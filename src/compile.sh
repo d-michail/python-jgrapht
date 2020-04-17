@@ -1,10 +1,6 @@
 
 # Compile 
 
-#gcc -c -fpic libjgrapht_wrap.c -I/usr/include/python3.6m -I.
-#gcc -shared libjgrapht_wrap.o -o _libjgrapht.so
-
-#swig -python libjgrapht.i
 #python3 setup.py build_ext --inplace
 
 if [ ! -e 'jgrapht_nlib.so' ]; then
@@ -16,3 +12,6 @@ gcc -shared pjgrapht.o -o libpjgrapht.so
 
 gcc -o client client.c -L. -lpjgrapht -ljgrapht_nlib  -I.
 
+swig -python pjgrapht.i
+gcc -c -fpic pjgrapht_wrap.c -I/usr/include/python3.6m -I.
+gcc -shared pjgrapht_wrap.o -L. -lpjgrapht -ljgrapht_nlib -o _pjgrapht.so
