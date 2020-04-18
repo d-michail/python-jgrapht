@@ -22,7 +22,7 @@ long long int jgrapht_it_next(void *);
 
 int jgrapht_it_hasnext(void *);
 
-void * jgrapht_create_graph(int, int, int, int);
+void * jgrapht_graph_create(int, int, int, int);
 
 long long int jgrapht_graph_vertices_count(void *);
 
@@ -39,6 +39,8 @@ long long int jgrapht_graph_add_edge(void *, long long int, long long int);
 int jgrapht_graph_remove_edge(void *, long long int);
 
 int jgrapht_graph_contains_edge(void *, long long int);
+
+int jgrapht_graph_contains_edge_between(void *, long long int, long long int);
 
 long long int jgrapht_graph_degree_of(void *, long long int);
 
@@ -68,11 +70,21 @@ void * jgrapht_graph_create_all_vit(void *);
 
 void * jgrapht_graph_create_all_eit(void *);
 
+void * jgrapht_graph_create_between_eit(void *, long long int, long long int);
+
 void * jgrapht_graph_vertex_create_eit(void *, long long int);
 
 void * jgrapht_graph_vertex_create_out_eit(void *, long long int);
 
 void * jgrapht_graph_vertex_create_in_eit(void *, long long int);
+
+void * jgrapht_map_create();
+
+void jgrapht_map_long_double_put(void *, long long int, double);
+
+double jgrapht_map_long_double_get(void *, long long int);
+
+int jgrapht_map_long_double_contains_key(void *, long long int);
 
 void * jgrapht_mst_exec_kruskal(void *);
 
@@ -81,6 +93,14 @@ void * jgrapht_mst_exec_prim(void *);
 double jgrapht_mst_get_weight(void *);
 
 void * jgrapht_mst_create_eit(void *);
+
+void * jgrapht_vertexcover_exec_greedy_uniform(void *);
+
+void * jgrapht_vertexcover_exec_greedy_weighted(void *, void *);
+
+double jgrapht_vertexcover_get_weight(void *);
+
+void * jgrapht_vertexcover_create_vit(void *);
 
 void jgrapht_vmLocatorSymbol();
 
