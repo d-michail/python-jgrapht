@@ -45,7 +45,7 @@ class GraphType:
 class Graph:
     """The main graph class"""
     def __init__(self, directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True):
-        self.__handle = jgrapht.jgrapht_create_graph(directed, allowing_self_loops, allowing_multiple_edges, weighted)
+        self.__handle = jgrapht.jgrapht_graph_create(directed, allowing_self_loops, allowing_multiple_edges, weighted)
         self.__graph_type = GraphType(directed, allowing_self_loops, allowing_multiple_edges, weighted)
         errors.check_last_error()
 
@@ -96,6 +96,11 @@ class Graph:
     def contains_edge(self, edge):
         res = jgrapht.jgrapht_graph_contains_edge(self.__handle, edge)
         errors.check_last_error()
+        return res
+
+    def contains_edge_between(self, source, target): 
+        res = jgrapht.jgrapht_graph_contains_edge_between(self.__handle, source, target)
+        errors.check_last_error()
         return res     
 
     def edges_count(self):
@@ -144,6 +149,11 @@ class Graph:
 
     def edges(self): 
         handle = jgrapht.jgrapht_graph_create_all_eit(self.__handle)
+        errors.check_last_error()
+        return iterator.VertexOrEdgeIterator(handle)
+
+    def edges_between(self, source, target):
+        handle = jgrapht.jgrapht_graph_create_between_eit(self.__handle)
         errors.check_last_error()
         return iterator.VertexOrEdgeIterator(handle)
 

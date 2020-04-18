@@ -10,6 +10,7 @@ def mst_kruskal(graph):
     eit = iterator.VertexOrEdgeIterator(jgrapht.jgrapht_mst_create_eit(mst_handle))
     mst_edges = list(eit)
     jgrapht.jgrapht_destroy(mst_handle)
+    errors.check_last_error()
     return (mst_weight, mst_edges)
 
 def mst_prim(graph):
@@ -20,4 +21,5 @@ def mst_prim(graph):
     eit = iterator.VertexOrEdgeIterator(jgrapht.jgrapht_mst_create_eit(mst_handle))
     mst_edges = list(eit)
     jgrapht.jgrapht_destroy(mst_handle)
+    errors.check_last_error()
     return (mst_weight, mst_edges)

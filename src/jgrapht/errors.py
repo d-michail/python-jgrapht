@@ -45,6 +45,16 @@ class InvalidReferenceError(Error):
     def __init__(self, message):
         self.message = message                        
 
+class IllegalArgumentError(Error):
+    """Exception raised for illegal argument errors.
+
+    Attributes:
+        message -- explanation of the error
+    """
+
+    def __init__(self, message):
+        self.message = message
+
 class IteratorError(Error):
     """Exception raised for iterator errors.
 
@@ -61,6 +71,8 @@ def check_last_error(message=None):
         raise GenericError('An error occured' if message is None else message)
     if errno == status.Status.UNSUPPORTED_OPERATION.value:
         raise UnsupportedError('Unsupported Operation' if message is None else message)    
+    if errno == status.Status.ILLEGAL_ARGUMENT.value:
+        raise IllegalArgumentError('Illegal argument' if message is None else message)    
     if errno == status.Status.INVALID_REFERENCE.value:
         raise InvalidReferenceError('Invalid reference' if message is None else message)
     if errno == status.Status.INVALID_GRAPH.value:
@@ -73,6 +85,8 @@ def check_last_error(message=None):
         raise GraphError('Graph creation error' if message is None else message)
     if errno == status.Status.GRAPH_IS_UNWEIGHTED.value:
         raise GraphError('Graph is unweighted' if message is None else message)
+    if errno == status.Status.GRAPH_NOT_UNDIRECTED.value:
+        raise GraphError('Graph is not undirected' if message is None else message)
     if errno == status.Status.ITERATOR_NO_SUCH_ELEMENT.value:
         raise IteratorError('No such element' if message is None else message)                                                            
     if errno != status.Status.SUCCESS.value:
