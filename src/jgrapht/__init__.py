@@ -6,7 +6,6 @@ from . import jgrapht
 print('Creating thread')
 jgrapht.jgrapht_thread_create()
 
-
 def module_cleanup_function():
     print('Destroying thread')
     if jgrapht.jgrapht_is_thread_attached():
