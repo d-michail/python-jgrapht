@@ -21,7 +21,7 @@ long long int jgrapht_it_next(void *);
 
 int jgrapht_it_hasnext(void *);
 
-void * jgrapht_create_graph(int, int, int);
+void * jgrapht_create_graph(int, int, int, int);
 
 long long int jgrapht_graph_vertices_count(void *);
 

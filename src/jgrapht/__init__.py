@@ -9,7 +9,8 @@ jgrapht.jgrapht_thread_create()
 
 def module_cleanup_function():
     print('Destroying thread')
-    jgrapht.jgrapht_thread_destroy()
+    if jgrapht.jgrapht_is_thread_attached():
+        jgrapht.jgrapht_thread_destroy()
 
 # Register cleanup
 atexit.register(module_cleanup_function)

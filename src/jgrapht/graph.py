@@ -3,7 +3,7 @@ from . import status
 from . import errors
 
 class GraphType: 
-
+    """Graph Type"""
     def __init__(self, directed, allowing_self_loops, allowing_multiple_edges, weighted):
         self.__directed = directed
         self.__allowing_self_loops = allowing_self_loops
@@ -59,21 +59,24 @@ class VertexOrEdgeIterator:
         return e
 
     def __del__(self):
-        jgrapht.jgrapht_destroy(self.__handle) 
-        errors.check_last_error()
+        if jgrapht.jgrapht_is_thread_attached():
+            errors.check_last_error()
+            jgrapht.jgrapht_destroy(self.__handle) 
+            errors.check_last_error()
 
 
 class Graph:
-
-    def __init__(self):
-        self.__g_handle = jgrapht.jgrapht_create_graph(1,1,1)
-        self.__graph_type = GraphType(True, True, True, True)
+    """The main graph class"""
+    def __init__(self, directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True):
+        self.__g_handle = jgrapht.jgrapht_create_graph(directed, allowing_self_loops, allowing_multiple_edges, weighted)
+        self.__graph_type = GraphType(directed, allowing_self_loops, allowing_multiple_edges, weighted)
         errors.check_last_error()
 
     def __del__(self):
-        print('Graph deletion')
-        jgrapht.jgrapht_destroy(self.__g_handle) 
-        errors.check_last_error()
+        if jgrapht.jgrapht_is_thread_attached():
+            errors.check_last_error()
+            jgrapht.jgrapht_destroy(self.__g_handle) 
+            errors.check_last_error()
 
     @property
     def graph_type(self):
