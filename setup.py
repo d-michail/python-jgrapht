@@ -1,5 +1,6 @@
 import os
 import sys
+import setuptools
 from setuptools import setup
 from distutils.core import Extension
 
@@ -17,7 +18,7 @@ class CustomInstall(install):
         self.do_egg_install()
 custom_cmdclass = {'build': CustomBuild, 'install': CustomInstall}
 
-if sys.version_info < (3, 3):
+if sys.version_info < (3, 4):
     raise Exception('jgrapht-python requires Python 3.3 or higher.')
 
 # This is quite the hack, but we don't want to import our package from here
@@ -50,7 +51,8 @@ setup(
     url='https://github.com/d-michail/python-jgrapht',
     license='MIT License',
     platforms=['any'],
-    packages=['jgrapht'],
+    #packages=['jgrapht'],
+    packages=setuptools.find_packages(),
     classifiers = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
@@ -63,7 +65,8 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Topic :: Scientific/Engineering',
     ],
-    keywords='graphs, algorithms'
+    keywords='graphs, algorithms',
+    python_requires='>=3.4'
 #    ,
 #    install_requires=['biopython',
 #                      'crossmapper==0.0.1'],
