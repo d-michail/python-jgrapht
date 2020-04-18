@@ -30,9 +30,37 @@ class GraphType:
     def weighted(self):
         return self.__weighted
 
+    def __repr__(self):
+        return { 'directed':self.__directed, 
+                 'allowing_self_loops':self.__allowing_self_loops, 
+                 'allowing_multiple_edges':self.__allowing_multiple_edges, 
+                 'weighted': self.__weighted }
+
     def __str__(self):
-        return '(directed={}, self-loops={}, multiple-edges={}, weighted={})' \
-            .format(self.__directed, self.__allowing_self_loops, self.__allowing_multiple_edges, self.__weighed )
+        return 'GraphType(directed={}, allowing-self-loops={}, allowing-multiple-edges={}, weighted={})' \
+            .format(self.__directed, self.__allowing_self_loops, self.__allowing_multiple_edges, self.__weighed)
+
+
+class VertexOrEdgeIterator: 
+    """Vertex or Edge Iterator"""
+    def __init__(self, handle):
+        self.__handle = handle
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        has_next = jgrapht.jgrapht_it_hasnext(self.__handle)
+        errors.check_last_error()
+        if not has_next: 
+            raise StopIteration()
+        e = jgrapht.jgrapht_it_next(self.__handle)
+        errors.check_last_error()
+        return e
+
+    def __del__(self):
+        jgrapht.jgrapht_destroy(self.__handle) 
+        errors.check_last_error()
 
 
 class Graph:
@@ -120,4 +148,12 @@ class Graph:
         jgrapht.jgrapht_graph_set_edge_weight(self.__g_handle, edge, weight)
         errors.check_last_error()
 
-    
+    def vertices_iterator(self): 
+        handle = jgrapht.jgrapht_graph_create_all_vit(self.__g_handle)
+        errors.check_last_error()
+        return VertexOrEdgeIterator(handle)
+
+    def edges_iterator(self): 
+        handle = jgrapht.jgrapht_graph_create_all_eit(self.__g_handle)
+        errors.check_last_error()
+        return VertexOrEdgeIterator(handle)
