@@ -35,10 +35,13 @@ for line in open(os.path.join('jgrapht', '__init__.py')):
 distmeta['__version__'] = '0.1'
 distmeta['__version_info__'] = ('0','1')
 
+_jgrapht_extension = Extension('_jgrapht', ['jgrapht/jgrapht.i', 'jgrapht/jgrapht.c'], 
+                               include_dirs=['jgrapht/'])
+
 setup(
     name='python-jgrapht',
     cmdclass=custom_cmdclass,
-    ext_modules=[Extension('_jgrapht', ['jgrapht/jgrapht.i', 'jgrapht/jgrapht.c'])],
+    ext_modules=[_jgrapht_extension],
     version=distmeta['__version__'],
     description='JGraphT library',
     long_description='JGraphT library',
