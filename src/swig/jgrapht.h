@@ -9,6 +9,8 @@ void jgrapht_thread_create();
 
 void jgrapht_thread_destroy();
 
+int jgrapht_is_thread_attached();
+
 int jgrapht_get_errno();
 
 void jgrapht_clear_errno();
