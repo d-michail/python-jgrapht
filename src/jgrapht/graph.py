@@ -70,6 +70,11 @@ class Graph:
         self.__graph_type = GraphType(True, True, True, True)
         errors.check_last_error()
 
+    def __del__(self):
+        print('Graph deletion')
+        jgrapht.jgrapht_destroy(self.__g_handle) 
+        errors.check_last_error()
+
     @property
     def graph_type(self):
         return self.__graph_type;
@@ -148,12 +153,27 @@ class Graph:
         jgrapht.jgrapht_graph_set_edge_weight(self.__g_handle, edge, weight)
         errors.check_last_error()
 
-    def vertices_iterator(self): 
+    def vertices(self): 
         handle = jgrapht.jgrapht_graph_create_all_vit(self.__g_handle)
         errors.check_last_error()
         return VertexOrEdgeIterator(handle)
 
-    def edges_iterator(self): 
+    def edges(self): 
         handle = jgrapht.jgrapht_graph_create_all_eit(self.__g_handle)
         errors.check_last_error()
         return VertexOrEdgeIterator(handle)
+
+    def edges_of(self, vertex):
+        handle = jgrapht.jgrapht_graph_vertex_create_eit(self.__g_handle, vertex)
+        errors.check_last_error()
+        return VertexOrEdgeIterator(handle)
+
+    def inedges_of(self, vertex):
+        handle = jgrapht.jgrapht_graph_vertex_create_in_eit(self.__g_handle, vertex)
+        errors.check_last_error()
+        return VertexOrEdgeIterator(handle)    
+
+    def outedges_of(self, vertex):
+        handle = jgrapht.jgrapht_graph_vertex_create_out_eit(self.__g_handle, vertex)
+        errors.check_last_error()
+        return VertexOrEdgeIterator(handle)    
