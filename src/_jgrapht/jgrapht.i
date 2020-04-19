@@ -6,21 +6,33 @@
 #include "jgrapht.h"
 %}
 
+// library init
+
 void jgrapht_thread_create();
 
 void jgrapht_thread_destroy();
 
 int jgrapht_is_thread_attached();
 
+// errors
+
 int jgrapht_get_errno();
 
 void jgrapht_clear_errno();
 
+char *jgrapht_get_errno_msg();
+
+// cleanup
+
 void jgrapht_destroy(void *);
+
+// iterators
 
 long long int jgrapht_it_next(void *);
 
 int jgrapht_it_hasnext(void *);
+
+// graph 
 
 void * jgrapht_graph_create(int, int, int, int);
 
@@ -78,13 +90,21 @@ void * jgrapht_graph_vertex_create_out_eit(void *, long long int);
 
 void * jgrapht_graph_vertex_create_in_eit(void *, long long int);
 
+// map
+
 void * jgrapht_map_create();
+
+void * jgrapht_map_keys_it_create(void *);
+
+void * jgrapht_map_values_it_create(void *);
 
 void jgrapht_map_long_double_put(void *, long long int, double);
 
 double jgrapht_map_long_double_get(void *, long long int);
 
-int jgrapht_map_long_double_contains_key(void *, long long int);
+int jgrapht_map_long_contains_key(void *, long long int);
+
+// mst
 
 void * jgrapht_mst_exec_kruskal(void *);
 
@@ -94,6 +114,8 @@ double jgrapht_mst_get_weight(void *);
 
 void * jgrapht_mst_create_eit(void *);
 
+// vertex cover
+
 void * jgrapht_vertexcover_exec_greedy_uniform(void *);
 
 void * jgrapht_vertexcover_exec_greedy_weighted(void *, void *);
@@ -101,6 +123,8 @@ void * jgrapht_vertexcover_exec_greedy_weighted(void *, void *);
 double jgrapht_vertexcover_get_weight(void *);
 
 void * jgrapht_vertexcover_create_vit(void *);
+
+// vm
 
 void jgrapht_vmLocatorSymbol();
 

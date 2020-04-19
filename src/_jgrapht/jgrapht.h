@@ -19,6 +19,8 @@ int jgrapht_get_errno();
 
 void jgrapht_clear_errno();
 
+char *jgrapht_get_errno_msg();
+
 // cleanup
 
 void jgrapht_destroy(void *);
@@ -91,11 +93,15 @@ void * jgrapht_graph_vertex_create_in_eit(void *, long long int);
 
 void * jgrapht_map_create();
 
+void * jgrapht_map_keys_it_create(void *);
+
+void * jgrapht_map_values_it_create(void *);
+
 void jgrapht_map_long_double_put(void *, long long int, double);
 
 double jgrapht_map_long_double_get(void *, long long int);
 
-int jgrapht_map_long_double_contains_key(void *, long long int);
+int jgrapht_map_long_contains_key(void *, long long int);
 
 // mst
 

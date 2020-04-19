@@ -25,19 +25,21 @@ if sys.version_info < (3, 4):
 # since that's recipe for disaster (it might have some uninstalled
 # dependencies, or we might import another already installed version).
 distmeta = {}
-for line in open(os.path.join('jgrapht', '__init__.py')):
-    try:
-        field, value = (x.strip() for x in line.split('='))
-    except ValueError:
-        continue
-    value = value.strip('\'"')
-    distmeta[field] = value
+#for line in open(os.path.join('jgrapht', '__init__.py')):
+#    try:
+#        field, value = (x.strip() for x in line.split('='))
+#    except ValueError:
+#        continue
+#    value = value.strip('\'"')
+#    distmeta[field] = value
 
 distmeta['__version__'] = '0.1'
 distmeta['__version_info__'] = ('0','1')
 
-_jgrapht_extension = Extension('_jgrapht', ['jgrapht/jgrapht.i', 'jgrapht/jgrapht.c'], 
-                               include_dirs=['jgrapht/'])
+_jgrapht_extension = Extension('_jgrapht', ['src/_jgrapht/jgrapht.i', 'src/_jgrapht/jgrapht.c'], 
+                               include_dirs=['src/_jgrapht/'],
+                               library_dirs=['src/_jgrapht/'], 
+                               libraries=['jgrapht_capi'])
 
 setup(
     name='python-jgrapht',
