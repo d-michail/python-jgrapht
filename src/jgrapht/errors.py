@@ -2,20 +2,24 @@ from . import jgrapht
 from . import status
 
 class Error(Exception):
-    """Base class for exceptions in this module."""
-    pass
+    """Base class for exceptions in this module.
 
-class GraphError(Error):
+    Attributes:
+        message -- explanation of the error
+    """
+    def __init__(self, message):
+        self.message = message    
+
+class InvalidVertexError(Error):
     """Exception raised for graph errors.
 
     Attributes:
         message -- explanation of the error
     """
-
     def __init__(self, message):
         self.message = message
 
-class GenericError(Error):
+class IllegalArgumentError(Error):
     """Exception raised for generic errors.
 
     Attributes:
@@ -25,7 +29,7 @@ class GenericError(Error):
     def __init__(self, message):
         self.message = message
 
-class UnsupportedError(Error):
+class UnsupportedOperationError(Error):
     """Exception raised for unsupported errors.
 
     Attributes:
@@ -34,16 +38,6 @@ class UnsupportedError(Error):
 
     def __init__(self, message):
         self.message = message
-
-class InvalidReferenceError(Error):
-    """Exception raised for invalid reference errors.
-
-    Attributes:
-        message -- explanation of the error
-    """
-
-    def __init__(self, message):
-        self.message = message                        
 
 class IllegalArgumentError(Error):
     """Exception raised for illegal argument errors.
@@ -55,7 +49,7 @@ class IllegalArgumentError(Error):
     def __init__(self, message):
         self.message = message
 
-class IteratorError(Error):
+class NoSuchElementError(Error):
     """Exception raised for iterator errors.
 
     Attributes:
@@ -65,29 +59,18 @@ class IteratorError(Error):
     def __init__(self, message):
         self.message = message
 
-def check_last_error(message=None):
+def check_last_error():
     errno = jgrapht.jgrapht_get_errno()
-    if errno == status.Status.GENERIC_ERROR.value:
-        raise GenericError('An error occured' if message is None else message)
+    errno_msg = jgrapht.jgrapht_get_errno_msg()
+    if errno == status.Status.ERROR.value:
+        raise Error(errno_msg)
     if errno == status.Status.UNSUPPORTED_OPERATION.value:
-        raise UnsupportedError('Unsupported Operation' if message is None else message)    
+        raise UnsupportedOperationError(errno_msg)    
     if errno == status.Status.ILLEGAL_ARGUMENT.value:
-        raise IllegalArgumentError('Illegal argument' if message is None else message)    
-    if errno == status.Status.INVALID_REFERENCE.value:
-        raise InvalidReferenceError('Invalid reference' if message is None else message)
-    if errno == status.Status.INVALID_GRAPH.value:
-        raise GraphError('Invalid graph' if message is None else message)    
+        raise IllegalArgumentError(errno_msg)    
     if errno == status.Status.INVALID_VERTEX.value:
-        raise GraphError('Invalid vertex' if message is None else message)
-    if errno == status.Status.INVALID_EDGE.value:
-        raise GraphError('Invalid edge' if message is None else message)
-    if errno == status.Status.GRAPH_CREATION_ERROR.value:
-        raise GraphError('Graph creation error' if message is None else message)
-    if errno == status.Status.GRAPH_IS_UNWEIGHTED.value:
-        raise GraphError('Graph is unweighted' if message is None else message)
-    if errno == status.Status.GRAPH_NOT_UNDIRECTED.value:
-        raise GraphError('Graph is not undirected' if message is None else message)
-    if errno == status.Status.ITERATOR_NO_SUCH_ELEMENT.value:
-        raise IteratorError('No such element' if message is None else message)                                                            
+        raise InvalidVertexError(errno_msg)
+    if errno == status.Status.NO_SUCH_ELEMENT.value:
+        raise NoSuchElementError(errno_msg)                                                            
     if errno != status.Status.SUCCESS.value:
-        raise GenericError('Operation failed' if message is None else message)        
+        raise Error(errno_msg)        
