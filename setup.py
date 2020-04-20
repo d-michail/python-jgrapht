@@ -54,8 +54,17 @@ class BuildConfig(object):
 
                 print("Running custom build_ext")
 
+                # Find the jgrapht-capi extension
+                extensions = [extension for extension in self.extensions if extension.name == "_jgrapht"]
+                _jgrapht_extension = extensions[0]
+
+                from pprint import pprint
+                pprint(vars(_jgrapht_extension))
+
                 # Run the original build_ext command
                 build_ext.run(self) 
+
+                print(self)
 
         return CustomBuildExt
 
