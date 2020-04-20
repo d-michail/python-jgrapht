@@ -6,6 +6,7 @@ import setuptools
 from setuptools import setup
 from setuptools.command.install import install
 from setuptools.command.build_ext import build_ext
+from setuptools.command.sdist import sdist
 
 import distutils
 from distutils.command.build import build
@@ -64,6 +65,9 @@ class BuildConfig(object):
                 # Run the original build_ext command
                 build_ext.run(self) 
 
+                # Put files from build_capi to the build folder of the build_ext
+
+
                 print(self)
 
         return CustomBuildExt
@@ -90,6 +94,32 @@ class BuildConfig(object):
                 build.run(self)
 
         return CustomBuild
+
+    @property
+    def sdist(self):
+        """`sdist` which first cleans up submodule."""
+        buildcfg = self
+
+        class CustomSDist(sdist):
+            def run(self):
+                # Clean up vendor/source/jgrapht-capi with git
+                print("Cleaning up vendor source")
+                cwd = os.getcwd()
+                try:
+                    os.chdir(os.path.join("vendor", "source", "jgrapht-capi"))
+                    if os.path.exists(".git"):
+                        retcode = subprocess.call("git clean -dfx", shell=True)
+                        if retcode:
+                            print("Failed to clean vendor/source/jgrapht-capi with git")
+                            print("")
+                            return False
+                finally:
+                    os.chdir(cwd)
+
+                # Run the original sdist command
+                sdist.run(self)
+
+        return CustomSDist
 
     def _compile_capi(self):
         """Compile the jgrapht-capi from the git submodule inside `vendor/source/jgrapht-capi`."""
@@ -178,7 +208,8 @@ setup(
         'build_capi': build_config.build_capi,
         'build_ext': build_config.build_ext,
         'build': build_config.build,
-        'install': build_config.install
+        'install': build_config.install,
+        'sdist': build_config.sdist
     },
     ext_modules=[_jgrapht_extension],
     version='0.1',
