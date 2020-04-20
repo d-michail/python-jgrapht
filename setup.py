@@ -22,9 +22,9 @@ if sys.version_info < (3, 4):
     raise Exception('jgrapht-python requires Python 3.3 or higher.')
 
 
-_jgrapht_extension = Extension('_jgrapht', ['src/_jgrapht/jgrapht.i', 'src/_jgrapht/jgrapht.c'], 
-                               include_dirs=['src/_jgrapht/'],
-                               library_dirs=['src/_jgrapht/'], 
+_jgrapht_extension = Extension('_jgrapht', ['jgrapht/jgrapht.i', 'jgrapht/jgrapht.c'], 
+                               include_dirs=['jgrapht/'],
+                               library_dirs=['jgrapht/'], 
                                libraries=['jgrapht_capi'])
 
 setup(
@@ -39,9 +39,7 @@ setup(
     url='https://github.com/d-michail/python-jgrapht',
     license='MIT License',
     platforms=['any'],
-    #packages=['jgrapht'],
-    package_dir={"": "src"},
-    packages=setuptools.find_packages('src'),
+    packages=setuptools.find_packages(),
     classifiers = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
@@ -56,11 +54,5 @@ setup(
     ],
     keywords='graphs, algorithms',
     python_requires='>=3.4'
-#    ,
-#    install_requires=['biopython',
-#                      'crossmapper==0.0.1'],
-#    dependency_links=[
-#        'https://github.com/mutalyzer/crossmapper/archive/v0.0.1.tar.gz#egg=crossmapper-0.0.1'
-#    ]
 )
 
