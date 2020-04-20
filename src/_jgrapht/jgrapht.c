@@ -162,11 +162,11 @@ void * jgrapht_graph_vertex_create_in_eit(void *gHandle, long long int vertex) {
 // iterators
 
 long long int jgrapht_it_next_long(void *itHandle) { 
-    return jgrapht_capi_it_next(thread, itHandle);
+    return jgrapht_capi_it_next_long(thread, itHandle);
 }
 
 double jgrapht_it_next_double(void *itHandle) { 
-    return jgrapht_capi_it_next(thread, itHandle);
+    return jgrapht_capi_it_next_double(thread, itHandle);
 }
 
 int jgrapht_it_hasnext(void *itHandle) { 
