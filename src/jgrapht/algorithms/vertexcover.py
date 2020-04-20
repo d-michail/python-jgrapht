@@ -7,7 +7,7 @@ def vertexcover_greedy(graph):
     errors.check_last_error()
     vc_weight = jgrapht.jgrapht_vertexcover_get_weight(vc_handle)
     errors.check_last_error()
-    vit = iterator.VertexOrEdgeIterator(jgrapht.jgrapht_vertexcover_create_vit(vc_handle))
+    vit = iterator.LongValueIterator(jgrapht.jgrapht_vertexcover_create_vit(vc_handle))
     vc_vertices = list(vit)
     jgrapht.jgrapht_destroy(vc_handle)
     errors.check_last_error()

@@ -145,29 +145,29 @@ class Graph:
     def vertices(self): 
         handle = jgrapht.jgrapht_graph_create_all_vit(self.__handle)
         errors.check_last_error()
-        return iterator.VertexOrEdgeIterator(handle)
+        return iterator.LongValueIterator(handle)
 
     def edges(self): 
         handle = jgrapht.jgrapht_graph_create_all_eit(self.__handle)
         errors.check_last_error()
-        return iterator.VertexOrEdgeIterator(handle)
+        return iterator.LongValueIterator(handle)
 
     def edges_between(self, source, target):
         handle = jgrapht.jgrapht_graph_create_between_eit(self.__handle)
         errors.check_last_error()
-        return iterator.VertexOrEdgeIterator(handle)
+        return iterator.LongValueIterator(handle)
 
     def edges_of(self, vertex):
         handle = jgrapht.jgrapht_graph_vertex_create_eit(self.__handle, vertex)
         errors.check_last_error()
-        return iterator.VertexOrEdgeIterator(handle)
+        return iterator.LongValueIterator(handle)
 
     def inedges_of(self, vertex):
         handle = jgrapht.jgrapht_graph_vertex_create_in_eit(self.__handle, vertex)
         errors.check_last_error()
-        return iterator.VertexOrEdgeIterator(handle)    
+        return iterator.LongValueIterator(handle)    
 
     def outedges_of(self, vertex):
         handle = jgrapht.jgrapht_graph_vertex_create_out_eit(self.__handle, vertex)
         errors.check_last_error()
-        return iterator.VertexOrEdgeIterator(handle)    
+        return iterator.LongValueIterator(handle)    
