@@ -1,0 +1,3 @@
+[submodule "vendor/source/jgrapht-capi"]
+	path = vendor/source/jgrapht-capi
+	url = git@github.com:d-michail/jgrapht-capi.git
