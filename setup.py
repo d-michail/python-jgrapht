@@ -1,22 +1,84 @@
 import os
 import sys
+import subprocess
+
 import setuptools
 from setuptools import setup
+from setuptools.command.install import install
+
+import distutils
+from distutils.command.build import build
+from distutils.cmd import Command
 from distutils.core import Extension
 
-# Make sure SWIG runs before installing the generated files.
-# http://stackoverflow.com/questions/12491328/python-distutils-not-include-the-swig-generated-module
-from setuptools.command.install import install
-from distutils.command.build import build
+class BuildConfig(object):
+    """Global build configuration"""
+
+    def __init__(self):
+        self.libraries = []
+
+    @property
+    def build_capi(self):    
+        """Return a command for building the jgraph-capi"""
+        build_cfg = self
+
+        class BuildCapiCommand(Command): 
+            """A custom command to build the jgrapht-capi from source."""
+
+            description = 'build jgrapht-capi'
+
+            def initialize_options(self):
+                pass
+
+            def finalize_options(self):
+                pass
+
+            def run(self):
+                build_cfg.is_capi_build = build_cfg.compile_capi('vendor/source/jgrapht-capi')
+                #command = ['echo Hello']
+                #self.announce('Running command: %s' % str(command), level=distutils.log.INFO)
+                #subprocess.check_call(command)
+
+        return BuildCapiCommand
+
+    def compile_capi(self, source_folder):
+        source_folder = os.path.abspath(source_folder)
+        build_folder = os.path.join(source_folder, 'build')
+        BuildConfig.create_dir_unless_exists(build_folder)
+
+        cwd = os.getcwd()
+        try: 
+            os.chdir(build_folder)
+
+            print("Configuring jgrapht-capi")
+            retcode = subprocess.call('cmake ..', shell=True)
+            if retcode:
+                return False
+
+            print("Build jgrapht-capi")
+            retcode = subprocess.call('make', shell=True)
+            if retcode:
+                return False
+        finally:
+            os.chdir(cwd)
+
+    @staticmethod
+    def create_dir_unless_exists(dirname):
+        """Creates a directory unless it exists already."""
+        path = os.path.join(dirname)
+        if not os.path.isdir(path):
+            os.makedirs(path)
+
 class CustomBuild(build):
     def run(self):
+        self.run_command('build_capi')
         self.run_command('build_ext')
         build.run(self)
+
 class CustomInstall(install):
     def run(self):
         self.run_command('build_ext')
         self.do_egg_install()
-custom_cmdclass = {'build': CustomBuild, 'install': CustomInstall}
 
 if sys.version_info < (3, 4):
     raise Exception('jgrapht-python requires Python 3.3 or higher.')
@@ -27,9 +89,15 @@ _jgrapht_extension = Extension('_jgrapht', ['jgrapht/jgrapht.i', 'jgrapht/jgraph
                                library_dirs=['jgrapht/'], 
                                libraries=['jgrapht_capi'])
 
+build_config = BuildConfig()
+
 setup(
     name='python-jgrapht',
-    cmdclass=custom_cmdclass,
+    cmdclass={
+        'build_capi': build_config.build_capi,
+        'build': CustomBuild,
+        'install': CustomInstall
+    },
     ext_modules=[_jgrapht_extension],
     version='0.1',
     description='JGraphT library',
