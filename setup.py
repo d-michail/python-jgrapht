@@ -5,6 +5,7 @@ import subprocess
 import setuptools
 from setuptools import setup
 from setuptools.command.install import install
+from setuptools.command.build_ext import build_ext
 
 import distutils
 from distutils.command.build import build
@@ -40,6 +41,23 @@ class BuildConfig(object):
                 #subprocess.check_call(command)
 
         return BuildCapiCommand
+
+    @property
+    def build_ext(self):    
+        """Return a custom build_ext"""
+        build_cfg = self
+
+        class CustomBuildExt(build_ext): 
+            """A custom build_ext."""
+
+            def run(self):
+
+                print("Running custom build_ext")
+
+                # Run the original build_ext command
+                build_ext.run(self) 
+
+        return CustomBuildExt
 
     @property
     def install(self):
@@ -149,6 +167,7 @@ setup(
     name='python-jgrapht',
     cmdclass={
         'build_capi': build_config.build_capi,
+        'build_ext': build_config.build_ext,
         'build': build_config.build,
         'install': build_config.install
     },
