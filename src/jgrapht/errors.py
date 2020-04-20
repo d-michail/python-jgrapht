@@ -59,8 +59,10 @@ class NoSuchElementError(Error):
     def __init__(self, message):
         self.message = message
 
-def check_last_error():
+def raise_if_last_error():
     errno = jgrapht.jgrapht_get_errno()
+    if errno == status.Status.SUCCESS.value:
+        return
     errno_msg = jgrapht.jgrapht_get_errno_msg()
     if errno == status.Status.ERROR.value:
         raise Error(errno_msg)
