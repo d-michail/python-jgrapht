@@ -21,20 +21,6 @@ custom_cmdclass = {'build': CustomBuild, 'install': CustomInstall}
 if sys.version_info < (3, 4):
     raise Exception('jgrapht-python requires Python 3.3 or higher.')
 
-# This is quite the hack, but we don't want to import our package from here
-# since that's recipe for disaster (it might have some uninstalled
-# dependencies, or we might import another already installed version).
-distmeta = {}
-#for line in open(os.path.join('jgrapht', '__init__.py')):
-#    try:
-#        field, value = (x.strip() for x in line.split('='))
-#    except ValueError:
-#        continue
-#    value = value.strip('\'"')
-#    distmeta[field] = value
-
-distmeta['__version__'] = '0.1'
-distmeta['__version_info__'] = ('0','1')
 
 _jgrapht_extension = Extension('_jgrapht', ['src/_jgrapht/jgrapht.i', 'src/_jgrapht/jgrapht.c'], 
                                include_dirs=['src/_jgrapht/'],
@@ -45,7 +31,7 @@ setup(
     name='python-jgrapht',
     cmdclass=custom_cmdclass,
     ext_modules=[_jgrapht_extension],
-    version=distmeta['__version__'],
+    version='0.1',
     description='JGraphT library',
     long_description='JGraphT library',
     author='Dimitrios Michail',
@@ -54,7 +40,8 @@ setup(
     license='MIT License',
     platforms=['any'],
     #packages=['jgrapht'],
-    packages=setuptools.find_packages(),
+    package_dir={"": "src"},
+    packages=setuptools.find_packages('src'),
     classifiers = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
