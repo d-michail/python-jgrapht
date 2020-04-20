@@ -5,6 +5,8 @@
 static graal_isolate_t *isolate = NULL;
 static graal_isolatethread_t *thread = NULL;
 
+// library init
+
 void jgrapht_thread_create() {
     if (thread == NULL) { 
         if (graal_create_isolate(NULL, &isolate, &thread) != 0) {
@@ -29,6 +31,12 @@ int jgrapht_is_thread_attached() {
     return thread != NULL; 
 }
 
+// errors
+
+void jgrapht_clear_errno() { 
+    jgrapht_capi_clear_errno(thread);
+}
+
 int jgrapht_get_errno() { 
     return jgrapht_capi_get_errno(thread);
 }
@@ -37,21 +45,7 @@ char * jgrapht_get_errno_msg() {
     return jgrapht_capi_get_errno_msg(thread);
 }
 
-void jgrapht_clear_errno() { 
-    jgrapht_capi_clear_errno(thread);
-}
-
-void jgrapht_destroy(void *handle) { 
-    jgrapht_capi_destroy(thread, handle);
-}
-
-long long int jgrapht_it_next(void *itHandle) { 
-    return jgrapht_capi_it_next(thread, itHandle);
-}
-
-int jgrapht_it_hasnext(void *itHandle) { 
-    return jgrapht_capi_it_hasnext(thread, itHandle);
-}
+// graph
 
 void * jgrapht_graph_create(int directed, int allowingSelfLoops, int allowingMultipleEdges, int weighted) { 
     return jgrapht_capi_graph_create(thread, directed, allowingSelfLoops, allowingMultipleEdges, weighted);
@@ -165,14 +159,36 @@ void * jgrapht_graph_vertex_create_in_eit(void *gHandle, long long int vertex) {
     return jgrapht_capi_graph_vertex_create_in_eit(thread, gHandle, vertex);
 }
 
+// iterators
+
+long long int jgrapht_it_next_long(void *itHandle) { 
+    return jgrapht_capi_it_next(thread, itHandle);
+}
+
+double jgrapht_it_next_double(void *itHandle) { 
+    return jgrapht_capi_it_next(thread, itHandle);
+}
+
+int jgrapht_it_hasnext(void *itHandle) { 
+    return jgrapht_capi_it_hasnext(thread, itHandle);
+}
+
 // map
 
 void * jgrapht_map_create() { 
     return jgrapht_capi_map_create(thread);
 }
 
+void * jgrapht_map_linked_create() { 
+    return jgrapht_capi_map_linked_create(thread);
+}
+
 void * jgrapht_map_keys_it_create(void *mapHandle) { 
     return jgrapht_capi_map_keys_it_create(thread, mapHandle);
+}
+
+long long int jgrapht_map_size(void *mapHandle) { 
+    return jgrapht_capi_map_size(thread, mapHandle);
 }
 
 void * jgrapht_map_values_it_create(void *mapHandle) { 
@@ -189,6 +205,16 @@ double jgrapht_map_long_double_get(void *mapHandle, long long int key) {
 
 int jgrapht_map_long_contains_key(void *mapHandle, long long int key) { 
     return jgrapht_capi_map_long_contains_key(thread, mapHandle, key);
+}
+
+void jgrapht_map_clear(void *mapHandle) { 
+    return jgrapht_capi_map_clear(thread, mapHandle);
+}
+
+// cleanup
+
+void jgrapht_destroy(void *handle) { 
+    jgrapht_capi_destroy(thread, handle);
 }
 
 // mst
@@ -211,12 +237,40 @@ void * jgrapht_mst_create_eit(void *mstHandle) {
 
 // vertex cover
 
-void * jgrapht_vertexcover_exec_greedy_uniform(void *gHandle) { 
-    return jgrapht_capi_vertexcover_exec_greedy_uniform(thread, gHandle);
+void * jgrapht_vertexcover_exec_greedy(void *gHandle) { 
+    return jgrapht_capi_vertexcover_exec_greedy(thread, gHandle);
 }
 
 void * jgrapht_vertexcover_exec_greedy_weighted(void *gHandle, void *weightMapHandle) { 
     return jgrapht_capi_vertexcover_exec_greedy_weighted(thread, gHandle, weightMapHandle);
+}
+
+void * jgrapht_vertexcover_exec_clarkson(void *gHandle) { 
+    return jgrapht_capi_vertexcover_exec_clarkson(thread, gHandle);
+}
+
+void * jgrapht_vertexcover_exec_clarkson_weighted(void *gHandle, void *weightMapHandle) { 
+    return jgrapht_capi_vertexcover_exec_clarkson_weighted(thread, gHandle, weightMapHandle);
+}
+
+void * jgrapht_vertexcover_exec_edgebased(void *gHandle) { 
+    return jgrapht_capi_vertexcover_exec_edgebased(thread, gHandle);
+}
+
+void * jgrapht_vertexcover_exec_baryehudaeven(void *gHandle) { 
+    return jgrapht_capi_vertexcover_exec_baryehudaeven(thread, gHandle);
+}
+
+void * jgrapht_vertexcover_exec_baryehudaeven_weighted(void *gHandle, void *weightMapHandle) { 
+    return jgrapht_capi_vertexcover_exec_baryehudaeven_weighted(thread, gHandle, weightMapHandle);
+}
+
+void * jgrapht_vertexcover_exec_exact(void *gHandle) { 
+    return jgrapht_capi_vertexcover_exec_exact(thread, gHandle);
+}
+
+void * jgrapht_vertexcover_exec_exact_weighted(void *gHandle, void *weightMapHandle) { 
+    return jgrapht_capi_vertexcover_exec_exact_weighted(thread, gHandle, weightMapHandle);
 }
 
 double jgrapht_vertexcover_get_weight(void *vcHandle) { 

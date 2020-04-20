@@ -16,21 +16,11 @@ int jgrapht_is_thread_attached();
 
 // errors
 
-int jgrapht_get_errno();
-
 void jgrapht_clear_errno();
 
+int jgrapht_get_errno();
+
 char *jgrapht_get_errno_msg();
-
-// cleanup
-
-void jgrapht_destroy(void *);
-
-// iterators
-
-long long int jgrapht_it_next(void *);
-
-int jgrapht_it_hasnext(void *);
 
 // graph 
 
@@ -90,11 +80,23 @@ void * jgrapht_graph_vertex_create_out_eit(void *, long long int);
 
 void * jgrapht_graph_vertex_create_in_eit(void *, long long int);
 
+// iterators
+
+long long int jgrapht_it_next_long(void *);
+
+double jgrapht_it_next_double(void *);
+
+int jgrapht_it_hasnext(void *);
+
 // map
 
 void * jgrapht_map_create();
 
+void * jgrapht_map_linked_create();
+
 void * jgrapht_map_keys_it_create(void *);
+
+long long int jgrapht_map_size(void *);
 
 void * jgrapht_map_values_it_create(void *);
 
@@ -103,6 +105,12 @@ void jgrapht_map_long_double_put(void *, long long int, double);
 double jgrapht_map_long_double_get(void *, long long int);
 
 int jgrapht_map_long_contains_key(void *, long long int);
+
+void jgrapht_map_clear(void *);
+
+// cleanup
+
+void jgrapht_destroy(void *);
 
 // mst
 
@@ -116,9 +124,23 @@ void * jgrapht_mst_create_eit(void *);
 
 // vertex cover
 
-void * jgrapht_vertexcover_exec_greedy_uniform(void *);
+void * jgrapht_vertexcover_exec_greedy(void *);
 
 void * jgrapht_vertexcover_exec_greedy_weighted(void *, void *);
+
+void * jgrapht_vertexcover_exec_clarkson(void *);
+
+void * jgrapht_vertexcover_exec_clarkson_weighted(void *, void *);
+
+void * jgrapht_vertexcover_exec_edgebased(void *);
+
+void * jgrapht_vertexcover_exec_baryehudaeven(void *);
+
+void * jgrapht_vertexcover_exec_baryehudaeven_weighted(void *, void *);
+
+void * jgrapht_vertexcover_exec_exact(void *);
+
+void * jgrapht_vertexcover_exec_exact_weighted(void *, void *);
 
 double jgrapht_vertexcover_get_weight(void *);
 
