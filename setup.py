@@ -34,14 +34,37 @@ class BuildConfig(object):
                 pass
 
             def run(self):
-                build_cfg.is_capi_build = build_cfg.compile_capi()
+                build_cfg.is_capi_build = build_cfg._compile_capi()
                 #command = ['echo Hello']
                 #self.announce('Running command: %s' % str(command), level=distutils.log.INFO)
                 #subprocess.check_call(command)
 
         return BuildCapiCommand
 
-    def compile_capi(self):
+    @property
+    def install(self):
+        build_cfg = self
+
+        class CustomInstall(install):
+            def run(self):
+                self.run_command('build_ext')
+                self.do_egg_install()
+
+        return CustomInstall
+
+    @property
+    def build(self):
+        build_cfg = self
+
+        class CustomBuild(build):
+            def run(self):
+                self.run_command('build_capi')
+                self.run_command('build_ext')
+                build.run(self)
+
+        return CustomBuild
+
+    def _compile_capi(self):
         """Compile the jgrapht-capi from the git submodule inside `vendor/source/jgrapht-capi`."""
 
         install_folder = os.path.join("vendor", "install", "jgrapht-capi")
@@ -110,16 +133,6 @@ class BuildConfig(object):
             env[k] = "{0} {1}".format(prev, v) if prev else v
         return env        
 
-class CustomBuild(build):
-    def run(self):
-        self.run_command('build_capi')
-        self.run_command('build_ext')
-        build.run(self)
-
-class CustomInstall(install):
-    def run(self):
-        self.run_command('build_ext')
-        self.do_egg_install()
 
 if sys.version_info < (3, 4):
     raise Exception('jgrapht-python requires Python 3.3 or higher.')
@@ -136,8 +149,8 @@ setup(
     name='python-jgrapht',
     cmdclass={
         'build_capi': build_config.build_capi,
-        'build': CustomBuild,
-        'install': CustomInstall
+        'build': build_config.build,
+        'install': build_config.install
     },
     ext_modules=[_jgrapht_extension],
     version='0.1',
