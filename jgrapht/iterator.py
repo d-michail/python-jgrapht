@@ -11,19 +11,21 @@ class LongValueIterator:
         return self
 
     def __next__(self):
-        has_next = jgrapht.jgrapht_it_hasnext(self._handle)
-        errors.raise_if_last_error()
-        if not has_next: 
+        err, res = jgrapht.jgrapht_it_hasnext(self._handle)
+        if err: 
+            errors.raise_status()
+        if not res: 
             raise StopIteration()
-        e = jgrapht.jgrapht_it_next_long(self._handle)
-        errors.raise_if_last_error()
-        return e
+        err, res = jgrapht.jgrapht_it_next_long(self._handle)
+        if err: 
+            errors.raise_status()
+        return res
 
     def __del__(self):
         if self._owner and jgrapht.jgrapht_is_thread_attached():
-            errors.raise_if_last_error()
-            jgrapht.jgrapht_destroy(self._handle) 
-            errors.raise_if_last_error()
+            err = jgrapht.jgrapht_destroy(self._handle)
+            if err: 
+                errors.raise_status() 
 
 
 class DoubleValueIterator: 
@@ -36,16 +38,18 @@ class DoubleValueIterator:
         return self
 
     def __next__(self):
-        has_next = jgrapht.jgrapht_it_hasnext(self._handle)
-        errors.raise_if_last_error()
-        if not has_next: 
+        err, res = jgrapht.jgrapht_it_hasnext(self._handle)
+        if err: 
+            errors.raise_status()
+        if not res: 
             raise StopIteration()
-        e = jgrapht.jgrapht_it_next_double(self._handle)
-        errors.raise_if_last_error()
-        return e
+        err, res = jgrapht.jgrapht_it_next_double(self._handle)
+        if err: 
+            errors.raise_status()
+        return res
 
     def __del__(self):
         if self._owner and jgrapht.jgrapht_is_thread_attached():
-            errors.raise_if_last_error()
-            jgrapht.jgrapht_destroy(self._handle) 
-            errors.raise_if_last_error()
+            err = jgrapht.jgrapht_destroy(self._handle) 
+            if err: 
+                errors.raise_status() 

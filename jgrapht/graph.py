@@ -45,11 +45,8 @@ class GraphType:
 class Graph:
     """The main graph class"""
     def __init__(self, directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True):
-
         status, handle = jgrapht.jgrapht_graph_create(directed, allowing_self_loops, allowing_multiple_edges, weighted)
-        errors.raise_if_last_error()
-        print('Status %d' % status)
-        print('handle %s' % str(handle))
+        errors.raise_status()
         self._handle = handle
         self._graph_type = GraphType(directed, allowing_self_loops, allowing_multiple_edges, weighted)
 
@@ -68,112 +65,131 @@ class Graph:
         return self._handle;    
 
     def add_vertex(self):
-        v = jgrapht.jgrapht_graph_add_vertex(self._handle)
-        errors.raise_if_last_error()
+        err, v = jgrapht.jgrapht_graph_add_vertex(self._handle)
+        if err:
+            errors.raise_status()
         return v
 
     def remove_vertex(self, vertex):
-        res = jgrapht.jgrapht_graph_remove_vertex(self._handle, vertex)
-        errors.raise_if_last_error()
-        return res 
+        err = jgrapht.jgrapht_graph_remove_vertex(self._handle, vertex)
+        if err:
+            errors.raise_status()
 
     def contains_vertex(self, vertex):
-        res = jgrapht.jgrapht_graph_contains_vertex(self._handle, vertex)
-        errors.raise_if_last_error()
+        err, res = jgrapht.jgrapht_graph_contains_vertex(self._handle, vertex)
+        if err:
+            errors.raise_status()
         return res 
 
     def vertices_count(self):
         err, res = jgrapht.jgrapht_graph_vertices_count(self._handle)
         if err:
-            errors.raise_if_last_error()        
+            errors.raise_status()        
         return res 
 
     def add_edge(self, source, target):
-        e = jgrapht.jgrapht_graph_add_edge(self._handle, source, target)
-        errors.raise_if_last_error()
-        return e
+        err, res = jgrapht.jgrapht_graph_add_edge(self._handle, source, target)
+        if err:
+            errors.raise_status()
+        return res 
 
     def remove_edge(self, edge): 
-        res = jgrapht.jgrapht_graph_remove_edge(self._handle, edge)
-        errors.raise_if_last_error()
-        return res
+        err, res = jgrapht.jgrapht_graph_remove_edge(self._handle, edge)
+        if err:
+            errors.raise_status()
 
     def contains_edge(self, edge):
-        res = jgrapht.jgrapht_graph_contains_edge(self._handle, edge)
-        errors.raise_if_last_error()
+        err, res = jgrapht.jgrapht_graph_contains_edge(self._handle, edge)
+        if err:
+            errors.raise_status()
         return res
 
     def contains_edge_between(self, source, target): 
-        res = jgrapht.jgrapht_graph_contains_edge_between(self._handle, source, target)
-        errors.raise_if_last_error()
-        return res     
+        err, res = jgrapht.jgrapht_graph_contains_edge_between(self._handle, source, target)
+        if err:
+            errors.raise_status()
+        return res
 
     def edges_count(self):
-        res = jgrapht.jgrapht_graph_edges_count(self._handle)
-        errors.raise_if_last_error()        
+        err, res = jgrapht.jgrapht_graph_edges_count(self._handle)
+        if err:
+            errors.raise_status()
         return res     
 
     def degree_of(self, vertex):
-        res = jgrapht.jgrapht_graph_degree_of(self._handle, vertex)
-        errors.raise_if_last_error()        
+        err, res = jgrapht.jgrapht_graph_degree_of(self._handle, vertex)
+        if err:
+            errors.raise_status()
         return res     
 
     def indegree_of(self, vertex):
-        res = jgrapht.jgrapht_graph_indegree_of(self._handle, vertex)
-        errors.raise_if_last_error()        
+        err, res = jgrapht.jgrapht_graph_indegree_of(self._handle, vertex)
+        if err:
+            errors.raise_status()
         return res
 
     def outdegree_of(self, vertex):
-        res = jgrapht.jgrapht_graph_outdegree_of(self._handle, vertex)
-        errors.raise_if_last_error()        
+        err, res = jgrapht.jgrapht_graph_outdegree_of(self._handle, vertex)
+        if err:
+            errors.raise_status()
         return res
 
     def edge_source(self, edge):
-        res = jgrapht.jgrapht_graph_edge_source(self._handle, edge)
-        errors.raise_if_last_error()
+        err, res = jgrapht.jgrapht_graph_edge_source(self._handle, edge)
+        if err:
+            errors.raise_status()
         return res
 
     def edge_target(self, edge):
-        res = jgrapht.jgrapht_graph_edge_target(self._handle, edge)
-        errors.raise_if_last_error()
+        err, res = jgrapht.jgrapht_graph_edge_target(self._handle, edge)
+        if err:
+            errors.raise_status()
         return res
 
     def get_edge_weight(self, edge): 
-        res = jgrapht.jgrapht_graph_get_edge_weight(self._handle, edge)
-        errors.raise_if_last_error()
+        err, res = jgrapht.jgrapht_graph_get_edge_weight(self._handle, edge)
+        if err:
+            errors.raise_status()
         return res
 
-    def set_edge_weight(self, edge, weight): 
-        jgrapht.jgrapht_graph_set_edge_weight(self._handle, edge, weight)
-        errors.raise_if_last_error()
+    def set_edge_weight(self, edge, weight):
+        err = jgrapht.jgrapht_graph_set_edge_weight(self._handle, edge, weight)
+        if err:
+            errors.raise_status()
 
     def vertices(self): 
-        handle = jgrapht.jgrapht_graph_create_all_vit(self._handle)
-        errors.raise_if_last_error()
-        return iterator.LongValueIterator(handle)
+        err, res = jgrapht.jgrapht_graph_create_all_vit(self._handle)
+        if err:
+            errors.raise_status()
+        return iterator.LongValueIterator(res)
 
     def edges(self): 
-        handle = jgrapht.jgrapht_graph_create_all_eit(self._handle)
-        errors.raise_if_last_error()
-        return iterator.LongValueIterator(handle)
+        err, res = jgrapht.jgrapht_graph_create_all_eit(self._handle)
+        if err:
+            errors.raise_status()
+        return iterator.LongValueIterator(res)
 
     def edges_between(self, source, target):
-        handle = jgrapht.jgrapht_graph_create_between_eit(self._handle)
-        errors.raise_if_last_error()
-        return iterator.LongValueIterator(handle)
+        err, res = jgrapht.jgrapht_graph_create_between_eit(self._handle)
+        if err:
+            errors.raise_status()
+        return iterator.LongValueIterator(res)
 
     def edges_of(self, vertex):
-        handle = jgrapht.jgrapht_graph_vertex_create_eit(self._handle, vertex)
-        errors.raise_if_last_error()
-        return iterator.LongValueIterator(handle)
+        err, res = jgrapht.jgrapht_graph_vertex_create_eit(self._handle, vertex)
+        if err:
+            errors.raise_status()
+        return iterator.LongValueIterator(res)
 
     def inedges_of(self, vertex):
-        handle = jgrapht.jgrapht_graph_vertex_create_in_eit(self._handle, vertex)
-        errors.raise_if_last_error()
-        return iterator.LongValueIterator(handle)    
+        err, res = jgrapht.jgrapht_graph_vertex_create_in_eit(self._handle, vertex)
+        if err:
+            errors.raise_status()
+        return iterator.LongValueIterator(res)    
 
     def outedges_of(self, vertex):
-        handle = jgrapht.jgrapht_graph_vertex_create_out_eit(self._handle, vertex)
-        errors.raise_if_last_error()
-        return iterator.LongValueIterator(handle)
+        err, res = jgrapht.jgrapht_graph_vertex_create_out_eit(self._handle, vertex)
+        if err:
+            errors.raise_status()
+        return iterator.LongValueIterator(res)
             

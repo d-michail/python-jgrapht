@@ -59,20 +59,52 @@ class NoSuchElementError(Error):
     def __init__(self, message):
         self.message = message
 
-def raise_if_last_error():
+class IndexOutOfBoundsError(Error):
+    """Exception raised for class cast errors.
+
+    Attributes:
+        message -- explanation of the error
+    """
+
+    def __init__(self, message):
+        self.message = message
+
+class NullPointerError(Error):
+    """Exception raised for class cast errors.
+
+    Attributes:
+        message -- explanation of the error
+    """
+
+    def __init__(self, message):
+        self.message = message        
+
+class ClassCastError(Error):
+    """Exception raised for class cast errors.
+
+    Attributes:
+        message -- explanation of the error
+    """
+
+    def __init__(self, message):
+        self.message = message        
+
+def raise_status():
     errno = jgrapht.jgrapht_get_errno()
     if errno == status.Status.SUCCESS.value:
         return
     errno_msg = jgrapht.jgrapht_get_errno_msg()
-    if errno == status.Status.ERROR.value:
-        raise Error(errno_msg)
-    if errno == status.Status.UNSUPPORTED_OPERATION.value:
-        raise UnsupportedOperationError(errno_msg)    
     if errno == status.Status.ILLEGAL_ARGUMENT.value:
         raise IllegalArgumentError(errno_msg)    
-    if errno == status.Status.INVALID_VERTEX.value:
-        raise InvalidVertexError(errno_msg)
+    if errno == status.Status.UNSUPPORTED_OPERATION.value:
+        raise UnsupportedOperationError(errno_msg)    
+    if errno == status.Status.INDEX_OUT_OF_BOUNDS.value:
+        raise IndexOutOfBoundsError(errno_msg)
     if errno == status.Status.NO_SUCH_ELEMENT.value:
-        raise NoSuchElementError(errno_msg)                                                            
+        raise NoSuchElementError(errno_msg)
+    if errno == status.Status.NULL_POINTER.value:
+        raise NullPointerError(errno_msg)
+    if errno == status.Status.CLASS_CAST.value:
+        raise ClassCastError(errno_msg)
     if errno != status.Status.SUCCESS.value:
         raise Error(errno_msg)        

@@ -8,6 +8,16 @@
 
 %include <typemaps.i>
 
+// custom typemap to append void** types to the result
+%typemap(in,numinputs=0,noblock=1) void **OUTPUT ($*1_ltype temp, int res = SWIG_TMPOBJ) {
+    $1 = &temp;
+}
+
+%typemap(argout,noblock=1) void **OUTPUT {
+    %append_output(SWIG_NewPointerObj(*$1, $*1_descriptor, SWIG_POINTER_NOSHADOW | %newpointer_flags));
+}
+
+
 // library init
 
 void jgrapht_thread_create();
@@ -18,33 +28,33 @@ int jgrapht_is_thread_attached();
 
 // clustering
 
-int jgrapht_clustering_exec_k_spanning_tree(void *, int, void**);
+int jgrapht_clustering_exec_k_spanning_tree(void *, int, void** OUTPUT);
 
-int jgrapht_clustering_get_number_clusters(void *, long long*);
+int jgrapht_clustering_get_number_clusters(void *, long long* OUTPUT);
 
-int jgrapht_clustering_ith_cluster_vit(void *, int, void**);
+int jgrapht_clustering_ith_cluster_vit(void *, int, void** OUTPUT);
 
 // coloring
 
-int jgrapht_coloring_exec_greedy(void *, void**);
+int jgrapht_coloring_exec_greedy(void *, void** OUTPUT);
 
-int jgrapht_coloring_exec_greedy_smallestdegreelast(void *, void**);
+int jgrapht_coloring_exec_greedy_smallestdegreelast(void *, void** OUTPUT);
 
-int jgrapht_coloring_exec_backtracking_brown(void *, void**);
+int jgrapht_coloring_exec_backtracking_brown(void *, void** OUTPUT);
 
-int jgrapht_coloring_exec_greedy_largestdegreefirst(void *, void**);
+int jgrapht_coloring_exec_greedy_largestdegreefirst(void *, void** OUTPUT);
 
-int jgrapht_coloring_exec_greedy_random(void *, void**);
+int jgrapht_coloring_exec_greedy_random(void *, void** OUTPUT);
 
-int jgrapht_coloring_exec_greedy_random_with_seed(void *, long long int, void**);
+int jgrapht_coloring_exec_greedy_random_with_seed(void *, long long int, void** OUTPUT);
 
-int jgrapht_coloring_exec_greedy_dsatur(void *, void**);
+int jgrapht_coloring_exec_greedy_dsatur(void *, void** OUTPUT);
 
-int jgrapht_coloring_exec_color_refinement(void *, void**);
+int jgrapht_coloring_exec_color_refinement(void *, void** OUTPUT);
 
-int jgrapht_coloring_get_number_colors(void *, long long*);
+int jgrapht_coloring_get_number_colors(void *, long long* OUTPUT);
 
-int jgrapht_coloring_get_vertex_color_map(void *, void**);
+int jgrapht_coloring_get_vertex_color_map(void *, void** OUTPUT);
 
 // error
 
@@ -68,24 +78,7 @@ int jgrapht_generate_empty(void *, int);
 
 // graph
 
-%typemap(in,numinputs=0,noblock=1) void **HANDLEOUTPUT ($*1_ltype temp, int res = SWIG_TMPOBJ) {
-    $1 = &temp;
-}
-
-%typemap(argout,noblock=1) void **HANDLEOUTPUT { 
-    int new_flags = SWIG_IsNewObj(res$argnum) ? (SWIG_POINTER_OWN | %newpointer_flags) : %newpointer_flags;
-     %append_output(SWIG_NewPointerObj(*$1, $*1_descriptor, new_flags));
-  
-  //if (SWIG_IsTmpObj(res$argnum)) {
-  //   int new_flags = SWIG_IsNewObj(res$argnum) ? (SWIG_POINTER_OWN | %newpointer_flags) : %newpointer_flags;
-  //   %append_output(SWIG_NewPointerObj(*$1, $*1_descriptor, new_flags)); //   %as_voidptr(*$1));
-  // } else {
-  //   int new_flags = SWIG_IsNewObj(res$argnum) ? (SWIG_POINTER_OWN | %newpointer_flags) : %newpointer_flags;
-  //   %append_output(SWIG_NewPointerObj(%as_voidptr($1), $*1_descriptor, new_flags));
-  // }    
-}
-
-int jgrapht_graph_create(int, int, int, int, void **HANDLEOUTPUT);
+int jgrapht_graph_create(int, int, int, int, void **OUTPUT);
 
 int jgrapht_graph_vertices_count(void *, long long* OUTPUT);
 
@@ -129,25 +122,25 @@ int jgrapht_graph_get_edge_weight(void *, long long int, double* OUTPUT);
 
 int jgrapht_graph_set_edge_weight(void *, long long int, double);
 
-int jgrapht_graph_create_all_vit(void *, void**);
+int jgrapht_graph_create_all_vit(void *, void** OUTPUT);
 
-int jgrapht_graph_create_all_eit(void *, void**);
+int jgrapht_graph_create_all_eit(void *, void** OUTPUT);
 
-int jgrapht_graph_create_between_eit(void *, long long int, long long int, void**);
+int jgrapht_graph_create_between_eit(void *, long long int, long long int, void** OUTPUT);
 
-int jgrapht_graph_vertex_create_eit(void *, long long int, void**);
+int jgrapht_graph_vertex_create_eit(void *, long long int, void** OUTPUT);
 
-int jgrapht_graph_vertex_create_out_eit(void *, long long int, void**);
+int jgrapht_graph_vertex_create_out_eit(void *, long long int, void** OUTPUT);
 
-int jgrapht_graph_vertex_create_in_eit(void *, long long int, void**);
+int jgrapht_graph_vertex_create_in_eit(void *, long long int, void** OUTPUT);
 
-int jgrapht_graph_as_undirected(void *, void**);
+int jgrapht_graph_as_undirected(void *, void** OUTPUT);
 
-int jgrapht_graph_as_unmodifiable(void *, void**);
+int jgrapht_graph_as_unmodifiable(void *, void** OUTPUT);
 
-int jgrapht_graph_as_unweighted(void *, void**);
+int jgrapht_graph_as_unweighted(void *, void** OUTPUT);
 
-int jgrapht_graph_as_edgereversed(void *, void**);
+int jgrapht_graph_as_edgereversed(void *, void** OUTPUT);
 
 // graph test
 
@@ -207,15 +200,15 @@ int jgrapht_it_hasnext(void *, int* OUTPUT);
 
 // map
 
-int jgrapht_map_create(void**);
+int jgrapht_map_create(void** OUTPUT);
 
-int jgrapht_map_linked_create(void**);
+int jgrapht_map_linked_create(void** OUTPUT);
 
-int jgrapht_map_keys_it_create(void *, void**);
+int jgrapht_map_keys_it_create(void *, void** OUTPUT);
 
 int jgrapht_map_size(void *, long long* OUTPUT);
 
-int jgrapht_map_values_it_create(void *, void**);
+int jgrapht_map_values_it_create(void *, void** OUTPUT);
 
 int jgrapht_map_long_double_put(void *, long long int, double);
 
@@ -231,39 +224,39 @@ int jgrapht_map_clear(void *);
 
 // matching
 
-int jgrapht_matching_exec_greedy_general_max_card(void *, void**);
+int jgrapht_matching_exec_greedy_general_max_card(void *, void** OUTPUT);
 
-int jgrapht_matching_exec_custom_greedy_general_max_card(void *, int, void**);
+int jgrapht_matching_exec_custom_greedy_general_max_card(void *, int, void** OUTPUT);
 
-int jgrapht_matching_exec_edmonds_general_max_card_dense(void *, void**);
+int jgrapht_matching_exec_edmonds_general_max_card_dense(void *, void** OUTPUT);
 
-int jgrapht_matching_exec_edmonds_general_max_card_sparse(void *, void**);
+int jgrapht_matching_exec_edmonds_general_max_card_sparse(void *, void** OUTPUT);
 
-int jgrapht_matching_exec_greedy_general_max_weight(void *, void**);
+int jgrapht_matching_exec_greedy_general_max_weight(void *, void** OUTPUT);
 
-int jgrapht_matching_exec_custom_greedy_general_max_weight(void *, int, double, void**);
+int jgrapht_matching_exec_custom_greedy_general_max_weight(void *, int, double, void** OUTPUT);
 
-int jgrapht_matching_exec_pathgrowing_max_weight(void *, void**);
+int jgrapht_matching_exec_pathgrowing_max_weight(void *, void** OUTPUT);
 
-int jgrapht_matching_exec_blossom5_general_max_weight(void *, void**);
+int jgrapht_matching_exec_blossom5_general_max_weight(void *, void** OUTPUT);
 
-int jgrapht_matching_exec_blossom5_general_min_weight(void *, void**);
+int jgrapht_matching_exec_blossom5_general_min_weight(void *, void** OUTPUT);
 
-int jgrapht_matching_exec_blossom5_general_perfect_max_weight(void *, void**);
+int jgrapht_matching_exec_blossom5_general_perfect_max_weight(void *, void** OUTPUT);
 
-int jgrapht_matching_exec_blossom5_general_perfect_min_weight(void *, void**);
+int jgrapht_matching_exec_blossom5_general_perfect_min_weight(void *, void** OUTPUT);
 
-int jgrapht_matching_exec_bipartite_max_card(void *, void**);
+int jgrapht_matching_exec_bipartite_max_card(void *, void** OUTPUT);
 
-int jgrapht_matching_exec_bipartite_perfect_min_weight(void *, void *, void *, void**);
+int jgrapht_matching_exec_bipartite_perfect_min_weight(void *, void *, void *, void** OUTPUT);
 
-int jgrapht_matching_exec_bipartite_max_weight(void *, void**);
+int jgrapht_matching_exec_bipartite_max_weight(void *, void** OUTPUT);
 
 int jgrapht_matching_get_weight(void *, double* OUTPUT);
 
 int jgrapht_matching_get_card(void *, long long* OUTPUT);
 
-int jgrapht_matching_create_eit(void *, void**);
+int jgrapht_matching_create_eit(void *, void** OUTPUT);
 
 // cleanup
 
@@ -271,41 +264,41 @@ int jgrapht_destroy(void *);
 
 // mst
 
-int jgrapht_mst_exec_kruskal(void *, void**);
+int jgrapht_mst_exec_kruskal(void *, void** OUTPUT);
 
-int jgrapht_mst_exec_prim(void *, void**);
+int jgrapht_mst_exec_prim(void *, void** OUTPUT);
 
-int jgrapht_mst_exec_boruvka(void *, void**);
+int jgrapht_mst_exec_boruvka(void *, void** OUTPUT);
 
-int jgrapht_mst_get_weight(void *, double*);
+int jgrapht_mst_get_weight(void *, double* OUTPUT);
 
-int jgrapht_mst_create_eit(void *, void**);
+int jgrapht_mst_create_eit(void *, void** OUTPUT);
 
 // partition
 
-int jgrapht_partition_exec_bipartite(void *, int*, void**, void**);
+int jgrapht_partition_exec_bipartite(void *, int* OUTPUT, void** OUTPUT, void** OUTPUT);
 
 // scoring
 
-int jgrapht_scoring_exec_alpha_centrality(void *, void**);
+int jgrapht_scoring_exec_alpha_centrality(void *, void** OUTPUT);
 
-int jgrapht_scoring_exec_custom_alpha_centrality(void *, double, double, int, double, void**);
+int jgrapht_scoring_exec_custom_alpha_centrality(void *, double, double, int, double, void** OUTPUT);
 
-int jgrapht_scoring_exec_betweenness_centrality(void *, void**);
+int jgrapht_scoring_exec_betweenness_centrality(void *, void** OUTPUT);
 
-int jgrapht_scoring_exec_custom_betweenness_centrality(void *, int, void**);
+int jgrapht_scoring_exec_custom_betweenness_centrality(void *, int, void** OUTPUT);
 
-int jgrapht_scoring_exec_closeness_centrality(void *, void**);
+int jgrapht_scoring_exec_closeness_centrality(void *, void** OUTPUT);
 
-int jgrapht_scoring_exec_custom_closeness_centrality(void *, int, int, void**);
+int jgrapht_scoring_exec_custom_closeness_centrality(void *, int, int, void** OUTPUT);
 
-int jgrapht_scoring_exec_harmonic_centrality(void *, void**);
+int jgrapht_scoring_exec_harmonic_centrality(void *, void** OUTPUT);
 
-int jgrapht_scoring_exec_custom_harmonic_centrality(void *, int, int, void**);
+int jgrapht_scoring_exec_custom_harmonic_centrality(void *, int, int, void** OUTPUT);
 
-int jgrapht_scoring_exec_pagerank(void *, void**);
+int jgrapht_scoring_exec_pagerank(void *, void** OUTPUT);
 
-int jgrapht_scoring_exec_custom_pagerank(void *, double, int, double, void**);
+int jgrapht_scoring_exec_custom_pagerank(void *, double, int, double, void** OUTPUT);
 
 // set
 
