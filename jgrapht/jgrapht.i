@@ -302,11 +302,11 @@ int jgrapht_scoring_exec_custom_pagerank(void *, double, int, double, void** OUT
 
 // set
 
-int jgrapht_set_create(void**);
+int jgrapht_set_create(void** OUTPUT);
 
-int jgrapht_set_linked_create(void**);
+int jgrapht_set_linked_create(void** OUTPUT);
 
-int jgrapht_set_it_create(void *, void**);
+int jgrapht_set_it_create(void *, void** OUTPUT);
 
 int jgrapht_set_size(void *, long long* OUTPUT);
 
@@ -326,15 +326,15 @@ int jgrapht_set_clear(void *);
 
 // vertex cover
 
-int jgrapht_vertexcover_exec_greedy(void *, void**);
+int jgrapht_vertexcover_exec_greedy(void *, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_greedy_weighted(void *, void *, void**);
+int jgrapht_vertexcover_exec_greedy_weighted(void *, void *, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_clarkson(void *, void**);
+int jgrapht_vertexcover_exec_clarkson(void *, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_clarkson_weighted(void *, void *, void**);
+int jgrapht_vertexcover_exec_clarkson_weighted(void *, void *, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_edgebased(void *, void**);
+int jgrapht_vertexcover_exec_edgebased(void *, void** OUTPUT);
 
 int jgrapht_vertexcover_exec_baryehudaeven(void *, void**);
 

@@ -52,9 +52,9 @@ class Graph:
 
     def __del__(self):
         if jgrapht.jgrapht_is_thread_attached():
-            errors.raise_if_last_error()
-            jgrapht.jgrapht_destroy(self._handle) 
-            errors.raise_if_last_error()
+            err = jgrapht.jgrapht_destroy(self._handle)
+            if err:
+                errors.raise_status() 
 
     @property
     def graph_type(self):
@@ -62,7 +62,7 @@ class Graph:
 
     @property
     def handle(self):
-        return self._handle;    
+        return self._handle;
 
     def add_vertex(self):
         err, v = jgrapht.jgrapht_graph_add_vertex(self._handle)
