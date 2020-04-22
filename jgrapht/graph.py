@@ -45,9 +45,13 @@ class GraphType:
 class Graph:
     """The main graph class"""
     def __init__(self, directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True):
-        self._handle = jgrapht.jgrapht_graph_create(directed, allowing_self_loops, allowing_multiple_edges, weighted)
-        self._graph_type = GraphType(directed, allowing_self_loops, allowing_multiple_edges, weighted)
+
+        status, handle = jgrapht.jgrapht_graph_create(directed, allowing_self_loops, allowing_multiple_edges, weighted)
         errors.raise_if_last_error()
+        print('Status %d' % status)
+        print('handle %s' % str(handle))
+        self._handle = handle
+        self._graph_type = GraphType(directed, allowing_self_loops, allowing_multiple_edges, weighted)
 
     def __del__(self):
         if jgrapht.jgrapht_is_thread_attached():
@@ -79,8 +83,9 @@ class Graph:
         return res 
 
     def vertices_count(self):
-        res = jgrapht.jgrapht_graph_vertices_count(self._handle)
-        errors.raise_if_last_error()        
+        err, res = jgrapht.jgrapht_graph_vertices_count(self._handle)
+        if err:
+            errors.raise_if_last_error()        
         return res 
 
     def add_edge(self, source, target):
