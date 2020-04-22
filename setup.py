@@ -37,9 +37,8 @@ class BuildConfig(object):
 
             def run(self):
                 build_cfg.is_capi_build = build_cfg._compile_capi()
-                #command = ['echo Hello']
-                #self.announce('Running command: %s' % str(command), level=distutils.log.INFO)
-                #subprocess.check_call(command)
+
+                
 
         return BuildCapiCommand
 
@@ -52,7 +51,6 @@ class BuildConfig(object):
             """A custom build_ext."""
 
             def run(self):
-
                 print("Running custom build_ext")
 
                 # Find the jgrapht-capi extension
@@ -64,11 +62,6 @@ class BuildConfig(object):
 
                 # Run the original build_ext command
                 build_ext.run(self) 
-
-                # Put files from build_capi to the build folder of the build_ext
-
-
-                print(self)
 
         return CustomBuildExt
 
@@ -198,7 +191,7 @@ if sys.version_info < (3, 4):
 _jgrapht_extension = Extension('_jgrapht', ['jgrapht/jgrapht.i', 'jgrapht/jgrapht.c'], 
                                include_dirs=['jgrapht/'],
                                library_dirs=['jgrapht/'], 
-                               libraries=['jgrapht_capi'])
+                               libraries=[])
 
 build_config = BuildConfig()
 
