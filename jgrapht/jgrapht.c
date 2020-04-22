@@ -125,69 +125,133 @@ int jgrapht_generate_empty(void *g, int nodes) {
 
 // graph
 
-int jgrapht_graph_create(int, int, int, int, void**);
+int jgrapht_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, void** res) { 
+    return jgrapht_capi_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, res);
+}
 
-int jgrapht_graph_vertices_count(void *, long long*);
+int jgrapht_graph_vertices_count(void *g, long long* res) { 
+    return jgrapht_capi_graph_vertices_count(thread, g, res);
+}
 
-int jgrapht_graph_edges_count(void *, long long*);
+int jgrapht_graph_edges_count(void *g, long long* res) { 
+    return jgrapht_capi_graph_edges_count(thread, g, res);
+}
 
-int jgrapht_graph_add_vertex(void *, long long*);
+int jgrapht_graph_add_vertex(void *g, long long* res) { 
+    return jgrapht_capi_graph_add_vertex(thread, g, res);
+}
 
-int jgrapht_graph_remove_vertex(void *, long long int, int*);
+int jgrapht_graph_remove_vertex(void *g, long long int v, int* res) { 
+    return jgrapht_capi_graph_remove_vertex(thread, g, v, res);
+}
 
-int jgrapht_graph_contains_vertex(void *, long long int, int*);
+int jgrapht_graph_contains_vertex(void *g, long long int v, int* res) { 
+    return jgrapht_capi_graph_contains_vertex(thread, g, v, res);
+}
 
-int jgrapht_graph_add_edge(void *, long long int, long long int, long long*);
+int jgrapht_graph_add_edge(void *g, long long int u, long long int v, long long* res) { 
+    return jgrapht_capi_graph_add_edge(thread, g, u, v, res);
+}
 
-int jgrapht_graph_remove_edge(void *, long long int, int*);
+int jgrapht_graph_remove_edge(void *g, long long int e, int* res) { 
+    return jgrapht_capi_graph_remove_edge(thread, g, e, res);
+}
 
-int jgrapht_graph_contains_edge(void *, long long int, int*);
+int jgrapht_graph_contains_edge(void *g, long long int e, int* res) { 
+    return jgrapht_capi_graph_contains_edge(thread, g, e, res);
+}
 
-int jgrapht_graph_contains_edge_between(void *, long long int, long long int, int*);
+int jgrapht_graph_contains_edge_between(void *g, long long int u, long long int v, int* res) { 
+    return jgrapht_capi_graph_contains_edge_between(thread, g, u, v, res);
+}
 
-int jgrapht_graph_degree_of(void *, long long int, long long*);
+int jgrapht_graph_degree_of(void *g, long long int v, long long* res) { 
+    return jgrapht_capi_graph_degree_of(thread, g, v, res);
+}
 
-int jgrapht_graph_indegree_of(void *, long long int, long long*);
+int jgrapht_graph_indegree_of(void *g, long long int v, long long* res) { 
+    return jgrapht_capi_graph_indegree_of(thread, g, v, res);
+}
 
-int jgrapht_graph_outdegree_of(void *, long long int, long long*);
+int jgrapht_graph_outdegree_of(void *g, long long int v, long long* res) { 
+    return jgrapht_capi_graph_outdegree_of(thread, g, v, res);
+}
 
-int jgrapht_graph_edge_source(void *, long long int, long long*);
+int jgrapht_graph_edge_source(void *g, long long int v, long long* res) { 
+    return jgrapht_capi_graph_edge_source(thread, g, v, res);
+}
 
-int jgrapht_graph_edge_target(void *, long long int, long long*);
+int jgrapht_graph_edge_target(void *g, long long int v, long long* res) { 
+    return jgrapht_capi_graph_edge_target(thread, g, v, res);
+}
 
-int jgrapht_graph_is_weighted(void *, int*);
+int jgrapht_graph_is_weighted(void *g, int* res) { 
+    return jgrapht_capi_graph_is_weighted(thread, g, res);
+}
 
-int jgrapht_graph_is_directed(void *, int*);
+int jgrapht_graph_is_directed(void *g, int* res) { 
+    return jgrapht_capi_graph_is_directed(thread, g, res);
+}
 
-int jgrapht_graph_is_undirected(void *, int*);
+int jgrapht_graph_is_undirected(void *g, int* res) { 
+    return jgrapht_capi_graph_is_undirected(thread, g, res);
+}
 
-int jgrapht_graph_is_allowing_selfloops(void *, int*);
+int jgrapht_graph_is_allowing_selfloops(void *g, int* res) { 
+    return jgrapht_capi_graph_is_allowing_selfloops(thread, g, res);
+}
 
-int jgrapht_graph_is_allowing_multipleedges(void *, int*);
+int jgrapht_graph_is_allowing_multipleedges(void *g, int* res) { 
+    return jgrapht_capi_graph_is_allowing_multipleedges(thread, g, res);
+}
 
-int jgrapht_graph_get_edge_weight(void *, long long int, double*);
+int jgrapht_graph_get_edge_weight(void *g, long long int e, double* res) { 
+    return jgrapht_capi_graph_get_edge_weight(thread, g, e, res);
+}
 
-int jgrapht_graph_set_edge_weight(void *, long long int, double);
+int jgrapht_graph_set_edge_weight(void *g, long long int e, double weight) { 
+    return jgrapht_capi_graph_set_edge_weight(thread, g, e, weight);
+}
 
-int jgrapht_graph_create_all_vit(void *, void**);
+int jgrapht_graph_create_all_vit(void *g, void** res)  { 
+    return jgrapht_capi_graph_create_all_vit(thread, g, res);
+}
 
-int jgrapht_graph_create_all_eit(void *, void**);
+int jgrapht_graph_create_all_eit(void *g, void** res) { 
+    return jgrapht_capi_graph_create_all_eit(thread, g, res);
+}
 
-int jgrapht_graph_create_between_eit(void *, long long int, long long int, void**);
+int jgrapht_graph_create_between_eit(void *g, long long int u, long long int v, void** res) { 
+    return jgrapht_capi_graph_create_between_eit(thread, g, u, v, res);
+}
 
-int jgrapht_graph_vertex_create_eit(void *, long long int, void**);
+int jgrapht_graph_vertex_create_eit(void *g, long long int v, void** res) { 
+    return jgrapht_capi_graph_vertex_create_eit(thread, g, v, res);
+}
 
-int jgrapht_graph_vertex_create_out_eit(void *, long long int, void**);
+int jgrapht_graph_vertex_create_out_eit(void *g, long long int v, void** res) { 
+    return jgrapht_capi_graph_vertex_create_out_eit(thread, g, v, res);
+}
 
-int jgrapht_graph_vertex_create_in_eit(void *, long long int, void**);
+int jgrapht_graph_vertex_create_in_eit(void *g, long long int v, void** res) { 
+    return jgrapht_capi_graph_vertex_create_in_eit(thread, g, v, res);
+}
 
-int jgrapht_graph_as_undirected(void *, void**);
+int jgrapht_graph_as_undirected(void *g, void** res) { 
+    return jgrapht_capi_graph_as_undirected(thread, g, res);
+}
 
-int jgrapht_graph_as_unmodifiable(void *, void**);
+int jgrapht_graph_as_unmodifiable(void *g, void** res) { 
+    return jgrapht_capi_graph_as_unmodifiable(thread, g, res);
+}
 
-int jgrapht_graph_as_unweighted(void *, void**);
+int jgrapht_graph_as_unweighted(void *g, void** res) { 
+    return jgrapht_capi_graph_as_unweighted(thread, g, res);
+}
 
-int jgrapht_graph_as_edgereversed(void *, void**);
+int jgrapht_graph_as_edgereversed(void *g, void** res) { 
+    return jgrapht_capi_graph_as_edgereversed(thread, g, res);
+}
 
 // graph test
 
@@ -221,7 +285,9 @@ int jgrapht_graph_test_is_eulerian(void *, int*);
 
 int jgrapht_graph_test_is_chordal(void *, int*);
 
-int jgrapht_graph_test_is_weakly_chordal(void *, int*);
+int jgrapht_graph_test_is_weakly_chordal(void *g, int* res) { 
+    return jgrapht_capi_graph_test_is_weakly_chordal(thread, g, res);
+}
 
 int jgrapht_graph_test_has_ore(void *, int*);
 
@@ -239,35 +305,41 @@ int jgrapht_graph_test_is_k5_subdivision(void *, int*);
 
 // iterators
 
-int jgrapht_it_next_long(void *, long long*);
+int jgrapht_it_next_long(void *it, long long* res) { 
+    return jgrapht_capi_it_next_long(thread, it, res);
+}
 
-int jgrapht_it_next_double(void *, double*);
+int jgrapht_it_next_double(void *it, double* res) { 
+    return jgrapht_capi_it_next_double(thread, it, res);
+}
 
-int jgrapht_it_hasnext(void *, int*);
+int jgrapht_it_hasnext(void *it, int* res) { 
+    return jgrapht_capi_it_hasnext(thread, it, res);
+}
 
 // map
 
-int jgrapht_map_create(void**);
+int jgrapht_map_create(void** res);
 
-int jgrapht_map_linked_create(void**);
+int jgrapht_map_linked_create(void** res);
 
-int jgrapht_map_keys_it_create(void *, void**);
+int jgrapht_map_keys_it_create(void *map, void** res);
 
-int jgrapht_map_size(void *, long long*);
+int jgrapht_map_size(void *map, long long* res);
 
-int jgrapht_map_values_it_create(void *, void**);
+int jgrapht_map_values_it_create(void *map, void** res);
 
-int jgrapht_map_long_double_put(void *, long long int, double);
+int jgrapht_map_long_double_put(void *map, long long int key, double value);
 
-int jgrapht_map_long_long_put(void *, long long int, long long int);
+int jgrapht_map_long_long_put(void *map, long long int key, long long int value);
 
-int jgrapht_map_long_double_get(void *, long long int, double*);
+int jgrapht_map_long_double_get(void *map, long long int key, double* res);
 
-int jgrapht_map_long_long_get(void *, long long int, long long*);
+int jgrapht_map_long_long_get(void *map, long long int key, long long* res);
 
-int jgrapht_map_long_contains_key(void *, long long int, int*);
+int jgrapht_map_long_contains_key(void *map, long long int key, int* res);
 
-int jgrapht_map_clear(void *);
+int jgrapht_map_clear(void *map);
 
 // matching
 
@@ -303,7 +375,9 @@ int jgrapht_matching_get_weight(void *, double*);
 
 int jgrapht_matching_get_card(void *, long long*);
 
-int jgrapht_matching_create_eit(void *, void**);
+int jgrapht_matching_create_eit(void *matching, void** res) { 
+    return jgrapht_capi_matching_create_eit(thread, matching, res);
+}
 
 // cleanup
 
@@ -361,51 +435,51 @@ int jgrapht_scoring_exec_custom_pagerank(void *, double, int, double, void**);
 
 // set
 
-int jgrapht_set_create(void**);
+int jgrapht_set_create(void** res);
 
-int jgrapht_set_linked_create(void**);
+int jgrapht_set_linked_create(void** res);
 
-int jgrapht_set_it_create(void *, void**);
+int jgrapht_set_it_create(void *set, void**res);
 
-int jgrapht_set_size(void *, long long*);
+int jgrapht_set_size(void *set, long long* res);
 
-int jgrapht_set_long_add(void *, long long int);
+int jgrapht_set_long_add(void *set , long long int elem);
 
-int jgrapht_set_double_add(void *, double);
+int jgrapht_set_double_add(void *set, double elem);
 
-int jgrapht_set_long_remove(void *, long long int);
+int jgrapht_set_long_remove(void *set, long long int elem);
 
-int jgrapht_set_double_remove(void *, double);
+int jgrapht_set_double_remove(void *set, double elem);
 
-int jgrapht_set_long_contains(void *, long long int, int*);
+int jgrapht_set_long_contains(void *set, long long int elem, int*res);
 
-int jgrapht_set_double_contains(void *, double, int*);
+int jgrapht_set_double_contains(void *set, double elem, int* res);
 
-int jgrapht_set_clear(void *);
+int jgrapht_set_clear(void *set);
 
 // vertex cover
 
-int jgrapht_vertexcover_exec_greedy(void *, void**);
+int jgrapht_vertexcover_exec_greedy(void *g, void**res);
 
-int jgrapht_vertexcover_exec_greedy_weighted(void *, void *, void**);
+int jgrapht_vertexcover_exec_greedy_weighted(void *g, void *weight_vertex_map, void**res);
 
-int jgrapht_vertexcover_exec_clarkson(void *, void**);
+int jgrapht_vertexcover_exec_clarkson(void *g, void**res);
 
-int jgrapht_vertexcover_exec_clarkson_weighted(void *, void *, void**);
+int jgrapht_vertexcover_exec_clarkson_weighted(void *g, void *weight_vertex_map, void**res);
 
-int jgrapht_vertexcover_exec_edgebased(void *, void**);
+int jgrapht_vertexcover_exec_edgebased(void *g, void**res);
 
-int jgrapht_vertexcover_exec_baryehudaeven(void *, void**);
+int jgrapht_vertexcover_exec_baryehudaeven(void *g, void**res);
 
-int jgrapht_vertexcover_exec_baryehudaeven_weighted(void *, void *, void**);
+int jgrapht_vertexcover_exec_baryehudaeven_weighted(void *g, void *weight_vertex_map, void**res);
 
-int jgrapht_vertexcover_exec_exact(void *, void**);
+int jgrapht_vertexcover_exec_exact(void *g, void**res);
 
-int jgrapht_vertexcover_exec_exact_weighted(void *, void *, void**);
+int jgrapht_vertexcover_exec_exact_weighted(void *g, void *weight_vertex_map, void**res);
 
-int jgrapht_vertexcover_get_weight(void *, double*);
+int jgrapht_vertexcover_get_weight(void *vertex_cover, double* res);
 
-int jgrapht_vertexcover_create_vit(void *, void**);
+int jgrapht_vertexcover_create_vit(void *vertex_cover, void** res);
 
 // vm
 
