@@ -31,6 +31,62 @@ int jgrapht_is_thread_attached() {
     return thread != NULL; 
 }
 
+// clustering
+
+int jgrapht_clustering_exec_k_spanning_tree(void *g, int k, void**res) { 
+    return jgrapht_capi_clustering_exec_k_spanning_tree(thread, g, k, res);
+}
+
+int jgrapht_clustering_get_number_clusters(void *clustering, long long* res) { 
+    return jgrapht_capi_clustering_get_number_clusters(thread, clustering, res);
+}
+
+int jgrapht_clustering_ith_cluster_vit(void *clustering, int i, void** res) { 
+    return jgrapht_capi_clustering_ith_cluster_vit(thread, clustering, i, res);
+}
+
+// coloring
+
+int jgrapht_coloring_exec_greedy(void *g, void** res) { 
+    return jgrapht_capi_coloring_exec_greedy(thread, g, res);
+}
+
+int jgrapht_coloring_exec_greedy_smallestdegreelast(void *g, void** res) {
+    return jgrapht_capi_coloring_exec_greedy_smallestdegreelast(thread, g, res);
+}
+
+int jgrapht_coloring_exec_backtracking_brown(void *g, void** res) { 
+    return jgrapht_capi_coloring_exec_backtracking_brown(thread, g, res);
+}
+
+int jgrapht_coloring_exec_greedy_largestdegreefirst(void *g, void** res) {
+    return jgrapht_capi_coloring_exec_greedy_largestdegreefirst(thread, g, res);
+}
+
+int jgrapht_coloring_exec_greedy_random(void *g, void** res) {
+    return jgrapht_capi_coloring_exec_greedy_random(thread, g, res);
+}
+
+int jgrapht_coloring_exec_greedy_random_with_seed(void * g, long long int seed, void** res) {
+    return jgrapht_capi_coloring_exec_greedy_random_with_seed(thread, g, seed, res);
+}
+
+int jgrapht_coloring_exec_greedy_dsatur(void *g, void** res) {
+    return jgrapht_capi_coloring_exec_greedy_dsatur(thread, g, res);
+}
+
+int jgrapht_coloring_exec_color_refinement(void *g, void** res) {
+    return jgrapht_capi_coloring_exec_color_refinement(thread, g, res);
+}
+
+int jgrapht_coloring_get_number_colors(void *coloring, long long* res) {
+    return jgrapht_capi_coloring_get_number_colors(thread, coloring, res);
+}
+
+int jgrapht_coloring_get_vertex_color_map(void *coloring, void** res) {
+    return jgrapht_capi_coloring_get_vertex_color_map(thread, coloring, res);
+}
+
 // errors
 
 void jgrapht_clear_errno() { 
@@ -45,241 +101,311 @@ char * jgrapht_get_errno_msg() {
     return jgrapht_capi_get_errno_msg(thread);
 }
 
+// generate
+
+int jgrapht_generate_barabasi_albert(void *g, int m0, int m, int n, long long int seed) { 
+    return jgrapht_capi_generate_barabasi_albert(thread, g, m0, m, n, seed);
+}
+
+int jgrapht_generate_barabasi_albert_forest(void *g, int t, int n, long long int seed) {
+    return jgrapht_capi_generate_barabasi_albert_forest(thread, g, t, n, seed);
+}
+
+int jgrapht_generate_complete(void *g, int nodes) {
+    return jgrapht_capi_generate_complete(thread, g, nodes);
+}
+
+int jgrapht_generate_bipartite_complete(void *g, int a, int b) {
+    return jgrapht_capi_generate_bipartite_complete(thread, g, a, b);
+}
+
+int jgrapht_generate_empty(void *g, int nodes) {
+    return jgrapht_capi_generate_empty(thread, g, nodes);
+}
+
 // graph
 
-void * jgrapht_graph_create(int directed, int allowingSelfLoops, int allowingMultipleEdges, int weighted) { 
-    return jgrapht_capi_graph_create(thread, directed, allowingSelfLoops, allowingMultipleEdges, weighted);
-}
+int jgrapht_graph_create(int, int, int, int, void**);
 
-long long int jgrapht_graph_vertices_count(void *gHandle) { 
-    return jgrapht_capi_graph_vertices_count(thread, gHandle);
-}
+int jgrapht_graph_vertices_count(void *, long long*);
 
-long long int jgrapht_graph_edges_count(void *gHandle) { 
-    return jgrapht_capi_graph_edges_count(thread, gHandle);
-}
+int jgrapht_graph_edges_count(void *, long long*);
 
-long long int jgrapht_graph_add_vertex(void *gHandle) { 
-    return jgrapht_capi_graph_add_vertex(thread, gHandle);
-}
+int jgrapht_graph_add_vertex(void *, long long*);
 
-int jgrapht_graph_remove_vertex(void *gHandle, long long int vertex) { 
-    return jgrapht_capi_graph_remove_vertex(thread, gHandle, vertex);
-}
+int jgrapht_graph_remove_vertex(void *, long long int, int*);
 
-int jgrapht_graph_contains_vertex(void *gHandle, long long int vertex) { 
-    return jgrapht_capi_graph_contains_vertex(thread, gHandle, vertex);
-}
+int jgrapht_graph_contains_vertex(void *, long long int, int*);
 
-long long int jgrapht_graph_add_edge(void *gHandle, long long int source, long long int target) { 
-    return jgrapht_capi_graph_add_edge(thread, gHandle, source, target);
-}
+int jgrapht_graph_add_edge(void *, long long int, long long int, long long*);
 
-int jgrapht_graph_remove_edge(void *gHandle, long long int edge) { 
-    return jgrapht_capi_graph_remove_edge(thread, gHandle, edge);
-}
+int jgrapht_graph_remove_edge(void *, long long int, int*);
 
-int jgrapht_graph_contains_edge(void *gHandle, long long int edge) { 
-    return jgrapht_capi_graph_contains_edge(thread, gHandle, edge);
-}
+int jgrapht_graph_contains_edge(void *, long long int, int*);
 
-int jgrapht_graph_contains_edge_between(void *gHandle, long long int source, long long int target) { 
-    return jgrapht_capi_graph_contains_edge_between(thread, gHandle, source, target);
-}
+int jgrapht_graph_contains_edge_between(void *, long long int, long long int, int*);
 
-long long int jgrapht_graph_degree_of(void *gHandle, long long int vertex) { 
-    return jgrapht_capi_graph_degree_of(thread, gHandle, vertex); 
-}
+int jgrapht_graph_degree_of(void *, long long int, long long*);
 
-long long int jgrapht_graph_indegree_of(void *gHandle, long long int vertex) { 
-    return jgrapht_capi_graph_indegree_of(thread, gHandle, vertex);
-}
+int jgrapht_graph_indegree_of(void *, long long int, long long*);
 
-long long int jgrapht_graph_outdegree_of(void *gHandle, long long int vertex) { 
-    return jgrapht_capi_graph_outdegree_of(thread, gHandle, vertex);
-}
+int jgrapht_graph_outdegree_of(void *, long long int, long long*);
 
-long long int jgrapht_graph_edge_source(void *gHandle, long long int edge) { 
-    return jgrapht_capi_graph_edge_source(thread, gHandle, edge);
-}
+int jgrapht_graph_edge_source(void *, long long int, long long*);
 
-long long int jgrapht_graph_edge_target(void *gHandle, long long int edge) { 
-    return jgrapht_capi_graph_edge_target(thread, gHandle, edge);
-}
+int jgrapht_graph_edge_target(void *, long long int, long long*);
 
-int jgrapht_graph_is_weighted(void *gHandle) { 
-    return jgrapht_capi_graph_is_weighted(thread, gHandle);
-}
+int jgrapht_graph_is_weighted(void *, int*);
 
-int jgrapht_graph_is_directed(void *gHandle) { 
-    return jgrapht_capi_graph_is_directed(thread, gHandle);
-}
+int jgrapht_graph_is_directed(void *, int*);
 
-int jgrapht_graph_is_undirected(void *gHandle) { 
-    return jgrapht_capi_graph_is_undirected(thread, gHandle);
-}
+int jgrapht_graph_is_undirected(void *, int*);
 
-int jgrapht_graph_is_allowing_selfloops(void *gHandle) { 
-    return jgrapht_capi_graph_is_allowing_selfloops(thread, gHandle);
-}
+int jgrapht_graph_is_allowing_selfloops(void *, int*);
 
-int jgrapht_graph_is_allowing_multipleedges(void *gHandle) { 
-    return jgrapht_capi_graph_is_allowing_multipleedges(thread, gHandle);
-}
+int jgrapht_graph_is_allowing_multipleedges(void *, int*);
 
-double jgrapht_graph_get_edge_weight(void *gHandle, long long int edge) { 
-    return jgrapht_capi_graph_get_edge_weight(thread, gHandle, edge);
-}
+int jgrapht_graph_get_edge_weight(void *, long long int, double*);
 
-void jgrapht_graph_set_edge_weight(void *gHandle, long long int edge, double weight) { 
-    return jgrapht_capi_graph_set_edge_weight(thread, gHandle, edge, weight);
-}
+int jgrapht_graph_set_edge_weight(void *, long long int, double);
 
-void * jgrapht_graph_create_all_vit(void *gHandle) { 
-    return jgrapht_capi_graph_create_all_vit(thread, gHandle);
-}
+int jgrapht_graph_create_all_vit(void *, void**);
 
-void * jgrapht_graph_create_all_eit(void *gHandle) { 
-    return jgrapht_capi_graph_create_all_eit(thread, gHandle);
-}
+int jgrapht_graph_create_all_eit(void *, void**);
 
-void * jgrapht_graph_create_between_eit(void *gHandle, long long int source, long long target) { 
-    return jgrapht_capi_graph_create_between_eit(thread, gHandle, source, target);
-}
+int jgrapht_graph_create_between_eit(void *, long long int, long long int, void**);
 
-void * jgrapht_graph_vertex_create_eit(void *gHandle, long long int vertex) { 
-    return jgrapht_capi_graph_vertex_create_eit(thread, gHandle, vertex);
-}
+int jgrapht_graph_vertex_create_eit(void *, long long int, void**);
 
-void * jgrapht_graph_vertex_create_out_eit(void *gHandle, long long int vertex) {
-    return jgrapht_capi_graph_vertex_create_out_eit(thread, gHandle, vertex);
-}
+int jgrapht_graph_vertex_create_out_eit(void *, long long int, void**);
 
-void * jgrapht_graph_vertex_create_in_eit(void *gHandle, long long int vertex) {
-    return jgrapht_capi_graph_vertex_create_in_eit(thread, gHandle, vertex);
-}
+int jgrapht_graph_vertex_create_in_eit(void *, long long int, void**);
+
+int jgrapht_graph_as_undirected(void *, void**);
+
+int jgrapht_graph_as_unmodifiable(void *, void**);
+
+int jgrapht_graph_as_unweighted(void *, void**);
+
+int jgrapht_graph_as_edgereversed(void *, void**);
+
+// graph test
+
+int jgrapht_graph_test_is_empty(void *, int*);
+
+int jgrapht_graph_test_is_simple(void *, int*);
+
+int jgrapht_graph_test_has_selfloops(void *, int*);
+
+int jgrapht_graph_test_has_multipleedges(void *, int*);
+
+int jgrapht_graph_test_is_complete(void *, int*);
+
+int jgrapht_graph_test_is_weakly_connected(void *, int*);
+
+int jgrapht_graph_test_is_strongly_connected(void *, int*);
+
+int jgrapht_graph_test_is_tree(void *, int*);
+
+int jgrapht_graph_test_is_forest(void *, int*);
+
+int jgrapht_graph_test_is_overfull(void *, int*);
+
+int jgrapht_graph_test_is_split(void *, int*);
+
+int jgrapht_graph_test_is_bipartite(void *, int*);
+
+int jgrapht_graph_test_is_cubic(void *, int*);
+
+int jgrapht_graph_test_is_eulerian(void *, int*);
+
+int jgrapht_graph_test_is_chordal(void *, int*);
+
+int jgrapht_graph_test_is_weakly_chordal(void *, int*);
+
+int jgrapht_graph_test_has_ore(void *, int*);
+
+int jgrapht_graph_test_is_trianglefree(void *, int*);
+
+int jgrapht_graph_test_is_perfect(void *, int*);
+
+int jgrapht_graph_test_is_planar(void *, int*);
+
+int jgrapht_graph_test_is_kuratowski_subdivision(void *, int*);
+
+int jgrapht_graph_test_is_k33_subdivision(void *, int*);
+
+int jgrapht_graph_test_is_k5_subdivision(void *, int*);
 
 // iterators
 
-long long int jgrapht_it_next_long(void *itHandle) { 
-    return jgrapht_capi_it_next_long(thread, itHandle);
-}
+int jgrapht_it_next_long(void *, long long*);
 
-double jgrapht_it_next_double(void *itHandle) { 
-    return jgrapht_capi_it_next_double(thread, itHandle);
-}
+int jgrapht_it_next_double(void *, double*);
 
-int jgrapht_it_hasnext(void *itHandle) { 
-    return jgrapht_capi_it_hasnext(thread, itHandle);
-}
+int jgrapht_it_hasnext(void *, int*);
 
 // map
 
-void * jgrapht_map_create() { 
-    return jgrapht_capi_map_create(thread);
-}
+int jgrapht_map_create(void**);
 
-void * jgrapht_map_linked_create() { 
-    return jgrapht_capi_map_linked_create(thread);
-}
+int jgrapht_map_linked_create(void**);
 
-void * jgrapht_map_keys_it_create(void *mapHandle) { 
-    return jgrapht_capi_map_keys_it_create(thread, mapHandle);
-}
+int jgrapht_map_keys_it_create(void *, void**);
 
-long long int jgrapht_map_size(void *mapHandle) { 
-    return jgrapht_capi_map_size(thread, mapHandle);
-}
+int jgrapht_map_size(void *, long long*);
 
-void * jgrapht_map_values_it_create(void *mapHandle) { 
-    return jgrapht_capi_map_values_it_create(thread, mapHandle);
-}
+int jgrapht_map_values_it_create(void *, void**);
 
-void jgrapht_map_long_double_put(void *mapHandle, long long int key, double value) { 
-    return jgrapht_capi_map_long_double_put(thread, mapHandle, key, value);
-}
+int jgrapht_map_long_double_put(void *, long long int, double);
 
-double jgrapht_map_long_double_get(void *mapHandle, long long int key) { 
-    return jgrapht_capi_map_long_double_get(thread, mapHandle, key);
-}
+int jgrapht_map_long_long_put(void *, long long int, long long int);
 
-int jgrapht_map_long_contains_key(void *mapHandle, long long int key) { 
-    return jgrapht_capi_map_long_contains_key(thread, mapHandle, key);
-}
+int jgrapht_map_long_double_get(void *, long long int, double*);
 
-void jgrapht_map_clear(void *mapHandle) { 
-    return jgrapht_capi_map_clear(thread, mapHandle);
-}
+int jgrapht_map_long_long_get(void *, long long int, long long*);
+
+int jgrapht_map_long_contains_key(void *, long long int, int*);
+
+int jgrapht_map_clear(void *);
+
+// matching
+
+int jgrapht_matching_exec_greedy_general_max_card(void *, void**);
+
+int jgrapht_matching_exec_custom_greedy_general_max_card(void *, int, void**);
+
+int jgrapht_matching_exec_edmonds_general_max_card_dense(void *, void**);
+
+int jgrapht_matching_exec_edmonds_general_max_card_sparse(void *, void**);
+
+int jgrapht_matching_exec_greedy_general_max_weight(void *, void**);
+
+int jgrapht_matching_exec_custom_greedy_general_max_weight(void *, int, double, void**);
+
+int jgrapht_matching_exec_pathgrowing_max_weight(void *, void**);
+
+int jgrapht_matching_exec_blossom5_general_max_weight(void *, void**);
+
+int jgrapht_matching_exec_blossom5_general_min_weight(void *, void**);
+
+int jgrapht_matching_exec_blossom5_general_perfect_max_weight(void *, void**);
+
+int jgrapht_matching_exec_blossom5_general_perfect_min_weight(void *, void**);
+
+int jgrapht_matching_exec_bipartite_max_card(void *, void**);
+
+int jgrapht_matching_exec_bipartite_perfect_min_weight(void *, void *, void *, void**);
+
+int jgrapht_matching_exec_bipartite_max_weight(void *, void**);
+
+int jgrapht_matching_get_weight(void *, double*);
+
+int jgrapht_matching_get_card(void *, long long*);
+
+int jgrapht_matching_create_eit(void *, void**);
 
 // cleanup
 
-void jgrapht_destroy(void *handle) { 
-    jgrapht_capi_destroy(thread, handle);
+int jgrapht_destroy(void *handle) { 
+    return jgrapht_capi_destroy(thread, handle);
 }
 
 // mst
 
-void * jgrapht_mst_exec_kruskal(void *gHandle) { 
-    return jgrapht_capi_mst_exec_kruskal(thread, gHandle);
+int jgrapht_mst_exec_kruskal(void *g, void** res) { 
+    return jgrapht_capi_mst_exec_kruskal(thread, g, res);
 }
 
-void * jgrapht_mst_exec_prim(void *gHandle) {
-    return jgrapht_capi_mst_exec_prim(thread, gHandle);
+int jgrapht_mst_exec_prim(void *g, void** res) {
+    return jgrapht_capi_mst_exec_prim(thread, g, res);
 }
 
-double jgrapht_mst_get_weight(void *mstHandle) {
-    return jgrapht_capi_mst_get_weight(thread, mstHandle);
+int jgrapht_mst_exec_boruvka(void *g, void** res) { 
+    return jgrapht_capi_mst_exec_boruvka(thread, g, res);
 }
 
-void * jgrapht_mst_create_eit(void *mstHandle) {
-    return jgrapht_capi_mst_create_eit(thread, mstHandle);
+int jgrapht_mst_get_weight(void *mst, double* res) {
+    return jgrapht_capi_mst_get_weight(thread, mst, res);
 }
+
+int jgrapht_mst_create_eit(void *mst, void** res) { 
+    return jgrapht_capi_mst_create_eit(thread, mst, res);
+}
+
+// partition
+
+int jgrapht_partition_exec_bipartite(void *, int*, void**, void**);
+
+// scoring
+
+int jgrapht_scoring_exec_alpha_centrality(void *, void**);
+
+int jgrapht_scoring_exec_custom_alpha_centrality(void *, double, double, int, double, void**);
+
+int jgrapht_scoring_exec_betweenness_centrality(void *, void**);
+
+int jgrapht_scoring_exec_custom_betweenness_centrality(void *, int, void**);
+
+int jgrapht_scoring_exec_closeness_centrality(void *, void**);
+
+int jgrapht_scoring_exec_custom_closeness_centrality(void *, int, int, void**);
+
+int jgrapht_scoring_exec_harmonic_centrality(void *, void**);
+
+int jgrapht_scoring_exec_custom_harmonic_centrality(void *, int, int, void**);
+
+int jgrapht_scoring_exec_pagerank(void *, void**);
+
+int jgrapht_scoring_exec_custom_pagerank(void *, double, int, double, void**);
+
+// set
+
+int jgrapht_set_create(void**);
+
+int jgrapht_set_linked_create(void**);
+
+int jgrapht_set_it_create(void *, void**);
+
+int jgrapht_set_size(void *, long long*);
+
+int jgrapht_set_long_add(void *, long long int);
+
+int jgrapht_set_double_add(void *, double);
+
+int jgrapht_set_long_remove(void *, long long int);
+
+int jgrapht_set_double_remove(void *, double);
+
+int jgrapht_set_long_contains(void *, long long int, int*);
+
+int jgrapht_set_double_contains(void *, double, int*);
+
+int jgrapht_set_clear(void *);
 
 // vertex cover
 
-void * jgrapht_vertexcover_exec_greedy(void *gHandle) { 
-    return jgrapht_capi_vertexcover_exec_greedy(thread, gHandle);
-}
+int jgrapht_vertexcover_exec_greedy(void *, void**);
 
-void * jgrapht_vertexcover_exec_greedy_weighted(void *gHandle, void *weightMapHandle) { 
-    return jgrapht_capi_vertexcover_exec_greedy_weighted(thread, gHandle, weightMapHandle);
-}
+int jgrapht_vertexcover_exec_greedy_weighted(void *, void *, void**);
 
-void * jgrapht_vertexcover_exec_clarkson(void *gHandle) { 
-    return jgrapht_capi_vertexcover_exec_clarkson(thread, gHandle);
-}
+int jgrapht_vertexcover_exec_clarkson(void *, void**);
 
-void * jgrapht_vertexcover_exec_clarkson_weighted(void *gHandle, void *weightMapHandle) { 
-    return jgrapht_capi_vertexcover_exec_clarkson_weighted(thread, gHandle, weightMapHandle);
-}
+int jgrapht_vertexcover_exec_clarkson_weighted(void *, void *, void**);
 
-void * jgrapht_vertexcover_exec_edgebased(void *gHandle) { 
-    return jgrapht_capi_vertexcover_exec_edgebased(thread, gHandle);
-}
+int jgrapht_vertexcover_exec_edgebased(void *, void**);
 
-void * jgrapht_vertexcover_exec_baryehudaeven(void *gHandle) { 
-    return jgrapht_capi_vertexcover_exec_baryehudaeven(thread, gHandle);
-}
+int jgrapht_vertexcover_exec_baryehudaeven(void *, void**);
 
-void * jgrapht_vertexcover_exec_baryehudaeven_weighted(void *gHandle, void *weightMapHandle) { 
-    return jgrapht_capi_vertexcover_exec_baryehudaeven_weighted(thread, gHandle, weightMapHandle);
-}
+int jgrapht_vertexcover_exec_baryehudaeven_weighted(void *, void *, void**);
 
-void * jgrapht_vertexcover_exec_exact(void *gHandle) { 
-    return jgrapht_capi_vertexcover_exec_exact(thread, gHandle);
-}
+int jgrapht_vertexcover_exec_exact(void *, void**);
 
-void * jgrapht_vertexcover_exec_exact_weighted(void *gHandle, void *weightMapHandle) { 
-    return jgrapht_capi_vertexcover_exec_exact_weighted(thread, gHandle, weightMapHandle);
-}
+int jgrapht_vertexcover_exec_exact_weighted(void *, void *, void**);
 
-double jgrapht_vertexcover_get_weight(void *vcHandle) { 
-    return jgrapht_capi_vertexcover_get_weight(thread, vcHandle);
-}
+int jgrapht_vertexcover_get_weight(void *, double*);
 
-void * jgrapht_vertexcover_create_vit(void *vcHandle) { 
-    return jgrapht_capi_vertexcover_create_vit(thread, vcHandle);
-}
+int jgrapht_vertexcover_create_vit(void *, void**);
 
 // vm
 
