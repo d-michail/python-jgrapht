@@ -3,7 +3,7 @@ from .. import errors
 from .. import iterator
 from .. import util
 
-def _vertex_cover_alg(name, graph, vertex_weights=None):
+def _vertexcover_alg(name, graph, vertex_weights=None):
 
     alg_method_name = 'jgrapht_vertexcover_exec_' + name
     if vertex_weights is not None: 
@@ -46,17 +46,17 @@ def _vertex_cover_alg(name, graph, vertex_weights=None):
 
 
 def vertexcover_greedy(graph, vertex_weights=None):
-    return _vertex_cover_alg('greedy', graph, vertex_weights)
+    return _vertexcover_alg('greedy', graph, vertex_weights)
 
 def vertexcover_clarkson(graph, vertex_weights=None):
-    return _vertex_cover_alg('clarkson', graph, vertex_weights)
+    return _vertexcover_alg('clarkson', graph, vertex_weights)
 
 def vertexcover_edgebased(graph, vertex_weights=None):
-    return _vertex_cover_alg('edgebased', graph, vertex_weights)
+    return _vertexcover_alg('edgebased', graph, vertex_weights)
 
 def vertexcover_baryehuda_even(graph, vertex_weights=None):
-    return _vertex_cover_alg('baryehudaeven', graph, vertex_weights)
+    return _vertexcover_alg('baryehudaeven', graph, vertex_weights)
 
 def vertexcover_exact(graph, vertex_weights=None):
-    return _vertex_cover_alg('exact', graph, vertex_weights)
+    return _vertexcover_alg('exact', graph, vertex_weights)
 
