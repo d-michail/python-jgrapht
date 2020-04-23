@@ -1,6 +1,7 @@
 from enum import Enum
 
 class Status(Enum):
+    """Error status corresponding to the errors coming from the JGraphT native library."""
     SUCCESS = 0
     ERROR = 1
     ILLEGAL_ARGUMENT = 2

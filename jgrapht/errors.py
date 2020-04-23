@@ -1,5 +1,7 @@
-from . import jgrapht
-from . import status
+
+from .status import Status
+from .jgrapht import jgrapht_get_errno, jgrapht_get_errno_msg, jgrapht_clear_errno
+
 
 class Error(Exception):
     """Base class for exceptions in this module.
@@ -90,23 +92,29 @@ class ClassCastError(Error):
         self.message = message        
 
 def raise_status():
-    errno = jgrapht.jgrapht_get_errno()
-    if errno == status.Status.SUCCESS.value:
+    """Check the last error and raise the appropriate exception if needed. 
+
+    If an error has been registered, it is cleared and the appropriate exception 
+    is raised. Otherwise, nothing happens.
+    """
+    errno = jgrapht_get_errno()
+    if errno == Status.SUCCESS.value:
         return
-    errno_msg = jgrapht.jgrapht_get_errno_msg()
-    if errno == status.Status.ILLEGAL_ARGUMENT.value:
+    errno_msg = jgrapht_get_errno_msg()
+    jgrapht_clear_errno()
+    if errno == Status.ILLEGAL_ARGUMENT.value:
         raise IllegalArgumentError(errno_msg)    
-    if errno == status.Status.UNSUPPORTED_OPERATION.value:
+    if errno == Status.UNSUPPORTED_OPERATION.value:
         raise UnsupportedOperationError(errno_msg)    
-    if errno == status.Status.INDEX_OUT_OF_BOUNDS.value:
+    if errno == Status.INDEX_OUT_OF_BOUNDS.value:
         raise IndexOutOfBoundsError(errno_msg)
-    if errno == status.Status.NO_SUCH_ELEMENT.value:
+    if errno == Status.NO_SUCH_ELEMENT.value:
         raise NoSuchElementError(errno_msg)
-    if errno == status.Status.NULL_POINTER.value:
+    if errno == Status.NULL_POINTER.value:
         raise NullPointerError(errno_msg)
-    if errno == status.Status.CLASS_CAST.value:
+    if errno == Status.CLASS_CAST.value:
         raise ClassCastError(errno_msg)
-    if errno != status.Status.SUCCESS.value:
+    if errno != Status.SUCCESS.value:
         raise Error(errno_msg)        
 
 
