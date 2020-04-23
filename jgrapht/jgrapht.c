@@ -47,44 +47,36 @@ int jgrapht_clustering_ith_cluster_vit(void *clustering, int i, void** res) {
 
 // coloring
 
-int jgrapht_coloring_exec_greedy(void *g, void** res) { 
-    return jgrapht_capi_coloring_exec_greedy(thread, g, res);
+int jgrapht_coloring_exec_greedy(void *g, long long* colors_res, void** res) { 
+    return jgrapht_capi_coloring_exec_greedy(thread, g, colors_res, res);
 }
 
-int jgrapht_coloring_exec_greedy_smallestdegreelast(void *g, void** res) {
-    return jgrapht_capi_coloring_exec_greedy_smallestdegreelast(thread, g, res);
+int jgrapht_coloring_exec_greedy_smallestdegreelast(void *g, long long* colors_res, void** res) {
+    return jgrapht_capi_coloring_exec_greedy_smallestdegreelast(thread, g, colors_res, res);
 }
 
-int jgrapht_coloring_exec_backtracking_brown(void *g, void** res) { 
-    return jgrapht_capi_coloring_exec_backtracking_brown(thread, g, res);
+int jgrapht_coloring_exec_backtracking_brown(void *g, long long* colors_res, void** res) { 
+    return jgrapht_capi_coloring_exec_backtracking_brown(thread, g, colors_res, res);
 }
 
-int jgrapht_coloring_exec_greedy_largestdegreefirst(void *g, void** res) {
-    return jgrapht_capi_coloring_exec_greedy_largestdegreefirst(thread, g, res);
+int jgrapht_coloring_exec_greedy_largestdegreefirst(void *g, long long* colors_res, void** res) {
+    return jgrapht_capi_coloring_exec_greedy_largestdegreefirst(thread, g, colors_res, res);
 }
 
-int jgrapht_coloring_exec_greedy_random(void *g, void** res) {
-    return jgrapht_capi_coloring_exec_greedy_random(thread, g, res);
+int jgrapht_coloring_exec_greedy_random(void *g, long long* colors_res, void** res) {
+    return jgrapht_capi_coloring_exec_greedy_random(thread, g, colors_res, res);
 }
 
-int jgrapht_coloring_exec_greedy_random_with_seed(void * g, long long int seed, void** res) {
-    return jgrapht_capi_coloring_exec_greedy_random_with_seed(thread, g, seed, res);
+int jgrapht_coloring_exec_greedy_random_with_seed(void * g, long long int seed, long long* colors_res, void** res) {
+    return jgrapht_capi_coloring_exec_greedy_random_with_seed(thread, g, seed, colors_res, res);
 }
 
-int jgrapht_coloring_exec_greedy_dsatur(void *g, void** res) {
-    return jgrapht_capi_coloring_exec_greedy_dsatur(thread, g, res);
+int jgrapht_coloring_exec_greedy_dsatur(void *g, long long* colors_res, void** res) {
+    return jgrapht_capi_coloring_exec_greedy_dsatur(thread, g, colors_res, res);
 }
 
-int jgrapht_coloring_exec_color_refinement(void *g, void** res) {
-    return jgrapht_capi_coloring_exec_color_refinement(thread, g, res);
-}
-
-int jgrapht_coloring_get_number_colors(void *coloring, long long* res) {
-    return jgrapht_capi_coloring_get_number_colors(thread, coloring, res);
-}
-
-int jgrapht_coloring_get_vertex_color_map(void *coloring, void** res) {
-    return jgrapht_capi_coloring_get_vertex_color_map(thread, coloring, res);
+int jgrapht_coloring_exec_color_refinement(void *g, long long* colors_res, void** res) {
+    return jgrapht_capi_coloring_exec_color_refinement(thread, g, colors_res, res);
 }
 
 // errors

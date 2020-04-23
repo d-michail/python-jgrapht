@@ -36,25 +36,21 @@ int jgrapht_clustering_ith_cluster_vit(void *, int, void** OUTPUT);
 
 // coloring
 
-int jgrapht_coloring_exec_greedy(void *, void** OUTPUT);
+int jgrapht_coloring_exec_greedy(void *, long long* OUTPUT, void** OUTPUT);
 
-int jgrapht_coloring_exec_greedy_smallestdegreelast(void *, void** OUTPUT);
+int jgrapht_coloring_exec_greedy_smallestdegreelast(void *, long long* OUTPUT, void** OUTPUT);
 
-int jgrapht_coloring_exec_backtracking_brown(void *, void** OUTPUT);
+int jgrapht_coloring_exec_backtracking_brown(void *, long long* OUTPUT, void** OUTPUT);
 
-int jgrapht_coloring_exec_greedy_largestdegreefirst(void *, void** OUTPUT);
+int jgrapht_coloring_exec_greedy_largestdegreefirst(void *, long long* OUTPUT, void** OUTPUT);
 
-int jgrapht_coloring_exec_greedy_random(void *, void** OUTPUT);
+int jgrapht_coloring_exec_greedy_random(void *, long long* OUTPUT, void** OUTPUT);
 
-int jgrapht_coloring_exec_greedy_random_with_seed(void *, long long int, void** OUTPUT);
+int jgrapht_coloring_exec_greedy_random_with_seed(void *, long long int, long long* OUTPUT, void** OUTPUT);
 
-int jgrapht_coloring_exec_greedy_dsatur(void *, void** OUTPUT);
+int jgrapht_coloring_exec_greedy_dsatur(void *, long long* OUTPUT, void** OUTPUT);
 
-int jgrapht_coloring_exec_color_refinement(void *, void** OUTPUT);
-
-int jgrapht_coloring_get_number_colors(void *, long long* OUTPUT);
-
-int jgrapht_coloring_get_vertex_color_map(void *, void** OUTPUT);
+int jgrapht_coloring_exec_color_refinement(void *, long long* OUTPUT, void** OUTPUT);
 
 // error
 

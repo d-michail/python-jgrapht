@@ -225,3 +225,111 @@ class JGraphTLongDoubleMap:
         err, res = jgrapht.jgrapht_map_long_clear(self._handle)
         if err: 
             errors.raise_status()
+
+
+class JGraphTLongLongMap:
+    """JGraphT Map with long keys and long values"""
+    def __init__(self, handle=None, owner=True, linked=True):
+        if handle is None:
+            if linked: 
+                err, res = jgrapht.jgrapht_map_linked_create()
+            else: 
+                err, res = jgrapht.jgrapht_map_create()
+            if err: 
+                errors.raise_status()
+            self._handle = res
+        else:
+            self._handle = handle
+        self._owner = owner
+
+    def __del__(self):
+        if jgrapht.jgrapht_is_thread_attached() and self._owner:
+            err = jgrapht.jgrapht_destroy(self._handle)
+            if err:
+                errors.raise_status() 
+
+    @property
+    def handle(self):
+        return self._handle;
+
+    def __iter__(self):
+        err, res = jgrapht.jgrapht_map_keys_it_create(self._handle)
+        if err: 
+            errors.raise_status()
+        return iterator.LongValueIterator(res)
+
+    def __len__(self):
+        err, res = jgrapht.jgrapht_map_size(self._handle)
+        if err: 
+            errors.raise_status()
+        return res
+
+    def get(self, key, value=None):
+        err, res = jgrapht.jgrapht_map_long_contains_key(self._handle, key)
+        if err: 
+            errors.raise_status()
+        if not res: 
+            if value is not None: 
+                return value
+            else: 
+                raise KeyError()
+        err, res = jgrapht.jgrapht_map_long_long_get(self._handle, key)
+        if err: 
+            errors.raise_status()
+        return res
+
+    def add(self, key, value):
+        err = jgrapht.jgrapht_map_long_long_put(self._handle, key, value)
+        if err: 
+            errors.raise_status()
+
+    def pop(self, key, defaultvalue):
+        err, res = jgrapht.jgrapht_map_long_long_remove(self._handle, key)
+        if err:
+            if err == status.Status.ILLEGAL_ARGUMENT.value:
+                # key not found in map
+                jgrapht.jgrapht_clear_errno()
+                if defaultvalue is not None:
+                    return defaultvalue 
+                else: 
+                    raise KeyError()
+            else:
+                errors.raise_status()
+        return res
+
+    def __contains__(self, key):
+        err, res = jgrapht.jgrapht_map_long_contains_key(self._handle, key)
+        if err: 
+            errors.raise_status()
+        return res
+
+    def __getitem__(self, key):
+        err, res = jgrapht.jgrapht_map_long_contains_key(self._handle, key)
+        if err: 
+            errors.raise_status()
+        if not res: 
+            raise KeyError()
+        err, res = jgrapht.jgrapht_map_long_long_get(self._handle, key)
+        if err: 
+            errors.raise_status()
+        return res
+
+    def __setitem__(self, key, value):
+        err = jgrapht.jgrapht_map_long_long_put(self._handle, key, value)
+        if err: 
+            errors.raise_status()
+
+    def __delitem__(self, key):
+        err, res = jgrapht.jgrapht_map_long_contains_key(self._handle, key)
+        if err: 
+            errors.raise_status()
+        if not res: 
+            raise KeyError()
+        err, res = jgrapht.jgrapht_map_long_long_remove(self._handle, key)
+        if err: 
+            errors.raise_status()
+
+    def clear(self): 
+        err, res = jgrapht.jgrapht_map_long_clear(self._handle)
+        if err: 
+            errors.raise_status()
