@@ -38,8 +38,21 @@ e91 = g.add_edge(9, 1)
 print('Total edges ' + str(len(g.edges())))
 
 pagerank = scoring.scoring_pagerank(g)
-
 for v in g.vertices():
     print ('Pagerank of vertex {} is {}'.format(v, pagerank[v]))
 
+harmonic_centrality = scoring.scoring_harmonic_centrality(g)
+for v in g.vertices():
+    print ('Harmonic centrality of vertex {} is {}'.format(v, harmonic_centrality[v]))
 
+closeness_centrality = scoring.scoring_closeness_centrality(g)
+for v in g.vertices():
+    print ('Closeness centrality of vertex {} is {}'.format(v, closeness_centrality[v]))
+
+betweenness_centrality = scoring.scoring_betweenness_centrality(g)
+for v in g.vertices():
+    print ('Betweenness centrality of vertex {} is {}'.format(v, betweenness_centrality[v]))
+
+alpha_centrality = scoring.scoring_alpha_centrality(g)
+for v in g.vertices():
+    print ('Alpha centrality of vertex {} is {}'.format(v, alpha_centrality[v]))
