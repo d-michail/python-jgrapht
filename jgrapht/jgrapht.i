@@ -220,6 +220,10 @@ int jgrapht_map_long_long_get(void *, long long int, long long* OUTPUT);
 
 int jgrapht_map_long_contains_key(void *, long long int, int* OUTPUT);
 
+int jgrapht_map_long_double_remove(void *, long long int, double* OUTPUT);
+
+int jgrapht_map_long_long_remove(void *, long long int, long long* OUTPUT);
+
 int jgrapht_map_clear(void *);
 
 // matching
@@ -336,17 +340,17 @@ int jgrapht_vertexcover_exec_clarkson_weighted(void *, void *, void** OUTPUT);
 
 int jgrapht_vertexcover_exec_edgebased(void *, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_baryehudaeven(void *, void**);
+int jgrapht_vertexcover_exec_baryehudaeven(void *, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_baryehudaeven_weighted(void *, void *, void**);
+int jgrapht_vertexcover_exec_baryehudaeven_weighted(void *, void *, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_exact(void *, void**);
+int jgrapht_vertexcover_exec_exact(void *, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_exact_weighted(void *, void *, void**);
+int jgrapht_vertexcover_exec_exact_weighted(void *, void *, void** OUTPUT);
 
 int jgrapht_vertexcover_get_weight(void *, double* OUTPUT);
 
-int jgrapht_vertexcover_create_vit(void *, void**);
+int jgrapht_vertexcover_create_vit(void *, void** OUTPUT);
 
 // vm
 

@@ -14,10 +14,18 @@ class GraphType:
 
     @property
     def directed(self):
+        """Check if the graph is directed.
+
+        :returns: True if the graph is directed, False otherwise.
+        """
         return self._directed
 
     @property
     def undirected(self):
+        """Check if the graph is undirected.
+        
+        :returns: True if the graph is undirected, False otherwise.
+        """
         return not self._directed    
 
     @property
@@ -61,6 +69,10 @@ class Graph:
 
     @property
     def graph_type(self):
+        """Query the graph type.
+
+        :returns: The graph type.
+        """
         return self._graph_type;
 
     @property
@@ -68,12 +80,23 @@ class Graph:
         return self._handle;
 
     def add_vertex(self):
+        """Add a new vertex to the graph.
+
+        Vertices are automatically created and represented as longs.
+
+        :returns: The new vertex.
+        :rtype: long
+        """
         err, v = jgrapht.jgrapht_graph_add_vertex(self._handle)
         if err:
             errors.raise_status()
         return v
 
     def remove_vertex(self, vertex):
+        """Remove a vertex from the graph.
+
+        :param vertex: The vertex to remove
+        """
         err = jgrapht.jgrapht_graph_remove_vertex(self._handle, vertex)
         if err:
             errors.raise_status()

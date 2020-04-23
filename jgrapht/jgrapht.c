@@ -403,6 +403,14 @@ int jgrapht_map_long_contains_key(void *map, long long int key, int* res) {
     return jgrapht_capi_map_long_contains_key(thread, map, key, res);
 }
 
+int jgrapht_map_long_double_remove(void *map, long long int key, double* res) {
+    return jgrapht_capi_map_long_double_remove(thread, map, key, res);
+}
+
+int jgrapht_map_long_long_remove(void *map, long long int key, long long* res) {
+    return jgrapht_capi_map_long_long_remove(thread, map, key, res);
+}
+
 int jgrapht_map_clear(void *map) { 
     return jgrapht_capi_map_clear(thread, map);
 }

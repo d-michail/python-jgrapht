@@ -207,6 +207,10 @@ int jgrapht_map_long_long_get(void *, long long int, long long*);
 
 int jgrapht_map_long_contains_key(void *, long long int, int*);
 
+int jgrapht_map_long_double_remove(void *, long long int, double*);
+
+int jgrapht_map_long_long_remove(void *, long long int, long long*);
+
 int jgrapht_map_clear(void *);
 
 // matching

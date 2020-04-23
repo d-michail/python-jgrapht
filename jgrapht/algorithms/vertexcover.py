@@ -1,58 +1,62 @@
 from .. import jgrapht
 from .. import errors
 from .. import iterator
+from .. import util
 
-def vertexcover_greedy(graph):
-    vc_handle = jgrapht.jgrapht_vertexcover_exec_greedy(graph.handle)
-    errors.raise_if_last_error()
-    vc_weight = jgrapht.jgrapht_vertexcover_get_weight(vc_handle)
-    errors.raise_if_last_error()
-    vit = iterator.LongValueIterator(jgrapht.jgrapht_vertexcover_create_vit(vc_handle))
-    vc_vertices = list(vit)
+def _vertex_cover_alg(name, graph, vertex_weights=None):
+
+    alg_method_name = 'jgrapht_vertexcover_exec_' + name
+    if vertex_weights is not None: 
+        alg_method_name += '_weighted'
+
+    try:
+        alg_method = getattr(jgrapht, alg_method_name)
+    except AttributeError:
+        if vertex_weights is not None: 
+            raise errors.UnsupportedOperationError("Algorithm not supported. Maybe try without weights?")
+        else:
+            raise errors.UnsupportedOperationError("Algorithm not supported.")
+
+    if vertex_weights is not None: 
+        jgrapht_vertex_weights = util.JGraphTLongDoubleMap()
+        for key, val in vertex_weights.items():
+            jgrapht_vertex_weights[key] = val
+        err, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
+    else:
+        err, vc_handle = alg_method(graph.handle)
+
+    if err: 
+        errors.raise_status()
+
+    err, vc_weight = jgrapht.jgrapht_vertexcover_get_weight(vc_handle)
+    if err:
+        errors.raise_status()
+
+    err, vc_vit_handle = jgrapht.jgrapht_vertexcover_create_vit(vc_handle)
+    if err:
+        errors.raise_status()
+
+    vc_vertices = list(iterator.LongValueIterator(vc_vit_handle))
+
     jgrapht.jgrapht_destroy(vc_handle)
-    errors.raise_if_last_error()
+    if err:
+        errors.raise_status()
+
     return (vc_weight, vc_vertices)
 
-def vertexcover_clarkson(graph):
-    vc_handle = jgrapht.jgrapht_vertexcover_exec_clarkson(graph.handle)
-    errors.raise_if_last_error()
-    vc_weight = jgrapht.jgrapht_vertexcover_get_weight(vc_handle)
-    errors.raise_if_last_error()
-    vit = iterator.LongValueIterator(jgrapht.jgrapht_vertexcover_create_vit(vc_handle))
-    vc_vertices = list(vit)
-    jgrapht.jgrapht_destroy(vc_handle)
-    errors.raise_if_last_error()
-    return (vc_weight, vc_vertices)
 
-def vertexcover_edgebased(graph):
-    vc_handle = jgrapht.jgrapht_vertexcover_exec_edgebased(graph.handle)
-    errors.raise_if_last_error()
-    vc_weight = jgrapht.jgrapht_vertexcover_get_weight(vc_handle)
-    errors.raise_if_last_error()
-    vit = iterator.LongValueIterator(jgrapht.jgrapht_vertexcover_create_vit(vc_handle))
-    vc_vertices = list(vit)
-    jgrapht.jgrapht_destroy(vc_handle)
-    errors.raise_if_last_error()
-    return (vc_weight, vc_vertices)
+def vertexcover_greedy(graph, vertex_weights=None):
+    return _vertex_cover_alg('greedy', graph, vertex_weights)
 
-def vertexcover_baryehudaeven(graph):
-    vc_handle = jgrapht.jgrapht_vertexcover_exec_baryehudaeven(graph.handle)
-    errors.raise_if_last_error()
-    vc_weight = jgrapht.jgrapht_vertexcover_get_weight(vc_handle)
-    errors.raise_if_last_error()
-    vit = iterator.LongValueIterator(jgrapht.jgrapht_vertexcover_create_vit(vc_handle))
-    vc_vertices = list(vit)
-    jgrapht.jgrapht_destroy(vc_handle)
-    errors.raise_if_last_error()
-    return (vc_weight, vc_vertices)
+def vertexcover_clarkson(graph, vertex_weights=None):
+    return _vertex_cover_alg('clarkson', graph, vertex_weights)
 
-def vertexcover_exact(graph):
-    vc_handle = jgrapht.jgrapht_vertexcover_exec_exact(graph.handle)
-    errors.raise_if_last_error()
-    vc_weight = jgrapht.jgrapht_vertexcover_get_weight(vc_handle)
-    errors.raise_if_last_error()
-    vit = iterator.LongValueIterator(jgrapht.jgrapht_vertexcover_create_vit(vc_handle))
-    vc_vertices = list(vit)
-    jgrapht.jgrapht_destroy(vc_handle)
-    errors.raise_if_last_error()
-    return (vc_weight, vc_vertices)
+def vertexcover_edgebased(graph, vertex_weights=None):
+    return _vertex_cover_alg('edgebased', graph, vertex_weights)
+
+def vertexcover_baryehuda_even(graph, vertex_weights=None):
+    return _vertex_cover_alg('baryehudaeven', graph, vertex_weights)
+
+def vertexcover_exact(graph, vertex_weights=None):
+    return _vertex_cover_alg('exact', graph, vertex_weights)
+
