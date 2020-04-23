@@ -157,7 +157,7 @@ class JGraphTLongDoubleMap:
         return res
 
     def get(self, key, value=None):
-        err, res = jgrapht.jgrapht_map_long_contains(self._handle, key)
+        err, res = jgrapht.jgrapht_map_long_contains_key(self._handle, key)
         if err: 
             errors.raise_status()
         if not res: 
@@ -190,13 +190,13 @@ class JGraphTLongDoubleMap:
         return res
 
     def __contains__(self, key):
-        err, res = jgrapht.jgrapht_map_long_contains(self._handle, key)
+        err, res = jgrapht.jgrapht_map_long_contains_key(self._handle, key)
         if err: 
             errors.raise_status()
         return res
 
     def __getitem__(self, key):
-        err, res = jgrapht.jgrapht_map_long_contains(self._handle, key)
+        err, res = jgrapht.jgrapht_map_long_contains_key(self._handle, key)
         if err: 
             errors.raise_status()
         if not res: 
@@ -212,7 +212,7 @@ class JGraphTLongDoubleMap:
             errors.raise_status()
 
     def __delitem__(self, key):
-        err, res = jgrapht.jgrapht_map_long_contains(self._handle, key)
+        err, res = jgrapht.jgrapht_map_long_contains_key(self._handle, key)
         if err: 
             errors.raise_status()
         if not res: 
