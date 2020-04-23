@@ -23,7 +23,6 @@ def generate_barabasi_albert_forest(graph, t, n, seed=None):
     if err: 
         raise_status()
 
-
 def generate_complete(graph, n):
     """ Generates a complete graph of any size.
 
