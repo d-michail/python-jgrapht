@@ -2,7 +2,7 @@ from . import jgrapht as backend
 from .errors import raise_status
 from .status import Status
 
-class LongValueIterator: 
+class JGraphTLongIterator: 
     """Long values iterator"""
     def __init__(self, handle, owner=True):
         self._handle = handle
@@ -29,7 +29,7 @@ class LongValueIterator:
                 raise_status() 
 
 
-class DoubleValueIterator: 
+class JGraphTDoubleIterator: 
     """Double values iterator"""
     def __init__(self, handle, owner=True):
         self._handle = handle
@@ -65,7 +65,7 @@ class GraphVertexSet:
         err, res = backend.jgrapht_graph_create_all_vit(self._handle)
         if err: 
             raise_status()
-        return LongValueIterator(res)
+        return JGraphTLongIterator(res)
 
     def __len__(self):
         err, res = backend.jgrapht_graph_vertices_count(self._handle)
@@ -88,7 +88,7 @@ class GraphEdgeSet:
         err, res = backend.jgrapht_graph_create_all_eit(self._handle)
         if err: 
             raise_status()
-        return LongValueIterator(res)
+        return JGraphTLongIterator(res)
 
     def __len__(self):
         err, res = backend.jgrapht_graph_edges_count(self._handle)
@@ -132,7 +132,7 @@ class JGraphTLongSet:
         err, res = backend.jgrapht_set_it_create(self._handle)
         if err: 
             raise_status()
-        return LongValueIterator(res)
+        return JGraphTLongIterator(res)
 
     def __len__(self):
         err, res = backend.jgrapht_set_size(self._handle)
@@ -201,7 +201,7 @@ class JGraphTLongDoubleMap:
         err, res = backend.jgrapht_map_keys_it_create(self._handle)
         if err: 
             raise_status()
-        return LongValueIterator(res)
+        return JGraphTLongIterator(res)
 
     def __len__(self):
         err, res = backend.jgrapht_map_size(self._handle)
@@ -309,7 +309,7 @@ class JGraphTLongLongMap:
         err, res = backend.jgrapht_map_keys_it_create(self._handle)
         if err: 
             raise_status()
-        return LongValueIterator(res)
+        return JGraphTLongIterator(res)
 
     def __len__(self):
         err, res = backend.jgrapht_map_size(self._handle)

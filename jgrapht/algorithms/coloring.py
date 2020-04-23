@@ -1,22 +1,22 @@
-from .. import jgrapht
-from .. import errors
-from .. import iterator
-from .. import util
+from .. import jgrapht as backend
+from ..errors import raise_status, UnsupportedOperationError
+from ..util import JGraphTLongIterator, JGraphTLongLongMap
+
 
 def _coloring_alg(name, graph, *args):
     alg_method_name = 'jgrapht_coloring_exec_'
     alg_method_name += name
 
     try:
-        alg_method = getattr(jgrapht, alg_method_name)
+        alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise errors.UnsupportedOperationError("Algorithm not supported.")    
+        raise UnsupportedOperationError("Algorithm not supported.")    
 
     err, num_colors, color_map_handle = alg_method(graph.handle, *args)
     if err: 
-        errors.raise_status()
+        raise_status()
 
-    return (num_colors, util.JGraphTLongLongMap(handle=color_map_handle))
+    return (num_colors, JGraphTLongLongMap(handle=color_map_handle))
 
 
 def coloring_greedy(graph):

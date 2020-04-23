@@ -2,7 +2,7 @@
 
 import jgrapht.util as util
 
-s = util.JGraphTSet()
+s = util.JGraphTLongSet()
 s.add(100)
 s.add(200)
 s.add(300)

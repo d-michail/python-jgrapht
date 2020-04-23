@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from copy import copy
 
+from . import jgrapht as backend
 from .errors import raise_status
 from .util import GraphVertexSet, GraphEdgeSet
-from .iterator import LongValueIterator
-from . import jgrapht as backend
+from .util import JGraphTLongIterator
 
 class GraphType: 
     """Graph Type"""
@@ -218,25 +218,25 @@ class JGraphTGraph(ABC):
         err, res = backend.jgrapht_graph_create_between_eit(self._handle, u, v)
         if err:
             raise_status()
-        return LongValueIterator(res)
+        return JGraphTLongIterator(res)
 
     def edges_of(self, v):
         err, res = backend.jgrapht_graph_vertex_create_eit(self._handle, v)
         if err:
             raise_status()
-        return LongValueIterator(res)
+        return JGraphTLongIterator(res)
 
     def inedges_of(self, v):
         err, res = backend.jgrapht_graph_vertex_create_in_eit(self._handle, v)
         if err:
             raise_status()
-        return LongValueIterator(res)    
+        return JGraphTLongIterator(res)    
 
     def outedges_of(self, v):
         err, res = backend.jgrapht_graph_vertex_create_out_eit(self._handle, v)
         if err:
             raise_status()
-        return LongValueIterator(res)
+        return JGraphTLongIterator(res)
 
 
 class Graph(JGraphTGraph):

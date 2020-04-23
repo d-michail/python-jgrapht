@@ -1,7 +1,7 @@
-from .. import jgrapht
-from .. import errors
-from .. import iterator
-from .. import util
+
+from .. import jgrapht as backend
+from ..errors import raise_status, UnsupportedOperationError
+from ..util import JGraphTLongIterator, JGraphTLongDoubleMap
 
 def _vertexcover_alg(name, graph, vertex_weights=None):
 
@@ -10,15 +10,15 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
         alg_method_name += '_weighted'
 
     try:
-        alg_method = getattr(jgrapht, alg_method_name)
+        alg_method = getattr(backend, alg_method_name)
     except AttributeError:
         if vertex_weights is not None: 
-            raise errors.UnsupportedOperationError("Algorithm not supported. Maybe try without weights?")
+            raise UnsupportedOperationError("Algorithm not supported. Maybe try without weights?")
         else:
-            raise errors.UnsupportedOperationError("Algorithm not supported.")
+            raise UnsupportedOperationError("Algorithm not supported.")
 
     if vertex_weights is not None: 
-        jgrapht_vertex_weights = util.JGraphTLongDoubleMap()
+        jgrapht_vertex_weights = JGraphTLongDoubleMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
         err, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
@@ -26,21 +26,21 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
         err, vc_handle = alg_method(graph.handle)
 
     if err: 
-        errors.raise_status()
+        raise_status()
 
-    err, vc_weight = jgrapht.jgrapht_vertexcover_get_weight(vc_handle)
+    err, vc_weight = backend.jgrapht_vertexcover_get_weight(vc_handle)
     if err:
-        errors.raise_status()
+        raise_status()
 
-    err, vc_vit_handle = jgrapht.jgrapht_vertexcover_create_vit(vc_handle)
+    err, vc_vit_handle = backend.jgrapht_vertexcover_create_vit(vc_handle)
     if err:
-        errors.raise_status()
+        raise_status()
 
-    vc_vertices = list(iterator.LongValueIterator(vc_vit_handle))
+    vc_vertices = list(JGraphTLongIterator(vc_vit_handle))
 
-    jgrapht.jgrapht_destroy(vc_handle)
+    backend.jgrapht_destroy(vc_handle)
     if err:
-        errors.raise_status()
+        raise_status()
 
     return (vc_weight, vc_vertices)
 
