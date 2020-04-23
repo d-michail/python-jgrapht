@@ -409,72 +409,60 @@ int jgrapht_map_clear(void *map) {
 
 // matching
 
-int jgrapht_matching_exec_greedy_general_max_card(void *g, void** res) { 
-    return jgrapht_capi_matching_exec_greedy_general_max_card(thread, g, res);
+int jgrapht_matching_exec_greedy_general_max_card(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_matching_exec_greedy_general_max_card(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_custom_greedy_general_max_card(void *g, int sort, void** res) {
-    return jgrapht_capi_matching_exec_custom_greedy_general_max_card(thread, g, sort, res);
+int jgrapht_matching_exec_custom_greedy_general_max_card(void *g, int sort, double* weight_res, void** res) {
+    return jgrapht_capi_matching_exec_custom_greedy_general_max_card(thread, g, sort, weight_res, res);
 }
 
-int jgrapht_matching_exec_edmonds_general_max_card_dense(void *g, void** res) {
-    return jgrapht_capi_matching_exec_edmonds_general_max_card_dense(thread, g, res);
+int jgrapht_matching_exec_edmonds_general_max_card_dense(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_matching_exec_edmonds_general_max_card_dense(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_edmonds_general_max_card_sparse(void *g, void** res) {
-    return jgrapht_capi_matching_exec_edmonds_general_max_card_sparse(thread, g, res);
+int jgrapht_matching_exec_edmonds_general_max_card_sparse(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_matching_exec_edmonds_general_max_card_sparse(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_greedy_general_max_weight(void *g, void** res) {
-    return jgrapht_capi_matching_exec_greedy_general_max_weight(thread, g, res);
+int jgrapht_matching_exec_greedy_general_max_weight(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_matching_exec_greedy_general_max_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_custom_greedy_general_max_weight(void *g, int normalize_edge_costs, double epsilon, void** res) { 
-    return jgrapht_capi_matching_exec_custom_greedy_general_max_weight(thread, g, normalize_edge_costs, epsilon, res);
+int jgrapht_matching_exec_custom_greedy_general_max_weight(void *g, int normalize_edge_costs, double epsilon, double* weight_res, void** res) { 
+    return jgrapht_capi_matching_exec_custom_greedy_general_max_weight(thread, g, normalize_edge_costs, epsilon, weight_res, res);
 }
 
-int jgrapht_matching_exec_pathgrowing_max_weight(void *g, void** res) {
-    return jgrapht_capi_matching_exec_pathgrowing_max_weight(thread, g, res);
+int jgrapht_matching_exec_pathgrowing_max_weight(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_matching_exec_pathgrowing_max_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_blossom5_general_max_weight(void *g, void** res) {
-    return jgrapht_capi_matching_exec_blossom5_general_max_weight(thread, g, res);
+int jgrapht_matching_exec_blossom5_general_max_weight(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_matching_exec_blossom5_general_max_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_blossom5_general_min_weight(void *g, void** res) {
-    return jgrapht_capi_matching_exec_blossom5_general_min_weight(thread, g, res);
+int jgrapht_matching_exec_blossom5_general_min_weight(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_matching_exec_blossom5_general_min_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_blossom5_general_perfect_max_weight(void *g, void** res) {
-    return jgrapht_capi_matching_exec_blossom5_general_perfect_max_weight(thread, g, res);
+int jgrapht_matching_exec_blossom5_general_perfect_max_weight(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_matching_exec_blossom5_general_perfect_max_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_blossom5_general_perfect_min_weight(void *g, void** res) {
-    return jgrapht_capi_matching_exec_blossom5_general_perfect_min_weight(thread, g, res);
+int jgrapht_matching_exec_blossom5_general_perfect_min_weight(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_matching_exec_blossom5_general_perfect_min_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_bipartite_max_card(void *g, void** res) {
-    return jgrapht_capi_matching_exec_bipartite_max_card(thread, g, res);
+int jgrapht_matching_exec_bipartite_max_card(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_matching_exec_bipartite_max_card(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_bipartite_perfect_min_weight(void *g, void *vertex_set1, void *vertex_set2, void** res) { 
-    return jgrapht_capi_matching_exec_bipartite_perfect_min_weight(thread, g, vertex_set1, vertex_set2, res);
+int jgrapht_matching_exec_bipartite_perfect_min_weight(void *g, void *vertex_set1, void *vertex_set2, double* weight_res, void** res) { 
+    return jgrapht_capi_matching_exec_bipartite_perfect_min_weight(thread, g, vertex_set1, vertex_set2, weight_res, res);
 }
 
-int jgrapht_matching_exec_bipartite_max_weight(void *g, void** res) { 
-    return jgrapht_capi_matching_exec_bipartite_max_weight(thread, g, res);
-}
-
-int jgrapht_matching_get_weight(void *matching, double* res) {
-    return jgrapht_capi_matching_get_weight(thread, matching, res);
-}
-
-int jgrapht_matching_get_card(void *matching, long long* res) {
-    return jgrapht_capi_matching_get_card(thread, matching, res);
-}
-
-int jgrapht_matching_create_eit(void *matching, void** res) { 
-    return jgrapht_capi_matching_create_eit(thread, matching, res);
+int jgrapht_matching_exec_bipartite_max_weight(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_matching_exec_bipartite_max_weight(thread, g, weight_res, res);
 }
 
 // cleanup

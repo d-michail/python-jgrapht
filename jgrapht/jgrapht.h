@@ -211,39 +211,33 @@ int jgrapht_map_clear(void *);
 
 // matching
 
-int jgrapht_matching_exec_greedy_general_max_card(void *, void**);
+int jgrapht_matching_exec_greedy_general_max_card(void *, double*, void**);
 
-int jgrapht_matching_exec_custom_greedy_general_max_card(void *, int, void**);
+int jgrapht_matching_exec_custom_greedy_general_max_card(void *, int, double*, void**);
 
-int jgrapht_matching_exec_edmonds_general_max_card_dense(void *, void**);
+int jgrapht_matching_exec_edmonds_general_max_card_dense(void *, double*, void**);
 
-int jgrapht_matching_exec_edmonds_general_max_card_sparse(void *, void**);
+int jgrapht_matching_exec_edmonds_general_max_card_sparse(void *, double*, void**);
 
-int jgrapht_matching_exec_greedy_general_max_weight(void *, void**);
+int jgrapht_matching_exec_greedy_general_max_weight(void *, double*, void**);
 
-int jgrapht_matching_exec_custom_greedy_general_max_weight(void *, int, double, void**);
+int jgrapht_matching_exec_custom_greedy_general_max_weight(void *, int, double, double*, void**);
 
-int jgrapht_matching_exec_pathgrowing_max_weight(void *, void**);
+int jgrapht_matching_exec_pathgrowing_max_weight(void *, double*, void**);
 
-int jgrapht_matching_exec_blossom5_general_max_weight(void *, void**);
+int jgrapht_matching_exec_blossom5_general_max_weight(void *, double*, void**);
 
-int jgrapht_matching_exec_blossom5_general_min_weight(void *, void**);
+int jgrapht_matching_exec_blossom5_general_min_weight(void *, double*, void**);
 
-int jgrapht_matching_exec_blossom5_general_perfect_max_weight(void *, void**);
+int jgrapht_matching_exec_blossom5_general_perfect_max_weight(void *, double*, void**);
 
-int jgrapht_matching_exec_blossom5_general_perfect_min_weight(void *, void**);
+int jgrapht_matching_exec_blossom5_general_perfect_min_weight(void *, double*, void**);
 
-int jgrapht_matching_exec_bipartite_max_card(void *, void**);
+int jgrapht_matching_exec_bipartite_max_card(void *, double*, void**);
 
-int jgrapht_matching_exec_bipartite_perfect_min_weight(void *, void *, void *, void**);
+int jgrapht_matching_exec_bipartite_perfect_min_weight(void *, void *, void *, double*, void**);
 
-int jgrapht_matching_exec_bipartite_max_weight(void *, void**);
-
-int jgrapht_matching_get_weight(void *, double*);
-
-int jgrapht_matching_get_card(void *, long long*);
-
-int jgrapht_matching_create_eit(void *, void**);
+int jgrapht_matching_exec_bipartite_max_weight(void *, double*, void**);
 
 // cleanup
 
