@@ -245,15 +245,11 @@ int jgrapht_destroy(void *);
 
 // mst
 
-int jgrapht_mst_exec_kruskal(void *, void**);
+int jgrapht_mst_exec_kruskal(void *, double*, void**);
 
-int jgrapht_mst_exec_prim(void *, void**);
+int jgrapht_mst_exec_prim(void *, double*, void**);
 
-int jgrapht_mst_exec_boruvka(void *, void**);
-
-int jgrapht_mst_get_weight(void *, double*);
-
-int jgrapht_mst_create_eit(void *, void**);
+int jgrapht_mst_exec_boruvka(void *, double*, void**);
 
 // partition
 

@@ -473,24 +473,16 @@ int jgrapht_destroy(void *handle) {
 
 // mst
 
-int jgrapht_mst_exec_kruskal(void *g, void** res) { 
-    return jgrapht_capi_mst_exec_kruskal(thread, g, res);
+int jgrapht_mst_exec_kruskal(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_mst_exec_kruskal(thread, g, weight_res, res);
 }
 
-int jgrapht_mst_exec_prim(void *g, void** res) {
-    return jgrapht_capi_mst_exec_prim(thread, g, res);
+int jgrapht_mst_exec_prim(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_mst_exec_prim(thread, g, weight_res, res);
 }
 
-int jgrapht_mst_exec_boruvka(void *g, void** res) { 
-    return jgrapht_capi_mst_exec_boruvka(thread, g, res);
-}
-
-int jgrapht_mst_get_weight(void *mst, double* res) {
-    return jgrapht_capi_mst_get_weight(thread, mst, res);
-}
-
-int jgrapht_mst_create_eit(void *mst, void** res) { 
-    return jgrapht_capi_mst_create_eit(thread, mst, res);
+int jgrapht_mst_exec_boruvka(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_mst_exec_boruvka(thread, g, weight_res, res);
 }
 
 // partition

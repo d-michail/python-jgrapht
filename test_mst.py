@@ -38,10 +38,10 @@ e91 = g.add_edge(9, 1)
 print('Total edges ' + str(len(g.edges())))
 
 mst_w, mst_edges = mst.mst_kruskal(g)
-print('Mst weight {}, mst edges {}'.format(mst_w, mst_edges))
+print('Mst weight {}, mst edges {}'.format(mst_w, list(mst_edges)))
 
 mst_w1, mst_edges1 = mst.mst_prim(g)
-print('Mst weight {}, mst edges {}'.format(mst_w1, mst_edges1))
+print('Mst weight {}, mst edges {}'.format(mst_w1, list(mst_edges1)))
 
 mst_w2, mst_edges2 = mst.mst_boruvka(g)
-print('Mst weight {}, mst edges {}'.format(mst_w2, mst_edges2))
+print('Mst weight {}, mst edges {}'.format(mst_w2, list(mst_edges2)))
