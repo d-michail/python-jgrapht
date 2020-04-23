@@ -35,3 +35,8 @@ Graph Generators
 .. automodule:: jgrapht.generators
    :members:
 
+Spanning Algorithms
+-------------------
+
+.. automodule:: jgrapht.algorithms.mst
+   :members:
