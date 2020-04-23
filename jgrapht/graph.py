@@ -33,6 +33,12 @@ class GraphType:
 
     @property
     def allowing_self_loops(self):
+        """Check if the graph allows self-loops.
+
+        Self-loops are edges (u,v) where u = v.
+        
+        :returns: True if the graph allows self-loops, False otherwise.
+        """
         return self._allowing_self_loops
 
     @property
@@ -86,8 +92,8 @@ class JGraphTGraph(ABC):
 
         Vertices are automatically created and represented as longs.
 
-        :returns: The new vertex.
-        :rtype: long
+        :returns: The new vertex identifier.
+        :rtype: Long
         """
         err, v = backend.jgrapht_graph_add_vertex(self._handle)
         if err:
@@ -104,23 +110,48 @@ class JGraphTGraph(ABC):
             raise_status()
 
     def contains_vertex(self, v):
+        """Check if a vertex is contained in the graph.
+
+        :param v: The vertex
+        :returns: True if the vertex is contained in the graph, False otherwise
+        :rtype: boolean
+        """
         err, res = backend.jgrapht_graph_contains_vertex(self._handle, v)
         if err:
             raise_status()
         return res 
 
     def add_edge(self, u, v):
+        """Adds an edge to the graph.
+
+        Edges are automatically created and represented as longs.
+
+        :param u: The first endpoint (vertex) of the edge
+        :param v: The second endpoint (vertex) of the edge
+        :returns: The new edge identifier
+        :rtype: Long
+        """
         err, res = backend.jgrapht_graph_add_edge(self._handle, u, v)
         if err:
             raise_status()
         return res 
 
-    def remove_edge(self, e): 
+    def remove_edge(self, e):
+        """Remove an edge from the graph.
+
+        :param e: The edge identifier to remove
+        """ 
         err, res = backend.jgrapht_graph_remove_edge(self._handle, e)
         if err:
             raise_status()
 
     def contains_edge(self, e):
+        """Check if an edge is contained in the graph.
+
+        :param e: The edge identifier to check
+        :returns: True if the edge belongs to the graph, False otherwise.
+        :rtype: Boolean
+        """ 
         err, res = backend.jgrapht_graph_contains_edge(self._handle, e)
         if err:
             raise_status()
@@ -221,9 +252,10 @@ class Graph(JGraphTGraph):
 
     @property
     def graph_type(self):
-        """Query the graph type.
+        """Query the graph :class:`type <.GraphType>`.
 
         :returns: The graph type.
+        :rtype: :class:`GraphType <.GraphType>`
         """
         return self._graph_type;
 
