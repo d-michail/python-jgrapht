@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from copy import copy
 
 from . import jgrapht as backend
-from .errors import raise_status
+from .errors import raise_status, return_or_raise
 from .util import GraphVertexSet, GraphEdgeSet
 from .util import JGraphTLongIterator
 
@@ -228,15 +228,11 @@ class JGraphTGraph(ABC):
 
     def inedges_of(self, v):
         err, res = backend.jgrapht_graph_vertex_create_in_eit(self._handle, v)
-        if err:
-            raise_status()
-        return JGraphTLongIterator(res)    
+        return JGraphTLongIterator(res) if not err else raise_status()
 
     def outedges_of(self, v):
         err, res = backend.jgrapht_graph_vertex_create_out_eit(self._handle, v)
-        if err:
-            raise_status()
-        return JGraphTLongIterator(res)
+        return JGraphTLongIterator(res) if not err else raise_status()
 
 
 class Graph(JGraphTGraph):
@@ -384,3 +380,6 @@ def as_edgereversed(graph):
     """Create an edge reversed view of a graph"""
     return EdgeReversedGraphView(graph)
 
+def is_empty_graph(graph):
+    err, res = backend.jgrapht_graph_test_is_empty(graph.handle)
+    return res if not err else raise_status()

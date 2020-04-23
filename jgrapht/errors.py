@@ -99,7 +99,7 @@ def raise_status():
     """
     errno = jgrapht_get_errno()
     if errno == Status.SUCCESS.value:
-        return
+        return errno
     errno_msg = jgrapht_get_errno_msg()
     jgrapht_clear_errno()
     if errno == Status.ILLEGAL_ARGUMENT.value:
@@ -114,7 +114,5 @@ def raise_status():
         raise NullPointerError(errno_msg)
     if errno == Status.CLASS_CAST.value:
         raise ClassCastError(errno_msg)
-    if errno != Status.SUCCESS.value:
-        raise Error(errno_msg)        
-
+    raise Error(errno_msg)        
 
