@@ -2,6 +2,7 @@ from . import jgrapht
 from . import status
 from . import errors
 from . import iterator
+from . import util
 
 class GraphType: 
     """Graph Type"""
@@ -49,6 +50,8 @@ class Graph:
         errors.raise_status()
         self._handle = handle
         self._graph_type = GraphType(directed, allowing_self_loops, allowing_multiple_edges, weighted)
+        self._vertex_set = None
+        self._edge_set = None
 
     def __del__(self):
         if jgrapht.jgrapht_is_thread_attached():
@@ -81,12 +84,6 @@ class Graph:
             errors.raise_status()
         return res 
 
-    def vertices_count(self):
-        err, res = jgrapht.jgrapht_graph_vertices_count(self._handle)
-        if err:
-            errors.raise_status()        
-        return res 
-
     def add_edge(self, source, target):
         err, res = jgrapht.jgrapht_graph_add_edge(self._handle, source, target)
         if err:
@@ -109,12 +106,6 @@ class Graph:
         if err:
             errors.raise_status()
         return res
-
-    def edges_count(self):
-        err, res = jgrapht.jgrapht_graph_edges_count(self._handle)
-        if err:
-            errors.raise_status()
-        return res     
 
     def degree_of(self, vertex):
         err, res = jgrapht.jgrapht_graph_degree_of(self._handle, vertex)
@@ -157,17 +148,15 @@ class Graph:
         if err:
             errors.raise_status()
 
-    def vertices(self): 
-        err, res = jgrapht.jgrapht_graph_create_all_vit(self._handle)
-        if err:
-            errors.raise_status()
-        return iterator.LongValueIterator(res)
+    def vertices(self):
+        if self._vertex_set is None: 
+            self._vertex_set = util.GraphVertexSet(self._handle)
+        return self._vertex_set
 
     def edges(self): 
-        err, res = jgrapht.jgrapht_graph_create_all_eit(self._handle)
-        if err:
-            errors.raise_status()
-        return iterator.LongValueIterator(res)
+        if self._edge_set is None: 
+            self._edge_set = util.GraphEdgeSet(self._handle)
+        return self._edge_set
 
     def edges_between(self, source, target):
         err, res = jgrapht.jgrapht_graph_create_between_eit(self._handle)
