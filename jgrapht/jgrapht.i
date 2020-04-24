@@ -324,6 +324,32 @@ int jgrapht_set_double_contains(void *, double, int* OUTPUT);
 
 int jgrapht_set_clear(void *);
 
+// traverse
+
+int jgrapht_traverse_create_bfs_from_all_vertices_vit(void *, void** OUTPUT);
+
+int jgrapht_traverse_create_bfs_from_vertex_vit(void *, long long int, void** OUTPUT);
+
+int jgrapht_traverse_create_lex_bfs_vit(void *, void** OUTPUT);
+
+int jgrapht_traverse_create_dfs_from_all_vertices_vit(void *, void** OUTPUT);
+
+int jgrapht_traverse_create_dfs_from_vertex_vit(void *, long long int, void** OUTPUT);
+
+int jgrapht_traverse_create_topological_order_vit(void *, void** OUTPUT);
+
+int jgrapht_traverse_create_random_walk_from_vertex_vit(void *, long long int, void** OUTPUT);
+
+int jgrapht_traverse_create_custom_random_walk_from_vertex_vit(void *, long long int, int, long long int, long long int, void** OUTPUT);
+
+int jgrapht_traverse_create_max_cardinality_vit(void *, void** OUTPUT);
+
+int jgrapht_traverse_create_degeneracy_ordering_vit(void *, void** OUTPUT);
+
+int jgrapht_traverse_create_closest_first_from_vertex_vit(void *, long long int, void** OUTPUT);
+
+int jgrapht_traverse_create_custom_closest_first_from_vertex_vit(void *, long long int, double, void** OUTPUT);
+
 // vertex cover
 
 int jgrapht_vertexcover_exec_greedy(void *, void** OUTPUT);

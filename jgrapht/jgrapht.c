@@ -597,6 +597,56 @@ int jgrapht_set_clear(void *set) {
     return jgrapht_capi_set_clear(thread, set);
 }
 
+// traverse
+
+int jgrapht_traverse_create_bfs_from_all_vertices_vit(void *g, void** res) {
+    return jgrapht_capi_traverse_create_bfs_from_all_vertices_vit(thread, g, res);
+}
+
+int jgrapht_traverse_create_bfs_from_vertex_vit(void *g, long long int v, void** res) {
+    return jgrapht_capi_traverse_create_bfs_from_vertex_vit(thread, g, v, res);
+}
+
+int jgrapht_traverse_create_lex_bfs_vit(void *g, void** res) {
+    return jgrapht_capi_traverse_create_lex_bfs_vit(thread, g, res);
+}
+
+int jgrapht_traverse_create_dfs_from_all_vertices_vit(void *g, void** res) {
+    return jgrapht_capi_traverse_create_dfs_from_all_vertices_vit(thread, g, res);
+}
+
+int jgrapht_traverse_create_dfs_from_vertex_vit(void *g, long long int v, void** res) {
+    return jgrapht_capi_traverse_create_dfs_from_vertex_vit(thread, g, v, res);
+}
+
+int jgrapht_traverse_create_topological_order_vit(void *g, void** res) {
+    return jgrapht_capi_traverse_create_topological_order_vit(thread, g, res);
+}
+
+int jgrapht_traverse_create_random_walk_from_vertex_vit(void *g, long long int v, void** res) {
+    return jgrapht_capi_traverse_create_random_walk_from_vertex_vit(thread, g, v, res);
+}
+
+int jgrapht_traverse_create_custom_random_walk_from_vertex_vit(void *g, long long int v, int weighted, long long int max_steps, long long int seed, void** res) {
+    return jgrapht_capi_traverse_create_custom_random_walk_from_vertex_vit(thread, g, v, weighted, max_steps, seed, res);
+}
+
+int jgrapht_traverse_create_max_cardinality_vit(void *g, void** res) {
+    return jgrapht_capi_traverse_create_max_cardinality_vit(thread, g, res);
+}
+
+int jgrapht_traverse_create_degeneracy_ordering_vit(void *g, void** res) {
+    return jgrapht_capi_traverse_create_degeneracy_ordering_vit(thread, g, res);
+}
+
+int jgrapht_traverse_create_closest_first_from_vertex_vit(void *g, long long int v, void** res) {
+    return jgrapht_capi_traverse_create_closest_first_from_vertex_vit(thread, g, v, res);
+}
+
+int jgrapht_traverse_create_custom_closest_first_from_vertex_vit(void *g, long long int v, double radius, void** res) {
+    return jgrapht_capi_traverse_create_custom_closest_first_from_vertex_vit(thread, g, v, radius, res);
+}
+
 // vertex cover
 
 int jgrapht_vertexcover_exec_greedy(void *g, void** res) { 
