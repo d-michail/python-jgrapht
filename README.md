@@ -6,11 +6,16 @@ Python interface for JGraphT
 ## Build
 
 ```
-python3 setup.py build_ext
-python3 setup.py install
+python3 setup.py build
 ```
 
 ## Install
+
+```
+python3 setup.py install
+```
+
+or
 
 ```
 pip install .
@@ -35,4 +40,12 @@ also be visible outside the base dir, you have to adjust the `PYTHONPATH` accord
 
 Note that another way to do an inplace build visible outside the repo base dir is with python setup.py develop. Instead of adjusting PYTHONPATH, this installs a .egg-link file into your site-packages as well as adjusts the easy-install.pth there, so its a more permanent operation.
 
+### Tests
 
+Execute the tests by giving
+
+```
+pytest tests/
+```
+
+Enjoy!
