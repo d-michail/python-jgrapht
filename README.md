@@ -30,4 +30,9 @@ For development you need to run:
 python setup.py build -i
 ```
 
+This allows you to import the in-place build from the repository base directory. If you want it to 
+also be visible outside the base dir, you have to adjust the `PYTHONPATH` accordingly.
+
+Note that another way to do an inplace build visible outside the repo base dir is with python setup.py develop. Instead of adjusting PYTHONPATH, this installs a .egg-link file into your site-packages as well as adjusts the easy-install.pth there, so its a more permanent operation.
+
 

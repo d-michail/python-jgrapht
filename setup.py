@@ -56,6 +56,22 @@ class BuildConfig(object):
                 # Run the original build_ext command
                 build_ext.run(self) 
 
+                # Install the build_capi in the build/ dir
+
+                if not self.dry_run:
+                    print('Original install directory: {}'.format(self.build_lib))
+
+                    # mkpath is a distutils helper to create directories
+                    self.mkpath(self.build_lib)
+
+                    capi_lib = 'libjgrapht_capi.so'
+                    capi_build_folder = os.path.join('vendor', 'build', 'jgrapht-capi')
+                    capi_source = os.path.join(capi_build_folder, capi_lib)
+                    capi_target = os.path.join(self.build_lib, capi_lib)
+                    outf, copied = self.copy_file(capi_source, capi_target)
+                    outf, copied = self.copy_file(capi_source, '.')
+
+
         return CustomBuildExt
 
     @property
@@ -72,18 +88,6 @@ class BuildConfig(object):
 
                 # run the original
                 build_py.run(self) 
-
-                if not self.dry_run:
-                    print('Original install directory: {}'.format(self.build_lib))
-                    
-                    # mkpath is a distutils helper to create directories
-                    self.mkpath(self.build_lib)
-
-                    capi_lib = 'libjgrapht_capi.so'
-                    capi_build_folder = os.path.join("vendor", "build", "jgrapht-capi")
-                    capi_source = os.path.join(capi_build_folder, capi_lib)
-                    capi_target = os.path.join(self.build_lib, capi_lib)
-                    outf, copied = self.copy_file(capi_source, capi_target)
 
         return CustomBuildPy
 
@@ -188,8 +192,8 @@ class BuildConfig(object):
         return env        
 
 
-if sys.version_info < (3, 4):
-    raise Exception('jgrapht-python requires Python 3.3 or higher.')
+if sys.version_info < (3, 5):
+    raise Exception('jgrapht-python requires Python 3.5 or higher.')
 
 
 _jgrapht_extension = Extension('_jgrapht', ['jgrapht/jgrapht.i','jgrapht/jgrapht.c'], 
