@@ -27,7 +27,7 @@ in order to import from the development sources.
 For development you need to run: 
 
 ```
-python setup.py build_ext -i
+python setup.py build -i
 ```
 
 

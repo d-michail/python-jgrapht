@@ -6,6 +6,7 @@ import setuptools
 from setuptools import setup
 from setuptools.command.install import install
 from setuptools.command.build_ext import build_ext
+from setuptools.command.build_py import build_py
 from setuptools.command.sdist import sdist
 
 import distutils
@@ -38,8 +39,6 @@ class BuildConfig(object):
             def run(self):
                 build_cfg.is_capi_build = build_cfg._compile_capi()
 
-                
-
         return BuildCapiCommand
 
     @property
@@ -54,21 +53,6 @@ class BuildConfig(object):
                 print("Running custom build_ext")
 
                 self.run_command('build_capi')
-
-                build_py = self.get_finalized_command('build_py')
-                #import pdb; pdb.set_trace()
-
-                for ext in self.extensions:
-                    fullname = self.get_ext_fullname(ext.name)
-                    filename = self.get_ext_filename(fullname)
-                    modpath = fullname.split('.')
-                    package = '.'.join(modpath[:-1])
-                    package_dir = build_py.get_package_dir(package)
-                    print(package_dir)
-
-                # Find the jgrapht-capi extension
-                #extensions = [extension for extension in self.extensions if extension.name == "_jgrapht"]
-                #_jgrapht_extension = extensions[0]
 
                 #from pprint import pprint
                 #pprint(vars(_jgrapht_extension))
@@ -99,6 +83,34 @@ class BuildConfig(object):
                     #    self.write_stub(package_dir or os.curdir, ext, True)
 
         return CustomBuildExt
+
+    @property
+    def build_py(self):    
+        """Return a custom build_py"""
+        build_cfg = self
+
+        class CustomBuildPy(build_py): 
+            """A custom build_py."""
+
+            def run(self):
+                # run the original
+                build_py.run(self) 
+
+                if not self.dry_run:
+
+                    print('Original install directory: {}'.format(self.build_lib))
+                    
+                    # mkpath is a distutils helper to create directories
+                    self.mkpath(self.build_lib)
+
+                    capi_lib = 'libjgrapht_capi.so'
+                    capi_build_folder = os.path.join("vendor", "build", "jgrapht-capi")
+                    capi_source = os.path.join(capi_build_folder, capi_lib)
+                    capi_target = os.path.join(self.build_lib, capi_lib)
+                    outf, copied = self.copy_file(capi_source, capi_target, 
+                        verbose=self.verbose, dry_run=self.dry_run)
+
+        return CustomBuildPy
 
     @property
     def install(self):
@@ -220,6 +232,7 @@ setup(
     cmdclass={
         'build_capi': build_config.build_capi,
         'build_ext': build_config.build_ext,
+        'build_py': build_config.build_py,
         'build': build_config.build,
         'install': build_config.install,
         'sdist': build_config.sdist
