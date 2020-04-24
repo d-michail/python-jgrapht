@@ -245,6 +245,24 @@ int jgrapht_graph_as_edgereversed(void *g, void** res) {
     return jgrapht_capi_graph_as_edgereversed(thread, g, res);
 }
 
+// graph metrics
+
+int jgrapht_graph_metrics_diameter(void *g, double* diameter) { 
+    return jgrapht_capi_graph_metrics_diameter(thread, g, diameter);
+}
+
+int jgrapht_graph_metrics_radius(void *g, double* radius) { 
+    return jgrapht_capi_graph_metrics_radius(thread, g, radius);
+}
+
+int jgrapht_graph_metrics_girth(void *g, long long* girth) {
+    return jgrapht_capi_graph_metrics_girth(thread, g, girth);
+}
+
+int jgrapht_graph_metrics_triangles(void *g, long long* triangles) {
+    return jgrapht_capi_graph_metrics_triangles(thread, g, triangles);
+}
+
 // graph test
 
 int jgrapht_graph_test_is_empty(void *g, int* res) { 

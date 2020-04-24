@@ -125,6 +125,16 @@ int jgrapht_graph_as_unweighted(void *, void**);
 
 int jgrapht_graph_as_edgereversed(void *, void**);
 
+// graph metrics
+
+int jgrapht_graph_metrics_diameter(void *, double*);
+
+int jgrapht_graph_metrics_radius(void *, double*);
+
+int jgrapht_graph_metrics_girth(void *, long long*);
+
+int jgrapht_graph_metrics_triangles(void *, long long*);
+
 // graph test
 
 int jgrapht_graph_test_is_empty(void *, int*);
