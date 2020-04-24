@@ -53,15 +53,50 @@ class BuildConfig(object):
             def run(self):
                 print("Running custom build_ext")
 
-                # Find the jgrapht-capi extension
-                extensions = [extension for extension in self.extensions if extension.name == "_jgrapht"]
-                _jgrapht_extension = extensions[0]
+                self.run_command('build_capi')
 
-                from pprint import pprint
-                pprint(vars(_jgrapht_extension))
+                build_py = self.get_finalized_command('build_py')
+                #import pdb; pdb.set_trace()
+
+                for ext in self.extensions:
+                    fullname = self.get_ext_fullname(ext.name)
+                    filename = self.get_ext_filename(fullname)
+                    modpath = fullname.split('.')
+                    package = '.'.join(modpath[:-1])
+                    package_dir = build_py.get_package_dir(package)
+                    print(package_dir)
+
+                # Find the jgrapht-capi extension
+                #extensions = [extension for extension in self.extensions if extension.name == "_jgrapht"]
+                #_jgrapht_extension = extensions[0]
+
+                #from pprint import pprint
+                #pprint(vars(_jgrapht_extension))
 
                 # Run the original build_ext command
                 build_ext.run(self) 
+
+            #def copy_extensions_to_source(self):
+                #build_py = self.get_finalized_command('build_py')
+                #for ext in self.extensions:
+                    #fullname = self.get_ext_fullname(ext.name)
+                    #filename = self.get_ext_filename(fullname)
+                    #modpath = fullname.split('.')
+                    #package = '.'.join(modpath[:-1])
+                    #package_dir = build_py.get_package_dir(package)
+                    #dest_filename = os.path.join(package_dir,
+                    #                            os.path.basename(filename))
+                    #src_filename = os.path.join(self.build_lib, filename)
+
+                    # Always copy, even if source is older than destination, to ensure
+                    # that the right extensions for the current Python/platform are
+                    # used.
+                    #copy_file(
+                    #    src_filename, dest_filename, verbose=self.verbose,
+                    #    dry_run=self.dry_run
+                    #)
+                    #if ext._needs_stub:
+                    #    self.write_stub(package_dir or os.curdir, ext, True)
 
         return CustomBuildExt
 
@@ -117,12 +152,6 @@ class BuildConfig(object):
     def _compile_capi(self):
         """Compile the jgrapht-capi from the git submodule inside `vendor/source/jgrapht-capi`."""
 
-        install_folder = os.path.join("vendor", "install", "jgrapht-capi")
-        install_folder = os.path.abspath(install_folder)
-        if os.path.exists(install_folder):
-            # already compiled and installed, just use it
-            return True
-
         source_folder = os.path.join("vendor", "source", "jgrapht-capi")
         source_folder = os.path.abspath(source_folder)
         if not os.path.isfile(os.path.join(source_folder, "CMakeLists.txt")):
@@ -152,17 +181,6 @@ class BuildConfig(object):
             if retcode:
                 return False
 
-            print("Creating jgrapht-capi installation")
-            print("Using install folder at {}".format(install_folder))
-            BuildConfig.create_dir_unless_exists(install_folder)
-            retcode = subprocess.call(
-                'make install', 
-                env=self.create_env(DESTDIR=install_folder),
-                shell=True
-            )
-            if retcode:
-                return False
-
             return True
 
         finally:
@@ -188,10 +206,12 @@ if sys.version_info < (3, 4):
     raise Exception('jgrapht-python requires Python 3.3 or higher.')
 
 
-_jgrapht_extension = Extension('_jgrapht', ['jgrapht/jgrapht.i', 'jgrapht/jgrapht.c'], 
-                               include_dirs=['jgrapht/'],
-                               library_dirs=['jgrapht/'], 
-                               libraries=[])
+_jgrapht_extension = Extension('_jgrapht', ['jgrapht/jgrapht.i','jgrapht/jgrapht.c'], 
+                               include_dirs=['jgrapht/', 'vendor/build/jgrapht-capi/'],
+                               library_dirs=['jgrapht/', 'vendor/build/jgrapht-capi/'], 
+                               libraries=['jgrapht_capi']
+                               )
+
 
 build_config = BuildConfig()
 
