@@ -57,3 +57,14 @@ Spanning Algorithms
 
 .. automodule:: jgrapht.algorithms.mst
    :members:
+
+
+Exceptions
+----------
+
+.. autoexception:: jgrapht.errors.IllegalArgumentError
+.. autoexception:: jgrapht.errors.UnsupportedOperationError
+.. autoexception:: jgrapht.errors.NoSuchElementError
+.. autoexception:: jgrapht.errors.IndexOutOfBoundsError
+.. autoexception:: jgrapht.errors.NullPointerError
+.. autoexception:: jgrapht.errors.ClassCastError

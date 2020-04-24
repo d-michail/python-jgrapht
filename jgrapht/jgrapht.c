@@ -115,6 +115,30 @@ int jgrapht_generate_empty(void *g, int nodes) {
     return jgrapht_capi_generate_empty(thread, g, nodes);
 }
 
+int jgrapht_generate_gnm_random(void *g, int n, int m, int loops, int multiple_edges, long long int seed) { 
+    return jgrapht_capi_generate_gnm_random(thread, g, n, m, loops, multiple_edges, seed);
+}
+
+int jgrapht_generate_gnp_random(void *g, int n, double p, int create_loops, long long int seed) { 
+    return jgrapht_capi_generate_gnp_random(thread, g, n, p, create_loops, seed);
+}
+
+int jgrapht_generate_ring(void *g, int n) { 
+    return jgrapht_capi_generate_ring(thread, g, n);
+}
+
+int jgrapht_generate_scalefree(void *g, int n, long long int seed) { 
+    return jgrapht_capi_generate_scalefree(thread, g, n, seed);
+}
+
+int jgrapht_generate_watts_strogatz(void *g, int n, int k, double p, int add_instead_of_rewire, long long int seed) { 
+    return jgrapht_capi_generate_watts_strogatz(thread, g, n, k, p, add_instead_of_rewire, seed);
+}
+
+int jgrapht_generate_kleinberg_smallworld(void *g, int n, int p, int q, int r, long long int seed) { 
+    return jgrapht_capi_generate_kleinberg_smallworld(thread, g, n, p, q, r, seed);
+}
+
 // graph
 
 int jgrapht_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, void** res) { 

@@ -59,6 +59,18 @@ int jgrapht_generate_bipartite_complete(void *, int, int);
 
 int jgrapht_generate_empty(void *, int);
 
+int jgrapht_generate_gnm_random(void *, int, int, int, int, long long int);
+
+int jgrapht_generate_gnp_random(void *, int, double, int, long long int);
+
+int jgrapht_generate_ring(void *, int);
+
+int jgrapht_generate_scalefree(void *, int, long long int);
+
+int jgrapht_generate_watts_strogatz(void *, int, int, double, int, long long int);
+
+int jgrapht_generate_kleinberg_smallworld(void *, int, int, int, int, long long int);
+
 // graph
 
 int jgrapht_graph_create(int, int, int, int, void**);

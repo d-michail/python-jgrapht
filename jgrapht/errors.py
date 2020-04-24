@@ -12,25 +12,6 @@ class Error(Exception):
     def __init__(self, message):
         self.message = message    
 
-class InvalidVertexError(Error):
-    """Exception raised for graph errors.
-
-    Attributes:
-        message -- explanation of the error
-    """
-    def __init__(self, message):
-        self.message = message
-
-class IllegalArgumentError(Error):
-    """Exception raised for generic errors.
-
-    Attributes:
-        message -- explanation of the error
-    """
-
-    def __init__(self, message):
-        self.message = message
-
 class UnsupportedOperationError(Error):
     """Exception raised for unsupported errors.
 
