@@ -50,37 +50,11 @@ class BuildConfig(object):
             """A custom build_ext."""
 
             def run(self):
-                print("Running custom build_ext")
-
+                # first run the build_cpi
                 self.run_command('build_capi')
-
-                #from pprint import pprint
-                #pprint(vars(_jgrapht_extension))
 
                 # Run the original build_ext command
                 build_ext.run(self) 
-
-            #def copy_extensions_to_source(self):
-                #build_py = self.get_finalized_command('build_py')
-                #for ext in self.extensions:
-                    #fullname = self.get_ext_fullname(ext.name)
-                    #filename = self.get_ext_filename(fullname)
-                    #modpath = fullname.split('.')
-                    #package = '.'.join(modpath[:-1])
-                    #package_dir = build_py.get_package_dir(package)
-                    #dest_filename = os.path.join(package_dir,
-                    #                            os.path.basename(filename))
-                    #src_filename = os.path.join(self.build_lib, filename)
-
-                    # Always copy, even if source is older than destination, to ensure
-                    # that the right extensions for the current Python/platform are
-                    # used.
-                    #copy_file(
-                    #    src_filename, dest_filename, verbose=self.verbose,
-                    #    dry_run=self.dry_run
-                    #)
-                    #if ext._needs_stub:
-                    #    self.write_stub(package_dir or os.curdir, ext, True)
 
         return CustomBuildExt
 
@@ -93,11 +67,13 @@ class BuildConfig(object):
             """A custom build_py."""
 
             def run(self):
+                # first run the build_ext
+                self.run_command('build_ext')
+
                 # run the original
                 build_py.run(self) 
 
                 if not self.dry_run:
-
                     print('Original install directory: {}'.format(self.build_lib))
                     
                     # mkpath is a distutils helper to create directories
@@ -117,7 +93,7 @@ class BuildConfig(object):
 
         class CustomInstall(install):
             def run(self):
-                self.run_command('build_ext')
+                self.run_command('build_py')
                 self.do_egg_install()
 
         return CustomInstall
@@ -128,8 +104,7 @@ class BuildConfig(object):
 
         class CustomBuild(build):
             def run(self):
-                self.run_command('build_capi')
-                self.run_command('build_ext')
+                self.run_command('build_py')    
                 build.run(self)
 
         return CustomBuild
