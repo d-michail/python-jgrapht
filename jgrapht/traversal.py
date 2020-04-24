@@ -6,6 +6,16 @@ from .util import JGraphTLongIterator
 import time
 
 def bfs_traversal(graph, start_vertex=None):
+    """Create a breadth-first search (BFS) traversal vertex iterator.
+
+    If a starting vertex is specified, the iteration will start there and will be limited to the 
+    connected component that includes the vertex. If no starting vertex is specified, the iteration 
+    will start at an artitrary vertex and will not be limited, that is, will be able to traverse the 
+    whole graph.
+
+    :param graph: The input graph
+    :param start_vertex: Vertex to start the search or None to start from an arbitrary vertex.
+    """
     if start_vertex is None:
         err, it = backend.jgrapht_traverse_create_bfs_from_all_vertices_vit(graph.handle)
     else:

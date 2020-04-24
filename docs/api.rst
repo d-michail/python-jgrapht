@@ -31,13 +31,18 @@ The following methods allow the user to check for certain graph properties.
 .. automodule:: jgrapht.graph
    :members: is_cubic, is_eulerian
 
-
 Graph Metrics
 -------------
 
 Certain graph metrics such as the diameter of a graph can be computed using the following methods.
 
 .. automodule:: jgrapht.metrics
+   :members:
+
+Graph Traversal 
+---------------
+
+.. automodule:: jgrapht.traversal
    :members:
 
 
