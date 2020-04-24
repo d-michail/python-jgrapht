@@ -107,8 +107,7 @@ class BuildConfig(object):
                     capi_build_folder = os.path.join("vendor", "build", "jgrapht-capi")
                     capi_source = os.path.join(capi_build_folder, capi_lib)
                     capi_target = os.path.join(self.build_lib, capi_lib)
-                    outf, copied = self.copy_file(capi_source, capi_target, 
-                        verbose=self.verbose, dry_run=self.dry_run)
+                    outf, copied = self.copy_file(capi_source, capi_target)
 
         return CustomBuildPy
 
