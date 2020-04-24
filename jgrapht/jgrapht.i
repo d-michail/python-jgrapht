@@ -9,7 +9,7 @@
 %include <typemaps.i>
 
 // custom typemap to append void** types to the result
-%typemap(in,numinputs=0,noblock=1) void **OUTPUT ($*1_ltype temp, int res = SWIG_TMPOBJ) {
+%typemap(in,numinputs=0,noblock=1) void **OUTPUT ($*1_ltype temp) {
     $1 = &temp;
 }
 
