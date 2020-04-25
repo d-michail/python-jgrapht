@@ -37,8 +37,7 @@ def test_kruskal():
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
     solution = set(mst_edges)
-    assert expected <= solution
-    assert solution <= expected
+    assert expected == solution
 
 
 def test_prim():
@@ -47,8 +46,7 @@ def test_prim():
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
     solution = set(mst_edges)
-    assert expected <= solution
-    assert solution <= expected
+    assert expected == solution
 
 
 def test_boruvka():
@@ -57,5 +55,4 @@ def test_boruvka():
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
     solution = set(mst_edges)
-    assert expected <= solution
-    assert solution <= expected
+    assert expected == solution

@@ -47,8 +47,6 @@ def test_harmonic_centrality():
     result = [scores[v] for v in g.vertices()]
     expected = [1.0, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666]
     assert all([a == b for a,b in zip(result, expected)]) 
-    #print (result)
-    #assert False
 
 def test_closeness_centrality():
     g = build_graph()
@@ -57,7 +55,6 @@ def test_closeness_centrality():
     print (result)
     expected = [1.0, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6]
     assert all([a == b for a,b in zip(result, expected)]) 
-    #assert False    
 
 def test_betweenness_centrality():
     g = build_graph()

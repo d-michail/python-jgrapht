@@ -39,8 +39,7 @@ def test_longset():
     with pytest.raises(KeyError):    
         s.remove(17)
 
-    assert set(s) <= set([5, 9, 11, 13])
-    assert set([5, 9, 11, 13]) <= set(s)
+    assert set(s) == set([5, 9, 11, 13])
 
 def test_longset_linked():
 
@@ -79,8 +78,5 @@ def test_longset_linked():
     with pytest.raises(KeyError):    
         s.remove(17)    
 
-    assert all([a == b for a,b in zip(list(s), [5, 9, 11, 13])])
-
-    assert set(s) <= set([5, 9, 11, 13])
-    assert set([5, 9, 11, 13]) <= set(s)
+    assert set(s) == set([5, 9, 11, 13])
 
