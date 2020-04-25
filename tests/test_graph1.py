@@ -53,5 +53,9 @@ def test_graph1():
 
     assert len(g.edges()) == 6
 
+    assert_same_set(set(g.edges_of(v1)), set([e12, e14, e11, e51]))
+    assert_same_set(set(g.outedges_of(v1)), set([e12, e14, e11]))
+    assert_same_set(set(g.inedges_of(v1)), set([e51, e11]))
+
     assert_same_set(set(g.edges()), set([0, 1, 2, 3, 4, 5]))
 
