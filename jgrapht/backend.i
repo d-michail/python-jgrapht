@@ -1,9 +1,9 @@
 
-%module jgrapht
+%module backend
 
 %{
 #define SWIG_FILE_WITH_INIT
-#include "jgrapht.h"
+#include "backend.h"
 %}
 
 %include <typemaps.i>

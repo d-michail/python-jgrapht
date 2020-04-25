@@ -1,7 +1,7 @@
 
 from enum import Enum
 from .exceptions import *
-from .jgrapht import jgrapht_get_errno, jgrapht_get_errno_msg, jgrapht_clear_errno
+from .backend import jgrapht_get_errno, jgrapht_get_errno_msg, jgrapht_clear_errno
 
 
 class Status(Enum):

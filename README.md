@@ -32,7 +32,7 @@ in order to import from the development sources.
 For development you need to run: 
 
 ```
-python setup.py build -i
+pip install -e .
 ```
 
 This allows you to import the in-place build from the repository base directory. If you want it to 

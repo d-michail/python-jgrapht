@@ -8,6 +8,7 @@ from setuptools.command.install import install
 from setuptools.command.build_ext import build_ext
 from setuptools.command.build_py import build_py
 from setuptools.command.sdist import sdist
+from setuptools.command.develop import develop
 
 import distutils
 from distutils.command.build import build
@@ -68,8 +69,8 @@ class BuildConfig(object):
                     capi_build_folder = os.path.join('vendor', 'build', 'jgrapht-capi')
                     capi_source = os.path.join(capi_build_folder, capi_lib)
                     capi_target = os.path.join(self.build_lib, capi_lib)
-                    outf, copied = self.copy_file(capi_source, capi_target)
-                    outf, copied = self.copy_file(capi_source, '.')
+                    #outf, copied = self.copy_file(capi_source, capi_target)
+                    #outf, copied = self.copy_file(capi_source, '.')
 
 
         return CustomBuildExt
@@ -196,7 +197,7 @@ if sys.version_info < (3, 5):
     raise Exception('jgrapht-python requires Python 3.5 or higher.')
 
 
-_jgrapht_extension = Extension('_jgrapht', ['jgrapht/jgrapht.i','jgrapht/jgrapht.c'], 
+_backend_extension = Extension('_backend', ['jgrapht/backend.i','jgrapht/backend.c'], 
                                include_dirs=['jgrapht/', 'vendor/build/jgrapht-capi/'],
                                library_dirs=['jgrapht/', 'vendor/build/jgrapht-capi/'], 
                                libraries=['jgrapht_capi']
@@ -215,7 +216,7 @@ setup(
         'install': build_config.install,
         'sdist': build_config.sdist
     },
-    ext_modules=[_jgrapht_extension],
+    ext_modules=[_backend_extension],
     version='0.1',
     description='JGraphT library',
     long_description='JGraphT library',

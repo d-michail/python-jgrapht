@@ -1,5 +1,5 @@
-#ifndef __JGRAPHT_H
-#define __JGRAPHT_H
+#ifndef __BACKEND_H
+#define __BACKEND_H
 
 #if defined(__cplusplus)
 extern "C" {
