@@ -38,7 +38,7 @@ def test_pagerank():
     scores = scoring.scoring_pagerank(g)
     result = [scores[v] for v in g.vertices()]
     expected = [0.2324869499599194, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115]
-    assert all([a == b for a,b in zip(result, expected)]) 
+    assert result == expected
 
 
 def test_harmonic_centrality():
@@ -46,27 +46,25 @@ def test_harmonic_centrality():
     scores = scoring.scoring_harmonic_centrality(g)
     result = [scores[v] for v in g.vertices()]
     expected = [1.0, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666]
-    assert all([a == b for a,b in zip(result, expected)]) 
+    assert result == expected
 
 def test_closeness_centrality():
     g = build_graph()
     scores = scoring.scoring_closeness_centrality(g)
     result = [scores[v] for v in g.vertices()]
-    print (result)
     expected = [1.0, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6]
-    assert all([a == b for a,b in zip(result, expected)]) 
+    assert result == expected
 
 def test_betweenness_centrality():
     g = build_graph()
     scores = scoring.scoring_betweenness_centrality(g)
     result = [scores[v] for v in g.vertices()]
-    print (result)
     expected = [22.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
-    assert all([a == b for a,b in zip(result, expected)]) 
+    assert result == expected
 
 def test_alpha_centrality():
     g = build_graph()
     scores = scoring.scoring_alpha_centrality(g)
     result = [scores[v] for v in g.vertices()]
     expected = [1.09284015241, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011]
-    assert all([a == b for a,b in zip(result, expected)]) 
+    assert result == expected
