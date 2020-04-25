@@ -225,7 +225,7 @@ setup(
     url='https://github.com/d-michail/python-jgrapht',
     license='MIT License',
     platforms=['any'],
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=['tests']),
     classifiers = [
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
@@ -239,6 +239,6 @@ setup(
         'Topic :: Scientific/Engineering',
     ],
     keywords='graphs, algorithms',
-    python_requires='>=3.4'
+    python_requires='>=3.5'
 )
 
