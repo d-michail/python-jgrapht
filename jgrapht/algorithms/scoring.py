@@ -1,6 +1,6 @@
-
-from .. import jgrapht as backend
-from ..errors import raise_status, UnsupportedOperationError
+from .. import backend
+from ..exceptions import UnsupportedOperationError
+from .._errors import raise_status
 from ..util import JGraphTLongIterator, JGraphTLongDoubleMap
 
 

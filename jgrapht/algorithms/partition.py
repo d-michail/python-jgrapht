@@ -1,5 +1,5 @@
-from .. import jgrapht as backend
-from ..errors import raise_status
+from .. import backend
+from .._errors import raise_status
 from ..util import JGraphTLongSet
 
 

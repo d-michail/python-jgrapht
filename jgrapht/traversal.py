@@ -1,9 +1,9 @@
-
-from . import jgrapht as backend
-from .errors import raise_status
+from . import backend
+from ._errors import raise_status
 from .util import JGraphTLongIterator
 
 import time
+
 
 def bfs_traversal(graph, start_vertex=None):
     """Create a breadth-first search (BFS) traversal vertex iterator.

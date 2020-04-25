@@ -1,7 +1,7 @@
-from .. import jgrapht as backend
-from ..errors import raise_status, UnsupportedOperationError
+from .. import backend
+from ..exceptions import UnsupportedOperationError
+from .._errors import raise_status
 from ..util import JGraphTLongSet
-
 
 def _mst_alg(name, graph):
     alg_method_name = 'jgrapht_mst_exec_' + name

@@ -1,7 +1,8 @@
-from . import jgrapht as backend
-from .errors import raise_status
+from . import backend
+from ._errors import raise_status
 from .graph import GraphType, JGraphTGraph
 from copy import copy
+
 
 class UnweightedGraphView(JGraphTGraph):
 

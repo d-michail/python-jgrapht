@@ -1,7 +1,8 @@
-
-from .. import jgrapht as backend
-from ..errors import raise_status, UnsupportedOperationError
+from .. import backend
+from ..exceptions import UnsupportedOperationError
+from .._errors import raise_status
 from ..util import JGraphTLongIterator, JGraphTLongDoubleMap
+
 
 def _vertexcover_alg(name, graph, vertex_weights=None):
 

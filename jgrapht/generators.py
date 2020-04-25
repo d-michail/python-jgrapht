@@ -1,8 +1,7 @@
-
 import time
 
-from . import jgrapht as backend
-from .errors import raise_status, UnsupportedOperationError
+from . import backend
+from ._errors import raise_status, UnsupportedOperationError
 
 def generate_barabasi_albert(graph, m0, m, n, seed=None): 
     if seed is None: 

@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from copy import copy
 
-from . import jgrapht as backend
-from .errors import raise_status
-from .util import GraphVertexSet, GraphEdgeSet
+from . import backend
+from ._errors import raise_status
 from .util import JGraphTLongIterator
 
 class GraphType: 
@@ -214,12 +213,12 @@ class JGraphTGraph(ABC):
 
     def vertices(self):
         if self._vertex_set is None: 
-            self._vertex_set = GraphVertexSet(self._handle)
+            self._vertex_set = self._VertexSet(self._handle)
         return self._vertex_set
 
     def edges(self): 
         if self._edge_set is None: 
-            self._edge_set = GraphEdgeSet(self._handle)
+            self._edge_set = self._EdgeSet(self._handle)
         return self._edge_set
 
     def edges_between(self, u, v):
@@ -242,6 +241,52 @@ class JGraphTGraph(ABC):
         err, res = backend.jgrapht_graph_vertex_create_out_eit(self._handle, v)
         return JGraphTLongIterator(res) if not err else raise_status()
 
+    class _VertexSet: 
+        """Wrapper around the vertices of a JGraphT graph"""
+        def __init__(self, handle=None):
+            self._handle = handle
+
+        def __iter__(self):
+            err, res = backend.jgrapht_graph_create_all_vit(self._handle)
+            if err: 
+                raise_status()
+            return JGraphTLongIterator(res)
+
+        def __len__(self):
+            err, res = backend.jgrapht_graph_vertices_count(self._handle)
+            if err: 
+                raise_status()
+            return res
+
+        def __contains__(self, v):
+            err, res = backend.jgrapht_graph_contains_vertex(self._handle, v)
+            if err: 
+                raise_status()
+            return res
+
+    class _EdgeSet: 
+        """Wrapper around the edges of a JGraphT graph"""
+        def __init__(self, handle=None):
+            self._handle = handle
+
+        def __iter__(self):
+            err, res = backend.jgrapht_graph_create_all_eit(self._handle)
+            if err: 
+                raise_status()
+            return JGraphTLongIterator(res)
+
+        def __len__(self):
+            err, res = backend.jgrapht_graph_edges_count(self._handle)
+            if err: 
+                raise_status()
+            return res
+
+        def __contains__(self, v):
+            err, res = backend.jgrapht_graph_contains_edge(self._handle, v)
+            if err: 
+                raise_status()
+            return res
+
 
 class Graph(JGraphTGraph):
     """The main graph class"""
@@ -263,112 +308,3 @@ class Graph(JGraphTGraph):
         """
         return self._graph_type;
 
-
-
-def is_empty_graph(graph):
-    err, res = backend.jgrapht_graph_test_is_empty(graph.handle)
-    return res if not err else raise_status()
-
-def is_simple(graph):
-    err, res = backend.jgrapht_graph_test_is_simple(graph.handle)
-    return res if not err else raise_status()
-
-def has_selfloops(graph):
-    err, res = backend.jgrapht_graph_test_has_selfloops(graph.handle)
-    return res if not err else raise_status()
-
-def has_multipleedges(graph):
-    err, res = backend.jgrapht_graph_test_has_multipleedges(graph.handle)
-    return res if not err else raise_status()
-
-def is_complete(graph):
-    err, res = backend.jgrapht_graph_test_is_complete(graph.handle)
-    return res if not err else raise_status()
-
-def is_weakly_connected(graph):
-    err, res = backend.jgrapht_graph_test_is_weakly_connected(graph.handle)
-    return res if not err else raise_status()
-
-def is_strongly_connected(graph):
-    err, res = backend.jgrapht_graph_test_is_strongly_connected(graph.handle)
-    return res if not err else raise_status()
-
-def is_tree(graph):
-    err, res = backend.jgrapht_graph_test_is_tree(graph.handle)
-    return res if not err else raise_status()
-
-def is_forest(graph):
-    err, res = backend.jgrapht_graph_test_is_forest(graph.handle)
-    return res if not err else raise_status()    
-
-def is_overfull(graph):
-    err, res = backend.jgrapht_graph_test_is_overfull(graph.handle)
-    return res if not err else raise_status()    
-
-def is_split(graph):
-    err, res = backend.jgrapht_graph_test_is_split(graph.handle)
-    return res if not err else raise_status()
-
-def is_bipartite(graph):
-    err, res = backend.jgrapht_graph_test_is_bipartite(graph.handle)
-    return res if not err else raise_status()
-
-def is_cubic(graph):
-    """Check whether a graph is `cubic <https://mathworld.wolfram.com/CubicGraph.html>`_.
-
-    A graph is `cubic <https://mathworld.wolfram.com/CubicGraph.html>`_ if all vertices have
-    degree equal to three.
-
-    :param graph: The input graph
-    :returns: True if the graph is cubic, False otherwise.
-    """
-    err, res = backend.jgrapht_graph_test_is_cubic(graph.handle)
-    return res if not err else raise_status()
-
-def is_eulerian(graph):
-    """Check whether a graph is `Eulerian <https://mathworld.wolfram.com/EulerianGraph.html>`_.
-
-    An `Eulerian <https://mathworld.wolfram.com/EulerianGraph.html>`_ graph is a graph containing
-    an `Eulerian cycle <https://mathworld.wolfram.com/EulerianCycle.html>`_.
-
-    :param graph: The input graph
-    :returns: True if the graph is Eulerian, False otherwise.
-    """
-    err, res = backend.jgrapht_graph_test_is_eulerian(graph.handle)
-    return res if not err else raise_status()
-
-def is_chordal(graph):
-    err, res = backend.jgrapht_graph_test_is_chordal(graph.handle)
-    return res if not err else raise_status()
-
-def is_weakly_chordal(graph):
-    err, res = backend.jgrapht_graph_test_is_weakly_chordal(graph.handle)
-    return res if not err else raise_status()
-
-def has_ore(graph):
-    err, res = backend.jgrapht_graph_test_has_ore(graph.handle)
-    return res if not err else raise_status()    
-
-def is_trianglefree(graph):
-    err, res = backend.jgrapht_graph_test_is_trianglefree(graph.handle)
-    return res if not err else raise_status()
-
-def is_perfect(graph):
-    err, res = backend.jgrapht_graph_test_is_perfect(graph.handle)
-    return res if not err else raise_status()
-
-def is_planar(graph):
-    err, res = backend.jgrapht_graph_test_is_planar(graph.handle)
-    return res if not err else raise_status()
-
-def is_kuratowski_subdivision(graph):
-    err, res = backend.jgrapht_graph_test_is_kuratowski_subdivision(graph.handle)
-    return res if not err else raise_status()
-
-def is_k33_subdivision(graph):
-    err, res = backend.jgrapht_graph_test_is_k33_subdivision(graph.handle)
-    return res if not err else raise_status()
-
-def is_k5_subdivision(graph):
-    err, res = backend.jgrapht_graph_test_is_k5_subdivision(graph.handle)
-    return res if not err else raise_status()

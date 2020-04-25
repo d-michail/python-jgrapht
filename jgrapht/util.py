@@ -1,6 +1,5 @@
-from . import jgrapht as backend
-from .errors import raise_status
-from .status import Status
+from . import backend
+from ._errors import raise_status, Status
 
 class JGraphTLongIterator: 
     """Long values iterator"""
@@ -56,53 +55,6 @@ class JGraphTDoubleIterator:
                 raise_status() 
 
 
-class GraphVertexSet: 
-    """Wrapper around the vertices of a JGraphT graph"""
-    def __init__(self, handle=None):
-        self._handle = handle
-
-    def __iter__(self):
-        err, res = backend.jgrapht_graph_create_all_vit(self._handle)
-        if err: 
-            raise_status()
-        return JGraphTLongIterator(res)
-
-    def __len__(self):
-        err, res = backend.jgrapht_graph_vertices_count(self._handle)
-        if err: 
-            raise_status()
-        return res
-
-    def __contains__(self, v):
-        err, res = backend.jgrapht_graph_contains_vertex(self._handle, v)
-        if err: 
-            raise_status()
-        return res
-
-class GraphEdgeSet: 
-    """Wrapper around the edges of a JGraphT graph"""
-    def __init__(self, handle=None):
-        self._handle = handle
-
-    def __iter__(self):
-        err, res = backend.jgrapht_graph_create_all_eit(self._handle)
-        if err: 
-            raise_status()
-        return JGraphTLongIterator(res)
-
-    def __len__(self):
-        err, res = backend.jgrapht_graph_edges_count(self._handle)
-        if err: 
-            raise_status()
-        return res
-
-    def __contains__(self, v):
-        err, res = backend.jgrapht_graph_contains_edge(self._handle, v)
-        if err: 
-            raise_status()
-        return res
-
-
 class JGraphTLongSet:
     """JGraphT Long Set"""
     def __init__(self, handle=None, owner=True, linked=True):
@@ -156,7 +108,7 @@ class JGraphTLongSet:
             raise_status()
 
     def discard(self, x):
-        err, res = backend.jgrapht_set_long_remove(self._handle, x)
+        err = backend.jgrapht_set_long_remove(self._handle, x)
         if err: 
             raise_status()            
 

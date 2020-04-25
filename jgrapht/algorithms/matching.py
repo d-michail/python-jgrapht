@@ -1,8 +1,6 @@
-from .. import jgrapht as backend
-from ..errors import raise_status, UnsupportedOperationError
+from .. import backend
+from .._errors import raise_status, UnsupportedOperationError
 from ..util import JGraphTLongSet
-
-
 
 def _matching_alg(name, graph, *args, no_custom_prefix=False):
 
