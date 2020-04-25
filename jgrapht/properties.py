@@ -1,4 +1,3 @@
-
 from . import jgrapht as backend
 from .errors import raise_status
 

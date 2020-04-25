@@ -10,12 +10,11 @@ class Error(Exception):
 
 
 class UnsupportedOperationError(Error):
-    """Exception raised for unsupported errors.
+    """Exception raised for unsupported operations.
 
     Attributes:
         message -- explanation of the error
     """
-
     def __init__(self, message):
         self.message = message
 
@@ -26,7 +25,6 @@ class IllegalArgumentError(Error):
     Attributes:
         message -- explanation of the error
     """
-
     def __init__(self, message):
         self.message = message
 
@@ -37,29 +35,26 @@ class NoSuchElementError(Error):
     Attributes:
         message -- explanation of the error
     """
-
     def __init__(self, message):
         self.message = message
 
 
 class IndexOutOfBoundsError(Error):
-    """Exception raised for class cast errors.
+    """Exception raised for element access errors.
 
     Attributes:
         message -- explanation of the error
     """
-
     def __init__(self, message):
         self.message = message
 
 
 class NullPointerError(Error):
-    """Exception raised for class cast errors.
+    """Exception raised for null dereference errors.
 
     Attributes:
         message -- explanation of the error
     """
-
     def __init__(self, message):
         self.message = message        
 
@@ -70,7 +65,6 @@ class ClassCastError(Error):
     Attributes:
         message -- explanation of the error
     """
-
     def __init__(self, message):
         self.message = message        
 
