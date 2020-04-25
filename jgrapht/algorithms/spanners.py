@@ -30,7 +30,7 @@ def spanner_multiplicative_greedy(graph, k):
     :param k: integer
     :returns: tuple of the form (weight, spanner_edges)
     """
-    err, weight, spanner = backend.jgrapht_spanner_exec_greedy_multiplicative(graph, k)
+    err, weight, spanner = backend.jgrapht_spanner_exec_greedy_multiplicative(graph.handle, k)
     if err:
         raise_status()
     return weight, JGraphTLongSet(spanner)
