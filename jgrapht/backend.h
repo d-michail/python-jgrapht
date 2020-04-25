@@ -323,6 +323,10 @@ int jgrapht_set_double_contains(void *, double, int*);
 
 int jgrapht_set_clear(void *);
 
+// spanner
+
+int jgrapht_spanner_exec_greedy_multiplicative(void *, int, double*, void**);
+
 // traverse
 
 int jgrapht_traverse_create_bfs_from_all_vertices_vit(void *, void**);

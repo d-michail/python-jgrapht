@@ -1,5 +1,5 @@
-from . import jgrapht as backend
-from .errors import raise_status
+from . import backend
+from ._errors import raise_status
 
 def is_empty_graph(graph):
     err, res = backend.jgrapht_graph_test_is_empty(graph.handle)

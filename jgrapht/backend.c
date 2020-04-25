@@ -621,6 +621,12 @@ int jgrapht_set_clear(void *set) {
     return jgrapht_capi_set_clear(thread, set);
 }
 
+// spanner
+
+int jgrapht_spanner_exec_greedy_multiplicative(void *g, int k, double* weight, void** res) {
+    return jgrapht_capi_spanner_exec_greedy_multiplicative(thread, g, k, weight, res);
+}
+
 // traverse
 
 int jgrapht_traverse_create_bfs_from_all_vertices_vit(void *g, void** res) {

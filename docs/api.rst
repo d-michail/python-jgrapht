@@ -28,8 +28,8 @@ Graph Properties
 
 The following methods allow the user to check for certain graph properties.
 
-.. automodule:: jgrapht.graph
-   :members: is_cubic, is_eulerian
+.. automodule:: jgrapht.properties
+   :members:
 
 Graph Metrics
 -------------
@@ -58,13 +58,16 @@ Spanning Algorithms
 .. automodule:: jgrapht.algorithms.mst
    :members:
 
+.. automodule:: jgrapht.algorithms.spanners
+   :members:
+
 
 Exceptions
 ----------
 
-.. autoexception:: jgrapht.errors.IllegalArgumentError
-.. autoexception:: jgrapht.errors.UnsupportedOperationError
-.. autoexception:: jgrapht.errors.NoSuchElementError
-.. autoexception:: jgrapht.errors.IndexOutOfBoundsError
-.. autoexception:: jgrapht.errors.NullPointerError
-.. autoexception:: jgrapht.errors.ClassCastError
+.. autoexception:: jgrapht.exceptions.IllegalArgumentError
+.. autoexception:: jgrapht.exceptions.UnsupportedOperationError
+.. autoexception:: jgrapht.exceptions.NoSuchElementError
+.. autoexception:: jgrapht.exceptions.IndexOutOfBoundsError
+.. autoexception:: jgrapht.exceptions.NullPointerError
+.. autoexception:: jgrapht.exceptions.ClassCastError
