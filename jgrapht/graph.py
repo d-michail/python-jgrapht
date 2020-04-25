@@ -181,6 +181,14 @@ class JGraphTGraph(ABC):
             raise_status()
         return res
 
+    def edge_endpoints(self, e):
+        """Get both endpoints of an edge as a tuple.
+
+        :param e: the edge
+        :returns: the edge endpoints as a (u,v) tuple
+        """
+        return self.edge_source(e), self.edge_target(e)
+
     def edge_source(self, e):
         err, res = backend.jgrapht_graph_edge_source(self._handle, e)
         if err:
