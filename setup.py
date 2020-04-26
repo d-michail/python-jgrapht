@@ -209,8 +209,8 @@ class BuildConfig(object):
         return env        
 
 
-if sys.version_info < (3, 5):
-    raise Exception('jgrapht-python requires Python 3.5 or higher.')
+if sys.version_info < (3, 6):
+    raise Exception('jgrapht-python requires Python 3.6 or higher.')
 
 
 _backend_extension = Extension('_backend', ['jgrapht/backend.i','jgrapht/backend.c'], 
@@ -221,6 +221,9 @@ _backend_extension = Extension('_backend', ['jgrapht/backend.i','jgrapht/backend
 
 
 build_config = BuildConfig()
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
 setup(
     name='python-jgrapht',
@@ -236,7 +239,8 @@ setup(
     ext_modules=[_backend_extension],
     version='0.1',
     description='JGraphT library',
-    long_description='JGraphT library',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author='Dimitrios Michail',
     author_email='dimitrios.michail@gmail.com',
     url='https://github.com/d-michail/python-jgrapht',
@@ -248,14 +252,19 @@ setup(
         'Intended Audience :: Science/Research',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
+        'License :: OSI Approved :: Eclipse Public License 2.0 (EPL-2.0)',
+        'License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)',
+        'Programming Language :: C',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Topic :: Documentation :: Sphinx',
         'Topic :: Scientific/Engineering',
+        'Topic :: Scientific/Engineering :: Mathematics',
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+        'Topic :: Software Development :: Libraries'
     ],
     keywords='graphs, algorithms',
-    python_requires='>=3.5'
+    python_requires='>=3.6'
 )
 
