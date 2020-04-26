@@ -287,6 +287,12 @@ int jgrapht_graph_metrics_triangles(void *g, long long* triangles) {
     return jgrapht_capi_graph_metrics_triangles(thread, g, triangles);
 }
 
+// graph path 
+
+int jgrapht_graphpath_get_fields(void *graph_path, double* weight, long long* start_vertex, long long* end_vertex, void** eit) {
+    return jgrapht_capi_graphpath_get_fields(thread, graph_path, weight, start_vertex, end_vertex, eit);
+}
+
 // graph test
 
 int jgrapht_graph_test_is_empty(void *g, int* res) { 
@@ -593,12 +599,12 @@ int jgrapht_set_size(void *set, long long* res) {
     return jgrapht_capi_set_size(thread, set, res);
 }
 
-int jgrapht_set_long_add(void *set , long long int elem) { 
-    return jgrapht_capi_set_long_add(thread, set, elem);
+int jgrapht_set_long_add(void *set , long long int elem, int* res) { 
+    return jgrapht_capi_set_long_add(thread, set, elem, res);
 }
 
-int jgrapht_set_double_add(void *set, double elem) { 
-    return jgrapht_capi_set_double_add(thread, set, elem);
+int jgrapht_set_double_add(void *set, double elem, int* res) { 
+    return jgrapht_capi_set_double_add(thread, set, elem, res);
 }
 
 int jgrapht_set_long_remove(void *set, long long int elem) { 
@@ -625,6 +631,48 @@ int jgrapht_set_clear(void *set) {
 
 int jgrapht_spanner_exec_greedy_multiplicative(void *g, int k, double* weight, void** res) {
     return jgrapht_capi_spanner_exec_greedy_multiplicative(thread, g, k, weight, res);
+}
+
+// tour 
+
+int jgrapht_tour_tsp_random(void *g, long long int seed, void** res) { 
+    return jgrapht_capi_tour_tsp_random(thread, g, seed, res);
+}
+
+int jgrapht_tour_tsp_greedy_heuristic(void * g, void** res) {
+    return jgrapht_capi_tour_tsp_greedy_heuristic(thread, g, res);
+}
+
+int jgrapht_tour_tsp_nearest_insertion_heuristic(void * g, void** res) {
+    return jgrapht_capi_tour_tsp_nearest_insertion_heuristic(thread, g, res);
+}
+
+int jgrapht_tour_tsp_nearest_neighbor_heuristic(void *g, long long int seed, void** res) {
+    return jgrapht_capi_tour_tsp_nearest_neighbor_heuristic(thread, g, seed, res);
+}
+
+int jgrapht_tour_metric_tsp_christofides(void *g, void** res) {
+    return jgrapht_capi_tour_metric_tsp_christofides(thread, g, res);
+}
+
+int jgrapht_tour_metric_tsp_two_approx(void *g, void** res) {
+    return jgrapht_capi_tour_metric_tsp_two_approx(thread, g, res);
+}
+
+int jgrapht_tour_tsp_held_karp(void *g, void** res) {
+    return jgrapht_capi_tour_tsp_held_karp(thread, g, res);
+}
+
+int jgrapht_tour_hamiltonian_palmer(void *g, void** res) {
+    return jgrapht_capi_tour_hamiltonian_palmer(thread, g, res);
+}
+
+int jgrapht_tour_tsp_two_opt_heuristic(void *g, int k, double min_cost_improvement, long long int seed, void** res) {
+    return jgrapht_capi_tour_tsp_two_opt_heuristic(thread, g, k, min_cost_improvement, seed, res);
+}
+
+int jgrapht_tour_tsp_two_opt_heuristic_improve(void *graph_path, double min_cost_improvement, long long int seed, void** res) {
+    return jgrapht_capi_tour_tsp_two_opt_heuristic_improve(thread, graph_path, min_cost_improvement, seed, res);
 }
 
 // traverse

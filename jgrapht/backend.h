@@ -147,6 +147,10 @@ int jgrapht_graph_metrics_girth(void *, long long*);
 
 int jgrapht_graph_metrics_triangles(void *, long long*);
 
+// graph path 
+
+int jgrapht_graphpath_get_fields(void *, double*, long long*, long long*, void**);
+
 // graph test
 
 int jgrapht_graph_test_is_empty(void *, int*);
@@ -309,9 +313,9 @@ int jgrapht_set_it_create(void *, void**);
 
 int jgrapht_set_size(void *, long long*);
 
-int jgrapht_set_long_add(void *, long long int);
+int jgrapht_set_long_add(void *, long long int, int*);
 
-int jgrapht_set_double_add(void *, double);
+int jgrapht_set_double_add(void *, double, int *);
 
 int jgrapht_set_long_remove(void *, long long int);
 
@@ -326,6 +330,28 @@ int jgrapht_set_clear(void *);
 // spanner
 
 int jgrapht_spanner_exec_greedy_multiplicative(void *, int, double*, void**);
+
+// tour
+
+int jgrapht_tour_tsp_random(void *, long long int, void**);
+
+int jgrapht_tour_tsp_greedy_heuristic(void *, void**);
+
+int jgrapht_tour_tsp_nearest_insertion_heuristic(void *, void**);
+
+int jgrapht_tour_tsp_nearest_neighbor_heuristic(void *, long long int, void**);
+
+int jgrapht_tour_metric_tsp_christofides(void *, void**);
+
+int jgrapht_tour_metric_tsp_two_approx(void *, void**);
+
+int jgrapht_tour_tsp_held_karp(void *, void**);
+
+int jgrapht_tour_hamiltonian_palmer(void *, void**);
+
+int jgrapht_tour_tsp_two_opt_heuristic(void *, int, double, long long int, void**);
+
+int jgrapht_tour_tsp_two_opt_heuristic_improve(void *, double, long long int, void**);
 
 // traverse
 
