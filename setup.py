@@ -240,7 +240,6 @@ setup(
     version='0.1',
     description='JGraphT library',
     long_description=long_description,
-    long_description_content_type="text/markdown",
     author='Dimitrios Michail',
     author_email='dimitrios.michail@gmail.com',
     url='https://github.com/d-michail/python-jgrapht',
