@@ -1,6 +1,6 @@
 from .. import backend
 from .._errors import raise_status, UnsupportedOperationError
-from ..util import JGraphTLongLongMap
+from .._wrappers import JGraphTLongLongMap
 
 
 def _coloring_alg(name, graph, *args):

@@ -1,7 +1,7 @@
 from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
-from ..util import JGraphTLongDoubleMap, JGraphTLongSet
+from .._wrappers import JGraphTLongDoubleMap, JGraphTLongSet
 
 
 def _vertexcover_alg(name, graph, vertex_weights=None):

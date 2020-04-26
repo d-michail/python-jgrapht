@@ -1,7 +1,7 @@
 from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
-from ..util import JGraphTLongIterator, JGraphTLongDoubleMap
+from .._wrappers import JGraphTLongIterator, JGraphTLongDoubleMap
 
 
 def _scoring_alg(name, graph, *args):

@@ -1,6 +1,6 @@
 from .. import backend
 from .._errors import raise_status
-from ..util import JGraphTLongSet
+from .._wrappers import JGraphTLongSet
 
 
 def bipartite_partitions(graph):

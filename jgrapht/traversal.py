@@ -1,6 +1,6 @@
 from . import backend
 from ._errors import raise_status
-from .util import JGraphTLongIterator
+from ._wrappers import JGraphTLongIterator
 
 import time
 

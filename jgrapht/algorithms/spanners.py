@@ -1,7 +1,7 @@
 from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
-from ..util import JGraphTLongSet
+from .._wrappers import JGraphTLongSet
 
 
 def _mst_alg(name, graph):

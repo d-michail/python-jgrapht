@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht.util import JGraphTLongSet
+from jgrapht._wrappers import JGraphTLongSet
 
 def test_longset():
 

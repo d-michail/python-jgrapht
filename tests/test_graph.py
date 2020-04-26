@@ -30,6 +30,8 @@ def test_graph_directed_inoutedges():
     vcount = len(g.vertices())
     assert vcount == 5
 
+    assert g.number_of_vertices() == 5
+
     assert_same_set(set(g.vertices()), set([0, 1, 2, 3, 4]))
 
     e12 = g.add_edge(v1, v2)
@@ -242,4 +244,14 @@ def test_graph_no_weights():
 
     with pytest.raises(UnsupportedOperationError):
         g.set_edge_weight(e12, 10.0)
+
+
+def test_graph_add_edge_with_weight():
+
+    g = graph.Graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+
+    v1 = g.add_vertex()
+    v2 = g.add_vertex()
+    e12 = g.add_edge(v1, v2, weight=55.0)
+    assert g.get_edge_weight(e12) == 55.0
 

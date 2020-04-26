@@ -3,7 +3,7 @@ from copy import copy
 
 from . import backend
 from ._errors import raise_status
-from .util import JGraphTLongIterator
+from ._wrappers import JGraphTLongIterator
 
 class GraphType: 
     """Graph Type"""
@@ -65,7 +65,7 @@ class GraphType:
             .format(self._directed, self._allowing_self_loops, self._allowing_multiple_edges, self._weighted, self._modifiable)
 
 
-class JGraphTGraph(ABC):
+class _JGraphTGraph(ABC):
     def __init__(self, handle, owner):
         self._handle = handle
         self._owner = owner
@@ -120,7 +120,7 @@ class JGraphTGraph(ABC):
             raise_status()
         return res 
 
-    def add_edge(self, u, v):
+    def add_edge(self, u, v, weight = None):
         """Adds an edge to the graph.
 
         Edges are automatically created and represented as longs.
@@ -133,6 +133,10 @@ class JGraphTGraph(ABC):
         err, res = backend.jgrapht_graph_add_edge(self._handle, u, v)
         if err:
             raise_status()
+
+        if weight is not None: 
+            self.set_edge_weight(res, weight)
+
         return res 
 
     def remove_edge(self, e):
@@ -211,10 +215,16 @@ class JGraphTGraph(ABC):
         if err:
             raise_status()
 
+    def number_of_vertices(self):
+        return len(self.vertices())
+
     def vertices(self):
         if self._vertex_set is None: 
             self._vertex_set = self._VertexSet(self._handle)
         return self._vertex_set
+
+    def number_of_edges(self):
+        return len(self.edges())
 
     def edges(self): 
         if self._edge_set is None: 
@@ -288,7 +298,7 @@ class JGraphTGraph(ABC):
             return res
 
 
-class Graph(JGraphTGraph):
+class Graph(_JGraphTGraph):
     """The main graph class"""
     def __init__(self, handle=None, owner=True, directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True):
         if handle is None: 

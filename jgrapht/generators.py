@@ -1,7 +1,7 @@
 import time
 
 from . import backend
-from ._errors import raise_status, UnsupportedOperationError
+from ._errors import raise_status
 
 def barabasi_albert_graph(graph, m0, m, n, seed=None): 
     if seed is None: 

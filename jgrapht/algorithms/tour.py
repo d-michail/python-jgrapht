@@ -3,7 +3,7 @@ import time
 from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
-from ..util import JGraphTLongIterator, JGraphTGraphPath
+from .._wrappers import JGraphTLongIterator, JGraphTGraphPath
 
 def _tour_tsp_alg(name, graph_or_graph_path, *args):
     alg_method_name = 'jgrapht_tour_' + name
