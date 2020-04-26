@@ -9,5 +9,6 @@ Algorithms
    :maxdepth: 2
 
    spanning
+   coloring
    vertexcover
    tour
