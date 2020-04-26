@@ -9,3 +9,4 @@ Algorithms
    :maxdepth: 2
 
    spanning
+   vertexcover

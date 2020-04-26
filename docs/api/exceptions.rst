@@ -10,3 +10,4 @@ Exceptions
 .. autoexception:: jgrapht.exceptions.IndexOutOfBoundsError
 .. autoexception:: jgrapht.exceptions.NullPointerError
 .. autoexception:: jgrapht.exceptions.ClassCastError
+
