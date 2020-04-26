@@ -1,22 +1,43 @@
 
 # python-jgrapht
 
-A python interface to the JGraphT graph library. The JGraphT graph library is originally written 
-in Java, but this package includes it as a natively compiled shared library.
+A python interface to the [JGraphT](https://github.com/jgrapht/jgrapht) graph library. JGraphT is a free Java
+class library that provides mathematical graph-theory objects and algorithms. It  contains very efficient and
+generic graph data-structures along with a sizeable collection of sophisticated algorithms. The library is written
+in Java, with stability, performance and interoperability in mind. It includes algorithms encountered in diverse
+application domains such as  pat) planning, routing, network analysis, combinatorial optimization, computational
+biology, and others.
 
-## Build
+## Building
+
+While the JGraphT library is written in Java, this package uses a native build provided by
+the [jgrapht-capi](https://github.com/d-michail/jgrapht-capi) project. The native build is in the form of a 
+shared library, obtained by using the [GraalVM](https://www.graalvm.org/).
+
+The jgrapht-capi project is included in the sources as a git submodule in folder `vendor/source/jgrapht-capi`.
+You need to either initialize the submodule by hand, or you can pass option `--recurse-submodules` when 
+cloning this repository.
+
+Afterwards, building should be as simple as 
 
 ```
-python3 setup.py build
+python setup.py build
 ```
+
+The build will succeed only if you have the following piece of software installed:
+
+ * GraalVM 20.0 with Java 11 support
+ * Native Image component from GraalVM
+ * Maven Java build tool
+ * GNU C compiler or clang
+ * CMake
+ * Python 3.5 and above
+
+For now only Linux is tested.
 
 ## Install
 
-```
-python3 setup.py install
-```
-
-or
+Install using 
 
 ```
 pip install .
@@ -25,12 +46,9 @@ pip install .
 ## Develop
 
 Since the library contains parts which are written in C that need to be compiled before use, make sure you have 
-the necessary compilers and development headers install. Compiled code means that additional steps are required
-in order to import from the development sources. 
-
-### Building in-place
-
-For development you need to run: 
+the necessary compilers and development headers installed. Compiled code means that additional steps are required
+in order to import from the development sources. Using the following commands you can setup an in-place development 
+environment:
 
 ```
 python3 -m env venv
@@ -38,37 +56,19 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-or
-```
-python3 -m env venv
-source venv/bin/activate
-python3 setup.py develop
-```
-
 This allows you to import the in-place build from the repository base directory. If you want it to 
 also be visible outside the base dir, you have to adjust the `PYTHONPATH` accordingly.
+Note also that the above commands call `python setup.py develop`. Instead of adjusting PYTHONPATH, this installs
+a .egg-link file into your site-packages as well as adjusts the easy-install.pth there, so its a more permanent
+operation.
 
-Note that another way to do an inplace build visible outside the repo base dir is with python setup.py develop. Instead of adjusting PYTHONPATH, this installs a .egg-link file into your site-packages as well as adjusts the easy-install.pth there, so its a more permanent operation.
-
-### Tests
+## Tests
 
 Execute the tests by giving
 
 ```
 pytest tests/
 ```
-
-## Requirements 
-
-The build will succeed only if you have the following piece of software installed:
-
- * GraalVM 20.0 with Java 11 support
- * Native Image component from GraalVM
- * Maven build tool
- * GNU C compiler or clang
- * Python 3.5 and above
-
-For now only Linux has been tested.
 
 ## License
 
