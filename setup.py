@@ -57,10 +57,12 @@ class BuildConfig(object):
                 # Run the original build_ext command
                 build_ext.run(self) 
 
-                # Install the build_capi in the build/ dir
+                # Record the build lib directory
+                print('Original build directory: {}'.format(self.build_lib))
+                build_cfg.build_lib = self.build_lib
 
+                # Install the build_capi in the build/ dir
                 if not self.dry_run:
-                    print('Original install directory: {}'.format(self.build_lib))
 
                     # mkpath is a distutils helper to create directories
                     self.mkpath(self.build_lib)
@@ -69,8 +71,7 @@ class BuildConfig(object):
                     capi_build_folder = os.path.join('vendor', 'build', 'jgrapht-capi')
                     capi_source = os.path.join(capi_build_folder, capi_lib)
                     capi_target = os.path.join(self.build_lib, capi_lib)
-                    outf, copied = self.copy_file(capi_source, capi_target)
-                    #outf, copied = self.copy_file(capi_source, '.')
+                    self.copy_file(capi_source, capi_target)
 
 
         return CustomBuildExt
@@ -78,7 +79,6 @@ class BuildConfig(object):
     @property
     def build_py(self):    
         """Return a custom build_py"""
-        build_cfg = self
 
         class CustomBuildPy(build_py): 
             """A custom build_py."""
@@ -94,7 +94,6 @@ class BuildConfig(object):
 
     @property
     def install(self):
-        build_cfg = self
 
         class CustomInstall(install):
             def run(self):
@@ -105,7 +104,6 @@ class BuildConfig(object):
 
     @property
     def build(self):
-        build_cfg = self
 
         class CustomBuild(build):
             def run(self):
@@ -117,7 +115,6 @@ class BuildConfig(object):
     @property
     def sdist(self):
         """`sdist` which first cleans up submodule."""
-        buildcfg = self
 
         class CustomSDist(sdist):
             def run(self):
@@ -139,6 +136,25 @@ class BuildConfig(object):
                 sdist.run(self)
 
         return CustomSDist
+
+    @property
+    def develop(self):
+
+        build_cfg = self
+
+        class CustomDevelop(develop):
+            def run(self):
+                develop.run(self)
+
+                print('Copying jgrapht-capi library for development')
+
+                # Install the build_capi in the build/ dir
+                if not self.dry_run:
+                    capi_lib = 'libjgrapht_capi.so'
+                    capi_source = os.path.join(build_cfg.build_lib, capi_lib)
+                    self.copy_file(capi_source, '.')
+                
+        return CustomDevelop
 
     def _compile_capi(self):
         """Compile the jgrapht-capi from the git submodule inside `vendor/source/jgrapht-capi`."""
@@ -214,7 +230,8 @@ setup(
         'build_py': build_config.build_py,
         'build': build_config.build,
         'install': build_config.install,
-        'sdist': build_config.sdist
+        'sdist': build_config.sdist,
+        'develop': build_config.develop
     },
     ext_modules=[_backend_extension],
     version='0.1',

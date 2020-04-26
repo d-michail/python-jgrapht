@@ -32,7 +32,16 @@ in order to import from the development sources.
 For development you need to run: 
 
 ```
-pip install -e .
+python3 -m env venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+or
+```
+python3 -m env venv
+source venv/bin/activate
+python3 setup.py develop
 ```
 
 This allows you to import the in-place build from the repository base directory. If you want it to 
