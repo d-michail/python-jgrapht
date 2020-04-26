@@ -9,6 +9,7 @@ from setuptools.command.build_ext import build_ext
 from setuptools.command.build_py import build_py
 from setuptools.command.sdist import sdist
 from setuptools.command.develop import develop
+from setuptools.dist import Distribution
 
 import distutils
 from distutils.command.build import build
@@ -156,6 +157,16 @@ class BuildConfig(object):
                 
         return CustomDevelop
 
+    @property
+    def binary_distribution(self):
+
+        class CustomBinaryDistribution(Distribution):
+
+            def is_pure(self):
+                return False
+
+        return CustomBinaryDistribution                
+
     def _compile_capi(self):
         """Compile the jgrapht-capi from the git submodule inside `vendor/source/jgrapht-capi`."""
 
@@ -236,6 +247,7 @@ setup(
         'sdist': build_config.sdist,
         'develop': build_config.develop
     },
+    distclass=build_config.binary_distribution,
     ext_modules=[_backend_extension],
     version='0.1',
     description='JGraphT library',

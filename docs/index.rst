@@ -10,13 +10,18 @@ Release v\ |version|.
 
 **Python-JGraphT** is a Python graph library build on top of the JGraphT graph library.
 
-The API Documentation/Guide
----------------------------
+Documentation
+-------------
 
 .. toctree::
    :maxdepth: 2
 
-   api
+   install
+   tutorial
+   api/index
+   license
+   citing
+   credits
 
 Indices and tables
 ==================
