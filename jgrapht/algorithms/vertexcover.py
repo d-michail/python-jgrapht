@@ -1,7 +1,7 @@
 from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
-from ..util import JGraphTLongIterator, JGraphTLongDoubleMap
+from ..util import JGraphTLongDoubleMap, JGraphTLongSet
 
 
 def _vertexcover_alg(name, graph, vertex_weights=None):
@@ -22,41 +22,31 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
         jgrapht_vertex_weights = JGraphTLongDoubleMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
-        err, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
+        err, weight, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
     else:
-        err, vc_handle = alg_method(graph.handle)
+        err, weight, vc_handle = alg_method(graph.handle)
 
     if err: 
         raise_status()
 
-    err, vc_weight = backend.jgrapht_vertexcover_get_weight(vc_handle)
-    if err:
-        raise_status()
-
-    err, vc_vit_handle = backend.jgrapht_vertexcover_create_vit(vc_handle)
-    if err:
-        raise_status()
-
-    vc_vertices = list(JGraphTLongIterator(vc_vit_handle))
-
-    backend.jgrapht_destroy(vc_handle)
-    if err:
-        raise_status()
-
-    return (vc_weight, vc_vertices)
+    return weight, JGraphTLongSet(vc_handle)
 
 
 def vertexcover_greedy(graph, vertex_weights=None):
     return _vertexcover_alg('greedy', graph, vertex_weights)
 
+
 def vertexcover_clarkson(graph, vertex_weights=None):
     return _vertexcover_alg('clarkson', graph, vertex_weights)
+
 
 def vertexcover_edgebased(graph, vertex_weights=None):
     return _vertexcover_alg('edgebased', graph, vertex_weights)
 
+
 def vertexcover_baryehuda_even(graph, vertex_weights=None):
     return _vertexcover_alg('baryehudaeven', graph, vertex_weights)
+
 
 def vertexcover_exact(graph, vertex_weights=None):
     return _vertexcover_alg('exact', graph, vertex_weights)

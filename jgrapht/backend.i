@@ -394,27 +394,23 @@ int jgrapht_traverse_create_custom_closest_first_from_vertex_vit(void *, long lo
 
 // vertex cover
 
-int jgrapht_vertexcover_exec_greedy(void *, void** OUTPUT);
+int jgrapht_vertexcover_exec_greedy(void *, double* OUTPUT, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_greedy_weighted(void *, void *, void** OUTPUT);
+int jgrapht_vertexcover_exec_greedy_weighted(void *, void *, double* OUTPUT, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_clarkson(void *, void** OUTPUT);
+int jgrapht_vertexcover_exec_clarkson(void *, double* OUTPUT, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_clarkson_weighted(void *, void *, void** OUTPUT);
+int jgrapht_vertexcover_exec_clarkson_weighted(void *, void *, double* OUTPUT, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_edgebased(void *, void** OUTPUT);
+int jgrapht_vertexcover_exec_edgebased(void *, double* OUTPUT, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_baryehudaeven(void *, void** OUTPUT);
+int jgrapht_vertexcover_exec_baryehudaeven(void *, double* OUTPUT, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_baryehudaeven_weighted(void *, void *, void** OUTPUT);
+int jgrapht_vertexcover_exec_baryehudaeven_weighted(void *, void *, double* OUTPUT, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_exact(void *, void** OUTPUT);
+int jgrapht_vertexcover_exec_exact(void *, double* OUTPUT, void** OUTPUT);
 
-int jgrapht_vertexcover_exec_exact_weighted(void *, void *, void** OUTPUT);
-
-int jgrapht_vertexcover_get_weight(void *, double* OUTPUT);
-
-int jgrapht_vertexcover_create_vit(void *, void** OUTPUT);
+int jgrapht_vertexcover_exec_exact_weighted(void *, void *, double* OUTPUT, void** OUTPUT);
 
 // vm
 

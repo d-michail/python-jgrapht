@@ -7,7 +7,7 @@ def generate_barabasi_albert(graph, m0, m, n, seed=None):
     if seed is None: 
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_barabasi_albert(graph.handle, m0, m, n, seed);
+    err = backend.jgrapht_generate_barabasi_albert(graph.handle, m0, m, n, seed)
     if err: 
         raise_status()
 
@@ -16,7 +16,7 @@ def generate_barabasi_albert_forest(graph, t, n, seed=None):
     if seed is None: 
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_barabasi_albert_forest(graph.handle, t, n, seed);
+    err = backend.jgrapht_generate_barabasi_albert_forest(graph.handle, t, n, seed)
     if err: 
         raise_status()
 
@@ -97,7 +97,7 @@ def generate_watts_strogatz(graph, n, k, p, add_instead_of_rewire=False, seed=No
 
 
 def generate_kleinberg_smallworld(graph, n, p, q, r, seed=None):
-    """Kleinberg's small-world graph generator.
+    r"""Kleinberg's small-world graph generator.
 
     The generator is described in the paper: J. Kleinberg, The Small-World Phenomenon: An Algorithmic
     Perspective, in Proc. 32nd ACM Symp. Theory of Comp., 163-170, 2000.

@@ -727,48 +727,40 @@ int jgrapht_traverse_create_custom_closest_first_from_vertex_vit(void *g, long l
 
 // vertex cover
 
-int jgrapht_vertexcover_exec_greedy(void *g, void** res) { 
-    return jgrapht_capi_vertexcover_exec_greedy(thread, g, res);
+int jgrapht_vertexcover_exec_greedy(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_vertexcover_exec_greedy(thread, g, weight_res, res);
 }
 
-int jgrapht_vertexcover_exec_greedy_weighted(void *g, void *weight_vertex_map, void** res) { 
-    return jgrapht_capi_vertexcover_exec_greedy_weighted(thread, g, weight_vertex_map, res);
+int jgrapht_vertexcover_exec_greedy_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
+    return jgrapht_capi_vertexcover_exec_greedy_weighted(thread, g, weight_vertex_map, weight_res, res);
 }
 
-int jgrapht_vertexcover_exec_clarkson(void *g, void** res) { 
-    return jgrapht_capi_vertexcover_exec_clarkson(thread, g, res);
+int jgrapht_vertexcover_exec_clarkson(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_vertexcover_exec_clarkson(thread, g, weight_res, res);
 }
 
-int jgrapht_vertexcover_exec_clarkson_weighted(void *g, void *weight_vertex_map, void** res) { 
-    return jgrapht_capi_vertexcover_exec_clarkson_weighted(thread, g, weight_vertex_map, res);
+int jgrapht_vertexcover_exec_clarkson_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
+    return jgrapht_capi_vertexcover_exec_clarkson_weighted(thread, g, weight_vertex_map, weight_res, res);
 }
 
-int jgrapht_vertexcover_exec_edgebased(void *g, void** res) { 
-    return jgrapht_capi_vertexcover_exec_edgebased(thread, g, res);    
+int jgrapht_vertexcover_exec_edgebased(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_vertexcover_exec_edgebased(thread, g, weight_res, res);    
 }
 
-int jgrapht_vertexcover_exec_baryehudaeven(void *g, void** res) { 
-    return jgrapht_capi_vertexcover_exec_baryehudaeven(thread, g, res);    
+int jgrapht_vertexcover_exec_baryehudaeven(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_vertexcover_exec_baryehudaeven(thread, g, weight_res, res);    
 }
 
-int jgrapht_vertexcover_exec_baryehudaeven_weighted(void *g, void *weight_vertex_map, void** res) { 
-    return jgrapht_capi_vertexcover_exec_baryehudaeven_weighted(thread, g, weight_vertex_map, res);    
+int jgrapht_vertexcover_exec_baryehudaeven_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
+    return jgrapht_capi_vertexcover_exec_baryehudaeven_weighted(thread, g, weight_vertex_map, weight_res, res);    
 }
 
-int jgrapht_vertexcover_exec_exact(void *g, void** res) { 
-    return jgrapht_capi_vertexcover_exec_exact(thread, g, res);    
+int jgrapht_vertexcover_exec_exact(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_vertexcover_exec_exact(thread, g, weight_res, res);    
 }
 
-int jgrapht_vertexcover_exec_exact_weighted(void *g, void *weight_vertex_map, void** res) { 
-    return jgrapht_capi_vertexcover_exec_exact_weighted(thread, g, weight_vertex_map, res);    
-}
-
-int jgrapht_vertexcover_get_weight(void *vertex_cover, double* res) { 
-    return jgrapht_capi_vertexcover_get_weight(thread, vertex_cover, res);
-}
-
-int jgrapht_vertexcover_create_vit(void *vertex_cover, void** res) { 
-    return jgrapht_capi_vertexcover_create_vit(thread, vertex_cover, res);
+int jgrapht_vertexcover_exec_exact_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
+    return jgrapht_capi_vertexcover_exec_exact_weighted(thread, g, weight_vertex_map, weight_res, res);    
 }
 
 // vm

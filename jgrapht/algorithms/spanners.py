@@ -4,9 +4,7 @@ from ..util import JGraphTLongSet
 
 
 def spanner_multiplicative_greedy(graph, k):
-    """
-    Greedy algorithm for :math:`(2k-1)`-multiplicative spanner construction (for any integer 
-    :math:`k \ge 1`.
+    r"""Greedy algorithm for :math:`(2k-1)`-multiplicative spanner construction (for any integer :math:`k \ge 1`.
  
     The spanner is guaranteed to contain :math:`\mathcal{O}(n^{1+1/k})` edges and the shortest path
     distance between any two vertices in the spanner is at most :math:`2k-1` times the corresponding

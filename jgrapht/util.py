@@ -78,7 +78,7 @@ class JGraphTLongSet:
 
     @property
     def handle(self):
-        return self._handle;
+        return self._handle
 
     def __iter__(self):
         err, res = backend.jgrapht_set_it_create(self._handle)
@@ -93,7 +93,7 @@ class JGraphTLongSet:
         return res
 
     def add(self, x):
-        err, res = backend.jgrapht_set_long_add(self._handle, x)
+        err, _ = backend.jgrapht_set_long_add(self._handle, x)
         if err: 
             raise_status()
 
@@ -119,7 +119,7 @@ class JGraphTLongSet:
         return res
 
     def clear(self): 
-        err, res = backend.jgrapht_set_long_clear(self._handle)
+        err = backend.jgrapht_set_clear(self._handle)
         if err: 
             raise_status()
 
@@ -147,7 +147,7 @@ class JGraphTLongDoubleMap:
 
     @property
     def handle(self):
-        return self._handle;
+        return self._handle
 
     def __iter__(self):
         err, res = backend.jgrapht_map_keys_it_create(self._handle)
@@ -227,7 +227,7 @@ class JGraphTLongDoubleMap:
             raise_status()
 
     def clear(self): 
-        err, res = backend.jgrapht_map_long_clear(self._handle)
+        err = backend.jgrapht_map_clear(self._handle)
         if err: 
             raise_status()
 
@@ -255,7 +255,7 @@ class JGraphTLongLongMap:
 
     @property
     def handle(self):
-        return self._handle;
+        return self._handle
 
     def __iter__(self):
         err, res = backend.jgrapht_map_keys_it_create(self._handle)
@@ -335,7 +335,7 @@ class JGraphTLongLongMap:
             raise_status()
 
     def clear(self): 
-        err, res = backend.jgrapht_map_long_clear(self._handle)
+        err = backend.jgrapht_map_clear(self._handle)
         if err: 
             raise_status()
 
@@ -352,27 +352,27 @@ class JGraphTGraphPath:
 
     @property
     def handle(self):
-        return self._handle;
+        return self._handle
 
     @property
     def weight(self):
         self._cache()
-        return self._weight;
+        return self._weight
 
     @property
     def start_vertex(self):
         self._cache()
-        return self._start_vertex;    
+        return self._start_vertex
 
     @property
     def end_vertex(self):
         self._cache()
-        return self._end_vertex;
+        return self._end_vertex
 
     @property
     def edges(self):
         self._cache()
-        return self._edges;    
+        return self._edges
 
     def __iter__(self):
         self._cache()

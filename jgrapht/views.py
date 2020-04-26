@@ -58,6 +58,7 @@ class UndirectedGraphView(JGraphTGraph):
         """
         return self._graph_type
 
+
 class UnmodifiableGraphView(JGraphTGraph):
 
     def __init__(self, graph):

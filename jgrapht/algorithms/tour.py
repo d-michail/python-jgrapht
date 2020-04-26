@@ -25,11 +25,14 @@ def tour_tsp_random(graph, seed=None):
         seed = time.time()
     return _tour_tsp_alg('tsp_random', graph, seed)
     
+
 def tour_tsp_greedy_heuristic(graph):
     return _tour_tsp_alg('tsp_greedy_heuristic', graph)    
 
+
 def tour_tsp_nearest_insertion_heuristic(graph):
     return _tour_tsp_alg('tsp_nearest_insertion_heuristic', graph)    
+
 
 def tour_tsp_nearest_neighbor_heuristic(graph, seed=None):
     if seed is None:
@@ -37,23 +40,29 @@ def tour_tsp_nearest_neighbor_heuristic(graph, seed=None):
     custom = [ seed ]
     return _tour_tsp_alg('tsp_nearest_neighbor_heuristic', graph, *custom)    
 
+
 def tour_metric_tsp_christofides(graph):
     return _tour_tsp_alg('metric_tsp_christofides', graph)    
+
 
 def tour_metric_tsp_two_approx(graph):
     return _tour_tsp_alg('metric_tsp_christofides', graph)
 
+
 def tour_tsp_held_karp(graph):
     return _tour_tsp_alg('tsp_held_karp', graph)    
 
+
 def tour_hamiltonian_palmer(graph):
     return _tour_tsp_alg('hamiltonian_palmer', graph)
+
 
 def tour_tsp_two_opt_heuristic(graph, k=1, min_cost_improvement=0.0001, seed=None):
     if seed is None:
         seed = time.time()
     custom = [ k, min_cost_improvement, seed ]
     return _tour_tsp_alg('tsp_two_opt_heuristic', graph, *custom)
+
 
 def tour_tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=None):
     if seed is None:

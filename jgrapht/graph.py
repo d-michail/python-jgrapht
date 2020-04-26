@@ -84,7 +84,7 @@ class JGraphTGraph(ABC):
 
     @property
     def handle(self):
-        return self._handle;
+        return self._handle
 
     def add_vertex(self):
         """Add a new vertex to the graph.
@@ -140,7 +140,7 @@ class JGraphTGraph(ABC):
 
         :param e: The edge identifier to remove
         """ 
-        err, res = backend.jgrapht_graph_remove_edge(self._handle, e)
+        err, _ = backend.jgrapht_graph_remove_edge(self._handle, e)
         if err:
             raise_status()
 
@@ -306,5 +306,4 @@ class Graph(JGraphTGraph):
         :returns: The graph type.
         :rtype: :class:`GraphType <.GraphType>`
         """
-        return self._graph_type;
-
+        return self._graph_type

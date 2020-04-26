@@ -19,7 +19,7 @@ def _mst_alg(name, graph):
 
 
 def mst_kruskal(graph):
-    """Compute the minimum spanning tree using `Kruskal's algorithm <https://en.wikipedia.org/wiki/Kruskal's_algorithm>`_.
+    r"""Compute the minimum spanning tree using `Kruskal's algorithm <https://en.wikipedia.org/wiki/Kruskal's_algorithm>`_.
 
     
     If the given graph is connected it computes the minimum spanning tree, otherwise it computes
@@ -30,10 +30,10 @@ def mst_kruskal(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    return _mst_alg('kruskal', graph);
+    return _mst_alg('kruskal', graph)
 
 def mst_prim(graph):
-    """Compute the minimum spanning tree using `Prim's algorithm <https://en.wikipedia.org/wiki/Prim's_algorithm>`_.
+    r"""Compute the minimum spanning tree using `Prim's algorithm <https://en.wikipedia.org/wiki/Prim's_algorithm>`_.
 
     The algorithm was developed by Czech mathematician V. Jarník and later independently by computer scientist
     Robert C. Prim and rediscovered by E. Dijkstra. This implementation uses a Fibonacci Heap in order to 
@@ -43,11 +43,11 @@ def mst_prim(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    return _mst_alg('prim', graph);
+    return _mst_alg('prim', graph)
 
 
 def mst_boruvka(graph):
-    """Compute the minimum spanning tree using `Borůvka's algorithm <https://en.wikipedia.org/wiki/Bor%C5%AFvka%27s_algorithm>`_.
+    r"""Compute the minimum spanning tree using `Borůvka's algorithm <https://en.wikipedia.org/wiki/Bor%C5%AFvka%27s_algorithm>`_.
 
     This implementation uses a union-find data structure (with union by rank and path compression
     heuristic) in order to track components. In graphs where edges have identical weights, edges with
@@ -58,5 +58,5 @@ def mst_boruvka(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    return _mst_alg('boruvka', graph);
+    return _mst_alg('boruvka', graph)
     

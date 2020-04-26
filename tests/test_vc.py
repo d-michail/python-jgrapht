@@ -15,14 +15,14 @@ def build_graph():
         g.add_edge(0, i)    
 
     vertex_weights = dict()
-    vertex_weights[0] = 1000.0;   
+    vertex_weights[0] = 1000.0   
     for i in range(1, 10):
-        vertex_weights[i] = 1.0;
+        vertex_weights[i] = 1.0
 
     return g, vertex_weights
 
 def test_greedy():
-    g, vertex_weights = build_graph()
+    g, _ = build_graph()
     vc_weight, vc_vertices = vc.vertexcover_greedy(g)
     assert vc_weight == 1.0
     assert set(vc_vertices) == set([0])
@@ -36,7 +36,7 @@ def test_greedy_with_weights():
 
 
 def test_clarkson():
-    g, vertex_weights = build_graph()
+    g, _ = build_graph()
     vc_weight, vc_vertices = vc.vertexcover_clarkson(g)
     assert vc_weight == 1.0
     assert set(vc_vertices) == set([0])
@@ -50,7 +50,7 @@ def test_clarkson_with_weights():
 
 
 def test_edgebased():
-    g, vertex_weights = build_graph()
+    g, _ = build_graph()
     vc_weight, vc_vertices = vc.vertexcover_edgebased(g)
     assert vc_weight == 2.0
     assert set(vc_vertices) == set([0, 1])
