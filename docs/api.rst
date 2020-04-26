@@ -55,9 +55,6 @@ Graph Generators
 Spanning Algorithms
 -------------------
 
-.. automodule:: jgrapht.algorithms.mst
-   :members:
-
 .. automodule:: jgrapht.algorithms.spanners
    :members:
 

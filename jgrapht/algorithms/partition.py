@@ -3,7 +3,7 @@ from .._errors import raise_status
 from ..util import JGraphTLongSet
 
 
-def partition_bipartite(graph):
+def bipartite_partitions(graph):
     """Check whether a graph is bipartite and compute the partitions.
     
     The algorithm runs in linear time in the number of vertices and edges.

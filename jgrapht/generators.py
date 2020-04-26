@@ -3,7 +3,7 @@ import time
 from . import backend
 from ._errors import raise_status, UnsupportedOperationError
 
-def generate_barabasi_albert(graph, m0, m, n, seed=None): 
+def barabasi_albert_graph(graph, m0, m, n, seed=None): 
     if seed is None: 
         seed = int(time.time())
 
@@ -12,7 +12,7 @@ def generate_barabasi_albert(graph, m0, m, n, seed=None):
         raise_status()
 
 
-def generate_barabasi_albert_forest(graph, t, n, seed=None): 
+def barabasi_albert_forest(graph, t, n, seed=None): 
     if seed is None: 
         seed = int(time.time())
 
@@ -20,7 +20,7 @@ def generate_barabasi_albert_forest(graph, t, n, seed=None):
     if err: 
         raise_status()
 
-def generate_complete(graph, n):
+def complete_graph(graph, n):
     """ Generates a complete graph of any size.
 
     A complete graph is a graph where every vertex shares an edge with every other vertex.
@@ -34,13 +34,13 @@ def generate_complete(graph, n):
         raise_status()
 
 
-def generate_complete_bipartite(graph, a, b): 
+def complete_bipartite_graph(graph, a, b): 
     err = backend.jgrapht_generate_bipartite_complete(graph.handle, a, b)
     if err: 
         raise_status()
 
 
-def generate_empty(graph, n):
+def empty_graph(graph, n):
     """Generate an empty graph of any size.
     
     The `empty graph <https://mathworld.wolfram.com/EmptyGraph.html>`_ is a graph 
@@ -54,7 +54,7 @@ def generate_empty(graph, n):
         raise_status()
 
 
-def generate_gnm_random(graph, n, m, loops=False, multiple_edges=False, seed=None):
+def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
     if seed is None: 
         seed = int(time.time())
 
@@ -63,7 +63,7 @@ def generate_gnm_random(graph, n, m, loops=False, multiple_edges=False, seed=Non
         raise_status()
 
 
-def generate_gnp_random(graph, n, p, loops=False, seed=None):
+def gnp_random_graph(graph, n, p, loops=False, seed=None):
     if seed is None: 
         seed = int(time.time())
 
@@ -72,13 +72,13 @@ def generate_gnp_random(graph, n, p, loops=False, seed=None):
         raise_status()
 
 
-def generate_ring(graph, n):
+def ring_graph(graph, n):
     err = backend.jgrapht_generate_ring(graph.handle, n)
     if err: 
         raise_status()
 
 
-def generate_scalefree(graph, n, seed=None):
+def scalefree_graph(graph, n, seed=None):
     if seed is None: 
         seed = int(time.time())
 
@@ -87,7 +87,7 @@ def generate_scalefree(graph, n, seed=None):
         raise_status()
 
 
-def generate_watts_strogatz(graph, n, k, p, add_instead_of_rewire=False, seed=None):
+def watts_strogatz_graph(graph, n, k, p, add_instead_of_rewire=False, seed=None):
     if seed is None: 
         seed = int(time.time())
 
@@ -96,7 +96,7 @@ def generate_watts_strogatz(graph, n, k, p, add_instead_of_rewire=False, seed=No
         raise_status()
 
 
-def generate_kleinberg_smallworld(graph, n, p, q, r, seed=None):
+def kleinberg_smallworld_graph(graph, n, p, q, r, seed=None):
     r"""Kleinberg's small-world graph generator.
 
     The generator is described in the paper: J. Kleinberg, The Small-World Phenomenon: An Algorithmic

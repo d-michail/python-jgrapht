@@ -32,22 +32,22 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
     return weight, JGraphTLongSet(vc_handle)
 
 
-def vertexcover_greedy(graph, vertex_weights=None):
+def greedy(graph, vertex_weights=None):
     return _vertexcover_alg('greedy', graph, vertex_weights)
 
 
-def vertexcover_clarkson(graph, vertex_weights=None):
+def clarkson(graph, vertex_weights=None):
     return _vertexcover_alg('clarkson', graph, vertex_weights)
 
 
-def vertexcover_edgebased(graph, vertex_weights=None):
+def edgebased(graph, vertex_weights=None):
     return _vertexcover_alg('edgebased', graph, vertex_weights)
 
 
-def vertexcover_baryehuda_even(graph, vertex_weights=None):
+def baryehuda_even(graph, vertex_weights=None):
     return _vertexcover_alg('baryehudaeven', graph, vertex_weights)
 
 
-def vertexcover_exact(graph, vertex_weights=None):
+def exact(graph, vertex_weights=None):
     return _vertexcover_alg('exact', graph, vertex_weights)
 

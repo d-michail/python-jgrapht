@@ -19,28 +19,28 @@ def _coloring_alg(name, graph, *args):
     return (num_colors, JGraphTLongLongMap(handle=color_map_handle))
 
 
-def coloring_greedy(graph):
+def greedy_smallestnotusedcolor(graph):
     return _coloring_alg('greedy', graph)
 
-def coloring_greedy_smallestdegreelast(graph):
+def greedy_smallestdegreelast(graph):
     return _coloring_alg('greedy_smallestdegreelast', graph)
 
-def coloring_greedy_largestdegreefirst(graph):
+def greedy_largestdegreefirst(graph):
     return _coloring_alg('greedy_largestdegreefirst', graph)
 
-def coloring_greedy_random(graph, seed=None):
+def greedy_random(graph, seed=None):
     if seed is None: 
         return _coloring_alg('greedy_random', graph)
     else:
         return _coloring_alg('greedy_random_with_seed', graph, seed)
 
-def coloring_greedy_dsatur(graph):
+def greedy_dsatur(graph):
     return _coloring_alg('greedy_dsatur', graph)
 
-def coloring_color_refinement(graph):
+def color_refinement(graph):
     return _coloring_alg('color_refinement', graph)
 
-def coloring_backtracking_brown(graph):
+def backtracking_brown(graph):
     return _coloring_alg('backtracking_brown', graph)    
 
 
