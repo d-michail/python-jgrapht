@@ -1,0 +1,4 @@
+include license-*.txt
+graft vendor/source/jgrapht-capi
+graft tests
+global-exclude *.py[cod]

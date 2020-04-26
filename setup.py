@@ -240,7 +240,8 @@ setup(
     author='Dimitrios Michail',
     author_email='dimitrios.michail@gmail.com',
     url='https://github.com/d-michail/python-jgrapht',
-    license='MIT License',
+    license='Dual licensed under EPL and LGPL',
+    license_files=['license-EPL.txt', 'license-LGPL.txt'],
     platforms=['any'],
     packages=setuptools.find_packages(exclude=['tests']),
     classifiers = [
