@@ -317,3 +317,65 @@ class Graph(_JGraphTGraph):
         :rtype: :class:`GraphType <.GraphType>`
         """
         return self._graph_type
+
+
+class GraphPath: 
+    """Wrapper class around the GraphPath"""
+    def __init__(self, handle, owner=True):
+        self._handle = handle
+        self._owner = owner
+        self._weight = None
+        self._start_vertex = None
+        self._end_vertex = None
+        self._edges = None
+
+    @property
+    def handle(self):
+        return self._handle
+
+    @property
+    def weight(self):
+        self._cache()
+        return self._weight
+
+    @property
+    def start_vertex(self):
+        self._cache()
+        return self._start_vertex
+
+    @property
+    def end_vertex(self):
+        self._cache()
+        return self._end_vertex
+
+    @property
+    def edges(self):
+        self._cache()
+        return self._edges
+
+    def __iter__(self):
+        self._cache()
+        return self._edges.__iter__()
+
+    def __del__(self):
+        if self._owner and backend.jgrapht_is_thread_attached():
+            err = backend.jgrapht_destroy(self._handle)
+            if err: 
+                raise_status() 
+
+    def _cache(self):
+        if self._edges is not None:
+            return
+
+        err, weight, start_vertex, end_vertex, eit = backend.jgrapht_graphpath_get_fields(self._handle)
+        if err:
+            raise_status()
+
+        self._weight = weight
+        self._start_vertex = start_vertex
+        self._end_vertex = end_vertex
+        self._edges = list(JGraphTLongIterator(eit))
+
+        backend.jgrapht_destroy(eit)
+        if err:
+            raise_status()            

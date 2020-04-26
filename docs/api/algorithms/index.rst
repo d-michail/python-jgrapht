@@ -10,3 +10,4 @@ Algorithms
 
    spanning
    vertexcover
+   tour

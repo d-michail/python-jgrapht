@@ -16,3 +16,6 @@ The :class:`.GraphType` is used to represent during runtime the properties of th
 
 .. autoclass:: jgrapht.graph.GraphType
    :inherited-members:
+
+. autoclass:: jgrapht.graph.GraphPath
+   :inherited-members:
