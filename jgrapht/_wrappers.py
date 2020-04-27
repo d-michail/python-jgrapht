@@ -723,6 +723,15 @@ class _JGraphTGraph(AbstractGraph):
 
 
 def create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True):
+    """Create a graph.
+
+    :param directed: If True the graph will be directed, otherwise undirected.
+    :param allowing_self_loops: If True the graph will allow the addition of self-loops.
+    :param allowing_multiple_edges: If True the graph will allow multiple-edges.
+    :param weighted: If True the graph will be weighted, otherwise unweighted.
+    :returns: A graph
+    :rtype: :class:`type <.types.AbstractGraph>`
+    """
     return _JGraphTGraph(directed=directed, 
         allowing_self_loops=allowing_self_loops, 
         allowing_multiple_edges=allowing_multiple_edges,

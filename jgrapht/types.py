@@ -20,7 +20,7 @@ class GraphType:
 
     @property
     def undirected(self):
-        """Check if the graph is undirected.
+        """Tells if the graph is undirected.
         
         :returns: True if the graph is undirected, False otherwise.
         """
@@ -28,9 +28,7 @@ class GraphType:
 
     @property
     def allowing_self_loops(self):
-        """Check if the graph allows self-loops.
-
-        Self-loops are edges (u,v) where u = v.
+        """Tells if the graph allows self-loops. Self-loops are edges (u,v) where u = v.
         
         :returns: True if the graph allows self-loops, False otherwise.
         """
@@ -38,14 +36,27 @@ class GraphType:
 
     @property
     def allowing_multiple_edges(self):
+        """Tells if the graph allows multiple edges. Multiple edges are edges 
+        which have exactly the same endpoints.
+
+        :returns True if the graph allows multiple-edges, False otherwise.
+        """
         return self._allowing_multiple_edges
 
     @property
     def weighted(self):
+        """Tells if the graph is weighted or not.
+        
+        :returns True if the graph is weighted, False otherwise.
+        """
         return self._weighted
 
     @property
     def modifiable(self):
+        """Tells if the graph is modifiable or not.
+        
+        :returns True if the graph is modifiable, False otherwise.
+        """
         return self._modifiable    
 
     def __repr__(self):

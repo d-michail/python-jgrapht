@@ -8,7 +8,7 @@ The Graph Interface
 
 The main interface of the library is the :class:`AbstractGraph <jgrapht.types.AbstractGraph>`. All 
 graph instances returned by the library follow this interface and almost all library methods revolve 
-arount it. Appropriate factory methods can be used to create graph instances for most of the use-cases. 
+around it. Appropriate factory methods can be used to create graph instances for most of the use-cases. 
 The default graph is capable of representing various different kind of graphs such as:
 
  *  **directed**: in directed graphs an edge :math:`(u,v)` is a directed pair of vertices
@@ -18,7 +18,9 @@ The default graph is capable of representing various different kind of graphs su
  *  **weighted** graphs: graphs where each edge is associated with a double value called its weight,
  *  **unweighted** graphs: graphs where the weight of each edge is 1.0
 
-All the above can be represented by the following class using the appropriate constructor arguments.
+Creating graphs can be accomplished using the following factory method.  
+
+.. autofunction:: jgrapht.create_graph
 
 AbstractGraph
 =============
