@@ -627,6 +627,48 @@ int jgrapht_set_clear(void *set) {
     return jgrapht_capi_set_clear(thread, set);
 }
 
+// shortest paths 
+
+int jgrapht_sp_exec_dijkstra_get_path_between_vertices(void *g, long long int source, long long int target, void** res) {
+    return jgrapht_capi_sp_exec_dijkstra_get_path_between_vertices(thread, g, source, target, res);
+}
+
+int jgrapht_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *g, long long int source, long long int target, void** res) {
+    return jgrapht_capi_sp_exec_bidirectional_dijkstra_get_path_between_vertices(thread, g, source, target, res);
+}
+
+int jgrapht_sp_exec_dijkstra_get_singlesource_from_vertex(void *g, long long int source, void** res) {
+    return jgrapht_capi_sp_exec_dijkstra_get_singlesource_from_vertex(thread, g, source, res);
+}
+
+int jgrapht_sp_exec_bellmanford_get_singlesource_from_vertex(void *g, long long int source, void** res) {
+    return jgrapht_capi_sp_exec_bellmanford_get_singlesource_from_vertex(thread, g, source, res);
+}
+
+int jgrapht_sp_exec_bfs_get_singlesource_from_vertex(void *g, long long int source, void** res) {
+    return jgrapht_capi_sp_exec_bfs_get_singlesource_from_vertex(thread, g, source, res);
+}
+
+int jgrapht_sp_exec_johnson_get_allpairs(void *g, void** res) {
+    return jgrapht_capi_sp_exec_johnson_get_allpairs(thread, g, res);
+}
+
+int jgrapht_sp_exec_floydwarshall_get_allpairs(void *g, void** res) {
+    return jgrapht_capi_sp_exec_floydwarshall_get_allpairs(thread, g, res);
+}
+
+int jgrapht_sp_singlesource_get_path_to_vertex(void *g, long long int target, void** res) {
+    return jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, g, target, res);
+}
+
+int jgrapht_sp_allpairs_get_path_between_vertices(void *g, long long int source, long long int target, void** res) {
+    return jgrapht_capi_sp_allpairs_get_path_between_vertices(thread, g, source, target, res);
+}
+
+int jgrapht_sp_allpairs_get_singlesource_from_vertex(void *g, long long int source, void** res) {
+    return jgrapht_capi_sp_allpairs_get_singlesource_from_vertex(thread, g, source, res);
+}
+
 // spanner
 
 int jgrapht_spanner_exec_greedy_multiplicative(void *g, int k, double* weight, void** res) {

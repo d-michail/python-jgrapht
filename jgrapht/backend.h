@@ -327,6 +327,28 @@ int jgrapht_set_double_contains(void *, double, int*);
 
 int jgrapht_set_clear(void *);
 
+// shortest paths 
+
+int jgrapht_sp_exec_dijkstra_get_path_between_vertices(void *, long long int, long long int, void**);
+
+int jgrapht_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, long long int, long long int, void**);
+
+int jgrapht_sp_exec_dijkstra_get_singlesource_from_vertex(void *, long long int, void**);
+
+int jgrapht_sp_exec_bellmanford_get_singlesource_from_vertex(void *, long long int, void**);
+
+int jgrapht_sp_exec_bfs_get_singlesource_from_vertex(void *, long long int, void**);
+
+int jgrapht_sp_exec_johnson_get_allpairs(void *, void**);
+
+int jgrapht_sp_exec_floydwarshall_get_allpairs(void *, void**);
+
+int jgrapht_sp_singlesource_get_path_to_vertex(void *, long long int, void**);
+
+int jgrapht_sp_allpairs_get_path_between_vertices(void *, long long int, long long int, void**);
+
+int jgrapht_sp_allpairs_get_singlesource_from_vertex(void *, long long int, void**);
+
 // spanner
 
 int jgrapht_spanner_exec_greedy_multiplicative(void *, int, double*, void**);
