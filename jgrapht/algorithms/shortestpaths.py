@@ -1,75 +1,7 @@
 from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
-from ..graph import GraphPath
-
-
-class SingleSourcePaths: 
-    """A set of paths starting from a single source vertex.
-    
-    This class represents the whole shortest path tree from a single source vertex
-    to all other vertices in the graph.
-    """
-    def __init__(self, handle, source_vertex, owner=True):
-        self._handle = handle
-        self._owner = owner
-        self._source_vertex = source_vertex
-
-    @property
-    def handle(self):
-        return self._handle
-
-    @property
-    def source_vertex(self):
-        """The source vertex"""
-        return self._source_vertex
-
-    def get_path(self, target_vertex):
-        """Get a path to a target vertex.
-
-        :param target_vertex: The target vertex.
-        :returns: a path from the source to the target vertex.
-        """
-        err, gp = backend.jgrapht_sp_singlesource_get_path_to_vertex(self._handle, target_vertex)
-        if err: 
-            raise_status()
-        return GraphPath(gp)
-
-    def __del__(self):
-        if self._owner and backend.jgrapht_is_thread_attached():
-            err = backend.jgrapht_destroy(self._handle)
-            if err: 
-                raise_status() 
-
-
-class AllPairsPaths: 
-    """Wrapper class around the AllPairsPaths"""
-    def __init__(self, handle, owner=True):
-        self._handle = handle
-        self._owner = owner
-
-    @property
-    def handle(self):
-        return self._handle
-
-    def get_path(self, source_vertex, target_vertex):
-        err, gp = backend.jgrapht_sp_allpairs_get_path_between_vertices(self._handle, source_vertex, target_vertex)
-        if err: 
-            raise_status()
-        return GraphPath(gp)
-
-    def get_paths_from(self, source_vertex):
-        err, singlesource = backend.jgrapht_sp_allpairs_get_singlesource_from_vertex(self._handle, source_vertex)
-        if err: 
-            raise_status()
-        return SingleSourcePaths(singlesource, source_vertex)
-
-    def __del__(self):
-        if self._owner and backend.jgrapht_is_thread_attached():
-            err = backend.jgrapht_destroy(self._handle)
-            if err: 
-                raise_status()
-
+from .._wrappers import JGraphTGraphPath, JGraphTSingleSourcePaths, JGraphTAllPairsPaths
 
 
 def _sp_singlesource_alg(name, graph, source_vertex):
@@ -84,7 +16,7 @@ def _sp_singlesource_alg(name, graph, source_vertex):
     if err:
         raise_status()
 
-    return SingleSourcePaths(handle, source_vertex)
+    return JGraphTSingleSourcePaths(handle, source_vertex)
 
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex):
@@ -99,7 +31,7 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex):
     if err:
         raise_status()
 
-    return GraphPath(handle)
+    return JGraphTGraphPath(handle)
 
 
 def _sp_allpairs_alg(name, graph):
@@ -114,7 +46,7 @@ def _sp_allpairs_alg(name, graph):
     if err:
         raise_status()
 
-    return AllPairsPaths(handle)
+    return JGraphTAllPairsPaths(handle)
     
 
 
@@ -128,7 +60,7 @@ def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
            and returns as an instance of `:py:class:.SingleSourcePaths`.
     :param use_bidirectional: Only valid if a target vertex is supplied. In this case the search is 
            bidirectional.
-    :returns: Either a `:py:class.GraphPath` or `:py:class:.SingleSourcePaths`.
+    :returns: Either a `:py:class:jgrapht.types.AbstractGraphPath` or `:py:class:.SingleSourcePaths`.
     """
     if target_vertex is None:
         return _sp_singlesource_alg('dijkstra_get_singlesource_from_vertex', graph, source_vertex)

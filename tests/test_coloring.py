@@ -1,10 +1,10 @@
 import pytest
 
-import jgrapht.graph as graph
+from jgrapht import create_graph
 import jgrapht.algorithms.coloring as coloring
 
 def test_coloring():
-    g = graph.Graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
     for _ in range(0, 10):
         g.add_vertex()

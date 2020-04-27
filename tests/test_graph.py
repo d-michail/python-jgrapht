@@ -1,6 +1,6 @@
 import pytest
 
-import jgrapht.graph as graph
+from jgrapht import create_graph
 from jgrapht._errors import IllegalArgumentError, UnsupportedOperationError
 
 def assert_same_set(set1, set2):
@@ -9,7 +9,7 @@ def assert_same_set(set1, set2):
 
 def test_graph_directed_inoutedges():
 
-    g = graph.Graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
 
     assert g.graph_type.directed
     assert g.graph_type.allowing_self_loops
@@ -100,7 +100,7 @@ def test_graph_directed_inoutedges():
 
 def test_graph_undirected_inoutedges():
 
-    g = graph.Graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
 
     assert not g.graph_type.directed
     assert g.graph_type.allowing_self_loops
@@ -191,7 +191,7 @@ def test_graph_undirected_inoutedges():
 
 def test_graph_no_allow_self_loops():
 
-    g = graph.Graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
 
     assert g.graph_type.directed
     assert not g.graph_type.allowing_self_loops
@@ -207,7 +207,7 @@ def test_graph_no_allow_self_loops():
 
 def test_graph_no_allow_multiple_edges():
 
-    g = graph.Graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
     assert g.graph_type.directed
     assert g.graph_type.allowing_self_loops
@@ -226,7 +226,7 @@ def test_graph_no_allow_multiple_edges():
 
 def test_graph_no_weights():
 
-    g = graph.Graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
 
     assert g.graph_type.directed
     assert g.graph_type.allowing_self_loops
@@ -248,7 +248,7 @@ def test_graph_no_weights():
 
 def test_graph_add_edge_with_weight():
 
-    g = graph.Graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
     v1 = g.add_vertex()
     v2 = g.add_vertex()

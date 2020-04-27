@@ -1,10 +1,9 @@
 import time
 
 from .. import backend
-from ..graph import GraphPath
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
-from .._wrappers import JGraphTLongIterator
+from .._wrappers import JGraphTLongIterator, JGraphTGraphPath
 
 def _tour_tsp_alg(name, graph_or_graph_path, *args):
     alg_method_name = 'jgrapht_tour_' + name
@@ -18,7 +17,7 @@ def _tour_tsp_alg(name, graph_or_graph_path, *args):
     if err:
         raise_status()
 
-    return GraphPath(graph_path)
+    return JGraphTGraphPath(graph_path)
 
 
 def tsp_random(graph, seed=None):

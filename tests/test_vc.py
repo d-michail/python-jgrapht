@@ -1,11 +1,11 @@
 import pytest
 
-import jgrapht.graph as graph
+from jgrapht import create_graph
 import jgrapht.algorithms.vertexcover as vc
 
 
 def build_graph():
-    g = graph.Graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
     for i in range(0, 10):
         g.add_vertex()

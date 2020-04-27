@@ -13,13 +13,13 @@ The shortest path module contains the following classes for the
 representation of the shortest path queries. All methods related to shortest paths
 return instances from these classes.
 
-.. autoclass:: GraphPath
+.. autoclass:: jgrapht.types.AbstractGraphPath
    :members:
 
-.. autoclass:: SingleSourcePaths
+.. autoclass:: jgrapht.types.AbstractSingleSourcePaths
    :members:
 
-.. autoclass:: AllPairsPaths
+.. autoclass:: jgrapht.types.AbstractAllPairsPaths
    :members:
 
 Algorithms

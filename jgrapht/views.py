@@ -1,7 +1,7 @@
 from . import backend
 from ._errors import raise_status
-from .graph import GraphType, _JGraphTGraph
-
+from ._wrappers import _JGraphTGraph
+from .types import GraphType
 from copy import copy
 
 

@@ -1,13 +1,13 @@
 import pytest
 
-import jgrapht.graph as graph
+from jgrapht import create_graph
 import jgrapht.algorithms.matching as matching
 import jgrapht.algorithms.partition as partition
 import jgrapht.generators as generators
 
 
 def test_bipartite_max_cardinality():
-    g = graph.Graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
     for _ in range(0, 6):
         g.add_vertex()
@@ -29,7 +29,7 @@ def test_bipartite_max_cardinality():
 
 
 def test_bipartite_perfect_min_weight():
-    bg = graph.Graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    bg = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     generators.complete_bipartite_graph(bg, 10, 10)
     _, part1, part2 = partition.bipartite_partitions(bg)
     weight, _ = matching.bipartite_perfect_min_weight(bg, part1, part2)

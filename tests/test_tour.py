@@ -1,13 +1,13 @@
 import pytest
 
-import jgrapht.graph as graph
+from jgrapht import create_graph
 from jgrapht.generators import complete_graph
 import jgrapht.algorithms.tour as tour
 
 from random import Random
 
 def build_graph():
-    g = graph.Graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     complete_graph(g, 8)
 
     rng = Random(17)

@@ -10,6 +10,7 @@ from .__version__ import __author__, __author_email__, __license__
 from .__version__ import __copyright__
 
 from . import backend
+from ._wrappers import create_graph
 
 # Create main thread and setup cleanup
 import atexit
@@ -26,3 +27,6 @@ del atexit
 # Set default logging handler to avoid "No handler found" warnings.
 import logging
 logging.getLogger(__name__).addHandler(logging.NullHandler())
+
+
+

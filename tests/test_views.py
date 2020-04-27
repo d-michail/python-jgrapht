@@ -1,12 +1,12 @@
 import pytest
 
-import jgrapht.graph as graph
+from jgrapht import create_graph
 from jgrapht.exceptions import UnsupportedOperationError
 from jgrapht.views import as_undirected, as_edgereversed, as_unmodifiable, as_unweighted
 
 
 def test_as_unweighted():
-    g = graph.Graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
     v1 = g.add_vertex()
     v2 = g.add_vertex()
@@ -33,7 +33,7 @@ def test_as_unweighted():
 
 
 def test_as_undirected():
-    g = graph.Graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
     v1 = g.add_vertex()
     v2 = g.add_vertex()
@@ -57,7 +57,7 @@ def test_as_undirected():
 
 def test_as_unmodifiable():
 
-    g = graph.Graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
     v1 = g.add_vertex()
     v2 = g.add_vertex()
@@ -80,7 +80,7 @@ def test_as_unmodifiable():
 
 
 def test_as_edgereversed():
-    g = graph.Graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
     v1 = g.add_vertex()
     v2 = g.add_vertex()

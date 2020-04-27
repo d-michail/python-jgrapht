@@ -1,11 +1,11 @@
 import pytest
 
-import jgrapht.graph as graph
+from jgrapht import create_graph
 import jgrapht.traversal as traversal
 
 
 def test_traversals():
-    g = graph.Graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
     for _ in range(0, 10):
         g.add_vertex()
@@ -60,7 +60,7 @@ def test_traversals():
 
 def test_dag():
     # Create a dag to test top
-    g1 = graph.Graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g1 = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     g1.add_vertex()
     g1.add_vertex()
     g1.add_vertex()

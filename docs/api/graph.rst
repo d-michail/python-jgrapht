@@ -4,12 +4,12 @@
 The Graph Interface
 *******************
 
-.. currentmodule:: jgrapht.graph
+.. currentmodule:: jgrapht
 
-The main interface of the library is the :class:`Graph <jgrapht.graph.Graph>` and almost
-all library methods revolve around it. This is the default graph which should be used in most
-the use-cases. The default graph is capable of representing various different kind of graphs 
-such as:
+The main interface of the library is the :class:`AbstractGraph <jgrapht.types.AbstractGraph>`. All 
+graph instances returned by the library follow this interface and almost all library methods revolve 
+arount it. Appropriate factory methods can be used to create graph instances for most of the use-cases. 
+The default graph is capable of representing various different kind of graphs such as:
 
  *  **directed**: in directed graphs an edge :math:`(u,v)` is a directed pair of vertices
  *  **undirected**: in undirected graphs an edge :math:`{u,v}` is an unordered pair of vertices,
@@ -20,10 +20,10 @@ such as:
 
 All the above can be represented by the following class using the appropriate constructor arguments.
 
-Graph
-=====
+AbstractGraph
+=============
 
-.. autoclass:: jgrapht.graph.Graph
+.. autoclass:: jgrapht.types.AbstractGraph
    :inherited-members:
    :members:
 
@@ -32,8 +32,6 @@ Graph Type
 
 The :class:`.GraphType` is used to represent during runtime the properties of the graph.
 
-.. autoclass:: jgrapht.graph.GraphType
+.. autoclass:: jgrapht.types.GraphType
    :inherited-members:
 
-. autoclass:: jgrapht.graph.GraphPath
-   :inherited-members:

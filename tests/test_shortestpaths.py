@@ -1,10 +1,10 @@
 import pytest
 
-import jgrapht.graph as graph
+from jgrapht import create_graph
 import jgrapht.algorithms.shortestpaths as sp
 
 def get_graph():
-    g = graph.Graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
     for _ in range(0, 6):
         g.add_vertex()
@@ -21,7 +21,7 @@ def get_graph():
     return g
 
 def get_graph_with_negative_edges():
-    g = graph.Graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
     for _ in range(0, 7):
         g.add_vertex()
