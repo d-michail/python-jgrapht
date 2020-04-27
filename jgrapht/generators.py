@@ -3,7 +3,29 @@ import time
 from . import backend
 from ._errors import raise_status
 
-def barabasi_albert_graph(graph, m0, m, n, seed=None): 
+def barabasi_albert_graph(graph, m0, m, n, seed=None):
+    """Barabási-Albert growth and preferential attachment graph generator.
+ 
+    The generator is described in the paper: A.-L. Barabási and R. Albert. Emergence of scaling in
+    random networks. Science, 286:509-512, 1999.
+ 
+    The generator starts with a complete graph of :math:`m_0` nodes and grows the network by adding
+    :math:`n - m_0` additional nodes. The additional nodes are added one by one and each of them is
+    connected to :math:`m` previously added nodes, where the probability of connecting to a node is
+    proportional to its degree.
+ 
+    Note that the Barabàsi-Albert model is designed for undirected networks. Nevertheless, this
+    generator also works with directed networks where the probabilities are proportional to the sum
+    of incoming and outgoing degrees. For a more general discussion see the paper: M. E. J. Newman.
+    The Structure and Function of Complex Networks. SIAM Rev., 45(2):167--256, 2003.
+
+    :param graph: The graph to alter
+    :param m0: Number of initial nodes
+    :param m: Number of edges of each new node added during the network growth
+    :param n: Final number of nodes
+    :param seed: Seed for the random number generator. If None the system time is used
+    :raise IllegalArgumentError: In case of invalid parameters
+    """
     if seed is None: 
         seed = int(time.time())
 
