@@ -34,7 +34,24 @@ def barabasi_albert_graph(graph, m0, m, n, seed=None):
         raise_status()
 
 
-def barabasi_albert_forest(graph, t, n, seed=None): 
+def barabasi_albert_forest(graph, t, n, seed=None):
+    """Barabási-Albert growth and preferential attachment forest generator.
+ 
+    The general graph generator is described in the paper: A.-L. Barabási and R. Albert. Emergence of
+    scaling in random networks. Science, 286:509-512, 1999.
+
+    The generator starts with a :math:`t` isolated nodes and grows the network by adding
+    :math:`n - t` additional nodes. The additional nodes are added one by one and each of them is
+    connected to one previously added node, where the probability of connecting to a node is
+    proportional to its degree.
+ 
+    Note that this Barabàsi-Albert generator only works on undirected graphs.
+    :param graph: The graph to alter. Must be undirected.
+    :param t: Number of initial isolated nodes
+    :param n: Final number of nodes
+    :param seed: Seed for the random number generator. If None the system time is used
+    :raise IllegalArgumentError: In case of invalid parameters    
+    """ 
     if seed is None: 
         seed = int(time.time())
 
@@ -43,12 +60,12 @@ def barabasi_albert_forest(graph, t, n, seed=None):
         raise_status()
 
 def complete_graph(graph, n):
-    """ Generates a complete graph of any size.
+    """Generates a complete graph of any size.
 
     A complete graph is a graph where every vertex shares an edge with every other vertex.
     If it is a directed graph, then edges must always exist in both directions.
 
-    :param g: The graph to alter, which should be empty.
+    :param graph: The graph to alter, which should be empty.
     :param n: The number of vertices.
     """ 
     err = backend.jgrapht_generate_complete(graph.handle, n)
@@ -56,7 +73,13 @@ def complete_graph(graph, n):
         raise_status()
 
 
-def complete_bipartite_graph(graph, a, b): 
+def complete_bipartite_graph(graph, a, b):
+    """Generate a complete bipartite graph.
+
+    :param graph: The graph to alter.
+    :param a: Size of the first partition.
+    :param b: Size of the second partition.
+    """
     err = backend.jgrapht_generate_bipartite_complete(graph.handle, a, b)
     if err: 
         raise_status()
@@ -86,6 +109,19 @@ def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
 
 
 def gnp_random_graph(graph, n, p, loops=False, seed=None):
+    r"""Create a random graph based on the :math:`G(n, p)$` Erdős–Rényi model.
+ 
+    In the :math:`G(n, p)` model, a graph is constructed by connecting nodes randomly.
+    Each edge is included in the graph with probability :math:`p` independent from every
+    other edge. The complexity of the generator is :math:`\mathcal{O}(n^2)` where :math:`n`
+    is the number of vertices.
+
+    :param graph: The graph to alter.
+    :param n: The number of nodes.
+    :param p: Probability of edge existence.
+    :param loops: Whether to create self-loops.
+    :param seed: Seed for the random number generator. If None then the system time is used.
+    """
     if seed is None: 
         seed = int(time.time())
 

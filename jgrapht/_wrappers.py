@@ -564,21 +564,11 @@ class _JGraphTGraph(AbstractGraph):
         return res 
 
     def remove_edge(self, e):
-        """Remove an edge from the graph.
-
-        :param e: The edge identifier to remove
-        """ 
         err, _ = backend.jgrapht_graph_remove_edge(self._handle, e)
         if err:
             raise_status()
 
     def contains_edge(self, e):
-        """Check if an edge is contained in the graph.
-
-        :param e: The edge identifier to check
-        :returns: True if the edge belongs to the graph, False otherwise.
-        :rtype: Boolean
-        """ 
         err, res = backend.jgrapht_graph_contains_edge(self._handle, e)
         if err:
             raise_status()
@@ -607,14 +597,6 @@ class _JGraphTGraph(AbstractGraph):
         if err:
             raise_status()
         return res
-
-    def edge_endpoints(self, e):
-        """Get both endpoints of an edge as a tuple.
-
-        :param e: the edge
-        :returns: the edge endpoints as a (u,v) tuple
-        """
-        return self.edge_source(e), self.edge_target(e)
 
     def edge_source(self, e):
         err, res = backend.jgrapht_graph_edge_source(self._handle, e)

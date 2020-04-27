@@ -3,8 +3,7 @@ from ._errors import raise_status
 
 
 def diameter(graph):
-    """
-    Compute the `diameter <https://mathworld.wolfram.com/GraphDiameter.html>`_ of a graph. The  
+    r"""Compute the `diameter <https://mathworld.wolfram.com/GraphDiameter.html>`_ of a graph. The  
     diameter of a graph is defined as :math:`\max_{v\in V}\epsilon(v)`, where :math:`\epsilon(v)`
     is the eccentricity of vertex :math:`v`. In other words, this method computes the 'longest
     shortest path'. Two special cases exist: (a) if the graph has no vertices, the diameter is 0,

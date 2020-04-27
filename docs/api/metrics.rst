@@ -6,7 +6,7 @@
 Metrics
 *******
 
-Certain graph metrics such as the diameter of a graph can be computed using the following methods.
+Certain graph metrics such as the diameter of a graph can be computed using the following functions.
 
 .. automodule:: jgrapht.metrics
    :members:

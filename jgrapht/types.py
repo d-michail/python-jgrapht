@@ -216,14 +216,46 @@ class AbstractGraph(ABC):
 
     @abstractmethod
     def degree_of(self, v):
+        """Returns the degree of the specified vertex.
+
+        A degree of a vertex in an undirected graph is the number of edges touching that vertex.
+        Edges with same source and target vertices (self-loops) are counted twice.
+        In directed graphs this method returns the sum of the "in degree" and the "out degree".
+     
+        :param v: vertex whose degree is to be calculated
+        :returns: the degree of the specified vertex
+        :raises IllegalArgumentError: if the vertex is not found in the graph
+        """
         pass
 
     @abstractmethod
     def indegree_of(self, v):
+        """Returns the "in degree" of the specified vertex.
+       
+        The `indegree <https://mathworld.wolfram.com/Indegree.html>`_ of a vertex in a directed
+        graph is the number of inward directed edges from that vertex.
+        In the case of undirected graphs this method returns the number of edges touching the vertex.
+        Edges with same source and target vertices (self-loops) are counted twice.
+     
+        :param v: vertex whose degree is to be calculated
+        :returns: the degree of the specified vertex
+        :raises IllegalArgumentError: if the vertex is not found in the graph
+        """
         pass
 
     @abstractmethod
     def outdegree_of(self, v):
+        """Returns the "out degree" of the specified vertex.
+      
+        The `outdegree <https://mathworld.wolfram.com/Outdegree.html>`_ of a vertex in a directed
+        graph is the number of outward directed edges from that vertex.
+        In the case of undirected graphs this method returns the number of edges touching the vertex.
+        Edges with same source and target vertices (self-loops) are counted twice.
+     
+        :param v: vertex whose degree is to be calculated
+        :returns: the degree of the specified vertex
+        :raises IllegalArgumentError: if the vertex is not found in the graph
+        """
         pass
 
     def edge_endpoints(self, e):

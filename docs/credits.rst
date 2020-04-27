@@ -3,6 +3,5 @@
 Credits
 =======
 
-TODO
-
+© Copyright 2020, by Dimitrios Michail
 
