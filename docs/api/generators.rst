@@ -1,8 +1,10 @@
 
-.. currentmodule:: jgrapht
+.. _generators:
 
-Graph Generators
-----------------
+.. currentmodule:: jgrapht.generators
+
+Generators
+**********
 
 .. automodule:: jgrapht.generators
    :members:

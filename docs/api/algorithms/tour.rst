@@ -1,4 +1,6 @@
 
+.. _algorithms/tour:
+
 Tour
 ****
 

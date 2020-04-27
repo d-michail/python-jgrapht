@@ -1,8 +1,10 @@
 
-.. currentmodule:: jgrapht
+.. _traversals:
 
-Graph Traversal 
----------------
+.. currentmodule:: jgrapht.traversal
+
+Traversals 
+**********
 
 .. automodule:: jgrapht.traversal
    :members:

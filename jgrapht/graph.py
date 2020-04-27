@@ -320,7 +320,7 @@ class Graph(_JGraphTGraph):
 
 
 class GraphPath: 
-    """Wrapper class around the GraphPath"""
+    """A class representing a graph path."""
     def __init__(self, handle, owner=True):
         self._handle = handle
         self._owner = owner
@@ -335,21 +335,25 @@ class GraphPath:
 
     @property
     def weight(self):
+        """The weight of the path."""
         self._cache()
         return self._weight
 
     @property
     def start_vertex(self):
+        """The starting vertex of the path."""
         self._cache()
         return self._start_vertex
 
     @property
     def end_vertex(self):
+        """The ending vertex of the path."""
         self._cache()
         return self._end_vertex
 
     @property
     def edges(self):
+        """A list of edges of the path."""
         self._cache()
         return self._edges
 

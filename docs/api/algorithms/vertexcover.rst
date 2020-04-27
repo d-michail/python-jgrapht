@@ -1,4 +1,6 @@
 
+.. _algorithms/vertexcover:
+
 Vertex Cover
 ************
 

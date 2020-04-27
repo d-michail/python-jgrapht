@@ -1,8 +1,10 @@
 
-.. currentmodule:: jgrapht
+.. _exceptions:
+
+.. currentmodule:: jgrapht.exceptions
 
 Exceptions
-----------
+**********
 
 .. autoexception:: jgrapht.exceptions.IllegalArgumentError
 .. autoexception:: jgrapht.exceptions.UnsupportedOperationError

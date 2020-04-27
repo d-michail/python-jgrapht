@@ -5,7 +5,11 @@ from ..graph import GraphPath
 
 
 class SingleSourcePaths: 
-    """Wrapper class around the SingleSourcePaths"""
+    """A set of paths starting from a single source vertex.
+    
+    This class represents the whole shortest path tree from a single source vertex
+    to all other vertices in the graph.
+    """
     def __init__(self, handle, source_vertex, owner=True):
         self._handle = handle
         self._owner = owner
@@ -17,9 +21,15 @@ class SingleSourcePaths:
 
     @property
     def source_vertex(self):
+        """The source vertex"""
         return self._source_vertex
 
     def get_path(self, target_vertex):
+        """Get a path to a target vertex.
+
+        :param target_vertex: The target vertex.
+        :returns: a path from the source to the target vertex.
+        """
         err, gp = backend.jgrapht_sp_singlesource_get_path_to_vertex(self._handle, target_vertex)
         if err: 
             raise_status()
@@ -109,6 +119,17 @@ def _sp_allpairs_alg(name, graph):
 
 
 def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
+    """Dijkstra's algorithm to compute single-source shortest paths. 
+
+    This implementation uses a pairing heap in order to order the edge relaxations.
+
+    :param source_vertex: The source vertex.
+    :param target_vertex: The target vertex. If None then shortest paths to all vertices are computed 
+           and returns as an instance of `:py:class:.SingleSourcePaths`.
+    :param use_bidirectional: Only valid if a target vertex is supplied. In this case the search is 
+           bidirectional.
+    :returns: Either a `:py:class.GraphPath` or `:py:class:.SingleSourcePaths`.
+    """
     if target_vertex is None:
         return _sp_singlesource_alg('dijkstra_get_singlesource_from_vertex', graph, source_vertex)
     else:
