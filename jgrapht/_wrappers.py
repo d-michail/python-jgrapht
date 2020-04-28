@@ -1,7 +1,7 @@
 from . import backend
 from .types import GraphType, AbstractGraphPath, AbstractSingleSourcePaths, AbstractAllPairsPaths, AbstractGraph
 from ._errors import raise_status, Status
-from collections.abc import Iterator
+from collections.abc import Iterator, MutableSet
 
 
 class HandleWrapper:
@@ -55,7 +55,7 @@ class JGraphTDoubleIterator(HandleWrapper, Iterator):
         return res
 
 
-class JGraphTLongSet(HandleWrapper):
+class JGraphTLongSet(HandleWrapper, MutableSet):
     """JGraphT Long Set"""
     def __init__(self, handle=None, owner=True, linked=True):
         if handle is None:
@@ -82,16 +82,6 @@ class JGraphTLongSet(HandleWrapper):
 
     def add(self, x):
         err, _ = backend.jgrapht_set_long_add(self._handle, x)
-        if err: 
-            raise_status()
-
-    def remove(self, x):
-        err, res = backend.jgrapht_set_long_contains(self._handle, x)
-        if err: 
-            raise_status()
-        if not res: 
-            raise KeyError()
-        err = backend.jgrapht_set_long_remove(self._handle, x)
         if err: 
             raise_status()
 
