@@ -125,6 +125,33 @@ class JGraphTLongSet:
             raise_status()
 
 
+class JGraphTLongSetIterator:
+    """An iterator which returns sets with longs."""
+    def __init__(self, handle, owner=True):
+        self._handle = handle
+        self._owner = owner
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        err, res = backend.jgrapht_it_hasnext(self._handle)
+        if err: 
+            raise_status()
+        if not res: 
+            raise StopIteration()
+        err, res = backend.jgrapht_it_next_object(self._handle)
+        if err: 
+            raise_status()
+        return JGraphTLongSet(handle=res)
+
+    def __del__(self):
+        if self._owner and backend.jgrapht_is_thread_attached():
+            err = backend.jgrapht_destroy(self._handle) 
+            if err: 
+                raise_status() 
+
+
 class JGraphTLongDoubleMap:
     """JGraphT Map"""
     def __init__(self, handle=None, owner=True, linked=True):
