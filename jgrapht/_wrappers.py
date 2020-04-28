@@ -1,15 +1,30 @@
 from . import backend
 from .types import GraphType, AbstractGraphPath, AbstractSingleSourcePaths, AbstractAllPairsPaths, AbstractGraph
 from ._errors import raise_status, Status
+from collections.abc import Iterator
 
-class JGraphTLongIterator: 
-    """Long values iterator"""
+
+class HandleWrapper:
+    """A handle wrapper"""
     def __init__(self, handle, owner=True):
         self._handle = handle
         self._owner = owner
 
-    def __iter__(self):
-        return self
+    @property
+    def handle(self):
+        return self._handle
+
+    def __del__(self):
+        if self._owner and backend.jgrapht_is_thread_attached():
+            err = backend.jgrapht_destroy(self._handle)
+            if err: 
+                raise_status() 
+
+
+class JGraphTLongIterator(HandleWrapper, Iterator): 
+    """Long values iterator"""
+    def __init__(self, handle, owner=True):
+        super().__init__(handle, owner)
 
     def __next__(self):
         err, res = backend.jgrapht_it_hasnext(self._handle)
@@ -22,21 +37,11 @@ class JGraphTLongIterator:
             raise_status()
         return res
 
-    def __del__(self):
-        if self._owner and backend.jgrapht_is_thread_attached():
-            err = backend.jgrapht_destroy(self._handle)
-            if err: 
-                raise_status() 
 
-
-class JGraphTDoubleIterator: 
+class JGraphTDoubleIterator(HandleWrapper, Iterator): 
     """Double values iterator"""
     def __init__(self, handle, owner=True):
-        self._handle = handle
-        self._owner = owner
-
-    def __iter__(self):
-        return self
+        super().__init__(handle, owner)
 
     def __next__(self):
         err, res = backend.jgrapht_it_hasnext(self._handle)
@@ -48,12 +53,6 @@ class JGraphTDoubleIterator:
         if err: 
             raise_status()
         return res
-
-    def __del__(self):
-        if self._owner and backend.jgrapht_is_thread_attached():
-            err = backend.jgrapht_destroy(self._handle) 
-            if err: 
-                raise_status() 
 
 
 class JGraphTLongSet:
@@ -125,14 +124,10 @@ class JGraphTLongSet:
             raise_status()
 
 
-class JGraphTLongSetIterator:
+class JGraphTLongSetIterator(HandleWrapper, Iterator): 
     """An iterator which returns sets with longs."""
     def __init__(self, handle, owner=True):
-        self._handle = handle
-        self._owner = owner
-
-    def __iter__(self):
-        return self
+        super().__init__(handle, owner)
 
     def __next__(self):
         err, res = backend.jgrapht_it_hasnext(self._handle)
@@ -144,12 +139,6 @@ class JGraphTLongSetIterator:
         if err: 
             raise_status()
         return JGraphTLongSet(handle=res)
-
-    def __del__(self):
-        if self._owner and backend.jgrapht_is_thread_attached():
-            err = backend.jgrapht_destroy(self._handle) 
-            if err: 
-                raise_status() 
 
 
 class JGraphTLongDoubleMap:
@@ -435,21 +424,15 @@ class JGraphTGraphPath(AbstractGraphPath):
             raise_status()            
 
 
-class JGraphTSingleSourcePaths(AbstractSingleSourcePaths): 
+class JGraphTSingleSourcePaths(HandleWrapper, AbstractSingleSourcePaths): 
     """A set of paths starting from a single source vertex.
     
     This class represents the whole shortest path tree from a single source vertex
     to all other vertices in the graph.
     """
     def __init__(self, handle, source_vertex, owner=True):
-        super().__init__()
-        self._handle = handle
-        self._owner = owner
+        super().__init__(handle, owner)
         self._source_vertex = source_vertex
-
-    @property
-    def handle(self):
-        return self._handle
 
     @property
     def source_vertex(self):
@@ -467,23 +450,11 @@ class JGraphTSingleSourcePaths(AbstractSingleSourcePaths):
             raise_status()
         return JGraphTGraphPath(gp)
 
-    def __del__(self):
-        if self._owner and backend.jgrapht_is_thread_attached():
-            err = backend.jgrapht_destroy(self._handle)
-            if err: 
-                raise_status() 
 
-
-class JGraphTAllPairsPaths(AbstractAllPairsPaths): 
+class JGraphTAllPairsPaths(HandleWrapper, AbstractAllPairsPaths): 
     """Wrapper class around the AllPairsPaths"""
     def __init__(self, handle, owner=True):
-        super().__init__()
-        self._handle = handle
-        self._owner = owner
-
-    @property
-    def handle(self):
-        return self._handle
+        super().__init__(handle, owner)
 
     def get_path(self, source_vertex, target_vertex):
         err, gp = backend.jgrapht_sp_allpairs_get_path_between_vertices(self._handle, source_vertex, target_vertex)
@@ -496,12 +467,6 @@ class JGraphTAllPairsPaths(AbstractAllPairsPaths):
         if err: 
             raise_status()
         return JGraphTSingleSourcePaths(singlesource, source_vertex)
-
-    def __del__(self):
-        if self._owner and backend.jgrapht_is_thread_attached():
-            err = backend.jgrapht_destroy(self._handle)
-            if err: 
-                raise_status()
 
 
 class _JGraphTGraph(AbstractGraph):
