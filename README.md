@@ -5,7 +5,7 @@ A python interface to the [JGraphT](https://github.com/jgrapht/jgrapht) graph li
 class library that provides mathematical graph-theory objects and algorithms. It  contains very efficient and
 generic graph data-structures along with a sizeable collection of sophisticated algorithms. The library is written
 in Java, with stability, performance and interoperability in mind. It includes algorithms encountered in diverse
-application domains such as  pat) planning, routing, network analysis, combinatorial optimization, computational
+application domains such as  path planning, routing, network analysis, combinatorial optimization, computational
 biology, and others.
 
 ## Building
