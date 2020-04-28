@@ -16,3 +16,4 @@ The JGraphT contains a large collection of advanced algorithms.
    coloring
    vertexcover
    tour
+   cliques

@@ -24,7 +24,7 @@ def build_graph():
 def test_bron_with_degeneracy():
     g = build_graph()
 
-    clique_it = cliques.bron_kerbosch(g, pivot=False, degeneracy_ordering=True)
+    clique_it = cliques.bron_kerbosch_with_degeneracy_ordering(g)
 
     assert set(next(clique_it)) == set([0, 1, 2])
     assert set(next(clique_it)) == set([2, 3])
@@ -36,7 +36,7 @@ def test_bron_with_degeneracy():
 def test_bron_with_pivot():
     g = build_graph()
 
-    clique_it = cliques.bron_kerbosch(g, pivot=True, degeneracy_ordering=False)
+    clique_it = cliques.bron_kerbosch_with_pivot(g)
 
     assert set(next(clique_it)) == set([0, 1, 2])
     assert set(next(clique_it)) == set([2, 3])
@@ -48,7 +48,7 @@ def test_bron_with_pivot():
 def test_bron():
     g = build_graph()
 
-    clique_it = cliques.bron_kerbosch(g, pivot=False, degeneracy_ordering=False)
+    clique_it = cliques.bron_kerbosch(g)
 
     assert set(next(clique_it)) == set([0, 1, 2])
     assert set(next(clique_it)) == set([2, 3])
