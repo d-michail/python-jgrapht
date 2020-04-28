@@ -55,30 +55,18 @@ class JGraphTDoubleIterator(HandleWrapper, Iterator):
         return res
 
 
-class JGraphTLongSet:
+class JGraphTLongSet(HandleWrapper):
     """JGraphT Long Set"""
     def __init__(self, handle=None, owner=True, linked=True):
         if handle is None:
             if linked: 
-                err, res = backend.jgrapht_set_linked_create()
+                err, handle = backend.jgrapht_set_linked_create()
             else: 
-                err, res = backend.jgrapht_set_create()
+                err, handle = backend.jgrapht_set_create()
             if err: 
                 raise_status()
-            self._handle = res
-        else:
-            self._handle = handle
-        self._owner = owner
-
-    def __del__(self):
-        if backend.jgrapht_is_thread_attached() and self._owner:
-            err = backend.jgrapht_destroy(self._handle)
-            if err:
-                raise_status() 
-
-    @property
-    def handle(self):
-        return self._handle
+            owner=True
+        super().__init__(handle, owner)
 
     def __iter__(self):
         err, res = backend.jgrapht_set_it_create(self._handle)
@@ -141,30 +129,18 @@ class JGraphTLongSetIterator(HandleWrapper, Iterator):
         return JGraphTLongSet(handle=res)
 
 
-class JGraphTLongDoubleMap:
+class JGraphTLongDoubleMap(HandleWrapper):
     """JGraphT Map"""
     def __init__(self, handle=None, owner=True, linked=True):
         if handle is None:
             if linked: 
-                err, res = backend.jgrapht_map_linked_create()
+                err, handle = backend.jgrapht_map_linked_create()
             else: 
-                err, res = backend.jgrapht_map_create()
+                err, handle = backend.jgrapht_map_create()
             if err: 
                 raise_status()
-            self._handle = res
-        else:
-            self._handle = handle
-        self._owner = owner
-
-    def __del__(self):
-        if backend.jgrapht_is_thread_attached() and self._owner:
-            err = backend.jgrapht_destroy(self._handle)
-            if err:
-                raise_status() 
-
-    @property
-    def handle(self):
-        return self._handle
+            owner = True
+        super().__init__(handle, owner)                
 
     def __iter__(self):
         err, res = backend.jgrapht_map_keys_it_create(self._handle)
@@ -249,30 +225,18 @@ class JGraphTLongDoubleMap:
             raise_status()
 
 
-class JGraphTLongLongMap:
+class JGraphTLongLongMap(HandleWrapper):
     """JGraphT Map with long keys and long values"""
     def __init__(self, handle=None, owner=True, linked=True):
         if handle is None:
             if linked: 
-                err, res = backend.jgrapht_map_linked_create()
+                err, handle = backend.jgrapht_map_linked_create()
             else: 
-                err, res = backend.jgrapht_map_create()
+                err, handle = backend.jgrapht_map_create()
             if err: 
                 raise_status()
-            self._handle = res
-        else:
-            self._handle = handle
-        self._owner = owner
-
-    def __del__(self):
-        if backend.jgrapht_is_thread_attached() and self._owner:
-            err = backend.jgrapht_destroy(self._handle)
-            if err:
-                raise_status() 
-
-    @property
-    def handle(self):
-        return self._handle
+            owner = True
+        super().__init__(handle, owner)                
 
     def __iter__(self):
         err, res = backend.jgrapht_map_keys_it_create(self._handle)
@@ -357,20 +321,14 @@ class JGraphTLongLongMap:
             raise_status()
 
 
-class JGraphTGraphPath(AbstractGraphPath): 
+class JGraphTGraphPath(HandleWrapper, AbstractGraphPath): 
     """A class representing a graph path."""
     def __init__(self, handle, owner=True):
-        super().__init__()
-        self._handle = handle
-        self._owner = owner
+        super().__init__(handle, owner)
         self._weight = None
         self._start_vertex = None
         self._end_vertex = None
         self._edges = None
-
-    @property
-    def handle(self):
-        return self._handle
 
     @property
     def weight(self):
@@ -399,12 +357,6 @@ class JGraphTGraphPath(AbstractGraphPath):
     def __iter__(self):
         self._cache()
         return self._edges.__iter__()
-
-    def __del__(self):
-        if self._owner and backend.jgrapht_is_thread_attached():
-            err = backend.jgrapht_destroy(self._handle)
-            if err: 
-                raise_status() 
 
     def _cache(self):
         if self._edges is not None:
@@ -469,25 +421,18 @@ class JGraphTAllPairsPaths(HandleWrapper, AbstractAllPairsPaths):
         return JGraphTSingleSourcePaths(singlesource, source_vertex)
 
 
-class _JGraphTGraph(AbstractGraph):
+class _JGraphTGraph(HandleWrapper, AbstractGraph):
     """The main graph class"""
     def __init__(self, handle=None, owner=True, directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True):
         if handle is None: 
             err, handle = backend.jgrapht_graph_create(directed, allowing_self_loops, allowing_multiple_edges, weighted)
             if err:
                 raise_status()
-
-        self._handle = handle
-        self._owner = owner
+            owner = True
+        super().__init__(handle, owner)
         self._vertex_set = None
         self._edge_set = None
         self._graph_type = GraphType(directed, allowing_self_loops, allowing_multiple_edges, weighted)
-
-    def __del__(self):
-        if backend.jgrapht_is_thread_attached() and self._owner:
-            err = backend.jgrapht_destroy(self._handle)
-            if err:
-                raise_status()    
 
     @property
     def graph_type(self):
@@ -497,10 +442,6 @@ class _JGraphTGraph(AbstractGraph):
         :rtype: :class:`GraphType <.GraphType>`
         """
         return self._graph_type
-
-    @property
-    def handle(self):
-        return self._handle
 
     def add_vertex(self):
         """Add a new vertex to the graph.
