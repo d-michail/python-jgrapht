@@ -51,7 +51,7 @@ in order to import from the development sources. Using the following commands yo
 environment:
 
 ```
-python3 -m env venv
+python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
