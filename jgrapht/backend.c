@@ -31,6 +31,20 @@ int jgrapht_is_thread_attached() {
     return thread != NULL; 
 }
 
+// clique
+
+int jgrapht_clique_exec_bron_kerbosch(void *g, long long int timeout, void** res) { 
+    return jgrapht_capi_clique_exec_bron_kerbosch(thread, g, timeout, res);
+}
+
+int jgrapht_clique_exec_bron_kerbosch_pivot(void *g, long long int timeout, void** res) { 
+    return jgrapht_capi_clique_exec_bron_kerbosch_pivot(thread, g, timeout, res);
+}
+
+int jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(void *g, long long int timeout, void** res) {
+    return jgrapht_capi_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(thread, g, timeout, res);
+}
+
 // clustering
 
 int jgrapht_clustering_exec_k_spanning_tree(void *g, int k, void**res) { 
@@ -395,6 +409,10 @@ int jgrapht_it_next_long(void *it, long long* res) {
 
 int jgrapht_it_next_double(void *it, double* res) { 
     return jgrapht_capi_it_next_double(thread, it, res);
+}
+
+int jgrapht_it_next_object(void *it, void** res) { 
+    return jgrapht_capi_it_next_object(thread, it, res);
 }
 
 int jgrapht_it_hasnext(void *it, int* res) { 

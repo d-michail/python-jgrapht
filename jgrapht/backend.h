@@ -13,6 +13,14 @@ void jgrapht_thread_destroy();
 
 int jgrapht_is_thread_attached();
 
+// clique
+
+int jgrapht_clique_exec_bron_kerbosch(void *, long long int, void**);
+
+int jgrapht_clique_exec_bron_kerbosch_pivot(void *, long long int, void**);
+
+int jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(void *, long long int, void**);
+
 // clustering
 
 int jgrapht_clustering_exec_k_spanning_tree(void *, int, void**);
@@ -204,6 +212,8 @@ int jgrapht_graph_test_is_k5_subdivision(void *, int*);
 int jgrapht_it_next_long(void *, long long*);
 
 int jgrapht_it_next_double(void *, double*);
+
+int jgrapht_it_next_object(void *, void**);
 
 int jgrapht_it_hasnext(void *, int*);
 
