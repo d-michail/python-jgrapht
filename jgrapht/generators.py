@@ -100,6 +100,30 @@ def empty_graph(graph, n):
 
 
 def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
+    r"""Create a random graph based on the :math:`G(n, M)` Erdős–Rényi model. 
+ 
+    In the :math:`G(n, M)` model, a graph is chosen uniformly at random from the collection
+    of all graphs which have :math:`n nodes and $M$ edges. For example, in the 
+    :math:`G(3, 2)` model, each of the three possible graphs on three vertices and two edges
+    are included with probability :math:`\frac{1}{3}`.
+ 
+    The implementation creates the vertices and then randomly chooses an edge and tries to
+    add it. If the add fails for any reason (an edge already exists and multiple edges are
+    not allowed) it will just choose another and try again. The performance therefore varies
+    significantly based on the probability of successfully constructing an acceptable edge.
+ 
+    The implementation tries to guess the number of allowed edges based on the following. If
+    self-loops or multiple edges are allowed and requested, the maximum number of edges is
+    the maximum integer value. Otherwise the maximum for undirected graphs with :math:`n`
+    vertices is :math:`\frac{n(n-1)}{2}` while for directed :math:`n(n-1)`.
+
+    :param graph: The graph to alter.
+    :param n: The number of nodes.
+    :param m: The number of edges.
+    :param loops: Whether to create self-loops.
+    :param multiple_edges: Whether to create multiple edges.
+    :param seed: Seed for the random number generator. If None then the system time is used.
+    """
     if seed is None: 
         seed = int(time.time())
 
