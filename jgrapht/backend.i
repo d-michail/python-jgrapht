@@ -83,7 +83,7 @@ int jgrapht_coloring_exec_color_refinement(void *, long long* OUTPUT, void** OUT
 
 void jgrapht_clear_errno();
 
-status_t jgrapht_get_errno();
+int jgrapht_get_errno();
 
 char *jgrapht_get_errno_msg();
 
