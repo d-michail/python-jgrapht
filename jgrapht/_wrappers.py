@@ -1,6 +1,6 @@
 from . import backend
 from .types import GraphType, AbstractGraphPath, AbstractSingleSourcePaths, AbstractAllPairsPaths, AbstractGraph
-from ._errors import raise_status, Status
+from ._errors import raise_status
 from collections.abc import Iterator, MutableSet
 
 
@@ -166,7 +166,7 @@ class JGraphTLongDoubleMap(HandleWrapper):
     def pop(self, key, defaultvalue):
         err, res = backend.jgrapht_map_long_double_remove(self._handle, key)
         if err:
-            if err == Status.ILLEGAL_ARGUMENT.value:
+            if err == backend.STATUS_ILLEGAL_ARGUMENT:
                 # key not found in map
                 backend.jgrapht_clear_errno()
                 if defaultvalue is not None:
@@ -262,7 +262,7 @@ class JGraphTLongLongMap(HandleWrapper):
     def pop(self, key, defaultvalue):
         err, res = backend.jgrapht_map_long_long_remove(self._handle, key)
         if err:
-            if err == Status.ILLEGAL_ARGUMENT.value:
+            if err == backend.ILLEGAL_ARGUMENT:
                 # key not found in map
                 backend.jgrapht_clear_errno()
                 if defaultvalue is not None:

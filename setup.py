@@ -225,7 +225,7 @@ if sys.version_info < (3, 6):
 
 
 _backend_extension = Extension('_backend', ['jgrapht/backend.i','jgrapht/backend.c'], 
-                               include_dirs=['jgrapht/', 'vendor/build/jgrapht-capi/'],
+                               include_dirs=['jgrapht/', 'vendor/build/jgrapht-capi/', 'vendor/build/jgrapht-capi/src/main/native'],
                                library_dirs=['jgrapht/', 'vendor/build/jgrapht-capi/'], 
                                libraries=['jgrapht_capi']
                                )
