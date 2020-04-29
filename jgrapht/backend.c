@@ -111,8 +111,8 @@ char * jgrapht_get_errno_msg() {
 
 // exporter
 
-status_t jgrapht_export_file_dimacs_sp(void *g, dimacs_format_t format, char* filename) { 
-    return jgrapht_capi_export_file_dimacs_sp(thread, g, format, filename);
+status_t jgrapht_export_file_dimacs(void *g, char* filename, dimacs_format_t format) { 
+    return jgrapht_capi_export_file_dimacs(thread, g, filename, format);
 }
 
 // generate

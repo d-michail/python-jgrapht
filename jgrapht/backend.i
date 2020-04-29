@@ -89,7 +89,7 @@ char *jgrapht_get_errno_msg();
 
 // exporter
 
-status_t jgrapht_export_file_dimacs_sp(void *, dimacs_format_t, char*);
+status_t jgrapht_export_file_dimacs(void *, char*, dimacs_format_t);
 
 // generate
 
