@@ -1,5 +1,5 @@
 from . import backend
-from .types import GraphType, AbstractGraphPath, AbstractSingleSourcePaths, AbstractAllPairsPaths, AbstractGraph
+from .types import GraphType, GraphPath, SingleSourcePaths, AllPairsPaths, Graph
 from ._errors import raise_status
 from collections.abc import Iterator, MutableSet
 
@@ -262,7 +262,7 @@ class JGraphTLongLongMap(HandleWrapper):
     def pop(self, key, defaultvalue):
         err, res = backend.jgrapht_map_long_long_remove(self._handle, key)
         if err:
-            if err == backend.ILLEGAL_ARGUMENT:
+            if err == backend.STATUS_ILLEGAL_ARGUMENT:
                 # key not found in map
                 backend.jgrapht_clear_errno()
                 if defaultvalue is not None:
@@ -311,7 +311,7 @@ class JGraphTLongLongMap(HandleWrapper):
             raise_status()
 
 
-class JGraphTGraphPath(HandleWrapper, AbstractGraphPath): 
+class JGraphTGraphPath(HandleWrapper, GraphPath): 
     """A class representing a graph path."""
     def __init__(self, handle, owner=True):
         super().__init__(handle, owner)
@@ -366,7 +366,7 @@ class JGraphTGraphPath(HandleWrapper, AbstractGraphPath):
             raise_status()            
 
 
-class JGraphTSingleSourcePaths(HandleWrapper, AbstractSingleSourcePaths): 
+class JGraphTSingleSourcePaths(HandleWrapper, SingleSourcePaths): 
     """A set of paths starting from a single source vertex.
     
     This class represents the whole shortest path tree from a single source vertex
@@ -393,7 +393,7 @@ class JGraphTSingleSourcePaths(HandleWrapper, AbstractSingleSourcePaths):
         return JGraphTGraphPath(gp)
 
 
-class JGraphTAllPairsPaths(HandleWrapper, AbstractAllPairsPaths): 
+class JGraphTAllPairsPaths(HandleWrapper, AllPairsPaths): 
     """Wrapper class around the AllPairsPaths"""
     def __init__(self, handle, owner=True):
         super().__init__(handle, owner)
@@ -411,7 +411,7 @@ class JGraphTAllPairsPaths(HandleWrapper, AbstractAllPairsPaths):
         return JGraphTSingleSourcePaths(singlesource, source_vertex)
 
 
-class _JGraphTGraph(HandleWrapper, AbstractGraph):
+class JGraphTGraph(HandleWrapper, Graph):
     """The main graph class"""
     def __init__(self, handle=None, owner=True, directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True):
         if handle is None: 
@@ -637,7 +637,7 @@ def create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edg
     :returns: A graph
     :rtype: :class:`type <.types.AbstractGraph>`
     """
-    return _JGraphTGraph(directed=directed, 
+    return JGraphTGraph(directed=directed, 
         allowing_self_loops=allowing_self_loops, 
         allowing_multiple_edges=allowing_multiple_edges,
         weighted=weighted

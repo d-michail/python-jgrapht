@@ -1,11 +1,11 @@
 from . import backend
 from ._errors import raise_status
-from ._wrappers import _JGraphTGraph
+from ._wrappers import JGraphTGraph
 from .types import GraphType
 from copy import copy
 
 
-class UnweightedGraphView(_JGraphTGraph):
+class UnweightedGraphView(JGraphTGraph):
 
     def __init__(self, graph):
         err, res = backend.jgrapht_graph_as_unweighted(graph.handle)
@@ -32,7 +32,7 @@ class UnweightedGraphView(_JGraphTGraph):
         """
         return self._graph_type
 
-class UndirectedGraphView(_JGraphTGraph):
+class UndirectedGraphView(JGraphTGraph):
 
     def __init__(self, graph):
         err, res = backend.jgrapht_graph_as_undirected(graph.handle)
@@ -60,7 +60,7 @@ class UndirectedGraphView(_JGraphTGraph):
         return self._graph_type
 
 
-class UnmodifiableGraphView(_JGraphTGraph):
+class UnmodifiableGraphView(JGraphTGraph):
 
     def __init__(self, graph):
         err, res = backend.jgrapht_graph_as_unmodifiable(graph.handle)
@@ -88,7 +88,7 @@ class UnmodifiableGraphView(_JGraphTGraph):
         return self._graph_type
 
 
-class EdgeReversedGraphView(_JGraphTGraph):
+class EdgeReversedGraphView(JGraphTGraph):
 
     def __init__(self, graph):
         err, res = backend.jgrapht_graph_as_edgereversed(graph.handle)

@@ -33,6 +33,20 @@ int jgrapht_is_thread_attached() {
     return thread != NULL; 
 }
 
+// attribute store
+
+int jgrapht_attributes_store_create(void** res) { 
+    return jgrapht_capi_attributes_store_create(thread, res);
+}
+
+int jgrapht_attributes_store_put_string_attribute(void *store, long long int element, char* key, char* value) {
+    return jgrapht_capi_attributes_store_put_string_attribute(thread, store, element, key, value);
+}
+
+int jgrapht_attributes_store_remove_attribute(void *store, long long int element, char* key) { 
+    return jgrapht_capi_attributes_store_remove_attribute(thread, store, element, key);
+}
+
 // clique
 
 int jgrapht_clique_exec_bron_kerbosch(void *g, long long int timeout, void** res) { 
@@ -113,6 +127,10 @@ char * jgrapht_get_errno_msg() {
 
 int jgrapht_export_file_dimacs(void *g, char* filename, dimacs_format_t format) { 
     return jgrapht_capi_export_file_dimacs(thread, g, filename, format);
+}
+
+int jgrapht_export_file_gml(void *g, char* filename, int export_edge_weights, void* vertex_attribute_store, void* edge_attribute_store) { 
+    return jgrapht_capi_export_file_gml(thread, g, filename, export_edge_weights, vertex_attribute_store, edge_attribute_store);
 }
 
 // generate
@@ -407,6 +425,16 @@ int jgrapht_graph_test_is_k33_subdivision(void *g, int* res) {
 
 int jgrapht_graph_test_is_k5_subdivision(void *g, int* res) { 
     return jgrapht_capi_graph_test_is_k5_subdivision(thread, g, res);
+}
+
+// importers
+
+int jgrapht_import_file_dimacs(void *g, char* filename) { 
+    return jgrapht_capi_import_file_dimacs(thread, g, filename);
+}
+
+int jgrapht_import_file_gml(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_file_gml(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
 // iterators

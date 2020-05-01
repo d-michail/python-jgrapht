@@ -72,7 +72,7 @@ class GraphType:
             .format(self._directed, self._allowing_self_loops, self._allowing_multiple_edges, self._weighted, self._modifiable)
 
 
-class AbstractGraphPath(ABC):
+class GraphPath(ABC):
     """Interface for a graph path."""
 
     def __init__(self):
@@ -99,7 +99,7 @@ class AbstractGraphPath(ABC):
         pass
 
 
-class AbstractSingleSourcePaths(ABC): 
+class SingleSourcePaths(ABC): 
     """A set of paths starting from a single source vertex.
     
     This class represents the whole shortest path tree from a single source vertex
@@ -122,7 +122,7 @@ class AbstractSingleSourcePaths(ABC):
         pass
 
 
-class AbstractAllPairsPaths(ABC): 
+class AllPairsPaths(ABC): 
     """All pair paths"""
     def __init__(self):
         pass
@@ -136,7 +136,7 @@ class AbstractAllPairsPaths(ABC):
         pass
 
 
-class AbstractGraph(ABC):
+class Graph(ABC):
     """A graph."""
     def __init__(self):
         pass

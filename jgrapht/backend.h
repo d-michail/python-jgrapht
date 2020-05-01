@@ -1,6 +1,7 @@
 #ifndef __BACKEND_H
 #define __BACKEND_H
 
+#include <graal_isolate.h>
 #include <jgrapht_capi_types.h>
 
 #if defined(__cplusplus)
@@ -14,6 +15,14 @@ void jgrapht_thread_create();
 void jgrapht_thread_destroy();
 
 int jgrapht_is_thread_attached();
+
+// attribute store 
+
+int jgrapht_attributes_store_create(void**);
+
+int jgrapht_attributes_store_put_string_attribute(void *, long long int, char*, char*);
+
+int jgrapht_attributes_store_remove_attribute(void *, long long int, char*);
 
 // clique
 
@@ -60,6 +69,8 @@ char *jgrapht_get_errno_msg();
 // exporter
 
 int jgrapht_export_file_dimacs(void *, char*, dimacs_format_t);
+
+int jgrapht_export_file_gml(void *, char*, int, void *, void *);
 
 // generate
 
@@ -212,6 +223,12 @@ int jgrapht_graph_test_is_kuratowski_subdivision(void *, int*);
 int jgrapht_graph_test_is_k33_subdivision(void *, int*);
 
 int jgrapht_graph_test_is_k5_subdivision(void *, int*);
+
+// importers
+
+int jgrapht_import_file_dimacs(void *, char*);
+
+int jgrapht_import_file_gml(void *, char*, void *, void *);
 
 // iterators
 

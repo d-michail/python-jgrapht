@@ -17,6 +17,16 @@
     %append_output(SWIG_NewPointerObj(*$1, $*1_descriptor, SWIG_POINTER_NOSHADOW | %newpointer_flags));
 }
 
+// a typemap for the callback, it expects the argument to be an integer
+// whose value is the address of an appropriate callback function
+//%typemap(in) char* (*f)(long long int) {
+//    $1 = (char* (*)(long long int))PyLong_AsVoidPtr($input);
+//}
+
+%typemap(in) void *LONG_TO_FUNCTION_POINTER { 
+    $1 = PyLong_AsVoidPtr($input);    
+}
+
 enum status_t { 
     STATUS_SUCCESS = 0,
     STATUS_ERROR,
@@ -44,6 +54,14 @@ void jgrapht_thread_create();
 void jgrapht_thread_destroy();
 
 int jgrapht_is_thread_attached();
+
+// attribute store 
+
+int jgrapht_attributes_store_create(void** OUTPUT);
+
+int jgrapht_attributes_store_put_string_attribute(void *, long long int, char*, char*);
+
+int jgrapht_attributes_store_remove_attribute(void *, long long int, char*);
 
 // clique
 
@@ -90,6 +108,8 @@ char *jgrapht_get_errno_msg();
 // exporter
 
 int jgrapht_export_file_dimacs(void *, char*, dimacs_format_t);
+
+int jgrapht_export_file_gml(void *, char*, int, void *, void *);
 
 // generate
 
@@ -242,6 +262,12 @@ int jgrapht_graph_test_is_kuratowski_subdivision(void *, int* OUTPUT);
 int jgrapht_graph_test_is_k33_subdivision(void *, int* OUTPUT);
 
 int jgrapht_graph_test_is_k5_subdivision(void *, int* OUTPUT);
+
+// importers
+
+int jgrapht_import_file_dimacs(void *, char*);
+
+int jgrapht_import_file_gml(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
 // iterators
 
