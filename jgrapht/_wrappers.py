@@ -644,6 +644,25 @@ def create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edg
     )
 
 
+class JGraphTAttributeStore(HandleWrapper):
+    """Attribute Store. Used to keep attributes for exporters."""
+    def __init__(self, handle=None, owner=True):
+        if handle is None:
+            err, handle = backend.jgrapht_attributes_store_create()
+            if err: 
+                raise_status()
+            owner = True
+        super().__init__(handle, owner)                
 
+    def put(self, element, key, value):
+        err = backend.jgrapht_attributes_store_put_string_attribute(self._handle, element, key, value)
+        if err: 
+            raise_status()
+
+    def remove(self, element, key):
+        err = backend.jgrapht_attributes_store_remove_attribute(self._handle, element, key)
+        if err: 
+            raise_status()
+            
 
 

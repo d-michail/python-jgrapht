@@ -4,6 +4,175 @@ from jgrapht import create_graph
 from jgrapht.io.exporters import gml
 
 
+expected="""Creator "JGraphT GML Exporter"
+Version 1
+graph
+[
+	label ""
+	directed 0
+	node
+	[
+		id 0
+		label "label 0"
+	]
+	node
+	[
+		id 1
+		label "label 1"
+	]
+	node
+	[
+		id 2
+		label "κόμβος 2"
+	]
+	node
+	[
+		id 3
+		label "κόμβος 3"
+	]
+	node
+	[
+		id 4
+		label "4"
+	]
+	node
+	[
+		id 5
+		label "5"
+	]
+	node
+	[
+		id 6
+		label "6"
+	]
+	node
+	[
+		id 7
+		label "7"
+	]
+	node
+	[
+		id 8
+		label "8"
+	]
+	node
+	[
+		id 9
+		label "9"
+	]
+	edge
+	[
+		source 0
+		target 1
+		label "0"
+	]
+	edge
+	[
+		source 0
+		target 2
+		label "1"
+	]
+	edge
+	[
+		source 0
+		target 3
+		label "2"
+	]
+	edge
+	[
+		source 0
+		target 4
+		label "3"
+	]
+	edge
+	[
+		source 0
+		target 5
+		label "4"
+	]
+	edge
+	[
+		source 0
+		target 6
+		label "5"
+	]
+	edge
+	[
+		source 0
+		target 7
+		label "6"
+	]
+	edge
+	[
+		source 0
+		target 8
+		label "7"
+	]
+	edge
+	[
+		source 0
+		target 9
+		label "8"
+	]
+	edge
+	[
+		source 1
+		target 2
+		label "ακμή 1-2"
+	]
+	edge
+	[
+		source 2
+		target 3
+		label "10"
+	]
+	edge
+	[
+		source 3
+		target 4
+		label "11"
+	]
+	edge
+	[
+		source 4
+		target 5
+		label "12"
+	]
+	edge
+	[
+		source 5
+		target 6
+		label "13"
+	]
+	edge
+	[
+		source 6
+		target 7
+		label "14"
+	]
+	edge
+	[
+		source 7
+		target 8
+		label "15"
+	]
+	edge
+	[
+		source 8
+		target 9
+		label "16"
+	]
+	edge
+	[
+		source 9
+		target 1
+		label "17"
+	]
+]
+"""
+
+
+
 def build_graph():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
@@ -35,24 +204,16 @@ def build_graph():
 
 def test_output_gml(tmpdir):
     g = build_graph()
-    
+    tmpfile = tmpdir.join('gml.out')
+    tmpfilename = str(tmpfile)
 
+    v_labels = { 0: 'label 0', 1: 'label 1', 2: 'κόμβος 2', 3: 'κόμβος 3' }
+    e_labels = { 9: 'ακμή 1-2' }
+    gml(g, tmpfilename, False, v_labels, e_labels)
 
-#def vertex_to_label(v): 
-#    return "label {}".format(v)
+    with open(tmpfilename, "r") as f: 
+        contents = f.read()
 
-#def test_gml(tmpdir):
-#    g = build_graph()
-    #tmpfile = tmpdir.join('gml.out')
-    #tmpfilename = str(tmpfile)
-
-    #gml(g, tmpfilename, False, vertex_to_label)
-#    gml(g, "foo.gml", False, vertex_to_label)
-
-#    with open(tmpfilename, "r") as f: 
-#        contents = f.read()
-#        print (contents)
-        
-#    assert contents == dimacs_sp_expected
+    assert contents == expected
 
 
