@@ -1,7 +1,8 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.io.exporters import gml
+from jgrapht.io.exporters import write_gml
+from jgrapht.io.importers import read_gml
 
 
 expected="""Creator "JGraphT GML Exporter"
@@ -209,11 +210,34 @@ def test_output_gml(tmpdir):
 
     v_labels = { 0: 'label 0', 1: 'label 1', 2: 'κόμβος 2', 3: 'κόμβος 3' }
     e_labels = { 9: 'ακμή 1-2' }
-    gml(g, tmpfilename, False, v_labels, e_labels)
+    write_gml(g, tmpfilename, False, v_labels, e_labels)
 
     with open(tmpfilename, "r") as f: 
         contents = f.read()
 
     assert contents == expected
 
+
+def test_input_gml(tmpdir):
+	tmpfile = tmpdir.join('gml.out')
+	tmpfilename = str(tmpfile)
+
+	with open(tmpfilename, "w") as f: 
+		f.write(expected)
+
+	g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+
+	def va_cb(vertex, attribute_name, attribute_value):
+		print('Vertex {}, attr {}, value {}'.format(vertex, attribute_name.decode(), attribute_value.decode()))
+		if vertex == 2 and attribute_name.decode() == 'label': 
+			assert attribute_value.decode() == 'κόμβος 2'
+		if vertex == 5 and attribute_name.decode() == 'label': 
+			assert attribute_value.decode() == '5'	
+
+	def ea_cb(edge, attribute_name, attribute_value):
+		print('Edge {}, attr {}, value {}'.format(edge, attribute_name.decode(), attribute_value.decode()))
+		if edge == 9 and attribute_name.decode() == 'label': 
+			assert attribute_value.decode() == 'ακμή 1-2'
+
+	read_gml(g, tmpfilename, va_cb, ea_cb)
 

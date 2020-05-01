@@ -1,7 +1,7 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.io.exporters import dimacs
+from jgrapht.io.exporters import write_dimacs
 
 
 def build_graph():
@@ -108,7 +108,7 @@ def test_dimacs(tmpdir):
     g = build_graph()
     tmpfile = tmpdir.join('dimacs.out')
     tmpfilename = str(tmpfile)
-    dimacs(g, tmpfilename)
+    write_dimacs(g, tmpfilename)
 
     with open(tmpfilename, "r") as f: 
         contents = f.read()
@@ -121,7 +121,7 @@ def test_dimacs_coloring(tmpdir):
     g = build_graph()
     tmpfile = tmpdir.join('dimacs.out')
     tmpfilename = str(tmpfile)
-    dimacs(g, tmpfilename, format='coloring')
+    write_dimacs(g, tmpfilename, format='coloring')
 
     with open(tmpfilename, "r") as f: 
         contents = f.read()
@@ -134,7 +134,7 @@ def test_dimacs_maxclique(tmpdir):
     g = build_graph()
     tmpfile = tmpdir.join('dimacs.out')
     tmpfilename = str(tmpfile)
-    dimacs(g, tmpfilename, format='maxclique')
+    write_dimacs(g, tmpfilename, format='maxclique')
 
     with open(tmpfilename, "r") as f: 
         contents = f.read()

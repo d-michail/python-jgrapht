@@ -25,13 +25,13 @@ DIMACS_FORMATS = dict({ 'shortestpath': backend.DIMACS_FORMAT_SHORTEST_PATH,
 })
 
 
-def dimacs(graph, filename, format="shortestpath"):
+def write_dimacs(graph, filename, format="shortestpath"):
     format = DIMACS_FORMATS.get(format, backend.DIMACS_FORMAT_SHORTEST_PATH)
     custom = [ format ]
     return _export_to_file('dimacs', graph, filename, *custom)
 
 
-def gml(graph, filename, export_edge_weights, vertex_label_dict=None, edge_label_dict=None):
+def write_gml(graph, filename, export_edge_weights, vertex_label_dict=None, edge_label_dict=None):
 
     vertex_attribute_store = None
     if vertex_label_dict is not None:
@@ -50,15 +50,4 @@ def gml(graph, filename, export_edge_weights, vertex_label_dict=None, edge_label
             edge_attribute_store.handle if edge_attribute_store is not None else None)
     if err:
         raise_status()
-
-    # a ctypes callback prototype
-    #callback_type = ctypes.CFUNCTYPE(ctypes.c_char_p, ctypes.c_longlong)
-
-    # wrap the python callback with a ctypes function pointer
-    #f = callback_type(vertex_label_cb)
-
-    # get the function pointer of the ctypes wrapper by casting it to void* and taking its value
-    #f_ptr = ctypes.cast(f, ctypes.c_void_p).value
-
-    #print("Function pointer value: {}, type {}".format(f_ptr, type(f_ptr)))
 
