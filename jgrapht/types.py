@@ -80,18 +80,28 @@ class GraphPath(ABC):
 
     @abstractmethod
     def weight(self):
+        """Weight of the path.
+
+        :rtype: Double
+        """
         pass
 
     @abstractmethod
     def start_vertex(self):
+        """Starting vertex of the path."""
         pass
 
     @abstractmethod
     def end_vertex(self):
+        """Ending vertex of the path."""
         pass
 
     @abstractmethod
     def edges(self):
+        """Edges of the path.
+
+        :rtype: :class:`collections.abc.Iterable`
+        """
         pass
 
     @abstractmethod
@@ -110,6 +120,7 @@ class SingleSourcePaths(ABC):
 
     @abstractmethod
     def source_vertex(self):
+        """The source vertex."""
         pass
 
     @abstractmethod
@@ -123,12 +134,21 @@ class SingleSourcePaths(ABC):
 
 
 class AllPairsPaths(ABC): 
-    """All pair paths"""
+    """Paths between all pair of vertices. Used in all-pair shortest
+    path algorithms in order to represent the result set.
+    """
     def __init__(self):
         pass
 
     @abstractmethod    
     def get_path(self, source_vertex, target_vertex):
+        """Get a path from a source vertex to a target vertex. 
+
+        :param source_vertex: The source vertex
+        :param target_vertex: The target vertex
+        :returns: A path from the source vertex to the target vertex
+        :rtype: :class:`.GraphPath`
+        """
         pass
 
     @abstractmethod    

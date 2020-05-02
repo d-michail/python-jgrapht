@@ -6,7 +6,7 @@ The Graph Interface
 
 .. currentmodule:: jgrapht
 
-The main interface of the library is the :class:`AbstractGraph <jgrapht.types.AbstractGraph>`. All 
+The main interface of the library is the :class:`Graph <jgrapht.types.Graph>`. All 
 graph instances returned by the library follow this interface and almost all library methods revolve 
 around it. Appropriate factory methods can be used to create graph instances for most of the use-cases. 
 The default graph is capable of representing various different kind of graphs such as:
@@ -22,8 +22,8 @@ Creating graphs can be accomplished using the following factory method.
 
 .. autofunction:: jgrapht.create_graph
 
-AbstractGraph
-=============
+Graph
+=====
 
 .. autoclass:: jgrapht.types.Graph
    :inherited-members:
