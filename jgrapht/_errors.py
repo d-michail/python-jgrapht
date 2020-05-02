@@ -4,7 +4,10 @@ from .exceptions import *
 from .backend import jgrapht_get_errno, jgrapht_get_errno_msg, jgrapht_clear_errno
 from .backend import STATUS_SUCCESS, STATUS_ILLEGAL_ARGUMENT, STATUS_UNSUPPORTED_OPERATION
 from .backend import STATUS_INDEX_OUT_OF_BOUNDS, STATUS_NO_SUCH_ELEMENT, STATUS_NULL_POINTER
-from .backend import STATUS_CLASS_CAST, STATUS_IO_ERROR, STATUS_EXPORT_ERROR
+from .backend import STATUS_CLASS_CAST
+from .backend import STATUS_IO_ERROR
+from .backend import STATUS_EXPORT_ERROR
+from .backend import STATUS_IMPORT_ERROR
 
 
 def raise_status():
@@ -33,6 +36,8 @@ def raise_status():
     if errno == STATUS_IO_ERROR:
         raise InputOutputError(errno_msg)
     if errno == STATUS_EXPORT_ERROR:
-        raise ExportError(errno_msg)
+        raise GraphExportError(errno_msg)
+    if errno == STATUS_IMPORT_ERROR:
+        raise GraphImportError(errno_msg)
     raise Error(errno_msg)        
 

@@ -38,6 +38,7 @@ enum status_t {
     STATUS_CLASS_CAST,
     STATUS_IO_ERROR,
     STATUS_EXPORT_ERROR,
+    STATUS_IMPORT_ERROR,
 };
 
 enum dimacs_format_t {

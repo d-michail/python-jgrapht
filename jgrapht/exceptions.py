@@ -68,8 +68,17 @@ class ClassCastError(Error):
     def __init__(self, message):
         self.message = message        
 
-class ExportError(Error):
+class GraphExportError(Error):
     """Exception raised for export errors.
+
+    Attributes:
+        message -- explanation of the error
+    """
+    def __init__(self, message):
+        self.message = message
+
+class GraphImportError(Error):
+    """Exception raised for import errors.
 
     Attributes:
         message -- explanation of the error
