@@ -25,7 +25,7 @@ Creating graphs can be accomplished using the following factory method.
 AbstractGraph
 =============
 
-.. autoclass:: jgrapht.types.AbstractGraph
+.. autoclass:: jgrapht.types.Graph
    :inherited-members:
    :members:
 

@@ -16,4 +16,5 @@ API
    traversals
    metrics
    algorithms/index
+   io/index
    exceptions
