@@ -59,6 +59,12 @@ int jgrapht_is_thread_attached();
 
 int jgrapht_attributes_store_create(void** OUTPUT);
 
+int jgrapht_attributes_store_put_boolean_attribute(void *, long long int, char*, int);
+
+int jgrapht_attributes_store_put_long_attribute(void *, long long int, char*, long long int);
+
+int jgrapht_attributes_store_put_double_attribute(void *, long long int, char*, double);
+
 int jgrapht_attributes_store_put_string_attribute(void *, long long int, char*, char*);
 
 int jgrapht_attributes_store_remove_attribute(void *, long long int, char*);
@@ -107,9 +113,13 @@ char *jgrapht_get_errno_msg();
 
 // exporter
 
-int jgrapht_export_file_dimacs(void *, char*, dimacs_format_t);
+int jgrapht_export_file_dimacs(void *, char*, dimacs_format_t, int);
 
 int jgrapht_export_file_gml(void *, char*, int, void *, void *);
+
+int jgrapht_export_file_json(void *, char*, void *, void *);
+
+int jgrapht_export_file_lemon(void *, char*, int, int);
 
 // generate
 
@@ -268,6 +278,8 @@ int jgrapht_graph_test_is_k5_subdivision(void *, int* OUTPUT);
 int jgrapht_import_file_dimacs(void *, char*);
 
 int jgrapht_import_file_gml(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_import_file_json(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
 // iterators
 

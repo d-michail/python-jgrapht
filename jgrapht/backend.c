@@ -39,6 +39,18 @@ int jgrapht_attributes_store_create(void** res) {
     return jgrapht_capi_attributes_store_create(thread, res);
 }
 
+int jgrapht_attributes_store_put_boolean_attribute(void *store, long long int element, char* key, int value) { 
+    return jgrapht_capi_attributes_store_put_boolean_attribute(thread, store, element, key, value);
+}
+
+int jgrapht_attributes_store_put_long_attribute(void *store, long long int element, char* key, long long int value) {
+    return jgrapht_capi_attributes_store_put_long_attribute(thread, store, element, key, value);
+}
+
+int jgrapht_attributes_store_put_double_attribute(void *store, long long int element, char* key, double value) {
+    return jgrapht_capi_attributes_store_put_double_attribute(thread, store, element, key, value);
+}
+
 int jgrapht_attributes_store_put_string_attribute(void *store, long long int element, char* key, char* value) {
     return jgrapht_capi_attributes_store_put_string_attribute(thread, store, element, key, value);
 }
@@ -125,12 +137,20 @@ char * jgrapht_get_errno_msg() {
 
 // exporter
 
-int jgrapht_export_file_dimacs(void *g, char* filename, dimacs_format_t format) { 
-    return jgrapht_capi_export_file_dimacs(thread, g, filename, format);
+int jgrapht_export_file_dimacs(void *g, char* filename, dimacs_format_t format, int export_edge_weights) { 
+    return jgrapht_capi_export_file_dimacs(thread, g, filename, format, export_edge_weights);
 }
 
 int jgrapht_export_file_gml(void *g, char* filename, int export_edge_weights, void* vertex_attribute_store, void* edge_attribute_store) { 
     return jgrapht_capi_export_file_gml(thread, g, filename, export_edge_weights, vertex_attribute_store, edge_attribute_store);
+}
+
+int jgrapht_export_file_json(void *g, char* filename, void* vertex_attribute_store, void* edge_attribute_store) { 
+    return jgrapht_capi_export_file_json(thread, g, filename, vertex_attribute_store, edge_attribute_store);
+}
+
+int jgrapht_export_file_lemon(void *g, char* filename, int export_edge_weights, int escape_strings_as_java) { 
+    return jgrapht_capi_export_file_lemon(thread, g, filename, export_edge_weights, escape_strings_as_java);
 }
 
 // generate
@@ -435,6 +455,10 @@ int jgrapht_import_file_dimacs(void *g, char* filename) {
 
 int jgrapht_import_file_gml(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
     return jgrapht_capi_import_file_gml(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_file_json(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_file_json(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
 // iterators

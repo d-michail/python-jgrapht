@@ -36,16 +36,15 @@ dimacs_sp_expected = """c
 c SOURCE: Generated using the JGraphT library
 c
 p sp 10 18
-a 0 1
-a 0 2
-a 0 3
-a 0 4
-a 0 5
-a 0 6
-a 0 7
-a 0 8
-a 0 9
 a 1 2
+a 1 3
+a 1 4
+a 1 5
+a 1 6
+a 1 7
+a 1 8
+a 1 9
+a 1 10
 a 2 3
 a 3 4
 a 4 5
@@ -53,23 +52,23 @@ a 5 6
 a 6 7
 a 7 8
 a 8 9
-a 9 1
+a 9 10
+a 10 2
 """
 
 dimacs_coloring_expected = """c
 c SOURCE: Generated using the JGraphT library
 c
 p col 10 18
-e 0 1
-e 0 2
-e 0 3
-e 0 4
-e 0 5
-e 0 6
-e 0 7
-e 0 8
-e 0 9
 e 1 2
+e 1 3
+e 1 4
+e 1 5
+e 1 6
+e 1 7
+e 1 8
+e 1 9
+e 1 10
 e 2 3
 e 3 4
 e 4 5
@@ -77,23 +76,23 @@ e 5 6
 e 6 7
 e 7 8
 e 8 9
-e 9 1
+e 9 10
+e 10 2
 """
 
 dimacs_maxclique_expected = """c
 c SOURCE: Generated using the JGraphT library
 c
 p edge 10 18
-e 0 1
-e 0 2
-e 0 3
-e 0 4
-e 0 5
-e 0 6
-e 0 7
-e 0 8
-e 0 9
 e 1 2
+e 1 3
+e 1 4
+e 1 5
+e 1 6
+e 1 7
+e 1 8
+e 1 9
+e 1 10
 e 2 3
 e 3 4
 e 4 5
@@ -101,7 +100,8 @@ e 5 6
 e 6 7
 e 7 8
 e 8 9
-e 9 1
+e 9 10
+e 10 2
 """
 
 def test_dimacs(tmpdir):

@@ -208,8 +208,11 @@ def test_output_gml(tmpdir):
     tmpfile = tmpdir.join('gml.out')
     tmpfilename = str(tmpfile)
 
-    v_labels = { 0: 'label 0', 1: 'label 1', 2: 'κόμβος 2', 3: 'κόμβος 3' }
-    e_labels = { 9: 'ακμή 1-2' }
+    v_labels = { 0: { 'label': 'label 0'  }, 
+	             1: { 'label': 'label 1'  }, 
+				 2: { 'label': 'κόμβος 2' }, 
+				 3: { 'label': 'κόμβος 3' } }
+    e_labels = { 9: { 'label': 'ακμή 1-2' } }
     write_gml(g, tmpfilename, False, v_labels, e_labels)
 
     with open(tmpfilename, "r") as f: 
@@ -241,3 +244,14 @@ def test_input_gml(tmpdir):
 
 	read_gml(g, tmpfilename, va_cb, ea_cb)
 
+
+def test_input_gml_nocallbacks(tmpdir):
+	tmpfile = tmpdir.join('gml.out')
+	tmpfilename = str(tmpfile)
+
+	with open(tmpfilename, "w") as f: 
+		f.write(expected)
+
+	g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+
+	read_gml(g, tmpfilename)

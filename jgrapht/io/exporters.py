@@ -19,31 +19,38 @@ def _export_to_file(name, graph, filename, *args):
         raise_status()
 
 
+def _attributes_to_store(attributes_dict):
+    vertex_attribute_store = None
+    if attributes_dict is not None:
+        vertex_attribute_store = JGraphTAttributeStore()
+        for element, attr_dict in attributes_dict.items():
+            for key, value in attr_dict.items():
+                vertex_attribute_store.put(element, key, value)
+
+    return vertex_attribute_store
+
+
 DIMACS_FORMATS = dict({ 'shortestpath': backend.DIMACS_FORMAT_SHORTEST_PATH, 
                    'maxclique': backend.DIMACS_FORMAT_MAX_CLIQUE, 
                    'coloring' : backend.DIMACS_FORMAT_COLORING 
 })
 
 
-def write_dimacs(graph, filename, format="shortestpath"):
+def write_dimacs(graph, filename, format="shortestpath", export_edge_weights=False):
     format = DIMACS_FORMATS.get(format, backend.DIMACS_FORMAT_SHORTEST_PATH)
-    custom = [ format ]
+    custom = [ format, export_edge_weights ]
     return _export_to_file('dimacs', graph, filename, *custom)
 
 
-def write_gml(graph, filename, export_edge_weights, vertex_label_dict=None, edge_label_dict=None):
+def write_lemon(graph, filename, export_edge_weights=False, escape_strings=False):
+    custom = [ export_edge_weights, escape_strings ]
+    return _export_to_file('lemon', graph, filename, *custom)
 
-    vertex_attribute_store = None
-    if vertex_label_dict is not None:
-        vertex_attribute_store = JGraphTAttributeStore()
-        for k, v in vertex_label_dict.items():
-            vertex_attribute_store.put(k, "label", v)
 
-    edge_attribute_store = None
-    if edge_label_dict is not None:
-        edge_attribute_store = JGraphTAttributeStore()
-        for k, v in edge_label_dict.items():
-            edge_attribute_store.put(k, "label", v)
+def write_gml(graph, filename, export_edge_weights=False, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
+
+    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
+    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
 
     err = backend.jgrapht_export_file_gml(graph.handle, filename, export_edge_weights,
             vertex_attribute_store.handle if vertex_attribute_store is not None else None, 
@@ -51,3 +58,14 @@ def write_gml(graph, filename, export_edge_weights, vertex_label_dict=None, edge
     if err:
         raise_status()
 
+
+def write_json(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
+
+    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
+    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+
+    err = backend.jgrapht_export_file_json(graph.handle, filename, 
+            vertex_attribute_store.handle if vertex_attribute_store is not None else None, 
+            edge_attribute_store.handle if edge_attribute_store is not None else None)
+    if err:
+        raise_status()
