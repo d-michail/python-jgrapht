@@ -26,7 +26,6 @@ def _create_wrapped_callback(callback):
 
         # get the function pointer of the ctypes wrapper by casting it to void* and taking its value
         # we perform the reverse using typemaps on the SWIG layer
-    
         f_ptr = ctypes.cast(f, ctypes.c_void_p).value
 
         # make sure to also return the callback to avoid garbage collection
@@ -46,8 +45,10 @@ def read_gml(graph, filename, vertex_attribute_cb=None, edge_attribute_cb=None):
 
 
 def read_json(graph, filename, vertex_attribute_cb=None, edge_attribute_cb=None):
-    vertex_f_ptr, _ = _create_wrapped_callback(vertex_attribute_cb)
-    edge_f_ptr, _ = _create_wrapped_callback(edge_attribute_cb)
+    #pylint: disable=unused-variable
+    vertex_f_ptr, vertex_f = _create_wrapped_callback(vertex_attribute_cb)
+    edge_f_ptr, edge_f = _create_wrapped_callback(edge_attribute_cb)
+    #pylint: enable=unused-variable
 
     args = [ vertex_f_ptr, edge_f_ptr ]
     return _import_from_file('json', graph, filename, *args)
