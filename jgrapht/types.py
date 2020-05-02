@@ -332,3 +332,20 @@ class Graph(ABC):
     def outedges_of(self, v):
         pass
 
+
+class Clustering(ABC): 
+    """A vertex clustering.
+    """
+    def __init__(self):
+        pass
+
+    @abstractmethod    
+    def number_of_clusters(self):
+        """Number of clusters."""
+        pass
+
+    @abstractmethod    
+    def ith_cluster(self, i):
+        pass
+
+

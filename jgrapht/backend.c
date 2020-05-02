@@ -79,6 +79,10 @@ int jgrapht_clustering_exec_k_spanning_tree(void *g, int k, void**res) {
     return jgrapht_capi_clustering_exec_k_spanning_tree(thread, g, k, res);
 }
 
+int jgrapht_clustering_exec_label_propagation(void *g, int max_iterations, long long int seed, void** res) { 
+    return jgrapht_capi_clustering_exec_label_propagation(thread, g, max_iterations, seed, res);
+}
+
 int jgrapht_clustering_get_number_clusters(void *clustering, long long* res) { 
     return jgrapht_capi_clustering_get_number_clusters(thread, clustering, res);
 }

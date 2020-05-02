@@ -42,6 +42,8 @@ int jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(void *, long lon
 
 int jgrapht_clustering_exec_k_spanning_tree(void *, int, void**);
 
+int jgrapht_clustering_exec_label_propagation(void *, int, long long int, void**);
+
 int jgrapht_clustering_get_number_clusters(void *, long long*);
 
 int jgrapht_clustering_ith_cluster_vit(void *, int, void**);

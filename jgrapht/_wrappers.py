@@ -1,5 +1,5 @@
 from . import backend
-from .types import GraphType, GraphPath, SingleSourcePaths, AllPairsPaths, Graph
+from .types import GraphType, GraphPath, SingleSourcePaths, AllPairsPaths, Graph, Clustering
 from ._errors import raise_status
 from collections.abc import Iterator, MutableSet
 
@@ -665,4 +665,20 @@ class JGraphTAttributeStore(HandleWrapper):
             raise_status()
             
 
+class JGraphTClustering(HandleWrapper, Clustering):
+    """A vertex clustering."""
+    def __init__(self, handle, owner=True):
+        super().__init__(handle, owner)                
+
+    def number_of_clusters(self):
+        err, res = backend.jgrapht_clustering_get_number_clusters(self._handle)
+        if err: 
+            raise_status()
+        return res
+
+    def ith_cluster(self, i):
+        err, res = backend.jgrapht_clustering_ith_cluster_vit(self._handle, i)
+        if err: 
+            raise_status()
+        return JGraphTLongIterator(res)
 
