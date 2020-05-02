@@ -6,27 +6,15 @@ from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
 from .._wrappers import JGraphTLongIterator, JGraphTGraphPath, JGraphTAttributeStore
 
-def _import_from_file(name, graph, filename, *args):
-    alg_method_name = 'jgrapht_import_file_' + name
+def _import(name, graph, filename_or_string, *args):
+    alg_method_name = 'jgrapht_import_' + name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
         raise UnsupportedOperationError('Algorithm {} not supported.'.format(name))
 
-    err = alg_method(graph.handle, filename, *args)
-    if err:
-        raise_status()
-
-def _import_from_string(name, graph, input, *args):
-    alg_method_name = 'jgrapht_import_string_' + name
-
-    try:
-        alg_method = getattr(backend, alg_method_name)
-    except AttributeError:
-        raise UnsupportedOperationError('Algorithm {} not supported.'.format(name))
-
-    err = alg_method(graph.handle, input, *args)
+    err = alg_method(graph.handle, filename_or_string, *args)
     if err:
         raise_status()
 
@@ -80,7 +68,7 @@ def read_dimacs(graph, filename):
     :param filename: Filename to read from
     :raises GraphImportError: In case of an import error 
     """ 
-    return _import_from_file('dimacs', graph, filename)
+    return _import('file_dimacs', graph, filename)
 
 
 def parse_dimacs(graph, input_string):
@@ -120,7 +108,7 @@ def parse_dimacs(graph, input_string):
     :param input_string: Input string to read from
     :raises GraphImportError: In case of an import error 
     """ 
-    return _import_from_string('dimacs', graph, input_string)
+    return _import('string_dimacs', graph, input_string)
 
 
 def read_gml(graph, filename, vertex_attribute_cb=None, edge_attribute_cb=None):
@@ -193,7 +181,7 @@ def read_gml(graph, filename, vertex_attribute_cb=None, edge_attribute_cb=None):
     edge_f_ptr, _ = _create_wrapped_callback(edge_attribute_cb)
 
     args = [ vertex_f_ptr, edge_f_ptr ]
-    return _import_from_file('gml', graph, filename, *args)
+    return _import('file_gml', graph, filename, *args)
 
 def parse_gml(graph, input_string, vertex_attribute_cb=None, edge_attribute_cb=None):
     """Read a graph in GML format (Graph Modelling Language) from a string.
@@ -265,7 +253,7 @@ def parse_gml(graph, input_string, vertex_attribute_cb=None, edge_attribute_cb=N
     edge_f_ptr, _ = _create_wrapped_callback(edge_attribute_cb)
 
     args = [ vertex_f_ptr, edge_f_ptr ]
-    return _import_from_string('gml', graph, input_string, *args)
+    return _import('string_gml', graph, input_string, *args)
 
 
 def read_json(graph, filename, vertex_attribute_cb=None, edge_attribute_cb=None):
@@ -314,13 +302,11 @@ def read_json(graph, filename, vertex_attribute_cb=None, edge_attribute_cb=None)
     :param edge_attribute_cb: Callback function for edge attributes
     :raises GraphImportError: In case of an import error    
     """
-    #pylint: disable=unused-variable
-    vertex_f_ptr, vertex_f = _create_wrapped_callback(vertex_attribute_cb)
-    edge_f_ptr, edge_f = _create_wrapped_callback(edge_attribute_cb)
-    #pylint: enable=unused-variable
+    vertex_f_ptr, _ = _create_wrapped_callback(vertex_attribute_cb)
+    edge_f_ptr, _ = _create_wrapped_callback(edge_attribute_cb)
 
     args = [ vertex_f_ptr, edge_f_ptr ]
-    return _import_from_file('json', graph, filename, *args)
+    return _import('file_json', graph, filename, *args)
 
 def parse_json(graph, input_string, vertex_attribute_cb=None, edge_attribute_cb=None):
     """Import a graph from a JSON string. 
@@ -368,10 +354,8 @@ def parse_json(graph, input_string, vertex_attribute_cb=None, edge_attribute_cb=
     :param edge_attribute_cb: Callback function for edge attributes
     :raises GraphImportError: In case of an import error    
     """
-    #pylint: disable=unused-variable
-    vertex_f_ptr, vertex_f = _create_wrapped_callback(vertex_attribute_cb)
-    edge_f_ptr, edge_f = _create_wrapped_callback(edge_attribute_cb)
-    #pylint: enable=unused-variable
+    vertex_f_ptr, _ = _create_wrapped_callback(vertex_attribute_cb)
+    edge_f_ptr, _ = _create_wrapped_callback(edge_attribute_cb)
 
     args = [ vertex_f_ptr, edge_f_ptr ]
-    return _import_from_string('json', graph, input_string, *args)
+    return _import('string_json', graph, input_string, *args)
