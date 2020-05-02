@@ -238,9 +238,15 @@ int jgrapht_graph_test_is_k5_subdivision(void *, int*);
 
 int jgrapht_import_file_dimacs(void *, char*);
 
+int jgrapht_import_string_dimacs(void *, char*);
+
 int jgrapht_import_file_gml(void *, char*, void *, void *);
 
+int jgrapht_import_string_gml(void *, char*, void *, void *);
+
 int jgrapht_import_file_json(void *, char*, void *, void *);
+
+int jgrapht_import_string_json(void *, char*, void *, void *);
 
 // iterators
 

@@ -17,12 +17,6 @@
     %append_output(SWIG_NewPointerObj(*$1, $*1_descriptor, SWIG_POINTER_NOSHADOW | %newpointer_flags));
 }
 
-// a typemap for the callback, it expects the argument to be an integer
-// whose value is the address of an appropriate callback function
-//%typemap(in) char* (*f)(long long int) {
-//    $1 = (char* (*)(long long int))PyLong_AsVoidPtr($input);
-//}
-
 %typemap(in) void *LONG_TO_FUNCTION_POINTER { 
     $1 = PyLong_AsVoidPtr($input);    
 }
@@ -278,9 +272,15 @@ int jgrapht_graph_test_is_k5_subdivision(void *, int* OUTPUT);
 
 int jgrapht_import_file_dimacs(void *, char*);
 
+int jgrapht_import_string_dimacs(void *, char*);
+
 int jgrapht_import_file_gml(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
+int jgrapht_import_string_gml(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
 int jgrapht_import_file_json(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_import_string_json(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
 // iterators
 

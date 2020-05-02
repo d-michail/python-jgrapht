@@ -453,12 +453,24 @@ int jgrapht_import_file_dimacs(void *g, char* filename) {
     return jgrapht_capi_import_file_dimacs(thread, g, filename);
 }
 
+int jgrapht_import_string_dimacs(void *g, char* filename) { 
+    return jgrapht_capi_import_string_dimacs(thread, g, filename);
+}
+
 int jgrapht_import_file_gml(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
     return jgrapht_capi_import_file_gml(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
+int jgrapht_import_string_gml(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_string_gml(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
 int jgrapht_import_file_json(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
     return jgrapht_capi_import_file_json(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_string_json(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_string_json(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
 // iterators
