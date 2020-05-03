@@ -14,7 +14,8 @@ The JGraphT contains a large collection of advanced algorithms.
    shortestpaths
    spanning
    coloring
+   planar
    flow
-   vertexcover
    tour
    cliques
+   vertexcover
