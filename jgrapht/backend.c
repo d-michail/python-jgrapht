@@ -157,6 +157,20 @@ int jgrapht_export_file_lemon(void *g, char* filename, int export_edge_weights, 
     return jgrapht_capi_export_file_lemon(thread, g, filename, export_edge_weights, escape_strings_as_java);
 }
 
+// flow
+
+int jgrapht_maxflow_exec_push_relabel(void *g, long long int source, long long int sink, double* valueRes, void** flowMapRes, void** cutSourcePartitionRes) { 
+    return jgrapht_capi_maxflow_exec_push_relabel(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);
+}
+
+int jgrapht_maxflow_exec_dinic(void *g, long long int source, long long int sink, double* valueRes, void** flowMapRes, void** cutSourcePartitionRes) { 
+    return jgrapht_capi_maxflow_exec_dinic(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);    
+}
+
+int jgrapht_maxflow_exec_edmonds_karp(void *g, long long int source, long long int sink, double* valueRes, void** flowMapRes, void** cutSourcePartitionRes) { 
+    return jgrapht_capi_maxflow_exec_edmonds_karp(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);
+}
+
 // generate
 
 int jgrapht_generate_barabasi_albert(void *g, int m0, int m, int n, long long int seed) { 

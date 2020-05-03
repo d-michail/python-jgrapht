@@ -118,6 +118,14 @@ int jgrapht_export_file_json(void *, char*, void *, void *);
 
 int jgrapht_export_file_lemon(void *, char*, int, int);
 
+// flow 
+
+int jgrapht_maxflow_exec_push_relabel(void *, long long int, long long int, double* OUTPUT, void** OUTPUT, void** OUTPUT);
+
+int jgrapht_maxflow_exec_dinic(void *, long long int, long long int, double* OUTPUT, void** OUTPUT, void** OUTPUT);
+
+int jgrapht_maxflow_exec_edmonds_karp(void *, long long int, long long int, double* OUTPUT, void** OUTPUT, void** OUTPUT);
+
 // generate
 
 int jgrapht_generate_barabasi_albert(void *, int, int, int, long long int);
