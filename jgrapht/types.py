@@ -249,6 +249,12 @@ class Graph(ABC):
 
     @abstractmethod
     def contains_edge_between(self, u, v):
+        """Check if an edge exists between two vertices.
+
+        :param u: The first vertex
+        :param v: The second vertex
+        :returns: True if an edge between u and v exists, False otherwise.
+        """
         pass
 
     @abstractmethod
@@ -305,10 +311,30 @@ class Graph(ABC):
 
     @abstractmethod
     def edge_source(self, e):
+        """Get the source vertex of an edge.
+
+        For directed graphs this method always returns the vertex from which the 
+        edge originates. For undirected graphs, an arbitrary one of the two
+        vertices, but always the same and always the opposite of what method 
+        :meth:`edge_target` returns.
+
+        :param e: the edge
+        :returns: the source endpoint of the edge
+        """
         pass
 
     @abstractmethod
     def edge_target(self, e):
+        """Get the target vertex of an edge.
+
+        For directed graphs this method always returns the vertex to which this
+        edge points. For undirected graphs, an arbitrary one of the two
+        vertices, but always the same and always the opposite of what method 
+        :meth:`edge_source` returns.
+
+        :param e: the edge
+        :returns: the source endpoint of the edge
+        """
         pass
 
     @abstractmethod
