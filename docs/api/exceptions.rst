@@ -16,6 +16,9 @@ is thrown in the backend the original error message is also propagated.
 .. autoexception:: jgrapht.exceptions.IndexOutOfBoundsError
 .. autoexception:: jgrapht.exceptions.NullPointerError
 .. autoexception:: jgrapht.exceptions.ClassCastError
+.. autoexception:: jgrapht.exceptions.GraphExportError
+.. autoexception:: jgrapht.exceptions.GraphImportError
+.. autoexception:: jgrapht.exceptions.InputOutputError
 
 All the above exceptions have the following error as a base class. In the case that
 a backend exception is not mapped explicitly to one of the above, we simply raise 
