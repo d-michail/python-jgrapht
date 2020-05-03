@@ -23,6 +23,15 @@ def has_multipleedges(graph):
 
 
 def is_complete(graph):
+    """Check if the graph is complete.
+
+    For undirected graphs, each pair of vertices must be connected by a single edge.
+    For directed graphs, each pair of vertices must be connected by one pair of edges, one 
+    in each direction.
+
+    :param graph: The input graph
+    :returns: True if the graph is complete, False otherwise.
+    """
     err, res = backend.jgrapht_graph_test_is_complete(graph.handle)
     return res if not err else raise_status()
 
@@ -38,11 +47,21 @@ def is_strongly_connected(graph):
 
 
 def is_tree(graph):
+    """Check if an undirected graph is a tree.
+
+    :param graph: The input graph
+    :returns: True if the graph is a tree, False otherwise.
+    """
     err, res = backend.jgrapht_graph_test_is_tree(graph.handle)
     return res if not err else raise_status()
 
 
 def is_forest(graph):
+    """Check if an undirected graph is a forest.
+
+    :param graph: The input graph
+    :returns: True if the graph is a forest, False otherwise.
+    """
     err, res = backend.jgrapht_graph_test_is_forest(graph.handle)
     return res if not err else raise_status()
 
@@ -58,6 +77,11 @@ def is_split(graph):
 
 
 def is_bipartite(graph):
+    """Check if a graph is bipartite.
+
+    :param graph: The input graph
+    :returns: True if the graph is bipartite, False otherwise.
+    """
     err, res = backend.jgrapht_graph_test_is_bipartite(graph.handle)
     return res if not err else raise_status()
 
