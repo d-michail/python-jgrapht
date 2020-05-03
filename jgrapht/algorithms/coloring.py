@@ -4,16 +4,16 @@ from .._wrappers import JGraphTLongLongMap
 
 
 def _coloring_alg(name, graph, *args):
-    alg_method_name = 'jgrapht_coloring_exec_'
+    alg_method_name = "jgrapht_coloring_exec_"
     alg_method_name += name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")    
+        raise UnsupportedOperationError("Algorithm not supported.")
 
     err, num_colors, color_map_handle = alg_method(graph.handle, *args)
-    if err: 
+    if err:
         raise_status()
 
     return (num_colors, JGraphTLongLongMap(handle=color_map_handle))
@@ -28,7 +28,8 @@ def greedy_smallestnotusedcolor(graph):
     :param graph: The input graph. Either directed or undirected.
     :returns: A vertex coloring as a dictionary from vertices to integers.
     """
-    return _coloring_alg('greedy', graph)
+    return _coloring_alg("greedy", graph)
+
 
 def greedy_smallestdegreelast(graph):
     r"""The smallest degree last greedy coloring algorithm.
@@ -44,7 +45,8 @@ def greedy_smallestdegreelast(graph):
     :param graph: The input graph. Either directed or undirected.
     :returns: A vertex coloring as a dictionary from vertices to integers.
     """
-    return _coloring_alg('greedy_smallestdegreelast', graph)
+    return _coloring_alg("greedy_smallestdegreelast", graph)
+
 
 def greedy_largestdegreefirst(graph):
     """The largest degree first greedy coloring algorithm.
@@ -58,7 +60,8 @@ def greedy_largestdegreefirst(graph):
     :param graph: The input graph. Either directed or undirected.
     :returns: A vertex coloring as a dictionary from vertices to integers.    
     """
-    return _coloring_alg('greedy_largestdegreefirst', graph)
+    return _coloring_alg("greedy_largestdegreefirst", graph)
+
 
 def greedy_random(graph, seed=None):
     """The greedy coloring algorithm with a random vertex ordering.
@@ -68,10 +71,11 @@ def greedy_random(graph, seed=None):
                  is used to select a seed.
     :returns: A vertex coloring as a dictionary from vertices to integers.             
     """
-    if seed is None: 
-        return _coloring_alg('greedy_random', graph)
+    if seed is None:
+        return _coloring_alg("greedy_random", graph)
     else:
-        return _coloring_alg('greedy_random_with_seed', graph, seed)
+        return _coloring_alg("greedy_random_with_seed", graph, seed)
+
 
 def greedy_dsatur(graph):
     r"""The Dsatur greedy coloring algorithm.
@@ -96,7 +100,8 @@ def greedy_dsatur(graph):
     :param graph: The input graph. Either directed or undirected.
     :returns: A vertex coloring as a dictionary from vertices to integers.             
     """
-    return _coloring_alg('greedy_dsatur', graph)
+    return _coloring_alg("greedy_dsatur", graph)
+
 
 def color_refinement(graph):
     r"""Color refinement algorithm. Finds the coarsest stable coloring of a graph based on a given
@@ -111,7 +116,8 @@ def color_refinement(graph):
     :param graph: The input graph. Either directed or undirected.
     :returns: A vertex coloring as a dictionary from vertices to integers.             
     """
-    return _coloring_alg('color_refinement', graph)
+    return _coloring_alg("color_refinement", graph)
+
 
 def backtracking_brown(graph):
     """Brown backtracking graph coloring algorithm.
@@ -119,6 +125,4 @@ def backtracking_brown(graph):
     :param graph: The input graph. Either directed or undirected.
     :returns: A vertex coloring as a dictionary from vertices to integers.
     """
-    return _coloring_alg('backtracking_brown', graph)    
-
-
+    return _coloring_alg("backtracking_brown", graph)

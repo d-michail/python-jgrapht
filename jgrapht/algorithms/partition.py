@@ -12,8 +12,6 @@ def bipartite_partitions(graph):
     :returns: A tuple (result, partition1, partition2)
     """
     err, res, part1, part2 = backend.jgrapht_partition_exec_bipartite(graph.handle)
-    if err: 
+    if err:
         raise_status()
     return res, JGraphTLongSet(part1), JGraphTLongSet(part2)
-
-

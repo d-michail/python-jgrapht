@@ -3,6 +3,7 @@ import time
 from . import backend
 from ._errors import raise_status
 
+
 def barabasi_albert_graph(graph, m0, m, n, seed=None):
     """Barabási-Albert growth and preferential attachment graph generator.
  
@@ -26,11 +27,11 @@ def barabasi_albert_graph(graph, m0, m, n, seed=None):
     :param seed: Seed for the random number generator. If None the system time is used
     :raise IllegalArgumentError: In case of invalid parameters
     """
-    if seed is None: 
+    if seed is None:
         seed = int(time.time())
 
     err = backend.jgrapht_generate_barabasi_albert(graph.handle, m0, m, n, seed)
-    if err: 
+    if err:
         raise_status()
 
 
@@ -51,13 +52,14 @@ def barabasi_albert_forest(graph, t, n, seed=None):
     :param n: Final number of nodes
     :param seed: Seed for the random number generator. If None the system time is used
     :raise IllegalArgumentError: In case of invalid parameters    
-    """ 
-    if seed is None: 
+    """
+    if seed is None:
         seed = int(time.time())
 
     err = backend.jgrapht_generate_barabasi_albert_forest(graph.handle, t, n, seed)
-    if err: 
+    if err:
         raise_status()
+
 
 def complete_graph(graph, n):
     """Generates a complete graph of any size.
@@ -67,9 +69,9 @@ def complete_graph(graph, n):
 
     :param graph: The graph to alter, which should be empty.
     :param n: The number of vertices.
-    """ 
+    """
     err = backend.jgrapht_generate_complete(graph.handle, n)
-    if err: 
+    if err:
         raise_status()
 
 
@@ -81,7 +83,7 @@ def complete_bipartite_graph(graph, a, b):
     :param b: Size of the second partition.
     """
     err = backend.jgrapht_generate_bipartite_complete(graph.handle, a, b)
-    if err: 
+    if err:
         raise_status()
 
 
@@ -95,7 +97,7 @@ def empty_graph(graph, n):
     :param n: The number of vertices.
     """
     err = backend.jgrapht_generate_empty(graph.handle, n)
-    if err: 
+    if err:
         raise_status()
 
 
@@ -124,11 +126,13 @@ def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
     :param multiple_edges: Whether to create multiple edges.
     :param seed: Seed for the random number generator. If None then the system time is used.
     """
-    if seed is None: 
+    if seed is None:
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_gnm_random(graph.handle, n, m, loops, multiple_edges, seed)
-    if err: 
+    err = backend.jgrapht_generate_gnm_random(
+        graph.handle, n, m, loops, multiple_edges, seed
+    )
+    if err:
         raise_status()
 
 
@@ -146,35 +150,37 @@ def gnp_random_graph(graph, n, p, loops=False, seed=None):
     :param loops: Whether to create self-loops.
     :param seed: Seed for the random number generator. If None then the system time is used.
     """
-    if seed is None: 
+    if seed is None:
         seed = int(time.time())
 
     err = backend.jgrapht_generate_gnp_random(graph.handle, n, p, loops, seed)
-    if err: 
+    if err:
         raise_status()
 
 
 def ring_graph(graph, n):
     err = backend.jgrapht_generate_ring(graph.handle, n)
-    if err: 
+    if err:
         raise_status()
 
 
 def scalefree_graph(graph, n, seed=None):
-    if seed is None: 
+    if seed is None:
         seed = int(time.time())
 
     err = backend.jgrapht_generate_scalefree(graph.handle, n, seed)
-    if err: 
+    if err:
         raise_status()
 
 
 def watts_strogatz_graph(graph, n, k, p, add_instead_of_rewire=False, seed=None):
-    if seed is None: 
+    if seed is None:
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_watts_strogatz(graph.handle, n, k, p, add_instead_of_rewire, seed)
-    if err: 
+    err = backend.jgrapht_generate_watts_strogatz(
+        graph.handle, n, k, p, add_instead_of_rewire, seed
+    )
+    if err:
         raise_status()
 
 
@@ -202,9 +208,9 @@ def kleinberg_smallworld_graph(graph, n, p, q, r, seed=None):
     :param seed: seed for the random number generator
     :raises IllegalArgumentError: in case of invalid parameters
     """
-    if seed is None: 
+    if seed is None:
         seed = int(time.time())
 
     err = backend.jgrapht_generate_kleinberg_smallworld(graph.handle, n, p, q, r, seed)
-    if err: 
-        raise_status()        
+    if err:
+        raise_status()

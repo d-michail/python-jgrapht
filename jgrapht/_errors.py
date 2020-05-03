@@ -1,9 +1,16 @@
-
 from enum import Enum
 from .exceptions import *
 from .backend import jgrapht_get_errno, jgrapht_get_errno_msg, jgrapht_clear_errno
-from .backend import STATUS_SUCCESS, STATUS_ILLEGAL_ARGUMENT, STATUS_UNSUPPORTED_OPERATION
-from .backend import STATUS_INDEX_OUT_OF_BOUNDS, STATUS_NO_SUCH_ELEMENT, STATUS_NULL_POINTER
+from .backend import (
+    STATUS_SUCCESS,
+    STATUS_ILLEGAL_ARGUMENT,
+    STATUS_UNSUPPORTED_OPERATION,
+)
+from .backend import (
+    STATUS_INDEX_OUT_OF_BOUNDS,
+    STATUS_NO_SUCH_ELEMENT,
+    STATUS_NULL_POINTER,
+)
 from .backend import STATUS_CLASS_CAST
 from .backend import STATUS_IO_ERROR
 from .backend import STATUS_EXPORT_ERROR
@@ -22,9 +29,9 @@ def raise_status():
     errno_msg = jgrapht_get_errno_msg()
     jgrapht_clear_errno()
     if errno == STATUS_ILLEGAL_ARGUMENT:
-        raise IllegalArgumentError(errno_msg)    
+        raise IllegalArgumentError(errno_msg)
     if errno == STATUS_UNSUPPORTED_OPERATION:
-        raise UnsupportedOperationError(errno_msg)    
+        raise UnsupportedOperationError(errno_msg)
     if errno == STATUS_INDEX_OUT_OF_BOUNDS:
         raise IndexOutOfBoundsError(errno_msg)
     if errno == STATUS_NO_SUCH_ELEMENT:
@@ -39,5 +46,4 @@ def raise_status():
         raise GraphExportError(errno_msg)
     if errno == STATUS_IMPORT_ERROR:
         raise GraphImportError(errno_msg)
-    raise Error(errno_msg)        
-
+    raise Error(errno_msg)

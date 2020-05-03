@@ -5,13 +5,14 @@ from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
 from .._wrappers import JGraphTLongIterator, JGraphTGraphPath
 
+
 def _tour_tsp_alg(name, graph_or_graph_path, *args):
-    alg_method_name = 'jgrapht_tour_' + name
+    alg_method_name = "jgrapht_tour_" + name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError('Algorithm {} not supported.'.format(name))
+        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
 
     err, graph_path = alg_method(graph_or_graph_path.handle, *args)
     if err:
@@ -33,8 +34,8 @@ def tsp_random(graph, seed=None):
     """
     if seed is None:
         seed = time.time()
-    return _tour_tsp_alg('tsp_random', graph, seed)
-    
+    return _tour_tsp_alg("tsp_random", graph, seed)
+
 
 def tsp_greedy_heuristic(graph):
     """ Construct a tour greedily. The algorithm repeatedly selects the shortest edge
@@ -47,46 +48,45 @@ def tsp_greedy_heuristic(graph):
     :returns: A graph path
     :rtype: :py:class:`jgrapht.graph.GraphPath`
     """
-    return _tour_tsp_alg('tsp_greedy_heuristic', graph)    
+    return _tour_tsp_alg("tsp_greedy_heuristic", graph)
 
 
 def tsp_nearest_insertion_heuristic(graph):
-    return _tour_tsp_alg('tsp_nearest_insertion_heuristic', graph)    
+    return _tour_tsp_alg("tsp_nearest_insertion_heuristic", graph)
 
 
 def tsp_nearest_neighbor_heuristic(graph, seed=None):
     if seed is None:
         seed = time.time()
-    custom = [ seed ]
-    return _tour_tsp_alg('tsp_nearest_neighbor_heuristic', graph, *custom)    
+    custom = [seed]
+    return _tour_tsp_alg("tsp_nearest_neighbor_heuristic", graph, *custom)
 
 
 def metric_tsp_christofides(graph):
-    return _tour_tsp_alg('metric_tsp_christofides', graph)    
+    return _tour_tsp_alg("metric_tsp_christofides", graph)
 
 
 def metric_tsp_two_approx(graph):
-    return _tour_tsp_alg('metric_tsp_christofides', graph)
+    return _tour_tsp_alg("metric_tsp_christofides", graph)
 
 
 def tsp_held_karp(graph):
-    return _tour_tsp_alg('tsp_held_karp', graph)    
+    return _tour_tsp_alg("tsp_held_karp", graph)
 
 
 def hamiltonian_palmer(graph):
-    return _tour_tsp_alg('hamiltonian_palmer', graph)
+    return _tour_tsp_alg("hamiltonian_palmer", graph)
 
 
 def tsp_two_opt_heuristic(graph, k=1, min_cost_improvement=0.0001, seed=None):
     if seed is None:
         seed = time.time()
-    custom = [ k, min_cost_improvement, seed ]
-    return _tour_tsp_alg('tsp_two_opt_heuristic', graph, *custom)
+    custom = [k, min_cost_improvement, seed]
+    return _tour_tsp_alg("tsp_two_opt_heuristic", graph, *custom)
 
 
 def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=None):
     if seed is None:
         seed = time.time()
-    custom = [  min_cost_improvement, seed ]
-    return _tour_tsp_alg('tsp_two_opt_heuristic_improve', graph_path, *custom)
-
+    custom = [min_cost_improvement, seed]
+    return _tour_tsp_alg("tsp_two_opt_heuristic_improve", graph_path, *custom)

@@ -4,32 +4,32 @@ from .._wrappers import JGraphTClustering
 
 import time
 
+
 def _clustering_alg(name, graph, *args):
-    alg_method_name = 'jgrapht_clustering_exec_'
+    alg_method_name = "jgrapht_clustering_exec_"
     alg_method_name += name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")    
+        raise UnsupportedOperationError("Algorithm not supported.")
 
     err, handle = alg_method(graph.handle, *args)
-    if err: 
+    if err:
         raise_status()
 
     return JGraphTClustering(handle)
 
 
 def k_spanning_tree(graph, k):
-    args = [ k ]
-    return _clustering_alg('k_spanning_tree', graph, *args)
+    args = [k]
+    return _clustering_alg("k_spanning_tree", graph, *args)
 
 
 def label_propagation(graph, max_iterations=None, seed=None):
-    if seed is None: 
+    if seed is None:
         seed = time.time()
     if max_iterations is None:
         max_iterations = 0
     args = [max_iterations, seed]
-    return _clustering_alg('label_propagation', graph, *args)
-
+    return _clustering_alg("label_propagation", graph, *args)

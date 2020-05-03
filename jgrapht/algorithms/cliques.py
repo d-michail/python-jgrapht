@@ -2,17 +2,18 @@ from .. import backend
 from .._errors import raise_status, UnsupportedOperationError
 from .._wrappers import JGraphTLongSetIterator
 
+
 def _clique_enumeration_alg(name, graph, *args):
-    alg_method_name = 'jgrapht_clique_exec_'
+    alg_method_name = "jgrapht_clique_exec_"
     alg_method_name += name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")    
+        raise UnsupportedOperationError("Algorithm not supported.")
 
     err, clique_it = alg_method(graph.handle, *args)
-    if err: 
+    if err:
         raise_status()
 
     return JGraphTLongSetIterator(handle=clique_it)
@@ -33,8 +34,8 @@ def bron_kerbosch(graph, timeout=0):
     :param timeout: Timeout in seconds. No timeout if zero
     :returns: An iterator over maximal cliques
     """
-    custom = [ timeout ]
-    return _clique_enumeration_alg('bron_kerbosch', graph, *custom)
+    custom = [timeout]
+    return _clique_enumeration_alg("bron_kerbosch", graph, *custom)
 
 
 def bron_kerbosch_with_pivot(graph, timeout=0):
@@ -56,8 +57,8 @@ def bron_kerbosch_with_pivot(graph, timeout=0):
     :param timeout: Timeout in seconds. No timeout if zero
     :returns: An iterator over maximal cliques
     """
-    custom = [ timeout ]
-    return _clique_enumeration_alg('bron_kerbosch_pivot', graph, *custom)
+    custom = [timeout]
+    return _clique_enumeration_alg("bron_kerbosch_pivot", graph, *custom)
 
 
 def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
@@ -83,5 +84,5 @@ def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
     :param timeout: Timeout in seconds. No timeout if zero
     :returns: An iterator over maximal cliques
     """
-    custom = [ timeout ]
-    return _clique_enumeration_alg('bron_kerbosch_pivot', graph, *custom)
+    custom = [timeout]
+    return _clique_enumeration_alg("bron_kerbosch_pivot", graph, *custom)

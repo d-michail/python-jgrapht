@@ -1,9 +1,17 @@
 from abc import ABC, abstractmethod
 
 
-class GraphType: 
+class GraphType:
     """Graph Type"""
-    def __init__(self, directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True, modifiable=True):
+
+    def __init__(
+        self,
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        modifiable=True,
+    ):
         self._directed = directed
         self._allowing_self_loops = allowing_self_loops
         self._allowing_multiple_edges = allowing_multiple_edges
@@ -24,7 +32,7 @@ class GraphType:
         
         :returns: True if the graph is undirected, False otherwise.
         """
-        return not self._directed    
+        return not self._directed
 
     @property
     def allowing_self_loops(self):
@@ -57,19 +65,25 @@ class GraphType:
         
         :returns True if the graph is modifiable, False otherwise.
         """
-        return self._modifiable    
+        return self._modifiable
 
     def __repr__(self):
-        return { 'directed':self._directed, 
-                 'allowing_self_loops':self._allowing_self_loops, 
-                 'allowing_multiple_edges':self._allowing_multiple_edges, 
-                 'weighted': self._weighted,
-                 'modifiable': self._modifiable
+        return {
+            "directed": self._directed,
+            "allowing_self_loops": self._allowing_self_loops,
+            "allowing_multiple_edges": self._allowing_multiple_edges,
+            "weighted": self._weighted,
+            "modifiable": self._modifiable,
         }
 
     def __str__(self):
-        return 'GraphType(directed={}, allowing-self-loops={}, allowing-multiple-edges={}, weighted={}, modifiable={})' \
-            .format(self._directed, self._allowing_self_loops, self._allowing_multiple_edges, self._weighted, self._modifiable)
+        return "GraphType(directed={}, allowing-self-loops={}, allowing-multiple-edges={}, weighted={}, modifiable={})".format(
+            self._directed,
+            self._allowing_self_loops,
+            self._allowing_multiple_edges,
+            self._weighted,
+            self._modifiable,
+        )
 
 
 class GraphPath(ABC):
@@ -109,12 +123,13 @@ class GraphPath(ABC):
         pass
 
 
-class SingleSourcePaths(ABC): 
+class SingleSourcePaths(ABC):
     """A set of paths starting from a single source vertex.
     
     This class represents the whole shortest path tree from a single source vertex
     to all other vertices in the graph.
     """
+
     def __init__(self):
         pass
 
@@ -133,14 +148,15 @@ class SingleSourcePaths(ABC):
         pass
 
 
-class AllPairsPaths(ABC): 
+class AllPairsPaths(ABC):
     """Paths between all pair of vertices. Used in all-pair shortest
     path algorithms in order to represent the result set.
     """
+
     def __init__(self):
         pass
 
-    @abstractmethod    
+    @abstractmethod
     def get_path(self, source_vertex, target_vertex):
         """Get a path from a source vertex to a target vertex. 
 
@@ -151,13 +167,14 @@ class AllPairsPaths(ABC):
         """
         pass
 
-    @abstractmethod    
+    @abstractmethod
     def get_paths_from(self, source_vertex):
         pass
 
 
 class Graph(ABC):
     """A graph."""
+
     def __init__(self):
         pass
 
@@ -200,7 +217,7 @@ class Graph(ABC):
         pass
 
     @abstractmethod
-    def add_edge(self, u, v, weight = None):
+    def add_edge(self, u, v, weight=None):
         """Adds an edge to the graph.
 
         Edges are automatically created and represented as longs.
@@ -217,7 +234,7 @@ class Graph(ABC):
         """Remove an edge from the graph.
 
         :param e: The edge identifier to remove
-        """ 
+        """
         pass
 
     @abstractmethod
@@ -227,11 +244,11 @@ class Graph(ABC):
         :param e: The edge identifier to check
         :returns: True if the edge belongs to the graph, False otherwise.
         :rtype: Boolean
-        """ 
+        """
         pass
 
     @abstractmethod
-    def contains_edge_between(self, u, v): 
+    def contains_edge_between(self, u, v):
         pass
 
     @abstractmethod
@@ -295,7 +312,7 @@ class Graph(ABC):
         pass
 
     @abstractmethod
-    def get_edge_weight(self, e): 
+    def get_edge_weight(self, e):
         pass
 
     @abstractmethod
@@ -313,7 +330,7 @@ class Graph(ABC):
         return len(self.edges())
 
     @abstractmethod
-    def edges(self): 
+    def edges(self):
         pass
 
     @abstractmethod
@@ -333,18 +350,18 @@ class Graph(ABC):
         pass
 
 
-class Clustering(ABC): 
+class Clustering(ABC):
     """A vertex clustering.
     """
+
     def __init__(self):
         pass
 
-    @abstractmethod    
+    @abstractmethod
     def number_of_clusters(self):
         """Number of clusters."""
         pass
 
-    @abstractmethod    
+    @abstractmethod
     def ith_cluster(self, i):
         pass
-

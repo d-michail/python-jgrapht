@@ -1,12 +1,12 @@
-
 class Error(Exception):
     """Base class for exceptions in this module.
 
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message):
-        self.message = message    
+        self.message = message
 
 
 class UnsupportedOperationError(Error):
@@ -15,6 +15,7 @@ class UnsupportedOperationError(Error):
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message):
         self.message = message
 
@@ -25,6 +26,7 @@ class IllegalArgumentError(Error):
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message):
         self.message = message
 
@@ -35,6 +37,7 @@ class NoSuchElementError(Error):
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message):
         self.message = message
 
@@ -45,6 +48,7 @@ class IndexOutOfBoundsError(Error):
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message):
         self.message = message
 
@@ -55,8 +59,9 @@ class NullPointerError(Error):
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message):
-        self.message = message        
+        self.message = message
 
 
 class ClassCastError(Error):
@@ -65,8 +70,10 @@ class ClassCastError(Error):
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message):
-        self.message = message        
+        self.message = message
+
 
 class GraphExportError(Error):
     """Exception raised for export errors.
@@ -74,8 +81,10 @@ class GraphExportError(Error):
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message):
         self.message = message
+
 
 class GraphImportError(Error):
     """Exception raised for import errors.
@@ -83,8 +92,10 @@ class GraphImportError(Error):
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message):
         self.message = message
+
 
 class InputOutputError(Error):
     """Exception raised for IO errors.
@@ -92,6 +103,6 @@ class InputOutputError(Error):
     Attributes:
         message -- explanation of the error
     """
+
     def __init__(self, message):
         self.message = message
-                        

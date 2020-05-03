@@ -1,4 +1,3 @@
-
 """
 Python JGraphT Library
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -14,11 +13,14 @@ from ._wrappers import create_graph
 
 # Create main thread and setup cleanup
 import atexit
+
 backend.jgrapht_thread_create()
+
 
 def _module_cleanup_function():
     if backend.jgrapht_is_thread_attached():
         backend.jgrapht_thread_destroy()
+
 
 atexit.register(_module_cleanup_function)
 del atexit
@@ -26,7 +28,5 @@ del atexit
 
 # Set default logging handler to avoid "No handler found" warnings.
 import logging
+
 logging.getLogger(__name__).addHandler(logging.NullHandler())
-
-
-

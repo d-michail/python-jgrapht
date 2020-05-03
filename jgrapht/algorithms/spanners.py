@@ -5,12 +5,12 @@ from .._wrappers import JGraphTLongSet
 
 
 def _mst_alg(name, graph):
-    alg_method_name = 'jgrapht_mst_exec_' + name
+    alg_method_name = "jgrapht_mst_exec_" + name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError('Algorithm {} not supported.'.format(name))
+        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
 
     err, weight, mst_handle = alg_method(graph.handle)
     if err:
@@ -31,7 +31,8 @@ def kruskal(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    return _mst_alg('kruskal', graph)
+    return _mst_alg("kruskal", graph)
+
 
 def prim(graph):
     r"""Compute the minimum spanning tree using `Prim's algorithm <https://en.wikipedia.org/wiki/Prim's_algorithm>`_.
@@ -44,7 +45,7 @@ def prim(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    return _mst_alg('prim', graph)
+    return _mst_alg("prim", graph)
 
 
 def boruvka(graph):
@@ -59,8 +60,9 @@ def boruvka(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    return _mst_alg('boruvka', graph)
-    
+    return _mst_alg("boruvka", graph)
+
+
 def multiplicative_greedy(graph, k):
     r"""Greedy algorithm for :math:`(2k-1)`-multiplicative spanner construction (for any integer :math:`k \ge 1`.
  
@@ -86,8 +88,9 @@ def multiplicative_greedy(graph, k):
     :param k: integer
     :returns: tuple of the form (weight, spanner_edges)
     """
-    err, weight, spanner = backend.jgrapht_spanner_exec_greedy_multiplicative(graph.handle, k)
+    err, weight, spanner = backend.jgrapht_spanner_exec_greedy_multiplicative(
+        graph.handle, k
+    )
     if err:
         raise_status()
     return weight, JGraphTLongSet(spanner)
-

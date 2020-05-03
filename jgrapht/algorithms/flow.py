@@ -2,23 +2,27 @@ from .. import backend
 from .._errors import raise_status, UnsupportedOperationError
 from .._wrappers import JGraphTCut, JGraphTFlow
 
+
 def _maxflow_alg(name, graph, source, sink, *args):
 
-    alg_method_name = 'jgrapht_maxflow_exec_' + name
+    alg_method_name = "jgrapht_maxflow_exec_" + name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")    
+        raise UnsupportedOperationError("Algorithm not supported.")
 
-    err, flow_value, flow_handle, cut_source_partition_handle = alg_method(graph.handle, source, sink, *args)
-    if err: 
+    err, flow_value, flow_handle, cut_source_partition_handle = alg_method(
+        graph.handle, source, sink, *args
+    )
+    if err:
         raise_status()
 
     flow = JGraphTFlow(flow_handle, source, sink, flow_value)
     cut = JGraphTCut(graph, flow_value, cut_source_partition_handle)
 
     return flow, cut
+
 
 def dinic(graph, source, sink):
     r"""Compute a maximum flow using Dinic's algorithm with scaling.
@@ -35,7 +39,8 @@ def dinic(graph, source, sink):
     :param sink: The sink vertex.
     :returns: A tuple (max s-t flow, min s-t cut).
     """
-    return _maxflow_alg('dinic', graph, source, sink)
+    return _maxflow_alg("dinic", graph, source, sink)
+
 
 def push_relabel(graph, source, sink):
     r"""Compute a maximum flow using the Push-relabel algorithm.
@@ -55,7 +60,8 @@ def push_relabel(graph, source, sink):
     :param sink: The sink vertex.
     :returns: A tuple (max s-t flow, min s-t cut).
     """
-    return _maxflow_alg('push_relabel', graph, source, sink)
+    return _maxflow_alg("push_relabel", graph, source, sink)
+
 
 def edmonds_karp(graph, source, sink):
     r"""Compute a maximum flow using the Edmonds-Karp variant of the Ford-Fulkerson algorithm.
@@ -74,7 +80,8 @@ def edmonds_karp(graph, source, sink):
     :param sink: The sink vertex.
     :returns: A tuple (max s-t flow, min s-t cut).
     """
-    return _maxflow_alg('edmonds_karp', graph, source, sink)
+    return _maxflow_alg("edmonds_karp", graph, source, sink)
+
 
 def max_st_flow(graph, source, sink):
     r"""Compute a maximum flow using the Push-relabel algorithm.
@@ -95,6 +102,7 @@ def max_st_flow(graph, source, sink):
     """
     flow, _ = push_relabel(graph, source, sink)
     return flow
+
 
 def min_st_cut(graph, source, sink):
     r"""Compute a minimum s-t cut using the Push-relabel algorithm.

@@ -5,12 +5,12 @@ from .._wrappers import JGraphTGraphPath, JGraphTSingleSourcePaths, JGraphTAllPa
 
 
 def _sp_singlesource_alg(name, graph, source_vertex):
-    alg_method_name = 'jgrapht_sp_exec_' + name
+    alg_method_name = "jgrapht_sp_exec_" + name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError('Algorithm {} not supported.'.format(name))
+        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
 
     err, handle = alg_method(graph.handle, source_vertex)
     if err:
@@ -20,12 +20,12 @@ def _sp_singlesource_alg(name, graph, source_vertex):
 
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex):
-    alg_method_name = 'jgrapht_sp_exec_' + name
+    alg_method_name = "jgrapht_sp_exec_" + name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError('Algorithm {} not supported.'.format(name))
+        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
 
     err, handle = alg_method(graph.handle, source_vertex, target_vertex)
     if err:
@@ -35,19 +35,18 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex):
 
 
 def _sp_allpairs_alg(name, graph):
-    alg_method_name = 'jgrapht_sp_exec_' + name
+    alg_method_name = "jgrapht_sp_exec_" + name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError('Algorithm {} not supported.'.format(name))
+        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
 
     err, handle = alg_method(graph.handle)
     if err:
         raise_status()
 
     return JGraphTAllPairsPaths(handle)
-    
 
 
 def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
@@ -63,21 +62,41 @@ def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
     :returns: Either a `:py:class:jgrapht.types.AbstractGraphPath` or `:py:class:.SingleSourcePaths`.
     """
     if target_vertex is None:
-        return _sp_singlesource_alg('dijkstra_get_singlesource_from_vertex', graph, source_vertex)
+        return _sp_singlesource_alg(
+            "dijkstra_get_singlesource_from_vertex", graph, source_vertex
+        )
     else:
         if use_bidirectional:
-            return _sp_between_alg('bidirectional_dijkstra_get_path_between_vertices', graph, source_vertex, target_vertex)
+            return _sp_between_alg(
+                "bidirectional_dijkstra_get_path_between_vertices",
+                graph,
+                source_vertex,
+                target_vertex,
+            )
         else:
-            return _sp_between_alg('dijkstra_get_path_between_vertices', graph, source_vertex, target_vertex)
+            return _sp_between_alg(
+                "dijkstra_get_path_between_vertices",
+                graph,
+                source_vertex,
+                target_vertex,
+            )
+
 
 def bellman_ford(graph, source_vertex):
-    return _sp_singlesource_alg('bellmanford_get_singlesource_from_vertex', graph, source_vertex)
+    return _sp_singlesource_alg(
+        "bellmanford_get_singlesource_from_vertex", graph, source_vertex
+    )
+
 
 def bfs(graph, source_vertex):
-    return _sp_singlesource_alg('bfs_get_singlesource_from_vertex', graph, source_vertex)
+    return _sp_singlesource_alg(
+        "bfs_get_singlesource_from_vertex", graph, source_vertex
+    )
+
 
 def johnson_allpairs(graph):
-    return _sp_allpairs_alg('johnson_get_allpairs', graph)
-    
+    return _sp_allpairs_alg("johnson_get_allpairs", graph)
+
+
 def floyd_warshall_allpairs(graph):
-    return _sp_allpairs_alg('floydwarshall_get_allpairs', graph)    
+    return _sp_allpairs_alg("floydwarshall_get_allpairs", graph)

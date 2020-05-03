@@ -29,4 +29,3 @@ def girth(graph):
 def count_triangles(graph):
     err, res = backend.jgrapht_graph_metrics_triangles(graph.handle)
     return res if not err else raise_status()
-
