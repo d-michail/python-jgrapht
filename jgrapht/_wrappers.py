@@ -8,7 +8,11 @@ from .types import (
     Clustering,
 )
 from ._errors import raise_status
-from collections.abc import Iterator, MutableSet
+from collections.abc import (
+    Iterator, 
+    MutableSet, 
+    Set,
+)
 
 
 class HandleWrapper:
@@ -641,7 +645,7 @@ class JGraphTGraph(HandleWrapper, Graph):
         err, res = backend.jgrapht_graph_vertex_create_out_eit(self._handle, v)
         return JGraphTLongIterator(res) if not err else raise_status()
 
-    class _VertexSet:
+    class _VertexSet(Set):
         """Wrapper around the vertices of a JGraphT graph"""
 
         def __init__(self, handle=None):
@@ -665,7 +669,7 @@ class JGraphTGraph(HandleWrapper, Graph):
                 raise_status()
             return res
 
-    class _EdgeSet:
+    class _EdgeSet(Set):
         """Wrapper around the edges of a JGraphT graph"""
 
         def __init__(self, handle=None):

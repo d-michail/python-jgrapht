@@ -38,5 +38,5 @@ def test_non_planar():
     res, aux = planar.is_planar(g)
 
     assert res == False
-    assert set(aux.vertices()) == set([0, 1, 2, 3, 4])
+    assert aux.vertices() == set([0, 1, 2, 3, 4])
 
