@@ -108,7 +108,7 @@ def test_dimacs(tmpdir):
     g = build_graph()
     tmpfile = tmpdir.join('dimacs.out')
     tmpfilename = str(tmpfile)
-    write_dimacs(g, tmpfilename)
+    write_dimacs(g, tmpfilename, format='shortestpath')
 
     with open(tmpfilename, "r") as f: 
         contents = f.read()
