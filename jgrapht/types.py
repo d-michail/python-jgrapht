@@ -339,40 +339,91 @@ class Graph(ABC):
 
     @abstractmethod
     def get_edge_weight(self, e):
+        """Get the weight of an edge. 
+
+        If the graph is unweighted, this method returns 1.0 in order to allow algorithms
+        to also execute on them.
+
+        :param e: the edge
+        :returns: the weight of an edge
+        :rtype: Double
+        """
         pass
 
     @abstractmethod
     def set_edge_weight(self, e, weight):
+        """Set the weight of an edge. 
+
+        :param e: the edge
+        :param weight: the weight
+        :raises UnsupportedOperationError: in case the graph does not support weights
+        """
         pass
 
     def number_of_vertices(self):
+        """Get the number of vertices in the graph."""
         return len(self.vertices())
 
     @abstractmethod
     def vertices(self):
+        """Graph vertex set."""
         pass
 
     def number_of_edges(self):
+        """Get the number of edges in the graph."""
         return len(self.edges())
 
     @abstractmethod
     def edges(self):
+        """Graph edge set."""
         pass
 
     @abstractmethod
     def edges_between(self, u, v):
+        """Returns all edges between vertices u and v.
+
+        :param u: the first endpoint
+        :param v: the second endpoint
+        :returns: All edges between vertices u and v.
+        """
         pass
 
     @abstractmethod
     def edges_of(self, v):
+        """Set of all edges touching vertex v.
+
+        :param v: the vertex
+        :returns: the set of all edges touching v.
+        :raises IllegalArgumentError: If the vertex is not in the graph.
+        """
         pass
 
     @abstractmethod
     def inedges_of(self, v):
+        """Set of all edges incoming into vertex v.
+
+        In the case of undirected graphs this method returns all edges touching the
+        vertex, thus, some of the returned edges may have their source and target
+        vertices in the opposite order.
+
+        :param v: the vertex
+        :returns: the set of all edges incoming into v.
+        :raises IllegalArgumentError: If the vertex is not in the graph.
+        """
         pass
 
     @abstractmethod
     def outedges_of(self, v):
+        """Set of all edges outgoing from vertex v.
+
+        In the case of undirected graphs this method returns all edges touching the
+        vertex, thus, some of the returned edges may have their source and target
+        vertices in the opposite order.
+
+        :param v: the vertex
+        :returns: the set of all edges outgoing from v.
+        :raises IllegalArgumentError: If the vertex is not in the graph.
+        """
         pass
 
 
@@ -390,4 +441,6 @@ class Clustering(ABC):
 
     @abstractmethod
     def ith_cluster(self, i):
+        """Set of vertices comprising the i-th cluster. 
+        """
         pass

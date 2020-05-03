@@ -20,12 +20,12 @@ def barabasi_albert_graph(graph, m0, m, n, seed=None):
     of incoming and outgoing degrees. For a more general discussion see the paper: M. E. J. Newman.
     The Structure and Function of Complex Networks. SIAM Rev., 45(2):167--256, 2003.
 
-    :param graph: The graph to alter
-    :param m0: Number of initial nodes
-    :param m: Number of edges of each new node added during the network growth
-    :param n: Final number of nodes
-    :param seed: Seed for the random number generator. If None the system time is used
-    :raise IllegalArgumentError: In case of invalid parameters
+    :param graph: the graph to alter
+    :param m0: number of initial nodes
+    :param m: number of edges of each new node added during the network growth
+    :param n: final number of nodes
+    :param seed: seed for the random number generator. If None the system time is used
+    :raise IllegalArgumentError: in case of invalid parameters
     """
     if seed is None:
         seed = int(time.time())
@@ -47,10 +47,10 @@ def barabasi_albert_forest(graph, t, n, seed=None):
     proportional to its degree.
  
     Note that this Barabàsi-Albert generator only works on undirected graphs.
-    :param graph: The graph to alter. Must be undirected.
-    :param t: Number of initial isolated nodes
-    :param n: Final number of nodes
-    :param seed: Seed for the random number generator. If None the system time is used
+    :param graph: the graph to alter. Must be undirected.
+    :param t: number of initial isolated nodes.
+    :param n: final number of nodes
+    :param seed: seed for the random number generator. If None the system time is used
     :raise IllegalArgumentError: In case of invalid parameters    
     """
     if seed is None:
@@ -67,8 +67,8 @@ def complete_graph(graph, n):
     A complete graph is a graph where every vertex shares an edge with every other vertex.
     If it is a directed graph, then edges must always exist in both directions.
 
-    :param graph: The graph to alter, which should be empty.
-    :param n: The number of vertices.
+    :param graph: the graph to alter, which should be empty
+    :param n: the number of vertices.
     """
     err = backend.jgrapht_generate_complete(graph.handle, n)
     if err:
@@ -78,9 +78,9 @@ def complete_graph(graph, n):
 def complete_bipartite_graph(graph, a, b):
     """Generate a complete bipartite graph.
 
-    :param graph: The graph to alter.
-    :param a: Size of the first partition.
-    :param b: Size of the second partition.
+    :param graph: the graph to alter
+    :param a: size of the first partition
+    :param b: size of the second partition
     """
     err = backend.jgrapht_generate_bipartite_complete(graph.handle, a, b)
     if err:
@@ -93,8 +93,8 @@ def empty_graph(graph, n):
     The `empty graph <https://mathworld.wolfram.com/EmptyGraph.html>`_ is a graph 
     with a certain number of vertices and no edges.
 
-    :param g: The graph to alter, which should be empty.
-    :param n: The number of vertices.
+    :param g: the graph to alter, which should be empty
+    :param n: number of vertices
     """
     err = backend.jgrapht_generate_empty(graph.handle, n)
     if err:
@@ -119,12 +119,12 @@ def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
     the maximum integer value. Otherwise the maximum for undirected graphs with :math:`n`
     vertices is :math:`\frac{n(n-1)}{2}` while for directed :math:`n(n-1)`.
 
-    :param graph: The graph to alter.
-    :param n: The number of nodes.
-    :param m: The number of edges.
-    :param loops: Whether to create self-loops.
-    :param multiple_edges: Whether to create multiple edges.
-    :param seed: Seed for the random number generator. If None then the system time is used.
+    :param graph: the graph to alter
+    :param n: the number of nodes
+    :param m: the number of edges
+    :param loops: whether to create self-loops
+    :param multiple_edges: whether to create multiple edges
+    :param seed: seed for the random number generator. If None then the system time is used
     """
     if seed is None:
         seed = int(time.time())
@@ -144,11 +144,11 @@ def gnp_random_graph(graph, n, p, loops=False, seed=None):
     other edge. The complexity of the generator is :math:`\mathcal{O}(n^2)` where :math:`n`
     is the number of vertices.
 
-    :param graph: The graph to alter.
-    :param n: The number of nodes.
-    :param p: Probability of edge existence.
-    :param loops: Whether to create self-loops.
-    :param seed: Seed for the random number generator. If None then the system time is used.
+    :param graph: the graph to alter
+    :param n: the number of nodes
+    :param p: probability of edge existence
+    :param loops: whether to create self-loops
+    :param seed: seed for the random number generator. If None then the system time is used
     """
     if seed is None:
         seed = int(time.time())
@@ -159,12 +159,28 @@ def gnp_random_graph(graph, n, p, loops=False, seed=None):
 
 
 def ring_graph(graph, n):
+    """Generate a ring graph.
+
+    If the graph is directed, then all edges follow the ring consistently.
+
+    :param graph: the graph to alter
+    :param n: the number of vertices
+    """
     err = backend.jgrapht_generate_ring(graph.handle, n)
     if err:
         raise_status()
 
 
 def scalefree_graph(graph, n, seed=None):
+    """Generate directed or undirected scale-free graphs of any size. 
+
+    The generated graphs are connected and contains a large number of vertices with 
+    small degrees and only a small number of vertices with large degree.
+
+    :param graph: the graph to alter
+    :param n: the number of vertices
+    :param seed: seed for the random number generator. If None then the system time is used
+    """
     if seed is None:
         seed = int(time.time())
 
@@ -174,6 +190,50 @@ def scalefree_graph(graph, n, seed=None):
 
 
 def watts_strogatz_graph(graph, n, k, p, add_instead_of_rewire=False, seed=None):
+    r"""Watts-Strogatz small-world graph generator.
+
+    The generator is described in the paper: 
+     
+     * D. J. Watts and S. H. Strogatz. Collective dynamics of small-world networks.
+       Nature 393(6684):440--442, 1998.
+
+    .. note::
+    
+        The following paragraph from the paper describes the construction.
+
+        "The generator starts with a ring of :math:`n` vertices, each connected to its :math:`k`
+        nearest neighbors (:math:`k` must be even). Then it chooses a vertex and the edge that
+        connects it to its nearest neighbor in a clockwise sense. With probability :math:`p`, it
+        reconnects this edge to a vertex chosen uniformly at random over the entire ring with
+        duplicate edges forbidden; otherwise it leaves the edge in place. The process is repeated
+        by moving clock-wise around the ring, considering each vertex in turn until one lap is
+        completed. Next, it considers the edges that connect vertices to their second-nearest
+        neighbors clockwise. As before, it randomly rewires each of these edges with probability
+        :math:`p`, and continues this process, circulating around the ring and proceeding outward
+        to more distant neighbors after each lap, until each edge in the original lattice has been
+        considered once. As there are :math:`\frac{nk}{2}` edges in the entire graph, the rewiring
+        process stops after :math:`\frac{k}{2}`. For :math:`p=0`, the original ring is unchanged;
+        as :math:`p` increases, the graph becomes increasingly disordered until for :math:`p=1`,
+        all edges are rewired randomly. For intermediate values of :math:`p`, the graph is a
+        small-world network: highly clustered like a regular graph, yet with small characteristic
+        path length, like a random graph."
+
+    The authors require :math:`n \gg k \gg \ln(n) \gg 1` and specifically
+    :math:`k \gg \ln(n)` guarantees that a random graph will be connected.
+
+    Through the parameters the model can be slightly changed into adding shortcut edges
+    instead of re-wiring. This variation was proposed in the paper:
+
+     * M. E. J. Newman and D. J. Watts, Renormalization group analysis of the small-world
+       network model, Physics Letters A, 263, 341, 1999.
+
+    :param graph: the graph to alter
+    :param n: the number of vertices
+    :param k: connect each node to its :math:`k` nearest neighbors in a ring
+    :param p: probabilityof re-wiring each edge
+    :param add_instead_of_rewire: whether to add shortcut edges instead of re-wiring
+    :param seed: seed for the random number generator. If None then the system time is used
+    """
     if seed is None:
         seed = int(time.time())
 
