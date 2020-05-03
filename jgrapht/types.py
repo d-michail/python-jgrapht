@@ -444,3 +444,16 @@ class Clustering(ABC):
         """Set of vertices comprising the i-th cluster. 
         """
         pass
+
+
+class PlanarEmbedding(ABC):
+    """A planar embedding. Represented as the edges ordered clockwise around the vertices.
+    """
+
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def edges_around(self, vertex):
+        """Get edges around a vertex in clockwise order."""
+        pass

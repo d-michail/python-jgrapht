@@ -376,6 +376,12 @@ int jgrapht_mst_exec_boruvka(void *, double* OUTPUT, void** OUTPUT);
 
 int jgrapht_partition_exec_bipartite(void *, int* OUTPUT, void** OUTPUT, void** OUTPUT);
 
+// planarity
+
+int jgrapht_planarity_exec_boyer_myrvold(void *, int* OUTPUT, void** OUTPUT, void** OUTPUT);
+
+int jgrapht_planarity_embedding_edges_around_vertex(void *, long long int, void** OUTPUT);
+
 // scoring
 
 int jgrapht_scoring_exec_alpha_centrality(void *, void** OUTPUT);

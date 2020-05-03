@@ -452,16 +452,35 @@ class JGraphTGraph(HandleWrapper, Graph):
         allowing_multiple_edges=True,
         weighted=True,
     ):
-        if handle is None:
+        creating_graph = handle is None
+        if creating_graph:
             err, handle = backend.jgrapht_graph_create(
                 directed, allowing_self_loops, allowing_multiple_edges, weighted
             )
             if err:
                 raise_status()
             owner = True
+
         super().__init__(handle, owner)
+
         self._vertex_set = None
         self._edge_set = None
+
+        if not creating_graph:
+            # read attributes from backend
+            err, directed = backend.jgrapht_graph_is_directed(self._handle)
+            if err:
+                    raise_status()
+            err, allowing_self_loops = backend.jgrapht_graph_is_allowing_selfloops(self._handle)
+            if err:
+                    raise_status()
+            err, allowing_multiple_edges = backend.jgrapht_graph_is_allowing_multipleedges(self._handle)
+            if err:
+                    raise_status()
+            err, weighted = backend.jgrapht_graph_is_weighted(self._handle)
+            if err:
+                    raise_status()                        
+
         self._graph_type = GraphType(
             directed, allowing_self_loops, allowing_multiple_edges, weighted
         )
@@ -816,3 +835,17 @@ class JGraphTCut:
                 t_in_s = self._graph.edge_target(e) in self._source_partition
                 if s_in_s ^ t_in_s:
                     self._edges.add(e)
+
+
+class JGraphTPlanarEmbedding(HandleWrapper):
+    """A JGraphT wrapped planar embedding."""
+
+    def __init__(self, handle, owner=True):
+        super().__init__(handle, owner)
+
+    def edges_around(self, vertex):
+        err, res = backend.jgrapht_planarity_embedding_edges_around_vertex(self._handle, vertex)
+        if err:
+            raise_status()
+        return list(JGraphTLongIterator(res))
+

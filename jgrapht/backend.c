@@ -647,6 +647,16 @@ int jgrapht_partition_exec_bipartite(void *g, int* res, void** vertex_partition1
     return jgrapht_capi_partition_exec_bipartite(thread, g, res, vertex_partition1, vertex_partition2);
 }
 
+// planarity
+
+int jgrapht_planarity_exec_boyer_myrvold(void *g, int* is_planar_res, void** embedding_res, void** kuratowski_subdivision_res) { 
+    return jgrapht_capi_planarity_exec_boyer_myrvold(thread, g, is_planar_res, embedding_res, kuratowski_subdivision_res);
+}
+
+int jgrapht_planarity_embedding_edges_around_vertex(void *embedding, long long int vertex, void** it_res) {
+    return jgrapht_capi_planarity_embedding_edges_around_vertex(thread, embedding, vertex, it_res);
+}
+
 // scoring
 
 int jgrapht_scoring_exec_alpha_centrality(void *g, void** res) { 
