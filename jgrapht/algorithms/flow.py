@@ -23,10 +23,16 @@ def _maxflow_alg(name, graph, source, sink, *args):
 def dinic(graph, source, sink):
     return _maxflow_alg('dinic', graph, source, sink)
 
-
 def push_relabel(graph, source, sink):
     return _maxflow_alg('push_relabel', graph, source, sink)
 
-
 def edmonds_karp(graph, source, sink):
     return _maxflow_alg('edmonds_karp', graph, source, sink)
+
+def max_st_flow(graph, source, sink):
+    flow, _ = push_relabel(graph, source, sink)
+    return flow
+
+def min_st_cut(graph, source, sink):
+    _, cut = push_relabel(graph, source, sink)
+    return cut
