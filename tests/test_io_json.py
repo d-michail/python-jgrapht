@@ -96,3 +96,22 @@ def test_input_json_from_string_nocallbacks(tmpdir):
     parse_json(g, expected)
     assert g.number_of_vertices() == 10
     assert g.number_of_edges() == 18
+
+
+def test_input_json_from_string_create_new_vertices():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    input_string=r'{"version":"1","nodes":[{"id":"5"},{"id":"7"}],"edges":[{"source":"5","target":"7"}]}'
+    parse_json(g, input_string) 
+    assert g.vertices() == set([0, 1])
+
+
+def test_input_json_from_string_preserve_ids():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    input_string=r'{"version":"1","nodes":[{"id":"5"},{"id":"7"}],"edges":[{"source":"5","target":"7"}]}'
+
+    def import_id(file_id): 
+        return int(file_id)
+
+    parse_json(g, input_string, import_id_cb=import_id) 
+    assert g.vertices() == set([5, 7])
+
