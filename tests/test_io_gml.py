@@ -274,3 +274,25 @@ def test_input_gml_nocallbacks(tmpdir):
 	g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
 	read_gml(g, tmpfilename)
+
+
+def test_input_gml_from_string_create_new_vertices():
+
+	g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+
+	input_string ="Version 1 graph [ directed 0 node [ id 5 ] node [ id 7 ] edge [ source 5 target 7 ] ]"
+
+	parse_gml(g, input_string, preserve_ids_from_input=False) 
+
+	assert g.vertices() == set([0, 1])
+
+
+def test_input_gml_from_string_preserve_ids():
+
+	g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+
+	input_string ="Version 1 graph [ directed 0 node [ id 5 ] node [ id 7 ] edge [ source 5 target 7 ] ]"
+
+	parse_gml(g, input_string, preserve_ids_from_input=True) 
+
+	assert g.vertices() == set([5, 7])
