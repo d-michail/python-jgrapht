@@ -416,12 +416,12 @@ def read_csv(graph, filename, import_id_cb=None, format="edgelist", import_edge_
     return _import('file_csv', graph, filename, *args)
 
 
-def parse_csv(graph, input_string, import_id_cb=None, format="edgelist", import_edge_weights=False, matrix_format_node_id=False, matrix_format_zero_when_noedge=True):
+def parse_csv(graph, input_string, import_id_cb=None, format="adjacencylist", import_edge_weights=False, matrix_format_node_id=False, matrix_format_zero_when_noedge=True):
 
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
     import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
 
-    format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_EDGE_LIST)
+    format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
     args = [ import_id_f_ptr, format_to_use, import_edge_weights, matrix_format_node_id, matrix_format_zero_when_noedge ]
 
     return _import('string_csv', graph, input_string, *args)

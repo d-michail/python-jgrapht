@@ -258,13 +258,13 @@ int jgrapht_import_file_json(void *, char*, void *, void *, void *);
 
 int jgrapht_import_string_json(void *, char*, void *, void *, void *);
 
-int jgrapht_capi_import_file_csv(void *, char*, void *, csv_format_t, int, int, int);
+int jgrapht_import_file_csv(void *, char*, void *, csv_format_t, int, int, int);
 
-int jgrapht_capi_import_string_csv(void *, char*, void *, csv_format_t, int, int, int);
+int jgrapht_import_string_csv(void *, char*, void *, csv_format_t, int, int, int);
 
-int jgrapht_capi_import_file_gexf(void *, char*, void *, int, void *, void *);
+int jgrapht_import_file_gexf(void *, char*, void *, int, void *, void *);
 
-int jgrapht_capi_import_string_gexf(void *, char*, void *, int, void *, void *);
+int jgrapht_import_string_gexf(void *, char*, void *, int, void *, void *);
 
 // iterators
 
