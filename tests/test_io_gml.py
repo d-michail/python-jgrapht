@@ -242,7 +242,7 @@ def test_input_gml(tmpdir):
 		if edge == 9 and attribute_name.decode() == 'label': 
 			assert attribute_value.decode() == 'ακμή 1-2'
 
-	read_gml(g, tmpfilename, va_cb, ea_cb)
+	read_gml(g, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
 
 def test_input_gml_from_string(tmpdir):
@@ -261,7 +261,7 @@ def test_input_gml_from_string(tmpdir):
 		if edge == 9 and attribute_name.decode() == 'label': 
 			assert attribute_value.decode() == 'ακμή 1-2'
 
-	parse_gml(g, expected, va_cb, ea_cb)
+	parse_gml(g, expected, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
 
 def test_input_gml_nocallbacks(tmpdir):

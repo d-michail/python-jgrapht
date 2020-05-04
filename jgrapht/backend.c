@@ -467,28 +467,44 @@ int jgrapht_graph_test_is_k5_subdivision(void *g, int* res) {
 
 // importers
 
-int jgrapht_import_file_dimacs(void *g, char* filename) { 
-    return jgrapht_capi_import_file_dimacs(thread, g, filename);
+int jgrapht_import_file_dimacs(void *g, char* filename, int preserve_ids_from_input) { 
+    return jgrapht_capi_import_file_dimacs(thread, g, filename, preserve_ids_from_input);
 }
 
-int jgrapht_import_string_dimacs(void *g, char* filename) { 
-    return jgrapht_capi_import_string_dimacs(thread, g, filename);
+int jgrapht_import_string_dimacs(void *g, char* input, int preserve_ids_from_input) { 
+    return jgrapht_capi_import_string_dimacs(thread, g, input, preserve_ids_from_input);
 }
 
-int jgrapht_import_file_gml(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
-    return jgrapht_capi_import_file_gml(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
+int jgrapht_import_file_gml(void *g, char* filename, int preserve_ids_from_input, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_file_gml(thread, g, filename, preserve_ids_from_input, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
-int jgrapht_import_string_gml(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
-    return jgrapht_capi_import_string_gml(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
+int jgrapht_import_string_gml(void *g, char* input, int preserve_ids_from_input, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_string_gml(thread, g, input, preserve_ids_from_input, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
-int jgrapht_import_file_json(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
-    return jgrapht_capi_import_file_json(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
+int jgrapht_import_file_json(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_file_json(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
-int jgrapht_import_string_json(void *g, char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
-    return jgrapht_capi_import_string_json(thread, g, filename, vertex_attribute_fptr, edge_attribute_fptr);
+int jgrapht_import_string_json(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_string_json(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_file_csv(void *g, char* filename, void *import_vertex_id_fptr, csv_format_t format, int import_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge) { 
+    return jgrapht_capi_import_file_csv(thread, g, filename, import_vertex_id_fptr, format, import_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge);
+}
+
+int jgrapht_import_string_csv(void *g, char* input, void *import_vertex_id_fptr, csv_format_t format, int import_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge) { 
+    return jgrapht_capi_import_string_csv(thread, g, input, import_vertex_id_fptr, format, import_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge);
+}
+
+int jgrapht_import_file_gexf(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_file_gexf(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_string_gexf(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_string_gexf(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
 // iterators

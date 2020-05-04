@@ -74,7 +74,7 @@ def test_input_json(tmpdir):
 		if edge == 9 and attribute_name.decode() == 'label': 
 			assert attribute_value.decode() == 'edge 1-2'
 
-	read_json(g, tmpfilename, va_cb, ea_cb)
+	read_json(g, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
 
 def test_input_json_nocallbacks(tmpdir):

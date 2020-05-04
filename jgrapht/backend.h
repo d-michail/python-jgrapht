@@ -246,17 +246,25 @@ int jgrapht_graph_test_is_k5_subdivision(void *, int*);
 
 // importers
 
-int jgrapht_import_file_dimacs(void *, char*);
+int jgrapht_import_file_dimacs(void *, char*, int);
 
-int jgrapht_import_string_dimacs(void *, char*);
+int jgrapht_import_string_dimacs(void *, char*, int);
 
-int jgrapht_import_file_gml(void *, char*, void *, void *);
+int jgrapht_import_file_gml(void *, char*, int, void *, void *);
 
-int jgrapht_import_string_gml(void *, char*, void *, void *);
+int jgrapht_import_string_gml(void *, char*, int, void *, void *);
 
-int jgrapht_import_file_json(void *, char*, void *, void *);
+int jgrapht_import_file_json(void *, char*, void *, void *, void *);
 
-int jgrapht_import_string_json(void *, char*, void *, void *);
+int jgrapht_import_string_json(void *, char*, void *, void *, void *);
+
+int jgrapht_capi_import_file_csv(void *, char*, void *, csv_format_t, int, int, int);
+
+int jgrapht_capi_import_string_csv(void *, char*, void *, csv_format_t, int, int, int);
+
+int jgrapht_capi_import_file_gexf(void *, char*, void *, int, void *, void *);
+
+int jgrapht_capi_import_string_gexf(void *, char*, void *, int, void *, void *);
 
 // iterators
 

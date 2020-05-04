@@ -39,8 +39,13 @@ enum dimacs_format_t {
     DIMACS_FORMAT_SHORTEST_PATH = 0,
     DIMACS_FORMAT_MAX_CLIQUE,
     DIMACS_FORMAT_COLORING,
-} ;
+};
 
+enum csv_format_t {
+    CSV_FORMAT_EDGE_LIST = 0,
+    CSV_FORMAT_ADJACENCY_LIST,
+    CSV_FORMAT_MATRIX,
+};
 
 // library init
 
@@ -280,17 +285,25 @@ int jgrapht_graph_test_is_k5_subdivision(void *, int* OUTPUT);
 
 // importers
 
-int jgrapht_import_file_dimacs(void *, char*);
+int jgrapht_import_file_dimacs(void *, char*, int);
 
-int jgrapht_import_string_dimacs(void *, char*);
+int jgrapht_import_string_dimacs(void *, char*, int);
 
-int jgrapht_import_file_gml(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_gml(void *, char*, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_gml(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_gml(void *, char*, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_file_json(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_json(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_json(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_json(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_capi_import_file_csv(void *, char*, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int);
+
+int jgrapht_capi_import_string_csv(void *, char*, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int);
+
+int jgrapht_capi_import_file_gexf(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_capi_import_string_gexf(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
 // iterators
 
