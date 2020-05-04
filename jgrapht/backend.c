@@ -139,6 +139,10 @@ char * jgrapht_get_errno_msg() {
     return jgrapht_capi_get_errno_msg(thread);
 }
 
+void jgrapht_print_stack_trace() { 
+    return jgrapht_capi_print_stack_trace(thread);
+}
+
 // exporter
 
 int jgrapht_export_file_dimacs(void *g, char* filename, dimacs_format_t format, int export_edge_weights) { 

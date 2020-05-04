@@ -113,6 +113,8 @@ int jgrapht_get_errno();
 
 char *jgrapht_get_errno_msg();
 
+void jgrapht_print_stack_trace();
+
 // exporter
 
 int jgrapht_export_file_dimacs(void *, char*, dimacs_format_t, int);

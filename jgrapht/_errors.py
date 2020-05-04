@@ -1,6 +1,11 @@
 from enum import Enum
 from .exceptions import *
-from .backend import jgrapht_get_errno, jgrapht_get_errno_msg, jgrapht_clear_errno
+from .backend import (
+    jgrapht_get_errno, 
+    jgrapht_get_errno_msg, 
+    jgrapht_clear_errno,
+    jgrapht_print_stack_trace,
+)
 from .backend import (
     STATUS_SUCCESS,
     STATUS_ILLEGAL_ARGUMENT,
@@ -27,6 +32,7 @@ def raise_status():
     if errno == STATUS_SUCCESS:
         return errno
     errno_msg = jgrapht_get_errno_msg()
+    #jgrapht_print_stack_trace()
     jgrapht_clear_errno()
     if errno == STATUS_ILLEGAL_ARGUMENT:
         raise IllegalArgumentError(errno_msg)
