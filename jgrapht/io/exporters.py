@@ -188,3 +188,33 @@ def write_json(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=
     )
     if err:
         raise_status()
+
+
+CSV_FORMATS = dict(
+    {
+        "adjacencylist": backend.CSV_FORMAT_ADJACENCY_LIST,
+        "edgelist": backend.CSV_FORMAT_EDGE_LIST,
+        "matrix": backend.CSV_FORMAT_MATRIX,
+    }
+)
+
+def write_csv(graph, filename, format="adjacencylist", export_edge_weights=False, matrix_format_nodeid=False, 
+    matrix_format_zero_when_no_edge=True):
+    """Export a graph using the CSV format.
+
+    The exporter supports various different formats which can be adjusted using the format parameter.
+    The supported formats are the same CSV formats used by Gephi. The exporter respects rfc4180.
+
+    :param graph: the graph
+    :param filename: the filename
+    :param format: a string with the format to use. Valid are `maxclique`, `shortestpath`
+                   and `coloring`.
+    :param export_edge_weights: whether to export edge weights
+    :param matrix_format_node_id: only for the matrix format, whether to export node identifiers
+    :param matrix_format_zero_when_noedge: only for the matrix format, whether the output should contain
+           zero for missing edges
+    :raises GraphExportError: in case of an export error
+    """
+    format = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
+    custom = [format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge]
+    return _export_to_file("csv", graph, filename, *custom)
