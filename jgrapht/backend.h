@@ -146,6 +146,8 @@ int jgrapht_graph_edges_count(void *, long long*);
 
 int jgrapht_graph_add_vertex(void *, long long*);
 
+int jgrapht_graph_add_given_vertex(void *, long long int, int *);
+
 int jgrapht_graph_remove_vertex(void *, long long int, int*);
 
 int jgrapht_graph_contains_vertex(void *, long long int, int*);

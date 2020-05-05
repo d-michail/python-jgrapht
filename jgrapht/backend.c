@@ -280,6 +280,10 @@ int jgrapht_graph_add_vertex(void *g, long long* res) {
     return jgrapht_capi_graph_add_vertex(thread, g, res);
 }
 
+int jgrapht_graph_add_given_vertex(void *g, long long int vertex, int *res) {
+    return jgrapht_capi_graph_add_given_vertex(thread, g, vertex, res);
+}
+
 int jgrapht_graph_remove_vertex(void *g, long long int v, int* res) { 
     return jgrapht_capi_graph_remove_vertex(thread, g, v, res);
 }

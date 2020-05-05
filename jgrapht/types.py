@@ -188,11 +188,11 @@ class Graph(ABC):
         pass
 
     @abstractmethod
-    def add_vertex(self):
+    def add_vertex(self, vertex=None):
         """Add a new vertex to the graph.
 
-        Vertices are automatically created and represented as longs.
-
+        :param vertex: A long integer identifer for the vertex. If None the graph automatically 
+                       creates a new identifier.
         :returns: The new vertex identifier.
         :rtype: Long
         """

@@ -498,7 +498,7 @@ class JGraphTGraph(HandleWrapper, Graph):
         """
         return self._graph_type
 
-    def add_vertex(self):
+    def add_vertex(self, vertex=None):
         """Add a new vertex to the graph.
 
         Vertices are automatically created and represented as longs.
@@ -506,7 +506,10 @@ class JGraphTGraph(HandleWrapper, Graph):
         :returns: The new vertex identifier.
         :rtype: Long
         """
-        err, v = backend.jgrapht_graph_add_vertex(self._handle)
+        if vertex is None:
+            err, v = backend.jgrapht_graph_add_vertex(self._handle)
+        else:
+            err, v = backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
         if err:
             raise_status()
         return v
