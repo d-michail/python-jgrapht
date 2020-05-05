@@ -1,18 +1,21 @@
 
 # python-jgrapht
 
-A python interface to the [JGraphT](https://github.com/jgrapht/jgrapht) graph library. JGraphT is a free Java
-class library that provides mathematical graph-theory objects and algorithms. It  contains very efficient and
-generic graph data-structures along with a sizeable collection of sophisticated algorithms. The library is written
-in Java, with stability, performance and interoperability in mind. It includes algorithms encountered in diverse
-application domains such as  path planning, routing, network analysis, combinatorial optimization, computational
-biology, and others.
+A python interface to the [JGraphT](https://github.com/jgrapht/jgrapht) graph library. 
+
+JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It  contains
+very efficient and generic graph data-structures along with a sizeable collection of sophisticated algorithms.
+The library is written in Java, with stability, performance and interoperability in mind. It includes algorithms
+encountered in diverse application domains such as  path planning, routing, network analysis, combinatorial
+optimization, computational biology, and others.
+
+While the original library is written in Java, this package uses a native build provided by
+the [jgrapht-capi](https://github.com/d-michail/jgrapht-capi) project. The native build is in the form of a 
+shared library, created by [GraalVM](https://www.graalvm.org/).
+
+The result is a purely native library.
 
 ## Building
-
-While the JGraphT library is written in Java, this package uses a native build provided by
-the [jgrapht-capi](https://github.com/d-michail/jgrapht-capi) project. The native build is in the form of a 
-shared library, obtained by using the [GraalVM](https://www.graalvm.org/).
 
 The jgrapht-capi project is included in the sources as a git submodule in folder `vendor/source/jgrapht-capi`.
 You need to either initialize the submodule by hand, or you can pass option `--recurse-submodules` when 
@@ -32,6 +35,7 @@ The build will succeed only if you have the following piece of software installe
  * GNU C compiler or clang
  * CMake
  * Python 3.5 and above
+ * SWIG 3 and above
 
 For now only Linux is tested.
 
