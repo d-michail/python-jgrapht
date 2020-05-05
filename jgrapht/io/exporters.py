@@ -345,3 +345,29 @@ def write_dot(
     ]
 
     return _export_to_file("dot", graph, filename, *custom)
+
+
+def write_graph6(graph, filename):
+    """Exports a graph to graph6 format.
+
+    See https://users.cecs.anu.edu.au/~bdm/data/formats.txt for a description of the format.
+
+    :param graph: The graph to export
+    :param filename: Filename to write
+    :raises GraphExportError: In case of an export error         
+    """
+
+    return _export_to_file("graph6", graph, filename)
+
+
+def write_sparse6(graph, filename):
+    """Exports a graph to sparse6 format.
+
+    See https://users.cecs.anu.edu.au/~bdm/data/formats.txt for a description of the format.
+
+    :param graph: The graph to export
+    :param filename: Filename to write
+    :raises GraphExportError: In case of an export error         
+    """
+
+    return _export_to_file("sparse6", graph, filename)
