@@ -8,17 +8,12 @@ The Graph Interface
 
 The main interface of the library is the :class:`Graph <jgrapht.types.Graph>`. All 
 graph instances returned by the library follow this interface and almost all library methods revolve 
-around it. Appropriate factory methods can be used to create graph instances for most of the use-cases. 
-The default graph is capable of representing various different kind of graphs such as:
+around it. 
 
- *  **directed**: in directed graphs an edge :math:`(u,v)` is a directed pair of vertices
- *  **undirected**: in undirected graphs an edge :math:`{u,v}` is an unordered pair of vertices,
- *  with **self-loops**: self-loops are edges of the form :math:`(v,v)` where both endpoints are the same,
- *  graphs with **multiple-edges**: multiple-edges are edges :math:`e` and :math:`e` which have the exact same endpoints,
- *  **weighted** graphs: graphs where each edge is associated with a double value called its weight,
- *  **unweighted** graphs: graphs where the weight of each edge is 1.0
-
-Creating graphs can be accomplished using the following factory method.  
+Creating graphs can be accomplished using the following factory method. During runtime the 
+type of the graph can be queried using :py:meth:`.Graph.graph_type` which returns a 
+:class:`GraphType <jgrapht.types.GraphType>` instance. This allows algorithms to adjust their 
+behavior depending on the graph they are working on.
 
 .. autofunction:: jgrapht.create_graph
 

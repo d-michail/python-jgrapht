@@ -47,6 +47,7 @@ def barabasi_albert_forest(graph, t, n, seed=None):
     proportional to its degree.
  
     Note that this Barabàsi-Albert generator only works on undirected graphs.
+
     :param graph: the graph to alter. Must be undirected.
     :param t: number of initial isolated nodes.
     :param n: final number of nodes
@@ -105,7 +106,7 @@ def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
     r"""Create a random graph based on the :math:`G(n, M)` Erdős–Rényi model. 
  
     In the :math:`G(n, M)` model, a graph is chosen uniformly at random from the collection
-    of all graphs which have :math:`n nodes and $M$ edges. For example, in the 
+    of all graphs which have :math:`n` nodes and :math:`M` edges. For example, in the 
     :math:`G(3, 2)` model, each of the three possible graphs on three vertices and two edges
     are included with probability :math:`\frac{1}{3}`.
  
@@ -137,7 +138,7 @@ def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
 
 
 def gnp_random_graph(graph, n, p, loops=False, seed=None):
-    r"""Create a random graph based on the :math:`G(n, p)$` Erdős–Rényi model.
+    r"""Create a random graph based on the :math:`G(n, p)` Erdős–Rényi model.
  
     In the :math:`G(n, p)` model, a graph is constructed by connecting nodes randomly.
     Each edge is included in the graph with probability :math:`p` independent from every
