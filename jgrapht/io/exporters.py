@@ -316,3 +316,32 @@ def write_gexf(
     ]
 
     return _export_to_file("gexf", graph, filename, *custom)
+
+
+def write_dot(
+    graph,
+    filename,
+    per_vertex_attrs_dict=None,
+    per_edge_attrs_dict=None
+):
+    """Exports a graph to DOT format.
+
+    For a description of the format see https://en.wikipedia.org/wiki/DOT_language.
+
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+
+    :param graph: The graph to export
+    :param filename: Filename to write
+    :param per_vertex_attrs_dict: per vertex attribute dicts
+    :param per_edge_attrs_dict: per edge attribute dicts
+    :raises GraphExportError: In case of an export error         
+    """
+    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
+    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+
+    custom = [ 
+        vertex_attribute_store.handle if vertex_attribute_store is not None else None,
+        edge_attribute_store.handle if edge_attribute_store is not None else None,
+    ]
+
+    return _export_to_file("dot", graph, filename, *custom)
