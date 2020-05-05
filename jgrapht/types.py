@@ -182,7 +182,7 @@ class Graph(ABC):
     def graph_type(self):
         """Query the graph :class:`type <.GraphType>`.
 
-        :returns: The graph type.
+        :returns: the graph type.
         :rtype: :class:`GraphType <.GraphType>`
         """
         pass
@@ -191,12 +191,25 @@ class Graph(ABC):
     def add_vertex(self, vertex=None):
         """Add a new vertex to the graph.
 
-        :param vertex: A long integer identifer for the vertex. If None the graph automatically 
+        :param vertex: a long integer identifer for the vertex. If None the graph automatically 
                        creates a new identifier.
-        :returns: The new vertex identifier.
+        :returns: the new vertex identifier.
         :rtype: Long
         """
         pass
+
+    def add_vertices_from(self, vertices):
+        """Add a list of vertices to the graph.
+
+        :param vertices: a list of vertices
+        :returns: a list of boolean values indicating whether each vertex is added to the graph
+        :rtype: list of booleans
+        """
+        added = ()
+        for v in vertices:
+            x = self.add_vertex(v)
+            added.append(x)
+        return added
 
     @abstractmethod
     def remove_vertex(self, v):
@@ -210,8 +223,8 @@ class Graph(ABC):
     def contains_vertex(self, v):
         """Check if a vertex is contained in the graph.
 
-        :param v: The vertex
-        :returns: True if the vertex is contained in the graph, False otherwise
+        :param v: the vertex
+        :returns: true if the vertex is contained in the graph, False otherwise
         :rtype: boolean
         """
         pass
@@ -222,18 +235,30 @@ class Graph(ABC):
 
         Edges are automatically created and represented as longs.
 
-        :param u: The first endpoint (vertex) of the edge
-        :param v: The second endpoint (vertex) of the edge
-        :returns: The new edge identifier
+        :param u: the first endpoint (vertex) of the edge
+        :param v: the second endpoint (vertex) of the edge
+        :returns: the new edge identifier
         :rtype: Long
         """
         pass
+
+    def add_edges_from(self, edges):
+        """Add all edges for an iterable.
+
+        :param edges: any iterable of edges. Each edge is (u,v) or (u,v,weight)  
+        :returns: list of added edge identifiers
+        """ 
+        added = []
+        for u, v, weight in edges:
+            e = self.add_edge(u, v, weight)
+            added.append(e)
+        return added
 
     @abstractmethod
     def remove_edge(self, e):
         """Remove an edge from the graph.
 
-        :param e: The edge identifier to remove
+        :param e: the edge identifier to remove
         """
         pass
 
@@ -241,7 +266,7 @@ class Graph(ABC):
     def contains_edge(self, e):
         """Check if an edge is contained in the graph.
 
-        :param e: The edge identifier to check
+        :param e: the edge identifier to check
         :returns: True if the edge belongs to the graph, False otherwise.
         :rtype: Boolean
         """
@@ -251,8 +276,8 @@ class Graph(ABC):
     def contains_edge_between(self, u, v):
         """Check if an edge exists between two vertices.
 
-        :param u: The first vertex
-        :param v: The second vertex
+        :param u: the first vertex
+        :param v: the second vertex
         :returns: True if an edge between u and v exists, False otherwise.
         """
         pass
@@ -384,7 +409,7 @@ class Graph(ABC):
 
         :param u: the first endpoint
         :param v: the second endpoint
-        :returns: All edges between vertices u and v.
+        :returns: all edges between vertices u and v.
         """
         pass
 
