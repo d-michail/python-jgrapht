@@ -91,8 +91,7 @@ def test_export_import(tmpdir):
         }
     }
 
-    #write_gexf(g, tmpfilename, attrs=attrs, export_edge_weights=True)
-    write_gexf(g, '/tmp/ok', attrs=attrs, per_vertex_attrs_dict=v_dict, per_edge_attrs_dict=e_dict, export_edge_weights=True)
+    write_gexf(g, tmpfilename, attrs=attrs, per_vertex_attrs_dict=v_dict, per_edge_attrs_dict=e_dict, export_edge_weights=True)
 
     # read back 
 
@@ -121,7 +120,7 @@ def test_export_import(tmpdir):
             if attribute_name == 'id': 
                 assert attribute_value == '17'                
 
-    read_gexf(g1, '/tmp/ok', vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
+    read_gexf(g1, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
     assert g1.vertices() == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     assert g1.contains_edge_between(6, 7)
