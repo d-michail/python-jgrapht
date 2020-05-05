@@ -1,7 +1,11 @@
 """
-Python JGraphT Library
+Python-JGraphT Library
 ~~~~~~~~~~~~~~~~~~~~~~
 
+JGraphT is an library providing state-of-the-art graph data structures
+and algorithms.
+
+See https://github.com/d-michail/python-jgrapht for more details.
 """
 
 from .__version__ import __title__, __description__, __url__, __version__
@@ -16,11 +20,9 @@ import atexit
 
 backend.jgrapht_thread_create()
 
-
 def _module_cleanup_function():
     if backend.jgrapht_is_thread_attached():
         backend.jgrapht_thread_destroy()
-
 
 atexit.register(_module_cleanup_function)
 del atexit
