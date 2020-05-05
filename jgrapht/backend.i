@@ -69,6 +69,12 @@ int jgrapht_attributes_store_put_string_attribute(void *, long long int, char*, 
 
 int jgrapht_attributes_store_remove_attribute(void *, long long int, char*);
 
+int jgrapht_attributes_registry_create(void** OUTPUT);
+
+int jgrapht_attributes_registry_register_attribute(void *, char*, char*, char*, char*);
+
+int jgrapht_attributes_registry_unregister_attribute(void *, char*, char*, char*, char*);
+
 // clique
 
 int jgrapht_clique_exec_bron_kerbosch(void *, long long int, void** OUTPUT);
@@ -124,6 +130,18 @@ int jgrapht_export_file_gml(void *, char*, int, void *, void *);
 int jgrapht_export_file_json(void *, char*, void *, void *);
 
 int jgrapht_export_file_lemon(void *, char*, int, int);
+
+int jgrapht_export_file_csv(void *, char*, csv_format_t, int, int, int);
+
+int jgrapht_export_file_gexf(void *, char*, void *, void *, void *, int, int, int, int);
+
+int jgrapht_export_file_dot(void *, char*, void *, void *);
+
+int jgrapht_export_file_graph6(void *, char*);
+
+int jgrapht_export_file_sparse6(void *, char*);
+
+int jgrapht_export_file_graphml(void *, char*, void *, void *, void *, int, int, int);
 
 // flow 
 
@@ -306,6 +324,22 @@ int jgrapht_import_string_csv(void *, char*, void *LONG_TO_FUNCTION_POINTER, csv
 int jgrapht_import_file_gexf(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
 int jgrapht_import_string_gexf(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_import_file_graphml_simple(void *, char*, void * LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_import_string_graphml_simple(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_import_file_graphml(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_import_string_graphml(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_import_file_dot(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_import_string_dot(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_import_file_graph6sparse6(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+
+int jgrapht_import_string_graph6sparse6(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
 // iterators
 

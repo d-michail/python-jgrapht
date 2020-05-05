@@ -59,6 +59,18 @@ int jgrapht_attributes_store_remove_attribute(void *store, long long int element
     return jgrapht_capi_attributes_store_remove_attribute(thread, store, element, key);
 }
 
+int jgrapht_attributes_registry_create(void** res) { 
+    return jgrapht_capi_attributes_registry_create(thread, res);
+}
+
+int jgrapht_attributes_registry_register_attribute(void *registry, char* name, char* category, char* type, char* default_value) { 
+    return jgrapht_capi_attributes_registry_register_attribute(thread, registry, name, category, type, default_value);
+}
+
+int jgrapht_attributes_registry_unregister_attribute(void *registry, char* name, char* category, char* type, char* default_value) { 
+    return jgrapht_capi_attributes_registry_unregister_attribute(thread, registry, name, category, type, default_value);
+}
+
 // clique
 
 int jgrapht_clique_exec_bron_kerbosch(void *g, long long int timeout, void** res) { 
@@ -159,6 +171,35 @@ int jgrapht_export_file_json(void *g, char* filename, void* vertex_attribute_sto
 
 int jgrapht_export_file_lemon(void *g, char* filename, int export_edge_weights, int escape_strings_as_java) { 
     return jgrapht_capi_export_file_lemon(thread, g, filename, export_edge_weights, escape_strings_as_java);
+}
+
+int jgrapht_export_file_csv(void *g, char* filename, csv_format_t format, int export_edge_weights, int matrix_format_nodeid,
+        int matrix_format_zero_when_no_edge) { 
+    return jgrapht_capi_export_file_csv(thread, g, filename, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge);
+}
+
+int jgrapht_export_file_gexf(void *g, char* filename, void *attributes_registry, void *vertex_attribute_store, void *edge_attribute_store, 
+        int export_edge_weights, int export_edge_labels, int export_edge_types, int export_meta) { 
+    return jgrapht_capi_export_file_gexf(thread, g, filename, attributes_registry, vertex_attribute_store, edge_attribute_store, 
+            export_edge_weights, export_edge_labels, export_edge_types, export_meta);
+}
+
+int jgrapht_export_file_dot(void *g, char* filename, void *vertex_attribute_store, void *edge_attribute_store) { 
+    return jgrapht_capi_export_file_dot(thread, g, filename, vertex_attribute_store, edge_attribute_store);
+}
+
+int jgrapht_export_file_graph6(void *g, char* filename) { 
+    return jgrapht_capi_export_file_graph6(thread, g, filename);
+}
+
+int jgrapht_export_file_sparse6(void *g, char* filename) { 
+    return jgrapht_capi_export_file_sparse6(thread, g, filename);
+}
+
+int jgrapht_export_file_graphml(void *g, char* filename, void *attributes_registry, void *vertex_attribute_store, 
+        void *edge_attribute_store, int export_edge_weights, int export_vertex_labels, int export_edge_labels) { 
+    return jgrapht_capi_export_file_graphml(thread, g, filename, attributes_registry, vertex_attribute_store, edge_attribute_store,
+            export_edge_weights, export_vertex_labels, export_edge_labels);
 }
 
 // flow
@@ -509,6 +550,38 @@ int jgrapht_import_file_gexf(void *g, char* filename, void *import_vertex_id_fpt
 
 int jgrapht_import_string_gexf(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
     return jgrapht_capi_import_string_gexf(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_file_graphml_simple(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_file_graphml_simple(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_string_graphml_simple(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_string_graphml_simple(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr);
+}    
+
+int jgrapht_import_file_graphml(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_file_graphml(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_string_graphml(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_string_graphml(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_file_dot(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_file_dot(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_string_dot(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_string_dot(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_file_graph6sparse6(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr) {
+    return jgrapht_capi_import_file_graph6sparse6(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
+}
+
+int jgrapht_import_string_graph6sparse6(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr) {
+    return jgrapht_capi_import_string_graph6sparse6(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
 // iterators
