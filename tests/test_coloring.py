@@ -6,8 +6,8 @@ import jgrapht.algorithms.coloring as coloring
 def test_coloring():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
-    for _ in range(0, 10):
-        g.add_vertex()
+    for i in range(0, 10):
+        g.add_vertex(i)
 
     vcount = len(g.vertices())
     assert vcount == 10

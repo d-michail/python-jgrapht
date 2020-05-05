@@ -188,13 +188,12 @@ class Graph(ABC):
         pass
 
     @abstractmethod
-    def add_vertex(self, vertex=None):
+    def add_vertex(self, vertex):
         """Add a new vertex to the graph.
 
-        :param vertex: a long integer identifer for the vertex. If None the graph automatically 
-                       creates a new identifier.
-        :returns: the new vertex identifier.
-        :rtype: Long
+        :param vertex: a long integer identifier for the vertex.
+        :returns: True if the vertex was added to the graph, False if it was already present
+        :rtype: Boolean
         """
         pass
 
@@ -205,7 +204,7 @@ class Graph(ABC):
         :returns: a list of boolean values indicating whether each vertex is added to the graph
         :rtype: list of booleans
         """
-        added = ()
+        added = []
         for v in vertices:
             x = self.add_vertex(v)
             added.append(x)
@@ -259,6 +258,8 @@ class Graph(ABC):
         """Remove an edge from the graph.
 
         :param e: the edge identifier to remove
+        :returns: True if the edge was removed, False otherwise.
+        :rtype: Boolean
         """
         pass
 

@@ -6,8 +6,8 @@ import jgrapht.algorithms.cliques as cliques
 def build_graph():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
 
-    for _ in range(0, 6):
-        g.add_vertex()
+    for i in range(0, 6):
+        g.add_vertex(i)
 
     g.add_edge(0, 1)
     g.add_edge(0, 2)

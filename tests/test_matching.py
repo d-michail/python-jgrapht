@@ -9,8 +9,8 @@ import jgrapht.generators as generators
 def test_bipartite_max_cardinality():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
-    for _ in range(0, 6):
-        g.add_vertex()
+    for i in range(0, 6):
+        g.add_vertex(i)
 
     e03 = g.add_edge(0, 3)
     e13 = g.add_edge(1, 3)

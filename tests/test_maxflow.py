@@ -6,10 +6,10 @@ import jgrapht.algorithms.flow as flow
 def _do_run_cut(algo):
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
-    g.add_vertex()
-    g.add_vertex()
-    g.add_vertex()
-    g.add_vertex()
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_vertex(2)
+    g.add_vertex(3)
 
     e01 = g.add_edge(0, 1, weight=20)
     e02 = g.add_edge(0, 2, weight=10)
@@ -27,10 +27,10 @@ def _do_run_cut(algo):
 def _do_run_both(algo):
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
-    g.add_vertex()
-    g.add_vertex()
-    g.add_vertex()
-    g.add_vertex()
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_vertex(2)
+    g.add_vertex(3)
 
     e01 = g.add_edge(0, 1, weight=20)
     e02 = g.add_edge(0, 2, weight=10)
@@ -57,10 +57,10 @@ def _do_run_both(algo):
 def _do_run_flow(algo):
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
-    g.add_vertex()
-    g.add_vertex()
-    g.add_vertex()
-    g.add_vertex()
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_vertex(2)
+    g.add_vertex(3)
 
     e01 = g.add_edge(0, 1, weight=20)
     e02 = g.add_edge(0, 2, weight=10)

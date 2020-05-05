@@ -8,11 +8,16 @@ from jgrapht.views import as_undirected, as_edgereversed, as_unmodifiable, as_un
 def test_as_unweighted():
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
-    v1 = g.add_vertex()
-    v2 = g.add_vertex()
-    v3 = g.add_vertex()
-    v4 = g.add_vertex()
-    v5 = g.add_vertex()
+    g.add_vertex(0)
+    v1 = 0
+    g.add_vertex(1)
+    v2 = 1
+    g.add_vertex(2)
+    v3 = 2
+    g.add_vertex(3)
+    v4 = 3
+    g.add_vertex(4)
+    v5 = 4
     g.add_edge(v1, v2)
     g.add_edge(v2, v3)
     g.add_edge(v1, v4)
@@ -35,11 +40,16 @@ def test_as_unweighted():
 def test_as_undirected():
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
-    v1 = g.add_vertex()
-    v2 = g.add_vertex()
-    v3 = g.add_vertex()
-    v4 = g.add_vertex()
-    v5 = g.add_vertex()
+    g.add_vertex(0)
+    v1 = 0
+    g.add_vertex(1)
+    v2 = 1
+    g.add_vertex(2)
+    v3 = 2
+    g.add_vertex(3)
+    v4 = 3
+    g.add_vertex(4)
+    v5 = 4
 
     g.add_edge(v1, v2)
     g.add_edge(v2, v3)
@@ -59,11 +69,16 @@ def test_as_unmodifiable():
 
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
-    v1 = g.add_vertex()
-    v2 = g.add_vertex()
-    v3 = g.add_vertex()
-    v4 = g.add_vertex()
-    v5 = g.add_vertex()
+    g.add_vertex(0)
+    v1 = 0
+    g.add_vertex(1)
+    v2 = 1
+    g.add_vertex(2)
+    v3 = 2
+    g.add_vertex(3)
+    v4 = 3
+    g.add_vertex(4)
+    v5 = 4
 
     g.add_edge(v1, v2)
     g.add_edge(v2, v3)
@@ -82,11 +97,17 @@ def test_as_unmodifiable():
 def test_as_edgereversed():
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
-    v1 = g.add_vertex()
-    v2 = g.add_vertex()
-    v3 = g.add_vertex()
-    v4 = g.add_vertex()
-    v5 = g.add_vertex()
+    g.add_vertex(0)
+    v1 = 0
+    g.add_vertex(1)
+    v2 = 1
+    g.add_vertex(2)
+    v3 = 2
+    g.add_vertex(3)
+    v4 = 3
+    g.add_vertex(4)
+    v5 = 4
+    
     g.add_edge(v1, v2)
     g.add_edge(v2, v3)
     g.add_edge(v1, v4)

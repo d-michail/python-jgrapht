@@ -8,7 +8,7 @@ def build_graph():
     g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
     for i in range(0, 10):
-        g.add_vertex()
+        g.add_vertex(i)
     for i in range(1,10):
         g.add_edge(0, i)    
 

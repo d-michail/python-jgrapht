@@ -9,9 +9,9 @@ from jgrapht.io.importers import read_dot, parse_dot
 def build_graph():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
-    g.add_vertex()
-    g.add_vertex()
-    g.add_vertex()
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_vertex(2)
 
     g.add_edge(0, 1)
     g.add_edge(0, 2)

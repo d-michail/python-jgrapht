@@ -51,8 +51,8 @@ def test_export_import(tmpdir):
 
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
 
-    for _ in range(0, 10):
-        g.add_vertex()
+    for i in range(0, 10):
+        g.add_vertex(i)
 
     g.add_edge(0, 1)
     g.add_edge(0, 2)

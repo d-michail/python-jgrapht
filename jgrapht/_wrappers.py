@@ -445,7 +445,7 @@ class JGraphTAllPairsPaths(HandleWrapper, AllPairsPaths):
 
 
 class JGraphTGraph(HandleWrapper, Graph):
-    """The main graph class"""
+    """The actual graph implementation."""
 
     def __init__(
         self,
@@ -491,60 +491,22 @@ class JGraphTGraph(HandleWrapper, Graph):
 
     @property
     def graph_type(self):
-        """Query the graph :class:`type <.GraphType>`.
-
-        :returns: The graph type.
-        :rtype: :class:`GraphType <.GraphType>`
-        """
         return self._graph_type
 
-    def add_vertex(self, vertex=None):
-        """Add a new vertex to the graph.
-
-        Vertices are automatically created and represented as longs.
-
-        :returns: The new vertex identifier.
-        :rtype: Long
-        """
-        if vertex is None:
-            err, v = backend.jgrapht_graph_add_vertex(self._handle)
-        else:
-            err, v = backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
-        if err:
-            raise_status()
-        return v
+    def add_vertex(self, vertex):
+        err, res = backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
+        return res if not err else raise_status()
 
     def remove_vertex(self, v):
-        """Remove a vertex from the graph.
-
-        :param v: The vertex to remove
-        """
         err = backend.jgrapht_graph_remove_vertex(self._handle, v)
         if err:
             raise_status()
 
     def contains_vertex(self, v):
-        """Check if a vertex is contained in the graph.
-
-        :param v: The vertex
-        :returns: True if the vertex is contained in the graph, False otherwise
-        :rtype: boolean
-        """
         err, res = backend.jgrapht_graph_contains_vertex(self._handle, v)
-        if err:
-            raise_status()
-        return res
+        return res if not err else raise_status()
 
     def add_edge(self, u, v, weight=None):
-        """Adds an edge to the graph.
-
-        Edges are automatically created and represented as longs.
-
-        :param u: The first endpoint (vertex) of the edge
-        :param v: The second endpoint (vertex) of the edge
-        :returns: The new edge identifier
-        :rtype: Long
-        """
         err, res = backend.jgrapht_graph_add_edge(self._handle, u, v)
         if err:
             raise_status()
@@ -555,57 +517,40 @@ class JGraphTGraph(HandleWrapper, Graph):
         return res
 
     def remove_edge(self, e):
-        err, _ = backend.jgrapht_graph_remove_edge(self._handle, e)
-        if err:
-            raise_status()
+        err, res = backend.jgrapht_graph_remove_edge(self._handle, e)
+        return res if not err else raise_status()
 
     def contains_edge(self, e):
         err, res = backend.jgrapht_graph_contains_edge(self._handle, e)
-        if err:
-            raise_status()
-        return res
+        return res if not err else raise_status()
 
     def contains_edge_between(self, u, v):
         err, res = backend.jgrapht_graph_contains_edge_between(self._handle, u, v)
-        if err:
-            raise_status()
-        return res
+        return res if not err else raise_status()
 
     def degree_of(self, v):
         err, res = backend.jgrapht_graph_degree_of(self._handle, v)
-        if err:
-            raise_status()
-        return res
+        return res if not err else raise_status()
 
     def indegree_of(self, v):
         err, res = backend.jgrapht_graph_indegree_of(self._handle, v)
-        if err:
-            raise_status()
-        return res
+        return res if not err else raise_status()
 
     def outdegree_of(self, v):
         err, res = backend.jgrapht_graph_outdegree_of(self._handle, v)
-        if err:
-            raise_status()
-        return res
+        return res if not err else raise_status()
 
     def edge_source(self, e):
         err, res = backend.jgrapht_graph_edge_source(self._handle, e)
-        if err:
-            raise_status()
-        return res
+        return res if not err else raise_status()
 
     def edge_target(self, e):
         err, res = backend.jgrapht_graph_edge_target(self._handle, e)
-        if err:
-            raise_status()
-        return res
+        return res if not err else raise_status()
 
     def get_edge_weight(self, e):
         err, res = backend.jgrapht_graph_get_edge_weight(self._handle, e)
-        if err:
-            raise_status()
-        return res
+        return res if not err else raise_status()
 
     def set_edge_weight(self, e, weight):
         err = backend.jgrapht_graph_set_edge_weight(self._handle, e, weight)
@@ -630,15 +575,11 @@ class JGraphTGraph(HandleWrapper, Graph):
 
     def edges_between(self, u, v):
         err, res = backend.jgrapht_graph_create_between_eit(self._handle, u, v)
-        if err:
-            raise_status()
-        return JGraphTLongIterator(res)
+        return JGraphTLongIterator(res) if not err else raise_status()
 
     def edges_of(self, v):
         err, res = backend.jgrapht_graph_vertex_create_eit(self._handle, v)
-        if err:
-            raise_status()
-        return JGraphTLongIterator(res)
+        return JGraphTLongIterator(res) if not err else raise_status()
 
     def inedges_of(self, v):
         err, res = backend.jgrapht_graph_vertex_create_in_eit(self._handle, v)
@@ -710,7 +651,7 @@ def create_graph(
     :param allowing_multiple_edges: If True the graph will allow multiple-edges.
     :param weighted: If True the graph will be weighted, otherwise unweighted.
     :returns: A graph
-    :rtype: :class:`type <.types.AbstractGraph>`
+    :rtype: :class:`type <.types.Graph>`
     """
     return JGraphTGraph(
         directed=directed,

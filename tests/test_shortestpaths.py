@@ -6,8 +6,8 @@ import jgrapht.algorithms.shortestpaths as sp
 def get_graph():
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
-    for _ in range(0, 6):
-        g.add_vertex()
+    for i in range(0, 6):
+        g.add_vertex(i)
 
     g.add_edge(0, 1, weight=3.0)
     g.add_edge(1, 3, weight=100.0)
@@ -20,11 +20,14 @@ def get_graph():
 
     return g
 
+
 def get_graph_with_negative_edges():
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
-    for _ in range(0, 7):
-        g.add_vertex()
+    assert g.graph_type.directed
+
+    for i in range(0, 7):
+        assert g.add_vertex(i)
 
     g.add_edge(0, 1, weight=3.0)
     g.add_edge(1, 3, weight=100.0)
@@ -35,6 +38,9 @@ def get_graph_with_negative_edges():
     g.add_edge(5, 0, weight=13.0)
     g.add_edge(0, 6, weight=1000.0)
     g.add_edge(6, 3, weight=-900.0)
+
+    assert len(g.vertices()) == 7
+    assert len(g.edges()) == 9
 
     return g    
 
