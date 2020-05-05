@@ -4,7 +4,12 @@ import ctypes
 from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status, GraphExportError
-from .._wrappers import JGraphTLongIterator, JGraphTGraphPath, JGraphTAttributeStore
+from .._wrappers import (
+    JGraphTLongIterator, 
+    JGraphTGraphPath, 
+    JGraphTAttributeStore,
+    JGraphTAttributesRegistry,
+)
 
 
 def _export_to_file(name, graph, filename, *args):
@@ -135,8 +140,8 @@ def write_gml(
 
     .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
 
-    :param graph: The graph to read into
-    :param filename: Filename to read from
+    :param graph: the graph
+    :param filename: the filename
     :param export_edge_weights: whether to export edge weights
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
@@ -171,8 +176,8 @@ def write_json(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=
 
     .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
 
-    :param graph: The graph to read into
-    :param filename: Filename to read from
+    :param graph: The graph to export
+    :param filename: Filename to write
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
     :raises GraphExportError: In case of an export error 
@@ -198,8 +203,15 @@ CSV_FORMATS = dict(
     }
 )
 
-def write_csv(graph, filename, format="adjacencylist", export_edge_weights=False, matrix_format_nodeid=False, 
-    matrix_format_zero_when_no_edge=True):
+
+def write_csv(
+    graph,
+    filename,
+    format="adjacencylist",
+    export_edge_weights=False,
+    matrix_format_nodeid=False,
+    matrix_format_zero_when_no_edge=True,
+):
     """Export a graph using the CSV format.
 
     The exporter supports various different formats which can be adjusted using the format parameter.
@@ -216,5 +228,91 @@ def write_csv(graph, filename, format="adjacencylist", export_edge_weights=False
     :raises GraphExportError: in case of an export error
     """
     format = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
-    custom = [format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge]
+    custom = [
+        format,
+        export_edge_weights,
+        matrix_format_nodeid,
+        matrix_format_zero_when_no_edge,
+    ]
     return _export_to_file("csv", graph, filename, *custom)
+
+
+def write_gexf(
+    graph,
+    filename,
+    attrs=list(),
+    per_vertex_attrs_dict=None,
+    per_edge_attrs_dict=None,
+    export_edge_weights=False,
+    export_edge_labels=False,
+    export_edge_types=False,
+    export_meta=False,
+):
+    """Exports a graph to a GEXF file.
+
+    For a description of the format see https://gephi.org/gexf/format/index.html or the 
+    `GEXF Primer <https://gephi.org/gexf/format/primer.html>`_.
+
+    Below is small example of a graph in GEXF format::
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <gexf xmlns="http://www.gexf.net/1.2draft"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd"
+            version="1.2">
+            <graph defaultedgetype="undirected">
+                <nodes>
+                <node id="n0" label="node 0"/>
+                <node id="n1" label="node 1"/>
+                <node id="n2" label="node 2"/>
+                <node id="n3" label="node 3"/>
+                <node id="n4" label="node 4"/>
+                <node id="n5" label="node 5"/>
+                </nodes>
+                <edges>
+                <edge id="e0" source="n0" target="n2" weight="1.0"/>
+                <edge id="e1" source="n0" target="n1" weight="1.0"/>
+                <edge id="e2" source="n1" target="n3" weight="2.0"/>
+                <edge id="e3" source="n3" target="n2"/>
+                <edge id="e4" source="n2" target="n4"/>
+                <edge id="e5" source="n3" target="n5"/>
+                <edge id="e6" source="n5" target="n4" weight="1.1"/>
+                </edges>
+            </graph>
+        </gexf>
+
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+
+    .. note:: Custom attributes need to be registered in the `attrs` parameter which accepts a list
+              of tuple(name, category, type, default_value). Type and default value may None. Category 
+              must be either `node` or `edge`.
+
+    :param graph: The graph to export
+    :param filename: Filename to write
+    :param attrs: a list of tuples (name, category, type, default_value)
+    :param per_vertex_attrs_dict: per vertex attribute dicts
+    :param per_edge_attrs_dict: per edge attribute dicts
+    :param export_edge_weights: whether to export edge weights
+    :param export_edge_labels: whether to export edge labels
+    :param export_edge_types: whether to export edge types
+    :param export_meta: whether to export meta tag
+    :raises GraphExportError: In case of an export error         
+    """
+    attrs_registry = JGraphTAttributesRegistry()
+    for name, category, type, default_value in attrs: 
+        attrs_registry.put(name, category, type, default_value)
+
+    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
+    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+
+    custom = [ 
+        attrs_registry.handle, 
+        vertex_attribute_store.handle if vertex_attribute_store is not None else None,
+        edge_attribute_store.handle if edge_attribute_store is not None else None,
+        export_edge_weights,
+        export_edge_labels,
+        export_edge_types,
+        export_meta
+    ]
+
+    return _export_to_file("gexf", graph, filename, *custom)

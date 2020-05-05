@@ -742,6 +742,33 @@ class JGraphTAttributeStore(HandleWrapper):
         if err:
             raise_status()
 
+class JGraphTAttributesRegistry(HandleWrapper):
+    """Attribute Registry. Used to keep a list of registered attributes
+    for exporters.
+    """
+
+    def __init__(self, handle=None, owner=True):
+        if handle is None:
+            err, handle = backend.jgrapht_attributes_registry_create()
+            if err:
+                raise_status()
+            owner = True
+        super().__init__(handle, owner)
+
+    def put(self, name, category, type=None, default_value=None):
+        err = backend.jgrapht_attributes_registry_register_attribute(
+            self._handle, name, category, type, default_value
+        )
+        if err:
+            raise_status()
+
+    def remove(self, name, category):
+        err = backend.jgrapht_attributes_registry_unregister_attribute(
+            self._handle, name, category
+        )
+        if err:
+            raise_status()
+
 
 class JGraphTClustering(HandleWrapper, Clustering):
     """A vertex clustering."""

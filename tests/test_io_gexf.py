@@ -2,6 +2,7 @@ import pytest
 
 from jgrapht import create_graph
 from jgrapht.io.importers import read_gexf, parse_gexf
+from jgrapht.io.exporters import write_gexf
 
 input1=r"""<?xml version="1.0" encoding="UTF-8"?>
 <gexf xmlns="http://www.gexf.net/1.2draft"
@@ -44,3 +45,88 @@ def test_input_gexf_with_renumbering(tmpdir):
 
     assert not g.contains_vertex(1)
     assert g.contains_vertex(6)
+
+
+def test_export_import(tmpdir):
+
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
+
+    for _ in range(0, 10):
+        g.add_vertex()
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(0, 4)
+    g.add_edge(0, 5)
+    g.add_edge(0, 6)
+    g.add_edge(0, 7)
+    g.add_edge(0, 8)
+    g.add_edge(0, 9)
+
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 6)
+    g.add_edge(6, 7)
+    g.add_edge(7, 8)
+    g.add_edge(8, 9)
+    g.add_edge(9, 1, weight=33.3)
+
+    assert len(g.edges()) == 18
+
+    tmpfile = tmpdir.join('gexf.out')
+    tmpfilename = str(tmpfile)
+
+    attrs = [('cost', 'edge', 'double', None), ('name', 'node', 'string', None)]
+
+    v_dict = { 
+        0: { 'name': 'κόμβος 0' }, 
+	    1: { 'name': 'node 1'   } 
+    }
+    e_dict = {
+        17: {
+            'cost': '48.5'
+        }
+    }
+
+    #write_gexf(g, tmpfilename, attrs=attrs, export_edge_weights=True)
+    write_gexf(g, '/tmp/ok', attrs=attrs, per_vertex_attrs_dict=v_dict, per_edge_attrs_dict=e_dict, export_edge_weights=True)
+
+    # read back 
+
+    g1 = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
+
+    def va_cb(vertex, attribute_name, attribute_value):
+        print('Vertex {}, attr {}, value {}'.format(vertex, attribute_name.decode(), attribute_value.decode()))
+        if vertex == 0:
+            if attribute_name == 'name': 
+                assert attribute_value == 'κόμβος 0'
+        if vertex == 1:
+            if attribute_name == 'name': 
+                assert attribute_value == 'node 1'
+
+    def ea_cb(edge, attribute_name, attribute_value):
+        print('Edge {}, attr {}, value {}'.format(edge, attribute_name.decode(), attribute_value.decode()))
+        if edge == 17: 
+            if attribute_name == 'cost': 
+                assert attribute_value == '48.5'
+            if attribute_name == 'weight': 
+                assert attribute_value == '33.3'
+            if attribute_name == 'source': 
+                assert attribute_value == '9'
+            if attribute_name == 'target': 
+                assert attribute_value == '1'
+            if attribute_name == 'id': 
+                assert attribute_value == '17'                
+
+    read_gexf(g1, '/tmp/ok', vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
+
+    assert g1.vertices() == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    assert g1.contains_edge_between(6, 7)
+    assert not g1.contains_edge_between(6, 8)
+    assert len(g1.edges()) == 18
+
+    assert g1.get_edge_weight(17) == 33.3
+
