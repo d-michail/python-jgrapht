@@ -25,6 +25,8 @@ return instances from these classes.
 Algorithms
 ----------
 
+All classic algorithms for shortest paths are provided. See below for details.
+
 .. autofunction:: dijkstra
 
 .. autofunction:: bfs

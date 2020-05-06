@@ -7,7 +7,7 @@ Exceptions
 **********
 
 Exceptions and errors used in the library. We follow the naming of exceptions 
-used in the original Java library, in order to help debug issues. If an exception 
+used in the original backend library, in order to help debug issues. If an exception 
 is thrown in the backend the original error message is also propagated.
 
 .. autoexception:: jgrapht.exceptions.IllegalArgumentError

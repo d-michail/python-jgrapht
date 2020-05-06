@@ -29,6 +29,18 @@ def bfs_traversal(graph, start_vertex=None):
 
 
 def lexicographic_bfs_traversal(graph):
+    """Create a lexicographical breadth-first search iterator for undirected graphs.
+
+    For more information see the following
+    `paper <https://pdfs.semanticscholar.org/d4b5/a492f781f23a30773841ec79c46d2ec2eb9c.pdf>`_: 
+
+      * Corneil D.G. (2004) Lexicographic Breadth First Search – A Survey. In: Hromkovič J., Nagl M., Westfechtel
+        B. (eds) Graph-Theoretic Concepts in Computer Science. WG 2004. Lecture Notes in Computer Science,
+        vol 3353. Springer, Berlin, Heidelberg
+
+    :param graph: The input graph
+    :returns: A vertex iterator
+    """
     err, it = backend.jgrapht_traverse_create_lex_bfs_vit(graph.handle)
     return JGraphTLongIterator(it) if not err else raise_status()
 
@@ -75,10 +87,21 @@ def topological_order_traversal(graph):
 
 
 def random_walk_traversal(
-    graph, start_vertex, weighted=False, max_steps=0x7FFFFFFFFFFFFFFF, seed=None
+    graph, start_vertex, weighted=False, max_steps=None, seed=None
 ):
+    """A random walk iterator for an undirected or directed graph.
+
+    :param graph: the graph to search
+    :param start_vertex: where to start the random walk
+    :param weighted: whether to select edges based on their weights, otherwise a uniform weight
+      function is assumed
+    :param max_steps: maximum steps to perform. If None no limit is used
+    :param seed: seed for the random number generator. If None the system time is used.
+    """
     if seed is None:
         seed = int(time.time())
+    if max_steps is None: 
+        max_steps=0x7FFFFFFFFFFFFFFF
     err, it = backend.jgrapht_traverse_create_custom_random_walk_from_vertex_vit(
         graph.handle, start_vertex, weighted, max_steps, seed
     )
@@ -124,6 +147,15 @@ def degeneracy_ordering_traversal(graph):
 
 
 def closest_first_traversal(graph, start_vertex, radius=None):
+    """A closest first iterator. 
+
+    The metric for closest is the weighted path length from the start vertex. Thus, negative 
+    weights are not allowed. The path length may be bounded, optionally, by providing a radius.
+
+    :param graph: the graph
+    :param start_vertex: where to start the search
+    :param radius: if given restrict the search up to this radius
+    """
     if radius is None:
         err, it = backend.jgrapht_traverse_create_closest_first_from_vertex_vit(
             graph.handle, start_vertex

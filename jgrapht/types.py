@@ -169,6 +169,12 @@ class AllPairsPaths(ABC):
 
     @abstractmethod
     def get_paths_from(self, source_vertex):
+        """Get all paths from a source vertex to all other vertices.
+
+        :param source_vertex the source vertex
+        :returns: a set of paths starting from a single source vertex
+        :rtype: :class:`.SingleSourcePaths`
+        """
         pass
 
 
