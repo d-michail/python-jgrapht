@@ -137,21 +137,39 @@ int jgrapht_export_string_dimacs(void *, dimacs_format_t, int, void** OUTPUT);
 
 int jgrapht_export_file_gml(void *, char*, int, void *, void *);
 
+int jgrapht_export_string_gml(void *, int, void *, void *, void **OUTPUT);
+
 int jgrapht_export_file_json(void *, char*, void *, void *);
+
+int jgrapht_export_string_json(void *, void *, void *, void **OUTPUT);
 
 int jgrapht_export_file_lemon(void *, char*, int, int);
 
+int jgrapht_export_string_lemon(void *, int, int, void **OUTPUT);
+
 int jgrapht_export_file_csv(void *, char*, csv_format_t, int, int, int);
+
+int jgrapht_export_string_csv(void *, csv_format_t, int, int, int, void **OUTPUT);
 
 int jgrapht_export_file_gexf(void *, char*, void *, void *, void *, int, int, int, int);
 
+int jgrapht_export_string_gexf(void *, void *, void *, void *, int, int, int, int, void **OUTPUT);
+
 int jgrapht_export_file_dot(void *, char*, void *, void *);
+
+int jgrapht_export_string_dot(void *, void *, void *, void **OUTPUT);
 
 int jgrapht_export_file_graph6(void *, char*);
 
+int jgrapht_export_string_graph6(void *, void **OUTPUT);
+
 int jgrapht_export_file_sparse6(void *, char*);
 
+int jgrapht_export_string_sparse6(void *, void** OUTPUT);
+
 int jgrapht_export_file_graphml(void *, char*, void *, void *, void *, int, int, int);
+
+int jgrapht_export_string_graphml(void *, void *, void *, void *, int, int, int, void** OUTPUT);
 
 // flow 
 

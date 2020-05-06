@@ -148,4 +148,4 @@ def test_dimacs_output_to_string():
 
     out = generate_dimacs(g)
 
-    assert str(out) == dimacs_maxclique_expected
+    assert out == dimacs_maxclique_expected

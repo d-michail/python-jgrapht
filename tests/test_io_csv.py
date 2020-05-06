@@ -2,7 +2,7 @@ import pytest
 
 from jgrapht import create_graph
 from jgrapht.io.importers import parse_csv, read_csv
-from jgrapht.io.exporters import write_csv
+from jgrapht.io.exporters import write_csv, generate_csv
 
 def test_input_csv_from_string_create_new_vertices():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
@@ -82,3 +82,18 @@ def test_export_import(tmpdir):
     assert g1.contains_edge_between(6, 7)
     assert not g1.contains_edge_between(6, 8)
     assert len(g1.edges()) == 18
+
+
+def test_output_to_string(): 
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
+
+    g.add_vertices_from(range(0,4))
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
+
+    out = generate_csv(g)
+
+    assert out == '0,1,2,3\n1\n2,3\n3\n'
