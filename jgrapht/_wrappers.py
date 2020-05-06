@@ -28,7 +28,7 @@ class HandleWrapper:
 
     def __del__(self):
         if self._owner and backend.jgrapht_is_thread_attached():
-            err = backend.jgrapht_destroy(self._handle)
+            err = backend.jgrapht_handles_destroy(self._handle)
             if err:
                 raise_status()
 
@@ -386,7 +386,7 @@ class JGraphTGraphPath(HandleWrapper, GraphPath):
         self._end_vertex = end_vertex
         self._edges = list(JGraphTLongIterator(eit))
 
-        backend.jgrapht_destroy(eit)
+        backend.jgrapht_handles_destroy(eit)
         if err:
             raise_status()
 
@@ -824,3 +824,15 @@ class JGraphTPlanarEmbedding(HandleWrapper):
             raise_status()
         return list(JGraphTLongIterator(res))
 
+
+class JGraphTString(HandleWrapper):
+    """A JGraphT string."""
+
+    def __init__(self, handle, owner=True):
+        super().__init__(handle, owner)
+
+    def __str__(self): 
+        err, res = backend.jgrapht_handles_get_ccharpointer(self._handle)
+        if err: 
+            raise_status()
+        return str(res)

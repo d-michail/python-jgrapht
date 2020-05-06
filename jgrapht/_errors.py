@@ -1,10 +1,10 @@
 from enum import Enum
 from .exceptions import *
 from .backend import (
-    jgrapht_get_errno, 
-    jgrapht_get_errno_msg, 
-    jgrapht_clear_errno,
-    jgrapht_print_stack_trace,
+    jgrapht_error_get_errno, 
+    jgrapht_error_get_errno_msg, 
+    jgrapht_error_clear_errno,
+    jgrapht_error_print_stack_trace,
 )
 from .backend import (
     STATUS_SUCCESS,
@@ -28,12 +28,12 @@ def raise_status():
     If an error has been registered, it is cleared and the appropriate exception 
     is raised. Otherwise, nothing happens.
     """
-    errno = jgrapht_get_errno()
+    errno = jgrapht_error_get_errno()
     if errno == STATUS_SUCCESS:
         return errno
-    errno_msg = jgrapht_get_errno_msg()
-    #jgrapht_print_stack_trace()
-    jgrapht_clear_errno()
+    errno_msg = jgrapht_error_get_errno_msg()
+    #jgrapht_error_print_stack_trace()
+    jgrapht_error_clear_errno()
     if errno == STATUS_ILLEGAL_ARGUMENT:
         raise IllegalArgumentError(errno_msg)
     if errno == STATUS_UNSUPPORTED_OPERATION:

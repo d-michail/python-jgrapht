@@ -139,26 +139,30 @@ int jgrapht_coloring_exec_color_refinement(void *g, long long* colors_res, void*
 
 // errors
 
-void jgrapht_clear_errno() { 
-    jgrapht_capi_clear_errno(thread);
+void jgrapht_error_clear_errno() { 
+    jgrapht_capi_error_clear_errno(thread);
 }
 
-status_t jgrapht_get_errno() { 
-    return jgrapht_capi_get_errno(thread);
+status_t jgrapht_error_get_errno() { 
+    return jgrapht_capi_error_get_errno(thread);
 }
 
-char * jgrapht_get_errno_msg() { 
-    return jgrapht_capi_get_errno_msg(thread);
+char * jgrapht_error_get_errno_msg() { 
+    return jgrapht_capi_error_get_errno_msg(thread);
 }
 
-void jgrapht_print_stack_trace() { 
-    return jgrapht_capi_print_stack_trace(thread);
+void jgrapht_error_print_stack_trace() { 
+    return jgrapht_capi_error_print_stack_trace(thread);
 }
 
 // exporter
 
 int jgrapht_export_file_dimacs(void *g, char* filename, dimacs_format_t format, int export_edge_weights) { 
     return jgrapht_capi_export_file_dimacs(thread, g, filename, format, export_edge_weights);
+}
+
+int jgrapht_export_string_dimacs(void *g, dimacs_format_t format, int export_edge_weights, void** res) { 
+    return jgrapht_capi_export_string_dimacs(thread, g, format, export_edge_weights, res);
 }
 
 int jgrapht_export_file_gml(void *g, char* filename, int export_edge_weights, void* vertex_attribute_store, void* edge_attribute_store) { 
@@ -514,6 +518,16 @@ int jgrapht_graph_test_is_k5_subdivision(void *g, int* res) {
     return jgrapht_capi_graph_test_is_k5_subdivision(thread, g, res);
 }
 
+// handles
+
+int jgrapht_handles_destroy(void *handle) { 
+    return jgrapht_capi_handles_destroy(thread, handle);
+}
+
+int jgrapht_handles_get_ccharpointer(void *handle, char** res) { 
+    return jgrapht_capi_handles_get_ccharpointer(thread, handle, res);
+}
+
 // importers
 
 int jgrapht_import_file_dimacs(void *g, char* filename, int preserve_ids_from_input) { 
@@ -716,12 +730,6 @@ int jgrapht_matching_exec_bipartite_perfect_min_weight(void *g, void *vertex_set
 
 int jgrapht_matching_exec_bipartite_max_weight(void *g, double* weight_res, void** res) { 
     return jgrapht_capi_matching_exec_bipartite_max_weight(thread, g, weight_res, res);
-}
-
-// cleanup
-
-int jgrapht_destroy(void *handle) { 
-    return jgrapht_capi_destroy(thread, handle);
 }
 
 // mst

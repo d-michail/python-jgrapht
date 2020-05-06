@@ -17,6 +17,14 @@
     %append_output(SWIG_NewPointerObj(*$1, $*1_descriptor, SWIG_POINTER_NOSHADOW | %newpointer_flags));
 }
 
+%typemap(in,numinputs=0,noblock=1) char **OUTPUT ($*1_ltype temp) {
+    $1 = &temp;
+}
+
+%typemap(argout,noblock=1) char **OUTPUT {
+    %append_output(SWIG_FromCharPtr(($*1_ltype)*$1));
+}
+
 %typemap(in) void *LONG_TO_FUNCTION_POINTER { 
     $1 = PyLong_AsVoidPtr($input);    
 }
@@ -113,17 +121,19 @@ int jgrapht_coloring_exec_color_refinement(void *, long long* OUTPUT, void** OUT
 
 // error
 
-void jgrapht_clear_errno();
+void jgrapht_error_clear_errno();
 
-int jgrapht_get_errno();
+int jgrapht_error_get_errno();
 
-char *jgrapht_get_errno_msg();
+char *jgrapht_error_get_errno_msg();
 
-void jgrapht_print_stack_trace();
+void jgrapht_error_print_stack_trace();
 
 // exporter
 
 int jgrapht_export_file_dimacs(void *, char*, dimacs_format_t, int);
+
+int jgrapht_export_string_dimacs(void *, dimacs_format_t, int, void** OUTPUT);
 
 int jgrapht_export_file_gml(void *, char*, int, void *, void *);
 
@@ -305,6 +315,12 @@ int jgrapht_graph_test_is_k33_subdivision(void *, int* OUTPUT);
 
 int jgrapht_graph_test_is_k5_subdivision(void *, int* OUTPUT);
 
+// handles
+
+int jgrapht_handles_destroy(void *);
+
+int jgrapht_handles_get_ccharpointer(void *, char** OUTPUT);
+
 // importers
 
 int jgrapht_import_file_dimacs(void *, char*, int);
@@ -410,10 +426,6 @@ int jgrapht_matching_exec_bipartite_max_card(void *, double* OUTPUT, void** OUTP
 int jgrapht_matching_exec_bipartite_perfect_min_weight(void *, void *, void *, double* OUTPUT, void** OUTPUT);
 
 int jgrapht_matching_exec_bipartite_max_weight(void *, double* OUTPUT, void** OUTPUT);
-
-// cleanup
-
-int jgrapht_destroy(void *);
 
 // mst
 

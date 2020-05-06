@@ -1,7 +1,7 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.io.exporters import write_dimacs
+from jgrapht.io.exporters import write_dimacs, generate_dimacs
 
 
 def build_graph():
@@ -141,3 +141,11 @@ def test_dimacs_maxclique(tmpdir):
         print (contents)
         
     assert contents == dimacs_maxclique_expected
+
+
+def test_dimacs_output_to_string(): 
+    g = build_graph()
+
+    out = generate_dimacs(g)
+
+    assert str(out) == dimacs_maxclique_expected

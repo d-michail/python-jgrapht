@@ -9,6 +9,7 @@ from .._wrappers import (
     JGraphTGraphPath, 
     JGraphTAttributeStore,
     JGraphTAttributesRegistry,
+    JGraphTString
 )
 
 
@@ -23,6 +24,20 @@ def _export_to_file(name, graph, filename, *args):
     err = alg_method(graph.handle, filename, *args)
     if err:
         raise_status()
+
+def _export_to_string(name, graph, *args):
+    alg_method_name = "jgrapht_export_string_" + name
+
+    try:
+        alg_method = getattr(backend, alg_method_name)
+    except AttributeError:
+        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+
+    err, handle = alg_method(graph.handle, *args)
+    if err:
+        raise_status()
+
+    return str(JGraphTString(handle))
 
 
 def _attributes_to_store(attributes_dict):
@@ -84,6 +99,47 @@ def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False)
     format = DIMACS_FORMATS.get(format, backend.DIMACS_FORMAT_MAX_CLIQUE)
     custom = [format, export_edge_weights]
     return _export_to_file("dimacs", graph, filename, *custom)
+
+
+def generate_dimacs(graph, format="maxclique", export_edge_weights=False):
+    """Export a graph using the DIMACS format into a string.
+
+    For a description of the formats see http://dimacs.rutgers.edu/Challenges . Note that
+    there a lot of different formats based on each different challenge. The exports supports
+    the shortest path challenge format, the coloring format and the maximum-clique challenge
+    formats. By default the maximum-clique is used.
+
+    .. note:: In DIMACS formats the vertices are integers numbered from one.
+                 The exporter automatically translates them. 
+
+    Briefly, one of the most common DIMACS formats is the
+    `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the 
+    following structure::
+
+      DIMACS G {
+        c <comments> ignored during parsing of the graph
+        p edge <number of nodes> <number of edges>
+        e <edge source 1> <edge target 1>
+        e <edge source 2> <edge target 2>
+        e <edge source 3> <edge target 3>
+        e <edge source 4> <edge target 4>
+        ...
+      }
+
+    Although not specified directly in the DIMACS format documentation, this implementation also
+    allows for the a weighted variant::
+ 
+      e <edge source 1> <edge target 1> <edge_weight>
+
+    :param graph: the graph
+    :param format: a string with the format to use. Valid are `maxclique`, `shortestpath`
+                   and `coloring`.
+    :param export_edge_weights: whether to also export edge weights
+    :returns: a string with the generated output               
+    """
+    format = DIMACS_FORMATS.get(format, backend.DIMACS_FORMAT_MAX_CLIQUE)
+    custom = [format, export_edge_weights]
+    return _export_to_string("dimacs", graph, *custom)
 
 
 def write_lemon(graph, filename, export_edge_weights=False, escape_strings=False):
