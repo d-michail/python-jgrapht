@@ -4,8 +4,8 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-static graal_isolate_t *isolate = NULL;
-static graal_isolatethread_t *thread = NULL;
+static _Thread_local graal_isolate_t *isolate = NULL;
+static _Thread_local graal_isolatethread_t *thread = NULL;
 
 // library init
 
