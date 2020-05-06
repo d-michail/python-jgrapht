@@ -32,7 +32,7 @@ Multiple vertices can also be added using any iterable using::
 
   g.add_vertices_from([1, 2])
 
-Now are graph should contain 3 vertices. You can find the number of vertices using:
+Now are graph should contain 3 vertices. You can find the number of vertices using::
 
   print (len(g.vertices()))
 
