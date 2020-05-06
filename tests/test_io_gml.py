@@ -1,7 +1,7 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.io.exporters import write_gml
+from jgrapht.io.exporters import write_gml, generate_gml
 from jgrapht.io.importers import read_gml, parse_gml
 
 
@@ -172,7 +172,50 @@ graph
 ]
 """
 
-
+expected2=r"""Creator "JGraphT GML Exporter"
+Version 1
+graph
+[
+	label ""
+	directed 1
+	node
+	[
+		id 0
+	]
+	node
+	[
+		id 1
+	]
+	node
+	[
+		id 2
+	]
+	node
+	[
+		id 3
+	]
+	edge
+	[
+		source 0
+		target 1
+	]
+	edge
+	[
+		source 0
+		target 2
+	]
+	edge
+	[
+		source 0
+		target 3
+	]
+	edge
+	[
+		source 2
+		target 3
+	]
+]
+"""
 
 def build_graph():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
@@ -296,3 +339,16 @@ def test_input_gml_from_string_preserve_ids():
 	parse_gml(g, input_string, preserve_ids_from_input=True) 
 
 	assert g.vertices() == set([5, 7])
+
+def test_output_to_string(): 
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
+
+    g.add_vertices_from(range(0,4))
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
+
+    out = generate_gml(g)
+    assert out == expected2

@@ -2,7 +2,7 @@ import pytest
 
 from jgrapht import create_graph
 from jgrapht.io.importers import read_gexf, parse_gexf
-from jgrapht.io.exporters import write_gexf
+from jgrapht.io.exporters import write_gexf, generate_gexf
 
 input1=r"""<?xml version="1.0" encoding="UTF-8"?>
 <gexf xmlns="http://www.gexf.net/1.2draft"
@@ -21,6 +21,24 @@ input1=r"""<?xml version="1.0" encoding="UTF-8"?>
             <edge id="2" source="3" target="1" />
         </edges>
         </graph>
+</gexf>
+"""
+
+expected=r"""<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.gexf.net/1.2draft" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <graph defaultedgetype="directed">
+        <nodes>
+            <node id="0" label="0"/>
+            <node id="1" label="1"/>
+            <node id="2" label="2"/>
+            <node id="3" label="3"/>
+        </nodes>
+        <edges>
+            <edge id="0" source="0" target="1"/>
+            <edge id="1" source="0" target="2"/>
+            <edge id="2" source="0" target="3"/>
+            <edge id="3" source="2" target="3"/>
+        </edges>
+    </graph>
 </gexf>
 """
 
@@ -129,3 +147,16 @@ def test_export_import(tmpdir):
 
     assert g1.get_edge_weight(17) == 33.3
 
+def test_output_to_string(): 
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
+
+    g.add_vertices_from(range(0,4))
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
+
+    out = generate_gexf(g)
+
+    assert out == expected

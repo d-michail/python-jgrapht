@@ -1,7 +1,7 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.io.exporters import write_sparse6, write_graph6
+from jgrapht.io.exporters import write_sparse6, write_graph6, generate_sparse6, generate_graph6
 from jgrapht.io.importers import read_graph6sparse6
 
 
@@ -69,3 +69,18 @@ def test_output_graph6(tmpdir):
     assert len(g1.vertices()) == 4
     assert len(g1.edges()) == 5
 
+def test_output_to_string(): 
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
+
+    g.add_vertices_from(range(0,4))
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
+
+    out = generate_sparse6(g)
+    assert out == ':Cca'
+
+    out = generate_graph6(g)
+    assert out == 'Ct'

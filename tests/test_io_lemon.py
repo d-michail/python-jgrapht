@@ -1,7 +1,7 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.io.exporters import write_lemon
+from jgrapht.io.exporters import write_lemon, generate_lemon
 
 
 def build_graph():
@@ -71,6 +71,24 @@ label
 
 """
 
+expected2=r"""#Creator: JGraphT Lemon (LGF) Exporter
+#Version: 1
+
+@nodes
+label
+0
+1
+2
+3
+
+@arcs
+		-
+0	1
+0	2
+0	3
+2	3
+
+"""
 
 def test_lemon(tmpdir):
     g = build_graph()
@@ -85,3 +103,15 @@ def test_lemon(tmpdir):
     assert contents == lemon_expected
 
 
+def test_output_to_string(): 
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
+
+    g.add_vertices_from(range(0,4))
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
+
+    out = generate_lemon(g)
+    assert out == expected2

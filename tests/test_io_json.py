@@ -1,10 +1,12 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.io.exporters import write_json
+from jgrapht.io.exporters import write_json, generate_json
 from jgrapht.io.importers import read_json, parse_json
 
 expected=r'{"creator":"JGraphT JSON Exporter","version":"1","nodes":[{"id":"0","label":"label 0"},{"id":"1","label":"label 1"},{"id":"2","label":"\u03BA\u03CC\u03BC\u03B2\u03BF\u03C2 2"},{"id":"3","label":"label 3"},{"id":"4"},{"id":"5"},{"id":"6"},{"id":"7"},{"id":"8"},{"id":"9"}],"edges":[{"source":"0","target":"1"},{"source":"0","target":"2"},{"source":"0","target":"3"},{"source":"0","target":"4"},{"source":"0","target":"5"},{"source":"0","target":"6"},{"source":"0","target":"7"},{"source":"0","target":"8"},{"source":"0","target":"9"},{"source":"1","target":"2","label":"edge 1-2"},{"source":"2","target":"3"},{"source":"3","target":"4"},{"source":"4","target":"5"},{"source":"5","target":"6"},{"source":"6","target":"7"},{"source":"7","target":"8"},{"source":"8","target":"9"},{"source":"9","target":"1"}]}'
+
+expected2=r'{"creator":"JGraphT JSON Exporter","version":"1","nodes":[{"id":"0"},{"id":"1"},{"id":"2"},{"id":"3"}],"edges":[{"source":"0","target":"1"},{"source":"0","target":"2"},{"source":"0","target":"3"},{"source":"2","target":"3"}]}'
 
 def build_graph():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
@@ -115,3 +117,15 @@ def test_input_json_from_string_preserve_ids():
     parse_json(g, input_string, import_id_cb=import_id) 
     assert g.vertices() == set([5, 7])
 
+def test_output_to_string(): 
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
+
+    g.add_vertices_from(range(0,4))
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
+
+    out = generate_json(g)
+    assert out == expected2

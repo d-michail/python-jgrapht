@@ -135,6 +135,7 @@ def generate_dimacs(graph, format="maxclique", export_edge_weights=False):
     :param format: a string with the format to use. Valid are `maxclique`, `shortestpath`
                    and `coloring`.
     :param export_edge_weights: whether to also export edge weights
+    :returns: a string contains the exported graph    
     :returns: a string with the generated output               
     """
     format = DIMACS_FORMATS.get(format, backend.DIMACS_FORMAT_MAX_CLIQUE)
@@ -164,6 +165,7 @@ def generate_lemon(graph, export_edge_weights=False, escape_strings=False):
     :param graph: the graph
     :param export_edge_weights: whether to also export edge weights
     :param escape_strings: whether to escape all strings as Java strings
+    :returns: a string contains the exported graph    
     :raises GraphExportError: In case of an export error        
     """
     custom = [export_edge_weights, escape_strings]
@@ -272,6 +274,7 @@ def generate_gml(
     :param export_edge_weights: whether to export edge weights
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
+    :returns: a string contains the exported graph    
     :raises GraphExportError: In case of an export error 
     """
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
@@ -336,6 +339,7 @@ def generate_json(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
     :param graph: The graph to export
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
+    :returns: a string contains the exported graph    
     :raises GraphExportError: In case of an export error 
     """
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
@@ -410,6 +414,7 @@ def generate_csv(
     :param matrix_format_node_id: only for the matrix format, whether to export node identifiers
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the output should contain
            zero for missing edges
+    :returns: a string contains the exported graph           
     :raises GraphExportError: in case of an export error
     """
     format = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
@@ -560,6 +565,7 @@ def generate_gexf(
     :param export_edge_labels: whether to export edge labels
     :param export_edge_types: whether to export edge types
     :param export_meta: whether to export meta tag
+    :returns: a string contains the exported graph    
     :raises GraphExportError: In case of an export error         
     """
     attrs_registry = JGraphTAttributesRegistry()
@@ -625,6 +631,7 @@ def generate_dot(
     :param graph: The graph to export
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
+    :returns: a string contains the exported graph    
     :raises GraphExportError: In case of an export error         
     """
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
@@ -650,12 +657,13 @@ def write_graph6(graph, filename):
     return _export_to_file("graph6", graph, filename)
 
 
-def generate_graph6(graph, filename):
+def generate_graph6(graph):
     """Exports a graph to string using graph6 format.
 
     See https://users.cecs.anu.edu.au/~bdm/data/formats.txt for a description of the format.
 
     :param graph: The graph to export
+    :returns: a string contains the exported graph    
     :raises GraphExportError: In case of an export error         
     """
     return _export_to_string("graph6", graph)
@@ -673,12 +681,13 @@ def write_sparse6(graph, filename):
 
     return _export_to_file("sparse6", graph, filename)
 
-def generate_sparse6(graph, filename):
+def generate_sparse6(graph):
     """Exports a graph to string using sparse6 format.
 
     See https://users.cecs.anu.edu.au/~bdm/data/formats.txt for a description of the format.
 
     :param graph: The graph to export
-    :raises GraphExportError: In case of an export error         
+    :returns: a string contains the exported graph         
+    :raises GraphExportError: In case of an export error
     """
     return _export_to_string("sparse6", graph)    

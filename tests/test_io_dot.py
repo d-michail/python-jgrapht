@@ -1,7 +1,7 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.io.exporters import write_dot
+from jgrapht.io.exporters import write_dot, generate_dot
 from jgrapht.io.importers import read_dot, parse_dot
 
 
@@ -51,7 +51,18 @@ def test_output_gml(tmpdir):
     assert len(g1.vertices()) == 3
     assert len(g1.edges()) == 3
 
-    #assert 0
+    
+def test_output_to_string(): 
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
 
+    g.add_vertices_from(range(0,4))
 
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
+
+    out = generate_dot(g)
+
+    assert out == 'digraph G {\n  0;\n  1;\n  2;\n  3;\n  0 -> 1;\n  0 -> 2;\n  0 -> 3;\n  2 -> 3;\n}\n'
 
