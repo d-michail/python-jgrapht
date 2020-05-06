@@ -18,11 +18,11 @@ from ._wrappers import create_graph
 # Create main thread and setup cleanup
 import atexit
 
-backend.jgrapht_thread_create()
+backend.jgrapht_isolate_create()
 
 def _module_cleanup_function():
-    if backend.jgrapht_is_thread_attached():
-        backend.jgrapht_thread_destroy()
+    if backend.jgrapht_isolate_is_attached():
+        backend.jgrapht_isolate_destroy()
 
 atexit.register(_module_cleanup_function)
 del atexit

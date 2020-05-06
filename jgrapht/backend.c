@@ -4,12 +4,12 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-static _Thread_local graal_isolate_t *isolate = NULL;
-static _Thread_local graal_isolatethread_t *thread = NULL;
+static graal_isolate_t *isolate = NULL;
+static graal_isolatethread_t *thread = NULL;
 
 // library init
 
-void jgrapht_thread_create() {
+void jgrapht_isolate_create() {
     if (thread == NULL) { 
         if (graal_create_isolate(NULL, &isolate, &thread) != 0) {
             fprintf(stderr, "graal_create_isolate error\n");
@@ -18,7 +18,7 @@ void jgrapht_thread_create() {
     } 
 }
 
-void jgrapht_thread_destroy() { 
+void jgrapht_isolate_destroy() { 
     if (thread != NULL) { 
         if (graal_detach_thread(thread) != 0) {
                 fprintf(stderr, "graal_detach_thread error\n");
@@ -29,7 +29,7 @@ void jgrapht_thread_destroy() {
     }
 }
 
-int jgrapht_is_thread_attached() {
+int jgrapht_isolate_is_attached() {
     return thread != NULL; 
 }
 

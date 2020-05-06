@@ -10,11 +10,11 @@ extern "C" {
 
 // library init
 
-void jgrapht_thread_create();
+void jgrapht_isolate_create();
 
-void jgrapht_thread_destroy();
+void jgrapht_isolate_destroy();
 
-int jgrapht_is_thread_attached();
+int jgrapht_isolate_is_attached();
 
 // attribute store 
 
