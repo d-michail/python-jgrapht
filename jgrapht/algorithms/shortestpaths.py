@@ -107,14 +107,43 @@ def bellman_ford(graph, source_vertex):
 
 
 def bfs(graph, source_vertex):
+    """The BFS as a shortest path algorithm. Even if the graph has weights, 
+    this algorithms treats the graph as unweighted.
+
+    Running time :math:`\mathcal{O}(n+m)`.
+
+    :param graph: the graph
+    :param source_vertex: the source vertex
+    :returns: a shortest path tree as an instance of :py:class:`.SingleSourcePaths`
+    """
     return _sp_singlesource_alg(
         "bfs_get_singlesource_from_vertex", graph, source_vertex
     )
 
 
 def johnson_allpairs(graph):
+    """Johnson's all-pairs shortest-paths algorithm.
+
+    Finds the shortest paths between all pairs of vertices in a sparse graph. Edge weights
+    can be negative, but no negative-weight cycles may exist. It first executes the
+    Bellman-Ford algorithm to compute a transformation of the input graph that removes all
+    negative weights, allowing Dijkstra's algorithm to be used on the transformed graph.
+
+    Running time :math:`\mathcal{O}(n m + n^2 \log n)`.
+
+    :param graph: the input graph
+    :returns: all-pairs shortest paths as an instance of :py:class:`.AllPairsPaths`
+    """
     return _sp_allpairs_alg("johnson_get_allpairs", graph)
 
 
 def floyd_warshall_allpairs(graph):
+    """The Floyd-Warshall algorithm for all-pairs shortest-paths.
+
+    Find all :math:`n^2` shortest paths in time :math:`\mathcal{O}(n^3)`.
+    Also requires :math:`\mathcal{O}(n^2)` space.
+
+    :param graph: the input graph
+    :returns: all-pairs shortest paths as an instance of :py:class:`.AllPairsPaths`
+    """
     return _sp_allpairs_alg("floydwarshall_get_allpairs", graph)

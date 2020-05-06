@@ -20,6 +20,8 @@ behavior depending on the graph they are working on.
 Graph
 =====
 
+The graph interface contains all the necessary methods to query or modify the graph.
+
 .. autoclass:: jgrapht.types.Graph
    :inherited-members:
    :members:

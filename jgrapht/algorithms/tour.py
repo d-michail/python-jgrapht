@@ -26,11 +26,11 @@ def tsp_random(graph, seed=None):
     Travelling Salesman Problem, suitable for a starting point in optimizing using the 
     two-opt heuristic.
 
-    :param graph: The input graph. Must be undirected and complete.
-    :param seed: Seed for the random number generator. If None then the seed is chosen based
-                 on the current time.
-    :returns: A graph path
-    :rtype: :py:class:`jgrapht.graph.GraphPath`
+    :param graph: the input graph. Must be undirected and complete
+    :param seed: seed for the random number generator. If None then the seed is chosen based
+                 on the current time
+    :returns: A random tour
+    :rtype: :py:class:`.GraphPath`
     """
     if seed is None:
         seed = time.time()
@@ -44,18 +44,35 @@ def tsp_greedy_heuristic(graph):
  
     The runtime complexity is :math:`\mathcal{O}(n^2 \log n)`.
  
-    :param graph: The input graph. Must be undirected and complete.
-    :returns: A graph path
-    :rtype: :py:class:`jgrapht.graph.GraphPath`
+    :param graph: the input graph. Must be undirected and complete
+    :returns: a greedy tour
+    :rtype: :py:class:`.GraphPath`
     """
     return _tour_tsp_alg("tsp_greedy_heuristic", graph)
 
 
 def tsp_nearest_insertion_heuristic(graph):
+    """The nearest insertion heuristic algorithm for the TSP problem.
+
+    The runtime complexity is :math:`\mathcal{O}(n^2)`.
+
+    :param graph: the input graph. Must be undirected and complete
+    :returns: a tour
+    :rtype: :py:class:`.GraphPath`
+    """
     return _tour_tsp_alg("tsp_nearest_insertion_heuristic", graph)
 
 
 def tsp_nearest_neighbor_heuristic(graph, seed=None):
+    """The nearest neighbour heuristic algorithm for the TSP problem.
+
+    The runtime complexity is :math:`\mathcal{O}(n^2)`.
+
+    :param graph: the input graph. Must be undirected and complete
+    :param seed: seed for the random number generator, use system time if None
+    :returns: a tour
+    :rtype: :py:class:`.GraphPath`
+    """
     if seed is None:
         seed = time.time()
     custom = [seed]
@@ -63,22 +80,81 @@ def tsp_nearest_neighbor_heuristic(graph, seed=None):
 
 
 def metric_tsp_christofides(graph):
+    """The Christofides 3/2 approximation algorithm for the metric TSP.
+
+    For details see:
+
+      * Christofides, N.: Worst-case analysis of a new heuristic for the travelling
+        salesman problem. Graduate School of Industrial Administration, Carnegie Mellon
+        University (1976).
+
+    Running time :math:`\mathcal{O}(n^3 m)`.
+
+    :param graph: The input graph. Must be undirected, complete and satisfy the
+      triangle inequality.
+    :returns: a tour which is a 3/2 approximation
+    :rtype: :py:class:`.GraphPath`
+    """
     return _tour_tsp_alg("metric_tsp_christofides", graph)
 
 
 def metric_tsp_two_approx(graph):
+    """A 2 approximation algorithm for the metrix TSP.
+
+    This is an implementation of the folklore algorithm which returns a depth-first ordering
+    of the minimum spanning tree. The algorithm is a 2-approximation assuming that the instance
+    satisfies the triangle inequality. The implementation requires the input graph to be
+    undirected and complete. The running time is :math:`\mathcal{O}(n^2 \log n)`.
+
+    :param graph: the input graph. Must be undirected, complete and satisfy the
+      triangle inequality
+    :returns: a tour which is a 2-approximation
+    :rtype: :py:class:`.GraphPath`
+    """
     return _tour_tsp_alg("metric_tsp_christofides", graph)
 
 
 def tsp_held_karp(graph):
+    r"""A dynamic programming algorithm for the TSP.
+
+    Finds an optimal, minimum-cost Hamiltonian tour. Running time is 
+    :math:`\mathcal{O}(2^n \times n^2)` and space :math:`\mathcal{O}(2^n \times n)`.
+
+    :param graph: the input graph. Must be undirected and complete
+    :returns: an optimal tour
+    :rtype: :py:class:`.GraphPath`
+    """
     return _tour_tsp_alg("tsp_held_karp", graph)
 
 
 def hamiltonian_palmer(graph):
+    """Palmer's algorithm for computing Hamiltonian cycles in graphs that meet Ore's condition.
+
+    Running time :math:`\mathcal{O}(n^2)`.
+
+    :param graph: the input graph. Must be simple and meet Ore's condition.
+    :returns: a hamiltonian cycle
+    :rtype: :py:class:`.GraphPath`
+    """
     return _tour_tsp_alg("hamiltonian_palmer", graph)
 
 
 def tsp_two_opt_heuristic(graph, k=1, min_cost_improvement=0.0001, seed=None):
+    """The 2-opt heuristic algorithm for the TSP problem.
+
+    This is an implementation of the 2-opt improvement heuristic algorithm. The algorithm
+    generates k initial tours and then iteratively improves the tours until a local minimum
+    is reached. In each iteration it applies the best possible 2-opt move which means to find
+    the best pair of edges (i,i+1) and (j,j+1) such that replacing them with (i,j) and
+    (i+1,j+1) minimizes the tour length. The default initial tours are constructed randomly.
+
+    :param graph: the input graph. Must be undirected and complete
+    :param k: how many initial tours to generate
+    :param min_cost_improvement: minimum cost improvement per iteration
+    :param seed: seed for the random number generator, use system time if None
+    :returns: a tour
+    :rtype: :py:class:`.GraphPath`
+    """
     if seed is None:
         seed = time.time()
     custom = [k, min_cost_improvement, seed]
@@ -86,6 +162,20 @@ def tsp_two_opt_heuristic(graph, k=1, min_cost_improvement=0.0001, seed=None):
 
 
 def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=None):
+    """Improve a tour using the 2-opt heuristic for the TSP problem.
+
+    This is an implementation of the 2-opt improvement heuristic algorithm. The algorithm
+    takes as input a tour and then iteratively improves the tour until a local minimum
+    is reached. In each iteration it applies the best possible 2-opt move which means to find
+    the best pair of edges (i,i+1) and (j,j+1) such that replacing them with (i,j) and
+    (i+1,j+1) minimizes the tour length.
+
+    :param graph: the input tour, instance of :py:class:`.GraphPath`
+    :param min_cost_improvement: minimum cost improvement per iteration
+    :param seed: seed for the random number generator, use system time if None
+    :returns: a tour
+    :rtype: :py:class:`.GraphPath`
+    """
     if seed is None:
         seed = time.time()
     custom = [min_cost_improvement, seed]

@@ -11,10 +11,10 @@ API
 
    introduction
    graph
-   generators
-   properties
    traversals
+   properties
    metrics
    algorithms/index
+   generators
    io/index
    exceptions

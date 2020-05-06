@@ -45,10 +45,10 @@ def greedy(graph, vertex_weights=None):
     supports both the uniform and the weighted case where the graph vertices
     have weights.
 
-    :param graph: The input graph. It must be undirected. Self-loops and multiple edges
-                  are allowed.
-    :param vertex_weights: An optional dictionary of vertex weights.
-    :returns: A tuple (weight, vertex set).
+    :param graph: the input graph. It must be undirected. Self-loops and multiple edges
+                  are allowed
+    :param vertex_weights: an optional dictionary of vertex weights
+    :returns: a tuple (weight, vertex set)
     """
     return _vertexcover_alg("greedy", graph, vertex_weights)
 
@@ -64,19 +64,36 @@ def clarkson(graph, vertex_weights=None):
     Clarkson, Kenneth L. A modification of the greedy algorithm for vertex cover.
     Information Processing Letters 16.1 (1983): 23-25.
 
-    :param graph: The input graph. It must be undirected. Self-loops and multiple edges
-                are allowed.
-    :param vertex_weights: An optional dictionary of vertex weights.
-    :returns: A tuple (weight, vertex set).
+    :param graph: the input graph. It must be undirected. Self-loops and multiple edges
+                are allowed
+    :param vertex_weights: an optional dictionary of vertex weights
+    :returns: a tuple (weight, vertex set)
     """
     return _vertexcover_alg("clarkson", graph, vertex_weights)
 
 
-def edgebased(graph, vertex_weights=None):
-    return _vertexcover_alg("edgebased", graph, vertex_weights)
+def edgebased(graph):
+    r"""A 2-opt algorithm for the minimum vertex cover.
+
+    This is a 2-approximation algorithm with running time :math:`\mathcal{O}(m)`.
+
+    :param graph: the input graph. It must be undirected. Self-loops and multiple edges
+                are allowed
+    :returns: a tuple (weight, vertex set)
+    """
+    return _vertexcover_alg("edgebased", graph)
 
 
 def baryehuda_even(graph, vertex_weights=None):
+    r"""The 2-opt algorithm for a minimum weighted vertex cover by R. Bar-Yehuda and S. Even.
+
+    This is a 2-approximation algorithm with running time :math:`\mathcal{O}(m)`.
+
+    :param graph: the input graph. It must be undirected. Self-loops and multiple edges
+                are allowed
+    :param vertex_weights: an optional dictionary of vertex weights
+    :returns: a tuple (weight, vertex set)
+    """
     return _vertexcover_alg("baryehudaeven", graph, vertex_weights)
 
 
@@ -89,8 +106,8 @@ def exact(graph, vertex_weights=None):
 
     Can solve instances with around 150-200 vertices to optimality.
     
-    :param graph: The input graph. It must be undirected.
-    :param vertex_weights: An optional dictionary of vertex weights.
-    :returns: A tuple (weight, vertex set).
+    :param graph: the input graph. It must be undirected
+    :param vertex_weights: an optional dictionary of vertex weights
+    :returns: a tuple (weight, vertex set)
     """
     return _vertexcover_alg("exact", graph, vertex_weights)

@@ -6,6 +6,7 @@ from .types import (
     AllPairsPaths,
     Graph,
     Clustering,
+    PlanarEmbedding,
 )
 from ._errors import raise_status
 from collections.abc import (
@@ -812,7 +813,7 @@ class JGraphTCut:
                     self._edges.add(e)
 
 
-class JGraphTPlanarEmbedding(HandleWrapper):
+class JGraphTPlanarEmbedding(HandleWrapper, PlanarEmbedding):
     """A JGraphT wrapped planar embedding."""
 
     def __init__(self, handle, owner=True):
