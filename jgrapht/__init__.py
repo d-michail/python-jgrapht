@@ -20,9 +20,11 @@ import atexit
 
 backend.jgrapht_isolate_create()
 
+
 def _module_cleanup_function():
     if backend.jgrapht_isolate_is_attached():
         backend.jgrapht_isolate_destroy()
+
 
 atexit.register(_module_cleanup_function)
 del atexit

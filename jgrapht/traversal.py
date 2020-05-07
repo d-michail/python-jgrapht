@@ -100,8 +100,8 @@ def random_walk_traversal(
     """
     if seed is None:
         seed = int(time.time())
-    if max_steps is None: 
-        max_steps=0x7FFFFFFFFFFFFFFF
+    if max_steps is None:
+        max_steps = 0x7FFFFFFFFFFFFFFF
     err, it = backend.jgrapht_traverse_create_custom_random_walk_from_vertex_vit(
         graph.handle, start_vertex, weighted, max_steps, seed
     )

@@ -252,7 +252,7 @@ class Graph(ABC):
 
         :param edges: any iterable of edges. Each edge is (u,v) or (u,v,weight)  
         :returns: list of added edge identifiers
-        """ 
+        """
         added = []
         for u, v, weight in edges:
             e = self.add_edge(u, v, weight)

@@ -5,11 +5,11 @@ from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status, GraphExportError
 from .._wrappers import (
-    JGraphTLongIterator, 
-    JGraphTGraphPath, 
+    JGraphTLongIterator,
+    JGraphTGraphPath,
     JGraphTAttributeStore,
     JGraphTAttributesRegistry,
-    JGraphTString
+    JGraphTString,
 )
 
 
@@ -24,6 +24,7 @@ def _export_to_file(name, graph, filename, *args):
     err = alg_method(graph.handle, filename, *args)
     if err:
         raise_status()
+
 
 def _export_to_string(name, graph, *args):
     alg_method_name = "jgrapht_export_string_" + name
@@ -489,20 +490,20 @@ def write_gexf(
     :raises GraphExportError: In case of an export error         
     """
     attrs_registry = JGraphTAttributesRegistry()
-    for name, category, type, default_value in attrs: 
+    for name, category, type, default_value in attrs:
         attrs_registry.put(name, category, type, default_value)
 
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
 
-    custom = [ 
-        attrs_registry.handle, 
+    custom = [
+        attrs_registry.handle,
         vertex_attribute_store.handle if vertex_attribute_store is not None else None,
         edge_attribute_store.handle if edge_attribute_store is not None else None,
         export_edge_weights,
         export_edge_labels,
         export_edge_types,
-        export_meta
+        export_meta,
     ]
 
     return _export_to_file("gexf", graph, filename, *custom)
@@ -569,31 +570,26 @@ def generate_gexf(
     :raises GraphExportError: In case of an export error         
     """
     attrs_registry = JGraphTAttributesRegistry()
-    for name, category, type, default_value in attrs: 
+    for name, category, type, default_value in attrs:
         attrs_registry.put(name, category, type, default_value)
 
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
 
-    custom = [ 
-        attrs_registry.handle, 
+    custom = [
+        attrs_registry.handle,
         vertex_attribute_store.handle if vertex_attribute_store is not None else None,
         edge_attribute_store.handle if edge_attribute_store is not None else None,
         export_edge_weights,
         export_edge_labels,
         export_edge_types,
-        export_meta
+        export_meta,
     ]
 
     return _export_to_string("gexf", graph, *custom)
 
 
-def write_dot(
-    graph,
-    filename,
-    per_vertex_attrs_dict=None,
-    per_edge_attrs_dict=None
-):
+def write_dot(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
     """Exports a graph to DOT format.
 
     For a description of the format see https://en.wikipedia.org/wiki/DOT_language.
@@ -609,7 +605,7 @@ def write_dot(
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
 
-    custom = [ 
+    custom = [
         vertex_attribute_store.handle if vertex_attribute_store is not None else None,
         edge_attribute_store.handle if edge_attribute_store is not None else None,
     ]
@@ -617,11 +613,7 @@ def write_dot(
     return _export_to_file("dot", graph, filename, *custom)
 
 
-def generate_dot(
-    graph,
-    per_vertex_attrs_dict=None,
-    per_edge_attrs_dict=None
-):
+def generate_dot(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
     """Exports a graph to string using DOT format.
 
     For a description of the format see https://en.wikipedia.org/wiki/DOT_language.
@@ -637,7 +629,7 @@ def generate_dot(
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
 
-    custom = [ 
+    custom = [
         vertex_attribute_store.handle if vertex_attribute_store is not None else None,
         edge_attribute_store.handle if edge_attribute_store is not None else None,
     ]
@@ -681,6 +673,7 @@ def write_sparse6(graph, filename):
 
     return _export_to_file("sparse6", graph, filename)
 
+
 def generate_sparse6(graph):
     """Exports a graph to string using sparse6 format.
 
@@ -690,4 +683,4 @@ def generate_sparse6(graph):
     :returns: a string contains the exported graph         
     :raises GraphExportError: In case of an export error
     """
-    return _export_to_string("sparse6", graph)    
+    return _export_to_string("sparse6", graph)

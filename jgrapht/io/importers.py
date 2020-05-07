@@ -909,24 +909,25 @@ def parse_graph6sparse6(
 ):
     """Read a graph in graph6 or sparse6 format from a string.
 
-    See https://users.cecs.anu.edu.au/~bdm/data/formats.txt for a description of the format. Both graph6
-    and sparse6 are formats for storing undirected graphs, using a small number of printable ASCII
-    characters. Graph6 is suitable for small graphs or large dense graphs while sparse6 is better for 
-    large sparse graphs. Moreover, sparse6 supports self-loops and multiple-edges while graph6 does not.
+    See https://users.cecs.anu.edu.au/~bdm/data/formats.txt for a description of the format. Both
+    graph6 and sparse6 are formats for storing undirected graphs, using a small number of printable
+    ASCII characters. Graph6 is suitable for small graphs or large dense graphs while sparse6 is
+    better for large sparse graphs. Moreover, sparse6 supports self-loops and multiple-edges while
+    graph6 does not.
 
-    The provided graph object, where the imported graph will be stored, must be able to support the
-    features of the graph that is read. For example if the file contains self-loops then the graph
-    provided must also support self-loops. The same for multiple edges. Whether edges are directed or
-    not depends on the underlying implementation of the user provided graph object.
+    The provided graph object, where the imported graph will be stored, must be able to support
+    the features of the graph that is read. For example if the file contains self-loops then the
+    graph provided must also support self-loops. The same for multiple edges. Whether edges are
+    directed or not depends on the underlying implementation of the user provided graph object.
 
-    The graph vertices and edges are build automatically by the graph. The id of the vertices in the
-    input file are reported as a vertex attribute named "ID". The user can also bypass vertex creation
-    by providing a import identifier callback. This callback accepts as a parameter the vertex identifier
-    read from file and should return the new vertex.
+    The graph vertices and edges are build automatically by the graph. The id of the vertices in
+    the input file are reported as a vertex attribute named "ID". The user can also bypass vertex
+    creation by providing a import identifier callback. This callback accepts as a parameter the
+    vertex identifier read from file and should return the new vertex.
 
-    .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a long integer with the identifier of the 
-              graph vertex.
+    .. note:: The import identifier callback accepts a single parameter which is the identifier
+              read from the input file as a string. It should return a long integer with the
+              identifier of the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the 
@@ -934,8 +935,8 @@ def parse_graph6sparse6(
 
     :param graph: the graph to read into
     :param input_string: the input string
-    :param import_id_cb: callback to transform identifiers from file to long integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.                   
+    :param import_id_cb: callback to transform identifiers from file to long integer vertices.
+        Can be None to allow the graph to assign identifiers to new vertices.                   
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
     :raises GraphImportError: in case of an import error 

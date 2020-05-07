@@ -2,8 +2,8 @@ from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
 from .._wrappers import (
-    JGraphTGraphPath, 
-    JGraphTSingleSourcePaths, 
+    JGraphTGraphPath,
+    JGraphTSingleSourcePaths,
     JGraphTAllPairsPaths,
     JGraphTLongSet,
 )
@@ -91,7 +91,7 @@ def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
 
 
 def bellman_ford(graph, source_vertex):
-    """Bellman-Ford algorithm to compute single-source shortest paths.
+    r"""Bellman-Ford algorithm to compute single-source shortest paths.
 
     Computes shortest paths from a single source vertex to all other vertices in a weighted graph.
     The Bellman-Ford algorithm supports negative edge weights.
@@ -113,7 +113,7 @@ def bellman_ford(graph, source_vertex):
 
 
 def bfs(graph, source_vertex):
-    """The BFS as a shortest path algorithm. Even if the graph has weights, 
+    r"""The BFS as a shortest path algorithm. Even if the graph has weights, 
     this algorithms treats the graph as unweighted.
 
     Running time :math:`\mathcal{O}(n+m)`.
@@ -128,7 +128,7 @@ def bfs(graph, source_vertex):
 
 
 def johnson_allpairs(graph):
-    """Johnson's all-pairs shortest-paths algorithm.
+    r"""Johnson's all-pairs shortest-paths algorithm.
 
     Finds the shortest paths between all pairs of vertices in a sparse graph. Edge weights
     can be negative, but no negative-weight cycles may exist. It first executes the
@@ -144,7 +144,7 @@ def johnson_allpairs(graph):
 
 
 def floyd_warshall_allpairs(graph):
-    """The Floyd-Warshall algorithm for all-pairs shortest-paths.
+    r"""The Floyd-Warshall algorithm for all-pairs shortest-paths.
 
     Find all :math:`n^2` shortest paths in time :math:`\mathcal{O}(n^3)`.
     Also requires :math:`\mathcal{O}(n^2)` space.
@@ -191,7 +191,10 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
             *custom
         )
 
-def a_star_with_alt_heuristic(graph, source_vertex, target_vertex, landmarks, use_bidirectional=False):
+
+def a_star_with_alt_heuristic(
+    graph, source_vertex, target_vertex, landmarks, use_bidirectional=False
+):
     r"""The A* algorithm with the ALT admissible heuristic.
 
     The ALT admissible heuristic for the A* algorithm using a set of landmarks and the triangle inequality.
@@ -233,7 +236,7 @@ def a_star_with_alt_heuristic(graph, source_vertex, target_vertex, landmarks, us
     for landmark in landmarks:
         landmarks_set.add(landmark)
 
-    custom = [ landmarks_set.handle ]
+    custom = [landmarks_set.handle]
 
     if use_bidirectional:
         return _sp_between_alg(

@@ -10,8 +10,8 @@ from .types import (
 )
 from ._errors import raise_status
 from collections.abc import (
-    Iterator, 
-    MutableSet, 
+    Iterator,
+    MutableSet,
     Set,
 )
 
@@ -475,16 +475,21 @@ class JGraphTGraph(HandleWrapper, Graph):
             # read attributes from backend
             err, directed = backend.jgrapht_graph_is_directed(self._handle)
             if err:
-                    raise_status()
-            err, allowing_self_loops = backend.jgrapht_graph_is_allowing_selfloops(self._handle)
+                raise_status()
+            err, allowing_self_loops = backend.jgrapht_graph_is_allowing_selfloops(
+                self._handle
+            )
             if err:
-                    raise_status()
-            err, allowing_multiple_edges = backend.jgrapht_graph_is_allowing_multipleedges(self._handle)
+                raise_status()
+            (
+                err,
+                allowing_multiple_edges,
+            ) = backend.jgrapht_graph_is_allowing_multipleedges(self._handle)
             if err:
-                    raise_status()
+                raise_status()
             err, weighted = backend.jgrapht_graph_is_weighted(self._handle)
             if err:
-                    raise_status()                        
+                raise_status()
 
         self._graph_type = GraphType(
             directed, allowing_self_loops, allowing_multiple_edges, weighted
@@ -687,6 +692,7 @@ class JGraphTAttributeStore(HandleWrapper):
         if err:
             raise_status()
 
+
 class JGraphTAttributesRegistry(HandleWrapper):
     """Attribute Registry. Used to keep a list of registered attributes
     for exporters.
@@ -820,7 +826,9 @@ class JGraphTPlanarEmbedding(HandleWrapper, PlanarEmbedding):
         super().__init__(handle, owner)
 
     def edges_around(self, vertex):
-        err, res = backend.jgrapht_planarity_embedding_edges_around_vertex(self._handle, vertex)
+        err, res = backend.jgrapht_planarity_embedding_edges_around_vertex(
+            self._handle, vertex
+        )
         if err:
             raise_status()
         return list(JGraphTLongIterator(res))
@@ -832,8 +840,8 @@ class JGraphTString(HandleWrapper):
     def __init__(self, handle, owner=True):
         super().__init__(handle, owner)
 
-    def __str__(self): 
+    def __str__(self):
         err, res = backend.jgrapht_handles_get_ccharpointer(self._handle)
-        if err: 
+        if err:
             raise_status()
         return str(res)

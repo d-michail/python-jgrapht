@@ -1,8 +1,8 @@
-__title__ = 'Python-JGraphT'
-__description__ = 'Python-JGraphT graph library.'
-__url__ = 'https://jgrapht.org'
-__version__ = '0.4.0'
-__author__ = 'Dimitrios Michail'
-__author_email__ = 'dimitrios.michail@gmail.com'
-__license__ = 'LGPL-2.1-or-later OR EPL-2.0'
-__copyright__ = 'Copyright (C) 2020 Dimitrios Michail'
+__title__ = "Python-JGraphT"
+__description__ = "Python-JGraphT graph library."
+__url__ = "https://jgrapht.org"
+__version__ = "0.4.0"
+__author__ = "Dimitrios Michail"
+__author_email__ = "dimitrios.michail@gmail.com"
+__license__ = "LGPL-2.1-or-later OR EPL-2.0"
+__copyright__ = "Copyright (C) 2020 Dimitrios Michail"

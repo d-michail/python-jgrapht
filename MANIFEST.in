@@ -1,5 +1,7 @@
 include license-*.txt
 include jgrapht/backend.h
+graft docs
+prune docs/_build
 graft vendor/source/jgrapht-capi
 graft tests
 global-exclude *.py[cod]

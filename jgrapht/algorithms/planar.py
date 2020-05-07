@@ -16,9 +16,9 @@ def _planarity_alg(name, graph, *args):
     if err:
         raise_status()
 
-    if is_planar: 
+    if is_planar:
         return is_planar, JGraphTPlanarEmbedding(embedding)
-    else: 
+    else:
         return is_planar, JGraphTGraph(handle=kuratowski_subdivision)
 
 
@@ -29,7 +29,7 @@ def boyer_myrvold(graph):
     :returns: a tuple whose first element is whether the graph is planar. The second is 
               either an embedding (:py:class:`.PlanarEmbedding`) or a Kuratowski subgraph.
     """
-    return _planarity_alg('boyer_myrvold', graph)
+    return _planarity_alg("boyer_myrvold", graph)
 
 
 def is_planar(graph):

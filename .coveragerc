@@ -1,0 +1,7 @@
+[run]
+omit =
+  tests/*
+  .tox/*
+
+[report]
+ignore_errors = True
