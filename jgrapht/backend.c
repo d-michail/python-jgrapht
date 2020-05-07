@@ -941,6 +941,14 @@ int jgrapht_sp_exec_bidirectional_astar_get_path_between_vertices(void *g, long 
     return jgrapht_capi_sp_exec_bidirectional_astar_get_path_between_vertices(thread, g, source, target, heuristic, res);
 }
 
+int jgrapht_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *g, long long int source, long long int target, void *landmarks_set, void** res) {
+    return jgrapht_capi_sp_exec_astar_alt_heuristic_get_path_between_vertices(thread, g, source, target, landmarks_set, res);
+}
+
+int jgrapht_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *g, long long int source, long long int target, void *landmarks_set, void** res) { 
+    return jgrapht_capi_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(thread, g, source, target, landmarks_set, res);
+}
+
 // spanner
 
 int jgrapht_spanner_exec_greedy_multiplicative(void *g, int k, double* weight, void** res) {

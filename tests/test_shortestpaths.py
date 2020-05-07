@@ -196,3 +196,33 @@ def test_a_star():
     assert path1.edges == [0, 3, 7, 9]
     assert path1.start_vertex == 0
     assert path1.end_vertex == 8
+
+
+def test_a_star_with_alt_heuristic():
+
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 3)
+    g.add_edge(1, 2)
+    g.add_edge(1, 4)
+    g.add_edge(2, 5)
+    g.add_edge(3, 4)
+    g.add_edge(3, 6)
+    g.add_edge(4, 5)
+    g.add_edge(4, 7)
+    g.add_edge(5, 8)
+
+    path = sp.a_star_with_alt_heuristic(g, 0, 8, landmarks=set([3, 6]))
+
+    assert path.edges == [0, 2, 4, 9]
+    assert path.start_vertex == 0
+    assert path.end_vertex == 8
+
+    path1 = sp.a_star_with_alt_heuristic(g, 0, 8, landmarks=set([2, 7]), use_bidirectional=True)
+
+    assert path1.edges == [0, 2, 4, 9]
+    assert path1.start_vertex == 0
+    assert path1.end_vertex == 8

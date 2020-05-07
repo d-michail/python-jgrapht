@@ -163,7 +163,7 @@ class AllPairsPaths(ABC):
         :param source_vertex: The source vertex
         :param target_vertex: The target vertex
         :returns: A path from the source vertex to the target vertex
-        :rtype: :class:`.GraphPath`
+        :rtype: :py:class:`.GraphPath`
         """
         pass
 
@@ -173,7 +173,7 @@ class AllPairsPaths(ABC):
 
         :param source_vertex the source vertex
         :returns: a set of paths starting from a single source vertex
-        :rtype: :class:`.SingleSourcePaths`
+        :rtype: :py:class:`.SingleSourcePaths`
         """
         pass
 

@@ -11,15 +11,9 @@ Algorithms
 
 All classic algorithms for shortest paths are provided. See below for details.
 
-.. autofunction:: dijkstra
-
-.. autofunction:: bfs
-
-.. autofunction:: bellman_ford
-
-.. autofunction:: johnson_allpairs
-
-.. autofunction:: floyd_warshall_allpairs
+.. automodule:: jgrapht.algorithms.shortestpaths
+   :members:
+   :noindex:
 
 Representation
 --------------

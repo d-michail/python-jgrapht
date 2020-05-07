@@ -1,7 +1,12 @@
 from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
-from .._wrappers import JGraphTGraphPath, JGraphTSingleSourcePaths, JGraphTAllPairsPaths
+from .._wrappers import (
+    JGraphTGraphPath, 
+    JGraphTSingleSourcePaths, 
+    JGraphTAllPairsPaths,
+    JGraphTLongSet,
+)
 import ctypes
 
 
@@ -151,7 +156,7 @@ def floyd_warshall_allpairs(graph):
 
 
 def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=False):
-    """The A-star algorithm.
+    """The A* algorithm.
 
     :param graph: the graph
     :param source_vertex: the source vertex
@@ -180,6 +185,67 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
     else:
         return _sp_between_alg(
             "astar_get_path_between_vertices",
+            graph,
+            source_vertex,
+            target_vertex,
+            *custom
+        )
+
+def a_star_with_alt_heuristic(graph, source_vertex, target_vertex, landmarks, use_bidirectional=False):
+    r"""The A* algorithm with the ALT admissible heuristic.
+
+    The ALT admissible heuristic for the A* algorithm using a set of landmarks and the triangle inequality.
+    Assumes that the graph contains non-negative edge weights. The heuristic requires a set of input nodes
+    from the graph, which are used as landmarks. During a pre-processing phase, which requires two shortest
+    path computations per landmark using Dijkstra's algorithm, all distances to and from these landmark nodes
+    are computed and stored. Afterwards the heuristic estimates the distance from a vertex to another vertex
+    using the already computed distances to and from the landmarks and the fact that shortest path distances
+    obey the triangle-inequality. The heuristic's space requirement is :math:`\mathcal{O}(n)` per landmark
+    where :math:`n` is the number of vertices of the graph. In case of undirected graphs only one Dijkstra's
+    algorithm execution is performed per landmark.
+
+    The method generally abbreviated as ALT (from A*, Landmarks and Triangle inequality) is described
+    in detail in the following 
+    `paper <https://www.microsoft.com/en-us/research/publication/computing-the-shortest-path-a-search-meets-graph-theory>`_
+    which also contains a discussion on landmark selection strategies.
+    
+      * Andrew Goldberg and Chris Harrelson. Computing the shortest path: A* Search Meets Graph Theory.
+        In Proceedings of the sixteenth annual ACM-SIAM symposium on Discrete algorithms (SODA' 05),
+        156--165, 2005.
+ 
+    Note that using this heuristic does not require the edge weights to satisfy the triangle-inequality. The
+    method depends on the triangle inequality with respect to the shortest path distances in the graph, not
+    an embedding in Euclidean space or some other metric, which need not be present.
+
+    In general more landmarks will speed up A* but will need more space. Given an A* query with
+    vertices source and target, a good landmark appears "before" source or "after" target where
+    before and after are relative to the "direction" from source to target.    
+
+    :param graph: the graph
+    :param source_vertex: the source vertex
+    :param target_vertex: the target vertex.
+    :param landmarks: set of graph vertices to use for landmarks
+    :param use_bidirectional: use a bidirectional search
+    :returns: a :py:class:`.GraphPath`
+    """
+
+    landmarks_set = JGraphTLongSet(linked=True)
+    for landmark in landmarks:
+        landmarks_set.add(landmark)
+
+    custom = [ landmarks_set.handle ]
+
+    if use_bidirectional:
+        return _sp_between_alg(
+            "bidirectional_astar_alt_heuristic_get_path_between_vertices",
+            graph,
+            source_vertex,
+            target_vertex,
+            *custom
+        )
+    else:
+        return _sp_between_alg(
+            "astar_alt_heuristic_get_path_between_vertices",
             graph,
             source_vertex,
             target_vertex,
