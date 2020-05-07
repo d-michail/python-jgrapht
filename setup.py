@@ -52,6 +52,7 @@ class BuildCapiCommand(Command):
             print("")
             return False
         print("Found source at {}".format(self.src_dir))
+        self.mkpath(self.build_dir)
         self.spawn(['cmake', '-B', self.build_dir, '-S', self.src_dir])
         self.spawn(['cmake', '--build', self.build_dir])
         lib_source_path = os.path.join(self.build_dir, self.filename)
