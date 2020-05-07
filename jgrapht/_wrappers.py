@@ -186,7 +186,7 @@ class JGraphTLongDoubleMap(HandleWrapper):
         if err:
             if err == backend.STATUS_ILLEGAL_ARGUMENT:
                 # key not found in map
-                backend.jgrapht_clear_errno()
+                backend.jgrapht_error_clear_errno()
                 if defaultvalue is not None:
                     return defaultvalue
                 else:
@@ -283,7 +283,7 @@ class JGraphTLongLongMap(HandleWrapper):
         if err:
             if err == backend.STATUS_ILLEGAL_ARGUMENT:
                 # key not found in map
-                backend.jgrapht_clear_errno()
+                backend.jgrapht_error_clear_errno()
                 if defaultvalue is not None:
                     return defaultvalue
                 else:
@@ -419,7 +419,7 @@ class JGraphTSingleSourcePaths(HandleWrapper, SingleSourcePaths):
         )
         if err:
             raise_status()
-        return JGraphTGraphPath(gp)
+        return JGraphTGraphPath(gp) if gp is not None else None
 
 
 class JGraphTAllPairsPaths(HandleWrapper, AllPairsPaths):
@@ -434,7 +434,7 @@ class JGraphTAllPairsPaths(HandleWrapper, AllPairsPaths):
         )
         if err:
             raise_status()
-        return JGraphTGraphPath(gp)
+        return JGraphTGraphPath(gp) if gp is not None else None
 
     def get_paths_from(self, source_vertex):
         err, singlesource = backend.jgrapht_sp_allpairs_get_singlesource_from_vertex(

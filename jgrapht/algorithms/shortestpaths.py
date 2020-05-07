@@ -4,6 +4,7 @@ from .._errors import raise_status
 from .._wrappers import JGraphTGraphPath, JGraphTSingleSourcePaths, JGraphTAllPairsPaths
 import ctypes
 
+
 def _sp_singlesource_alg(name, graph, source_vertex):
     alg_method_name = "jgrapht_sp_exec_" + name
 
@@ -31,10 +32,7 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     if err:
         raise_status()
 
-    if handle is None: 
-        return None
-    else: 
-        return JGraphTGraphPath(handle)
+    return JGraphTGraphPath(handle) if handle is not None else None
 
 
 def _sp_allpairs_alg(name, graph):
@@ -163,13 +161,27 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
     :param use_bidirectional: use a bidirectional search
     :returns: a :py:class:`.GraphPath`
     """
-    heuristic_f_type = ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_longlong, ctypes.c_longlong)
+    heuristic_f_type = ctypes.CFUNCTYPE(
+        ctypes.c_double, ctypes.c_longlong, ctypes.c_longlong
+    )
     heuristic_f = heuristic_f_type(heuristic_cb)
     heuristic_f_ptr = ctypes.cast(heuristic_f, ctypes.c_void_p).value
 
-    custom = [ heuristic_f_ptr ]
+    custom = [heuristic_f_ptr]
 
-    if use_bidirectional: 
-        return _sp_between_alg('bidirectional_astar_get_path_between_vertices', graph, source_vertex, target_vertex, *custom)
+    if use_bidirectional:
+        return _sp_between_alg(
+            "bidirectional_astar_get_path_between_vertices",
+            graph,
+            source_vertex,
+            target_vertex,
+            *custom
+        )
     else:
-        return _sp_between_alg('astar_get_path_between_vertices', graph, source_vertex, target_vertex, *custom)
+        return _sp_between_alg(
+            "astar_get_path_between_vertices",
+            graph,
+            source_vertex,
+            target_vertex,
+            *custom
+        )
