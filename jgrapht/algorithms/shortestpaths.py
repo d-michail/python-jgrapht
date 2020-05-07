@@ -2,7 +2,7 @@ from .. import backend
 from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
 from .._wrappers import JGraphTGraphPath, JGraphTSingleSourcePaths, JGraphTAllPairsPaths
-
+import ctypes
 
 def _sp_singlesource_alg(name, graph, source_vertex):
     alg_method_name = "jgrapht_sp_exec_" + name
@@ -19,7 +19,7 @@ def _sp_singlesource_alg(name, graph, source_vertex):
     return JGraphTSingleSourcePaths(handle, source_vertex)
 
 
-def _sp_between_alg(name, graph, source_vertex, target_vertex):
+def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
 
     try:
@@ -27,11 +27,14 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex):
     except AttributeError:
         raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
 
-    err, handle = alg_method(graph.handle, source_vertex, target_vertex)
+    err, handle = alg_method(graph.handle, source_vertex, target_vertex, *args)
     if err:
         raise_status()
 
-    return JGraphTGraphPath(handle)
+    if handle is None: 
+        return None
+    else: 
+        return JGraphTGraphPath(handle)
 
 
 def _sp_allpairs_alg(name, graph):
@@ -147,3 +150,26 @@ def floyd_warshall_allpairs(graph):
     :returns: all-pairs shortest paths as an instance of :py:class:`.AllPairsPaths`
     """
     return _sp_allpairs_alg("floydwarshall_get_allpairs", graph)
+
+
+def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=False):
+    """The A-star algorithm.
+
+    :param graph: the graph
+    :param source_vertex: the source vertex
+    :param target_vertex: the target vertex.
+    :param heuristic_cb: the heuristic callback. Must be a function which accepts two long parameters
+      (source and target) and returns a double
+    :param use_bidirectional: use a bidirectional search
+    :returns: a :py:class:`.GraphPath`
+    """
+    heuristic_f_type = ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_longlong, ctypes.c_longlong)
+    heuristic_f = heuristic_f_type(heuristic_cb)
+    heuristic_f_ptr = ctypes.cast(heuristic_f, ctypes.c_void_p).value
+
+    custom = [ heuristic_f_ptr ]
+
+    if use_bidirectional: 
+        return _sp_between_alg('bidirectional_astar_get_path_between_vertices', graph, source_vertex, target_vertex, *custom)
+    else:
+        return _sp_between_alg('astar_get_path_between_vertices', graph, source_vertex, target_vertex, *custom)

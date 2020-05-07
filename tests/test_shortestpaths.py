@@ -2,6 +2,7 @@ import pytest
 
 from jgrapht import create_graph
 import jgrapht.algorithms.shortestpaths as sp
+import math
 
 def get_graph():
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
@@ -151,3 +152,47 @@ def test_floyd_warshall():
     assert path05.start_vertex == 0
     assert path05.end_vertex == 5
     assert list(path05.edges) == [2, 3, 5]
+
+
+def test_a_star():
+
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 3)
+    g.add_edge(1, 2)
+    g.add_edge(1, 4)
+    g.add_edge(2, 5)
+    g.add_edge(3, 4)
+    g.add_edge(3, 6)
+    g.add_edge(4, 5)
+    g.add_edge(4, 7)
+    g.add_edge(5, 8)
+
+    def heuristic(source, target):
+        coordinates = { 0: (2,0), 1: (2,1), 2:(2,2), 3:(1,0), 4:(1,1), 5:(1,2), 6:(0,0), 7:(0,1), 8:(0,2) }
+        sx = coordinates[source][0]
+        sy = coordinates[source][1]
+
+        tx = coordinates[target][0]
+        ty = coordinates[target][1]
+
+        dx = sx-tx
+        dy = sy-ty
+        d = math.sqrt(dx*dx + dy*dy)
+
+        return d
+
+    path = sp.a_star(g, 0, 8, heuristic_cb=heuristic)
+
+    assert path.edges == [0, 3, 7, 9]
+    assert path.start_vertex == 0
+    assert path.end_vertex == 8
+
+    path1 = sp.a_star(g, 0, 8, heuristic_cb=heuristic, use_bidirectional=True)
+
+    assert path1.edges == [0, 3, 7, 9]
+    assert path1.start_vertex == 0
+    assert path1.end_vertex == 8

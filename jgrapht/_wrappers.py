@@ -28,7 +28,7 @@ class HandleWrapper:
         return self._handle
 
     def __del__(self):
-        if self._owner and backend.jgrapht_is_thread_attached():
+        if self._owner and backend.jgrapht_isolate_is_attached():
             err = backend.jgrapht_handles_destroy(self._handle)
             if err:
                 raise_status()

@@ -41,6 +41,7 @@ enum status_t {
     STATUS_IO_ERROR,
     STATUS_EXPORT_ERROR,
     STATUS_IMPORT_ERROR,
+    STATUS_NEGATIVE_CYCLE_DETECTED,
 };
 
 enum dimacs_format_t {
@@ -530,6 +531,10 @@ int jgrapht_sp_singlesource_get_path_to_vertex(void *, long long int, void** OUT
 int jgrapht_sp_allpairs_get_path_between_vertices(void *, long long int, long long int, void** OUTPUT);
 
 int jgrapht_sp_allpairs_get_singlesource_from_vertex(void *, long long int, void** OUTPUT);
+
+int jgrapht_sp_exec_astar_get_path_between_vertices(void *, long long int, long long int, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_sp_exec_bidirectional_astar_get_path_between_vertices(void *, long long int, long long int, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
 
 // spanner
 
