@@ -22,7 +22,7 @@ def _cut_alg(name, graph, *args):
 
 
 def stoer_wagner(graph):
-    r"""Compute a min-cut using the Stoer-Wagner algorithm..
+    r"""Compute a min-cut using the Stoer-Wagner algorithm.
         
     This implementation requires :math:`\mathcal{O}(m n \log m)` time where :math:`n` is the
     number of vertices and :math:`m` the number of edges of the graph.

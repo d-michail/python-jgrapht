@@ -4,6 +4,9 @@
 Coloring
 ********
 
+Algorithms
+----------
+
 The following algorithms are available:
 
 .. automodule:: jgrapht.algorithms.coloring

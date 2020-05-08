@@ -4,6 +4,9 @@
 Spanning
 ********
 
+Algorithms
+----------
+
 .. automodule:: jgrapht.algorithms.spanning
    :members:
 

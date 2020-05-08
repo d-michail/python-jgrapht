@@ -9,14 +9,15 @@ Shortest Paths
 Algorithms
 ----------
 
+
 All classic algorithms for shortest paths are provided. See below for details.
 
 .. automodule:: jgrapht.algorithms.shortestpaths
    :members:
    :noindex:
 
-Representation
---------------
+Types
+-----
 
 The shortest path module contains the following classes for the 
 representation of the shortest path queries. All methods related to shortest paths

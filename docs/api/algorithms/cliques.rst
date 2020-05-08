@@ -4,6 +4,9 @@
 Cliques
 *******
 
+Algorithms
+----------
+
 The following algorithms are available:
 
 .. automodule:: jgrapht.algorithms.cliques

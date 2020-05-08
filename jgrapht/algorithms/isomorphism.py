@@ -26,7 +26,7 @@ def vf2(graph1, graph2):
 
     This implementation of the VF2 algorithm does not support graphs with multiple-edges.
 
-    .. note :: Graph mappings are represented using :py:class`.GraphMapping` instances
+    .. note :: Graph mappings are represented using :py:class:`.GraphMapping` instances
 
     :param graph1: the first graph
     :param graph2: the second graph
@@ -43,11 +43,11 @@ def vf2_subgraph(graph1, graph2):
 
     This implementation of the VF2 algorithm does not support graphs with multiple-edges.
 
-    .. note :: Graph mappings are represented using :py:class`.GraphMapping` instances
+    .. note :: Graph mappings are represented using :py:class:`.GraphMapping` instances
 
     .. warning :: This algorithm only finds isomorphisms between a smaller graph and all 
       `induced subgraphs <http://mathworld.wolfram.com/Vertex-InducedSubgraph.html>`_ of a
-      larger graphs. It does not find isomorphisms between the smaller graph and arbitrary
+      larger graph. It does **not** find isomorphisms between the smaller graph and arbitrary
       subgraphs of the larger graph.
  
     :param graph1: the first graph
