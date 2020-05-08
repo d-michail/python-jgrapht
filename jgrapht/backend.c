@@ -653,6 +653,24 @@ int jgrapht_import_string_graph6sparse6(void *g, char* input, void *import_verte
     return jgrapht_capi_import_string_graph6sparse6(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
+// isomorphism
+
+int jgrapht_isomorphism_exec_vf2(void *g1, void *g2, int* exist_iso_res, void** graph_mapping_it_res) { 
+    return jgrapht_capi_isomorphism_exec_vf2(thread, g1, g2, exist_iso_res, graph_mapping_it_res);
+}
+
+int jgrapht_isomorphism_exec_vf2_subgraph(void *g1, void *g2, int* exist_iso_res, void** graph_mapping_it_res) { 
+    return jgrapht_capi_isomorphism_exec_vf2_subgraph(thread, g1, g2, exist_iso_res, graph_mapping_it_res);
+}
+
+int jgrapht_isomorphism_graph_mapping_edge_correspondence(void *graph_mapping, long long int edge, int forward, int* exists_edge_res, long long* edge_res) { 
+    return jgrapht_capi_isomorphism_graph_mapping_edge_correspondence(thread, graph_mapping, edge, forward, exists_edge_res, edge_res);
+}
+
+int jgrapht_isomorphism_graph_mapping_vertex_correspondence(void *graph_mapping, long long int vertex, int forward, int* exist_vertex_res, long long* vertex_res) { 
+    return jgrapht_capi_isomorphism_graph_mapping_vertex_correspondence(thread, graph_mapping, vertex, forward, exist_vertex_res, vertex_res);
+}
+
 // iterators
 
 int jgrapht_it_next_long(void *it, long long* res) { 

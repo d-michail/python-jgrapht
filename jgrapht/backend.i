@@ -384,6 +384,16 @@ int jgrapht_import_file_graph6sparse6(void *, char*, void *LONG_TO_FUNCTION_POIN
 
 int jgrapht_import_string_graph6sparse6(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
+// isomorphism
+
+int jgrapht_isomorphism_exec_vf2(void *, void *, int* OUTPUT, void** OUTPUT);
+
+int jgrapht_isomorphism_exec_vf2_subgraph(void *, void *, int* OUTPUT, void** OUTPUT);
+
+int jgrapht_isomorphism_graph_mapping_edge_correspondence(void *, long long int, int, int* OUTPUT, long long* OUTPUT);
+
+int jgrapht_isomorphism_graph_mapping_vertex_correspondence(void *, long long int, int, int* OUTPUT, long long* OUTPUT);
+
 // iterators
 
 int jgrapht_it_next_long(void *, long long* OUTPUT);

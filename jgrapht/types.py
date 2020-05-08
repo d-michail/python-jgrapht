@@ -522,3 +522,47 @@ class Cut:
     def edges(self):
         """Edges crossing the cut."""
         pass
+
+
+class GraphMapping:
+    """A graph mapping between two graphs g1 and g2."""
+
+    @abstractmethod
+    def vertex_correspondence(self, vertex, forward=True):
+        """Get the corresponding vertex.
+        
+        :param vertex: the first vertex
+        :param forward: if True the map is from g1 to g2, otherwise from g2 to g1
+        :returns: the vertex on the other graph or None if it does not exist
+        """
+        pass
+
+    @abstractmethod
+    def edge_correspondence(self, edge, forward=True):
+        """Get the corresponding edge.
+        
+        :param edge: the first edge
+        :param forward: if True the map is from g1 to g2, otherwise from g2 to g1
+        :returns: the edge on the other graph or None if it does not exist
+        """
+        pass
+
+    @abstractmethod
+    def vertices_correspondence(self, forward=True):
+        """Get a dictionary with all the corresponding vertices.
+        
+        :param forward: if True the map is from g1 to g2, otherwise from g2 to g1
+        :returns: a dictionary with keys vertices from one of the graphs and values vertices
+          from the other graph
+        """
+        pass
+
+    @abstractmethod
+    def edges_correspondence(self, forward=True):
+        """Get a dictionary with all the corresponding edges.
+        
+        :param forward: if True the map is from g1 to g2, otherwise from g2 to g1
+        :returns: a dictionary with keys edges from one of the graphs and values edges
+          from the other graph
+        """
+        pass
