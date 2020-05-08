@@ -226,3 +226,32 @@ def test_a_star_with_alt_heuristic():
     assert path1.edges == [0, 2, 4, 9]
     assert path1.start_vertex == 0
     assert path1.end_vertex == 8
+
+
+def test_yen_k():
+
+    g = get_graph()
+
+    it = sp.yen_k_loopless(g, 0, 5, 2)
+
+    p1 = next(it)
+    assert p1.edges == [2, 3, 5]
+    assert p1.weight == 62.0
+    p2 = next(it)
+    assert p2.edges == [0, 1, 4]
+    assert p2.weight == 105.0
+    assert next(it, None) == None
+
+def test_eppstein_k():
+
+    g = get_graph()
+
+    it = sp.eppstein_k(g, 0, 5, 2)
+
+    p1 = next(it)
+    assert p1.edges == [2, 3, 5]
+    assert p1.weight == 62.0
+    p2 = next(it)
+    assert p2.edges == [0, 1, 4]
+    assert p2.weight == 105.0
+    assert next(it, None) == None

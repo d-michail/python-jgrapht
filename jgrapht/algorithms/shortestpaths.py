@@ -3,6 +3,7 @@ from ..exceptions import UnsupportedOperationError
 from .._errors import raise_status
 from .._wrappers import (
     JGraphTGraphPath,
+    JGraphTGraphPathIterator,
     JGraphTSingleSourcePaths,
     JGraphTAllPairsPaths,
     JGraphTLongSet,
@@ -53,6 +54,20 @@ def _sp_allpairs_alg(name, graph):
         raise_status()
 
     return JGraphTAllPairsPaths(handle)
+
+def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
+    alg_method_name = "jgrapht_sp_exec_" + name
+
+    try:
+        alg_method = getattr(backend, alg_method_name)
+    except AttributeError:
+        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+
+    err, handle = alg_method(graph.handle, source_vertex, target_vertex, k, *args)
+    if err:
+        raise_status()
+
+    return JGraphTGraphPathIterator(handle)
 
 
 def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
@@ -254,3 +269,50 @@ def a_star_with_alt_heuristic(
             target_vertex,
             *custom
         )
+
+def yen_k_loopless(graph, source_vertex, target_vertex, k):
+    r"""Yen's algorithm for k loopless shortest paths. 
+
+    Running time :math:`\mathcal{O}(k n (m + n \log n))`. 
+
+    The implementation follows: 
+    
+      * Q. V. Martins, Ernesto and M. B. Pascoal, Marta. (2003). A new implementation
+        of Yen’s ranking loopless paths algorithm. Quarterly Journal of the Belgian,
+        French and Italian Operations Research Societies. 1. 121-133.
+
+    :param graph: the graph
+    :param source_vertex: the source vertex
+    :param target_vertex: the target vertex.
+    :param k: how many paths to return
+    :returns: a iterator of :py:class:`.GraphPath`
+    """
+    return _sp_k_between_alg(
+                "yen_get_k_loopless_paths_between_vertices",
+                graph,
+                source_vertex,
+                target_vertex,
+                k
+            )
+
+def eppstein_k(graph, source_vertex, target_vertex, k):
+    r"""Eppstein's algorithm for k shortest paths (may contain loops). 
+
+    Running time :math:`\mathcal{O}(m + n \log n + k \log k)`. Paths are 
+    produced in sorted order by weight.
+
+    .. note:: Paths are not guaranteed to be simple, i.e. many contains loops.
+
+    :param graph: the graph. Must be simple
+    :param source_vertex: the source vertex
+    :param target_vertex: the target vertex
+    :param k: how many paths to return
+    :returns: a iterator of :py:class:`.GraphPath`
+    """
+    return _sp_k_between_alg(
+                "eppstein_get_k_paths_between_vertices",
+                graph,
+                source_vertex,
+                target_vertex,
+                k
+            )

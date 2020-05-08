@@ -69,6 +69,23 @@ class JGraphTDoubleIterator(HandleWrapper, Iterator):
             raise_status()
         return res
 
+class JGraphTGraphPathIterator(HandleWrapper, Iterator):
+    """A graph path iterator"""
+
+    def __init__(self, handle, owner=True):
+        super().__init__(handle, owner)
+
+    def __next__(self):
+        err, res = backend.jgrapht_it_hasnext(self._handle)
+        if err:
+            raise_status()
+        if not res:
+            raise StopIteration()
+        err, res = backend.jgrapht_it_next_object(self._handle)
+        if err:
+            raise_status()
+        return JGraphTGraphPath(res)
+
 
 class JGraphTLongSet(HandleWrapper, MutableSet):
     """JGraphT Long Set"""
