@@ -7,28 +7,33 @@ from ..types import (
     Graph,
     Clustering,
     PlanarEmbedding,
+    Flow,
+    Cut,
 )
 from ._errors import _raise_status
 from collections.abc import (
     Iterator,
     MutableSet,
     Set,
+    MutableMapping,
 )
 
 
 class _HandleWrapper:
-    """A handle wrapper"""
+    """A handle wrapper. Keeps a handle to a backend object and cleans up
+       on deletion.
+    """
 
-    def __init__(self, handle, owner=True):
+    def __init__(self, handle, **kwargs):
         self._handle = handle
-        self._owner = owner
+        super().__init__(**kwargs)
 
     @property
     def handle(self):
         return self._handle
 
     def __del__(self):
-        if self._owner and backend.jgrapht_isolate_is_attached():
+        if backend.jgrapht_isolate_is_attached():
             err = backend.jgrapht_handles_destroy(self._handle)
             if err:
                 _raise_status()
@@ -37,8 +42,8 @@ class _HandleWrapper:
 class _JGraphTLongIterator(_HandleWrapper, Iterator):
     """Long values iterator"""
 
-    def __init__(self, handle, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
 
     def __next__(self):
         err, res = backend.jgrapht_it_hasnext(self._handle)
@@ -55,8 +60,8 @@ class _JGraphTLongIterator(_HandleWrapper, Iterator):
 class _JGraphTDoubleIterator(_HandleWrapper, Iterator):
     """Double values iterator"""
 
-    def __init__(self, handle, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
 
     def __next__(self):
         err, res = backend.jgrapht_it_hasnext(self._handle)
@@ -72,8 +77,8 @@ class _JGraphTDoubleIterator(_HandleWrapper, Iterator):
 class _JGraphTGraphPathIterator(_HandleWrapper, Iterator):
     """A graph path iterator"""
 
-    def __init__(self, handle, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
 
     def __next__(self):
         err, res = backend.jgrapht_it_hasnext(self._handle)
@@ -90,7 +95,7 @@ class _JGraphTGraphPathIterator(_HandleWrapper, Iterator):
 class _JGraphTLongSet(_HandleWrapper, MutableSet):
     """JGraphT Long Set"""
 
-    def __init__(self, handle=None, owner=True, linked=True):
+    def __init__(self, handle=None, linked=True, **kwargs):
         if handle is None:
             if linked:
                 err, handle = backend.jgrapht_set_linked_create()
@@ -98,8 +103,7 @@ class _JGraphTLongSet(_HandleWrapper, MutableSet):
                 err, handle = backend.jgrapht_set_create()
             if err:
                 _raise_status()
-            owner = True
-        super().__init__(handle, owner)
+        super().__init__(handle=handle, **kwargs)    
 
     def __iter__(self):
         err, res = backend.jgrapht_set_it_create(self._handle)
@@ -138,8 +142,8 @@ class _JGraphTLongSet(_HandleWrapper, MutableSet):
 class _JGraphTLongSetIterator(_HandleWrapper, Iterator):
     """An iterator which returns sets with longs."""
 
-    def __init__(self, handle, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)    
 
     def __next__(self):
         err, res = backend.jgrapht_it_hasnext(self._handle)
@@ -153,10 +157,10 @@ class _JGraphTLongSetIterator(_HandleWrapper, Iterator):
         return _JGraphTLongSet(handle=res)
 
 
-class _JGraphTLongDoubleMap(_HandleWrapper):
+class _JGraphTLongDoubleMap(_HandleWrapper, MutableMapping):
     """JGraphT Map"""
 
-    def __init__(self, handle=None, owner=True, linked=True):
+    def __init__(self, handle=None, linked=True, **kwargs):
         if handle is None:
             if linked:
                 err, handle = backend.jgrapht_map_linked_create()
@@ -165,7 +169,7 @@ class _JGraphTLongDoubleMap(_HandleWrapper):
             if err:
                 _raise_status()
             owner = True
-        super().__init__(handle, owner)
+        super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
         err, res = backend.jgrapht_map_keys_it_create(self._handle)
@@ -250,10 +254,10 @@ class _JGraphTLongDoubleMap(_HandleWrapper):
             _raise_status()
 
 
-class _JGraphTLongLongMap(_HandleWrapper):
+class _JGraphTLongLongMap(_HandleWrapper, MutableMapping):
     """JGraphT Map with long keys and long values"""
 
-    def __init__(self, handle=None, owner=True, linked=True):
+    def __init__(self, handle=None, linked=True, **kwargs):
         if handle is None:
             if linked:
                 err, handle = backend.jgrapht_map_linked_create()
@@ -261,8 +265,7 @@ class _JGraphTLongLongMap(_HandleWrapper):
                 err, handle = backend.jgrapht_map_create()
             if err:
                 _raise_status()
-            owner = True
-        super().__init__(handle, owner)
+        super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
         err, res = backend.jgrapht_map_keys_it_create(self._handle)
@@ -350,8 +353,8 @@ class _JGraphTLongLongMap(_HandleWrapper):
 class _JGraphTGraphPath(_HandleWrapper, GraphPath):
     """A class representing a graph path."""
 
-    def __init__(self, handle, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
         self._weight = None
         self._start_vertex = None
         self._end_vertex = None
@@ -404,10 +407,6 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
         self._end_vertex = end_vertex
         self._edges = list(_JGraphTLongIterator(eit))
 
-        backend.jgrapht_handles_destroy(eit)
-        if err:
-            _raise_status()
-
 
 class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
     """A set of paths starting from a single source vertex.
@@ -416,8 +415,8 @@ class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
     to all other vertices in the graph.
     """
 
-    def __init__(self, handle, source_vertex, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, source_vertex, **kwargs):
+        super().__init__(handle=handle, **kwargs)
         self._source_vertex = source_vertex
 
     @property
@@ -442,8 +441,8 @@ class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
 class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
     """Wrapper class around the AllPairsPaths"""
 
-    def __init__(self, handle, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
 
     def get_path(self, source_vertex, target_vertex):
         err, gp = backend.jgrapht_sp_allpairs_get_path_between_vertices(
@@ -468,11 +467,11 @@ class _JGraphTGraph(_HandleWrapper, Graph):
     def __init__(
         self,
         handle=None,
-        owner=True,
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        **kwargs
     ):
         creating_graph = handle is None
         if creating_graph:
@@ -481,9 +480,7 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             )
             if err:
                 _raise_status()
-            owner = True
-
-        super().__init__(handle, owner)
+        super().__init__(handle=handle, **kwargs)
 
         self._vertex_set = None
         self._edge_set = None
@@ -687,13 +684,13 @@ def create_graph(
 class _JGraphTAttributeStore(_HandleWrapper):
     """Attribute Store. Used to keep attributes for exporters."""
 
-    def __init__(self, handle=None, owner=True):
+    def __init__(self, handle=None, **kwargs):
         if handle is None:
             err, handle = backend.jgrapht_attributes_store_create()
             if err:
                 _raise_status()
             owner = True
-        super().__init__(handle, owner)
+        super().__init__(handle=handle, **kwargs)
 
     def put(self, element, key, value):
         err = backend.jgrapht_attributes_store_put_string_attribute(
@@ -715,13 +712,13 @@ class _JGraphTAttributesRegistry(_HandleWrapper):
     for exporters.
     """
 
-    def __init__(self, handle=None, owner=True):
+    def __init__(self, handle=None, **kwargs):
         if handle is None:
             err, handle = backend.jgrapht_attributes_registry_create()
             if err:
                 _raise_status()
             owner = True
-        super().__init__(handle, owner)
+        super().__init__(handle=handle, **kwargs)
 
     def put(self, name, category, type=None, default_value=None):
         err = backend.jgrapht_attributes_registry_register_attribute(
@@ -741,8 +738,8 @@ class _JGraphTAttributesRegistry(_HandleWrapper):
 class _JGraphTClustering(_HandleWrapper, Clustering):
     """A vertex clustering."""
 
-    def __init__(self, handle, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
 
     def number_of_clusters(self):
         err, res = backend.jgrapht_clustering_get_number_clusters(self._handle)
@@ -757,14 +754,14 @@ class _JGraphTClustering(_HandleWrapper, Clustering):
         return _JGraphTLongIterator(res)
 
 
-class _JGraphTFlow(_JGraphTLongDoubleMap):
+class _JGraphTFlow(_JGraphTLongDoubleMap, Flow):
     """Flow representation as a map from edges to double values."""
 
-    def __init__(self, handle, source, sink, value, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, source, sink, value, **kwargs):
         self._source = source
         self._sink = sink
         self._value = value
+        super().__init__(handle=handle, **kwargs)
 
     @property
     def source(self):
@@ -782,10 +779,11 @@ class _JGraphTFlow(_JGraphTLongDoubleMap):
         return self._value
 
 
-class _JGraphTCut:
+class _JGraphTCut(Cut):
     """A graph cut."""
 
-    def __init__(self, graph, capacity, source_partition_handle, owner=True):
+    def __init__(self, graph, capacity, source_partition_handle, **kwargs):
+        super().__init__(**kwargs)
         self._graph = graph
         self._capacity = capacity
         self._source_partition = _JGraphTLongSet(source_partition_handle)
@@ -793,8 +791,11 @@ class _JGraphTCut:
         self._edges = None
 
     @property
+    def weight(self):
+        return self._capacity
+
+    @property
     def capacity(self):
-        """Cut edges total capacity."""
         return self._capacity
 
     @property
@@ -839,8 +840,8 @@ class _JGraphTCut:
 class _JGraphTPlanarEmbedding(_HandleWrapper, PlanarEmbedding):
     """A JGraphT wrapped planar embedding."""
 
-    def __init__(self, handle, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
 
     def edges_around(self, vertex):
         err, res = backend.jgrapht_planarity_embedding_edges_around_vertex(
@@ -854,8 +855,8 @@ class _JGraphTPlanarEmbedding(_HandleWrapper, PlanarEmbedding):
 class _JGraphTString(_HandleWrapper):
     """A JGraphT string."""
 
-    def __init__(self, handle, owner=True):
-        super().__init__(handle, owner)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
 
     def __str__(self):
         err, res = backend.jgrapht_handles_get_ccharpointer(self._handle)

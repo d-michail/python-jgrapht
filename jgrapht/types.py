@@ -1,5 +1,9 @@
 from abc import ABC, abstractmethod
 
+from collections.abc import (
+    Mapping,
+)
+
 
 class GraphType:
     """Graph Type"""
@@ -89,9 +93,6 @@ class GraphType:
 class GraphPath(ABC):
     """Interface for a graph path."""
 
-    def __init__(self):
-        pass
-
     @abstractmethod
     def weight(self):
         """Weight of the path.
@@ -130,9 +131,6 @@ class SingleSourcePaths(ABC):
     to all other vertices in the graph.
     """
 
-    def __init__(self):
-        pass
-
     @abstractmethod
     def source_vertex(self):
         """The source vertex."""
@@ -152,9 +150,6 @@ class AllPairsPaths(ABC):
     """Paths between all pair of vertices. Used in all-pair shortest
     path algorithms in order to represent the result set.
     """
-
-    def __init__(self):
-        pass
 
     @abstractmethod
     def get_path(self, source_vertex, target_vertex):
@@ -180,9 +175,6 @@ class AllPairsPaths(ABC):
 
 class Graph(ABC):
     """A graph."""
-
-    def __init__(self):
-        pass
 
     @abstractmethod
     def graph_type(self):
@@ -463,9 +455,6 @@ class Clustering(ABC):
     """A vertex clustering.
     """
 
-    def __init__(self):
-        pass
-
     @abstractmethod
     def number_of_clusters(self):
         """Number of clusters."""
@@ -482,10 +471,54 @@ class PlanarEmbedding(ABC):
     """A planar embedding. Represented as the edges ordered clockwise around the vertices.
     """
 
-    def __init__(self):
-        pass
-
     @abstractmethod
     def edges_around(self, vertex):
         """Get edges around a vertex in clockwise order."""
+        pass
+
+
+class Flow(ABC, Mapping):
+    """A network flow."""
+
+    @abstractmethod
+    def source(self):
+        """Source vertex in flow network."""
+        pass
+
+    @abstractmethod
+    def sink(self):
+        """Sink vertex in flow network."""
+        pass
+
+    @property
+    def value(self):
+        """Flow value."""
+        pass
+
+class Cut:
+    """A graph cut."""
+
+    @abstractmethod
+    def weight(self):
+        """Cut edges total weight."""
+        pass
+
+    @abstractmethod
+    def capacity(self):
+        """Cut edges total capacity."""
+        pass
+
+    @abstractmethod
+    def source_partition(self):
+        """Source partition vertex set."""
+        pass
+
+    @abstractmethod
+    def target_partition(self):
+        """Target partition vertex set."""
+        pass
+
+    @abstractmethod
+    def edges(self):
+        """Edges crossing the cut."""
         pass
