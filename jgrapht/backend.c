@@ -137,6 +137,12 @@ int jgrapht_coloring_exec_color_refinement(void *g, long long* colors_res, void*
     return jgrapht_capi_coloring_exec_color_refinement(thread, g, colors_res, res);
 }
 
+// cut
+
+int jgrapht_cut_exec_stoer_wagner(void *g, double* weight, void** res) { 
+    return jgrapht_capi_cut_exec_stoer_wagner(thread, g, weight, res);
+}
+
 // errors
 
 void jgrapht_error_clear_errno() { 
@@ -457,6 +463,10 @@ int jgrapht_graph_metrics_girth(void *g, long long* girth) {
 
 int jgrapht_graph_metrics_triangles(void *g, long long* triangles) {
     return jgrapht_capi_graph_metrics_triangles(thread, g, triangles);
+}
+
+int jgrapht_graph_metrics_measure_graph(void *g, double* diameter_res, double* radius_res, void** center_res, void** periphery_res, void** pseudo_periphery_res, void** vertex_eccentricity_map_res) { 
+    return jgrapht_capi_graph_metrics_measure_graph(thread, g, diameter_res, radius_res, center_res, periphery_res, pseudo_periphery_res, vertex_eccentricity_map_res);
 }
 
 // graph path 

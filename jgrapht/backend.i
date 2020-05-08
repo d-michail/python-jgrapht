@@ -120,6 +120,10 @@ int jgrapht_coloring_exec_greedy_dsatur(void *, long long* OUTPUT, void** OUTPUT
 
 int jgrapht_coloring_exec_color_refinement(void *, long long* OUTPUT, void** OUTPUT);
 
+// cut
+
+int jgrapht_cut_exec_stoer_wagner(void *, double* OUTPUT, void** OUTPUT);
+
 // error
 
 void jgrapht_error_clear_errno();
@@ -281,6 +285,8 @@ int jgrapht_graph_metrics_radius(void *, double* OUTPUT);
 int jgrapht_graph_metrics_girth(void *, long long* OUTPUT);
 
 int jgrapht_graph_metrics_triangles(void *, long long* OUTPUT);
+
+int jgrapht_graph_metrics_measure_graph(void *, double* OUTPUT, double* OUTPUT, void** OUTPUT, void** OUTPUT, void** OUTPUT, void** OUTPUT);
 
 // graph path 
 

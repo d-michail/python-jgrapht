@@ -15,6 +15,7 @@ The JGraphT contains a large collection of advanced algorithms.
    spanning
    coloring
    planar
+   cuts
    flow
    tour
    cliques

@@ -1,7 +1,7 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.metrics import diameter, radius, girth, count_triangles
+import jgrapht.metrics as metrics
 
 def create_test_graph():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
@@ -34,17 +34,32 @@ def create_test_graph():
 
 def test_diameter():
     g = create_test_graph()
-    assert diameter(g) == 2.0
+    assert metrics.diameter(g) == 2.0
 
 def test_radius():
     g = create_test_graph()
-    assert radius(g) == 1.0
+    assert metrics.radius(g) == 1.0
 
 def test_girth():
     g = create_test_graph()
-    assert girth(g) == 3.0
+    assert metrics.girth(g) == 3.0
 
 def test_count_triangles():
     g = create_test_graph()
-    assert count_triangles(g) == 9
+    assert metrics.count_triangles(g) == 9
+
+def test_measure():
+    g = create_test_graph()
+
+    d, r, center, periphery, pseudo_periphery, eccentricity_map = metrics.measure(g)
+
+    assert d == 2.0
+    assert r == 1.0
+    assert center == set([0])
+    assert periphery == set([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    assert pseudo_periphery == set([1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    assert eccentricity_map[0] == 1.0
+    for i in range(1,10): 
+        assert eccentricity_map[i] == 2.0
 

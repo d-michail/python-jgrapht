@@ -1,5 +1,9 @@
 from . import backend
 from ._internals._errors import _raise_status
+from ._internals._wrappers import (
+    _JGraphTLongDoubleMap,
+    _JGraphTLongSet,
+)
 
 
 def diameter(graph):
@@ -62,3 +66,42 @@ def count_triangles(graph):
     """
     err, res = backend.jgrapht_graph_metrics_triangles(graph.handle)
     return res if not err else _raise_status()
+
+
+def measure(graph): 
+    """Measure the graph. This method executes an all-pairs shortest paths 
+    using Floyd-Warshal.
+
+    This method computes: 
+
+     * the graph diameter
+     * the graph radius
+     * the set of vertices which form the center of the graph
+     * the set of vertices which form the periphery of the graph
+     * the set of vertices which form the pseudo-periphery of the graph
+     * the vertex eccentricity map
+
+    :param graph: the input graph
+    :returns: a 6-tuple containing the results.
+    """
+    ( 
+        err,
+        diameter, 
+        radius, 
+        center_handle,
+        periphery_handle,
+        pseudo_periphery_handle,
+        vertex_eccentricity_map_handle
+    ) = backend.jgrapht_graph_metrics_measure_graph(graph.handle)
+
+    if err: 
+        _raise_status()
+
+    return (
+        diameter, 
+        radius, 
+        _JGraphTLongSet(handle=center_handle),
+        _JGraphTLongSet(handle=periphery_handle),
+        _JGraphTLongSet(handle=pseudo_periphery_handle),
+        _JGraphTLongDoubleMap(handle=vertex_eccentricity_map_handle),
+    )

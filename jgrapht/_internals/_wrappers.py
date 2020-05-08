@@ -38,6 +38,9 @@ class _HandleWrapper:
             if err:
                 _raise_status()
 
+    def __repr__(self):
+        return '_HandleWrapper(%r)' % self._handle
+
 
 class _JGraphTLongIterator(_HandleWrapper, Iterator):
     """Long values iterator"""
@@ -55,6 +58,9 @@ class _JGraphTLongIterator(_HandleWrapper, Iterator):
         if err:
             _raise_status()
         return res
+
+    def __repr__(self):
+        return '_JGraphTLongIterator(%r)' % self._handle
 
 
 class _JGraphTDoubleIterator(_HandleWrapper, Iterator):
@@ -74,6 +80,10 @@ class _JGraphTDoubleIterator(_HandleWrapper, Iterator):
             _raise_status()
         return res
 
+    def __repr__(self):
+        return '_JGraphTDoubleIterator(%r)' % self._handle    
+
+
 class _JGraphTGraphPathIterator(_HandleWrapper, Iterator):
     """A graph path iterator"""
 
@@ -90,6 +100,9 @@ class _JGraphTGraphPathIterator(_HandleWrapper, Iterator):
         if err:
             _raise_status()
         return _JGraphTGraphPath(res)
+
+    def __repr__(self):
+        return '_JGraphTGraphPathIterator(%r)' % self._handle    
 
 
 class _JGraphTLongSet(_HandleWrapper, MutableSet):
@@ -138,6 +151,9 @@ class _JGraphTLongSet(_HandleWrapper, MutableSet):
         if err:
             _raise_status()
 
+    def __repr__(self):
+        return '_JGraphTLongSet(%r)' % self._handle
+
 
 class _JGraphTLongSetIterator(_HandleWrapper, Iterator):
     """An iterator which returns sets with longs."""
@@ -155,6 +171,9 @@ class _JGraphTLongSetIterator(_HandleWrapper, Iterator):
         if err:
             _raise_status()
         return _JGraphTLongSet(handle=res)
+
+    def __repr__(self):
+        return '_JGraphTLongSetIterator(%r)' % self._handle    
 
 
 class _JGraphTLongDoubleMap(_HandleWrapper, MutableMapping):
@@ -253,6 +272,9 @@ class _JGraphTLongDoubleMap(_HandleWrapper, MutableMapping):
         if err:
             _raise_status()
 
+    def __repr__(self):
+        return '_JGraphTLongDoubleMap(%r)' % self._handle
+
 
 class _JGraphTLongLongMap(_HandleWrapper, MutableMapping):
     """JGraphT Map with long keys and long values"""
@@ -349,6 +371,9 @@ class _JGraphTLongLongMap(_HandleWrapper, MutableMapping):
         if err:
             _raise_status()
 
+    def __repr__(self):
+        return '_JGraphTLongLongMap(%r)' % self._handle
+
 
 class _JGraphTGraphPath(_HandleWrapper, GraphPath):
     """A class representing a graph path."""
@@ -407,6 +432,9 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
         self._end_vertex = end_vertex
         self._edges = list(_JGraphTLongIterator(eit))
 
+    def __repr__(self):
+        return '_JGraphTGraphPath(%r)' % self._handle
+
 
 class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
     """A set of paths starting from a single source vertex.
@@ -437,6 +465,9 @@ class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
             _raise_status()
         return _JGraphTGraphPath(gp) if gp is not None else None
 
+    def __repr__(self):
+        return '_JGraphTSingleSourcePaths(%r)' % self._handle
+
 
 class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
     """Wrapper class around the AllPairsPaths"""
@@ -459,6 +490,9 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
         if err:
             _raise_status()
         return _JGraphTSingleSourcePaths(singlesource, source_vertex)
+
+    def __repr__(self):
+        return '_JGraphTAllPairsPaths(%r)' % self._handle
 
 
 class _JGraphTGraph(_HandleWrapper, Graph):
@@ -657,6 +691,9 @@ class _JGraphTGraph(_HandleWrapper, Graph):
                 _raise_status()
             return res
 
+    def __repr__(self):
+        return '_JGraphTGraph(%r)' % self._handle
+
 
 def create_graph(
     directed=True,
@@ -706,6 +743,9 @@ class _JGraphTAttributeStore(_HandleWrapper):
         if err:
             _raise_status()
 
+    def __repr__(self):
+        return '_JGraphTAttributeStore(%r)' % self._handle
+
 
 class _JGraphTAttributesRegistry(_HandleWrapper):
     """Attribute Registry. Used to keep a list of registered attributes
@@ -734,6 +774,9 @@ class _JGraphTAttributesRegistry(_HandleWrapper):
         if err:
             _raise_status()
 
+    def __repr__(self):
+        return '_JGraphTAttributesRegistry(%r)' % self._handle
+
 
 class _JGraphTClustering(_HandleWrapper, Clustering):
     """A vertex clustering."""
@@ -752,6 +795,9 @@ class _JGraphTClustering(_HandleWrapper, Clustering):
         if err:
             _raise_status()
         return _JGraphTLongIterator(res)
+
+    def __repr__(self):
+        return '_JGraphTClustering(%r)' % self._handle
 
 
 class _JGraphTFlow(_JGraphTLongDoubleMap, Flow):
@@ -777,6 +823,9 @@ class _JGraphTFlow(_JGraphTLongDoubleMap, Flow):
     def value(self):
         """Flow value."""
         return self._value
+
+    def __repr__(self):
+        return '_JGraphTFlow(%r)' % self._handle
 
 
 class _JGraphTCut(Cut):
@@ -836,6 +885,9 @@ class _JGraphTCut(Cut):
                 if s_in_s ^ t_in_s:
                     self._edges.add(e)
 
+    def __repr__(self):
+        return '_JGraphTCut(%r)' % self._handle
+
 
 class _JGraphTPlanarEmbedding(_HandleWrapper, PlanarEmbedding):
     """A JGraphT wrapped planar embedding."""
@@ -851,6 +903,9 @@ class _JGraphTPlanarEmbedding(_HandleWrapper, PlanarEmbedding):
             _raise_status()
         return list(_JGraphTLongIterator(res))
 
+    def __repr__(self):
+        return '_JGraphTPlanarEmbedding(%r)' % self._handle
+
 
 class _JGraphTString(_HandleWrapper):
     """A JGraphT string."""
@@ -863,3 +918,6 @@ class _JGraphTString(_HandleWrapper):
         if err:
             _raise_status()
         return str(res)
+
+    def __repr__(self):
+        return '_JGraphTString(%r)' % self._handle
