@@ -26,9 +26,6 @@ def stoer_wagner(graph):
         
     This implementation requires :math:`\mathcal{O}(m n \log m)` time where :math:`n` is the
     number of vertices and :math:`m` the number of edges of the graph.
-
-    The algorithm uses the graph edge weights as the network edge capacities.
-    It returns a maximum s-t flow and a minimum s-t cut with the same value.
     
     :param graph: the input graph. Must be undirected with non-negative edge weights 
     :returns: a min cut as an instance of :py:class:`.Cut`.
