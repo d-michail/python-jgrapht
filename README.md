@@ -9,11 +9,11 @@ The library is written in Java, with stability, performance and interoperability
 encountered in diverse application domains such as  path planning, routing, network analysis, combinatorial
 optimization, computational biology, and others.
 
-While the original library is written in Java, this package uses a native build provided by
+While the original library is written in Java, this package uses a *native build* provided by
 the [jgrapht-capi](https://github.com/d-michail/jgrapht-capi) project. The native build is in the form of a 
 shared library, created by [GraalVM](https://www.graalvm.org/).
 
-The result is a purely native library.
+The result is a *native self-contained library* with no dependency on the JVM.
 
 ## Building
 

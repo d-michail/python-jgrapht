@@ -2,6 +2,7 @@ import sys
 if sys.version_info < (3, 6):
     raise Exception('Building python-jgrapht requires Python 3.6 or higher.')
 import os
+import codecs
 
 import setuptools
 from setuptools import setup
@@ -93,6 +94,19 @@ _backend_extension = Extension('jgrapht._backend', ['jgrapht/backend.i','jgrapht
                                runtime_library_dirs=['$ORIGIN'],
                                )
 
+def read(rel_path):
+    here = os.path.abspath(os.path.dirname(__file__))
+    with codecs.open(os.path.join(here, rel_path), 'r') as fp:
+        return fp.read()
+
+def get_version(rel_path):
+    for line in read(rel_path).splitlines():
+        if line.startswith('__version__'):
+            delim = '"' if '"' in line else "'"
+            return line.split(delim)[1]
+    else:
+        raise RuntimeError("Unable to find version string.")
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -104,7 +118,7 @@ setup(
         'build': CustomBuild,
     },
     ext_modules=[_backend_extension],
-    version='0.1',
+    version=get_version('jgrapht/__version__.py'),
     description='JGraphT library',
     long_description=long_description,
     author='Dimitrios Michail',
