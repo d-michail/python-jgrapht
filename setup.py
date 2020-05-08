@@ -119,12 +119,12 @@ setup(
     },
     ext_modules=[_backend_extension],
     version=get_version('jgrapht/__version__.py'),
-    description='JGraphT library',
+    description='Python-JGraphT graph library',
     long_description=long_description,
     author='Dimitrios Michail',
     author_email='dimitrios.michail@gmail.com',
     url='https://github.com/d-michail/python-jgrapht',
-    license='Dual licensed under EPL and LGPL',
+    license='LGPL-2.1-or-later OR EPL-2.0',
     platforms=['any'],
     packages=setuptools.find_packages(),
     classifiers = [
@@ -144,6 +144,6 @@ setup(
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Topic :: Software Development :: Libraries'
     ],
-    keywords='graphs, algorithms',
+    keywords='graphs,networks,data-structures,algorithms',
     python_requires='>=3.6'
 )

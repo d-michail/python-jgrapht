@@ -1,6 +1,6 @@
 __title__ = "Python-JGraphT"
-__description__ = "Python-JGraphT graph library."
-__url__ = "https://jgrapht.org"
+__description__ = "Python-JGraphT graph library"
+__url__ = "https://github.com/d-michail/python-jgrapht"
 __version__ = "0.4.0"
 __author__ = "Dimitrios Michail"
 __author_email__ = "dimitrios.michail@gmail.com"
