@@ -154,6 +154,9 @@ class _JGraphTLongSet(_HandleWrapper, MutableSet):
     def __repr__(self):
         return '_JGraphTLongSet(%r)' % self._handle
 
+    def __str__(self):
+        return '{' + ', '.join(str(x) for x in self) + '}'
+
 
 class _JGraphTLongSetIterator(_HandleWrapper, Iterator):
     """An iterator which returns sets with longs."""
