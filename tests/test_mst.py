@@ -1,7 +1,7 @@
 import pytest
 
 from jgrapht import create_graph
-import jgrapht.algorithms.spanners as spanners
+import jgrapht.algorithms.spanning as spanning
 
 def build_graph():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
@@ -33,7 +33,7 @@ def build_graph():
 
 def test_kruskal():
     g = build_graph()
-    mst_w, mst_edges = spanners.kruskal(g)
+    mst_w, mst_edges = spanning.kruskal(g)
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
     solution = set(mst_edges)
@@ -42,7 +42,7 @@ def test_kruskal():
 
 def test_prim():
     g = build_graph()
-    mst_w, mst_edges = spanners.prim(g)
+    mst_w, mst_edges = spanning.prim(g)
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
     solution = set(mst_edges)
@@ -51,7 +51,7 @@ def test_prim():
 
 def test_boruvka():
     g = build_graph()
-    mst_w, mst_edges = spanners.boruvka(g)
+    mst_w, mst_edges = spanning.boruvka(g)
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
     solution = set(mst_edges)

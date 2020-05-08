@@ -1,7 +1,7 @@
 import pytest
 
 from jgrapht import create_graph
-import jgrapht.algorithms.spanners as spanners
+import jgrapht.algorithms.spanning as spanning
 
 def build_graph():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
@@ -33,7 +33,7 @@ def build_graph():
 
 def test_greedy_multiplicative():
     g = build_graph()
-    weight, edges = spanners.multiplicative_greedy(g, 3)
+    weight, edges = spanning.multiplicative_greedy(g, 3)
     assert weight == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
     solution = set(edges)
