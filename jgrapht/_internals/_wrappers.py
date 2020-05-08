@@ -670,6 +670,12 @@ class _JGraphTGraph(_HandleWrapper, Graph):
                 _raise_status()
             return res
 
+        def __repr__(self):
+            return '_JGraphTGraph-VertexSet(%r)' % self._handle
+
+        def __str__(self):
+            return '{' + ', '.join(str(x) for x in self) + '}'
+
     class _EdgeSet(Set):
         """Wrapper around the edges of a JGraphT graph"""
 
@@ -693,6 +699,12 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             if err:
                 _raise_status()
             return res
+
+        def __repr__(self):
+            return '_JGraphTGraph-EdgeSet(%r)' % self._handle
+
+        def __str__(self):
+            return '{' + ', '.join(str(x) for x in self) + '}'
 
     def __repr__(self):
         return '_JGraphTGraph(%r)' % self._handle

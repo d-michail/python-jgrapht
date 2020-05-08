@@ -26,18 +26,17 @@ identifier as a parameter::
   g.add_vertex(0)
 
 The method returns `True` if the vertex is added and `False` if the 
-vertex was already a member of the graph. 
-
-Multiple vertices can also be added using any iterable using::
+vertex was already a member of the graph. Multiple vertices can also be added using any
+iterable::
 
   g.add_vertices_from([1, 2])
 
-Now are graph should contain 3 vertices. You can find the number of vertices using::
+Now the graph should contain 3 vertices. You can find the number of vertices using::
 
-  print (len(g.vertices()))
+  len(g.vertices())
 
 The method :py:meth:`.Graph.vertices()` returns the set of vertices, which is also 
-helpful in order to iterate over them:::
+helpful in order to iterate over them::
 
   for v in g.vertices(): 
       print ('Vertex {}'.format(v))
@@ -52,9 +51,10 @@ automatically given to the edge when they are first added to the graph::
   e1 = g.add_edge(0, 1)
 
 The call above creates a new edge from vertex 0 to vertex 1 and returns its identifier. Using this 
-edge identifier we can access the underlying information of the edge such as its source and its target.
-While in undirected graphs there is no source or target, we still keep this naming 
-to keep a uniform interface. Let us read edge source and target::
+edge identifier we can retrieve the underlying information of the edge such as its source and its
+target. While in undirected graphs there is no source or target, we use the same naming scheme
+to keep a uniform interface. This is very helpful in order to implement algorithms which work both 
+in directed and undirected graphs. Let us now read the edge source and target from the graph::
 
   print ('Edge {} has source {}'.format(e1, g.edge_source(e1)))
   print ('Edge {} has target {}'.format(e1, g.edge_target(e1)))
@@ -66,7 +66,7 @@ graphs to also work in unweighted ones. Here is how to read the weight of an edg
   print ('Edge {} has weight {}'.format(e, g.get_edge_weight(e1)))
 
 If the graph is weighted, the edge weight can be adjusted using method :py:meth:`.Graph.set_edge_weight()`.
-The user can also provide the weight directly on the edge creation using::
+The user can also provide the weight directly when adding the edge to the graph::
 
   e2 = g.add_edge(1, 2, weight=10.0)
 
@@ -79,8 +79,11 @@ Edges can be iterated using the set returned by method :py:meth:`.Graph.edges()`
       print ('Edge {} has source {}'.format(e, g.edge_source(e)))
       print ('Edge {} has target {}'.format(e, g.edge_target(e)))
 
-    
+Navigation
+----------
 
+When implementing graph algorithms one of the most common operation that is required is to 
+find the neighbors of a vertex. 
 
 
 

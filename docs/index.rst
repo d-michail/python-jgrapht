@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Python-JGraphT: The JGraphT graph library!
-==========================================
+The Python-JGraphT graph library
+================================
 
 Release v\ |version|.
 
