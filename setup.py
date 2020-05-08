@@ -121,6 +121,7 @@ setup(
     version=get_version('jgrapht/__version__.py'),
     description='Python-JGraphT graph library',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Dimitrios Michail',
     author_email='dimitrios.michail@gmail.com',
     url='https://github.com/d-michail/python-jgrapht',
