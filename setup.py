@@ -52,11 +52,7 @@ class BuildCapiCommand(Command):
             print("")
             return False
         print("Found source at {}".format(self.src_dir))
-        self.mkpath(self.build_dir)
-        cwd = os.getcwd()
-        os.chdir(os.path.abspath(self.build_dir))
-        self.spawn(['cmake', '../../source/jgrapht-capi'])
-        os.chdir(cwd)
+        self.spawn(['cmake', '-B{}'.format(self.build_dir), '-H{}'.format(self.src_dir)])
         self.spawn(['cmake', '--build', self.build_dir])
         lib_source_path = os.path.join(self.build_dir, self.filename)
         # inplace will is set to 1 when the develop command runs.
