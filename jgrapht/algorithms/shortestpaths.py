@@ -1,12 +1,12 @@
 from .. import backend
 from ..exceptions import UnsupportedOperationError
-from .._errors import raise_status
-from .._wrappers import (
-    JGraphTGraphPath,
-    JGraphTGraphPathIterator,
-    JGraphTSingleSourcePaths,
-    JGraphTAllPairsPaths,
-    JGraphTLongSet,
+from .._internals._errors import _raise_status
+from .._internals._wrappers import (
+    _JGraphTGraphPath,
+    _JGraphTGraphPathIterator,
+    _JGraphTSingleSourcePaths,
+    _JGraphTAllPairsPaths,
+    _JGraphTLongSet,
 )
 import ctypes
 
@@ -21,9 +21,9 @@ def _sp_singlesource_alg(name, graph, source_vertex):
 
     err, handle = alg_method(graph.handle, source_vertex)
     if err:
-        raise_status()
+        _raise_status()
 
-    return JGraphTSingleSourcePaths(handle, source_vertex)
+    return _JGraphTSingleSourcePaths(handle, source_vertex)
 
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
@@ -36,9 +36,9 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
 
     err, handle = alg_method(graph.handle, source_vertex, target_vertex, *args)
     if err:
-        raise_status()
+        _raise_status()
 
-    return JGraphTGraphPath(handle) if handle is not None else None
+    return _JGraphTGraphPath(handle) if handle is not None else None
 
 
 def _sp_allpairs_alg(name, graph):
@@ -51,9 +51,9 @@ def _sp_allpairs_alg(name, graph):
 
     err, handle = alg_method(graph.handle)
     if err:
-        raise_status()
+        _raise_status()
 
-    return JGraphTAllPairsPaths(handle)
+    return _JGraphTAllPairsPaths(handle)
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
@@ -65,9 +65,9 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
 
     err, handle = alg_method(graph.handle, source_vertex, target_vertex, k, *args)
     if err:
-        raise_status()
+        _raise_status()
 
-    return JGraphTGraphPathIterator(handle)
+    return _JGraphTGraphPathIterator(handle)
 
 
 def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
@@ -247,7 +247,7 @@ def a_star_with_alt_heuristic(
     :returns: a :py:class:`.GraphPath`
     """
 
-    landmarks_set = JGraphTLongSet(linked=True)
+    landmarks_set = _JGraphTLongSet(linked=True)
     for landmark in landmarks:
         landmarks_set.add(landmark)
 

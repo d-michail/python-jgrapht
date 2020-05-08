@@ -1,7 +1,7 @@
 from .. import backend
 from ..exceptions import UnsupportedOperationError
-from .._errors import raise_status
-from .._wrappers import JGraphTLongIterator, JGraphTLongDoubleMap
+from .._internals._errors import _raise_status
+from .._internals._wrappers import _JGraphTLongIterator, _JGraphTLongDoubleMap
 
 
 def _scoring_alg(name, graph, *args):
@@ -18,9 +18,9 @@ def _scoring_alg(name, graph, *args):
 
     err, scores_handle = alg_method(graph.handle, *args)
     if err:
-        raise_status()
+        _raise_status()
 
-    return JGraphTLongDoubleMap(handle=scores_handle)
+    return _JGraphTLongDoubleMap(handle=scores_handle)
 
 
 def alpha_centrality(

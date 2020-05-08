@@ -1,7 +1,8 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht._errors import IllegalArgumentError, UnsupportedOperationError
+from jgrapht.exceptions import IllegalArgumentError, UnsupportedOperationError
+
 
 def assert_same_set(set1, set2):
     assert set1 <= set2 and set2 <= set1

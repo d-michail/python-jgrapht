@@ -1,10 +1,10 @@
 import pytest
 
-from jgrapht._wrappers import JGraphTLongSet
+from jgrapht._internals._wrappers import _JGraphTLongSet
 
 def test_longset():
 
-    s = JGraphTLongSet()
+    s = _JGraphTLongSet()
 
     s.add(5)
     s.add(7)
@@ -43,7 +43,7 @@ def test_longset():
 
 def test_longset_linked():
 
-    s = JGraphTLongSet(linked=True)
+    s = _JGraphTLongSet(linked=True)
 
     s.add(5)
     s.add(7)

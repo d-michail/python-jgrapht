@@ -1,6 +1,6 @@
 from . import backend
-from ._errors import raise_status
-from ._wrappers import JGraphTLongIterator
+from ._internals._errors import _raise_status
+from ._internals._wrappers import _JGraphTLongIterator
 
 import time
 
@@ -25,7 +25,7 @@ def bfs_traversal(graph, start_vertex=None):
         err, it = backend.jgrapht_traverse_create_bfs_from_vertex_vit(
             graph.handle, start_vertex
         )
-    return JGraphTLongIterator(it) if not err else raise_status()
+    return _JGraphTLongIterator(it) if not err else _raise_status()
 
 
 def lexicographic_bfs_traversal(graph):
@@ -42,7 +42,7 @@ def lexicographic_bfs_traversal(graph):
     :returns: A vertex iterator
     """
     err, it = backend.jgrapht_traverse_create_lex_bfs_vit(graph.handle)
-    return JGraphTLongIterator(it) if not err else raise_status()
+    return _JGraphTLongIterator(it) if not err else _raise_status()
 
 
 def dfs_traversal(graph, start_vertex=None):
@@ -65,7 +65,7 @@ def dfs_traversal(graph, start_vertex=None):
         err, it = backend.jgrapht_traverse_create_dfs_from_vertex_vit(
             graph.handle, start_vertex
         )
-    return JGraphTLongIterator(it) if not err else raise_status()
+    return _JGraphTLongIterator(it) if not err else _raise_status()
 
 
 def topological_order_traversal(graph):
@@ -83,7 +83,7 @@ def topological_order_traversal(graph):
     :returns: A vertex iterator
     """
     err, it = backend.jgrapht_traverse_create_topological_order_vit(graph.handle)
-    return JGraphTLongIterator(it) if not err else raise_status()
+    return _JGraphTLongIterator(it) if not err else _raise_status()
 
 
 def random_walk_traversal(
@@ -105,7 +105,7 @@ def random_walk_traversal(
     err, it = backend.jgrapht_traverse_create_custom_random_walk_from_vertex_vit(
         graph.handle, start_vertex, weighted, max_steps, seed
     )
-    return JGraphTLongIterator(it) if not err else raise_status()
+    return _JGraphTLongIterator(it) if not err else _raise_status()
 
 
 def max_cardinality_traversal(graph):
@@ -125,7 +125,7 @@ def max_cardinality_traversal(graph):
     :returns: A vertex iterator 
     """
     err, it = backend.jgrapht_traverse_create_max_cardinality_vit(graph.handle)
-    return JGraphTLongIterator(it) if not err else raise_status()
+    return _JGraphTLongIterator(it) if not err else _raise_status()
 
 
 def degeneracy_ordering_traversal(graph):
@@ -143,7 +143,7 @@ def degeneracy_ordering_traversal(graph):
     :returns: A vertex iterator 
     """
     err, it = backend.jgrapht_traverse_create_degeneracy_ordering_vit(graph.handle)
-    return JGraphTLongIterator(it) if not err else raise_status()
+    return _JGraphTLongIterator(it) if not err else _raise_status()
 
 
 def closest_first_traversal(graph, start_vertex, radius=None):
@@ -164,4 +164,4 @@ def closest_first_traversal(graph, start_vertex, radius=None):
         err, it = backend.jgrapht_traverse_create_custom_closest_first_from_vertex_vit(
             graph.handle, start_vertex, radius
         )
-    return JGraphTLongIterator(it) if not err else raise_status()
+    return _JGraphTLongIterator(it) if not err else _raise_status()

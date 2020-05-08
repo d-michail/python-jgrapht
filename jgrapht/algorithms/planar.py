@@ -1,6 +1,6 @@
 from .. import backend
-from .._errors import raise_status, UnsupportedOperationError
-from .._wrappers import JGraphTPlanarEmbedding, JGraphTGraph
+from .._internals._errors import _raise_status, UnsupportedOperationError
+from .._internals._wrappers import _JGraphTPlanarEmbedding, _JGraphTGraph
 
 
 def _planarity_alg(name, graph, *args):
@@ -14,12 +14,12 @@ def _planarity_alg(name, graph, *args):
 
     err, is_planar, embedding, kuratowski_subdivision = alg_method(graph.handle, *args)
     if err:
-        raise_status()
+        _raise_status()
 
     if is_planar:
-        return is_planar, JGraphTPlanarEmbedding(embedding)
+        return is_planar, _JGraphTPlanarEmbedding(embedding)
     else:
-        return is_planar, JGraphTGraph(handle=kuratowski_subdivision)
+        return is_planar, _JGraphTGraph(handle=kuratowski_subdivision)
 
 
 def boyer_myrvold(graph):

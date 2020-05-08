@@ -1,7 +1,7 @@
 import time
 
 from . import backend
-from ._errors import raise_status
+from ._internals._errors import _raise_status
 
 
 def barabasi_albert_graph(graph, m0, m, n, seed=None):

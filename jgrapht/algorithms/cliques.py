@@ -1,6 +1,6 @@
 from .. import backend
-from .._errors import raise_status, UnsupportedOperationError
-from .._wrappers import JGraphTLongSetIterator
+from .._internals._errors import _raise_status, UnsupportedOperationError
+from .._internals._wrappers import _JGraphTLongSetIterator
 
 
 def _clique_enumeration_alg(name, graph, *args):
@@ -14,9 +14,9 @@ def _clique_enumeration_alg(name, graph, *args):
 
     err, clique_it = alg_method(graph.handle, *args)
     if err:
-        raise_status()
+        _raise_status()
 
-    return JGraphTLongSetIterator(handle=clique_it)
+    return _JGraphTLongSetIterator(handle=clique_it)
 
 
 def bron_kerbosch(graph, timeout=0):

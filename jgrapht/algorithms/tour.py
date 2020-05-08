@@ -2,8 +2,8 @@ import time
 
 from .. import backend
 from ..exceptions import UnsupportedOperationError
-from .._errors import raise_status
-from .._wrappers import JGraphTLongIterator, JGraphTGraphPath
+from .._internals._errors import _raise_status
+from .._internals._wrappers import _JGraphTLongIterator, _JGraphTGraphPath
 
 
 def _tour_tsp_alg(name, graph_or_graph_path, *args):
@@ -16,9 +16,9 @@ def _tour_tsp_alg(name, graph_or_graph_path, *args):
 
     err, graph_path = alg_method(graph_or_graph_path.handle, *args)
     if err:
-        raise_status()
+        _raise_status()
 
-    return JGraphTGraphPath(graph_path)
+    return _JGraphTGraphPath(graph_path)
 
 
 def tsp_random(graph, seed=None):
@@ -38,7 +38,7 @@ def tsp_random(graph, seed=None):
 
 
 def tsp_greedy_heuristic(graph):
-    """ Construct a tour greedily. The algorithm repeatedly selects the shortest edge
+    r""" Construct a tour greedily. The algorithm repeatedly selects the shortest edge
     and adds it to the tour as long as it doesn’t create a cycle with less than :math:`n`
     edges, or increases the degree of any node to more that two. 
  
@@ -52,7 +52,7 @@ def tsp_greedy_heuristic(graph):
 
 
 def tsp_nearest_insertion_heuristic(graph):
-    """The nearest insertion heuristic algorithm for the TSP problem.
+    r"""The nearest insertion heuristic algorithm for the TSP problem.
 
     The runtime complexity is :math:`\mathcal{O}(n^2)`.
 
@@ -64,7 +64,7 @@ def tsp_nearest_insertion_heuristic(graph):
 
 
 def tsp_nearest_neighbor_heuristic(graph, seed=None):
-    """The nearest neighbour heuristic algorithm for the TSP problem.
+    r"""The nearest neighbour heuristic algorithm for the TSP problem.
 
     The runtime complexity is :math:`\mathcal{O}(n^2)`.
 
@@ -80,7 +80,7 @@ def tsp_nearest_neighbor_heuristic(graph, seed=None):
 
 
 def metric_tsp_christofides(graph):
-    """The Christofides 3/2 approximation algorithm for the metric TSP.
+    r"""The Christofides 3/2 approximation algorithm for the metric TSP.
 
     For details see:
 
@@ -99,7 +99,7 @@ def metric_tsp_christofides(graph):
 
 
 def metric_tsp_two_approx(graph):
-    """A 2 approximation algorithm for the metrix TSP.
+    r"""A 2 approximation algorithm for the metrix TSP.
 
     This is an implementation of the folklore algorithm which returns a depth-first ordering
     of the minimum spanning tree. The algorithm is a 2-approximation assuming that the instance
@@ -128,7 +128,7 @@ def tsp_held_karp(graph):
 
 
 def hamiltonian_palmer(graph):
-    """Palmer's algorithm for computing Hamiltonian cycles in graphs that meet Ore's condition.
+    r"""Palmer's algorithm for computing Hamiltonian cycles in graphs that meet Ore's condition.
 
     Running time :math:`\mathcal{O}(n^2)`.
 

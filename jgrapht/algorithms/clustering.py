@@ -1,6 +1,6 @@
 from .. import backend
-from .._errors import raise_status, UnsupportedOperationError
-from .._wrappers import JGraphTClustering
+from .._internals._errors import _raise_status, UnsupportedOperationError
+from .._internals._wrappers import _JGraphTClustering
 
 import time
 
@@ -16,9 +16,9 @@ def _clustering_alg(name, graph, *args):
 
     err, handle = alg_method(graph.handle, *args)
     if err:
-        raise_status()
+        _raise_status()
 
-    return JGraphTClustering(handle)
+    return _JGraphTClustering(handle)
 
 
 def k_spanning_tree(graph, k):

@@ -1,6 +1,6 @@
 from .. import backend
-from .._errors import raise_status
-from .._wrappers import JGraphTLongSet
+from .._internals._errors import _raise_status
+from .._internals._wrappers import _JGraphTLongSet
 
 
 def bipartite_partitions(graph):
@@ -13,5 +13,5 @@ def bipartite_partitions(graph):
     """
     err, res, part1, part2 = backend.jgrapht_partition_exec_bipartite(graph.handle)
     if err:
-        raise_status()
-    return res, JGraphTLongSet(part1), JGraphTLongSet(part2)
+        _raise_status()
+    return res, _JGraphTLongSet(part1), _JGraphTLongSet(part2)

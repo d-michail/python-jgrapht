@@ -1,6 +1,6 @@
 from .. import backend
-from .._errors import raise_status, UnsupportedOperationError
-from .._wrappers import JGraphTLongLongMap
+from .._internals._errors import _raise_status, UnsupportedOperationError
+from .._internals._wrappers import _JGraphTLongLongMap
 
 
 def _coloring_alg(name, graph, *args):
@@ -14,9 +14,9 @@ def _coloring_alg(name, graph, *args):
 
     err, num_colors, color_map_handle = alg_method(graph.handle, *args)
     if err:
-        raise_status()
+        _raise_status()
 
-    return (num_colors, JGraphTLongLongMap(handle=color_map_handle))
+    return (num_colors, _JGraphTLongLongMap(handle=color_map_handle))
 
 
 def greedy_smallestnotusedcolor(graph):

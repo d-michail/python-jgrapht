@@ -1,5 +1,5 @@
 from . import backend
-from ._errors import raise_status
+from ._internals._errors import _raise_status
 
 
 def diameter(graph):
@@ -13,11 +13,11 @@ def diameter(graph):
     :returns: the graph diameter
     """
     err, res = backend.jgrapht_graph_metrics_diameter(graph.handle)
-    return res if not err else raise_status()
+    return res if not err else _raise_status()
 
 
 def radius(graph):
-    """Compute the `radius <https://mathworld.wolfram.com/GraphRadius.html>`_ of a graph. 
+    r"""Compute the `radius <https://mathworld.wolfram.com/GraphRadius.html>`_ of a graph. 
 
     The radius of a graph is the minimum vertex eccentricity.
 
@@ -30,11 +30,11 @@ def radius(graph):
     :returns: the graph diameter
     """
     err, res = backend.jgrapht_graph_metrics_radius(graph.handle)
-    return res if not err else raise_status()
+    return res if not err else _raise_status()
 
 
 def girth(graph):
-    """Compute the `girth <https://mathworld.wolfram.com/Girth.html>`_ of a graph. 
+    r"""Compute the `girth <https://mathworld.wolfram.com/Girth.html>`_ of a graph. 
 
     The girth is the length of the shortest graph cycle (if any) in a graph. Acyclic graphs
     are considered to have infinite girth. For directed graphs, the length of the shortest 
@@ -47,11 +47,11 @@ def girth(graph):
     :returns: the graph girth
     """
     err, res = backend.jgrapht_graph_metrics_girth(graph.handle)
-    return res if not err else raise_status()
+    return res if not err else _raise_status()
 
 
 def count_triangles(graph):
-    """Count the number of triangles in a graph.
+    r"""Count the number of triangles in a graph.
 
     This is an :math:`\mathcal{O}(m^{3/2})` algorithm for counting the number of 
     triangles in an undirected graph.
@@ -61,4 +61,4 @@ def count_triangles(graph):
     :raises IllegalArgumentError: if the graph is not undirected
     """
     err, res = backend.jgrapht_graph_metrics_triangles(graph.handle)
-    return res if not err else raise_status()
+    return res if not err else _raise_status()

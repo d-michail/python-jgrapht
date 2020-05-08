@@ -13,7 +13,7 @@ from .__version__ import __author__, __author_email__, __license__
 from .__version__ import __copyright__
 
 from . import backend
-from ._wrappers import create_graph
+from ._internals._wrappers import create_graph
 
 # Create main thread and setup cleanup
 import atexit

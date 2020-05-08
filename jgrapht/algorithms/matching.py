@@ -1,6 +1,6 @@
 from .. import backend
-from .._errors import raise_status, UnsupportedOperationError
-from .._wrappers import JGraphTLongSet
+from .._internals._errors import _raise_status, UnsupportedOperationError
+from .._internals._wrappers import _JGraphTLongSet
 
 
 def _matching_alg(name, graph, *args, no_custom_prefix=False):
@@ -17,9 +17,9 @@ def _matching_alg(name, graph, *args, no_custom_prefix=False):
 
     err, weight, m_handle = alg_method(graph.handle, *args)
     if err:
-        raise_status()
+        _raise_status()
 
-    return weight, JGraphTLongSet(handle=m_handle)
+    return weight, _JGraphTLongSet(handle=m_handle)
 
 
 def greedy_max_cardinality(graph, sort=False):

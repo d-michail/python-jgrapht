@@ -3,8 +3,8 @@ import ctypes
 
 from .. import backend
 from ..exceptions import UnsupportedOperationError
-from .._errors import raise_status
-from .._wrappers import JGraphTLongIterator, JGraphTGraphPath, JGraphTAttributeStore
+from .._internals._errors import _raise_status
+from .._internals._wrappers import _JGraphTLongIterator, _JGraphTGraphPath, _JGraphTAttributeStore
 
 
 def _import(name, graph, filename_or_string, *args):
@@ -17,7 +17,7 @@ def _import(name, graph, filename_or_string, *args):
 
     err = alg_method(graph.handle, filename_or_string, *args)
     if err:
-        raise_status()
+        _raise_status()
 
 
 def _create_wrapped_callback(callback, cfunctype):

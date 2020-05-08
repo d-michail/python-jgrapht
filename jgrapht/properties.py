@@ -1,5 +1,5 @@
 from . import backend
-from ._errors import raise_status
+from ._internals._errors import raise_status
 
 
 def is_empty_graph(graph):

@@ -1,7 +1,7 @@
 from .. import backend
 from ..exceptions import UnsupportedOperationError
-from .._errors import raise_status
-from .._wrappers import JGraphTLongSet
+from .._internals._errors import _raise_status
+from .._internals._wrappers import _JGraphTLongSet
 
 
 def _mst_alg(name, graph):
@@ -14,9 +14,9 @@ def _mst_alg(name, graph):
 
     err, weight, mst_handle = alg_method(graph.handle)
     if err:
-        raise_status()
+        _raise_status()
 
-    return weight, JGraphTLongSet(mst_handle)
+    return weight, _JGraphTLongSet(mst_handle)
 
 
 def kruskal(graph):
@@ -92,5 +92,5 @@ def multiplicative_greedy(graph, k):
         graph.handle, k
     )
     if err:
-        raise_status()
-    return weight, JGraphTLongSet(spanner)
+        _raise_status()
+    return weight, _JGraphTLongSet(spanner)

@@ -1,7 +1,7 @@
 from .. import backend
 from ..exceptions import UnsupportedOperationError
-from .._errors import raise_status
-from .._wrappers import JGraphTLongDoubleMap, JGraphTLongSet
+from .._internals._errors import _raise_status
+from .._internals._wrappers import _JGraphTLongDoubleMap, _JGraphTLongSet
 
 
 def _vertexcover_alg(name, graph, vertex_weights=None):
@@ -21,7 +21,7 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
             raise UnsupportedOperationError("Algorithm not supported.")
 
     if vertex_weights is not None:
-        jgrapht_vertex_weights = JGraphTLongDoubleMap()
+        jgrapht_vertex_weights = _JGraphTLongDoubleMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
         err, weight, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
@@ -29,9 +29,9 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
         err, weight, vc_handle = alg_method(graph.handle)
 
     if err:
-        raise_status()
+        _raise_status()
 
-    return weight, JGraphTLongSet(vc_handle)
+    return weight, _JGraphTLongSet(vc_handle)
 
 
 def greedy(graph, vertex_weights=None):
@@ -54,7 +54,7 @@ def greedy(graph, vertex_weights=None):
 
 
 def clarkson(graph, vertex_weights=None):
-    """Compute a vertex cover using the 2-opt algorithm of Clarkson.
+    r"""Compute a vertex cover using the 2-opt algorithm of Clarkson.
 
     The algorithm runs in time :math:`\mathcal{O}(m \log n)` and is a 2-approximation
     which means that the solution is guaranteed to be at most twice the optimum.

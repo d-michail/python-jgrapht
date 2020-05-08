@@ -3,13 +3,13 @@ import ctypes
 
 from .. import backend
 from ..exceptions import UnsupportedOperationError
-from .._errors import raise_status, GraphExportError
-from .._wrappers import (
-    JGraphTLongIterator,
-    JGraphTGraphPath,
-    JGraphTAttributeStore,
-    JGraphTAttributesRegistry,
-    JGraphTString,
+from .._internals._errors import _raise_status, GraphExportError
+from .._internals._wrappers import (
+    _JGraphTLongIterator,
+    _JGraphTGraphPath,
+    _JGraphTAttributeStore,
+    _JGraphTAttributesRegistry,
+    _JGraphTString,
 )
 
 
@@ -23,7 +23,7 @@ def _export_to_file(name, graph, filename, *args):
 
     err = alg_method(graph.handle, filename, *args)
     if err:
-        raise_status()
+        _raise_status()
 
 
 def _export_to_string(name, graph, *args):
@@ -36,15 +36,15 @@ def _export_to_string(name, graph, *args):
 
     err, handle = alg_method(graph.handle, *args)
     if err:
-        raise_status()
+        _raise_status()
 
-    return str(JGraphTString(handle))
+    return str(_JGraphTString(handle))
 
 
 def _attributes_to_store(attributes_dict):
     vertex_attribute_store = None
     if attributes_dict is not None:
-        vertex_attribute_store = JGraphTAttributeStore()
+        vertex_attribute_store = _JGraphTAttributeStore()
         for element, attr_dict in attributes_dict.items():
             for key, value in attr_dict.items():
                 vertex_attribute_store.put(element, key, value)
@@ -489,7 +489,7 @@ def write_gexf(
     :param export_meta: whether to export meta tag
     :raises GraphExportError: In case of an export error         
     """
-    attrs_registry = JGraphTAttributesRegistry()
+    attrs_registry = _JGraphTAttributesRegistry()
     for name, category, type, default_value in attrs:
         attrs_registry.put(name, category, type, default_value)
 
@@ -569,7 +569,7 @@ def generate_gexf(
     :returns: a string contains the exported graph    
     :raises GraphExportError: In case of an export error         
     """
-    attrs_registry = JGraphTAttributesRegistry()
+    attrs_registry = _JGraphTAttributesRegistry()
     for name, category, type, default_value in attrs:
         attrs_registry.put(name, category, type, default_value)
 
