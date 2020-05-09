@@ -6,6 +6,7 @@
 #include "backend.h"
 %}
 
+
 %include <typemaps.i>
 
 // custom typemap to append void** types to the result
@@ -133,6 +134,12 @@ int raise_exception_on_error(int result) {
 // ignore the integer return code
 // we already handled this using the exception 
 %typemap(out) int  "$result = SWIG_Py_Void();";
+
+
+// Put some init code in python
+%pythonbegin %{
+# The Python-JGraphT library
+%}
 
 // attribute store 
 
