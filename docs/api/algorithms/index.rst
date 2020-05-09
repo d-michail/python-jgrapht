@@ -17,6 +17,7 @@ The JGraphT contains a large collection of advanced algorithms.
    clustering
    planar
    cuts
+   cycles
    flow
    isomorphism
    tour
