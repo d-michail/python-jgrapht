@@ -11,11 +11,11 @@ def _do_run_cut(algo):
     g.add_vertex(2)
     g.add_vertex(3)
 
-    e01 = g.add_edge(0, 1, weight=20)
-    e02 = g.add_edge(0, 2, weight=10)
-    g.add_edge(1, 2, weight=30)
-    g.add_edge(1, 3, weight=10)
-    g.add_edge(2, 3, weight=20)
+    e01 = g.create_edge(0, 1, weight=20)
+    e02 = g.create_edge(0, 2, weight=10)
+    g.create_edge(1, 2, weight=30)
+    g.create_edge(1, 3, weight=10)
+    g.create_edge(2, 3, weight=20)
 
     cut = algo(g, 0, 3)
 
@@ -32,11 +32,11 @@ def _do_run_both(algo):
     g.add_vertex(2)
     g.add_vertex(3)
 
-    e01 = g.add_edge(0, 1, weight=20)
-    e02 = g.add_edge(0, 2, weight=10)
-    e12 = g.add_edge(1, 2, weight=30)
-    e13 = g.add_edge(1, 3, weight=10)
-    e23 = g.add_edge(2, 3, weight=20)
+    e01 = g.create_edge(0, 1, weight=20)
+    e02 = g.create_edge(0, 2, weight=10)
+    e12 = g.create_edge(1, 2, weight=30)
+    e13 = g.create_edge(1, 3, weight=10)
+    e23 = g.create_edge(2, 3, weight=20)
 
     f, cut = algo(g, 0, 3)
 
@@ -62,11 +62,11 @@ def _do_run_flow(algo):
     g.add_vertex(2)
     g.add_vertex(3)
 
-    e01 = g.add_edge(0, 1, weight=20)
-    e02 = g.add_edge(0, 2, weight=10)
-    e12 = g.add_edge(1, 2, weight=30)
-    e13 = g.add_edge(1, 3, weight=10)
-    e23 = g.add_edge(2, 3, weight=20)
+    e01 = g.create_edge(0, 1, weight=20)
+    e02 = g.create_edge(0, 2, weight=10)
+    e12 = g.create_edge(1, 2, weight=30)
+    e13 = g.create_edge(1, 3, weight=10)
+    e23 = g.create_edge(2, 3, weight=20)
 
     f = algo(g, 0, 3)
 

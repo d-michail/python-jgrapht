@@ -18,12 +18,12 @@ def test_as_unweighted():
     v4 = 3
     g.add_vertex(4)
     v5 = 4
-    g.add_edge(v1, v2)
-    g.add_edge(v2, v3)
-    g.add_edge(v1, v4)
-    g.add_edge(v1, v1)
-    e45 = g.add_edge(v4, v5)
-    g.add_edge(v5, v1)
+    g.create_edge(v1, v2)
+    g.create_edge(v2, v3)
+    g.create_edge(v1, v4)
+    g.create_edge(v1, v1)
+    e45 = g.create_edge(v4, v5)
+    g.create_edge(v5, v1)
 
     g.set_edge_weight(e45, 100.0)
 
@@ -51,12 +51,12 @@ def test_as_undirected():
     g.add_vertex(4)
     v5 = 4
 
-    g.add_edge(v1, v2)
-    g.add_edge(v2, v3)
-    g.add_edge(v1, v4)
-    g.add_edge(v1, v1)
-    g.add_edge(v4, v5)
-    g.add_edge(v5, v1)
+    g.create_edge(v1, v2)
+    g.create_edge(v2, v3)
+    g.create_edge(v1, v4)
+    g.create_edge(v1, v1)
+    g.create_edge(v4, v5)
+    g.create_edge(v5, v1)
 
     # undirected
     g2 = as_undirected(g)
@@ -80,18 +80,18 @@ def test_as_unmodifiable():
     g.add_vertex(4)
     v5 = 4
 
-    g.add_edge(v1, v2)
-    g.add_edge(v2, v3)
-    g.add_edge(v1, v4)
-    g.add_edge(v1, v1)
-    g.add_edge(v4, v5)
-    g.add_edge(v5, v1)
+    g.create_edge(v1, v2)
+    g.create_edge(v2, v3)
+    g.create_edge(v1, v4)
+    g.create_edge(v1, v1)
+    g.create_edge(v4, v5)
+    g.create_edge(v5, v1)
 
     # unmodifiable
     g3 = as_unmodifiable(g)
     assert g3.graph_type.modifiable is False
     with pytest.raises(UnsupportedOperationError):
-        g3.add_edge(v2, v2)
+        g3.create_edge(v2, v2)
 
 
 def test_as_edgereversed():
@@ -108,12 +108,12 @@ def test_as_edgereversed():
     g.add_vertex(4)
     v5 = 4
     
-    g.add_edge(v1, v2)
-    g.add_edge(v2, v3)
-    g.add_edge(v1, v4)
-    g.add_edge(v1, v1)
-    e45 = g.add_edge(v4, v5)
-    g.add_edge(v5, v1)
+    g.create_edge(v1, v2)
+    g.create_edge(v2, v3)
+    g.create_edge(v1, v4)
+    g.create_edge(v1, v1)
+    e45 = g.create_edge(v4, v5)
+    g.create_edge(v5, v1)
 
     # edge reversed
     g4 = as_edgereversed(g)

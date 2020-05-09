@@ -8,19 +8,19 @@ def test_iso():
 
     g1.add_vertices_from([0, 1, 2, 3])
 
-    g1.add_edge(0, 1)
-    g1.add_edge(1, 2)
-    g1.add_edge(2, 3)
-    g1.add_edge(3, 0)
+    g1.create_edge(0, 1)
+    g1.create_edge(1, 2)
+    g1.create_edge(2, 3)
+    g1.create_edge(3, 0)
 
     g2 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
 
     g2.add_vertices_from([5, 6, 7, 8])
 
-    g2.add_edge(5, 6)
-    g2.add_edge(6, 7)
-    g2.add_edge(7, 8)
-    g2.add_edge(8, 5)
+    g2.create_edge(5, 6)
+    g2.create_edge(6, 7)
+    g2.create_edge(7, 8)
+    g2.create_edge(8, 5)
 
     it = iso.vf2(g1, g2)
 
@@ -58,17 +58,17 @@ def test_iso_induced_subgraph():
 
     g1.add_vertices_from([0, 1, 2, 3])
 
-    g1.add_edge(0, 1)
-    g1.add_edge(1, 2)
-    g1.add_edge(2, 3)
-    g1.add_edge(3, 0)
+    g1.create_edge(0, 1)
+    g1.create_edge(1, 2)
+    g1.create_edge(2, 3)
+    g1.create_edge(3, 0)
 
     g2 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
 
     g2.add_vertices_from([5, 6, 7])
 
-    g2.add_edge(5, 6)
-    g2.add_edge(6, 7)
+    g2.create_edge(5, 6)
+    g2.create_edge(6, 7)
 
     it = iso.vf2_subgraph(g1, g2)
 
@@ -97,19 +97,19 @@ def test_iso_not_induced_subgraph():
 
     g1.add_vertices_from([0, 1, 2, 3])
 
-    g1.add_edge(0, 1)
-    g1.add_edge(1, 2)
-    g1.add_edge(2, 3)
-    g1.add_edge(3, 0)
-    g1.add_edge(0, 2)
-    g1.add_edge(1, 3)
+    g1.create_edge(0, 1)
+    g1.create_edge(1, 2)
+    g1.create_edge(2, 3)
+    g1.create_edge(3, 0)
+    g1.create_edge(0, 2)
+    g1.create_edge(1, 3)
 
     g2 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
 
     g2.add_vertices_from([5, 6, 7])
 
-    g2.add_edge(5, 6)
-    g2.add_edge(6, 7)
+    g2.create_edge(5, 6)
+    g2.create_edge(6, 7)
 
     it = iso.vf2_subgraph(g1, g2)
 

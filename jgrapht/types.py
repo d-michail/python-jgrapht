@@ -227,19 +227,32 @@ class Graph(ABC):
         pass
 
     @abstractmethod
-    def add_edge(self, u, v, weight=None):
-        """Adds an edge to the graph.
-
-        Edges are automatically created and represented as longs.
+    def create_edge(self, u, v, weight=None):
+        """Create an edge in the graph.
 
         :param u: the first endpoint (vertex) of the edge
         :param v: the second endpoint (vertex) of the edge
+        :param weight: an optional weight to use for the edge.
         :returns: the new edge identifier
         :rtype: Long
         """
         pass
 
-    def add_edges_from(self, edges):
+    @abstractmethod
+    def add_edge(self, u, v, edge, weight=None):
+        """Add an edge to the graph.
+
+        :param u: the first endpoint (vertex) of the edge
+        :param v: the second endpoint (vertex) of the edge
+        :param edge: the long edge identifier
+        :param weight: an optional weight to use for the edge. If the edge is present,
+          its weight is not adjusted.
+        :returns: True if the edge was added, False if it was already present
+        :rtype: Long
+        """
+        pass
+
+    def create_edges_from(self, edges):
         """Add all edges for an iterable.
 
         :param edges: any iterable of edges. Each edge is (u,v) or (u,v,weight)  

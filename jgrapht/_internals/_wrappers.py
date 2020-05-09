@@ -564,15 +564,21 @@ class _JGraphTGraph(_HandleWrapper, Graph):
         err, res = backend.jgrapht_graph_contains_vertex(self._handle, v)
         return res if not err else _raise_status()
 
-    def add_edge(self, u, v, weight=None):
+    def create_edge(self, u, v, weight=None):
         err, res = backend.jgrapht_graph_add_edge(self._handle, u, v)
         if err:
             _raise_status()
-
         if weight is not None:
             self.set_edge_weight(res, weight)
-
         return res
+
+    def add_edge(self, u, v, edge, weight=None):
+        err, added = backend.jgrapht_graph_add_given_edge(self._handle, u, v, edge)
+        if err:
+            _raise_status()
+        if added and weight is not None: 
+            self.set_edge_weight(edge, weight)
+        return added
 
     def remove_edge(self, e):
         err, res = backend.jgrapht_graph_remove_edge(self._handle, e)

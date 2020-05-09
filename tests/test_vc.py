@@ -10,7 +10,7 @@ def build_graph():
     for i in range(0, 10):
         g.add_vertex(i)
     for i in range(1,10):
-        g.add_edge(0, i)    
+        g.create_edge(0, i)    
 
     vertex_weights = dict()
     vertex_weights[0] = 1000.0   

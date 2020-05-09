@@ -10,14 +10,14 @@ def get_graph():
     for i in range(0, 6):
         g.add_vertex(i)
 
-    g.add_edge(0, 1, weight=3.0)
-    g.add_edge(1, 3, weight=100.0)
-    g.add_edge(0, 2, weight=40.0)
-    g.add_edge(2, 4, weight=20.0)
-    g.add_edge(3, 5, weight=2.0)
-    g.add_edge(4, 5, weight=2.0)
-    g.add_edge(5, 0, weight=13.0)
-    g.add_edge(0, 5, weight=1000.0)
+    g.create_edge(0, 1, weight=3.0)
+    g.create_edge(1, 3, weight=100.0)
+    g.create_edge(0, 2, weight=40.0)
+    g.create_edge(2, 4, weight=20.0)
+    g.create_edge(3, 5, weight=2.0)
+    g.create_edge(4, 5, weight=2.0)
+    g.create_edge(5, 0, weight=13.0)
+    g.create_edge(0, 5, weight=1000.0)
 
     return g
 
@@ -30,15 +30,15 @@ def get_graph_with_negative_edges():
     for i in range(0, 7):
         assert g.add_vertex(i)
 
-    g.add_edge(0, 1, weight=3.0)
-    g.add_edge(1, 3, weight=100.0)
-    g.add_edge(0, 2, weight=40.0)
-    g.add_edge(2, 4, weight=20.0)
-    g.add_edge(3, 5, weight=2.0)
-    g.add_edge(4, 5, weight=2.0)
-    g.add_edge(5, 0, weight=13.0)
-    g.add_edge(0, 6, weight=1000.0)
-    g.add_edge(6, 3, weight=-900.0)
+    g.create_edge(0, 1, weight=3.0)
+    g.create_edge(1, 3, weight=100.0)
+    g.create_edge(0, 2, weight=40.0)
+    g.create_edge(2, 4, weight=20.0)
+    g.create_edge(3, 5, weight=2.0)
+    g.create_edge(4, 5, weight=2.0)
+    g.create_edge(5, 0, weight=13.0)
+    g.create_edge(0, 6, weight=1000.0)
+    g.create_edge(6, 3, weight=-900.0)
 
     assert len(g.vertices()) == 7
     assert len(g.edges()) == 9
@@ -160,16 +160,16 @@ def test_a_star():
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
-    g.add_edge(0, 1)
-    g.add_edge(0, 3)
-    g.add_edge(1, 2)
-    g.add_edge(1, 4)
-    g.add_edge(2, 5)
-    g.add_edge(3, 4)
-    g.add_edge(3, 6)
-    g.add_edge(4, 5)
-    g.add_edge(4, 7)
-    g.add_edge(5, 8)
+    g.create_edge(0, 1)
+    g.create_edge(0, 3)
+    g.create_edge(1, 2)
+    g.create_edge(1, 4)
+    g.create_edge(2, 5)
+    g.create_edge(3, 4)
+    g.create_edge(3, 6)
+    g.create_edge(4, 5)
+    g.create_edge(4, 7)
+    g.create_edge(5, 8)
 
     def heuristic(source, target):
         coordinates = { 0: (2,0), 1: (2,1), 2:(2,2), 3:(1,0), 4:(1,1), 5:(1,2), 6:(0,0), 7:(0,1), 8:(0,2) }
@@ -204,16 +204,16 @@ def test_a_star_with_alt_heuristic():
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
-    g.add_edge(0, 1)
-    g.add_edge(0, 3)
-    g.add_edge(1, 2)
-    g.add_edge(1, 4)
-    g.add_edge(2, 5)
-    g.add_edge(3, 4)
-    g.add_edge(3, 6)
-    g.add_edge(4, 5)
-    g.add_edge(4, 7)
-    g.add_edge(5, 8)
+    g.create_edge(0, 1)
+    g.create_edge(0, 3)
+    g.create_edge(1, 2)
+    g.create_edge(1, 4)
+    g.create_edge(2, 5)
+    g.create_edge(3, 4)
+    g.create_edge(3, 6)
+    g.create_edge(4, 5)
+    g.create_edge(4, 7)
+    g.create_edge(5, 8)
 
     path = sp.a_star_with_alt_heuristic(g, 0, 8, landmarks=set([3, 6]))
 
