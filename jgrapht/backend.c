@@ -143,6 +143,48 @@ int jgrapht_cut_exec_stoer_wagner(void *g, double* weight, void** res) {
     return jgrapht_capi_cut_exec_stoer_wagner(thread, g, weight, res);
 }
 
+// cycles
+
+int jgrapht_cycles_eulerian_exec_hierholzer(void *g, int* is_eulerian_res, void** res) { 
+    return jgrapht_capi_cycles_eulerian_exec_hierholzer(thread, g, is_eulerian_res, res);
+}
+
+int jgrapht_cycles_chinese_postman_exec_edmonds_johnson(void *g, void** res) { 
+    return jgrapht_capi_cycles_chinese_postman_exec_edmonds_johnson(thread, g, res);
+}
+
+int jgrapht_cycles_simple_enumeration_exec_tarjan(void *g, void** res) { 
+    return jgrapht_capi_cycles_simple_enumeration_exec_tarjan(thread, g, res);
+}
+
+int jgrapht_cycles_simple_enumeration_exec_tiernan(void *g, void** res) { 
+    return jgrapht_capi_cycles_simple_enumeration_exec_tiernan(thread, g, res);
+}
+
+int jgrapht_cycles_simple_enumeration_exec_szwarcfiter_lauer(void *g, void** res) { 
+    return jgrapht_capi_cycles_simple_enumeration_exec_szwarcfiter_lauer(thread, g, res);
+}
+
+int jgrapht_cycles_simple_enumeration_exec_johnson(void *g, void** res) { 
+    return jgrapht_capi_cycles_simple_enumeration_exec_johnson(thread, g, res);
+}
+
+int jgrapht_cycles_simple_enumeration_exec_hawick_james(void *g, void** res) { 
+    return jgrapht_capi_cycles_simple_enumeration_exec_hawick_james(thread, g, res);
+}
+
+int jgrapht_cycles_fundamental_basis_exec_queue_bfs(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_cycles_fundamental_basis_exec_queue_bfs(thread, g, weight_res, res);
+}
+
+int jgrapht_cycles_fundamental_basis_exec_stack_bfs(void *g, double* weight_res, void** res) { 
+    return jgrapht_capi_cycles_fundamental_basis_exec_stack_bfs(thread, g, weight_res, res);
+}
+
+int jgrapht_cycles_fundamental_basis_exec_paton(void *g, double* weight_res, void** res) {
+    return jgrapht_capi_cycles_fundamental_basis_exec_paton(thread, g, weight_res, res);
+}
+
 // errors
 
 void jgrapht_error_clear_errno() { 
@@ -265,6 +307,12 @@ int jgrapht_maxflow_exec_dinic(void *g, long long int source, long long int sink
 
 int jgrapht_maxflow_exec_edmonds_karp(void *g, long long int source, long long int sink, double* valueRes, void** flowMapRes, void** cutSourcePartitionRes) { 
     return jgrapht_capi_maxflow_exec_edmonds_karp(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);
+}
+
+int jgrapht_mincostflow_exec_capacity_scaling(void *g, void *node_supply_fptr, void *arc_capacity_lower_bound_fptr, \
+   void *arc_capacity_upper_bound_fptr, int scaling_factor, double* cost_res, void** flow_res, void** dual_res) { 
+    return jgrapht_capi_mincostflow_exec_capacity_scaling(thread, g, node_supply_fptr, arc_capacity_lower_bound_fptr, \
+        arc_capacity_upper_bound_fptr, scaling_factor, cost_res, flow_res, dual_res);
 }
 
 // generate

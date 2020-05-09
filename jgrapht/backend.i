@@ -124,6 +124,28 @@ int jgrapht_coloring_exec_color_refinement(void *, long long* OUTPUT, void** OUT
 
 int jgrapht_cut_exec_stoer_wagner(void *, double* OUTPUT, void** OUTPUT);
 
+// cycles
+
+int jgrapht_cycles_eulerian_exec_hierholzer(void *, int* OUTPUT, void** OUTPUT);
+
+int jgrapht_cycles_chinese_postman_exec_edmonds_johnson(void *, void** OUTPUT);
+
+int jgrapht_cycles_simple_enumeration_exec_tarjan(void *, void** OUTPUT);
+
+int jgrapht_cycles_simple_enumeration_exec_tiernan(void *, void** OUTPUT);
+
+int jgrapht_cycles_simple_enumeration_exec_szwarcfiter_lauer(void *, void** OUTPUT);
+
+int jgrapht_cycles_simple_enumeration_exec_johnson(void *, void** OUTPUT);
+
+int jgrapht_cycles_simple_enumeration_exec_hawick_james(void *, void** OUTPUT);
+
+int jgrapht_cycles_fundamental_basis_exec_queue_bfs(void *, double* OUTPUT, void** OUTPUT);
+
+int jgrapht_cycles_fundamental_basis_exec_stack_bfs(void *, double* OUTPUT, void** OUTPUT);
+
+int jgrapht_cycles_fundamental_basis_exec_paton(void *, double* OUTPUT, void** OUTPUT);
+
 // error
 
 void jgrapht_error_clear_errno();
@@ -183,6 +205,8 @@ int jgrapht_maxflow_exec_push_relabel(void *, long long int, long long int, doub
 int jgrapht_maxflow_exec_dinic(void *, long long int, long long int, double* OUTPUT, void** OUTPUT, void** OUTPUT);
 
 int jgrapht_maxflow_exec_edmonds_karp(void *, long long int, long long int, double* OUTPUT, void** OUTPUT, void** OUTPUT);
+
+int jgrapht_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double* OUTPUT, void** OUTPUT, void** OUTPUT);
 
 // generate
 
