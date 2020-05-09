@@ -81,8 +81,8 @@ void jgrapht_vmLocatorSymbol();
 // exception handling
 // grab result from C and throw python exception
 
-%exception { 
-    $action
+%{
+int raise_exception_on_error(int result) { 
     if (result != STATUS_SUCCESS) {
         switch(result) {
         case STATUS_ILLEGAL_ARGUMENT:
@@ -117,6 +117,15 @@ void jgrapht_vmLocatorSymbol();
             break;
         }
         jgrapht_error_clear_errno();
+        return 1;
+    }
+    return 0;
+}
+%}
+
+%exception { 
+    $action
+    if (raise_exception_on_error(result)) { 
         SWIG_fail;
     }
 }
