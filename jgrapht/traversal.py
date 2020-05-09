@@ -76,7 +76,7 @@ def topological_order_traversal(graph):
     `wolfram <https://mathworld.wolfram.com/TopologicalSort.html>`_.
  
     The iterator crosses components. The iterator will detect (at some point) if the graph is not
-    a directed acyclic graph and raise an IllegalArgumentException.
+    a directed acyclic graph and raise a :py:class:`ValueError`.
  
     :param graph: The input graph. Must be a DAG.
     :returns: A vertex iterator

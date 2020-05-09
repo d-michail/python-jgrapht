@@ -24,7 +24,7 @@ def barabasi_albert_graph(graph, m0, m, n, seed=None):
     :param m: number of edges of each new node added during the network growth
     :param n: final number of nodes
     :param seed: seed for the random number generator. If None the system time is used
-    :raise IllegalArgumentError: in case of invalid parameters
+    :raise ValueError: in case of invalid parameters
     """
     if seed is None:
         seed = int(time.time())
@@ -49,7 +49,7 @@ def barabasi_albert_forest(graph, t, n, seed=None):
     :param t: number of initial isolated nodes.
     :param n: final number of nodes
     :param seed: seed for the random number generator. If None the system time is used
-    :raise IllegalArgumentError: In case of invalid parameters    
+    :raise ValueError: In case of invalid parameters    
     """
     if seed is None:
         seed = int(time.time())
@@ -246,7 +246,7 @@ def kleinberg_smallworld_graph(graph, n, p, q, r, seed=None):
     :param q: how many long-range contacts to add for each node
     :param r: probability distribution parameter which is a basic structural parameter measuring how widely "networked" the underlying society of nodes is
     :param seed: seed for the random number generator
-    :raises IllegalArgumentError: in case of invalid parameters
+    :raises ValueError: in case of invalid parameters
     """
     if seed is None:
         seed = int(time.time())

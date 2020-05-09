@@ -17,4 +17,3 @@ API
    algorithms/index
    generators
    io/index
-   exceptions

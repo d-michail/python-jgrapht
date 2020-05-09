@@ -58,7 +58,7 @@ def count_triangles(graph):
 
     :param graph: the input graph. Must be undirected
     :returns: the number of triangles in the graph 
-    :raises IllegalArgumentError: if the graph is not undirected
+    :raises ValueError: if the graph is not undirected
     """
     return backend.jgrapht_graph_metrics_triangles(graph.handle)
 

@@ -304,7 +304,7 @@ class Graph(ABC):
      
         :param v: vertex whose degree is to be calculated
         :returns: the degree of the specified vertex
-        :raises IllegalArgumentError: if the vertex is not found in the graph
+        :raises ValueError: if the vertex is not found in the graph
         """
         pass
 
@@ -319,7 +319,7 @@ class Graph(ABC):
      
         :param v: vertex whose degree is to be calculated
         :returns: the degree of the specified vertex
-        :raises IllegalArgumentError: if the vertex is not found in the graph
+        :raises ValueError: if the vertex is not found in the graph
         """
         pass
 
@@ -334,7 +334,7 @@ class Graph(ABC):
      
         :param v: vertex whose degree is to be calculated
         :returns: the degree of the specified vertex
-        :raises IllegalArgumentError: if the vertex is not found in the graph
+        :raises ValueError: if the vertex is not found in the graph
         """
         pass
 
@@ -431,7 +431,7 @@ class Graph(ABC):
 
         :param v: the vertex
         :returns: the set of all edges touching v.
-        :raises IllegalArgumentError: If the vertex is not in the graph.
+        :raises ValueError: If the vertex is not in the graph.
         """
         pass
 
@@ -445,7 +445,7 @@ class Graph(ABC):
 
         :param v: the vertex
         :returns: the set of all edges incoming into v.
-        :raises IllegalArgumentError: If the vertex is not in the graph.
+        :raises ValueError: If the vertex is not in the graph.
         """
         pass
 
@@ -459,7 +459,7 @@ class Graph(ABC):
 
         :param v: the vertex
         :returns: the set of all edges outgoing from v.
-        :raises IllegalArgumentError: If the vertex is not in the graph.
+        :raises ValueError: If the vertex is not in the graph.
         """
         pass
 

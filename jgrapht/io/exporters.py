@@ -146,7 +146,7 @@ def write_lemon(graph, filename, export_edge_weights=False, escape_strings=False
     :param filename: the filename
     :param export_edge_weights: whether to also export edge weights
     :param escape_strings: whether to escape all strings as Java strings
-    :raises GraphExportError: In case of an export error        
+    :raises IOError: In case of an export error        
     """
     custom = [export_edge_weights, escape_strings]
     return _export_to_file("lemon", graph, filename, *custom)
@@ -161,7 +161,7 @@ def generate_lemon(graph, export_edge_weights=False, escape_strings=False):
     :param export_edge_weights: whether to also export edge weights
     :param escape_strings: whether to escape all strings as Java strings
     :returns: a string contains the exported graph    
-    :raises GraphExportError: In case of an export error        
+    :raises IOError: In case of an export error        
     """
     custom = [export_edge_weights, escape_strings]
     return _export_to_string("lemon", graph, *custom)
@@ -212,7 +212,7 @@ def write_gml(
     :param export_edge_weights: whether to export edge weights
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
-    :raises GraphExportError: In case of an export error 
+    :raises IOError: In case of an export error 
     """
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
@@ -270,7 +270,7 @@ def generate_gml(
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
     :returns: a string contains the exported graph    
-    :raises GraphExportError: In case of an export error 
+    :raises IOError: In case of an export error 
     """
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
@@ -303,7 +303,7 @@ def write_json(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=
     :param filename: Filename to write
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
-    :raises GraphExportError: In case of an export error 
+    :raises IOError: In case of an export error 
     """
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
@@ -335,7 +335,7 @@ def generate_json(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
     :returns: a string contains the exported graph    
-    :raises GraphExportError: In case of an export error 
+    :raises IOError: In case of an export error 
     """
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
@@ -378,7 +378,7 @@ def write_csv(
     :param matrix_format_node_id: only for the matrix format, whether to export node identifiers
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the output should contain
            zero for missing edges
-    :raises GraphExportError: in case of an export error
+    :raises IOError: in case of an export error
     """
     format = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
     custom = [
@@ -410,7 +410,7 @@ def generate_csv(
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the output should contain
            zero for missing edges
     :returns: a string contains the exported graph           
-    :raises GraphExportError: in case of an export error
+    :raises IOError: in case of an export error
     """
     format = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
     custom = [
@@ -481,7 +481,7 @@ def write_gexf(
     :param export_edge_labels: whether to export edge labels
     :param export_edge_types: whether to export edge types
     :param export_meta: whether to export meta tag
-    :raises GraphExportError: In case of an export error         
+    :raises IOError: In case of an export error         
     """
     attrs_registry = _JGraphTAttributesRegistry()
     for name, category, type, default_value in attrs:
@@ -561,7 +561,7 @@ def generate_gexf(
     :param export_edge_types: whether to export edge types
     :param export_meta: whether to export meta tag
     :returns: a string contains the exported graph    
-    :raises GraphExportError: In case of an export error         
+    :raises IOError: In case of an export error         
     """
     attrs_registry = _JGraphTAttributesRegistry()
     for name, category, type, default_value in attrs:
@@ -594,7 +594,7 @@ def write_dot(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=N
     :param filename: Filename to write
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
-    :raises GraphExportError: In case of an export error         
+    :raises IOError: In case of an export error         
     """
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
@@ -618,7 +618,7 @@ def generate_dot(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
     :returns: a string contains the exported graph    
-    :raises GraphExportError: In case of an export error         
+    :raises IOError: In case of an export error         
     """
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
@@ -638,7 +638,7 @@ def write_graph6(graph, filename):
 
     :param graph: The graph to export
     :param filename: Filename to write
-    :raises GraphExportError: In case of an export error         
+    :raises IOError: In case of an export error         
     """
     return _export_to_file("graph6", graph, filename)
 
@@ -650,7 +650,7 @@ def generate_graph6(graph):
 
     :param graph: The graph to export
     :returns: a string contains the exported graph    
-    :raises GraphExportError: In case of an export error         
+    :raises IOError: In case of an export error         
     """
     return _export_to_string("graph6", graph)
 
@@ -662,7 +662,7 @@ def write_sparse6(graph, filename):
 
     :param graph: The graph to export
     :param filename: Filename to write
-    :raises GraphExportError: In case of an export error         
+    :raises IOError: In case of an export error         
     """
 
     return _export_to_file("sparse6", graph, filename)
@@ -675,6 +675,6 @@ def generate_sparse6(graph):
 
     :param graph: The graph to export
     :returns: a string contains the exported graph         
-    :raises GraphExportError: In case of an export error
+    :raises IOError: In case of an export error
     """
     return _export_to_string("sparse6", graph)

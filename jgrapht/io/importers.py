@@ -67,7 +67,7 @@ def read_dimacs(graph, filename, preserve_ids_from_input=True):
     :param filename: filename to read from
     :param preserve_ids_from_input: whether to preserve the vertex identifiers from the input. If False
            the importer uses new identifiers created from the provided graph.
-    :raises GraphImportError: In case of an import error 
+    :raises IOError: In case of an import error 
     """
     return _import("file_dimacs", graph, filename, preserve_ids_from_input)
 
@@ -109,7 +109,7 @@ def parse_dimacs(graph, input_string, preserve_ids_from_input=True):
     :param input_string: Input string to read from
     :param preserve_ids_from_input: whether to preserve the vertex identifiers from the input. If False
            the importer uses new identifiers created from the provided graph.    
-    :raises GraphImportError: In case of an import error 
+    :raises IOError: In case of an import error 
     """
     return _import("string_dimacs", graph, input_string, preserve_ids_from_input)
 
@@ -186,7 +186,7 @@ def read_gml(
            the importer uses new identifiers created from the provided graph.        
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
-    :raises GraphImportError: In case of an import error 
+    :raises IOError: In case of an import error 
     """
     callback_ctype = ctypes.CFUNCTYPE(
         None, ctypes.c_longlong, ctypes.c_char_p, ctypes.c_char_p
@@ -274,7 +274,7 @@ def parse_gml(
            the importer uses new identifiers created from the provided graph.        
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
-    :raises GraphImportError: In case of an import error 
+    :raises IOError: In case of an import error 
     """
     callback_ctype = ctypes.CFUNCTYPE(
         None, ctypes.c_longlong, ctypes.c_char_p, ctypes.c_char_p
@@ -342,7 +342,7 @@ def read_json(
                          None to allow the graph to assign identifiers to new vertices.
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
-    :raises GraphImportError: In case of an import error    
+    :raises IOError: In case of an import error    
     """
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
     import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
@@ -417,7 +417,7 @@ def parse_json(
                          None to allow the graph to assign identifiers to new vertices.    
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
-    :raises GraphImportError: In case of an import error    
+    :raises IOError: In case of an import error    
     """
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
     import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
@@ -471,7 +471,7 @@ def read_csv(
     :param import_edge_weights: whether to import edge weights
     :param matrix_format_node_id: only for the matrix format, whether to import node identifiers
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
-    :raises GraphImportError: in case of an import error    
+    :raises IOError: in case of an import error    
     """
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
     import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
@@ -514,7 +514,7 @@ def parse_csv(
     :param import_edge_weights: whether to import edge weights
     :param matrix_format_node_id: only for the matrix format, whether to import node identifiers
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
-    :raises GraphImportError: in case of an import error    
+    :raises IOError: in case of an import error    
     """
 
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
@@ -606,7 +606,7 @@ def read_gexf(
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
-    :raises GraphImportError: in case of an import error    
+    :raises IOError: in case of an import error    
     """
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
     import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
@@ -705,7 +705,7 @@ def parse_gexf(
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
-    :raises GraphImportError: in case of an import error    
+    :raises IOError: in case of an import error    
     """
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
     import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
@@ -766,7 +766,7 @@ def read_dot(
                          None to allow the graph to assign identifiers to new vertices.                   
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
-    :raises GraphImportError: In case of an import error 
+    :raises IOError: In case of an import error 
     """
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
     import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
@@ -820,7 +820,7 @@ def parse_dot(
                          None to allow the graph to assign identifiers to new vertices.                   
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
-    :raises GraphImportError: in case of an import error 
+    :raises IOError: in case of an import error 
     """
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
     import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
@@ -877,7 +877,7 @@ def read_graph6sparse6(
                          None to allow the graph to assign identifiers to new vertices.                   
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
-    :raises GraphImportError: in case of an import error 
+    :raises IOError: in case of an import error 
     """
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
     import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
@@ -935,7 +935,7 @@ def parse_graph6sparse6(
         Can be None to allow the graph to assign identifiers to new vertices.                   
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
-    :raises GraphImportError: in case of an import error 
+    :raises IOError: in case of an import error 
     """
     import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_char_p)
     import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
