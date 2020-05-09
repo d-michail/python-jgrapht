@@ -13,7 +13,7 @@ def _clustering_alg(name, graph, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 
-    _, handle = alg_method(graph.handle, *args)
+    handle = alg_method(graph.handle, *args)
 
     return _JGraphTClustering(handle)
 

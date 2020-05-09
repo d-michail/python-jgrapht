@@ -14,7 +14,7 @@ def _scoring_alg(name, graph, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 
-    _, scores_handle = alg_method(graph.handle, *args)
+    scores_handle = alg_method(graph.handle, *args)
 
     return _JGraphTLongDoubleMap(handle=scores_handle)
 

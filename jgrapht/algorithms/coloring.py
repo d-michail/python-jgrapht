@@ -11,7 +11,7 @@ def _coloring_alg(name, graph, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 
-    _, num_colors, color_map_handle = alg_method(graph.handle, *args)
+    num_colors, color_map_handle = alg_method(graph.handle, *args)
 
     return (num_colors, _JGraphTLongLongMap(handle=color_map_handle))
 

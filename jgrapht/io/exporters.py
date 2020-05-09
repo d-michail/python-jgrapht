@@ -30,7 +30,7 @@ def _export_to_string(name, graph, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    _, handle = alg_method(graph.handle, *args)
+    handle = alg_method(graph.handle, *args)
 
     return str(_JGraphTString(handle))
 

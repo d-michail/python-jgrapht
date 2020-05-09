@@ -10,7 +10,7 @@ def _mst_alg(name, graph):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    _, weight, mst_handle = alg_method(graph.handle)
+    weight, mst_handle = alg_method(graph.handle)
 
     return weight, _JGraphTLongSet(mst_handle)
 
@@ -84,9 +84,7 @@ def multiplicative_greedy(graph, k):
     :param k: integer
     :returns: tuple of the form (weight, spanner_edges)
     """
-    err, weight, spanner = backend.jgrapht_spanner_exec_greedy_multiplicative(
+    weight, spanner = backend.jgrapht_spanner_exec_greedy_multiplicative(
         graph.handle, k
     )
-    if err:
-        _raise_status()
     return weight, _JGraphTLongSet(spanner)

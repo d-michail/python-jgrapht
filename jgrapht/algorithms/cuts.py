@@ -11,7 +11,7 @@ def _cut_alg(name, graph, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 
-    _, cut_weight, cut_source_partition_handle = alg_method(
+    cut_weight, cut_source_partition_handle = alg_method(
         graph.handle, *args
     )
 

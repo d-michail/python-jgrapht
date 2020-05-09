@@ -12,7 +12,7 @@ def _tour_tsp_alg(name, graph_or_graph_path, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    _, graph_path = alg_method(graph_or_graph_path.handle, *args)
+    graph_path = alg_method(graph_or_graph_path.handle, *args)
 
     return _JGraphTGraphPath(graph_path)
 

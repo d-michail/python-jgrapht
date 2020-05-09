@@ -14,7 +14,7 @@ def _matching_alg(name, graph, *args, no_custom_prefix=False):
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 
-    _, weight, m_handle = alg_method(graph.handle, *args)
+    weight, m_handle = alg_method(graph.handle, *args)
 
     return weight, _JGraphTLongSet(handle=m_handle)
 

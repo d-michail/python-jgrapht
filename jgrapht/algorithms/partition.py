@@ -10,5 +10,5 @@ def bipartite_partitions(graph):
     :param graph: The input graph
     :returns: A tuple (result, partition1, partition2)
     """
-    _, res, part1, part2 = backend.jgrapht_partition_exec_bipartite(graph.handle)
+    res, part1, part2 = backend.jgrapht_partition_exec_bipartite(graph.handle)
     return res, _JGraphTLongSet(part1), _JGraphTLongSet(part2)

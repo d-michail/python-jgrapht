@@ -20,9 +20,9 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
         jgrapht_vertex_weights = _JGraphTLongDoubleMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
-        _, weight, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
+        weight, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
     else:
-        _, weight, vc_handle = alg_method(graph.handle)
+        weight, vc_handle = alg_method(graph.handle)
 
     return weight, _JGraphTLongSet(vc_handle)
 

@@ -11,7 +11,7 @@ def _clique_enumeration_alg(name, graph, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 
-    _, clique_it = alg_method(graph.handle, *args)
+    clique_it = alg_method(graph.handle, *args)
 
     return _JGraphTLongSetIterator(handle=clique_it)
 

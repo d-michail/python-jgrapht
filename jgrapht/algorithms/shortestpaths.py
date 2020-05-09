@@ -17,7 +17,7 @@ def _sp_singlesource_alg(name, graph, source_vertex):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    _, handle = alg_method(graph.handle, source_vertex)
+    handle = alg_method(graph.handle, source_vertex)
 
     return _JGraphTSingleSourcePaths(handle, source_vertex)
 
@@ -30,7 +30,7 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    _, handle = alg_method(graph.handle, source_vertex, target_vertex, *args)
+    handle = alg_method(graph.handle, source_vertex, target_vertex, *args)
 
     return _JGraphTGraphPath(handle) if handle is not None else None
 
@@ -43,7 +43,7 @@ def _sp_allpairs_alg(name, graph):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    _, handle = alg_method(graph.handle)
+    handle = alg_method(graph.handle)
 
     return _JGraphTAllPairsPaths(handle)
 
@@ -55,7 +55,7 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    _, handle = alg_method(graph.handle, source_vertex, target_vertex, k, *args)
+    handle = alg_method(graph.handle, source_vertex, target_vertex, k, *args)
 
     return _JGraphTGraphPathIterator(handle)
 

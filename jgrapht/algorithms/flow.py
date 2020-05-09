@@ -11,7 +11,7 @@ def _maxflow_alg(name, graph, source, sink, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 
-    _, flow_value, flow_handle, cut_source_partition_handle = alg_method(
+    flow_value, flow_handle, cut_source_partition_handle = alg_method(
         graph.handle, source, sink, *args
     )
 

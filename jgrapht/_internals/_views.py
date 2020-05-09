@@ -7,9 +7,7 @@ from ._wrappers import _JGraphTGraph
 
 class _UnweightedGraphView(_JGraphTGraph):
     def __init__(self, graph):
-        err, res = backend.jgrapht_graph_as_unweighted(graph.handle)
-        if err:
-            _raise_status()
+        res = backend.jgrapht_graph_as_unweighted(graph.handle)
 
         super().__init__(res, True)
 
@@ -36,9 +34,7 @@ class _UnweightedGraphView(_JGraphTGraph):
 
 class _UndirectedGraphView(_JGraphTGraph):
     def __init__(self, graph):
-        err, res = backend.jgrapht_graph_as_undirected(graph.handle)
-        if err:
-            _raise_status()
+        res = backend.jgrapht_graph_as_undirected(graph.handle)
 
         super().__init__(res, True)
 
@@ -65,9 +61,7 @@ class _UndirectedGraphView(_JGraphTGraph):
 
 class _UnmodifiableGraphView(_JGraphTGraph):
     def __init__(self, graph):
-        err, res = backend.jgrapht_graph_as_unmodifiable(graph.handle)
-        if err:
-            _raise_status()
+        res = backend.jgrapht_graph_as_unmodifiable(graph.handle)
 
         super().__init__(res, True)
 
@@ -94,9 +88,7 @@ class _UnmodifiableGraphView(_JGraphTGraph):
 
 class _EdgeReversedGraphView(_JGraphTGraph):
     def __init__(self, graph):
-        err, res = backend.jgrapht_graph_as_edgereversed(graph.handle)
-        if err:
-            _raise_status()
+        res = backend.jgrapht_graph_as_edgereversed(graph.handle)
 
         super().__init__(res, True)
         self._graph_type = copy.copy(graph.graph_type)

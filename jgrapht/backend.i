@@ -79,6 +79,7 @@ void jgrapht_error_print_stack_trace();
 void jgrapht_vmLocatorSymbol();
 
 // exception handling
+// grab result from C and throw python exception
 
 %exception { 
     $action
@@ -119,6 +120,10 @@ void jgrapht_vmLocatorSymbol();
         SWIG_fail;
     }
 }
+
+// ignore the integer return code
+// we already handled this using the exception 
+%typemap(out) int  "$result = SWIG_Py_Void();";
 
 // attribute store 
 

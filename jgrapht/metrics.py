@@ -15,8 +15,7 @@ def diameter(graph):
     :param graph: the input graph
     :returns: the graph diameter
     """
-    _, res = backend.jgrapht_graph_metrics_diameter(graph.handle)
-    return res
+    return backend.jgrapht_graph_metrics_diameter(graph.handle)
 
 
 def radius(graph):
@@ -32,8 +31,7 @@ def radius(graph):
     :param graph: the input graph
     :returns: the graph diameter
     """
-    _, res = backend.jgrapht_graph_metrics_radius(graph.handle)
-    return res
+    return backend.jgrapht_graph_metrics_radius(graph.handle)
 
 
 def girth(graph):
@@ -49,8 +47,7 @@ def girth(graph):
     :param graph: the input graph
     :returns: the graph girth
     """
-    _, res = backend.jgrapht_graph_metrics_girth(graph.handle)
-    return res
+    return backend.jgrapht_graph_metrics_girth(graph.handle)
 
 
 def count_triangles(graph):
@@ -63,8 +60,7 @@ def count_triangles(graph):
     :returns: the number of triangles in the graph 
     :raises IllegalArgumentError: if the graph is not undirected
     """
-    _, res = backend.jgrapht_graph_metrics_triangles(graph.handle)
-    return res
+    return backend.jgrapht_graph_metrics_triangles(graph.handle)
 
 
 def measure(graph): 
@@ -84,7 +80,6 @@ def measure(graph):
     :returns: a 6-tuple containing the results.
     """
     ( 
-        _,
         diameter, 
         radius, 
         center_handle,
