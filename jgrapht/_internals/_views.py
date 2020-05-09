@@ -2,7 +2,6 @@ from .. import backend
 from ..types import GraphType
 import copy
 
-from ._errors import _raise_status
 from ._wrappers import _JGraphTGraph
 
 

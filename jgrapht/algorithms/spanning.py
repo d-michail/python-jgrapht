@@ -1,6 +1,4 @@
 from .. import backend
-from ..exceptions import UnsupportedOperationError
-from .._internals._errors import _raise_status
 from .._internals._wrappers import _JGraphTLongSet
 
 
@@ -10,11 +8,9 @@ def _mst_alg(name, graph):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    err, weight, mst_handle = alg_method(graph.handle)
-    if err:
-        _raise_status()
+    _, weight, mst_handle = alg_method(graph.handle)
 
     return weight, _JGraphTLongSet(mst_handle)
 

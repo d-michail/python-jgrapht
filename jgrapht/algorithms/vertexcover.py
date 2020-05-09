@@ -1,6 +1,4 @@
 from .. import backend
-from ..exceptions import UnsupportedOperationError
-from .._internals._errors import _raise_status
 from .._internals._wrappers import _JGraphTLongDoubleMap, _JGraphTLongSet
 
 
@@ -14,22 +12,17 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
         if vertex_weights is not None:
-            raise UnsupportedOperationError(
-                "Algorithm not supported. Maybe try without weights?"
-            )
+            raise NotImplementedError("Algorithm not supported. Maybe try without weights?")
         else:
-            raise UnsupportedOperationError("Algorithm not supported.")
+            raise NotImplementedError("Algorithm not supported.")
 
     if vertex_weights is not None:
         jgrapht_vertex_weights = _JGraphTLongDoubleMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
-        err, weight, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
+        _, weight, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
     else:
-        err, weight, vc_handle = alg_method(graph.handle)
-
-    if err:
-        _raise_status()
+        _, weight, vc_handle = alg_method(graph.handle)
 
     return weight, _JGraphTLongSet(vc_handle)
 

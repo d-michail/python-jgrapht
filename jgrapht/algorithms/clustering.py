@@ -1,5 +1,4 @@
 from .. import backend
-from .._internals._errors import _raise_status, UnsupportedOperationError
 from .._internals._wrappers import _JGraphTClustering
 
 import time
@@ -12,17 +11,15 @@ def _clustering_alg(name, graph, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")
+        raise NotImplementedError("Algorithm not supported.")
 
-    err, handle = alg_method(graph.handle, *args)
-    if err:
-        _raise_status()
+    _, handle = alg_method(graph.handle, *args)
 
     return _JGraphTClustering(handle)
 
 
 def k_spanning_tree(graph, k):
-    """The k spanning tree clustering algorithm. 
+    r"""The k spanning tree clustering algorithm. 
 
     The algorithm finds a minimum spanning tree T using Prim's algorithm, then executes Kruskal's
     algorithm only on the edges of T until k trees are formed. The resulting trees are the final
@@ -42,7 +39,7 @@ def k_spanning_tree(graph, k):
 
 
 def label_propagation(graph, max_iterations=None, seed=None):
-    """Label propagation clustering.
+    r"""Label propagation clustering.
 
     The algorithm is a near linear time algorithm capable of discovering communities in large graphs.
     It is described in detail in the following `paper <https://dx.doi.org/10.1103/PhysRevE.76.036106>`_:

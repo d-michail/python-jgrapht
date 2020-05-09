@@ -1,5 +1,4 @@
 from . import backend
-from ._internals._errors import _raise_status
 from ._internals._wrappers import (
     _JGraphTLongDoubleMap,
     _JGraphTLongSet,
@@ -16,8 +15,8 @@ def diameter(graph):
     :param graph: the input graph
     :returns: the graph diameter
     """
-    err, res = backend.jgrapht_graph_metrics_diameter(graph.handle)
-    return res if not err else _raise_status()
+    _, res = backend.jgrapht_graph_metrics_diameter(graph.handle)
+    return res
 
 
 def radius(graph):
@@ -33,8 +32,8 @@ def radius(graph):
     :param graph: the input graph
     :returns: the graph diameter
     """
-    err, res = backend.jgrapht_graph_metrics_radius(graph.handle)
-    return res if not err else _raise_status()
+    _, res = backend.jgrapht_graph_metrics_radius(graph.handle)
+    return res
 
 
 def girth(graph):
@@ -50,8 +49,8 @@ def girth(graph):
     :param graph: the input graph
     :returns: the graph girth
     """
-    err, res = backend.jgrapht_graph_metrics_girth(graph.handle)
-    return res if not err else _raise_status()
+    _, res = backend.jgrapht_graph_metrics_girth(graph.handle)
+    return res
 
 
 def count_triangles(graph):
@@ -64,8 +63,8 @@ def count_triangles(graph):
     :returns: the number of triangles in the graph 
     :raises IllegalArgumentError: if the graph is not undirected
     """
-    err, res = backend.jgrapht_graph_metrics_triangles(graph.handle)
-    return res if not err else _raise_status()
+    _, res = backend.jgrapht_graph_metrics_triangles(graph.handle)
+    return res
 
 
 def measure(graph): 
@@ -85,7 +84,7 @@ def measure(graph):
     :returns: a 6-tuple containing the results.
     """
     ( 
-        err,
+        _,
         diameter, 
         radius, 
         center_handle,
@@ -93,9 +92,6 @@ def measure(graph):
         pseudo_periphery_handle,
         vertex_eccentricity_map_handle
     ) = backend.jgrapht_graph_metrics_measure_graph(graph.handle)
-
-    if err: 
-        _raise_status()
 
     return (
         diameter, 

@@ -1,5 +1,4 @@
 from .. import backend
-from .._internals._errors import _raise_status, UnsupportedOperationError
 from .._internals._wrappers import _JGraphTCut
 
 
@@ -10,13 +9,11 @@ def _cut_alg(name, graph, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")
+        raise NotImplementedError("Algorithm not supported.")
 
-    err, cut_weight, cut_source_partition_handle = alg_method(
+    _, cut_weight, cut_source_partition_handle = alg_method(
         graph.handle, *args
     )
-    if err:
-        _raise_status()
 
     return _JGraphTCut(graph, cut_weight, cut_source_partition_handle)
 

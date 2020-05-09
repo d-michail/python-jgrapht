@@ -1,5 +1,4 @@
 from .. import backend
-from .._internals._errors import _raise_status, UnsupportedOperationError
 from .._internals._wrappers import _JGraphTCut, _JGraphTFlow
 
 
@@ -10,13 +9,11 @@ def _maxflow_alg(name, graph, source, sink, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")
+        raise NotImplementedError("Algorithm not supported.")
 
-    err, flow_value, flow_handle, cut_source_partition_handle = alg_method(
+    _, flow_value, flow_handle, cut_source_partition_handle = alg_method(
         graph.handle, source, sink, *args
     )
-    if err:
-        _raise_status()
 
     flow = _JGraphTFlow(flow_handle, source, sink, flow_value)
     cut = _JGraphTCut(graph, flow_value, cut_source_partition_handle)

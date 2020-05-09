@@ -1,7 +1,6 @@
 import time
 
 from . import backend
-from ._internals._errors import _raise_status
 
 
 def barabasi_albert_graph(graph, m0, m, n, seed=None):
@@ -30,9 +29,7 @@ def barabasi_albert_graph(graph, m0, m, n, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_barabasi_albert(graph.handle, m0, m, n, seed)
-    if err:
-        raise_status()
+    backend.jgrapht_generate_barabasi_albert(graph.handle, m0, m, n, seed)
 
 
 def barabasi_albert_forest(graph, t, n, seed=None):
@@ -57,9 +54,7 @@ def barabasi_albert_forest(graph, t, n, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_barabasi_albert_forest(graph.handle, t, n, seed)
-    if err:
-        raise_status()
+    backend.jgrapht_generate_barabasi_albert_forest(graph.handle, t, n, seed)
 
 
 def complete_graph(graph, n):
@@ -71,9 +66,7 @@ def complete_graph(graph, n):
     :param graph: the graph to alter, which should be empty
     :param n: the number of vertices.
     """
-    err = backend.jgrapht_generate_complete(graph.handle, n)
-    if err:
-        raise_status()
+    backend.jgrapht_generate_complete(graph.handle, n)
 
 
 def complete_bipartite_graph(graph, a, b):
@@ -83,9 +76,7 @@ def complete_bipartite_graph(graph, a, b):
     :param a: size of the first partition
     :param b: size of the second partition
     """
-    err = backend.jgrapht_generate_bipartite_complete(graph.handle, a, b)
-    if err:
-        raise_status()
+    backend.jgrapht_generate_bipartite_complete(graph.handle, a, b)
 
 
 def empty_graph(graph, n):
@@ -97,9 +88,7 @@ def empty_graph(graph, n):
     :param g: the graph to alter, which should be empty
     :param n: number of vertices
     """
-    err = backend.jgrapht_generate_empty(graph.handle, n)
-    if err:
-        raise_status()
+    backend.jgrapht_generate_empty(graph.handle, n)
 
 
 def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
@@ -130,11 +119,9 @@ def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_gnm_random(
+    backend.jgrapht_generate_gnm_random(
         graph.handle, n, m, loops, multiple_edges, seed
     )
-    if err:
-        raise_status()
 
 
 def gnp_random_graph(graph, n, p, loops=False, seed=None):
@@ -154,9 +141,7 @@ def gnp_random_graph(graph, n, p, loops=False, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_gnp_random(graph.handle, n, p, loops, seed)
-    if err:
-        raise_status()
+    backend.jgrapht_generate_gnp_random(graph.handle, n, p, loops, seed)
 
 
 def ring_graph(graph, n):
@@ -167,9 +152,7 @@ def ring_graph(graph, n):
     :param graph: the graph to alter
     :param n: the number of vertices
     """
-    err = backend.jgrapht_generate_ring(graph.handle, n)
-    if err:
-        raise_status()
+    backend.jgrapht_generate_ring(graph.handle, n)
 
 
 def scalefree_graph(graph, n, seed=None):
@@ -185,9 +168,7 @@ def scalefree_graph(graph, n, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_scalefree(graph.handle, n, seed)
-    if err:
-        raise_status()
+    backend.jgrapht_generate_scalefree(graph.handle, n, seed)
 
 
 def watts_strogatz_graph(graph, n, k, p, add_instead_of_rewire=False, seed=None):
@@ -238,11 +219,9 @@ def watts_strogatz_graph(graph, n, k, p, add_instead_of_rewire=False, seed=None)
     if seed is None:
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_watts_strogatz(
+    backend.jgrapht_generate_watts_strogatz(
         graph.handle, n, k, p, add_instead_of_rewire, seed
     )
-    if err:
-        raise_status()
 
 
 def kleinberg_smallworld_graph(graph, n, p, q, r, seed=None):
@@ -272,6 +251,4 @@ def kleinberg_smallworld_graph(graph, n, p, q, r, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    err = backend.jgrapht_generate_kleinberg_smallworld(graph.handle, n, p, q, r, seed)
-    if err:
-        raise_status()
+    backend.jgrapht_generate_kleinberg_smallworld(graph.handle, n, p, q, r, seed)

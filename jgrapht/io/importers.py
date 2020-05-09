@@ -2,8 +2,6 @@ import time
 import ctypes
 
 from .. import backend
-from ..exceptions import UnsupportedOperationError
-from .._internals._errors import _raise_status
 from .._internals._wrappers import _JGraphTLongIterator, _JGraphTGraphPath, _JGraphTAttributeStore
 
 
@@ -13,11 +11,9 @@ def _import(name, graph, filename_or_string, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    err = alg_method(graph.handle, filename_or_string, *args)
-    if err:
-        _raise_status()
+    alg_method(graph.handle, filename_or_string, *args)
 
 
 def _create_wrapped_callback(callback, cfunctype):

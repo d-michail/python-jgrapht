@@ -1,5 +1,4 @@
 from . import backend
-from ._internals._errors import _raise_status
 from ._internals._wrappers import _JGraphTLongIterator
 
 import time
@@ -18,14 +17,14 @@ def bfs_traversal(graph, start_vertex=None):
     :returns: A vertex iterator
     """
     if start_vertex is None:
-        err, it = backend.jgrapht_traverse_create_bfs_from_all_vertices_vit(
+        _, it = backend.jgrapht_traverse_create_bfs_from_all_vertices_vit(
             graph.handle
         )
     else:
-        err, it = backend.jgrapht_traverse_create_bfs_from_vertex_vit(
+        _, it = backend.jgrapht_traverse_create_bfs_from_vertex_vit(
             graph.handle, start_vertex
         )
-    return _JGraphTLongIterator(it) if not err else _raise_status()
+    return _JGraphTLongIterator(it)
 
 
 def lexicographic_bfs_traversal(graph):
@@ -41,8 +40,8 @@ def lexicographic_bfs_traversal(graph):
     :param graph: The input graph
     :returns: A vertex iterator
     """
-    err, it = backend.jgrapht_traverse_create_lex_bfs_vit(graph.handle)
-    return _JGraphTLongIterator(it) if not err else _raise_status()
+    _, it = backend.jgrapht_traverse_create_lex_bfs_vit(graph.handle)
+    return _JGraphTLongIterator(it)
 
 
 def dfs_traversal(graph, start_vertex=None):
@@ -58,14 +57,14 @@ def dfs_traversal(graph, start_vertex=None):
     :returns: A vertex iterator
     """
     if start_vertex is None:
-        err, it = backend.jgrapht_traverse_create_dfs_from_all_vertices_vit(
+        _, it = backend.jgrapht_traverse_create_dfs_from_all_vertices_vit(
             graph.handle
         )
     else:
-        err, it = backend.jgrapht_traverse_create_dfs_from_vertex_vit(
+        _, it = backend.jgrapht_traverse_create_dfs_from_vertex_vit(
             graph.handle, start_vertex
         )
-    return _JGraphTLongIterator(it) if not err else _raise_status()
+    return _JGraphTLongIterator(it)
 
 
 def topological_order_traversal(graph):
@@ -82,8 +81,8 @@ def topological_order_traversal(graph):
     :param graph: The input graph. Must be a DAG.
     :returns: A vertex iterator
     """
-    err, it = backend.jgrapht_traverse_create_topological_order_vit(graph.handle)
-    return _JGraphTLongIterator(it) if not err else _raise_status()
+    _, it = backend.jgrapht_traverse_create_topological_order_vit(graph.handle)
+    return _JGraphTLongIterator(it)
 
 
 def random_walk_traversal(
@@ -102,10 +101,10 @@ def random_walk_traversal(
         seed = int(time.time())
     if max_steps is None:
         max_steps = 0x7FFFFFFFFFFFFFFF
-    err, it = backend.jgrapht_traverse_create_custom_random_walk_from_vertex_vit(
+    _, it = backend.jgrapht_traverse_create_custom_random_walk_from_vertex_vit(
         graph.handle, start_vertex, weighted, max_steps, seed
     )
-    return _JGraphTLongIterator(it) if not err else _raise_status()
+    return _JGraphTLongIterator(it)
 
 
 def max_cardinality_traversal(graph):
@@ -124,8 +123,8 @@ def max_cardinality_traversal(graph):
     :param graph: The input graph (must be undirected)
     :returns: A vertex iterator 
     """
-    err, it = backend.jgrapht_traverse_create_max_cardinality_vit(graph.handle)
-    return _JGraphTLongIterator(it) if not err else _raise_status()
+    _, it = backend.jgrapht_traverse_create_max_cardinality_vit(graph.handle)
+    return _JGraphTLongIterator(it)
 
 
 def degeneracy_ordering_traversal(graph):
@@ -142,8 +141,8 @@ def degeneracy_ordering_traversal(graph):
     :param graph: The input graph
     :returns: A vertex iterator 
     """
-    err, it = backend.jgrapht_traverse_create_degeneracy_ordering_vit(graph.handle)
-    return _JGraphTLongIterator(it) if not err else _raise_status()
+    _, it = backend.jgrapht_traverse_create_degeneracy_ordering_vit(graph.handle)
+    return _JGraphTLongIterator(it)
 
 
 def closest_first_traversal(graph, start_vertex, radius=None):
@@ -157,11 +156,11 @@ def closest_first_traversal(graph, start_vertex, radius=None):
     :param radius: if given restrict the search up to this radius
     """
     if radius is None:
-        err, it = backend.jgrapht_traverse_create_closest_first_from_vertex_vit(
+        _, it = backend.jgrapht_traverse_create_closest_first_from_vertex_vit(
             graph.handle, start_vertex
         )
     else:
-        err, it = backend.jgrapht_traverse_create_custom_closest_first_from_vertex_vit(
+        _, it = backend.jgrapht_traverse_create_custom_closest_first_from_vertex_vit(
             graph.handle, start_vertex, radius
         )
-    return _JGraphTLongIterator(it) if not err else _raise_status()
+    return _JGraphTLongIterator(it)

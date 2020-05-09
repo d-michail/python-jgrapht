@@ -1,7 +1,6 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.exceptions import UnsupportedOperationError
 from jgrapht.views import as_undirected, as_edgereversed, as_unmodifiable, as_unweighted
 
 
@@ -90,7 +89,7 @@ def test_as_unmodifiable():
     # unmodifiable
     g3 = as_unmodifiable(g)
     assert g3.graph_type.modifiable is False
-    with pytest.raises(UnsupportedOperationError):
+    with pytest.raises(ValueError):
         g3.create_edge(v2, v2)
 
 

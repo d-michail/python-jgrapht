@@ -64,6 +64,69 @@ void jgrapht_isolate_destroy();
 
 int jgrapht_isolate_is_attached();
 
+// error
+
+void jgrapht_error_clear_errno();
+
+int jgrapht_error_get_errno();
+
+char *jgrapht_error_get_errno_msg();
+
+void jgrapht_error_print_stack_trace();
+
+// vm
+
+void jgrapht_vmLocatorSymbol();
+
+// exception handling
+
+%exception { 
+    $action
+    switch(result) {
+    case STATUS_ERROR:
+      PyErr_SetString(PyExc_RuntimeError, jgrapht_error_get_errno_msg());
+      jgrapht_error_clear_errno();
+      SWIG_fail;
+    case STATUS_ILLEGAL_ARGUMENT:
+      PyErr_SetString(PyExc_ValueError, jgrapht_error_get_errno_msg());
+      jgrapht_error_clear_errno();
+      SWIG_fail;
+    case STATUS_UNSUPPORTED_OPERATION:
+      PyErr_SetString(PyExc_ValueError, jgrapht_error_get_errno_msg());
+      jgrapht_error_clear_errno();
+      SWIG_fail;
+    case STATUS_INDEX_OUT_OF_BOUNDS:
+      PyErr_SetString(PyExc_IndexError, jgrapht_error_get_errno_msg());
+      jgrapht_error_clear_errno();
+      SWIG_fail;
+    case STATUS_NO_SUCH_ELEMENT:
+      PyErr_SetString(PyExc_KeyError, jgrapht_error_get_errno_msg());
+      jgrapht_error_clear_errno();
+      SWIG_fail;
+    case STATUS_NULL_POINTER:
+      PyErr_SetString(PyExc_ValueError, jgrapht_error_get_errno_msg());
+      jgrapht_error_clear_errno();
+      SWIG_fail;
+    case STATUS_CLASS_CAST:
+      PyErr_SetString(PyExc_TypeError, jgrapht_error_get_errno_msg());
+      jgrapht_error_clear_errno();
+      SWIG_fail;
+    case STATUS_IO_ERROR:
+    case STATUS_EXPORT_ERROR:
+    case STATUS_IMPORT_ERROR:
+      PyErr_SetString(PyExc_IOError, jgrapht_error_get_errno_msg());
+      jgrapht_error_clear_errno();
+      SWIG_fail;
+    case STATUS_NEGATIVE_CYCLE_DETECTED:
+      PyErr_SetString(PyExc_ValueError, jgrapht_error_get_errno_msg());
+      jgrapht_error_clear_errno();
+      SWIG_fail;
+    case STATUS_SUCCESS:
+    default:
+      break;
+    }
+}
+
 // attribute store 
 
 int jgrapht_attributes_store_create(void** OUTPUT);
@@ -146,15 +209,6 @@ int jgrapht_cycles_fundamental_basis_exec_stack_bfs(void *, double* OUTPUT, void
 
 int jgrapht_cycles_fundamental_basis_exec_paton(void *, double* OUTPUT, void** OUTPUT);
 
-// error
-
-void jgrapht_error_clear_errno();
-
-int jgrapht_error_get_errno();
-
-char *jgrapht_error_get_errno_msg();
-
-void jgrapht_error_print_stack_trace();
 
 // exporter
 
@@ -680,6 +734,3 @@ int jgrapht_vertexcover_exec_exact(void *, double* OUTPUT, void** OUTPUT);
 
 int jgrapht_vertexcover_exec_exact_weighted(void *, void *, double* OUTPUT, void** OUTPUT);
 
-// vm
-
-void jgrapht_vmLocatorSymbol();

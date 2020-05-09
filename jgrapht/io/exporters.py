@@ -2,8 +2,6 @@ import time
 import ctypes
 
 from .. import backend
-from ..exceptions import UnsupportedOperationError
-from .._internals._errors import _raise_status, GraphExportError
 from .._internals._wrappers import (
     _JGraphTLongIterator,
     _JGraphTGraphPath,
@@ -19,11 +17,9 @@ def _export_to_file(name, graph, filename, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    err = alg_method(graph.handle, filename, *args)
-    if err:
-        _raise_status()
+    alg_method(graph.handle, filename, *args)
 
 
 def _export_to_string(name, graph, *args):
@@ -32,11 +28,9 @@ def _export_to_string(name, graph, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    err, handle = alg_method(graph.handle, *args)
-    if err:
-        _raise_status()
+    _, handle = alg_method(graph.handle, *args)
 
     return str(_JGraphTString(handle))
 

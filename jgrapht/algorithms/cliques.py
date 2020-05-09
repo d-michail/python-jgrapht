@@ -1,5 +1,4 @@
 from .. import backend
-from .._internals._errors import _raise_status, UnsupportedOperationError
 from .._internals._wrappers import _JGraphTLongSetIterator
 
 
@@ -10,11 +9,9 @@ def _clique_enumeration_alg(name, graph, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")
+        raise NotImplementedError("Algorithm not supported.")
 
-    err, clique_it = alg_method(graph.handle, *args)
-    if err:
-        _raise_status()
+    _, clique_it = alg_method(graph.handle, *args)
 
     return _JGraphTLongSetIterator(handle=clique_it)
 

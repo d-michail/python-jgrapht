@@ -1,5 +1,4 @@
 from .. import backend
-from .._internals._errors import _raise_status, UnsupportedOperationError
 from .._internals._wrappers import _JGraphTLongSet
 
 
@@ -13,11 +12,9 @@ def _matching_alg(name, graph, *args, no_custom_prefix=False):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")
+        raise NotImplementedError("Algorithm not supported.")
 
-    err, weight, m_handle = alg_method(graph.handle, *args)
-    if err:
-        _raise_status()
+    _, weight, m_handle = alg_method(graph.handle, *args)
 
     return weight, _JGraphTLongSet(handle=m_handle)
 

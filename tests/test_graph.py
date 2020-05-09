@@ -1,7 +1,6 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.exceptions import IllegalArgumentError, UnsupportedOperationError
 
 
 def assert_same_set(set1, set2):
@@ -202,7 +201,7 @@ def test_graph_no_allow_self_loops():
     v1 = 0
     assert g.add_vertex(v1)
 
-    with pytest.raises(IllegalArgumentError):
+    with pytest.raises(ValueError):
         g.create_edge(v1, v1)
 
 
@@ -221,7 +220,7 @@ def test_graph_no_allow_multiple_edges():
     assert g.add_vertex(v2)
 
     g.create_edge(v1, v2)
-    with pytest.raises(IllegalArgumentError):
+    with pytest.raises(ValueError):
         g.create_edge(v1, v2)
 
 
@@ -243,7 +242,7 @@ def test_graph_no_weights():
 
     assert g.get_edge_weight(e12) == 1.0
 
-    with pytest.raises(UnsupportedOperationError):
+    with pytest.raises(ValueError):
         g.set_edge_weight(e12, 10.0)
 
 

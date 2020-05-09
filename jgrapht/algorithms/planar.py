@@ -1,5 +1,4 @@
 from .. import backend
-from .._internals._errors import _raise_status, UnsupportedOperationError
 from .._internals._wrappers import _JGraphTPlanarEmbedding, _JGraphTGraph
 
 
@@ -10,11 +9,9 @@ def _planarity_alg(name, graph, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")
+        raise NotImplementedError("Algorithm not supported.")
 
-    err, is_planar, embedding, kuratowski_subdivision = alg_method(graph.handle, *args)
-    if err:
-        _raise_status()
+    _, is_planar, embedding, kuratowski_subdivision = alg_method(graph.handle, *args)
 
     if is_planar:
         return is_planar, _JGraphTPlanarEmbedding(embedding)

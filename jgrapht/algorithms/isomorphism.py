@@ -1,5 +1,4 @@
 from .. import backend
-from .._internals._errors import _raise_status, UnsupportedOperationError
 from .._internals._wrappers import _JGraphTGraphMapping, _JGraphTGraphMappingIterator
 
 
@@ -9,11 +8,9 @@ def _isomorphism_alg(name, graph1, graph2, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")
+        raise NotImplementedError("Algorithm not supported.")
 
-    err, exists, map_it_handle = alg_method(graph1.handle, graph2.handle, *args)
-    if err:
-        _raise_status()
+    _, exists, map_it_handle = alg_method(graph1.handle, graph2.handle, *args)
 
     return _JGraphTGraphMappingIterator(handle=map_it_handle, graph1=graph1, graph2=graph2) if exists else None
 

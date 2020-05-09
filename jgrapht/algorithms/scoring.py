@@ -1,6 +1,4 @@
 from .. import backend
-from ..exceptions import UnsupportedOperationError
-from .._internals._errors import _raise_status
 from .._internals._wrappers import _JGraphTLongIterator, _JGraphTLongDoubleMap
 
 
@@ -14,11 +12,9 @@ def _scoring_alg(name, graph, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm not supported.")
+        raise NotImplementedError("Algorithm not supported.")
 
-    err, scores_handle = alg_method(graph.handle, *args)
-    if err:
-        _raise_status()
+    _, scores_handle = alg_method(graph.handle, *args)
 
     return _JGraphTLongDoubleMap(handle=scores_handle)
 

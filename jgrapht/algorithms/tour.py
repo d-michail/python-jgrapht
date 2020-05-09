@@ -1,8 +1,6 @@
 import time
 
 from .. import backend
-from ..exceptions import UnsupportedOperationError
-from .._internals._errors import _raise_status
 from .._internals._wrappers import _JGraphTLongIterator, _JGraphTGraphPath
 
 
@@ -12,11 +10,9 @@ def _tour_tsp_alg(name, graph_or_graph_path, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    err, graph_path = alg_method(graph_or_graph_path.handle, *args)
-    if err:
-        _raise_status()
+    _, graph_path = alg_method(graph_or_graph_path.handle, *args)
 
     return _JGraphTGraphPath(graph_path)
 

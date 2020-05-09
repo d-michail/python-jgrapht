@@ -1,6 +1,4 @@
 from .. import backend
-from ..exceptions import UnsupportedOperationError
-from .._internals._errors import _raise_status
 from .._internals._wrappers import (
     _JGraphTGraphPath,
     _JGraphTGraphPathIterator,
@@ -17,11 +15,9 @@ def _sp_singlesource_alg(name, graph, source_vertex):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    err, handle = alg_method(graph.handle, source_vertex)
-    if err:
-        _raise_status()
+    _, handle = alg_method(graph.handle, source_vertex)
 
     return _JGraphTSingleSourcePaths(handle, source_vertex)
 
@@ -32,11 +28,9 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    err, handle = alg_method(graph.handle, source_vertex, target_vertex, *args)
-    if err:
-        _raise_status()
+    _, handle = alg_method(graph.handle, source_vertex, target_vertex, *args)
 
     return _JGraphTGraphPath(handle) if handle is not None else None
 
@@ -47,11 +41,9 @@ def _sp_allpairs_alg(name, graph):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    err, handle = alg_method(graph.handle)
-    if err:
-        _raise_status()
+    _, handle = alg_method(graph.handle)
 
     return _JGraphTAllPairsPaths(handle)
 
@@ -61,11 +53,9 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise UnsupportedOperationError("Algorithm {} not supported.".format(name))
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    err, handle = alg_method(graph.handle, source_vertex, target_vertex, k, *args)
-    if err:
-        _raise_status()
+    _, handle = alg_method(graph.handle, source_vertex, target_vertex, k, *args)
 
     return _JGraphTGraphPathIterator(handle)
 
