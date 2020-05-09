@@ -347,6 +347,10 @@ int jgrapht_graph_add_edge(void *g, long long int u, long long int v, long long*
     return jgrapht_capi_graph_add_edge(thread, g, u, v, res);
 }
 
+int jgrapht_graph_add_given_edge(void *g, long long int u, long long int v, long long int edge, int* res) { 
+    return jgrapht_capi_graph_add_given_edge(thread, g, u, v, edge, res);
+}
+
 int jgrapht_graph_remove_edge(void *g, long long int e, int* res) { 
     return jgrapht_capi_graph_remove_edge(thread, g, e, res);
 }
@@ -687,6 +691,48 @@ int jgrapht_it_next_object(void *it, void** res) {
 
 int jgrapht_it_hasnext(void *it, int* res) { 
     return jgrapht_capi_it_hasnext(thread, it, res);
+}
+
+// list
+
+int jgrapht_list_create(void** res) { 
+    return jgrapht_capi_list_create(thread, res);
+}
+
+int jgrapht_list_it_create(void *list, void** res) { 
+    return jgrapht_capi_list_it_create(thread, list, res);
+}
+
+int jgrapht_list_size(void *list, long long* res) { 
+    return jgrapht_capi_list_size(thread, list, res);
+}
+
+int jgrapht_list_long_add(void *list, long long int e, int* res) { 
+    return jgrapht_capi_list_long_add(thread, list, e, res);
+}
+
+int jgrapht_list_double_add(void *list, double e, int* res) { 
+    return jgrapht_capi_list_double_add(thread, list, e, res);
+}
+
+int jgrapht_list_long_remove(void *list, long long int e) { 
+    return jgrapht_capi_list_long_remove(thread, list, e);
+}
+
+int jgrapht_list_double_remove(void *list, double e) { 
+    return jgrapht_capi_list_double_remove(thread, list, e);
+}
+
+int jgrapht_list_long_contains(void *list, long long int e, int* res) { 
+    return jgrapht_capi_list_long_contains(thread, list, e, res);
+}
+
+int jgrapht_list_double_contains(void *list , double e, int* res) { 
+    return jgrapht_capi_list_double_contains(thread, list, e, res);
+}
+
+int jgrapht_list_clear(void *list) { 
+    return jgrapht_capi_list_clear(thread, list);
 }
 
 // map

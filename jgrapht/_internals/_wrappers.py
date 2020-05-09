@@ -17,6 +17,7 @@ from collections.abc import (
     MutableSet,
     Set,
     MutableMapping,
+    Collection,
 )
 
 
@@ -27,7 +28,7 @@ class _HandleWrapper:
 
     def __init__(self, handle, **kwargs):
         self._handle = handle
-        super().__init__(**kwargs)
+        super().__init__()
 
     @property
     def handle(self):
@@ -377,6 +378,56 @@ class _JGraphTLongLongMap(_HandleWrapper, MutableMapping):
 
     def __repr__(self):
         return "_JGraphTLongLongMap(%r)" % self._handle
+
+
+class _JGraphTLongList(_HandleWrapper, Collection):
+    """JGraphT Long List"""
+
+    def __init__(self, handle=None, **kwargs):
+        if handle is None:
+            err, handle = backend.jgrapht_list_create()
+            if err:
+                _raise_status()
+        super().__init__(handle=handle, **kwargs)
+
+    def __iter__(self):
+        err, res = backend.jgrapht_list_it_create(self._handle)
+        if err:
+            _raise_status()
+        return _JGraphTLongIterator(res)
+
+    def __len__(self):
+        err, res = backend.jgrapht_list_size(self._handle)
+        if err:
+            _raise_status()
+        return res
+
+    def add(self, x):
+        err, _ = backend.jgrapht_list_long_add(self._handle, x)
+        if err:
+            _raise_status()
+
+    def discard(self, x):
+        err = backend.jgrapht_list_long_remove(self._handle, x)
+        if err:
+            _raise_status()
+
+    def __contains__(self, x):
+        err, res = backend.jgrapht_list_long_contains(self._handle, x)
+        if err:
+            _raise_status()
+        return res
+
+    def clear(self):
+        err = backend.jgrapht_list_clear(self._handle)
+        if err:
+            _raise_status()
+
+    def __repr__(self):
+        return "_JGraphTLongList(%r)" % self._handle
+
+    def __str__(self):
+        return "{" + ", ".join(str(x) for x in self) + "}"
 
 
 class _JGraphTGraphPath(_HandleWrapper, GraphPath):

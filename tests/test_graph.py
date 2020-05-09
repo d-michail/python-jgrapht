@@ -259,3 +259,22 @@ def test_graph_create_edge_with_weight():
     e12 = g.create_edge(v1, v2, weight=55.0)
     assert g.get_edge_weight(e12) == 55.0
 
+
+def test_graph_add_edge():
+
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+
+    g.add_vertices_from([1,2])
+
+    assert g.create_edge(1,2) == 0
+    assert g.create_edge(1,2) == 1
+    assert g.create_edge(1,2) == 2
+    assert g.create_edge(1,2) == 3
+
+    assert g.add_edge(1, 2, 5)
+    assert g.contains_edge(5)
+
+    assert g.create_edge(1,2) == 4
+    assert g.create_edge(1,2) == 6
+
+    assert not g.add_edge(1, 2, 5)

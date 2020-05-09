@@ -226,6 +226,8 @@ int jgrapht_graph_contains_vertex(void *, long long int, int* OUTPUT);
 
 int jgrapht_graph_add_edge(void *, long long int, long long int, long long* OUTPUT);
 
+int jgrapht_graph_add_given_edge(void *, long long int, long long int, long long int, int* OUTPUT);
+
 int jgrapht_graph_remove_edge(void *, long long int, int* OUTPUT);
 
 int jgrapht_graph_contains_edge(void *, long long int, int* OUTPUT);
@@ -403,6 +405,28 @@ int jgrapht_it_next_double(void *, double* OUTPUT);
 int jgrapht_it_next_object(void *, void** OUTPUT);
 
 int jgrapht_it_hasnext(void *, int* OUTPUT);
+
+// list
+
+int jgrapht_list_create(void** OUTPUT);
+
+int jgrapht_list_it_create(void *, void** OUTPUT);
+
+int jgrapht_list_size(void *, long long* OUTPUT);
+
+int jgrapht_list_long_add(void *, long long int, int* OUTPUT);
+
+int jgrapht_list_double_add(void *, double, int* OUTPUT);
+
+int jgrapht_list_long_remove(void *, long long int);
+
+int jgrapht_list_double_remove(void *, double);
+
+int jgrapht_list_long_contains(void *, long long int, int* OUTPUT);
+
+int jgrapht_list_double_contains(void *, double, int* OUTPUT);
+
+int jgrapht_list_clear(void *);
 
 // map
 
