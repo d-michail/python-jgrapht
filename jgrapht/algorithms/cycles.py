@@ -1,6 +1,9 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTGraphPath
-
+from .._internals._wrappers import (
+    _JGraphTGraphPath,
+    _JGraphTGraphPathIterator,
+    _JGraphTLongListIterator
+)
 
 
 def eulerian_cycle(graph):
@@ -26,4 +29,53 @@ def chinese_postman(graph):
 
 
 
+def fundamental_cycle_basis(graph, variant='bfswithqueue'):
+    """Compute a fundamental cycle basis.
+
+    TODO
+    """
+
+    TECHNIQUE = {
+        'paton': 'paton',
+        'bfswithqueue': 'queue_bfs',
+        'bfswithstack': 'stack_bfs',
+    }
+
+    alg_name = TECHNIQUE.get(variant, 'bfswithqueue')
+    alg_method_name = 'jgrapht_cycles_fundamental_basis_exec_' + alg_name
+
+    try:
+        alg_method = getattr(backend, alg_method_name)
+    except AttributeError:
+        raise NotImplementedError("Algorithm not supported.")
+
+    weight, cycles_it = alg_method(graph.handle)
+
+    return weight, _JGraphTGraphPathIterator(cycles_it)
+
+
+def enumerate_simple_cycles(graph, variant='tarjan'): 
+    """Enumerate simple cycles in a directed graph.
+
+    TODO
+    """
+
+    TECHNIQUE = {
+        'Tarjan': 'tarjan',
+        'Tiernan': 'tiernan',
+        'Szwarcfiter-Lauer': 'szwarcfiter_lauer',
+        'Hawick-James': 'hawick_james',
+        'Johnson': 'johnson'
+    }
+
+    alg_name = TECHNIQUE.get(variant, 'tarjan')
+    alg_method_name = 'jgrapht_cycles_simple_enumeration_exec_' + alg_name
+
+    try:
+        alg_method = getattr(backend, alg_method_name)
+    except AttributeError:
+        raise NotImplementedError("Algorithm not supported.")
+
+    cycles_it = alg_method(graph.handle)
+    return _JGraphTLongListIterator(cycles_it)
 

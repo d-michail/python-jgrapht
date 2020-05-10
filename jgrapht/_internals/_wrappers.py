@@ -148,6 +148,24 @@ class _JGraphTLongSetIterator(_HandleWrapper, Iterator):
         return "_JGraphTLongSetIterator(%r)" % self._handle
 
 
+class _JGraphTLongListIterator(_HandleWrapper, Iterator):
+    """An iterator which returns lists with longs."""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def __next__(self):
+        res = backend.jgrapht_it_hasnext(self._handle)
+        if not res:
+            raise StopIteration()
+        res = backend.jgrapht_it_next_object(self._handle)
+        return _JGraphTLongList(handle=res)
+
+    def __repr__(self):
+        return "_JGraphTLongListIterator(%r)" % self._handle
+
+
+
 class _JGraphTLongDoubleMap(_HandleWrapper, MutableMapping):
     """JGraphT Map"""
 
