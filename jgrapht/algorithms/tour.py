@@ -1,7 +1,8 @@
 import time
 
 from .. import backend
-from .._internals._wrappers import _JGraphTLongIterator, _JGraphTGraphPath
+from .._internals._wrappers import _JGraphTLongIterator
+from .._internals._paths import _JGraphTGraphPath
 
 
 def _tour_tsp_alg(name, graph_or_graph_path, *args):

@@ -1,5 +1,5 @@
 from . import backend
-from ._internals._wrappers import (
+from ._internals._collections import (
     _JGraphTLongDoubleMap,
     _JGraphTLongSet,
 )

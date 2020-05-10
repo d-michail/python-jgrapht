@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht._internals._wrappers import _JGraphTLongList
+from jgrapht._internals._collections import _JGraphTLongList
 
 
 def test_longlist():

@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTLongSetIterator
+from .._internals._collections import _JGraphTLongSetIterator
 
 
 def _clique_enumeration_alg(name, graph, *args):

@@ -1,5 +1,6 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTPlanarEmbedding, _JGraphTGraph
+from .._internals._planar import _JGraphTPlanarEmbedding
+from .._internals._graphs import _JGraphTGraph
 
 
 def _planarity_alg(name, graph, *args):

@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTLongLongMap
+from .._internals._collections import _JGraphTLongLongMap
 
 
 def _coloring_alg(name, graph, *args):

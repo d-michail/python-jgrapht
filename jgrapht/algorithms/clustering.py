@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTClustering
+from .._internals._clustering import _JGraphTClustering
 
 import time
 

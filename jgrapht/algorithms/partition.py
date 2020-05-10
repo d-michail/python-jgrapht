@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTLongSet
+from .._internals._collections import _JGraphTLongSet
 
 
 def bipartite_partitions(graph):

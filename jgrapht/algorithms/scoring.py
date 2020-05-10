@@ -1,5 +1,8 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTLongIterator, _JGraphTLongDoubleMap
+from .._internals._collections import (
+    _JGraphTLongIterator,
+    _JGraphTLongDoubleMap,
+) 
 
 
 def _scoring_alg(name, graph, *args):

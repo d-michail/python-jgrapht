@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTCut
+from .._internals._flows import _JGraphTCut
 
 
 def _cut_alg(name, graph, *args):

@@ -4,11 +4,13 @@ import ctypes
 from .. import backend
 from .._internals._wrappers import (
     _JGraphTLongIterator,
-    _JGraphTGraphPath,
-    _JGraphTAttributeStore,
-    _JGraphTAttributesRegistry,
     _JGraphTString,
 )
+from .._internals._attributes import (
+    _JGraphTAttributeStore,
+    _JGraphTAttributesRegistry,
+)
+from .._internals._paths import _JGraphTGraphPath
 
 
 def _export_to_file(name, graph, filename, *args):

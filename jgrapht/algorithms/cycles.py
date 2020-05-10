@@ -1,7 +1,9 @@
 from .. import backend
-from .._internals._wrappers import (
+from .._internals._paths import (
     _JGraphTGraphPath,
     _JGraphTGraphPathIterator,
+)
+from .._internals._collections import (
     _JGraphTLongListIterator
 )
 

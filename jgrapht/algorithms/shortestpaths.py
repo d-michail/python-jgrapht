@@ -1,9 +1,11 @@
 from .. import backend
-from .._internals._wrappers import (
+from .._internals._paths import (
     _JGraphTGraphPath,
     _JGraphTGraphPathIterator,
     _JGraphTSingleSourcePaths,
     _JGraphTAllPairsPaths,
+)
+from .._internals._collections import (
     _JGraphTLongSet,
 )
 import ctypes

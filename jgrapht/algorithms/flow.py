@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTCut, _JGraphTFlow
+from .._internals._flows import _JGraphTCut, _JGraphTFlow
 
 
 def _maxflow_alg(name, graph, source, sink, *args):

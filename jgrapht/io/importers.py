@@ -2,7 +2,9 @@ import time
 import ctypes
 
 from .. import backend
-from .._internals._wrappers import _JGraphTLongIterator, _JGraphTGraphPath, _JGraphTAttributeStore
+from .._internals._wrappers import _JGraphTLongIterator
+from .._internals._attributes import _JGraphTAttributeStore
+from .._internals._paths import _JGraphTGraphPath
 
 
 def _import(name, graph, filename_or_string, *args):

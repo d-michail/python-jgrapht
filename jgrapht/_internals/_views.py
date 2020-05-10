@@ -1,8 +1,8 @@
 from .. import backend
 from ..types import GraphType
-import copy
+from ._graphs import _JGraphTGraph
 
-from ._wrappers import _JGraphTGraph
+import copy
 
 
 class _UnweightedGraphView(_JGraphTGraph):

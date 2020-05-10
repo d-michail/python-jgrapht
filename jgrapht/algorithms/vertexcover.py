@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTLongDoubleMap, _JGraphTLongSet
+from .._internals._collections import _JGraphTLongDoubleMap, _JGraphTLongSet
 
 
 def _vertexcover_alg(name, graph, vertex_weights=None):

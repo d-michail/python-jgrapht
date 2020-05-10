@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._wrappers import _JGraphTGraphMapping, _JGraphTGraphMappingIterator
+from .._internals._mapping import _JGraphTGraphMapping, _JGraphTGraphMappingIterator
 
 
 def _isomorphism_alg(name, graph1, graph2, *args):
