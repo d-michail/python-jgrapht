@@ -34,10 +34,81 @@ def test_chinese_postman():
     assert closed_walk is not None
     assert closed_walk.edges == [4, 3, 0, 1, 2, 4]
 
+def test_fundamental_cycle_basis_paton():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    
+    g.add_vertices_from([0,1,2,3,4,5])
+    g.create_edge(0, 1)
+    g.create_edge(1, 2)
+    g.create_edge(2, 3)
+    g.create_edge(3, 0)
+    g.create_edge(1, 4)
+    g.create_edge(4, 5)
+    g.create_edge(5, 2)
 
-def test_simple_cycles_tarjan(): 
+    fcb_weight, fcb_it = cycles.fundamental_cycle_basis(g, variant='paton')
 
-    for variant in ['Tarjan', 'Tiernan', 'Johnson']: 
+    assert fcb_weight == 8.0
+    cycle1 = next(fcb_it)
+    cycle2 = next(fcb_it)
+    with pytest.raises(StopIteration):
+        next(fcb_it)
+
+    assert cycle1.edges == [1, 2, 3, 0]
+    assert cycle2.edges == [4, 5, 6, 1]
+
+
+def test_fundamental_cycle_basis_queuebfs():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    
+    g.add_vertices_from([0,1,2,3,4,5])
+    g.create_edge(0, 1)
+    g.create_edge(1, 2)
+    g.create_edge(2, 3)
+    g.create_edge(3, 0)
+    g.create_edge(1, 4)
+    g.create_edge(4, 5)
+    g.create_edge(5, 2)
+
+    fcb_weight, fcb_it = cycles.fundamental_cycle_basis(g, variant='bfswithqueue')
+
+    assert fcb_weight == 8.0
+    cycle1 = next(fcb_it)
+    cycle2 = next(fcb_it)
+    with pytest.raises(StopIteration):
+        next(fcb_it)
+
+    assert cycle1.edges == [0, 1, 2, 3]
+    assert cycle2.edges == [4, 5, 6, 1]
+
+
+def test_fundamental_cycle_basis_stackbfs():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    
+    g.add_vertices_from([0,1,2,3,4,5])
+    g.create_edge(0, 1)
+    g.create_edge(1, 2)
+    g.create_edge(2, 3)
+    g.create_edge(3, 0)
+    g.create_edge(1, 4)
+    g.create_edge(4, 5)
+    g.create_edge(5, 2)
+
+    fcb_weight, fcb_it = cycles.fundamental_cycle_basis(g, variant='bfswithstack')
+
+    assert fcb_weight == 10.0
+    cycle1 = next(fcb_it)
+    cycle2 = next(fcb_it)
+    with pytest.raises(StopIteration):
+        next(fcb_it)
+
+    assert cycle1.edges == [0, 1, 2, 3]
+    assert cycle2.edges == [0, 4, 5, 6, 2, 3]
+
+
+def test_simple_cycles_most(): 
+
+    for variant in ['Tarjan', 'Tiernan', 'Johnson', 'WrongName']: 
         g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
         g.add_vertices_from([0,1,2,3,4,5])
@@ -59,7 +130,6 @@ def test_simple_cycles_tarjan():
 
         with pytest.raises(StopIteration):
             next(it)
-
 
 
 def test_simple_cycles_szwarcfiter_lauer(): 
