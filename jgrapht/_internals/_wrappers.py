@@ -51,8 +51,7 @@ class _JGraphTLongIterator(_HandleWrapper, Iterator):
         res = backend.jgrapht_it_hasnext(self._handle)
         if not res:
             raise StopIteration()
-        res = backend.jgrapht_it_next_long(self._handle)
-        return res
+        return backend.jgrapht_it_next_long(self._handle)
 
     def __repr__(self):
         return "_JGraphTLongIterator(%r)" % self._handle
@@ -68,16 +67,16 @@ class _JGraphTDoubleIterator(_HandleWrapper, Iterator):
         res = backend.jgrapht_it_hasnext(self._handle)
         if not res:
             raise StopIteration()
-        res = backend.jgrapht_it_next_double(self._handle)
-        return res
+        return backend.jgrapht_it_next_double(self._handle)
 
     def __repr__(self):
         return "_JGraphTDoubleIterator(%r)" % self._handle
 
 
-class _JGraphTGraphPathIterator(_HandleWrapper, Iterator):
-    """A graph path iterator"""
-
+class _JGraphTObjectIterator(_HandleWrapper, Iterator):
+    """A JGraphT iterator. This iterator returns handles to 
+    backend objects. 
+    """
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -85,8 +84,20 @@ class _JGraphTGraphPathIterator(_HandleWrapper, Iterator):
         res = backend.jgrapht_it_hasnext(self._handle)
         if not res:
             raise StopIteration()
-        res = backend.jgrapht_it_next_object(self._handle)
-        return _JGraphTGraphPath(res)
+        return backend.jgrapht_it_next_object(self._handle)
+
+    def __repr__(self):
+        return "_JGraphTObjectIterator(%r)" % self._handle
+
+
+class _JGraphTGraphPathIterator(_JGraphTObjectIterator):
+    """A graph path iterator"""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def __next__(self):
+        return _JGraphTGraphPath(super().__next__())
 
     def __repr__(self):
         return "_JGraphTGraphPathIterator(%r)" % self._handle
@@ -131,39 +142,30 @@ class _JGraphTLongSet(_HandleWrapper, MutableSet):
         return "{" + ", ".join(str(x) for x in self) + "}"
 
 
-class _JGraphTLongSetIterator(_HandleWrapper, Iterator):
+class _JGraphTLongSetIterator(_JGraphTObjectIterator):
     """An iterator which returns sets with longs."""
 
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
     def __next__(self):
-        res = backend.jgrapht_it_hasnext(self._handle)
-        if not res:
-            raise StopIteration()
-        res = backend.jgrapht_it_next_object(self._handle)
-        return _JGraphTLongSet(handle=res)
+        return _JGraphTLongSet(super().__next__())
 
     def __repr__(self):
         return "_JGraphTLongSetIterator(%r)" % self._handle
 
 
-class _JGraphTLongListIterator(_HandleWrapper, Iterator):
+class _JGraphTLongListIterator(_JGraphTObjectIterator):
     """An iterator which returns lists with longs."""
 
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
     def __next__(self):
-        res = backend.jgrapht_it_hasnext(self._handle)
-        if not res:
-            raise StopIteration()
-        res = backend.jgrapht_it_next_object(self._handle)
-        return _JGraphTLongList(handle=res)
+        return _JGraphTLongList(super().__next__())
 
     def __repr__(self):
         return "_JGraphTLongListIterator(%r)" % self._handle
-
 
 
 class _JGraphTLongDoubleMap(_HandleWrapper, MutableMapping):
@@ -888,7 +890,7 @@ class _JGraphTGraphMapping(_HandleWrapper,GraphMapping):
         return "_JGraphTGraphMapping(%r)" % self._handle
 
 
-class _JGraphTGraphMappingIterator(_HandleWrapper, Iterator):
+class _JGraphTGraphMappingIterator(_JGraphTObjectIterator):
     """A graph mapping iterator"""
 
     def __init__(self, handle, graph1, graph2, **kwargs):
@@ -897,11 +899,7 @@ class _JGraphTGraphMappingIterator(_HandleWrapper, Iterator):
         self._graph2 = graph2
 
     def __next__(self):
-        res = backend.jgrapht_it_hasnext(self._handle)
-        if not res:
-            raise StopIteration()
-        res = backend.jgrapht_it_next_object(self._handle)
-        return _JGraphTGraphMapping(res, self._graph1, self._graph2)
+        return _JGraphTGraphMapping(super().__next__(), self._graph1, self._graph2)
 
     def __repr__(self):
         return "_JGraphTGraphMappingIterator(%r)" % self._handle
