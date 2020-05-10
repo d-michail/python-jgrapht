@@ -46,7 +46,7 @@ def test_fundamental_cycle_basis_paton():
     g.create_edge(4, 5)
     g.create_edge(5, 2)
 
-    fcb_weight, fcb_it = cycles.fundamental_cycle_basis(g, variant='paton')
+    fcb_weight, fcb_it = cycles.fundamental_cycle_basis_paton(g)
 
     assert fcb_weight == 8.0
     cycle1 = next(fcb_it)
@@ -70,7 +70,7 @@ def test_fundamental_cycle_basis_queuebfs():
     g.create_edge(4, 5)
     g.create_edge(5, 2)
 
-    fcb_weight, fcb_it = cycles.fundamental_cycle_basis(g, variant='bfswithqueue')
+    fcb_weight, fcb_it = cycles.fundamental_cycle_basis_bfs_with_queue(g)
 
     assert fcb_weight == 8.0
     cycle1 = next(fcb_it)
@@ -94,7 +94,7 @@ def test_fundamental_cycle_basis_stackbfs():
     g.create_edge(4, 5)
     g.create_edge(5, 2)
 
-    fcb_weight, fcb_it = cycles.fundamental_cycle_basis(g, variant='bfswithstack')
+    fcb_weight, fcb_it = cycles.fundamental_cycle_basis_bfs_with_stack(g)
 
     assert fcb_weight == 10.0
     cycle1 = next(fcb_it)
@@ -105,31 +105,78 @@ def test_fundamental_cycle_basis_stackbfs():
     assert cycle1.edges == [0, 1, 2, 3]
     assert cycle2.edges == [0, 4, 5, 6, 2, 3]
 
+def test_simple_cycles_tiernan(): 
 
-def test_simple_cycles_most(): 
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
-    for variant in ['Tarjan', 'Tiernan', 'Johnson', 'WrongName']: 
-        g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g.add_vertices_from([0,1,2,3,4,5])
 
-        g.add_vertices_from([0,1,2,3,4,5])
+    g.create_edge(0, 1)
+    g.create_edge(1, 2)
+    g.create_edge(2, 3)
+    g.create_edge(3, 0)
+    g.create_edge(1, 4)
+    g.create_edge(4, 5)
+    g.create_edge(5, 2)
 
-        g.create_edge(0, 1)
-        g.create_edge(1, 2)
-        g.create_edge(2, 3)
-        g.create_edge(3, 0)
-        g.create_edge(1, 4)
-        g.create_edge(4, 5)
-        g.create_edge(5, 2)
+    it = cycles.enumerate_simple_cycles_tiernan(g)    
 
-        it = cycles.enumerate_simple_cycles(g, variant=variant)    
+    cycle1 = next(it)
+    assert list(cycle1) == [0, 1, 2, 3]
+    cycle2 = next(it)
+    assert list(cycle2) == [0, 1, 4, 5, 2, 3]
 
-        cycle1 = next(it)
-        assert list(cycle1) == [0, 1, 2, 3]
-        cycle2 = next(it)
-        assert list(cycle2) == [0, 1, 4, 5, 2, 3]
+    with pytest.raises(StopIteration):
+        next(it)
 
-        with pytest.raises(StopIteration):
-            next(it)
+
+def test_simple_cycles_johnson(): 
+
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+
+    g.add_vertices_from([0,1,2,3,4,5])
+
+    g.create_edge(0, 1)
+    g.create_edge(1, 2)
+    g.create_edge(2, 3)
+    g.create_edge(3, 0)
+    g.create_edge(1, 4)
+    g.create_edge(4, 5)
+    g.create_edge(5, 2)
+
+    it = cycles.enumerate_simple_cycles_johnson(g)
+
+    cycle1 = next(it)
+    assert list(cycle1) == [0, 1, 2, 3]
+    cycle2 = next(it)
+    assert list(cycle2) == [0, 1, 4, 5, 2, 3]
+
+    with pytest.raises(StopIteration):
+        next(it)
+
+def test_simple_cycles_tarjan(): 
+
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+
+    g.add_vertices_from([0,1,2,3,4,5])
+
+    g.create_edge(0, 1)
+    g.create_edge(1, 2)
+    g.create_edge(2, 3)
+    g.create_edge(3, 0)
+    g.create_edge(1, 4)
+    g.create_edge(4, 5)
+    g.create_edge(5, 2)
+
+    it = cycles.enumerate_simple_cycles_tarjan(g)    
+
+    cycle1 = next(it)
+    assert list(cycle1) == [0, 1, 2, 3]
+    cycle2 = next(it)
+    assert list(cycle2) == [0, 1, 4, 5, 2, 3]
+
+    with pytest.raises(StopIteration):
+        next(it)
 
 
 def test_simple_cycles_szwarcfiter_lauer(): 
@@ -146,7 +193,7 @@ def test_simple_cycles_szwarcfiter_lauer():
     g.create_edge(4, 5)
     g.create_edge(5, 2)
 
-    it = cycles.enumerate_simple_cycles(g, variant='Szwarcfiter-Lauer')    
+    it = cycles.enumerate_simple_cycles_szwarcfiter_lauer(g)    
 
     cycle1 = next(it)
     assert list(cycle1) == [2, 3, 0, 1]
@@ -171,7 +218,7 @@ def test_simple_cycles_hawick_james():
     g.create_edge(4, 5)
     g.create_edge(5, 2)
 
-    it = cycles.enumerate_simple_cycles(g, variant='Hawick-James')    
+    it = cycles.enumerate_simple_cycles_hawick_james(g)    
 
     cycle1 = next(it)
     assert list(cycle1) == [3, 2, 1, 0]
