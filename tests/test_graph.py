@@ -311,7 +311,7 @@ def test_graph_sparse_weighted():
 
     edgelist2 = []
     for e in g.edges(): 
-        edgelist2.append(g.edge(e))
+        edgelist2.append(g.edge_tuple(e))
     assert edgelist2 == edgelist
 
     # sparse graphs cannot be modified

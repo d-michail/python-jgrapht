@@ -346,7 +346,7 @@ class Graph(ABC):
         """
         return self.edge_source(e), self.edge_target(e)
 
-    def edge(self, e):
+    def edge_tuple(self, e):
         """Get an edge as a tuple. 
 
         :param e: the edge

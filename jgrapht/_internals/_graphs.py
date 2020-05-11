@@ -203,11 +203,11 @@ def create_graph(
 ):
     """Create a graph.
 
-    :param directed: If True the graph will be directed, otherwise undirected.
-    :param allowing_self_loops: If True the graph will allow the addition of self-loops.
-    :param allowing_multiple_edges: If True the graph will allow multiple-edges.
-    :param weighted: If True the graph will be weighted, otherwise unweighted.
-    :returns: A graph
+    :param directed: if True the graph will be directed, otherwise undirected
+    :param allowing_self_loops: if True the graph will allow the addition of self-loops
+    :param allowing_multiple_edges: if True the graph will allow multiple-edges
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :returns: a graph
     :rtype: :class:`type <.types.Graph>`
     """
     return _JGraphTGraph(
@@ -221,9 +221,28 @@ def create_graph(
 def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True):
     """Create a sparse graph. 
 
+    A sparse graph uses a CSR (compressed-sparse-rows) representation. The result is 
+    lower memory consumption and very efficient and cache-friendly representation on
+    recent machines.
+
+    Their drawback is that they assume a continuous range of vertices and edges and 
+    that they are not modifiable after construction.
+
     .. note :: Sparse graphs cannot be modified after construction. They are best suited 
        for executing algorithms which do not need to modify the graph after loading.
+       
+    .. node :: While the graph structure is unmodifiable, the edge weights can be
+      adjusted.
+    
+    Sparse graphs can always support self-loops and multiple-edges.
 
+    :param num_of_vertices: number of vertices of the graph. Vertices are start from 0 
+      and increase continuously
+    :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs
+    :param directed: whether the graph will be directed or undirected
+    :param weighted: whether the graph will be weighted or not
+    :returns: a graph
+    :rtype: :class:`type <.types.Graph>`
     """
     e_list = backend.jgrapht_list_create()
     if weighted: 
@@ -246,6 +265,9 @@ def as_sparse_graph(graph):
     (inclusive). The extra vertices will be isolated, meaning that they will have not incident
     edges.
 
+    .. note :: Sparse graphs are unmodifiable. Attempting to alter one will result in an error 
+      being raised.
+
     :param graph: the input graph
     :returns: a sparse graph 
     """
@@ -255,9 +277,9 @@ def as_sparse_graph(graph):
     max_vertex = max(graph.vertices())
 
     if graph.type.weighted:
-        edgelist = [graph.edge(e) for e in graph.edges()]
+        edgelist = [graph.edge_tuple(e) for e in graph.edges()]
     else: 
-        edgelist = [graph.edge(e) for e in graph.edges()]
+        edgelist = [graph.edge_tuple(e) for e in graph.edges()]
     
     return create_sparse_graph(max_vertex+1, edgelist, graph.type.directed, graph.type.weighted)
 

@@ -10,7 +10,7 @@ The JGraphT library is a highly efficient graph library containing state-of-the-
 data-structures as well as a multitude of sophisticated graph algorithms. It has been in development
 for many years already and is currently used in production both in research and industry.
 This interface to the library is a pure python/native package having no dependency on the JVM.
-During the build process the original JGraphT library is compiled as a shared library
+During the build process the backend JGraphT library is compiled as a shared library
 and bundled inside the python package.
 
 The python-jgrapht library provides a *graph* data-structure capable of representing various different
@@ -25,7 +25,7 @@ kind of graphs/networks such as:
  *  **unweighted** graphs: graphs where the weight of each edge is 1.0 (uniform weight function)
 
 A graph :math:`G(V,E)` contains vertices and edges. In python-jgrapht both the vertices and the edges of 
-the graph are represented using long integers. Each edge :math:`e = (u,v)` is associated with
+the graph are represented using integers. Each edge :math:`e = (u,v)` is associated with
 
  * its two endpoints :math:`u` and :math:`v`, and
  * a double value called its weight.

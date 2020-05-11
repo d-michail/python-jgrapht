@@ -11,7 +11,7 @@ graph instances returned by the library follow this interface and almost all lib
 around it. 
 
 Creating graphs can be accomplished using the following factory method. During runtime the 
-type of the graph can be queried using :py:meth:`.Graph.graph_type` which returns a 
+type of the graph can be queried using :py:attr:`.Graph.type` which returns a 
 :class:`GraphType <jgrapht.types.GraphType>` instance. This allows algorithms to adjust their 
 behavior depending on the graph they are working on.
 
