@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_sparse_graph, as_sparse_graph
 
 
 def assert_same_set(set1, set2):
@@ -277,3 +277,108 @@ def test_graph_add_edge():
     assert g.create_edge(1,2) == 6
 
     assert not g.add_edge(1, 2, 5)
+
+
+def test_graph_sparse():
+
+    edgelist = [(0,1), (0,2), (0,3), (1,3), (2,3), (2,4), (2,5), (0,4), (2, 6)]
+    g = create_sparse_graph(7, edgelist, weighted=False)
+
+    assert g.type.directed
+    assert not g.type.weighted
+
+    assert g.vertices() == set([0, 1, 2, 3, 4, 5, 6])
+
+    edgelist2 = []
+    for e in g.edges(): 
+        edgelist2.append(g.edge_endpoints(e))
+    assert edgelist2 == edgelist
+
+    # sparse graphs cannot be modified
+    with pytest.raises(ValueError):
+        g.create_edge(0,5)
+
+
+def test_graph_sparse_weighted():
+
+    edgelist = [(0,1,5), (0,2,2), (0,3,3), (1,3,1), (2,3,7.7), (2,4,3.3), (2,5,13.0), (0,4,9.999), (2,6,3.0)]
+    g = create_sparse_graph(7, edgelist, directed=False)
+
+    assert not g.type.directed
+    assert g.type.weighted
+
+    assert g.vertices() == set([0, 1, 2, 3, 4, 5, 6])
+
+    edgelist2 = []
+    for e in g.edges(): 
+        edgelist2.append(g.edge(e))
+    assert edgelist2 == edgelist
+
+    # sparse graphs cannot be modified
+    with pytest.raises(ValueError):
+        g.create_edge(0,5)
+
+
+def test_graph_copy_to_sparse():
+
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+
+    assert not g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
+
+    assert g.add_vertex(0)
+    v1 = 0
+    assert g.add_vertex(1)
+    v2 = 1
+    assert g.add_vertex(2)
+    v3 = 2
+    assert g.add_vertex(3)
+    v4 = 3
+    assert g.add_vertex(4)
+    v5 = 4
+
+    assert g.vertices(), set([0, 1, 2, 3, 4])
+
+    e12 = g.create_edge(v1, v2)
+    e23 = g.create_edge(v2, v3)
+    e14 = g.create_edge(v1, v4)
+    e11 = g.create_edge(v1, v1)
+    e45 = g.create_edge(v4, v5)
+    e51_1 = g.create_edge(v5, v1)
+    e51_2 = g.create_edge(v5, v1)
+
+    assert len(g.edges()) == 7
+
+    gs = as_sparse_graph(g)
+
+    assert gs.vertices(), set([0, 1, 2, 3, 4])
+    assert len(gs.edges()) == 7
+
+
+def test_graph_copy_to_sparse():
+
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+
+    assert g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
+
+    assert g.add_vertex(0)
+    assert g.add_vertex(5)
+    assert g.add_vertex(10)
+
+    g.create_edge(0, 10)
+    g.create_edge(0, 5)
+    g.create_edge(10, 5)
+
+    assert len(g.edges()) == 3
+
+    gs = as_sparse_graph(g)
+
+    assert gs.vertices(), set(range(0, 11))
+    assert len(gs.edges()) == 3
+    assert gs.type.weighted
+    assert gs.type.directed

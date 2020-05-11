@@ -385,6 +385,10 @@ int jgrapht_graph_create(int directed, int allowing_self_loops, int allowing_mul
     return jgrapht_capi_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, res);
 }
 
+int jgrapht_graph_sparse_create(int directed, int weighted, int num_vertices, void *edges, void**res) { 
+    return jgrapht_capi_graph_sparse_create(thread, directed, weighted, num_vertices, edges, res);
+}
+
 int jgrapht_graph_vertices_count(void *g, int* res) { 
     return jgrapht_capi_graph_vertices_count(thread, g, res);
 }
@@ -779,6 +783,14 @@ int jgrapht_list_int_add(void *list, int e, int* res) {
 
 int jgrapht_list_double_add(void *list, double e, int* res) { 
     return jgrapht_capi_list_double_add(thread, list, e, res);
+}
+
+int jgrapht_list_edge_pair_add(void *list, int source, int target, int* res) { 
+    return jgrapht_capi_list_edge_pair_add(thread, list, source, target, res);
+}
+
+int jgrapht_list_edge_triple_add(void *list, int source, int target, double weight, int* res) { 
+    return jgrapht_capi_list_edge_triple_add(thread, list, source, target, weight, res);
 }
 
 int jgrapht_list_int_remove(void *list, int e) { 

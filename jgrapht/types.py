@@ -346,6 +346,17 @@ class Graph(ABC):
         """
         return self.edge_source(e), self.edge_target(e)
 
+    def edge(self, e):
+        """Get an edge as a tuple. 
+
+        :param e: the edge
+        :returns: the edge either as (u,v) or (u,v,weight)
+        """
+        if self.type.weighted:
+            return self.edge_source(e), self.edge_target(e), self.get_edge_weight(e)
+        else:
+            return self.edge_source(e), self.edge_target(e)
+
     @abstractmethod
     def edge_source(self, e):
         """Get the source vertex of an edge.

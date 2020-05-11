@@ -216,3 +216,48 @@ def create_graph(
         allowing_multiple_edges=allowing_multiple_edges,
         weighted=weighted,
     )
+
+
+def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True):
+    """Create a sparse graph. 
+
+    .. note :: Sparse graphs cannot be modified after construction. They are best suited 
+       for executing algorithms which do not need to modify the graph after loading.
+
+    """
+    e_list = backend.jgrapht_list_create()
+    if weighted: 
+        for u, v, w in edgelist: 
+            backend.jgrapht_list_edge_triple_add(e_list, u, v, w)
+    else:
+        for u, v in edgelist: 
+            backend.jgrapht_list_edge_pair_add(e_list, u, v)
+
+    handle = backend.jgrapht_graph_sparse_create(directed, weighted, num_of_vertices, e_list)
+
+    return _JGraphTGraph(handle)
+
+def as_sparse_graph(graph):
+    """Copy a graph to a sparse graph.
+
+    .. note :: The resulting graph might have more vertices that the source graph. The reason is 
+    that sparse graphs have a continuous range of vertices. Thus, if your input graph contains 
+    vertices 0, 5, 10 the resulting sparse graph will contain all vertices from 0 up to 10
+    (inclusive). The extra vertices will be isolated, meaning that they will have not incident
+    edges.
+
+    :param graph: the input graph
+    :returns: a sparse graph 
+    """
+    if len(graph.vertices()) == 0: 
+        raise ValueError("Graph with no vertices")
+
+    max_vertex = max(graph.vertices())
+
+    if graph.type.weighted:
+        edgelist = [graph.edge(e) for e in graph.edges()]
+    else: 
+        edgelist = [graph.edge(e) for e in graph.edges()]
+    
+    return create_sparse_graph(max_vertex+1, edgelist, graph.type.directed, graph.type.weighted)
+

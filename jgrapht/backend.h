@@ -198,6 +198,8 @@ int jgrapht_generate_kleinberg_smallworld(void *, int, int, int, int, long long 
 
 int jgrapht_graph_create(int, int, int, int, void**);
 
+int jgrapht_graph_sparse_create(int, int, int, void *, void**);
+
 int jgrapht_graph_vertices_count(void *, int*);
 
 int jgrapht_graph_edges_count(void *, int*);
@@ -403,6 +405,10 @@ int jgrapht_list_size(void *, int*);
 int jgrapht_list_int_add(void *, int, int*);
 
 int jgrapht_list_double_add(void *, double, int*);
+
+int jgrapht_list_edge_pair_add(void *, int, int, int*);
+
+int jgrapht_list_edge_triple_add(void *, int, int, double, int*);
 
 int jgrapht_list_int_remove(void *, int);
 
