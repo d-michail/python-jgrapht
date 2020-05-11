@@ -20,6 +20,23 @@ import jgrapht
 g = jgrapht.create_graph(directed=True, weighted=True)
 
 # %%
+# We can add vertices by providing their identifier. The method returns `True` if the 
+# vertex was added, `False` otherwise. Identifiers of vertices and edges are always
+# integers.
+
+g.add_vertex(0)
+
+# %%
+# Adding multiple vertices together can also be performed,
+
+g.add_vertices_from(range(1,5))
+
+# %%
+# Find out all the vertices in the graph by using the following method
+
+print(g.vertices())
+
+# %%
 #
 # TODO
 #
