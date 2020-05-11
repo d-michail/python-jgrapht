@@ -8,12 +8,16 @@ This guide will help you start using the library.
 Creating a graph
 ----------------
 
-Let us start by creating a graph::
+Let us start by creating a graph.
 
-  import jgrapht
+.. nbplot::
 
-  g = jgrapht.create_graph(directed=True, weighted=True)
+  >>> import jgrapht
+  >>> g = jgrapht.create_graph(directed=True, weighted=True, allowing_self_loops=False,
+  >>>                          allowing_multiple_edges=False)
 
+This is the most general call. Sensible defaults are also provided, thus someone can create
+a graph simply by calling ``jgrapht.create_graph()``.
 The graph is a collection of vertices (aka nodes) and edges. In python-jgrapht vertices and
 edges are always integers.
 
@@ -21,44 +25,55 @@ Adding vertices
 ---------------
 
 Vertices are added by calling method :py:meth:`.Graph.add_vertex` and providing the vertex
-identifier as a parameter::
+identifier as a parameter.
 
-  g.add_vertex(0)
+.. nbplot::
+
+  >>> g.add_vertex(0)
 
 The method returns `True` if the vertex is added and `False` if the 
 vertex was already a member of the graph. Multiple vertices can also be added using any
-iterable::
+iterable.
 
-  g.add_vertices_from([1, 2])
+.. nbplot::
 
-Now the graph should contain 3 vertices.
+  >>> g.add_vertices_from([1, 2])
 
 Vertex Set
 ----------
 
-You can find the number of vertices using::
+Now the graph contains 3 vertices.  You can find their unique integer identifiers using,
 
-  len(g.vertices())
+.. nbplot::
+
+  >>> len(g.vertices())
 
 The method :py:meth:`.Graph.vertices()` returns the set of vertices, which is also 
-helpful in order to iterate over them::
+helpful in order to iterate over them.
 
-  for v in g.vertices(): 
-      print ('Vertex {}'.format(v))
+.. nbplot::
+
+  >>> for v in g.vertices(): 
+  >>>     print ('Vertex {}'.format(v))
+
 
 Adding edges
 ------------
 
 Edges are pair of vertices, either ordered or unordered, depending on the type of the graph. 
-In python-jgrapht edges are also identified using integers. These edge identifiers are 
-automatically given to the edge when they are first added to the graph::
+In Python-JGraphT edges are also identified using integers. These edge identifiers are 
+automatically given to the edge when they are first added to the graph,
 
-  e1 = g.create_edge(0, 1)
+.. nbplot::
+
+  >>> e1 = g.create_edge(0, 1)
 
 The call above creates a new edge from vertex 0 to vertex 1 and returns its identifier. Note that 
-it is also possible to provide the edge identifier using::
+it is also possible to provide the edge identifier using,
 
-  added = g.add_edge(0, 1, 5)
+.. nbplot::
+
+  >>> added = g.add_edge(0, 1, 5)
 
 In the example above we explicitly request to add edge `5` in the graph. A boolean value is returned 
 which designates whether the edge was indeed added in the graph or not (in case it was already present).
@@ -71,21 +86,27 @@ Edge Information
 Using the edge identifier we can retrieve the underlying information of the edge such as its source
 and its target. While in undirected graphs there is no source or target, we use the same naming scheme
 to keep a uniform interface. This is very helpful in order to implement algorithms which work both 
-in directed and undirected graphs. Let us now read the edge source and target from the graph::
+in directed and undirected graphs. Let us now read the edge source and target from the graph,
 
-  print ('Edge {} has source {}'.format(e1, g.edge_source(e1)))
-  print ('Edge {} has target {}'.format(e1, g.edge_target(e1)))
+.. nbplot::
 
-Graphs in python-jgrapht can be weighted or unweighted. In the case of unweighted graphs, method 
+  >>> print ('Edge {} has source {}'.format(e1, g.edge_source(e1)))
+  >>> print ('Edge {} has target {}'.format(e1, g.edge_target(e1)))
+
+Graphs can be weighted or unweighted. In the case of unweighted graphs, method 
 :py:meth:`.Graph.get_edge_weight()` always returns 1.0 . This allows algorithms designed for weighted 
-graphs to also work in unweighted ones. Here is how to read the weight of an edge::
+graphs to also work in unweighted ones. Here is how to read the weight of an edge,
 
-  print ('Edge {} has weight {}'.format(e, g.get_edge_weight(e1)))
+.. nbplot::
+  
+  >>> print ('Edge {} has weight {}'.format(e1, g.get_edge_weight(e1)))
 
 If the graph is weighted, the edge weight can be adjusted using method :py:meth:`.Graph.set_edge_weight()`.
-The user can also provide the weight directly when adding the edge to the graph::
+The user can also provide the weight directly when adding the edge to the graph,
 
-  e2 = g.add_edge(1, 2, weight=10.0)
+.. nbplot::
+
+  >>> e2 = g.create_edge(1, 2, weight=10.0)
 
 Care must be taken to not try to adjust the weight if the graph is unweighted. In such a case a 
 :py:class:`ValueError` is raised.
@@ -93,30 +114,64 @@ Care must be taken to not try to adjust the weight if the graph is unweighted. I
 Edge Set
 --------
 
-Edges can be iterated using the set returned by method :py:meth:`.Graph.edges()`::
+Edges can be iterated using the set returned by method :py:meth:`.Graph.edges()`,
 
-  for e in g.edges(): 
-      print ('Edge {} has source {}'.format(e, g.edge_source(e)))
-      print ('Edge {} has target {}'.format(e, g.edge_target(e)))
+.. nbplot::
 
-Finding the number of edges can be performed by executing::
+  >>> for e in g.edges(): 
+  >>>     print ('Edge {} has source {}'.format(e, g.edge_source(e)))
+  >>>     print ('Edge {} has target {}'.format(e, g.edge_target(e)))
 
-  len(g.edge())
+The same effect can be performed using the helper method :py:meth:`.Graph.edge_tuple()` which 
+returns a tuple containing the source and target of an edge and possibly its weight if the graph 
+is weighted,
+
+.. nbplot::
+
+  >>> for e in g.edges(): 
+  >>>     print ('Edge {}'.format(g.edge_tuple(e)))
+
+Finding the number of edges can be performed by executing,
+
+.. nbplot::
+
+  >>> len(g.edges())
+
+Graph Type
+----------
+
+The type of the graph can be queried during runtime using :py:meth:`.Graph.type` which
+returns instances of :py:class:`.GraphType`. This allows algorithms to alter their behavior
+based on the actual graph that they are running over. The following properties can be 
+queried,
+
+.. nbplot::
+ >>> g.type.directed
+ >>> g.type.undirected
+ >>> g.type.weighted
+ >>> g.type.allowing_multiple_edges
+ >>> g.type.allowing_self_loops
+ >>> g.type.modifiable
+
 
 Navigation
 ----------
 
 When implementing graph algorithms one of the most common operation that is required is to 
-find the neighbors of a vertex. 
+find the neighbors of a vertex. Given a vertex `v` you can find the incident edges using
+methods:
 
+  * :py:meth:`.Graph.edges_of()`
+  * :py:meth:`.Graph.inedges_of()`
+  * :py:meth:`.Graph.outedges_of()`
 
-
-
-
-
-
-
+The behavior of these methods strongly depend on whether the graph is directed or undirected.
+If the graph is undirected all methods return the set of edges touching the vertex. For directed
+graphs method :py:meth:`.Graph.outedges_of()` returns all outgoing edges from `v`, method 
+:py:meth:`.Graph.inedges_of()` all incoming edge to `v` and method :py:meth:`.Graph.edges_of()` 
+returns all edges either incoming or outgoing.
 
 TODO
+
 
 

@@ -19,6 +19,7 @@ Documentation
    install
    tutorial
    api/index
+   auto_examples/index
    license
    citing
    credits
