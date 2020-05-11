@@ -4,7 +4,7 @@ from ..types import (
 )
 from ._wrappers import (
     _HandleWrapper,
-    _JGraphTLongIterator,
+    _JGraphTIntegerIterator,
 )
 
 
@@ -19,7 +19,7 @@ class _JGraphTClustering(_HandleWrapper, Clustering):
 
     def ith_cluster(self, i):
         res = backend.jgrapht_clustering_ith_cluster_vit(self._handle, i)
-        return _JGraphTLongIterator(res)
+        return _JGraphTIntegerIterator(res)
 
     def __repr__(self):
         return "_JGraphTClustering(%r)" % self._handle

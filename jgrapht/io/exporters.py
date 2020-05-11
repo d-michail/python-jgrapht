@@ -3,7 +3,6 @@ import ctypes
 
 from .. import backend
 from .._internals._wrappers import (
-    _JGraphTLongIterator,
     _JGraphTString,
 )
 from .._internals._attributes import (

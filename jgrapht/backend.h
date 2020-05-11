@@ -20,15 +20,17 @@ int jgrapht_isolate_is_attached();
 
 int jgrapht_attributes_store_create(void**);
 
-int jgrapht_attributes_store_put_boolean_attribute(void *, long long int, char*, int);
+int jgrapht_attributes_store_put_boolean_attribute(void *, int, char*, int);
 
-int jgrapht_attributes_store_put_long_attribute(void *, long long int, char*, long long int);
+int jgrapht_attributes_store_put_int_attribute(void *, int, char*, int);
 
-int jgrapht_attributes_store_put_double_attribute(void *, long long int, char*, double);
+int jgrapht_attributes_store_put_long_attribute(void *, int, char*, long long int);
 
-int jgrapht_attributes_store_put_string_attribute(void *, long long int, char*, char*);
+int jgrapht_attributes_store_put_double_attribute(void *, int, char*, double);
 
-int jgrapht_attributes_store_remove_attribute(void *, long long int, char*);
+int jgrapht_attributes_store_put_string_attribute(void *, int, char*, char*);
+
+int jgrapht_attributes_store_remove_attribute(void *, int, char*);
 
 int jgrapht_attributes_registry_create(void**);
 
@@ -50,27 +52,27 @@ int jgrapht_clustering_exec_k_spanning_tree(void *, int, void**);
 
 int jgrapht_clustering_exec_label_propagation(void *, int, long long int, void**);
 
-int jgrapht_clustering_get_number_clusters(void *, long long*);
+int jgrapht_clustering_get_number_clusters(void *, int*);
 
 int jgrapht_clustering_ith_cluster_vit(void *, int, void**);
 
 // coloring
 
-int jgrapht_coloring_exec_greedy(void *, long long*, void**);
+int jgrapht_coloring_exec_greedy(void *, int*, void**);
 
-int jgrapht_coloring_exec_greedy_smallestdegreelast(void *, long long*, void**);
+int jgrapht_coloring_exec_greedy_smallestdegreelast(void *, int*, void**);
 
-int jgrapht_coloring_exec_backtracking_brown(void *, long long*, void**);
+int jgrapht_coloring_exec_backtracking_brown(void *, int*, void**);
 
-int jgrapht_coloring_exec_greedy_largestdegreefirst(void *, long long*, void**);
+int jgrapht_coloring_exec_greedy_largestdegreefirst(void *, int*, void**);
 
-int jgrapht_coloring_exec_greedy_random(void *, long long*, void**);
+int jgrapht_coloring_exec_greedy_random(void *, int*, void**);
 
-int jgrapht_coloring_exec_greedy_random_with_seed(void *, long long int, long long*, void**);
+int jgrapht_coloring_exec_greedy_random_with_seed(void *, long long int, int*, void**);
 
-int jgrapht_coloring_exec_greedy_dsatur(void *, long long*, void**);
+int jgrapht_coloring_exec_greedy_dsatur(void *, int*, void**);
 
-int jgrapht_coloring_exec_color_refinement(void *, long long*, void**);
+int jgrapht_coloring_exec_color_refinement(void *, int*, void**);
 
 // cut
 
@@ -152,11 +154,11 @@ int jgrapht_export_string_graphml(void *, void *, void *, void *, int, int, int,
 
 // flow 
 
-int jgrapht_maxflow_exec_push_relabel(void *, long long int, long long int, double*, void**, void**);
+int jgrapht_maxflow_exec_push_relabel(void *, int, int, double*, void**, void**);
 
-int jgrapht_maxflow_exec_dinic(void *, long long int, long long int, double*, void**, void**);
+int jgrapht_maxflow_exec_dinic(void *, int, int, double*, void**, void**);
 
-int jgrapht_maxflow_exec_edmonds_karp(void *, long long int, long long int, double*, void**, void**);
+int jgrapht_maxflow_exec_edmonds_karp(void *, int, int, double*, void**, void**);
 
 int jgrapht_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double*, void**, void**);
 
@@ -188,37 +190,37 @@ int jgrapht_generate_kleinberg_smallworld(void *, int, int, int, int, long long 
 
 int jgrapht_graph_create(int, int, int, int, void**);
 
-int jgrapht_graph_vertices_count(void *, long long*);
+int jgrapht_graph_vertices_count(void *, int*);
 
-int jgrapht_graph_edges_count(void *, long long*);
+int jgrapht_graph_edges_count(void *, int*);
 
-int jgrapht_graph_add_vertex(void *, long long*);
+int jgrapht_graph_add_vertex(void *, int*);
 
-int jgrapht_graph_add_given_vertex(void *, long long int, int *);
+int jgrapht_graph_add_given_vertex(void *, int, int *);
 
-int jgrapht_graph_remove_vertex(void *, long long int, int*);
+int jgrapht_graph_remove_vertex(void *, int, int*);
 
-int jgrapht_graph_contains_vertex(void *, long long int, int*);
+int jgrapht_graph_contains_vertex(void *, int, int*);
 
-int jgrapht_graph_add_edge(void *, long long int, long long int, long long*);
+int jgrapht_graph_add_edge(void *, int, int, int*);
 
-int jgrapht_graph_add_given_edge(void *, long long int, long long int, long long int, int*);
+int jgrapht_graph_add_given_edge(void *, int, int, int, int*);
 
-int jgrapht_graph_remove_edge(void *, long long int, int*);
+int jgrapht_graph_remove_edge(void *, int, int*);
 
-int jgrapht_graph_contains_edge(void *, long long int, int*);
+int jgrapht_graph_contains_edge(void *, int, int*);
 
-int jgrapht_graph_contains_edge_between(void *, long long int, long long int, int*);
+int jgrapht_graph_contains_edge_between(void *, int, int, int*);
 
-int jgrapht_graph_degree_of(void *, long long int, long long*);
+int jgrapht_graph_degree_of(void *, int, int*);
 
-int jgrapht_graph_indegree_of(void *, long long int, long long*);
+int jgrapht_graph_indegree_of(void *, int, int*);
 
-int jgrapht_graph_outdegree_of(void *, long long int, long long*);
+int jgrapht_graph_outdegree_of(void *, int, int*);
 
-int jgrapht_graph_edge_source(void *, long long int, long long*);
+int jgrapht_graph_edge_source(void *, int, int*);
 
-int jgrapht_graph_edge_target(void *, long long int, long long*);
+int jgrapht_graph_edge_target(void *, int, int*);
 
 int jgrapht_graph_is_weighted(void *, int*);
 
@@ -230,21 +232,21 @@ int jgrapht_graph_is_allowing_selfloops(void *, int*);
 
 int jgrapht_graph_is_allowing_multipleedges(void *, int*);
 
-int jgrapht_graph_get_edge_weight(void *, long long int, double*);
+int jgrapht_graph_get_edge_weight(void *, int, double*);
 
-int jgrapht_graph_set_edge_weight(void *, long long int, double);
+int jgrapht_graph_set_edge_weight(void *, int, double);
 
 int jgrapht_graph_create_all_vit(void *, void**);
 
 int jgrapht_graph_create_all_eit(void *, void**);
 
-int jgrapht_graph_create_between_eit(void *, long long int, long long int, void**);
+int jgrapht_graph_create_between_eit(void *, int, int, void**);
 
-int jgrapht_graph_vertex_create_eit(void *, long long int, void**);
+int jgrapht_graph_vertex_create_eit(void *, int, void**);
 
-int jgrapht_graph_vertex_create_out_eit(void *, long long int, void**);
+int jgrapht_graph_vertex_create_out_eit(void *, int, void**);
 
-int jgrapht_graph_vertex_create_in_eit(void *, long long int, void**);
+int jgrapht_graph_vertex_create_in_eit(void *, int, void**);
 
 int jgrapht_graph_as_undirected(void *, void**);
 
@@ -260,15 +262,15 @@ int jgrapht_graph_metrics_diameter(void *, double*);
 
 int jgrapht_graph_metrics_radius(void *, double*);
 
-int jgrapht_graph_metrics_girth(void *, long long*);
+int jgrapht_graph_metrics_girth(void *, int*);
 
-int jgrapht_graph_metrics_triangles(void *, long long*);
+int jgrapht_graph_metrics_triangles(void *, long long int*);
 
 int jgrapht_graph_metrics_measure_graph(void *, double*, double*, void**, void**, void**, void**);
 
 // graph path 
 
-int jgrapht_graphpath_get_fields(void *, double*, long long*, long long*, void**);
+int jgrapht_graphpath_get_fields(void *, double*, int*, int*, void**);
 
 // graph test
 
@@ -368,13 +370,13 @@ int jgrapht_isomorphism_exec_vf2(void *, void *, int*, void**);
 
 int jgrapht_isomorphism_exec_vf2_subgraph(void *, void *, int*, void**);
 
-int jgrapht_isomorphism_graph_mapping_edge_correspondence(void *, long long int, int, int*, long long*);
+int jgrapht_isomorphism_graph_mapping_edge_correspondence(void *, int, int, int*, int*);
 
-int jgrapht_isomorphism_graph_mapping_vertex_correspondence(void *, long long int, int, int*, long long*);
+int jgrapht_isomorphism_graph_mapping_vertex_correspondence(void *, int, int, int*, int*);
 
 // iterators
 
-int jgrapht_it_next_long(void *, long long*);
+int jgrapht_it_next_int(void *, int*);
 
 int jgrapht_it_next_double(void *, double*);
 
@@ -388,17 +390,17 @@ int jgrapht_list_create(void**);
 
 int jgrapht_list_it_create(void *, void**);
 
-int jgrapht_list_size(void *, long long*);
+int jgrapht_list_size(void *, int*);
 
-int jgrapht_list_long_add(void *, long long int, int*);
+int jgrapht_list_int_add(void *, int, int*);
 
 int jgrapht_list_double_add(void *, double, int*);
 
-int jgrapht_list_long_remove(void *, long long int);
+int jgrapht_list_int_remove(void *, int);
 
 int jgrapht_list_double_remove(void *, double);
 
-int jgrapht_list_long_contains(void *, long long int, int*);
+int jgrapht_list_int_contains(void *, int, int*);
 
 int jgrapht_list_double_contains(void *, double, int*);
 
@@ -412,23 +414,23 @@ int jgrapht_map_linked_create(void**);
 
 int jgrapht_map_keys_it_create(void *, void**);
 
-int jgrapht_map_size(void *, long long*);
+int jgrapht_map_size(void *, int*);
 
 int jgrapht_map_values_it_create(void *, void**);
 
-int jgrapht_map_long_double_put(void *, long long int, double);
+int jgrapht_map_int_double_put(void *, int, double);
 
-int jgrapht_map_long_long_put(void *, long long int, long long int);
+int jgrapht_map_int_int_put(void *, int, int);
 
-int jgrapht_map_long_double_get(void *, long long int, double*);
+int jgrapht_map_int_double_get(void *, int, double*);
 
-int jgrapht_map_long_long_get(void *, long long int, long long*);
+int jgrapht_map_int_int_get(void *, int, int*);
 
-int jgrapht_map_long_contains_key(void *, long long int, int*);
+int jgrapht_map_int_contains_key(void *, int, int*);
 
-int jgrapht_map_long_double_remove(void *, long long int, double*);
+int jgrapht_map_int_double_remove(void *, int, double*);
 
-int jgrapht_map_long_long_remove(void *, long long int, long long*);
+int jgrapht_map_int_int_remove(void *, int, int*);
 
 int jgrapht_map_clear(void *);
 
@@ -478,7 +480,7 @@ int jgrapht_partition_exec_bipartite(void *, int*, void**, void**);
 
 int jgrapht_planarity_exec_boyer_myrvold(void *, int*, void**, void**);
 
-int jgrapht_planarity_embedding_edges_around_vertex(void *, long long int, void**);
+int jgrapht_planarity_embedding_edges_around_vertex(void *, int, void**);
 
 // scoring
 
@@ -510,17 +512,17 @@ int jgrapht_set_linked_create(void**);
 
 int jgrapht_set_it_create(void *, void**);
 
-int jgrapht_set_size(void *, long long*);
+int jgrapht_set_size(void *, int*);
 
-int jgrapht_set_long_add(void *, long long int, int*);
+int jgrapht_set_int_add(void *, int, int*);
 
 int jgrapht_set_double_add(void *, double, int *);
 
-int jgrapht_set_long_remove(void *, long long int);
+int jgrapht_set_int_remove(void *, int);
 
 int jgrapht_set_double_remove(void *, double);
 
-int jgrapht_set_long_contains(void *, long long int, int*);
+int jgrapht_set_int_contains(void *, int, int*);
 
 int jgrapht_set_double_contains(void *, double, int*);
 
@@ -528,37 +530,37 @@ int jgrapht_set_clear(void *);
 
 // shortest paths 
 
-int jgrapht_sp_exec_dijkstra_get_path_between_vertices(void *, long long int, long long int, void**);
+int jgrapht_sp_exec_dijkstra_get_path_between_vertices(void *, int, int, void**);
 
-int jgrapht_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, long long int, long long int, void**);
+int jgrapht_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, int, int, void**);
 
-int jgrapht_sp_exec_dijkstra_get_singlesource_from_vertex(void *, long long int, void**);
+int jgrapht_sp_exec_dijkstra_get_singlesource_from_vertex(void *, int, void**);
 
-int jgrapht_sp_exec_bellmanford_get_singlesource_from_vertex(void *, long long int, void**);
+int jgrapht_sp_exec_bellmanford_get_singlesource_from_vertex(void *, int, void**);
 
-int jgrapht_sp_exec_bfs_get_singlesource_from_vertex(void *, long long int, void**);
+int jgrapht_sp_exec_bfs_get_singlesource_from_vertex(void *, int, void**);
 
 int jgrapht_sp_exec_johnson_get_allpairs(void *, void**);
 
 int jgrapht_sp_exec_floydwarshall_get_allpairs(void *, void**);
 
-int jgrapht_sp_singlesource_get_path_to_vertex(void *, long long int, void**);
+int jgrapht_sp_singlesource_get_path_to_vertex(void *, int, void**);
 
-int jgrapht_sp_allpairs_get_path_between_vertices(void *, long long int, long long int, void**);
+int jgrapht_sp_allpairs_get_path_between_vertices(void *, int, int, void**);
 
-int jgrapht_sp_allpairs_get_singlesource_from_vertex(void *, long long int, void**);
+int jgrapht_sp_allpairs_get_singlesource_from_vertex(void *, int, void**);
 
-int jgrapht_sp_exec_astar_get_path_between_vertices(void *, long long int, long long int, void *, void**);
+int jgrapht_sp_exec_astar_get_path_between_vertices(void *, int, int, void *, void**);
 
-int jgrapht_sp_exec_bidirectional_astar_get_path_between_vertices(void *, long long int, long long int, void *, void**);
+int jgrapht_sp_exec_bidirectional_astar_get_path_between_vertices(void *, int, int, void *, void**);
 
-int jgrapht_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, long long int, long long int, void *, void**);
+int jgrapht_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void**);
 
-int jgrapht_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, long long int, long long int, void *, void**);
+int jgrapht_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void**);
 
-int jgrapht_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, long long int, long long int, int, void**);
+int jgrapht_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, int, int, int, void**);
 
-int jgrapht_sp_exec_eppstein_get_k_paths_between_vertices(void *, long long int, long long int, int, void**);
+int jgrapht_sp_exec_eppstein_get_k_paths_between_vertices(void *, int, int, int, void**);
 
 // spanner
 
@@ -590,27 +592,27 @@ int jgrapht_tour_tsp_two_opt_heuristic_improve(void *, double, long long int, vo
 
 int jgrapht_traverse_create_bfs_from_all_vertices_vit(void *, void**);
 
-int jgrapht_traverse_create_bfs_from_vertex_vit(void *, long long int, void**);
+int jgrapht_traverse_create_bfs_from_vertex_vit(void *, int, void**);
 
 int jgrapht_traverse_create_lex_bfs_vit(void *, void**);
 
 int jgrapht_traverse_create_dfs_from_all_vertices_vit(void *, void**);
 
-int jgrapht_traverse_create_dfs_from_vertex_vit(void *, long long int, void**);
+int jgrapht_traverse_create_dfs_from_vertex_vit(void *, int, void**);
 
 int jgrapht_traverse_create_topological_order_vit(void *, void**);
 
-int jgrapht_traverse_create_random_walk_from_vertex_vit(void *, long long int, void**);
+int jgrapht_traverse_create_random_walk_from_vertex_vit(void *, int, void**);
 
-int jgrapht_traverse_create_custom_random_walk_from_vertex_vit(void *, long long int, int, long long int, long long int, void**);
+int jgrapht_traverse_create_custom_random_walk_from_vertex_vit(void *, int, int, long long int, long long int, void**);
 
 int jgrapht_traverse_create_max_cardinality_vit(void *, void**);
 
 int jgrapht_traverse_create_degeneracy_ordering_vit(void *, void**);
 
-int jgrapht_traverse_create_closest_first_from_vertex_vit(void *, long long int, void**);
+int jgrapht_traverse_create_closest_first_from_vertex_vit(void *, int, void**);
 
-int jgrapht_traverse_create_custom_closest_first_from_vertex_vit(void *, long long int, double, void**);
+int jgrapht_traverse_create_custom_closest_first_from_vertex_vit(void *, int, double, void**);
 
 // vertex cover
 

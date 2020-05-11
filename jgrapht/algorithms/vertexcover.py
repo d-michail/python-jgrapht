@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._collections import _JGraphTLongDoubleMap, _JGraphTLongSet
+from .._internals._collections import _JGraphTIntegerDoubleMap, _JGraphTIntegerSet
 
 
 def _vertexcover_alg(name, graph, vertex_weights=None):
@@ -17,14 +17,14 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
             raise NotImplementedError("Algorithm not supported.")
 
     if vertex_weights is not None:
-        jgrapht_vertex_weights = _JGraphTLongDoubleMap()
+        jgrapht_vertex_weights = _JGraphTIntegerDoubleMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
         weight, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
     else:
         weight, vc_handle = alg_method(graph.handle)
 
-    return weight, _JGraphTLongSet(vc_handle)
+    return weight, _JGraphTIntegerSet(vc_handle)
 
 
 def greedy(graph, vertex_weights=None):

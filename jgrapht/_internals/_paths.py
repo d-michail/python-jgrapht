@@ -6,7 +6,7 @@ from ..types import (
 )
 from ._wrappers import (
     _HandleWrapper,
-    _JGraphTLongIterator,
+    _JGraphTIntegerIterator,
     _JGraphTObjectIterator,
 )
 
@@ -63,7 +63,7 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
         self._weight = weight
         self._start_vertex = start_vertex
         self._end_vertex = end_vertex
-        self._edges = list(_JGraphTLongIterator(eit))
+        self._edges = list(_JGraphTIntegerIterator(eit))
 
     def __repr__(self):
         return "_JGraphTGraphPath(%r)" % self._handle

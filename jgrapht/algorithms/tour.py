@@ -1,7 +1,7 @@
 import time
 
 from .. import backend
-from .._internals._wrappers import _JGraphTLongIterator
+from .._internals._wrappers import _JGraphTIntegerIterator
 from .._internals._paths import _JGraphTGraphPath
 
 

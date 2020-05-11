@@ -7,7 +7,7 @@ from collections.abc import (
     Set,
 )
 from ._wrappers import _HandleWrapper
-from ._collections import _JGraphTLongIterator
+from ._collections import _JGraphTIntegerIterator
 
 
 class _JGraphTGraph(_HandleWrapper, Graph):
@@ -129,19 +129,19 @@ class _JGraphTGraph(_HandleWrapper, Graph):
 
     def edges_between(self, u, v):
         res = backend.jgrapht_graph_create_between_eit(self._handle, u, v)
-        return _JGraphTLongIterator(res)
+        return _JGraphTIntegerIterator(res)
 
     def edges_of(self, v):
         res = backend.jgrapht_graph_vertex_create_eit(self._handle, v)
-        return _JGraphTLongIterator(res)
+        return _JGraphTIntegerIterator(res)
 
     def inedges_of(self, v):
         res = backend.jgrapht_graph_vertex_create_in_eit(self._handle, v)
-        return _JGraphTLongIterator(res)
+        return _JGraphTIntegerIterator(res)
 
     def outedges_of(self, v):
         res = backend.jgrapht_graph_vertex_create_out_eit(self._handle, v)
-        return _JGraphTLongIterator(res)
+        return _JGraphTIntegerIterator(res)
 
     class _VertexSet(Set):
         """Wrapper around the vertices of a JGraphT graph"""
@@ -151,7 +151,7 @@ class _JGraphTGraph(_HandleWrapper, Graph):
 
         def __iter__(self):
             res = backend.jgrapht_graph_create_all_vit(self._handle)
-            return _JGraphTLongIterator(res)
+            return _JGraphTIntegerIterator(res)
 
         def __len__(self):
             res = backend.jgrapht_graph_vertices_count(self._handle)
@@ -175,7 +175,7 @@ class _JGraphTGraph(_HandleWrapper, Graph):
 
         def __iter__(self):
             res = backend.jgrapht_graph_create_all_eit(self._handle)
-            return _JGraphTLongIterator(res)
+            return _JGraphTIntegerIterator(res)
 
         def __len__(self):
             res = backend.jgrapht_graph_edges_count(self._handle)

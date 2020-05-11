@@ -1,7 +1,7 @@
 from . import backend
 from ._internals._collections import (
-    _JGraphTLongDoubleMap,
-    _JGraphTLongSet,
+    _JGraphTIntegerDoubleMap,
+    _JGraphTIntegerSet,
 )
 
 
@@ -91,8 +91,8 @@ def measure(graph):
     return (
         diameter, 
         radius, 
-        _JGraphTLongSet(handle=center_handle),
-        _JGraphTLongSet(handle=periphery_handle),
-        _JGraphTLongSet(handle=pseudo_periphery_handle),
-        _JGraphTLongDoubleMap(handle=vertex_eccentricity_map_handle),
+        _JGraphTIntegerSet(handle=center_handle),
+        _JGraphTIntegerSet(handle=periphery_handle),
+        _JGraphTIntegerSet(handle=pseudo_periphery_handle),
+        _JGraphTIntegerDoubleMap(handle=vertex_eccentricity_map_handle),
     )

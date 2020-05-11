@@ -1,10 +1,10 @@
 import pytest
 
-from jgrapht._internals._collections import _JGraphTLongSet
+from jgrapht._internals._collections import _JGraphTIntegerSet
 
-def test_longset():
+def test_Integerset():
 
-    s = _JGraphTLongSet()
+    s = _JGraphTIntegerSet()
 
     s.add(5)
     s.add(7)
@@ -41,9 +41,9 @@ def test_longset():
 
     assert set(s) == set([5, 9, 11, 13])
 
-def test_longset_linked():
+def test_Integerset_linked():
 
-    s = _JGraphTLongSet(linked=True)
+    s = _JGraphTIntegerSet(linked=True)
 
     s.add(5)
     s.add(7)

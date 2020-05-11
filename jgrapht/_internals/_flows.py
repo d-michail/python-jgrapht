@@ -4,8 +4,8 @@ from ..types import (
 )
 
 from ._collections import (
-    _JGraphTLongSet,
-    _JGraphTLongDoubleMap,
+    _JGraphTIntegerSet,
+    _JGraphTIntegerDoubleMap,
 )
 
 
@@ -16,7 +16,7 @@ class _JGraphTCut(Cut):
         super().__init__(**kwargs)
         self._graph = graph
         self._capacity = capacity
-        self._source_partition = _JGraphTLongSet(source_partition_handle)
+        self._source_partition = _JGraphTIntegerSet(source_partition_handle)
         self._target_partition = None
         self._edges = None
 
@@ -70,7 +70,7 @@ class _JGraphTCut(Cut):
         return "_JGraphTCut(%r)" % self._handle
 
 
-class _JGraphTFlow(_JGraphTLongDoubleMap, Flow):
+class _JGraphTFlow(_JGraphTIntegerDoubleMap, Flow):
     """Flow representation as a map from edges to double values."""
 
     def __init__(self, handle, source, sink, value, **kwargs):

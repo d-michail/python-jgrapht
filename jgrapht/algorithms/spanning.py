@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._collections import _JGraphTLongSet
+from .._internals._collections import _JGraphTIntegerSet
 
 
 def _mst_alg(name, graph):
@@ -12,7 +12,7 @@ def _mst_alg(name, graph):
 
     weight, mst_handle = alg_method(graph.handle)
 
-    return weight, _JGraphTLongSet(mst_handle)
+    return weight, _JGraphTIntegerSet(mst_handle)
 
 
 def kruskal(graph):
@@ -87,4 +87,4 @@ def multiplicative_greedy(graph, k):
     weight, spanner = backend.jgrapht_spanner_exec_greedy_multiplicative(
         graph.handle, k
     )
-    return weight, _JGraphTLongSet(spanner)
+    return weight, _JGraphTIntegerSet(spanner)

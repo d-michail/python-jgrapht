@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._collections import _JGraphTLongSetIterator
+from .._internals._collections import _JGraphTIntegerSetIterator
 
 
 def _clique_enumeration_alg(name, graph, *args):
@@ -13,7 +13,7 @@ def _clique_enumeration_alg(name, graph, *args):
 
     clique_it = alg_method(graph.handle, *args)
 
-    return _JGraphTLongSetIterator(handle=clique_it)
+    return _JGraphTIntegerSetIterator(handle=clique_it)
 
 
 def bron_kerbosch(graph, timeout=0):

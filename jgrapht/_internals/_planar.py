@@ -4,7 +4,7 @@ from ..types import (
 )
 from ._wrappers import (
     _HandleWrapper,
-    _JGraphTLongIterator,
+    _JGraphTIntegerIterator,
 )
 
 
@@ -18,7 +18,7 @@ class _JGraphTPlanarEmbedding(_HandleWrapper, PlanarEmbedding):
         res = backend.jgrapht_planarity_embedding_edges_around_vertex(
             self._handle, vertex
         )
-        return list(_JGraphTLongIterator(res))
+        return list(_JGraphTIntegerIterator(res))
 
     def __repr__(self):
         return "_JGraphTPlanarEmbedding(%r)" % self._handle

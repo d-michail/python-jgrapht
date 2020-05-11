@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._collections import _JGraphTLongSet
+from .._internals._collections import _JGraphTIntegerSet
 
 
 def bipartite_partitions(graph):
@@ -11,4 +11,4 @@ def bipartite_partitions(graph):
     :returns: A tuple (result, partition1, partition2)
     """
     res, part1, part2 = backend.jgrapht_partition_exec_bipartite(graph.handle)
-    return res, _JGraphTLongSet(part1), _JGraphTLongSet(part2)
+    return res, _JGraphTIntegerSet(part1), _JGraphTIntegerSet(part2)

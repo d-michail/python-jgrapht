@@ -25,8 +25,8 @@ class _HandleWrapper:
         return "_HandleWrapper(%r)" % self._handle
 
 
-class _JGraphTLongIterator(_HandleWrapper, Iterator):
-    """Long values iterator"""
+class _JGraphTIntegerIterator(_HandleWrapper, Iterator):
+    """Integer values iterator"""
 
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -35,10 +35,10 @@ class _JGraphTLongIterator(_HandleWrapper, Iterator):
         res = backend.jgrapht_it_hasnext(self._handle)
         if not res:
             raise StopIteration()
-        return backend.jgrapht_it_next_long(self._handle)
+        return backend.jgrapht_it_next_int(self._handle)
 
     def __repr__(self):
-        return "_JGraphTLongIterator(%r)" % self._handle
+        return "_JGraphTIntegerIterator(%r)" % self._handle
 
 
 class _JGraphTDoubleIterator(_HandleWrapper, Iterator):

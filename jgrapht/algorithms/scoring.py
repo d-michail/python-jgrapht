@@ -1,7 +1,7 @@
 from .. import backend
 from .._internals._collections import (
-    _JGraphTLongIterator,
-    _JGraphTLongDoubleMap,
+    _JGraphTIntegerIterator,
+    _JGraphTIntegerDoubleMap,
 ) 
 
 
@@ -19,7 +19,7 @@ def _scoring_alg(name, graph, *args):
 
     scores_handle = alg_method(graph.handle, *args)
 
-    return _JGraphTLongDoubleMap(handle=scores_handle)
+    return _JGraphTIntegerDoubleMap(handle=scores_handle)
 
 
 def alpha_centrality(

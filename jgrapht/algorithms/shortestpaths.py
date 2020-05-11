@@ -6,7 +6,7 @@ from .._internals._paths import (
     _JGraphTAllPairsPaths,
 )
 from .._internals._collections import (
-    _JGraphTLongSet,
+    _JGraphTIntegerSet,
 )
 import ctypes
 
@@ -239,7 +239,7 @@ def a_star_with_alt_heuristic(
     :returns: a :py:class:`.GraphPath`
     """
 
-    landmarks_set = _JGraphTLongSet(linked=True)
+    landmarks_set = _JGraphTIntegerSet(linked=True)
     for landmark in landmarks:
         landmarks_set.add(landmark)
 

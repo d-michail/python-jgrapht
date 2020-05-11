@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._collections import _JGraphTLongLongMap
+from .._internals._collections import _JGraphTIntegerIntegerMap
 
 
 def _coloring_alg(name, graph, *args):
@@ -13,7 +13,7 @@ def _coloring_alg(name, graph, *args):
 
     num_colors, color_map_handle = alg_method(graph.handle, *args)
 
-    return (num_colors, _JGraphTLongLongMap(handle=color_map_handle))
+    return (num_colors, _JGraphTIntegerIntegerMap(handle=color_map_handle))
 
 
 def greedy_smallestnotusedcolor(graph):

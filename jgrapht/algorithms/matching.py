@@ -1,5 +1,5 @@
 from .. import backend
-from .._internals._collections import _JGraphTLongSet
+from .._internals._collections import _JGraphTIntegerSet
 
 
 def _matching_alg(name, graph, *args, no_custom_prefix=False):
@@ -16,7 +16,7 @@ def _matching_alg(name, graph, *args, no_custom_prefix=False):
 
     weight, m_handle = alg_method(graph.handle, *args)
 
-    return weight, _JGraphTLongSet(handle=m_handle)
+    return weight, _JGraphTIntegerSet(handle=m_handle)
 
 
 def greedy_max_cardinality(graph, sort=False):

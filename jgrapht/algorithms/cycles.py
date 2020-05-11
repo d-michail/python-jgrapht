@@ -4,7 +4,7 @@ from .._internals._paths import (
     _JGraphTGraphPathIterator,
 )
 from .._internals._collections import (
-    _JGraphTLongListIterator
+    _JGraphTIntegerListIterator
 )
 
 
@@ -141,7 +141,7 @@ def enumerate_simple_cycles_tarjan(graph):
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
     """ 
     cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_tarjan(graph.handle)
-    return _JGraphTLongListIterator(cycles_it)
+    return _JGraphTIntegerListIterator(cycles_it)
 
 
 def enumerate_simple_cycles_johnson(graph):
@@ -163,7 +163,7 @@ def enumerate_simple_cycles_johnson(graph):
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
     """ 
     cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_johnson(graph.handle)
-    return _JGraphTLongListIterator(cycles_it)
+    return _JGraphTIntegerListIterator(cycles_it)
 
 
 def enumerate_simple_cycles_tiernan(graph):
@@ -185,7 +185,7 @@ def enumerate_simple_cycles_tiernan(graph):
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
     """ 
     cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_tiernan(graph.handle)
-    return _JGraphTLongListIterator(cycles_it)
+    return _JGraphTIntegerListIterator(cycles_it)
 
 
 def enumerate_simple_cycles_szwarcfiter_lauer(graph):
@@ -208,7 +208,7 @@ def enumerate_simple_cycles_szwarcfiter_lauer(graph):
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
     """ 
     cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_szwarcfiter_lauer(graph.handle)
-    return _JGraphTLongListIterator(cycles_it)
+    return _JGraphTIntegerListIterator(cycles_it)
 
 
 def enumerate_simple_cycles_hawick_james(graph):
@@ -231,5 +231,5 @@ def enumerate_simple_cycles_hawick_james(graph):
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
     """ 
     cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_hawick_james(graph.handle)
-    return _JGraphTLongListIterator(cycles_it)
+    return _JGraphTIntegerListIterator(cycles_it)
 
