@@ -141,6 +141,20 @@ int jgrapht_coloring_exec_color_refinement(void *g, int* colors_res, void** res)
     return jgrapht_capi_coloring_exec_color_refinement(thread, g, colors_res, res);
 }
 
+// connectivity
+
+int jgrapht_connectivity_strong_exec_kosaraju(void *g, int* is_connected_res, void** res) { 
+    return jgrapht_capi_connectivity_strong_exec_kosaraju(thread, g, is_connected_res, res);
+}
+
+int jgrapht_connectivity_strong_exec_gabow(void *g, int* is_connected_res, void** res) {
+    return jgrapht_capi_connectivity_strong_exec_gabow(thread, g, is_connected_res, res);
+}
+
+int jgrapht_connectivity_weak_exec_bfs(void *g, int* is_connected_res, void** res) {
+    return jgrapht_capi_connectivity_weak_exec_bfs(thread, g, is_connected_res, res);
+}
+
 // cut
 
 int jgrapht_cut_exec_stoer_wagner(void *g, double* weight, void** res) { 

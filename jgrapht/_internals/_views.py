@@ -11,12 +11,12 @@ class _UnweightedGraphView(_JGraphTGraph):
 
         super().__init__(res, True)
 
-        self._graph_type = GraphType(
-            directed=graph.graph_type.directed,
-            allowing_self_loops=graph.graph_type.allowing_self_loops,
-            allowing_multiple_edges=graph.graph_type.allowing_multiple_edges,
+        self._type = GraphType(
+            directed=graph.type.directed,
+            allowing_self_loops=graph.type.allowing_self_loops,
+            allowing_multiple_edges=graph.type.allowing_multiple_edges,
             weighted=False,
-            modifiable=graph.graph_type.modifiable,
+            modifiable=graph.type.modifiable,
         )
 
         # Keep a reference to avoid gargage collection. This is important since the
@@ -24,12 +24,12 @@ class _UnweightedGraphView(_JGraphTGraph):
         self._graph = graph
 
     @property
-    def graph_type(self):
+    def type(self):
         """Query the graph type.
 
         :returns: The graph type.
         """
-        return self._graph_type
+        return self._type
 
 
 class _UndirectedGraphView(_JGraphTGraph):
@@ -38,12 +38,12 @@ class _UndirectedGraphView(_JGraphTGraph):
 
         super().__init__(res, True)
 
-        self._graph_type = GraphType(
+        self._type = GraphType(
             directed=False,
-            allowing_self_loops=graph.graph_type.allowing_self_loops,
-            allowing_multiple_edges=graph.graph_type.allowing_multiple_edges,
-            weighted=graph.graph_type.weighted,
-            modifiable=graph.graph_type.modifiable,
+            allowing_self_loops=graph.type.allowing_self_loops,
+            allowing_multiple_edges=graph.type.allowing_multiple_edges,
+            weighted=graph.type.weighted,
+            modifiable=graph.type.modifiable,
         )
 
         # Keep a reference to avoid gargage collection. This is important since the
@@ -51,12 +51,12 @@ class _UndirectedGraphView(_JGraphTGraph):
         self._graph = graph
 
     @property
-    def graph_type(self):
+    def type(self):
         """Query the graph type.
 
         :returns: The graph type.
         """
-        return self._graph_type
+        return self._type
 
 
 class _UnmodifiableGraphView(_JGraphTGraph):
@@ -65,11 +65,11 @@ class _UnmodifiableGraphView(_JGraphTGraph):
 
         super().__init__(res, True)
 
-        self._graph_type = GraphType(
-            directed=graph.graph_type.directed,
-            allowing_self_loops=graph.graph_type.allowing_self_loops,
-            allowing_multiple_edges=graph.graph_type.allowing_multiple_edges,
-            weighted=graph.graph_type.weighted,
+        self._type = GraphType(
+            directed=graph.type.directed,
+            allowing_self_loops=graph.type.allowing_self_loops,
+            allowing_multiple_edges=graph.type.allowing_multiple_edges,
+            weighted=graph.type.weighted,
             modifiable=False,
         )
 
@@ -78,12 +78,12 @@ class _UnmodifiableGraphView(_JGraphTGraph):
         self._graph = graph
 
     @property
-    def graph_type(self):
+    def type(self):
         """Query the graph type.
 
         :returns: The graph type.
         """
-        return self._graph_type
+        return self._type
 
 
 class _EdgeReversedGraphView(_JGraphTGraph):
@@ -91,16 +91,16 @@ class _EdgeReversedGraphView(_JGraphTGraph):
         res = backend.jgrapht_graph_as_edgereversed(graph.handle)
 
         super().__init__(res, True)
-        self._graph_type = copy.copy(graph.graph_type)
+        self._type = copy.copy(graph.type)
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same picture is maintained inside the JVM.
         self._graph = graph
 
     @property
-    def graph_type(self):
+    def type(self):
         """Query the graph type.
 
         :returns: The graph type.
         """
-        return self._graph_type
+        return self._type

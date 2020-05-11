@@ -11,10 +11,10 @@ def test_graph_directed_inoutedges():
 
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
 
-    assert g.graph_type.directed
-    assert g.graph_type.allowing_self_loops
-    assert g.graph_type.allowing_multiple_edges
-    assert g.graph_type.weighted
+    assert g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
 
     assert g.add_vertex(0)
     v1 = 0
@@ -102,10 +102,10 @@ def test_graph_undirected_inoutedges():
 
     g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
 
-    assert not g.graph_type.directed
-    assert g.graph_type.allowing_self_loops
-    assert g.graph_type.allowing_multiple_edges
-    assert g.graph_type.weighted
+    assert not g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
 
     assert g.add_vertex(0)
     v1 = 0
@@ -193,10 +193,10 @@ def test_graph_no_allow_self_loops():
 
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
 
-    assert g.graph_type.directed
-    assert not g.graph_type.allowing_self_loops
-    assert g.graph_type.allowing_multiple_edges
-    assert g.graph_type.weighted
+    assert g.type.directed
+    assert not g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
 
     v1 = 0
     assert g.add_vertex(v1)
@@ -209,10 +209,10 @@ def test_graph_no_allow_multiple_edges():
 
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
-    assert g.graph_type.directed
-    assert g.graph_type.allowing_self_loops
-    assert not g.graph_type.allowing_multiple_edges
-    assert g.graph_type.weighted
+    assert g.type.directed
+    assert g.type.allowing_self_loops
+    assert not g.type.allowing_multiple_edges
+    assert g.type.weighted
 
     v1 = 0
     assert g.add_vertex(v1)
@@ -228,10 +228,10 @@ def test_graph_no_weights():
 
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
 
-    assert g.graph_type.directed
-    assert g.graph_type.allowing_self_loops
-    assert not g.graph_type.allowing_multiple_edges
-    assert not g.graph_type.weighted
+    assert g.type.directed
+    assert g.type.allowing_self_loops
+    assert not g.type.allowing_multiple_edges
+    assert not g.type.weighted
 
     v1 = 0
     assert g.add_vertex(v1)

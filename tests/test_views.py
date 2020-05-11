@@ -28,10 +28,10 @@ def test_as_unweighted():
 
     g1 = as_unweighted(g)
 
-    assert g.graph_type.directed == g1.graph_type.directed
-    assert g.graph_type.allowing_self_loops == g1.graph_type.allowing_self_loops
-    assert g.graph_type.allowing_multiple_edges == g1.graph_type.allowing_multiple_edges
-    assert g.graph_type.weighted != g1.graph_type.weighted
+    assert g.type.directed == g1.type.directed
+    assert g.type.allowing_self_loops == g1.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges == g1.type.allowing_multiple_edges
+    assert g.type.weighted != g1.type.weighted
     assert g.get_edge_weight(e45) == 100.0
     assert g1.get_edge_weight(e45) == 1.0
 
@@ -59,7 +59,7 @@ def test_as_undirected():
 
     # undirected
     g2 = as_undirected(g)
-    assert g2.graph_type.directed is False
+    assert g2.type.directed is False
     assert not g.contains_edge_between(2, 1)
     assert g2.contains_edge_between(2, 1)
 
@@ -88,7 +88,7 @@ def test_as_unmodifiable():
 
     # unmodifiable
     g3 = as_unmodifiable(g)
-    assert g3.graph_type.modifiable is False
+    assert g3.type.modifiable is False
     with pytest.raises(ValueError):
         g3.create_edge(v2, v2)
 

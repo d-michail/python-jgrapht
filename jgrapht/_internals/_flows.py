@@ -54,7 +54,7 @@ class _JGraphTCut(Cut):
         )
 
         self._edges = set()
-        if self._graph.graph_type.directed:
+        if self._graph.type.directed:
             for v in self._source_partition:
                 for e in self._graph.outedges_of(v):
                     if self._graph.edge_target(e) not in self._source_partition:

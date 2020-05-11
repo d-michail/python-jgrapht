@@ -74,6 +74,14 @@ int jgrapht_coloring_exec_greedy_dsatur(void *, int*, void**);
 
 int jgrapht_coloring_exec_color_refinement(void *, int*, void**);
 
+// connectivity
+
+int jgrapht_connectivity_strong_exec_kosaraju(void *, int*, void**);
+
+int jgrapht_connectivity_strong_exec_gabow(void *, int*, void**);
+
+int jgrapht_connectivity_weak_exec_bfs(void *, int*, void**);
+
 // cut
 
 int jgrapht_cut_exec_stoer_wagner(void *, double*, void**);

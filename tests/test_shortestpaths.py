@@ -25,7 +25,7 @@ def get_graph():
 def get_graph_with_negative_edges():
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 
-    assert g.graph_type.directed
+    assert g.type.directed
 
     for i in range(0, 7):
         assert g.add_vertex(i)

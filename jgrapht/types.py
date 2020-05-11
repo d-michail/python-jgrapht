@@ -177,7 +177,7 @@ class Graph(ABC):
     """A graph."""
 
     @abstractmethod
-    def graph_type(self):
+    def type(self):
         """Query the graph :class:`type <.GraphType>`.
 
         :returns: the graph type.

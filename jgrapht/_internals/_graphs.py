@@ -41,13 +41,13 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             allowing_multiple_edges = backend.jgrapht_graph_is_allowing_multipleedges(self._handle)
             weighted = backend.jgrapht_graph_is_weighted(self._handle)
 
-        self._graph_type = GraphType(
+        self._type = GraphType(
             directed, allowing_self_loops, allowing_multiple_edges, weighted
         )
 
     @property
-    def graph_type(self):
-        return self._graph_type
+    def type(self):
+        return self._type
 
     def add_vertex(self, vertex):
         res = backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
