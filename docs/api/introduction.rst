@@ -1,6 +1,8 @@
 
 .. _introduction:
 
+.. include:: ../common.rst
+
 Introduction
 ************ 
 
@@ -13,7 +15,7 @@ This interface to the library is a pure python/native package having no dependen
 During the build process the backend JGraphT library is compiled as a shared library
 and bundled inside the python package.
 
-The python-jgrapht library provides a *graph* data-structure capable of representing various different
+The |Project| library provides a *graph* data-structure capable of representing various different
 kind of graphs/networks such as:
 
  *  **directed**: in directed graphs an edge :math:`(u,v)` is a directed pair of vertices,
@@ -24,7 +26,7 @@ kind of graphs/networks such as:
  *  **weighted** graphs: graphs where each edge is associated with a double value called its weight,
  *  **unweighted** graphs: graphs where the weight of each edge is 1.0 (uniform weight function)
 
-A graph :math:`G(V,E)` contains vertices and edges. In python-jgrapht both the vertices and the edges of 
+A graph :math:`G(V,E)` contains vertices and edges. In |Project| both the vertices and the edges of 
 the graph are represented using integers. Each edge :math:`e = (u,v)` is associated with
 
  * its two endpoints :math:`u` and :math:`v`, and
