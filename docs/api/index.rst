@@ -11,6 +11,7 @@ API
 
    introduction
    graph
+   views
    traversals
    properties
    metrics

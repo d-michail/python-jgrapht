@@ -2,6 +2,8 @@
 
 .. include:: common.rst
 
+.. currentmodule:: jgrapht
+
 Tutorial
 ========
 
@@ -19,9 +21,9 @@ Let us start by creating a graph.
   >>>                          allowing_multiple_edges=False)
 
 This is the most general call. Sensible defaults are also provided, thus someone can create
-a graph simply by calling ``jgrapht.create_graph()``.
-The graph is a collection of vertices (aka nodes) and edges. In python-jgrapht vertices and
-edges are always integers.
+a graph simply by calling ``jgrapht.create_graph()``. 
+The graph is a collection of vertices (aka nodes) and edges. Note that in |Project| vertices
+and edges are always integers.
 
 Adding vertices
 ---------------
@@ -41,10 +43,19 @@ iterable.
 
   >>> g.add_vertices_from([1, 2])
 
+If the user does not want to explicitly provide a vertex number, vertices can be automatically
+assigned identifiers by the graph using :py:meth:`.Graph.create_vertex`. 
+
+.. nbplot::
+
+  >>> g.create_vertex()
+
+The method returns the identifier of the newly created vertex.
+
 Vertex Set
 ----------
 
-Now the graph contains 3 vertices.  You can find their unique integer identifiers using,
+Now the graph contains 4 vertices.  You can find how many vertices the graph contains using,
 
 .. nbplot::
 
@@ -70,8 +81,15 @@ automatically given to the edge when they are first added to the graph,
 
   >>> e1 = g.create_edge(0, 1)
 
-The call above creates a new edge from vertex 0 to vertex 1 and returns its identifier. Note that 
-it is also possible to provide the edge identifier using,
+The call above creates a new edge from vertex 0 to vertex 1 and returns its identifier.
+Multiple edges can be created in one go by using,
+
+.. nbplot::
+
+  >>> g.create_edges_from([(0,2), (1,2)])
+
+The method returns the identifiers of the newly created edges. Note also that it is possible to
+provide the edge identifier using,
 
 .. nbplot::
 
@@ -108,7 +126,7 @@ The user can also provide the weight directly when adding the edge to the graph,
 
 .. nbplot::
 
-  >>> e2 = g.create_edge(1, 2, weight=10.0)
+  >>> e2 = g.create_edge(1, 3, weight=10.0)
 
 Care must be taken to not try to adjust the weight if the graph is unweighted. In such a case a 
 :py:class:`ValueError` is raised.
@@ -139,8 +157,8 @@ Finding the number of edges can be performed by executing,
 
   >>> len(g.edges())
 
-Graph Type
-----------
+Graph Types
+-----------
 
 The type of the graph can be queried during runtime using :py:meth:`.Graph.type` which
 returns instances of :py:class:`.GraphType`. This allows algorithms to alter their behavior
@@ -155,6 +173,22 @@ queried,
  >>> g.type.allowing_self_loops
  >>> g.type.modifiable
 
+Now that we have seen a little bit how to create graphs, let us discuss what it means to 
+contain self-loops or multiple-edges:
+
+  * **self-loops** are edges which start at a vertex `v` and edge at the same vertex `v`,
+  * **multiple-edges** are edges which have the exact same endpoints.
+
+Some algorithms are able to tolerate this, others do not. Thus, it is important to read the 
+documentation of each algorithm in order to check whether such cases are tolerated. Some 
+algorithms raise a :py:class:`ValueError` in case they detect this.
+
+If the graph is constructed to not allow self-loops and/or multiple-edges, an attempt to 
+add such an edge will also raise a :py:class:`ValueError`.
+
+Finally, unmodifiable graphs are graphs which cannot be altered anymore. They can be constructed
+using either function :py:meth:`.as_unmodifiable` or by using some other graph 
+factory function, such as factory for sparse graphs, which we will discuss later on. 
 
 Navigation
 ----------
