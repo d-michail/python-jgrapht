@@ -1,0 +1,3 @@
+
+.. |Project| replace:: Python-JGraphT
+

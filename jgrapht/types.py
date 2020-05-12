@@ -258,11 +258,13 @@ class Graph(ABC):
         :param edges: any iterable of edges. Each edge is (u,v) or (u,v,weight)  
         :returns: list of added edge identifiers
         """
-        added = []
-        for u, v, weight in edges:
-            e = self.add_edge(u, v, weight)
-            added.append(e)
-        return added
+        created = []
+        for edge in edges:
+            u = edge[0]
+            v = edge[1]
+            e = self.create_edge(u, v, weight=edge[2] if len(edge)>2 else None)
+            created.append(e)
+        return created
 
     @abstractmethod
     def remove_edge(self, e):

@@ -39,23 +39,8 @@ print (g.vertices())
 # %%
 # We also add the edges
 
-g.create_edge(1, 2)
-g.create_edge(2, 1)
-g.create_edge(3, 0)
-g.create_edge(3, 1)
-g.create_edge(4, 1)
-g.create_edge(4, 3)
-g.create_edge(4, 5)
-g.create_edge(5, 1)
-g.create_edge(5, 4)
-g.create_edge(6, 1)
-g.create_edge(6, 4)
-g.create_edge(7, 1)
-g.create_edge(7, 4)
-g.create_edge(8, 1)
-g.create_edge(8, 4)
-g.create_edge(9, 4)
-g.create_edge(10, 4)
+g.create_edges_from([(1, 2), (2, 1), (3, 0), (3, 1), (4, 1), (4, 3), (4, 5), (5, 1), (5, 4),
+   (6, 1), (6, 4), (7, 1),  (7, 4), (8, 1),  (8, 4), (9, 4), (10, 4)])
 
 # %%
 # We now have the following edges

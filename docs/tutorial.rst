@@ -1,5 +1,7 @@
 .. _tutorial:
 
+.. include:: common.rst
+
 Tutorial
 ========
 
@@ -61,7 +63,7 @@ Adding edges
 ------------
 
 Edges are pair of vertices, either ordered or unordered, depending on the type of the graph. 
-In Python-JGraphT edges are also identified using integers. These edge identifiers are 
+In |Project| edges are also identified using integers. These edge identifiers are 
 automatically given to the edge when they are first added to the graph,
 
 .. nbplot::
