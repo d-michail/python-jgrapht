@@ -58,5 +58,3 @@ pagerank = scoring.pagerank(g)
 result = [pagerank[v] for v in g.vertices()]
 print(result)
 
-# %%
-#

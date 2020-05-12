@@ -248,8 +248,6 @@ Let us implement a breadth-first search using |Project| in order to get familiar
                   visited.add(u)
                   queue.append(u)
 
-
-TODO
-
+This is just an example, the library contains full support for classic graph traversals.
 
 

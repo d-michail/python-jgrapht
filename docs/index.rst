@@ -3,12 +3,32 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-The Python-JGraphT graph library
-================================
+The Python-JGraphT library
+==========================
 
 Release v\ |version|.
 
-**Python-JGraphT** is a Python graph library build on top of the JGraphT graph library.
+**Python-JGraphT** is a python graph library build on top of the JGraphT graph library.
+
+The JGraphT library is a highly efficient graph library, originally written in Java,
+containing state-of-the-art graph data-structures as well as a multitude of sophisticated
+graph algorithms. It has been in development for many years already and is currently used
+in production both in research and industry. This interface to the library is a pure
+python/native package having no dependency on the JVM. During the build process the backend
+JGraphT library is compiled as a shared library and bundled inside the python package.
+
+Audience
+--------
+
+The audience of the library is any user who needs to use graphs or networks in their every 
+day work, including engineers or researchers either from the industry or academia.
+
+Why another library?
+--------------------
+
+Well, this is not really a new library. This is just making a library cross boundaries between 
+two different programming worlds.
+
 
 Documentation
 -------------
