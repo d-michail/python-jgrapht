@@ -86,7 +86,7 @@ Multiple edges can be created in one go by using,
 
 .. nbplot::
 
-  >>> g.create_edges_from([(0,2), (1,2)])
+  >>> g.create_edges_from([(0, 2), (1, 2)])
 
 The method returns the identifiers of the newly created edges. Note also that it is possible to
 provide the edge identifier using,
@@ -130,6 +130,7 @@ The user can also provide the weight directly when adding the edge to the graph,
 
 Care must be taken to not try to adjust the weight if the graph is unweighted. In such a case a 
 :py:class:`ValueError` is raised.
+
 
 Edge Set
 --------
@@ -204,8 +205,49 @@ methods:
 The behavior of these methods strongly depend on whether the graph is directed or undirected.
 If the graph is undirected all methods return the set of edges touching the vertex. For directed
 graphs method :py:meth:`.Graph.outedges_of()` returns all outgoing edges from `v`, method 
-:py:meth:`.Graph.inedges_of()` all incoming edge to `v` and method :py:meth:`.Graph.edges_of()` 
-returns all edges either incoming or outgoing.
+:py:meth:`.Graph.inedges_of()` all incoming edges to `v` and method :py:meth:`.Graph.edges_of()` 
+returns all edges either incoming or outgoing.  
+
+Combining the above methods with the helper method :py:meth:`.Graph.opposite` which accepts an 
+edge and one of its endpoints and returns the opposite vertex of that edge, results in the 
+following classic pattern::
+
+  v = 0
+  for e in g.outedges_of(v):
+      u = g.opposite(v, e)
+      print ('Vertex {} is opposite {} in edge {}.format(u, v, e))
+
+Similar behavior can be seen when using methods:
+
+  * :py:meth:`.Graph.degree_of()`
+  * :py:meth:`.Graph.indegree_of()`
+  * :py:meth:`.Graph.outdegree_of()`
+
+which return the vertex degrees. Again depending on directed or undirected the results might be 
+different. We refer the reader to the documentation of each method for details.
+
+Example
+-------
+
+Let us implement a breadth-first search using |Project| in order to get familiar with the library::
+
+  def bfs(graph, source): 
+      queue = []
+      visited = set()
+
+      queue.append(source)
+      visited.add(source)
+
+      while len(queue)>0: 
+          v = queue.pop(0)
+          yield v
+
+          for e in graph.outedges_of(v):
+              u = graph.opposite(v, e)
+              if u not in visited:
+                  visited.add(u)
+                  queue.append(u)
+
 
 TODO
 

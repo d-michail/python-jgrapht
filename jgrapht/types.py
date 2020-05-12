@@ -305,6 +305,23 @@ class Graph(ABC):
         """
         pass
 
+    def opposite(self, u, e):
+        """Get the opposite vertex of an edge.
+
+        :param u: one endpoint of an edge
+        :param e: the edge
+        :returns: the opposite vertex of the edge
+        """
+        e_as_tuple = self.edge_tuple(e)
+        a = e_as_tuple[0]
+        b = e_as_tuple[1]
+        if a == u: 
+            return b
+        elif b == u:
+            return a
+        else:
+            raise ValueError("Provided vertex is not an edge endpoint")
+
     @abstractmethod
     def degree_of(self, v):
         """Returns the degree of the specified vertex.
