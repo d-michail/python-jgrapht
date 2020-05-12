@@ -3,7 +3,7 @@
 Install
 =======
 
-We automatically build 64-bit wheels for python versions 3.5, 3.6, 3.7, and 3.8 on Linux,
+We automatically build 64-bit wheels for python versions 3.6, 3.7, and 3.8 on Linux,
 Windows and MacOSX. Thus, on a recent machine, installation should be as easy as::
 
   $ pip install python-jgrapht

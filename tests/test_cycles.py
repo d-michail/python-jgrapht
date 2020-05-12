@@ -221,9 +221,9 @@ def test_simple_cycles_hawick_james():
     it = cycles.enumerate_simple_cycles_hawick_james(g)    
 
     cycle1 = next(it)
-    assert list(cycle1) == [3, 2, 1, 0]
+    assert list(cycle1) == [0, 1, 2, 3]
     cycle2 = next(it)
-    assert list(cycle2) == [3, 2, 5, 4, 1, 0]
+    assert list(cycle2) == [0, 1, 4, 5, 2, 3]
 
     with pytest.raises(StopIteration):
         next(it)
