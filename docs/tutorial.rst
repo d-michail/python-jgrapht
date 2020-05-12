@@ -144,8 +144,8 @@ Edges can be iterated using the set returned by method :py:meth:`.Graph.edges()`
   >>>     print ('Edge {} has target {}'.format(e, g.edge_target(e)))
 
 The same effect can be performed using the helper method :py:meth:`.Graph.edge_tuple()` which 
-returns a tuple containing the source and target of an edge and possibly its weight if the graph 
-is weighted,
+returns a tuple containing the source, the target of an edge, and the weight of the edge. If
+the graph is unweighted, the weight returned is always 1.0.
 
 .. nbplot::
 
@@ -163,7 +163,7 @@ Graph Types
 
 The type of the graph can be queried during runtime using :py:meth:`.Graph.type` which
 returns instances of :py:class:`.GraphType`. This allows algorithms to alter their behavior
-based on the actual graph that they are running over. The following properties can be 
+based on the actual graph that they are running on. The following properties can be 
 queried,
 
 .. nbplot::
@@ -182,7 +182,8 @@ contain self-loops or multiple-edges:
 
 Some algorithms are able to tolerate this, others do not. Thus, it is important to read the 
 documentation of each algorithm in order to check whether such cases are tolerated. Some 
-algorithms raise a :py:class:`ValueError` in case they detect this.
+algorithms raise a :py:class:`ValueError` in case they detect that they are running on a 
+graph that contains either self-loops or multiple-edges.
 
 If the graph is constructed to not allow self-loops and/or multiple-edges, an attempt to 
 add such an edge will also raise a :py:class:`ValueError`.

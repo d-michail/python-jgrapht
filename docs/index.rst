@@ -8,7 +8,8 @@ The Python-JGraphT library
 
 Release v\ |version|.
 
-**Python-JGraphT** is a python graph library build on top of the JGraphT graph library.
+**Python-JGraphT** is a python graph library build on top of the 
+`JGraphT graph library <https://jgrapht.org/>`_.
 
 The JGraphT library is a highly efficient graph library, originally written in Java,
 containing state-of-the-art graph data-structures as well as a multitude of sophisticated
@@ -28,6 +29,15 @@ Why another library?
 
 Well, this is not really a new library. This is just making a library cross boundaries between 
 two different programming worlds.
+
+Development
+-----------
+
+Development happens in the following places.
+
+ * https://github.com/d-michail/python-jgrapht 
+ * https://github.com/d-michail/jgrapht-capi
+ * https://github.com/jgrapht/jgrapht
 
 
 Documentation

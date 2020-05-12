@@ -312,9 +312,7 @@ class Graph(ABC):
         :param e: the edge
         :returns: the opposite vertex of the edge
         """
-        e_as_tuple = self.edge_tuple(e)
-        a = e_as_tuple[0]
-        b = e_as_tuple[1]
+        a, b, _ = self.edge_tuple(e)
         if a == u: 
             return b
         elif b == u:
@@ -378,12 +376,13 @@ class Graph(ABC):
         """Get an edge as a tuple. 
 
         :param e: the edge
-        :returns: the edge either as (u,v) or (u,v,weight)
+        :returns: the edge as (u, v, weight). If the graph is unweighted the 
+            weight is always 1.0
         """
         if self.type.weighted:
             return self.edge_source(e), self.edge_target(e), self.get_edge_weight(e)
         else:
-            return self.edge_source(e), self.edge_target(e)
+            return self.edge_source(e), self.edge_target(e), 1.0
 
     @abstractmethod
     def edge_source(self, e):
