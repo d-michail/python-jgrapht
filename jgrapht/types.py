@@ -186,10 +186,19 @@ class Graph(ABC):
         pass
 
     @abstractmethod
+    def create_vertex(self):
+        """Create a vertex in the graph.
+
+        :returns: the new vertex identifier
+        :rtype: int
+        """
+        pass
+
+    @abstractmethod
     def add_vertex(self, vertex):
         """Add a new vertex to the graph.
 
-        :param vertex: a long integer identifier for the vertex.
+        :param vertex: an integer identifier for the vertex.
         :returns: True if the vertex was added to the graph, False if it was already present
         :rtype: Boolean
         """
@@ -234,7 +243,7 @@ class Graph(ABC):
         :param v: the second endpoint (vertex) of the edge
         :param weight: an optional weight to use for the edge.
         :returns: the new edge identifier
-        :rtype: Long
+        :rtype: int
         """
         pass
 
@@ -244,11 +253,11 @@ class Graph(ABC):
 
         :param u: the first endpoint (vertex) of the edge
         :param v: the second endpoint (vertex) of the edge
-        :param edge: the long edge identifier
+        :param edge: the integer edge identifier
         :param weight: an optional weight to use for the edge. If the edge is present,
           its weight is not adjusted.
         :returns: True if the edge was added, False if it was already present
-        :rtype: Long
+        :rtype: int
         """
         pass
 

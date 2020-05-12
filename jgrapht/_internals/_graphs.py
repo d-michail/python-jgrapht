@@ -49,16 +49,17 @@ class _JGraphTGraph(_HandleWrapper, Graph):
     def type(self):
         return self._type
 
+    def create_vertex(self):
+        return backend.jgrapht_graph_add_vertex(self._handle)
+
     def add_vertex(self, vertex):
-        res = backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
-        return res
+        return backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
 
     def remove_vertex(self, v):
         backend.jgrapht_graph_remove_vertex(self._handle, v)
 
     def contains_vertex(self, v):
-        res = backend.jgrapht_graph_contains_vertex(self._handle, v)
-        return res
+        return backend.jgrapht_graph_contains_vertex(self._handle, v)
 
     def create_edge(self, u, v, weight=None):
         res = backend.jgrapht_graph_add_edge(self._handle, u, v)
@@ -73,40 +74,31 @@ class _JGraphTGraph(_HandleWrapper, Graph):
         return added
 
     def remove_edge(self, e):
-        res = backend.jgrapht_graph_remove_edge(self._handle, e)
-        return res
+        return backend.jgrapht_graph_remove_edge(self._handle, e)
 
     def contains_edge(self, e):
-        res = backend.jgrapht_graph_contains_edge(self._handle, e)
-        return res
+        return backend.jgrapht_graph_contains_edge(self._handle, e)
 
     def contains_edge_between(self, u, v):
-        res = backend.jgrapht_graph_contains_edge_between(self._handle, u, v)
-        return res
+        return backend.jgrapht_graph_contains_edge_between(self._handle, u, v)
 
     def degree_of(self, v):
-        res = backend.jgrapht_graph_degree_of(self._handle, v)
-        return res
+        return backend.jgrapht_graph_degree_of(self._handle, v)
 
     def indegree_of(self, v):
-        res = backend.jgrapht_graph_indegree_of(self._handle, v)
-        return res
+        return backend.jgrapht_graph_indegree_of(self._handle, v)
 
     def outdegree_of(self, v):
-        res = backend.jgrapht_graph_outdegree_of(self._handle, v)
-        return res
+        return backend.jgrapht_graph_outdegree_of(self._handle, v)
 
     def edge_source(self, e):
-        res = backend.jgrapht_graph_edge_source(self._handle, e)
-        return res
+        return backend.jgrapht_graph_edge_source(self._handle, e)
 
     def edge_target(self, e):
-        res = backend.jgrapht_graph_edge_target(self._handle, e)
-        return res
+        return backend.jgrapht_graph_edge_target(self._handle, e)
 
     def get_edge_weight(self, e):
-        res = backend.jgrapht_graph_get_edge_weight(self._handle, e)
-        return res
+        return backend.jgrapht_graph_get_edge_weight(self._handle, e)
 
     def set_edge_weight(self, e, weight):
         backend.jgrapht_graph_set_edge_weight(self._handle, e, weight)
@@ -154,12 +146,10 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             return _JGraphTIntegerIterator(res)
 
         def __len__(self):
-            res = backend.jgrapht_graph_vertices_count(self._handle)
-            return res
+            return backend.jgrapht_graph_vertices_count(self._handle)
 
         def __contains__(self, v):
-            res = backend.jgrapht_graph_contains_vertex(self._handle, v)
-            return res
+            return backend.jgrapht_graph_contains_vertex(self._handle, v)
 
         def __repr__(self):
             return "_JGraphTGraph-VertexSet(%r)" % self._handle
@@ -178,12 +168,10 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             return _JGraphTIntegerIterator(res)
 
         def __len__(self):
-            res = backend.jgrapht_graph_edges_count(self._handle)
-            return res
+            return backend.jgrapht_graph_edges_count(self._handle)
 
         def __contains__(self, v):
-            res = backend.jgrapht_graph_contains_edge(self._handle, v)
-            return res
+            return backend.jgrapht_graph_contains_edge(self._handle, v)
 
         def __repr__(self):
             return "_JGraphTGraph-EdgeSet(%r)" % self._handle

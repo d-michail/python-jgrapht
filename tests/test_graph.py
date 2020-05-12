@@ -279,6 +279,21 @@ def test_graph_add_edge():
     assert not g.add_edge(1, 2, 5)
 
 
+def test_graph_add_vertex():
+
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+
+    assert g.create_vertex() == 0
+    assert g.create_vertex() == 1
+    g.add_vertices_from([2, 3, 4])
+    assert len(g.vertices()) == 5
+
+    assert g.create_vertex() == 5
+    assert not g.add_vertex(5)
+
+    assert len(g.vertices()) == 6
+
+
 def test_graph_sparse():
 
     edgelist = [(0,1), (0,2), (0,3), (1,3), (2,3), (2,4), (2,5), (0,4), (2, 6)]
