@@ -501,6 +501,14 @@ class Graph(ABC):
         """
         pass
 
+    def __str__(self):
+        vertex_set = str(self.vertices())
+        e_l_delim = '(' if self.type.directed else '{'
+        e_r_delim = ')' if self.type.directed else '}'
+        edges = [(e, *self.edge_endpoints(e)) for e in self.edges()]
+        edges = [str(e) + '=' + e_l_delim + str(u) + ',' + str(v) + e_r_delim for e, u, v in edges]
+        edge_set = '{' + ', '.join(edges) + '}'
+        return '(' + vertex_set + ', ' + edge_set + ')'
 
 class Clustering(ABC):
     """A vertex clustering.

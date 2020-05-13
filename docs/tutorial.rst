@@ -227,8 +227,8 @@ Similar behavior can be seen when using methods:
 which return the vertex degrees. Again depending on directed or undirected the results might be 
 different. We refer the reader to the documentation of each method for details.
 
-Example
--------
+BFS Implementation Example
+--------------------------
 
 Let us implement a breadth-first search using |Project| in order to get familiar with the library::
 

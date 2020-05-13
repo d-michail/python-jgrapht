@@ -25,6 +25,8 @@ g = jgrapht.create_graph(directed=False)
 
 complete_graph(g, 5)
 
+print(g)
+
 # %%
 # We will export the graph to string in JSON format.
 
