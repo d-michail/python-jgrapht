@@ -219,18 +219,18 @@ def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True)
     .. note :: Sparse graphs cannot be modified after construction. They are best suited 
        for executing algorithms which do not need to modify the graph after loading.
        
-    .. node :: While the graph structure is unmodifiable, the edge weights can be
+    .. note :: While the graph structure is unmodifiable, the edge weights can be
       adjusted.
     
     Sparse graphs can always support self-loops and multiple-edges.
 
-    :param num_of_vertices: number of vertices of the graph. Vertices are start from 0 
+    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0 
       and increase continuously
     :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs
     :param directed: whether the graph will be directed or undirected
     :param weighted: whether the graph will be weighted or not
     :returns: a graph
-    :rtype: :class:`type <.types.Graph>`
+    :rtype: :class:`jgrapht.types.Graph`
     """
     e_list = backend.jgrapht_list_create()
     if weighted: 
@@ -258,6 +258,7 @@ def as_sparse_graph(graph):
 
     :param graph: the input graph
     :returns: a sparse graph 
+    :rtype: :class:`jgrapht.types.Graph`
     """
     if len(graph.vertices()) == 0: 
         raise ValueError("Graph with no vertices")

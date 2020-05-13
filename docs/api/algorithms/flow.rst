@@ -36,7 +36,6 @@ Types
 Flows are represented using instances of the following class.
 
 .. autoclass:: jgrapht.types.Flow
+   :members:
 
    This is a dictionary from edges to double values.   
-
-   :members:
