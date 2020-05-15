@@ -116,7 +116,7 @@ def test_export_import(tmpdir):
     g1 = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
 
     def va_cb(vertex, attribute_name, attribute_value):
-        print('Vertex {}, attr {}, value {}'.format(vertex, attribute_name.decode(), attribute_value.decode()))
+        print('Vertex {}, attr {}, value {}'.format(vertex, attribute_name, attribute_value))
         if vertex == 0:
             if attribute_name == 'name': 
                 assert attribute_value == 'κόμβος 0'
@@ -125,7 +125,7 @@ def test_export_import(tmpdir):
                 assert attribute_value == 'node 1'
 
     def ea_cb(edge, attribute_name, attribute_value):
-        print('Edge {}, attr {}, value {}'.format(edge, attribute_name.decode(), attribute_value.decode()))
+        print('Edge {}, attr {}, value {}'.format(edge, attribute_name, attribute_value))
         if edge == 17: 
             if attribute_name == 'cost': 
                 assert attribute_value == '48.5'

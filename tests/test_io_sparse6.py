@@ -34,10 +34,8 @@ def test_output_sparse6(tmpdir):
     # read back 
 
     def va_cb(vertex, attribute_name, attribute_value):
-        name = attribute_name.decode()
-        value = attribute_value.decode()
-        assert name == 'ID'
-        assert str(vertex) == value
+        assert attribute_name == 'ID'
+        assert str(vertex) == attribute_value
 
     g1 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     read_graph6sparse6(g1, tmpfilename, vertex_attribute_cb=va_cb)
@@ -57,10 +55,8 @@ def test_output_graph6(tmpdir):
     # read back 
 
     def va_cb(vertex, attribute_name, attribute_value):
-        name = attribute_name.decode()
-        value = attribute_value.decode()
-        assert name == 'ID'
-        assert str(vertex) == value
+        assert attribute_name == 'ID'
+        assert str(vertex) == attribute_value
 
 
     g1 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)

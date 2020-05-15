@@ -30,6 +30,37 @@ def _create_wrapped_callback(callback, cfunctype):
     return (0, None)
 
 
+def _create_wrapped_attribute_callback(callback):
+    if callback is not None:
+        callback_ctype = ctypes.CFUNCTYPE(
+            None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
+        )
+
+        # we wrap in order to decode string representation
+        def decoder_callback(id, key, value):
+            decoded_key = key.decode(encoding='utf-8')
+            decoded_value = value.decode(encoding='utf-8')
+            callback(id, decoded_key, decoded_value)
+
+        return _create_wrapped_callback(decoder_callback, callback_ctype)
+    else: 
+        return (0, None)
+
+
+def _create_wrapped_import_id_callback(callback):
+    if callback is not None:
+        callback_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
+
+        # we wrap in order to decode string representation
+        def decoder_callback(id):
+            decoded_id = id.decode(encoding='utf-8')
+            return callback(decoded_id)
+
+        return _create_wrapped_callback(decoder_callback, callback_ctype)
+    else: 
+        return (0, None)
+
+
 def read_dimacs(graph, filename, preserve_ids_from_input=True):
     """Read graph in DIMACS format. 
 
@@ -188,15 +219,8 @@ def read_gml(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error 
     """
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-    )
-    vertex_attribute_f_ptr, _ = _create_wrapped_callback(
-        vertex_attribute_cb, callback_ctype
-    )
-    edge_attribute_f_ptr, _ = _create_wrapped_callback(
-        edge_attribute_cb, callback_ctype
-    )
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
     args = [preserve_ids_from_input, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("file_gml", graph, filename, *args)
@@ -276,15 +300,8 @@ def parse_gml(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error 
     """
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-    )
-    vertex_attribute_f_ptr, _ = _create_wrapped_callback(
-        vertex_attribute_cb, callback_ctype
-    )
-    edge_attribute_f_ptr, _ = _create_wrapped_callback(
-        edge_attribute_cb, callback_ctype
-    )
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
     args = [preserve_ids_from_input, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("string_gml", graph, input_string, *args)
@@ -344,18 +361,9 @@ def read_json(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error    
     """
-    import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
-    import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
-
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-    )
-    vertex_attribute_f_ptr, _ = _create_wrapped_callback(
-        vertex_attribute_cb, callback_ctype
-    )
-    edge_attribute_f_ptr, _ = _create_wrapped_callback(
-        edge_attribute_cb, callback_ctype
-    )
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("file_json", graph, filename, *args)
@@ -419,18 +427,9 @@ def parse_json(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error    
     """
-    import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
-    import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
-
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-    )
-    vertex_attribute_f_ptr, _ = _create_wrapped_callback(
-        vertex_attribute_cb, callback_ctype
-    )
-    edge_attribute_f_ptr, _ = _create_wrapped_callback(
-        edge_attribute_cb, callback_ctype
-    )
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("string_json", graph, input_string, *args)
@@ -473,8 +472,7 @@ def read_csv(
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error    
     """
-    import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
-    import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
 
     format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_EDGE_LIST)
     args = [
@@ -516,9 +514,7 @@ def parse_csv(
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error    
     """
-
-    import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
-    import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
 
     format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
     args = [
@@ -608,18 +604,10 @@ def read_gexf(
     :param edge_attribute_cb: callback function for edge attributes
     :raises IOError: in case of an import error    
     """
-    import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
-    import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
 
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-    )
-    vertex_attribute_f_ptr, _ = _create_wrapped_callback(
-        vertex_attribute_cb, callback_ctype
-    )
-    edge_attribute_f_ptr, _ = _create_wrapped_callback(
-        edge_attribute_cb, callback_ctype
-    )
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
     args = [
         import_id_f_ptr,
@@ -707,18 +695,10 @@ def parse_gexf(
     :param edge_attribute_cb: callback function for edge attributes
     :raises IOError: in case of an import error    
     """
-    import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
-    import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
 
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-    )
-    vertex_attribute_f_ptr, _ = _create_wrapped_callback(
-        vertex_attribute_cb, callback_ctype
-    )
-    edge_attribute_f_ptr, _ = _create_wrapped_callback(
-        edge_attribute_cb, callback_ctype
-    )
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
     args = [
         import_id_f_ptr,
@@ -768,18 +748,10 @@ def read_dot(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error 
     """
-    import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
-    import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
 
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-    )
-    vertex_attribute_f_ptr, _ = _create_wrapped_callback(
-        vertex_attribute_cb, callback_ctype
-    )
-    edge_attribute_f_ptr, _ = _create_wrapped_callback(
-        edge_attribute_cb, callback_ctype
-    )
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
     args = [ import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr ]
     return _import("file_dot", graph, filename, *args)
@@ -822,18 +794,10 @@ def parse_dot(
     :param edge_attribute_cb: callback function for edge attributes
     :raises IOError: in case of an import error 
     """
-    import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
-    import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
 
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-    )
-    vertex_attribute_f_ptr, _ = _create_wrapped_callback(
-        vertex_attribute_cb, callback_ctype
-    )
-    edge_attribute_f_ptr, _ = _create_wrapped_callback(
-        edge_attribute_cb, callback_ctype
-    )
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
     args = [ import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr ]
     return _import("string_dot", graph, input_string, *args)
@@ -879,18 +843,10 @@ def read_graph6sparse6(
     :param edge_attribute_cb: callback function for edge attributes
     :raises IOError: in case of an import error 
     """
-    import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
-    import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
 
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-    )
-    vertex_attribute_f_ptr, _ = _create_wrapped_callback(
-        vertex_attribute_cb, callback_ctype
-    )
-    edge_attribute_f_ptr, _ = _create_wrapped_callback(
-        edge_attribute_cb, callback_ctype
-    )
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
     args = [ import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr ]
     return _import("file_graph6sparse6", graph, filename, *args)    
@@ -937,18 +893,9 @@ def parse_graph6sparse6(
     :param edge_attribute_cb: callback function for edge attributes
     :raises IOError: in case of an import error 
     """
-    import_id_cb_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
-    import_id_f_ptr, _ = _create_wrapped_callback(import_id_cb, import_id_cb_ctype)
-
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-    )
-    vertex_attribute_f_ptr, _ = _create_wrapped_callback(
-        vertex_attribute_cb, callback_ctype
-    )
-    edge_attribute_f_ptr, _ = _create_wrapped_callback(
-        edge_attribute_cb, callback_ctype
-    )
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
     args = [ import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr ]
     return _import("string_graph6sparse6", graph, input_string, *args)    
