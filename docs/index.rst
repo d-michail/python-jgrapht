@@ -18,6 +18,8 @@ in production both in research and industry. This interface to the library is a 
 python/native package having no dependency on the JVM. During the build process the backend
 JGraphT library is compiled as a shared library and bundled inside the python package.
 
+Backend version v\ |BackendVersion|.
+
 Audience
 --------
 

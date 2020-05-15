@@ -1,7 +1,5 @@
 .. _tutorial:
 
-.. include:: common.rst
-
 .. currentmodule:: jgrapht
 
 Tutorial

@@ -1,8 +1,6 @@
 
 .. _introduction:
 
-.. include:: ../common.rst
-
 Introduction
 ************ 
 

@@ -1,7 +1,5 @@
 .. _license:
 
-.. include:: common.rst
-
 License
 =======
 
