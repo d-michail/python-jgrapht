@@ -114,4 +114,4 @@ def test_output_to_string():
     g.create_edge(2, 3)
 
     out = generate_lemon(g)
-    assert out == expected2
+    assert out.splitlines() == expected2.splitlines()

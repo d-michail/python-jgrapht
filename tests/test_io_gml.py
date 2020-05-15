@@ -340,6 +340,7 @@ def test_input_gml_from_string_preserve_ids():
 
 	assert g.vertices() == set([5, 7])
 
+
 def test_output_to_string(): 
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
 
@@ -351,4 +352,4 @@ def test_output_to_string():
     g.create_edge(2, 3)
 
     out = generate_gml(g)
-    assert out == expected2
+    assert out.splitlines() == expected2.splitlines()
