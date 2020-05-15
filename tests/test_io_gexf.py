@@ -159,4 +159,4 @@ def test_output_to_string():
 
     out = generate_gexf(g)
 
-    assert out == expected
+    assert out.splitlines() == expected.splitlines()

@@ -96,4 +96,4 @@ def test_output_to_string():
 
     out = generate_csv(g)
 
-    assert out == '0,1,2,3\n1\n2,3\n3\n'
+    assert out.splitlines() == ['0,1,2,3', '1', '2,3', '3']

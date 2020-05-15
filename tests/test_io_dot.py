@@ -64,5 +64,5 @@ def test_output_to_string():
 
     out = generate_dot(g)
 
-    assert out == 'digraph G {\n  0;\n  1;\n  2;\n  3;\n  0 -> 1;\n  0 -> 2;\n  0 -> 3;\n  2 -> 3;\n}\n'
+    assert out.splitlines() == 'digraph G {\n  0;\n  1;\n  2;\n  3;\n  0 -> 1;\n  0 -> 2;\n  0 -> 3;\n  2 -> 3;\n}\n'.splitlines()
 
