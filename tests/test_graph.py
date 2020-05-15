@@ -38,11 +38,11 @@ def test_graph_directed_inoutedges():
     assert e12 == 0
     assert g.edge_source(e12) == v1
     assert g.edge_target(e12) == v2
-    assert g.edge_endpoints(e12) == (v1, v2)
+    assert g.edge_tuple(e12) == (v1, v2, 1.0)
     e23 = g.create_edge(v2, v3)
     assert g.edge_source(e23) == v2
     assert g.edge_target(e23) == v3
-    assert g.edge_endpoints(e23) == (v2, v3)
+    assert g.edge_tuple(e23) == (v2, v3, 1.0)
     assert e23 == 1
     e14 = g.create_edge(v1, v4)
     assert e14 == 2
@@ -127,11 +127,11 @@ def test_graph_undirected_inoutedges():
     assert e12 == 0
     assert g.edge_source(e12) == v1
     assert g.edge_target(e12) == v2
-    assert g.edge_endpoints(e12) == (v1, v2)
+    assert g.edge_tuple(e12) == (v1, v2, 1.0)
     e23 = g.create_edge(v2, v3)
     assert g.edge_source(e23) == v2
     assert g.edge_target(e23) == v3
-    assert g.edge_endpoints(e23) == (v2, v3)
+    assert g.edge_tuple(e23) == (v2, v3, 1.0)
     assert e23 == 1
     e14 = g.create_edge(v1, v4)
     assert e14 == 2
@@ -306,7 +306,8 @@ def test_graph_sparse():
 
     edgelist2 = []
     for e in g.edges(): 
-        edgelist2.append(g.edge_endpoints(e))
+        u, v, w = g.edge_tuple(e)
+        edgelist2.append((u,v))
     assert edgelist2 == edgelist
 
     # sparse graphs cannot be modified

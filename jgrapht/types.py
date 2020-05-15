@@ -196,7 +196,7 @@ class Graph(ABC):
 
     @abstractmethod
     def add_vertex(self, vertex):
-        """Add a new vertex to the graph.
+        """Add a vertex to the graph.
 
         :param vertex: an integer identifier for the vertex.
         :returns: True if the vertex was added to the graph, False if it was already present
@@ -364,14 +364,6 @@ class Graph(ABC):
         """
         pass
 
-    def edge_endpoints(self, e):
-        """Get both endpoints of an edge as a tuple.
-
-        :param e: the edge
-        :returns: the edge endpoints as a (u,v) tuple
-        """
-        return self.edge_source(e), self.edge_target(e)
-
     def edge_tuple(self, e):
         """Get an edge as a tuple. 
 
@@ -505,8 +497,8 @@ class Graph(ABC):
         vertex_set = str(self.vertices())
         e_l_delim = '(' if self.type.directed else '{'
         e_r_delim = ')' if self.type.directed else '}'
-        edges = [(e, *self.edge_endpoints(e)) for e in self.edges()]
-        edges = [str(e) + '=' + e_l_delim + str(u) + ',' + str(v) + e_r_delim for e, u, v in edges]
+        edges = [(e, *self.edge_tuple(e)) for e in self.edges()]
+        edges = [str(e) + '=' + e_l_delim + str(u) + ',' + str(v) + e_r_delim for e, u, v, w in edges]
         edge_set = '{' + ', '.join(edges) + '}'
         return '(' + vertex_set + ', ' + edge_set + ')'
 
