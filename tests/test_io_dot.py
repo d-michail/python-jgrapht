@@ -20,7 +20,7 @@ def build_graph():
     return g
 
 
-def test_output_gml(tmpdir):
+def test_output_dot(tmpdir):
 
     g = build_graph()
     tmpfile = tmpdir.join('dot.out')

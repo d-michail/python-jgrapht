@@ -25,8 +25,22 @@
     %append_output(SWIG_FromCharPtr(($*1_ltype)*$1));
 }
 
+// convert a long to a void function pointer
 %typemap(in) void *LONG_TO_FUNCTION_POINTER { 
     $1 = PyLong_AsVoidPtr($input);    
+}
+
+// convert bytearray to c-string
+%typemap(in) char *BYTEARRAY {
+    if ($input != Py_None) { 
+        if (!PyByteArray_Check($input)) {
+            SWIG_exception_fail(SWIG_TypeError, "in method '" "$symname" "', argument "
+                       "$argnum"" of type '" "$type""'");
+        }
+        $1 = (char*) PyByteArray_AsString($input);
+    } else { 
+        $1 = (char*) 0;
+    }
 }
 
 enum status_t { 
@@ -144,23 +158,23 @@ int raise_exception_on_error(int result) {
 
 int jgrapht_attributes_store_create(void** OUTPUT);
 
-int jgrapht_attributes_store_put_boolean_attribute(void *, int, char*, int);
+int jgrapht_attributes_store_put_boolean_attribute(void *, int, char* BYTEARRAY, int);
 
-int jgrapht_attributes_store_put_int_attribute(void *, int, char*, int);
+int jgrapht_attributes_store_put_int_attribute(void *, int, char* BYTEARRAY, int);
 
-int jgrapht_attributes_store_put_long_attribute(void *, long long int, char*, int);
+int jgrapht_attributes_store_put_long_attribute(void *,  int, char* BYTEARRAY, long long int);
 
-int jgrapht_attributes_store_put_double_attribute(void *, int, char*, double);
+int jgrapht_attributes_store_put_double_attribute(void *, int, char* BYTEARRAY, double);
 
-int jgrapht_attributes_store_put_string_attribute(void *, int, char*, char*);
+int jgrapht_attributes_store_put_string_attribute(void *, int, char* BYTEARRAY, char* BYTEARRAY);
 
-int jgrapht_attributes_store_remove_attribute(void *, int, char*);
+int jgrapht_attributes_store_remove_attribute(void *, int, char* BYTEARRAY);
 
 int jgrapht_attributes_registry_create(void** OUTPUT);
 
-int jgrapht_attributes_registry_register_attribute(void *, char*, char*, char*, char*);
+int jgrapht_attributes_registry_register_attribute(void *, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY);
 
-int jgrapht_attributes_registry_unregister_attribute(void *, char*, char*, char*, char*);
+int jgrapht_attributes_registry_unregister_attribute(void *, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY);
 
 // clique
 
@@ -453,41 +467,41 @@ int jgrapht_handles_get_ccharpointer(void *, char** OUTPUT);
 
 // importers
 
-int jgrapht_import_file_dimacs(void *, char*, int);
+int jgrapht_import_file_dimacs(void *, char* BYTEARRAY, int);
 
-int jgrapht_import_string_dimacs(void *, char*, int);
+int jgrapht_import_string_dimacs(void *, char* BYTEARRAY, int);
 
-int jgrapht_import_file_gml(void *, char*, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_gml(void *, char* BYTEARRAY, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_gml(void *, char*, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_gml(void *, char* BYTEARRAY, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_file_json(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_json(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_json(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_json(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_file_csv(void *, char*, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int);
+int jgrapht_import_file_csv(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int);
 
-int jgrapht_import_string_csv(void *, char*, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int);
+int jgrapht_import_string_csv(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int);
 
-int jgrapht_import_file_gexf(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_gexf(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_gexf(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_gexf(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_file_graphml_simple(void *, char*, void * LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_graphml_simple(void * BYTEARRAY, char*, void * LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_graphml_simple(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_graphml_simple(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_file_graphml(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_graphml(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_graphml(void *, char*, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_graphml(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_file_dot(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_dot(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_dot(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_dot(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_file_graph6sparse6(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_graph6sparse6(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_graph6sparse6(void *, char*, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_graph6sparse6(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
 // isomorphism
 

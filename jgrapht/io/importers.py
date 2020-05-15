@@ -13,7 +13,8 @@ def _import(name, graph, filename_or_string, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    alg_method(graph.handle, filename_or_string, *args)
+    filename_or_string_as_bytearray = bytearray(filename_or_string, encoding='utf-8')
+    alg_method(graph.handle, filename_or_string_as_bytearray, *args)
 
 
 def _create_wrapped_callback(callback, cfunctype):

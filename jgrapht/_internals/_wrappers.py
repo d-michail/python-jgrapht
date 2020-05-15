@@ -82,7 +82,7 @@ class _JGraphTString(_HandleWrapper):
 
     def __str__(self):
         res = backend.jgrapht_handles_get_ccharpointer(self._handle)
-        return str(res)
+        return res
 
     def __repr__(self):
         return "_JGraphTString(%r)" % self._handle

@@ -24,12 +24,12 @@ graph
 	node
 	[
 		id 2
-		label "κόμβος 2"
+		label "label 2"
 	]
 	node
 	[
 		id 3
-		label "κόμβος 3"
+		label "label 3"
 	]
 	node
 	[
@@ -119,7 +119,7 @@ graph
 	[
 		source 1
 		target 2
-		label "ακμή 1-2"
+		label "edge 1-2"
 	]
 	edge
 	[
@@ -253,13 +253,15 @@ def test_output_gml(tmpdir):
 
     v_labels = { 0: { 'label': 'label 0'  }, 
 	             1: { 'label': 'label 1'  }, 
-				 2: { 'label': 'κόμβος 2' }, 
-				 3: { 'label': 'κόμβος 3' } }
-    e_labels = { 9: { 'label': 'ακμή 1-2' } }
+				 2: { 'label': 'label 2' }, 
+				 3: { 'label': 'label 3' } }
+    e_labels = { 9: { 'label': 'edge 1-2' } }
     write_gml(g, tmpfilename, False, v_labels, e_labels)
 
-    with open(tmpfilename, "r") as f: 
+    with open(tmpfilename, "r", encoding='utf-8') as f: 
         contents = f.read()
+
+    print(contents)
 
     assert contents == expected
 
@@ -276,14 +278,14 @@ def test_input_gml(tmpdir):
 	def va_cb(vertex, attribute_name, attribute_value):
 		print('Vertex {}, attr {}, value {}'.format(vertex, attribute_name, attribute_value))
 		if vertex == 2 and attribute_name == 'label': 
-			assert attribute_value == 'κόμβος 2'
+			assert attribute_value == 'label 2'
 		if vertex == 5 and attribute_name == 'label': 
 			assert attribute_value == '5'	
 
 	def ea_cb(edge, attribute_name, attribute_value):
 		print('Edge {}, attr {}, value {}'.format(edge, attribute_name, attribute_value))
 		if edge == 9 and attribute_name == 'label': 
-			assert attribute_value == 'ακμή 1-2'
+			assert attribute_value == 'edge 1-2'
 
 	read_gml(g, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
@@ -295,14 +297,14 @@ def test_input_gml_from_string(tmpdir):
 	def va_cb(vertex, attribute_name, attribute_value):
 		print('Vertex {}, attr {}, value {}'.format(vertex, attribute_name, attribute_value))
 		if vertex == 2 and attribute_name == 'label': 
-			assert attribute_value == 'κόμβος 2'
+			assert attribute_value == 'label 2'
 		if vertex == 5 and attribute_name == 'label': 
 			assert attribute_value == '5'	
 
 	def ea_cb(edge, attribute_name, attribute_value):
 		print('Edge {}, attr {}, value {}'.format(edge, attribute_name, attribute_value))
 		if edge == 9 and attribute_name == 'label': 
-			assert attribute_value == 'ακμή 1-2'
+			assert attribute_value == 'edge 1-2'
 
 	parse_gml(g, expected, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 

@@ -32,7 +32,6 @@ def _export_to_string(name, graph, *args):
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
     handle = alg_method(graph.handle, *args)
-
     return str(_JGraphTString(handle))
 
 
@@ -485,8 +484,8 @@ def write_gexf(
     :raises IOError: In case of an export error         
     """
     attrs_registry = _JGraphTAttributesRegistry()
-    for name, category, type, default_value in attrs:
-        attrs_registry.put(name, category, type, default_value)
+    for name, category, attr_type, default_value in attrs:
+        attrs_registry.put(name, category, attr_type, default_value)
 
     vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
     edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)

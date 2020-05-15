@@ -118,7 +118,7 @@ def test_export_import(tmpdir):
     def va_cb(vertex, attribute_name, attribute_value):
         print('Vertex {}, attr {}, value {}'.format(vertex, attribute_name, attribute_value))
         if vertex == 0:
-            if attribute_name == 'name': 
+            if attribute_name == 'name':
                 assert attribute_value == 'κόμβος 0'
         if vertex == 1:
             if attribute_name == 'name': 
@@ -146,6 +146,7 @@ def test_export_import(tmpdir):
     assert len(g1.edges()) == 18
 
     assert g1.get_edge_weight(17) == 33.3
+
 
 def test_output_to_string(): 
     g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)

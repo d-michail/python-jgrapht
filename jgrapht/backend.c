@@ -47,7 +47,7 @@ int jgrapht_attributes_store_put_int_attribute(void *store, int element, char* k
     return jgrapht_capi_attributes_store_put_int_attribute(thread, store, element, key, value);
 }
 
-int jgrapht_attributes_store_put_long_attribute(void *store, long long int element, char* key, int value) {
+int jgrapht_attributes_store_put_long_attribute(void *store, int element, char* key, long long int value) {
     return jgrapht_capi_attributes_store_put_long_attribute(thread, store, element, key, value);
 }
 
@@ -218,7 +218,7 @@ char * jgrapht_error_get_errno_msg() {
 }
 
 void jgrapht_error_print_stack_trace() { 
-    return jgrapht_capi_error_print_stack_trace(thread);
+    jgrapht_capi_error_print_stack_trace(thread);
 }
 
 // exporter
