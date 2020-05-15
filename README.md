@@ -1,7 +1,7 @@
 
 # python-jgrapht
 
-A python interface to the [JGraphT](https://github.com/jgrapht/jgrapht) graph library. 
+A python interface to the [JGraphT](https://jgrapht.org/) graph library. 
 
 JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It  contains
 very efficient and generic graph data-structures along with a sizeable collection of sophisticated algorithms.
@@ -21,23 +21,21 @@ The jgrapht-capi project is included in the sources as a git submodule in folder
 You need to either initialize the submodule by hand, or you can pass option `--recurse-submodules` when 
 cloning this repository.
 
-Afterwards, building should be as simple as 
-
-```
-python setup.py build
-```
-
-The build will succeed only if you have the following piece of software installed:
+The following pieces of software are required for the build to succeed:
 
  * GraalVM 20.0 with Java 11 support
  * Native Image component from GraalVM
  * Maven Java build tool
  * GNU C compiler or clang
- * CMake
- * Python 3.5 and above
+ * CMake 
+ * Python 3.6 and above
  * SWIG 3 and above
 
-For now only Linux is tested.
+If all the above are installed properly, building should be as simple as 
+
+```
+python setup.py build
+```
 
 ## Install
 
@@ -55,8 +53,8 @@ in order to import from the development sources. Using the following commands yo
 environment:
 
 ```
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -71,7 +69,14 @@ operation.
 Execute the tests by giving
 
 ```
-pytest tests/
+pytest
+```
+
+## Building the docs
+
+```
+pip install -r requirements/doc.txt
+cd docs && make html
 ```
 
 ## License
