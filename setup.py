@@ -12,6 +12,22 @@ from setuptools.command.build_ext import build_ext
 
 from distutils.command.build import build
 
+extra_link_args = []
+runtime_library_dirs = []
+
+if sys.platform.startswith('win32'):
+    so_ext = '.dll'
+    capi_filename = 'jgrapht_capi' + so_ext
+if sys.platform.startswith('linux'):
+    so_ext = '.so'
+    capi_filename = 'libjgrapht_capi' + so_ext
+    # Make sure that _backend.so will be able to load jgrapht_capi.so
+    runtime_library_dirs=['$ORIGIN']
+elif sys.platform.startswith('darwin'):
+    so_ext = '.dylib'
+    capi_filename = 'libjgrapht_capi' + so_ext
+    extra_link_args = ['-Wl,-rpath,@loader_path']
+
 
 class BuildCapiCommand(Command):
     """A custom command to build the jgrapht-capi from source."""
@@ -37,7 +53,7 @@ class BuildCapiCommand(Command):
         self.src_dir = os.path.join('vendor', 'source', 'jgrapht-capi')
         self.build_dir = os.path.join('vendor', 'build', 'jgrapht-capi')
         self.package_name = 'jgrapht'
-        self.filename = 'libjgrapht_capi.so'
+        self.filename = capi_filename
 
     def run(self):
         """Compile the jgrapht-capi from the git submodule inside `vendor/source/jgrapht-capi`."""
@@ -85,13 +101,12 @@ class CustomBuildExt(build_ext):
         self.run_command('build_capi')
         super().run()
 
-
 _backend_extension = Extension('jgrapht._backend', ['jgrapht/backend.i','jgrapht/backend.c'],
                                include_dirs=['jgrapht/', 'vendor/build/jgrapht-capi/', 'vendor/build/jgrapht-capi/src/main/native'],
                                library_dirs=['vendor/build/jgrapht-capi/'],
                                libraries=['jgrapht_capi'],
-                               # Make sure that _backend.so will be able to load jgrapht_capi.so
-                               runtime_library_dirs=['$ORIGIN'],
+                               runtime_library_dirs=runtime_library_dirs,
+                               extra_link_args=extra_link_args,
                                )
 
 def read(rel_path):
