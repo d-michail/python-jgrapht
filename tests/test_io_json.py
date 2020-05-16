@@ -41,7 +41,7 @@ def build_graph():
     return g
 
 
-def test_output_json(tmpdir):
+def test_output_to_file_json(tmpdir):
     g = build_graph()
     tmpfile = tmpdir.join('json.out')
     tmpfilename = str(tmpfile)
@@ -57,6 +57,31 @@ def test_output_json(tmpdir):
         contents = f.read()
 
     assert contents == expected_escaped
+
+
+def test_output_to_string(): 
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
+
+    g.add_vertices_from(range(0,4))
+
+    g.create_edge(0, 1)
+    g.create_edge(0, 2)
+    g.create_edge(0, 3)
+    g.create_edge(2, 3)
+
+    out = generate_json(g)
+    assert out.splitlines() == expected2.splitlines()
+
+
+def test_output_to_string_with_labels():
+    g = build_graph()
+
+    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
+    g.add_vertex(0)
+    v_labels = { 0: { 'label': 'κόμβος 0'  } }
+
+    out = generate_json(g, per_vertex_attrs_dict=v_labels)
+    assert out.splitlines() == expected1_escaped.splitlines()
 
 
 def test_input_json(tmpdir):
@@ -122,30 +147,6 @@ def test_input_json_from_string_preserve_ids():
 
     parse_json(g, input_string, import_id_cb=import_id) 
     assert g.vertices() == set([5, 7])
-
-def test_output_to_string(): 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
-
-    g.add_vertices_from(range(0,4))
-
-    g.create_edge(0, 1)
-    g.create_edge(0, 2)
-    g.create_edge(0, 3)
-    g.create_edge(2, 3)
-
-    out = generate_json(g)
-    assert out.splitlines() == expected2.splitlines()
-
-def test_output_to_string_with_labels():
-    g = build_graph()
-
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
-    g.add_vertex(0)
-    v_labels = { 0: { 'label': 'κόμβος 0'  } }
-
-    out = generate_json(g, per_vertex_attrs_dict=v_labels)
-    print(out)
-    assert out == expected1_escaped
 
 
 def test_input_from_string_with_labels():
