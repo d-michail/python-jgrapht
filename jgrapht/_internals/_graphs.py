@@ -3,9 +3,7 @@ from ..types import (
     Graph,
     GraphType,
 )
-from collections.abc import (
-    Set,
-)
+from collections.abc import Set
 from ._wrappers import _HandleWrapper
 from ._collections import _JGraphTIntegerIterator
 
@@ -38,7 +36,9 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             allowing_self_loops = backend.jgrapht_graph_is_allowing_selfloops(
                 self._handle
             )
-            allowing_multiple_edges = backend.jgrapht_graph_is_allowing_multipleedges(self._handle)
+            allowing_multiple_edges = backend.jgrapht_graph_is_allowing_multipleedges(
+                self._handle
+            )
             weighted = backend.jgrapht_graph_is_weighted(self._handle)
 
         self._type = GraphType(
@@ -69,7 +69,7 @@ class _JGraphTGraph(_HandleWrapper, Graph):
 
     def add_edge(self, u, v, edge, weight=None):
         added = backend.jgrapht_graph_add_given_edge(self._handle, u, v, edge)
-        if added and weight is not None: 
+        if added and weight is not None:
             self.set_edge_weight(edge, weight)
         return added
 
@@ -233,16 +233,19 @@ def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True)
     :rtype: :class:`jgrapht.types.Graph`
     """
     e_list = backend.jgrapht_list_create()
-    if weighted: 
-        for u, v, w in edgelist: 
+    if weighted:
+        for u, v, w in edgelist:
             backend.jgrapht_list_edge_triple_add(e_list, u, v, w)
     else:
-        for u, v in edgelist: 
+        for u, v in edgelist:
             backend.jgrapht_list_edge_pair_add(e_list, u, v)
 
-    handle = backend.jgrapht_graph_sparse_create(directed, weighted, num_of_vertices, e_list)
+    handle = backend.jgrapht_graph_sparse_create(
+        directed, weighted, num_of_vertices, e_list
+    )
 
     return _JGraphTGraph(handle)
+
 
 def as_sparse_graph(graph):
     """Copy a graph to a sparse graph.
@@ -260,15 +263,16 @@ def as_sparse_graph(graph):
     :returns: a sparse graph 
     :rtype: :class:`jgrapht.types.Graph`
     """
-    if len(graph.vertices()) == 0: 
+    if len(graph.vertices()) == 0:
         raise ValueError("Graph with no vertices")
 
     max_vertex = max(graph.vertices())
 
     if graph.type.weighted:
         edgelist = [graph.edge_tuple(e) for e in graph.edges()]
-    else: 
+    else:
         edgelist = [graph.edge_tuple(e) for e in graph.edges()]
-    
-    return create_sparse_graph(max_vertex+1, edgelist, graph.type.directed, graph.type.weighted)
 
+    return create_sparse_graph(
+        max_vertex + 1, edgelist, graph.type.directed, graph.type.weighted
+    )

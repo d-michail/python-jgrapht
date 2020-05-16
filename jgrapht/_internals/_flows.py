@@ -1,5 +1,5 @@
 from ..types import (
-    Cut, 
+    Cut,
     Flow,
 )
 

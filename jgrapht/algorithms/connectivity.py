@@ -1,10 +1,9 @@
 from .. import backend
-from .._internals._collections import (
-    _JGraphTIntegerSetIterator
-)
+from .._internals._collections import _JGraphTIntegerSetIterator
+
 
 def is_weakly_connected(graph):
-    """Computes weakly connected components in a directed graph or 
+    r"""Computes weakly connected components in a directed graph or 
        connected components in an undirected graph. 
   
     This is a simple BFS based implementation.
@@ -21,7 +20,7 @@ def is_weakly_connected(graph):
 
 
 def is_strongly_connected_gabow(graph):
-    """Computes strongly connected components in a directed graph. 
+    r"""Computes strongly connected components in a directed graph. 
   
     This is Cheriyan-Mehlhorn/Gabow's algorithm and can be found at: 
   
@@ -40,7 +39,7 @@ def is_strongly_connected_gabow(graph):
 
 
 def is_strongly_connected_kosaraju(graph):
-    """Computes strongly connected components in a directed graph. 
+    r"""Computes strongly connected components in a directed graph. 
 
     This is an implementation based on:
 
@@ -55,10 +54,10 @@ def is_strongly_connected_kosaraju(graph):
       vertex set
     """
     connected, sets = backend.jgrapht_connectivity_strong_exec_kosaraju(graph.handle)
-    return connected, _JGraphTIntegerSetIterator(sets)  
+    return connected, _JGraphTIntegerSetIterator(sets)
 
 
-def is_connected(graph): 
+def is_connected(graph):
     """Compute connected components of a graph.
 
     For directed graphs this method computed strongly connected components.
@@ -72,4 +71,3 @@ def is_connected(graph):
         return is_strongly_connected_kosaraju(graph)
     else:
         return is_weakly_connected(graph)
-

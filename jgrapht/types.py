@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 
-from collections.abc import (
-    Mapping,
-)
+from collections.abc import Mapping
 
 
 class GraphType:
@@ -271,7 +269,7 @@ class Graph(ABC):
         for edge in edges:
             u = edge[0]
             v = edge[1]
-            e = self.create_edge(u, v, weight=edge[2] if len(edge)>2 else None)
+            e = self.create_edge(u, v, weight=edge[2] if len(edge) > 2 else None)
             created.append(e)
         return created
 
@@ -313,7 +311,7 @@ class Graph(ABC):
         :returns: the opposite vertex of the edge
         """
         a, b, _ = self.edge_tuple(e)
-        if a == u: 
+        if a == u:
             return b
         elif b == u:
             return a
@@ -495,12 +493,16 @@ class Graph(ABC):
 
     def __str__(self):
         vertex_set = str(self.vertices())
-        e_l_delim = '(' if self.type.directed else '{'
-        e_r_delim = ')' if self.type.directed else '}'
+        e_l_delim = "(" if self.type.directed else "{"
+        e_r_delim = ")" if self.type.directed else "}"
         edges = [(e, *self.edge_tuple(e)) for e in self.edges()]
-        edges = [str(e) + '=' + e_l_delim + str(u) + ',' + str(v) + e_r_delim for e, u, v, w in edges]
-        edge_set = '{' + ', '.join(edges) + '}'
-        return '(' + vertex_set + ', ' + edge_set + ')'
+        edges = [
+            str(e) + "=" + e_l_delim + str(u) + "," + str(v) + e_r_delim
+            for e, u, v, w in edges
+        ]
+        edge_set = "{" + ", ".join(edges) + "}"
+        return "(" + vertex_set + ", " + edge_set + ")"
+
 
 class Clustering(ABC):
     """A vertex clustering.
@@ -545,6 +547,7 @@ class Flow(ABC, Mapping):
     def value(self):
         """Flow value."""
         pass
+
 
 class Cut:
     """A graph cut."""

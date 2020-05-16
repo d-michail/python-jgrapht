@@ -1,14 +1,12 @@
 from .. import backend
-from ..types import (
-    GraphMapping,
-)
+from ..types import GraphMapping
 from ._wrappers import (
     _HandleWrapper,
     _JGraphTObjectIterator,
 )
 
 
-class _JGraphTGraphMapping(_HandleWrapper,GraphMapping):
+class _JGraphTGraphMapping(_HandleWrapper, GraphMapping):
     """A JGraphT mapping between two graphs g1 and g2."""
 
     def __init__(self, handle, graph1, graph2, **kwargs):
@@ -39,7 +37,7 @@ class _JGraphTGraphMapping(_HandleWrapper,GraphMapping):
         result = dict()
         for v in vertices():
             result[v] = self.vertex_correspondence(v, forward=forward)
-        return result    
+        return result
 
     def edges_correspondence(self, forward=True):
         edges = self._graph1.edges if forward else self._graph2.edges

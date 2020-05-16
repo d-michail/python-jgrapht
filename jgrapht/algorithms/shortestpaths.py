@@ -5,9 +5,7 @@ from .._internals._paths import (
     _JGraphTSingleSourcePaths,
     _JGraphTAllPairsPaths,
 )
-from .._internals._collections import (
-    _JGraphTIntegerSet,
-)
+from .._internals._collections import _JGraphTIntegerSet
 import ctypes
 
 
@@ -48,6 +46,7 @@ def _sp_allpairs_alg(name, graph):
     handle = alg_method(graph.handle)
 
     return _JGraphTAllPairsPaths(handle)
+
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
@@ -262,6 +261,7 @@ def a_star_with_alt_heuristic(
             *custom
         )
 
+
 def yen_k_loopless(graph, source_vertex, target_vertex, k):
     r"""Yen's algorithm for k loopless shortest paths. 
 
@@ -280,12 +280,13 @@ def yen_k_loopless(graph, source_vertex, target_vertex, k):
     :returns: a iterator of :py:class:`.GraphPath`
     """
     return _sp_k_between_alg(
-                "yen_get_k_loopless_paths_between_vertices",
-                graph,
-                source_vertex,
-                target_vertex,
-                k
-            )
+        "yen_get_k_loopless_paths_between_vertices",
+        graph,
+        source_vertex,
+        target_vertex,
+        k,
+    )
+
 
 def eppstein_k(graph, source_vertex, target_vertex, k):
     r"""Eppstein's algorithm for k shortest paths (may contain loops). 
@@ -302,9 +303,5 @@ def eppstein_k(graph, source_vertex, target_vertex, k):
     :returns: a iterator of :py:class:`.GraphPath`
     """
     return _sp_k_between_alg(
-                "eppstein_get_k_paths_between_vertices",
-                graph,
-                source_vertex,
-                target_vertex,
-                k
-            )
+        "eppstein_get_k_paths_between_vertices", graph, source_vertex, target_vertex, k
+    )

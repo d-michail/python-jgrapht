@@ -63,7 +63,7 @@ def count_triangles(graph):
     return backend.jgrapht_graph_metrics_triangles(graph.handle)
 
 
-def measure(graph): 
+def measure(graph):
     """Measure the graph. This method executes an all-pairs shortest paths 
     using Floyd-Warshal.
 
@@ -79,18 +79,18 @@ def measure(graph):
     :param graph: the input graph
     :returns: a 6-tuple containing the results.
     """
-    ( 
-        diameter, 
-        radius, 
+    (
+        diameter,
+        radius,
         center_handle,
         periphery_handle,
         pseudo_periphery_handle,
-        vertex_eccentricity_map_handle
+        vertex_eccentricity_map_handle,
     ) = backend.jgrapht_graph_metrics_measure_graph(graph.handle)
 
     return (
-        diameter, 
-        radius, 
+        diameter,
+        radius,
         _JGraphTIntegerSet(handle=center_handle),
         _JGraphTIntegerSet(handle=periphery_handle),
         _JGraphTIntegerSet(handle=pseudo_periphery_handle),

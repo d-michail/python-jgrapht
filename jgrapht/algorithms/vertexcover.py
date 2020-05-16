@@ -12,7 +12,9 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
         if vertex_weights is not None:
-            raise NotImplementedError("Algorithm not supported. Maybe try without weights?")
+            raise NotImplementedError(
+                "Algorithm not supported. Maybe try without weights?"
+            )
         else:
             raise NotImplementedError("Algorithm not supported.")
 

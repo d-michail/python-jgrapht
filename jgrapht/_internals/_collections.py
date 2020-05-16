@@ -64,7 +64,7 @@ class _JGraphTIntegerSetIterator(_JGraphTObjectIterator):
     def __repr__(self):
         return "_JGraphTIntegerSetIterator(%r)" % self._handle
 
-    
+
 class _JGraphTIntegerList(_HandleWrapper, Collection):
     """JGraphT Integer List"""
 
@@ -148,7 +148,7 @@ class _JGraphTIntegerDoubleMap(_HandleWrapper, MutableMapping):
         backend.jgrapht_map_int_double_put(self._handle, key, value)
 
     def pop(self, key, defaultvalue):
-        try: 
+        try:
             res = backend.jgrapht_map_int_double_remove(self._handle, key)
             return res
         except ValueError:
@@ -252,4 +252,3 @@ class _JGraphTIntegerIntegerMap(_HandleWrapper, MutableMapping):
 
     def __repr__(self):
         return "_JGraphTIntegerIntegerMap(%r)" % self._handle
-

@@ -17,9 +17,7 @@ def bfs_traversal(graph, start_vertex=None):
     :returns: A vertex iterator
     """
     if start_vertex is None:
-        it = backend.jgrapht_traverse_create_bfs_from_all_vertices_vit(
-            graph.handle
-        )
+        it = backend.jgrapht_traverse_create_bfs_from_all_vertices_vit(graph.handle)
     else:
         it = backend.jgrapht_traverse_create_bfs_from_vertex_vit(
             graph.handle, start_vertex
@@ -57,9 +55,7 @@ def dfs_traversal(graph, start_vertex=None):
     :returns: A vertex iterator
     """
     if start_vertex is None:
-        it = backend.jgrapht_traverse_create_dfs_from_all_vertices_vit(
-            graph.handle
-        )
+        it = backend.jgrapht_traverse_create_dfs_from_all_vertices_vit(graph.handle)
     else:
         it = backend.jgrapht_traverse_create_dfs_from_vertex_vit(
             graph.handle, start_vertex

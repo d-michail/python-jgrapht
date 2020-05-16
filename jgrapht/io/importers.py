@@ -13,7 +13,7 @@ def _import(name, graph, filename_or_string, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    filename_or_string_as_bytearray = bytearray(filename_or_string, encoding='utf-8')
+    filename_or_string_as_bytearray = bytearray(filename_or_string, encoding="utf-8")
     alg_method(graph.handle, filename_or_string_as_bytearray, *args)
 
 
@@ -37,14 +37,17 @@ def _create_wrapped_attribute_callback(callback):
             None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
         )
 
-        # we wrap in order to decode string representation
+        # We wrap in order to decode string representation.
+        # There is no SWIG layer here, as the capi calls us directly
+        # using a function pointer. This means that the arguments
+        # are bytearrays.
         def decoder_callback(id, key, value):
-            decoded_key = key.decode(encoding='utf-8')
-            decoded_value = value.decode(encoding='utf-8')
+            decoded_key = key.decode(encoding="utf-8")
+            decoded_value = value.decode(encoding="utf-8")
             callback(id, decoded_key, decoded_value)
 
         return _create_wrapped_callback(decoder_callback, callback_ctype)
-    else: 
+    else:
         return (0, None)
 
 
@@ -52,13 +55,16 @@ def _create_wrapped_import_id_callback(callback):
     if callback is not None:
         callback_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
 
-        # we wrap in order to decode string representation
+        # We wrap in order to decode string representation.
+        # There is no SWIG layer here, as the capi calls us directly
+        # using a function pointer. This means that the arguments
+        # are bytearrays.
         def decoder_callback(id):
-            decoded_id = id.decode(encoding='utf-8')
+            decoded_id = id.decode(encoding="utf-8")
             return callback(decoded_id)
 
         return _create_wrapped_callback(decoder_callback, callback_ctype)
-    else: 
+    else:
         return (0, None)
 
 
@@ -347,7 +353,7 @@ def read_json(
     The same is done for arrays or any other arbitrary nested structure.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a long integer with the identifier of the 
+              from the input file as a string. It should return a integer with the identifier of the 
               graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
@@ -356,7 +362,7 @@ def read_json(
 
     :param graph: The graph to read into
     :param filename: Filename to read from
-    :param import_id_cb: Callback to transform identifiers from file to long integer vertices. Can be 
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. Can be 
                          None to allow the graph to assign identifiers to new vertices.
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
@@ -413,7 +419,7 @@ def parse_json(
     The same is done for arrays or any other arbitrary nested structure.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a long integer with the identifier of the 
+              from the input file as a string. It should return a integer with the identifier of the 
               graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
@@ -422,7 +428,7 @@ def parse_json(
 
     :param graph: The graph to read into
     :param input_string: The input string to read from
-    :param import_id_cb: Callback to transform identifiers from file to long integer vertices. Can be 
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. Can be 
                          None to allow the graph to assign identifiers to new vertices.    
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
@@ -460,12 +466,12 @@ def read_csv(
     The supported formats are the same CSV formats used by Gephi. The importer respects rfc4180. 
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a long integer with the identifier of the 
+              from the input file as a string. It should return a integer with the identifier of the 
               graph vertex.
 
     :param graph: the graph to read into
     :param filename: the filename to read from
-    :param import_id_cb: callback to transform identifiers from file to long integer vertices. Can be 
+    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
                          None to allow the graph to assign identifiers to new vertices.
     :param format: format to use. One of "edgelist", "adjacencylist" and "matrix"    
     :param import_edge_weights: whether to import edge weights
@@ -502,12 +508,12 @@ def parse_csv(
     The supported formats are the same CSV formats used by Gephi. The importer respects rfc4180. 
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a long integer with the identifier of the 
+              from the input file as a string. It should return an integer with the identifier of the 
               graph vertex.
 
     :param graph: the graph to read into
     :param input_string: the input string to read from
-    :param import_id_cb: callback to transform identifiers from file to long integer vertices. Can be 
+    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
                          None to allow the graph to assign identifiers to new vertices.
     :param format: format to use. One of "edgelist", "adjacencylist" and "matrix"    
     :param import_edge_weights: whether to import edge weights
@@ -589,7 +595,7 @@ def read_gexf(
     accepts as a parameter the vertex identifier read from file and should return the new vertex.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a long integer with the identifier of the 
+              from the input file as a string. It should return a integer with the identifier of the 
               graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
@@ -598,7 +604,7 @@ def read_gexf(
 
     :param graph: the graph to read into
     :param filename: the input file to read from
-    :param import_id_cb: callback to transform identifiers from file to long integer vertices. Can be 
+    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
                          None to allow the graph to assign identifiers to new vertices.
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: callback function for vertex attributes
@@ -680,7 +686,7 @@ def parse_gexf(
     accepts as a parameter the vertex identifier read from file and should return the new vertex.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a long integer with the identifier of the 
+              from the input file as a string. It should return a integer with the identifier of the 
               graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
@@ -689,7 +695,7 @@ def parse_gexf(
 
     :param graph: the graph to read into
     :param input_string: the input string to read from
-    :param import_id_cb: callback to transform identifiers from file to long integer vertices. Can be 
+    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
                          None to allow the graph to assign identifiers to new vertices.
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: callback function for vertex attributes
@@ -734,7 +740,7 @@ def read_dot(
     read from file and should return the new vertex.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a long integer with the identifier of the 
+              from the input file as a string. It should return a integer with the identifier of the 
               graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
@@ -743,7 +749,7 @@ def read_dot(
 
     :param graph: The graph to read into
     :param filename: Filename to read from
-    :param import_id_cb: callback to transform identifiers from file to long integer vertices. Can be 
+    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
                          None to allow the graph to assign identifiers to new vertices.                   
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
@@ -754,8 +760,9 @@ def read_dot(
     vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
     edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
-    args = [ import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr ]
+    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("file_dot", graph, filename, *args)
+
 
 def parse_dot(
     graph,
@@ -780,7 +787,7 @@ def parse_dot(
     read from file and should return the new vertex.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a long integer with the identifier of the 
+              from the input file as a string. It should return a integer with the identifier of the 
               graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
@@ -789,7 +796,7 @@ def parse_dot(
 
     :param graph: the graph to read into
     :param input_string: the input string to read from
-    :param import_id_cb: callback to transform identifiers from file to long integer vertices. Can be 
+    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
                          None to allow the graph to assign identifiers to new vertices.                   
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
@@ -800,7 +807,7 @@ def parse_dot(
     vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
     edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
-    args = [ import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr ]
+    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("string_dot", graph, input_string, *args)
 
 
@@ -829,7 +836,7 @@ def read_graph6sparse6(
     read from file and should return the new vertex.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a long integer with the identifier of the 
+              from the input file as a string. It should return a integer with the identifier of the 
               graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
@@ -838,7 +845,7 @@ def read_graph6sparse6(
 
     :param graph: the graph to read into
     :param filename: filename to read from
-    :param import_id_cb: callback to transform identifiers from file to long integer vertices. Can be 
+    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
                          None to allow the graph to assign identifiers to new vertices.                   
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
@@ -849,8 +856,8 @@ def read_graph6sparse6(
     vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
     edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
-    args = [ import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr ]
-    return _import("file_graph6sparse6", graph, filename, *args)    
+    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+    return _import("file_graph6sparse6", graph, filename, *args)
 
 
 def parse_graph6sparse6(
@@ -879,7 +886,7 @@ def parse_graph6sparse6(
     vertex identifier read from file and should return the new vertex.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier
-              read from the input file as a string. It should return a long integer with the
+              read from the input file as a string. It should return a integer with the
               identifier of the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
@@ -888,7 +895,7 @@ def parse_graph6sparse6(
 
     :param graph: the graph to read into
     :param input_string: the input string
-    :param import_id_cb: callback to transform identifiers from file to long integer vertices.
+    :param import_id_cb: callback to transform identifiers from file to integer vertices.
         Can be None to allow the graph to assign identifiers to new vertices.                   
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
@@ -898,5 +905,5 @@ def parse_graph6sparse6(
     vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
     edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
 
-    args = [ import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr ]
-    return _import("string_graph6sparse6", graph, input_string, *args)    
+    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+    return _import("string_graph6sparse6", graph, input_string, *args)

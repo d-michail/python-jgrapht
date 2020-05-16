@@ -2,9 +2,7 @@ import time
 import ctypes
 
 from .. import backend
-from .._internals._wrappers import (
-    _JGraphTString,
-)
+from .._internals._wrappers import _JGraphTString
 from .._internals._attributes import (
     _JGraphTAttributeStore,
     _JGraphTAttributesRegistry,
@@ -36,6 +34,10 @@ def _export_to_string(name, graph, *args):
 
 
 def _attributes_to_store(attributes_dict):
+    """Take a per element (edge/vertex) attributes dictionary and create an
+    equivalent structure in the capi. This can then be used in order to export
+    a graph with attributes.
+    """
     vertex_attribute_store = None
     if attributes_dict is not None:
         vertex_attribute_store = _JGraphTAttributeStore()

@@ -3,9 +3,7 @@ from .._internals._paths import (
     _JGraphTGraphPath,
     _JGraphTGraphPathIterator,
 )
-from .._internals._collections import (
-    _JGraphTIntegerListIterator
-)
+from .._internals._collections import _JGraphTIntegerListIterator
 
 
 def eulerian_cycle(graph):
@@ -71,7 +69,9 @@ def fundamental_cycle_basis_paton(graph):
     :returns: a tuple (weight, cycle iterator). Each cycle is returned as a 
       :py:class:`.GraphPath` instance
     """
-    weight, cycles_it = backend.jgrapht_cycles_fundamental_basis_exec_paton(graph.handle)
+    weight, cycles_it = backend.jgrapht_cycles_fundamental_basis_exec_paton(
+        graph.handle
+    )
     return weight, _JGraphTGraphPathIterator(cycles_it)
 
 
@@ -95,7 +95,9 @@ def fundamental_cycle_basis_bfs_with_stack(graph):
     :returns: a tuple (weight, cycle iterator). Each cycle is returned as a 
       :py:class:`.GraphPath` instance
     """
-    weight, cycles_it = backend.jgrapht_cycles_fundamental_basis_exec_stack_bfs(graph.handle)
+    weight, cycles_it = backend.jgrapht_cycles_fundamental_basis_exec_stack_bfs(
+        graph.handle
+    )
     return weight, _JGraphTGraphPathIterator(cycles_it)
 
 
@@ -118,7 +120,9 @@ def fundamental_cycle_basis_bfs_with_queue(graph):
     :returns: a tuple (weight, cycle iterator). Each cycle is returned as a 
       :py:class:`.GraphPath` instance
     """
-    weight, cycles_it = backend.jgrapht_cycles_fundamental_basis_exec_queue_bfs(graph.handle)
+    weight, cycles_it = backend.jgrapht_cycles_fundamental_basis_exec_queue_bfs(
+        graph.handle
+    )
     return weight, _JGraphTGraphPathIterator(cycles_it)
 
 
@@ -139,7 +143,7 @@ def enumerate_simple_cycles_tarjan(graph):
 
     :param graph: the graph. Must be directed and without multiple edges
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
-    """ 
+    """
     cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_tarjan(graph.handle)
     return _JGraphTIntegerListIterator(cycles_it)
 
@@ -161,7 +165,7 @@ def enumerate_simple_cycles_johnson(graph):
 
     :param graph: the graph. Must be directed and without multiple edges
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
-    """ 
+    """
     cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_johnson(graph.handle)
     return _JGraphTIntegerListIterator(cycles_it)
 
@@ -183,7 +187,7 @@ def enumerate_simple_cycles_tiernan(graph):
 
     :param graph: the graph. Must be directed and without multiple edges
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
-    """ 
+    """
     cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_tiernan(graph.handle)
     return _JGraphTIntegerListIterator(cycles_it)
 
@@ -206,8 +210,10 @@ def enumerate_simple_cycles_szwarcfiter_lauer(graph):
 
     :param graph: the graph. Must be directed and without multiple edges
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
-    """ 
-    cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_szwarcfiter_lauer(graph.handle)
+    """
+    cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_szwarcfiter_lauer(
+        graph.handle
+    )
     return _JGraphTIntegerListIterator(cycles_it)
 
 
@@ -229,7 +235,8 @@ def enumerate_simple_cycles_hawick_james(graph):
 
     :param graph: the graph. Must be directed and without multiple edges
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
-    """ 
-    cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_hawick_james(graph.handle)
+    """
+    cycles_it = backend.jgrapht_cycles_simple_enumeration_exec_hawick_james(
+        graph.handle
+    )
     return _JGraphTIntegerListIterator(cycles_it)
-

@@ -1,7 +1,5 @@
 from .. import backend
-from ..types import (
-    PlanarEmbedding, 
-)
+from ..types import PlanarEmbedding
 from ._wrappers import (
     _HandleWrapper,
     _JGraphTIntegerIterator,
@@ -22,4 +20,3 @@ class _JGraphTPlanarEmbedding(_HandleWrapper, PlanarEmbedding):
 
     def __repr__(self):
         return "_JGraphTPlanarEmbedding(%r)" % self._handle
-

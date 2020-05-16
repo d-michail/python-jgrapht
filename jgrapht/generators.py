@@ -119,9 +119,7 @@ def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    backend.jgrapht_generate_gnm_random(
-        graph.handle, n, m, loops, multiple_edges, seed
-    )
+    backend.jgrapht_generate_gnm_random(graph.handle, n, m, loops, multiple_edges, seed)
 
 
 def gnp_random_graph(graph, n, p, loops=False, seed=None):

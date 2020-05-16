@@ -12,7 +12,11 @@ def _isomorphism_alg(name, graph1, graph2, *args):
 
     exists, map_it_handle = alg_method(graph1.handle, graph2.handle, *args)
 
-    return _JGraphTGraphMappingIterator(handle=map_it_handle, graph1=graph1, graph2=graph2) if exists else None
+    return (
+        _JGraphTGraphMappingIterator(handle=map_it_handle, graph1=graph1, graph2=graph2)
+        if exists
+        else None
+    )
 
 
 def vf2(graph1, graph2):

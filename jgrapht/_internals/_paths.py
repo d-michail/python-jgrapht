@@ -53,12 +53,9 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
         if self._edges is not None:
             return
 
-        (
-            weight,
-            start_vertex,
-            end_vertex,
-            eit,
-        ) = backend.jgrapht_graphpath_get_fields(self._handle)
+        (weight, start_vertex, end_vertex, eit,) = backend.jgrapht_graphpath_get_fields(
+            self._handle
+        )
 
         self._weight = weight
         self._start_vertex = start_vertex
@@ -80,7 +77,6 @@ class _JGraphTGraphPathIterator(_JGraphTObjectIterator):
 
     def __repr__(self):
         return "_JGraphTGraphPathIterator(%r)" % self._handle
-
 
 
 class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):

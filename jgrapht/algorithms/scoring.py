@@ -2,7 +2,7 @@ from .. import backend
 from .._internals._collections import (
     _JGraphTIntegerIterator,
     _JGraphTIntegerDoubleMap,
-) 
+)
 
 
 def _scoring_alg(name, graph, *args):

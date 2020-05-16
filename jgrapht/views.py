@@ -3,8 +3,9 @@ from ._internals._views import (
     _UnweightedGraphView,
     _UnmodifiableGraphView,
     _UndirectedGraphView,
-    _EdgeReversedGraphView
+    _EdgeReversedGraphView,
 )
+
 
 def as_unweighted(graph):
     """Create an unweighted view of a graph. Any updates in the original graph are reflected

@@ -1,7 +1,5 @@
 from .. import backend
-from ..types import (
-    Clustering, 
-)
+from ..types import Clustering
 from ._wrappers import (
     _HandleWrapper,
     _JGraphTIntegerIterator,

@@ -1,7 +1,5 @@
 from .. import backend
-from collections.abc import (
-    Iterator,
-)
+from collections.abc import Iterator
 
 
 class _HandleWrapper:
@@ -61,6 +59,7 @@ class _JGraphTObjectIterator(_HandleWrapper, Iterator):
     """A JGraphT iterator. This iterator returns handles to 
     backend objects. 
     """
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -81,6 +80,8 @@ class _JGraphTString(_HandleWrapper):
         super().__init__(handle=handle, **kwargs)
 
     def __str__(self):
+        # SWIG automatically converts the ccharpointer in utf-8
+        # coming from the capi to a python string
         res = backend.jgrapht_handles_get_ccharpointer(self._handle)
         return res
 
