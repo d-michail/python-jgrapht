@@ -487,7 +487,7 @@ int jgrapht_import_file_gexf(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POI
 
 int jgrapht_import_string_gexf(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_file_graphml_simple(void * BYTEARRAY, char*, void * LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_graphml_simple(void *, char* BYTEARRAY, void * LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
 int jgrapht_import_string_graphml_simple(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 

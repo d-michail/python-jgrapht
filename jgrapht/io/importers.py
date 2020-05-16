@@ -907,3 +907,239 @@ def parse_graph6sparse6(
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("string_graph6sparse6", graph, input_string, *args)
+
+
+def read_graphml(
+    graph,
+    filename,
+    import_id_cb=None,
+    validate_schema=True,
+    vertex_attribute_cb=None,
+    edge_attribute_cb=None,
+    simple=True,
+):
+    """Imports a graph from a GraphML file.
+
+    For a description of the format see http://en.wikipedia.org/wiki/GraphML or the
+    `GraphML Primer <http://graphml.graphdrawing.org/primer/graphml-primer.html>`_. 
+    
+    Below is a small example in GraphML::
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+            http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+            <key id="d0" for="node" attr.name="color" attr.type="string" />
+            <key id="d1" for="edge" attr.name="weight" attr.type="double"/>
+            <graph id="G" edgedefault="undirected">
+                <node id="n0">
+                    <data key="d0">green</data>
+                </node>
+                <node id="n1">
+                    <data key="d0">black</data>
+                </node>     
+                <node id="n2">
+                    <data key="d0">blue</data>
+                </node>
+                <node id="n3">
+                    <data key="d0">red</data>
+                </node>
+                <node id="n4">
+                    <data key="d0">white</data>
+                </node>
+                <node id="n5">
+                    <data key="d0">turquoise</data>
+                </node>
+                <edge id="e0" source="n0" target="n2">
+                    <data key="d1">1.0</data>
+                </edge>
+                <edge id="e1" source="n0" target="n1">
+                    <data key="d1">1.0</data>
+                </edge>
+                <edge id="e2" source="n1" target="n3">
+                    <data key="d1">2.0</data>
+                </edge>
+                <edge id="e3" source="n3" target="n2"/>
+                <edge id="e4" source="n2" target="n4"/>
+                <edge id="e5" source="n3" target="n5"/>
+                <edge id="e6" source="n5" target="n4">
+                    <data key="d1">1.1</data>
+                </edge>
+            </graph>
+        </graphml>
+
+    The importer reads the input into a graph which is provided by the user. In case the graph
+    is weighted and the corresponding edge attribute "weight" is defined, the importer also
+    reads edge weights. Otherwise edge weights are ignored. The provided graph object, where the
+    imported graph will be stored, must be able to support the features of the graph that is read.
+    For example if the GraphML file contains self-loops then the graph provided must also support
+    self-loops. The same for multiple edges. Moreover, the parser  completely ignores the global
+    attribute "edgedefault" which denotes whether an edge is directed or not. Whether edges are
+    directed or not depends on the underlying implementation of the user provided graph object.
+
+    The importer by default validates the input using 1.0 
+    `GraphML Schema <http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd>`_.
+    The user can (not recommended) disable the validation
+    by adjusting the appropriate parameter.
+
+    The graph vertices and edges are build automatically by the graph. The id of the vertices in the
+    input file are reported as a vertex attribute named "ID". The user can also bypass vertex creation
+    by providing a import identifier callback. This callback accepts as a parameter the vertex
+    identifier read from file and should return the new vertex.
+
+    .. note:: The import identifier callback accepts a single parameter which is the identifier read
+              from the input file as a string. It should return a integer with the identifier of the 
+              graph vertex.
+
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+              or edge identifier. The second is the attribute key and the third is the 
+              attribute value.
+
+    .. note:: The parameter simple affect the capabilities of the importer. It trades functionality
+              for parsing speed. 
+
+    :param graph: the graph to read into
+    :param filename: the input file to read from
+    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
+                         None to allow the graph to assign identifiers to new vertices.
+    :param validate_schema: whether to validate the XML schema    
+    :param vertex_attribute_cb: callback function for vertex attributes
+    :param edge_attribute_cb: callback function for edge attributes
+    :param simple: whether to use a simpler parser with more speed but less functionality
+    :raises IOError: in case of an import error    
+    """
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
+
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+
+    args = [
+        import_id_f_ptr,
+        validate_schema,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+    ]
+
+    if simple:
+        return _import("file_graphml_simple", graph, filename, *args)
+    else:
+        return _import("file_graphml", graph, filename, *args)
+
+
+def parse_graphml(
+    graph,
+    input_string,
+    import_id_cb=None,
+    validate_schema=True,
+    vertex_attribute_cb=None,
+    edge_attribute_cb=None,
+    simple=True,
+):
+    """Imports a graph from a GraphML input string.
+
+    For a description of the format see http://en.wikipedia.org/wiki/GraphML or the
+    `GraphML Primer <http://graphml.graphdrawing.org/primer/graphml-primer.html>`_. 
+    
+    Below is a small example in GraphML::
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+            http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+            <key id="d0" for="node" attr.name="color" attr.type="string" />
+            <key id="d1" for="edge" attr.name="weight" attr.type="double"/>
+            <graph id="G" edgedefault="undirected">
+                <node id="n0">
+                    <data key="d0">green</data>
+                </node>
+                <node id="n1">
+                    <data key="d0">black</data>
+                </node>     
+                <node id="n2">
+                    <data key="d0">blue</data>
+                </node>
+                <node id="n3">
+                    <data key="d0">red</data>
+                </node>
+                <node id="n4">
+                    <data key="d0">white</data>
+                </node>
+                <node id="n5">
+                    <data key="d0">turquoise</data>
+                </node>
+                <edge id="e0" source="n0" target="n2">
+                    <data key="d1">1.0</data>
+                </edge>
+                <edge id="e1" source="n0" target="n1">
+                    <data key="d1">1.0</data>
+                </edge>
+                <edge id="e2" source="n1" target="n3">
+                    <data key="d1">2.0</data>
+                </edge>
+                <edge id="e3" source="n3" target="n2"/>
+                <edge id="e4" source="n2" target="n4"/>
+                <edge id="e5" source="n3" target="n5"/>
+                <edge id="e6" source="n5" target="n4">
+                    <data key="d1">1.1</data>
+                </edge>
+            </graph>
+        </graphml>
+
+    The importer reads the input into a graph which is provided by the user. In case the graph is
+    weighted and the corresponding edge attribute "weight" is defined, the importer also reads edge
+    weights. Otherwise edge weights are ignored. The provided graph object, where the imported graph
+    will be stored, must be able to support the features of the graph that is read. For example if
+    the GraphML file contains self-loops then the graph provided must also support self-loops. The
+    same for multiple edges. Moreover, the parser completely ignores the global attribute
+    "edgedefault" which denotes whether an edge is directed or not. Whether edges are directed or
+    not depends on the underlying implementation of the user provided graph object.
+
+    The importer by default validates the input using 1.0 
+    `GraphML Schema <http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd>`_.
+    The user can (not recommended) disable the validation
+    by adjusting the appropriate parameter.
+
+    The graph vertices and edges are build automatically by the graph. The id of the vertices in
+    the input file are reported as a vertex attribute named "ID". The user can also bypass vertex
+    creation by providing a import identifier callback. This callback accepts as a parameter the
+    vertex identifier read from file and should return the new vertex.
+
+    .. note:: The import identifier callback accepts a single parameter which is the identifier read
+              from the input file as a string. It should return a integer with the identifier of the 
+              graph vertex.
+
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+              or edge identifier. The second is the attribute key and the third is the 
+              attribute value.
+
+    .. note:: The parameter simple affect the capabilities of the importer. It trades functionality
+              for parsing speed. 
+
+    :param graph: the graph to read into
+    :param input_string: the input string to read from
+    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
+                         None to allow the graph to assign identifiers to new vertices.
+    :param validate_schema: whether to validate the XML schema    
+    :param vertex_attribute_cb: callback function for vertex attributes
+    :param edge_attribute_cb: callback function for edge attributes
+    :param simple: whether to use a simpler parser with more speed but less functionality
+    :raises IOError: in case of an import error    
+    """
+    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
+
+    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+
+    args = [
+        import_id_f_ptr,
+        validate_schema,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+    ]
+
+    if simple:
+        return _import("string_graphml_simple", graph, input_string, *args)
+    else:
+        return _import("string_graphml", graph, input_string, *args)

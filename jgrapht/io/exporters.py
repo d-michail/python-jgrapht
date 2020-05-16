@@ -680,3 +680,99 @@ def generate_sparse6(graph):
     :raises IOError: In case of an export error
     """
     return _export_to_string("sparse6", graph)
+
+def write_graphml(
+    graph,
+    filename,
+    attrs=list(),
+    per_vertex_attrs_dict=None,
+    per_edge_attrs_dict=None,
+    export_edge_weights=False,
+    export_vertex_labels=False,    
+    export_edge_labels=False
+):
+    """Exports a graph to a GraphML file.
+
+    TODO
+
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+
+    .. note:: Custom attributes need to be registered in the `attrs` parameter which accepts a list
+              of tuple(name, category, type, default_value). Type and default value may None. Category 
+              must be either `graph`, `node` or `edge`.
+
+    :param graph: The graph to export
+    :param filename: Filename to write
+    :param attrs: a list of tuples (name, category, type, default_value)
+    :param per_vertex_attrs_dict: per vertex attribute dicts
+    :param per_edge_attrs_dict: per edge attribute dicts
+    :param export_edge_weights: whether to export edge weights
+    :param export_vertex_labels: whether to export vertex labels    
+    :param export_edge_labels: whether to export edge labels
+    :raises IOError: In case of an export error         
+    """
+    attrs_registry = _JGraphTAttributesRegistry()
+    for name, category, attr_type, default_value in attrs:
+        attrs_registry.put(name, category, attr_type, default_value)
+
+    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
+    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+
+    custom = [
+        attrs_registry.handle,
+        vertex_attribute_store.handle if vertex_attribute_store is not None else None,
+        edge_attribute_store.handle if edge_attribute_store is not None else None,
+        export_edge_weights,
+        export_vertex_labels,
+        export_edge_labels,
+    ]
+
+    return _export_to_file("graphml", graph, filename, *custom)
+
+
+def generate_graphml(
+    graph,
+    attrs=list(),
+    per_vertex_attrs_dict=None,
+    per_edge_attrs_dict=None,
+    export_edge_weights=False,
+    export_vertex_labels=False,    
+    export_edge_labels=False,
+):
+    """Exports a graph to string using GraphML.
+
+    TODO
+
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+
+    .. note:: Custom attributes need to be registered in the `attrs` parameter which accepts a list
+              of tuple(name, category, type, default_value). Type and default value may None. Category 
+              must be either `node` or `edge`.
+
+    :param graph: The graph to export
+    :param attrs: a list of tuples (name, category, type, default_value)
+    :param per_vertex_attrs_dict: per vertex attribute dicts
+    :param per_edge_attrs_dict: per edge attribute dicts
+    :param export_edge_weights: whether to export edge weights
+    :param export_vertex_labels: whether to export vertex labels    
+    :param export_edge_labels: whether to export edge labels
+    :returns: a string contains the exported graph    
+    :raises IOError: In case of an export error         
+    """
+    attrs_registry = _JGraphTAttributesRegistry()
+    for name, category, type, default_value in attrs:
+        attrs_registry.put(name, category, type, default_value)
+
+    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
+    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+
+    custom = [
+        attrs_registry.handle,
+        vertex_attribute_store.handle if vertex_attribute_store is not None else None,
+        edge_attribute_store.handle if edge_attribute_store is not None else None,
+        export_edge_weights,
+        export_vertex_labels,        
+        export_edge_labels,
+    ]
+
+    return _export_to_string("graphml", graph, *custom)
