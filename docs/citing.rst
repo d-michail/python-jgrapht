@@ -10,15 +10,14 @@ sources in your research. If you’re not sure whether or not to cite something,
 
 Below you can find the bibtex entry::
 
-  @article{michail2019jgrapht,
-    title={JGraphT--A Java library for graph data structures and algorithms},
+  @article{jgrapht,
+    title={{J}{G}raph{T}--{A} {J}ava library for graph data structures and algorithms},
     author={Michail, Dimitrios and Kinable, Joris and Naveh, Barak and Sichi, John V},
-    journal={arXiv preprint arXiv:1904.08355},
-    year={2019}
+    journal={ACM Transactions on Mathematical Software (TOMS)},
+    volume={46},
+    number={2},
+    year={2020},
+    publisher={ACM New York, NY, USA},
+    note={to appear}
   }
-
-
-
-
-
 

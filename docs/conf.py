@@ -80,7 +80,7 @@ rst_prolog = """
 .. |Project| replace:: {project}
 """.format(
     backend_version=backend_version,
-    project=project,
+    project=project
 )
 
 
