@@ -5,6 +5,7 @@ API
 
    :Release: |release|
    :Date: |today|
+   :Backend Release: |BackendVersion|
 
 .. toctree::
    :maxdepth: 2
