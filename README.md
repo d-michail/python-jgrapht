@@ -15,6 +15,34 @@ shared library, created by [GraalVM](https://www.graalvm.org/).
 
 The result is a *native self-contained library* with *no dependency* on the JVM.
 
+## Installing
+
+We automatically build 64-bit wheels for python versions 3.6, 3.7, and 3.8 on Linux,
+Windows and MacOSX. Thus, on a recent machine, installation should be as easy as:
+
+```
+pip install python-jgrapht
+```
+
+If you want to use `virtualenv` or `venv` module, you can write:
+
+```
+python -m venv venv
+source venv/bin/activate
+pip install python-jgrapht
+```
+
+Installation on the user directory is also possible:
+
+```
+pip install --user python-jgrapht
+```
+
+## Documentation 
+
+Automatically generated documentation with a tutorial and examples can be found at 
+[https://python-jgrapht.readthedocs.io/].
+
 ## Building
 
 The jgrapht-capi project is included in the sources as a git submodule in folder `vendor/source/jgrapht-capi`.
@@ -36,6 +64,12 @@ If all the above are installed properly, building should be as simple as
 ```
 python setup.py build
 ```
+
+For Windows you will need Microsoft Visual C++ (MSVC) 2017 15.5.5 or later. Build the
+system using the proper
+[Developer Command Prompt](https://docs.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=vs-2019#developer_command_prompt_shortcuts)
+for your version of [Visual Studio](https://visualstudio.microsoft.com/vs/). This means
+`x64 Native Tools Command Prompt`. Use Visual Studio 2017 or later.
 
 ## Install
 
