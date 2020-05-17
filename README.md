@@ -1,19 +1,19 @@
 
 # python-jgrapht
 
-A python interface to the [JGraphT](https://jgrapht.org/) graph library. 
+Python-JGraphT is a python graph library build on top of the [JGraphT graph library](https://jgrapht.org/).
 
-JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It  contains
-very efficient and generic graph data-structures along with a sizeable collection of sophisticated algorithms.
-The library is written in Java, with stability, performance and interoperability in mind. It includes algorithms
-encountered in diverse application domains such as  path planning, routing, network analysis, combinatorial
-optimization, computational biology, and others.
+The JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It
+contains very efficient and generic graph data-structures along with a sizeable collection of sophisticated
+algorithms. The library is written with stability, performance and interoperability in mind. It includes
+algorithms encountered in diverse application domains such as  path planning, routing, network analysis,
+combinatorial optimization, computational biology, and others.
 
 While the original library is written in Java, this package uses a *native build* provided by
 the [jgrapht-capi](https://github.com/d-michail/jgrapht-capi) project. The native build is in the form of a 
 shared library, created by [GraalVM](https://www.graalvm.org/).
 
-The result is a *native self-contained library* with no dependency on the JVM.
+The result is a *native self-contained library* with *no dependency* on the JVM.
 
 ## Building
 
@@ -69,6 +69,7 @@ operation.
 Execute the tests by giving
 
 ```
+pip install -r requirements/test.txt
 pytest
 ```
 
