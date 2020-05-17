@@ -17,6 +17,7 @@ The JGraphT contains a large collection of advanced algorithms.
    cycles
    coloring
    clustering
+   scoring
    planar
    cuts
    flow

@@ -647,6 +647,10 @@ int jgrapht_scoring_exec_pagerank(void *, void** OUTPUT);
 
 int jgrapht_scoring_exec_custom_pagerank(void *, double, int, double, void** OUTPUT);
 
+int jgrapht_scoring_exec_coreness(void *, int* OUTPUT, void** OUTPUT);
+
+int jgrapht_scoring_exec_clustering_coefficient(void *, double* OUTPUT, double* OUTPUT, void** OUTPUT);
+
 // set
 
 int jgrapht_set_create(void** OUTPUT);

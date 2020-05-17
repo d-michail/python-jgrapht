@@ -152,10 +152,10 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             return backend.jgrapht_graph_contains_vertex(self._handle, v)
 
         def __repr__(self):
-            return "_JGraphTGraph-VertexSet(%r)" % self._handle
+            return '_JGraphTGraph-VertexSet(%r)' % self._handle
 
         def __str__(self):
-            return "{" + ", ".join(str(x) for x in self) + "}"
+            return '{' + ', '.join(str(x) for x in self) + '}'
 
     class _EdgeSet(Set):
         """Wrapper around the edges of a JGraphT graph"""
@@ -174,13 +174,13 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             return backend.jgrapht_graph_contains_edge(self._handle, v)
 
         def __repr__(self):
-            return "_JGraphTGraph-EdgeSet(%r)" % self._handle
+            return '_JGraphTGraph-EdgeSet(%r)' % self._handle
 
         def __str__(self):
-            return "{" + ", ".join(str(x) for x in self) + "}"
+            return '{' + ', '.join(str(x) for x in self) + '}'
 
     def __repr__(self):
-        return "_JGraphTGraph(%r)" % self._handle
+        return '_JGraphTGraph(%r)' % self._handle
 
 
 def create_graph(

@@ -68,3 +68,23 @@ def test_alpha_centrality():
     result = [scores[v] for v in g.vertices()]
     expected = [1.09284015241, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011]
     assert result == expected
+
+
+def test_coreness():
+    g = build_graph()
+    degeneracy, scores = scoring.coreness(g)
+    assert degeneracy == 3
+    result = [scores[v] for v in g.vertices()]
+    expected = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+    assert result == expected
+
+
+def test_clustering_coefficient():
+    g = build_graph()
+    global_cc, avg_cc, local_cc = scoring.clustering_coefficient(g)
+    assert global_cc == 0.42857142857142855
+    assert avg_cc == 0.6250000000000001
+    result = [local_cc[v] for v in g.vertices()]
+    expected = [0.25, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 
+        0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666 ]
+    assert result == expected

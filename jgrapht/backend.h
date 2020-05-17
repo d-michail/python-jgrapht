@@ -518,6 +518,10 @@ int jgrapht_scoring_exec_pagerank(void *, void**);
 
 int jgrapht_scoring_exec_custom_pagerank(void *, double, int, double, void**);
 
+int jgrapht_scoring_exec_coreness(void *, int*, void**);
+
+int jgrapht_scoring_exec_clustering_coefficient(void *, double*, double*, void**);
+
 // set
 
 int jgrapht_set_create(void**);

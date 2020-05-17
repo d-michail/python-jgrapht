@@ -997,6 +997,14 @@ int jgrapht_scoring_exec_custom_pagerank(void *g, double damping_factor, int ite
     return jgrapht_capi_scoring_exec_custom_pagerank(thread, g, damping_factor, iterations, tolerance, res);
 }
 
+int jgrapht_scoring_exec_coreness(void *g, int* degeneracy_res, void** res) { 
+    return jgrapht_capi_scoring_exec_coreness(thread, g, degeneracy_res, res);
+}
+
+int jgrapht_scoring_exec_clustering_coefficient(void *g, double* global_res, double* avg_res, void** local_res) { 
+    return jgrapht_capi_scoring_exec_clustering_coefficient(thread, g, global_res, avg_res, local_res);
+}
+
 // set
 
 int jgrapht_set_create(void** res) { 
