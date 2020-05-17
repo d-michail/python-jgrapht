@@ -43,6 +43,23 @@ pip install --user python-jgrapht
 Automatically generated documentation with a tutorial and examples can be found at 
 <https://python-jgrapht.readthedocs.io/>.
 
+## Citing
+
+Are you using the software in your research? We would appreciate if you cite the following publication:
+
+```
+@article{jgrapht,
+  title={{J}{G}raph{T}--{A} {J}ava library for graph data structures and algorithms},
+  author={Michail, Dimitrios and Kinable, Joris and Naveh, Barak and Sichi, John V},
+  journal={ACM Transactions on Mathematical Software (TOMS)},
+  volume={46},
+  number={2},
+  year={2020},
+  publisher={ACM New York, NY, USA},
+  note={to appear}
+}
+```
+
 ## Building
 
 The jgrapht-capi project is included in the sources as a git submodule in folder `vendor/source/jgrapht-capi`.
