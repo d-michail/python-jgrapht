@@ -41,7 +41,7 @@ pip install --user python-jgrapht
 ## Documentation 
 
 Automatically generated documentation with a tutorial and examples can be found at 
-[https://python-jgrapht.readthedocs.io/].
+<https://python-jgrapht.readthedocs.io/>.
 
 ## Building
 
