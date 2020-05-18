@@ -1,5 +1,5 @@
 
-# python-jgrapht
+# Python-JGraphT
 
 Python-JGraphT is a python graph library build on top of the [JGraphT graph library](https://jgrapht.org/).
 
