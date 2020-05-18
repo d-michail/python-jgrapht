@@ -6,6 +6,7 @@ from ._internals._views import (
     _EdgeReversedGraphView,
     _MaskedSubgraphView,
     _WeightedView,
+    _ListenableView,
 )
 
 
@@ -97,3 +98,13 @@ def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through
     :returns: a weighted view
     """
     return _WeightedView(graph, edge_weight_cb, cache_weights, write_weights_through)
+
+
+def as_listenable(graph):
+    """Create a listenable view of a graph. This is a graph view which supports listeners
+    on structural change events.
+
+    :param graph: the original graph
+    :returns: a listenable graph which is an instance of type :py:class:`~jgrapht.types.ListenableGraph`.
+    """
+    return _ListenableView(graph)

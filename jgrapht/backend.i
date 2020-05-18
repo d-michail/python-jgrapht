@@ -165,6 +165,24 @@ int raise_exception_on_error(int result) {
 // Put some init code in python
 %pythonbegin %{
 # The Python-JGraphT library
+
+from enum import Enum
+
+%}
+
+// create custom enums
+%pythoncode %{
+
+class GraphEvent(Enum):
+    BEFORE_VERTEX_ADDED = _backend.GRAPH_EVENT_BEFORE_VERTEX_ADDED
+    BEFORE_VERTEX_REMOVED = _backend.GRAPH_EVENT_BEFORE_VERTEX_REMOVED
+    VERTEX_ADDED = _backend.GRAPH_EVENT_VERTEX_ADDED
+    VERTEX_REMOVED = _backend.GRAPH_EVENT_VERTEX_REMOVED
+    BEFORE_EDGE_ADDED = _backend.GRAPH_EVENT_BEFORE_EDGE_ADDED
+    BEFORE_EDGE_REMOVED = _backend.GRAPH_EVENT_BEFORE_EDGE_REMOVED
+    EDGE_ADDED = _backend.GRAPH_EVENT_EDGE_ADDED
+    EDGE_REMOVED = _backend.GRAPH_EVENT_EDGE_REMOVED
+    EDGE_WEIGHT_UPDATED = _backend.GRAPH_EVENT_EDGE_WEIGHT_UPDATED
 %}
 
 // attribute store 

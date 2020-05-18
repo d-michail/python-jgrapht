@@ -19,3 +19,13 @@ The :class:`.GraphType` is used to represent during runtime the properties of th
 .. autoclass:: jgrapht.types.GraphType
    :inherited-members:
 
+In case the user wants to listen on structural change events, a special type of listenable graph is 
+also provided.
+
+.. autoclass:: jgrapht.types.ListenableGraph
+   :no-inherited-members:
+   :members:
+
+   A listenable graph has all the graph members and the following additional methods which 
+   allow users to register and unregister listeners.
+

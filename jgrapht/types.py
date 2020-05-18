@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-
 from collections.abc import Mapping
-
+from .backend import GraphEvent
 
 class GraphType:
     """Graph Type"""
@@ -680,3 +679,25 @@ class GraphMapping:
           from the other graph
         """
         pass
+
+class ListenableGraph(Graph):
+    """A listenable graph."""
+
+    @abstractmethod
+    def add_listener(self, listener_cb):
+        """Add a listener
+
+        :returns: an identifer for the listener
+        :rtype: int
+        """
+        pass
+
+    @abstractmethod
+    def remove_listener(self, listener_id):
+        """Remove a listener
+
+        :param listener_id: the listener id returned when the listener was added
+        """
+        pass
+
+

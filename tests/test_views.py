@@ -1,6 +1,7 @@
 import pytest
 
 from jgrapht import create_graph
+from jgrapht.types import GraphEvent
 from jgrapht.views import (
     as_undirected,
     as_edge_reversed,
@@ -8,6 +9,7 @@ from jgrapht.views import (
     as_unweighted,
     as_masked_subgraph,
     as_weighted,
+    as_listenable,
 )
 
 def test_as_unweighted():
@@ -304,3 +306,53 @@ def test_as_weighted_with_no_caching_and_write_through():
         wg.set_edge_weight(0, 5.0)
 
     assert wg.get_edge_weight(0) == 100.5    
+
+
+listener1_expected = """element 0, event GraphEvent.VERTEX_ADDED
+element 1, event GraphEvent.VERTEX_ADDED
+element 2, event GraphEvent.VERTEX_ADDED
+element 0, event GraphEvent.EDGE_ADDED
+element 1, event GraphEvent.EDGE_ADDED
+element 1, event GraphEvent.EDGE_REMOVED
+element 2, event GraphEvent.VERTEX_REMOVED
+element 0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
+
+listener2_expected = """element 1, event GraphEvent.EDGE_REMOVED
+element 2, event GraphEvent.VERTEX_REMOVED
+element 0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
+
+
+def test_listenable(): 
+
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+
+    lg = as_listenable(g)
+
+
+    listener1_results = []
+    def listener1(vertex, event):
+        listener1_results.append('element {}, event {}'.format(vertex, event))
+
+    listener2_results = []
+    def listener2(vertex, event):
+        listener2_results.append('element {}, event {}'.format(vertex, event))
+
+    listener_id_1 = lg.add_listener(listener1)
+
+    lg.add_vertex(0)
+    lg.add_vertex(1)
+    lg.add_vertex(2)
+    lg.create_edge(0, 1)
+    lg.create_edge(1, 2)
+
+    listener_id_2 = lg.add_listener(listener2)
+
+    lg.remove_edge(1)
+    lg.remove_vertex(2)
+    lg.set_edge_weight(0, 5.0)
+
+    lg.remove_listener(listener_id_1)
+    lg.remove_listener(listener_id_2)
+
+    assert listener1_results == listener1_expected.splitlines()
+    assert listener2_results == listener2_expected.splitlines()
