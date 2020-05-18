@@ -3,6 +3,7 @@ import ctypes
 
 from .. import backend
 from .._internals._paths import _JGraphTGraphPath
+from .._internals._callbacks import _create_wrapped_callback
 
 
 def _import(name, graph, filename_or_string, *args):
@@ -15,20 +16,6 @@ def _import(name, graph, filename_or_string, *args):
 
     filename_or_string_as_bytearray = bytearray(filename_or_string, encoding="utf-8")
     alg_method(graph.handle, filename_or_string_as_bytearray, *args)
-
-
-def _create_wrapped_callback(callback, cfunctype):
-    if callback is not None:
-        # wrap the python callback with a ctypes function pointer
-        f = cfunctype(callback)
-
-        # get the function pointer of the ctypes wrapper by casting it to void* and taking its value
-        # we perform the reverse using typemaps on the SWIG layer
-        f_ptr = ctypes.cast(f, ctypes.c_void_p).value
-
-        # make sure to also return the callback to avoid garbage collection
-        return (f_ptr, f)
-    return (0, None)
 
 
 def _create_wrapped_attribute_callback(callback):

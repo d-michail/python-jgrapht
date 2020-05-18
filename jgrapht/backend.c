@@ -521,6 +521,14 @@ int jgrapht_graph_as_edgereversed(void *g, void** res) {
     return jgrapht_capi_graph_as_edgereversed(thread, g, res);
 }
 
+int jgrapht_graph_as_weighted(void *g, void *weight_function, int cache_weights, int write_weights_through, void** res) { 
+    return jgrapht_capi_graph_as_weighted(thread, g, weight_function, cache_weights, write_weights_through, res);
+}
+
+int jgrapht_graph_as_masked_subgraph(void *g, void *vertex_mask_function, void *edge_mask_function, void** res) {
+    return jgrapht_capi_graph_as_masked_subgraph(thread, g, vertex_mask_function, edge_mask_function, res);
+}
+
 // graph metrics
 
 int jgrapht_graph_metrics_diameter(void *g, double* diameter) { 
@@ -811,6 +819,24 @@ int jgrapht_list_double_contains(void *list , double e, int* res) {
 
 int jgrapht_list_clear(void *list) { 
     return jgrapht_capi_list_clear(thread, list);
+}
+
+// listenable
+
+int jgrapht_listenable_as_listenable(void *g, void** res) { 
+    return jgrapht_capi_listenable_as_listenable(thread, g, res);
+}
+
+int jgrapht_listenable_create_graph_listener(void *event_fptr, void** res) { 
+    return jgrapht_capi_listenable_create_graph_listener(thread, event_fptr, res);
+}
+
+int jgrapht_listenable_add_graph_listener(void *g, void *listener) { 
+    return jgrapht_capi_listenable_add_graph_listener(thread, g, listener);
+}
+
+int jgrapht_listenable_remove_graph_listener(void *g, void *listener) { 
+    return jgrapht_capi_listenable_remove_graph_listener(thread, g, listener);
 }
 
 // map

@@ -1,8 +1,13 @@
 import pytest
 
 from jgrapht import create_graph
-from jgrapht.views import as_undirected, as_edgereversed, as_unmodifiable, as_unweighted
-
+from jgrapht.views import (
+    as_undirected,
+    as_edgereversed,
+    as_unmodifiable,
+    as_unweighted,
+    as_masked_subgraph,
+)
 
 def test_as_unweighted():
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
@@ -121,3 +126,44 @@ def test_as_edgereversed():
     assert g4.edge_source(e45) == v5
     assert g4.edge_target(e45) == v4
 
+
+def test_as_masked_subgraph():
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_vertex(2)
+    g.add_vertex(3)
+    g.add_vertex(4)
+    
+    g.create_edge(0, 1)
+    g.create_edge(0, 2)
+    g.create_edge(0, 3)
+    g.create_edge(2, 3)
+    g.create_edge(1, 3)
+    g.create_edge(2, 4)
+
+    def vertex_mask(v): 
+        if v == 3: 
+            return True
+        return False
+
+    def edge_mask(e): 
+        if e == 5: 
+            return True
+        return False
+    
+    masked_graph = as_masked_subgraph(g, vertex_mask_cb=vertex_mask, edge_mask_cb=edge_mask)
+
+    assert masked_graph.vertices() == {0,1,2,4}
+    assert masked_graph.edges() == {0,1}
+    assert not masked_graph.type.modifiable
+
+    # test that we see changed in the original graph
+    g.add_vertex(5)
+
+    assert masked_graph.vertices() == {0, 1, 2, 4, 5}
+
+    # test that we are unmodifiable
+    with pytest.raises(ValueError):
+        masked_graph.add_vertex(6)

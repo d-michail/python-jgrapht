@@ -70,6 +70,19 @@ enum csv_format_t {
     CSV_FORMAT_MATRIX,
 };
 
+typedef enum {
+    GRAPH_EVENT_BEFORE_VERTEX_ADDED = 11,
+    GRAPH_EVENT_BEFORE_VERTEX_REMOVED,
+    GRAPH_EVENT_VERTEX_ADDED,
+    GRAPH_EVENT_VERTEX_REMOVED,
+    GRAPH_EVENT_BEFORE_EDGE_ADDED = 21,
+    GRAPH_EVENT_BEFORE_EDGE_REMOVED,
+    GRAPH_EVENT_EDGE_ADDED,
+    GRAPH_EVENT_EDGE_REMOVED,
+    GRAPH_EVENT_EDGE_WEIGHT_UPDATED,
+} graph_event_t;
+
+
 // library init
 
 void jgrapht_isolate_create();
@@ -395,6 +408,10 @@ int jgrapht_graph_as_unweighted(void *, void** OUTPUT);
 
 int jgrapht_graph_as_edgereversed(void *, void** OUTPUT);
 
+int jgrapht_graph_as_weighted(void *, void *LONG_TO_FUNCTION_POINTER, int, int, void** OUTPUT);
+
+int jgrapht_graph_as_masked_subgraph(void *, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
 // graph metrics
 
 int jgrapht_graph_metrics_diameter(void *, double* OUTPUT);
@@ -548,6 +565,16 @@ int jgrapht_list_int_contains(void *, int, int* OUTPUT);
 int jgrapht_list_double_contains(void *, double, int* OUTPUT);
 
 int jgrapht_list_clear(void *);
+
+// listenable
+
+int jgrapht_listenable_as_listenable(void *, void** OUTPUT);
+
+int jgrapht_listenable_create_graph_listener(void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_listenable_add_graph_listener(void *, void *);
+
+int jgrapht_listenable_remove_graph_listener(void *, void *);
 
 // map
 

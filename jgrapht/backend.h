@@ -266,6 +266,10 @@ int jgrapht_graph_as_unweighted(void *, void**);
 
 int jgrapht_graph_as_edgereversed(void *, void**);
 
+int jgrapht_graph_as_weighted(void *, void *, int, int, void**);
+
+int jgrapht_graph_as_masked_subgraph(void *, void *, void *, void**);
+
 // graph metrics
 
 int jgrapht_graph_metrics_diameter(void *, double*);
@@ -419,6 +423,16 @@ int jgrapht_list_int_contains(void *, int, int*);
 int jgrapht_list_double_contains(void *, double, int*);
 
 int jgrapht_list_clear(void *);
+
+// listenable
+
+int jgrapht_listenable_as_listenable(void *, void**);
+
+int jgrapht_listenable_create_graph_listener(void *, void**);
+
+int jgrapht_listenable_add_graph_listener(void *, void *);
+
+int jgrapht_listenable_remove_graph_listener(void *, void *);
 
 // map
 
