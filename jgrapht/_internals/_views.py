@@ -13,13 +13,7 @@ class _UnweightedGraphView(_JGraphTGraph):
 
         super().__init__(res)
 
-        self._type = GraphType(
-            directed=graph.type.directed,
-            allowing_self_loops=graph.type.allowing_self_loops,
-            allowing_multiple_edges=graph.type.allowing_multiple_edges,
-            weighted=False,
-            modifiable=graph.type.modifiable,
-        )
+        self._type = graph.type.as_unweighted()
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
@@ -41,13 +35,7 @@ class _UndirectedGraphView(_JGraphTGraph):
 
         super().__init__(res)
 
-        self._type = GraphType(
-            directed=False,
-            allowing_self_loops=graph.type.allowing_self_loops,
-            allowing_multiple_edges=graph.type.allowing_multiple_edges,
-            weighted=graph.type.weighted,
-            modifiable=graph.type.modifiable,
-        )
+        self._type = graph.type.as_undirected()
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
@@ -69,13 +57,7 @@ class _UnmodifiableGraphView(_JGraphTGraph):
 
         super().__init__(res)
 
-        self._type = GraphType(
-            directed=graph.type.directed,
-            allowing_self_loops=graph.type.allowing_self_loops,
-            allowing_multiple_edges=graph.type.allowing_multiple_edges,
-            weighted=graph.type.weighted,
-            modifiable=False,
-        )
+        self._type = graph.type.as_unmodifiable()
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
@@ -96,6 +78,7 @@ class _EdgeReversedGraphView(_JGraphTGraph):
         res = backend.jgrapht_graph_as_edgereversed(graph.handle)
 
         super().__init__(res)
+        
         self._type = copy.copy(graph.type)
 
         # Keep a reference to avoid gargage collection. This is important since the
@@ -128,13 +111,7 @@ class _MaskedSubgraphView(_JGraphTGraph):
 
         super().__init__(res)
 
-        self._type = GraphType(
-            directed=graph.type.directed,
-            allowing_self_loops=graph.type.allowing_self_loops,
-            allowing_multiple_edges=graph.type.allowing_multiple_edges,
-            weighted=graph.type.weighted,
-            modifiable=False,
-        )
+        self._type = graph.type.as_unmodifiable()
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
@@ -148,3 +125,39 @@ class _MaskedSubgraphView(_JGraphTGraph):
         :returns: The graph type.
         """
         return self._type
+
+
+class _WeightedView(_JGraphTGraph):
+    def __init__(self, graph, edge_weight_cb, cache_weights, write_weights_through):
+
+        # Create callbacks and keep a reference
+        self._edge_weight_cb_fptr, self._edge_weight_cb = _create_wrapped_callback(
+            edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_int)
+        )
+        res = backend.jgrapht_graph_as_weighted(
+            graph.handle, self._edge_weight_cb_fptr, cache_weights, write_weights_through
+        )
+
+        super().__init__(res)
+
+        self._type = graph.type.as_weighted()
+        self._cache_weights = cache_weights
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
+
+    def set_edge_weight(self, e, weight):
+        if not self._cache_weights:
+            raise ValueError('Cannot set edge weight with caching disabled')
+        super().set_edge_weight(e, weight)
+
+    @property
+    def type(self):
+        """Query the graph type.
+
+        :returns: The graph type.
+        """
+        return self._type
+    

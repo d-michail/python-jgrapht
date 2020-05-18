@@ -49,7 +49,7 @@ class GraphType:
         """Tells if the graph allows multiple edges. Multiple edges are edges 
         which have exactly the same endpoints.
 
-        :returns True if the graph allows multiple-edges, False otherwise.
+        :returns: True if the graph allows multiple-edges, False otherwise.
         """
         return self._allowing_multiple_edges
 
@@ -57,7 +57,7 @@ class GraphType:
     def weighted(self):
         """Tells if the graph is weighted or not.
         
-        :returns True if the graph is weighted, False otherwise.
+        :returns: True if the graph is weighted, False otherwise.
         """
         return self._weighted
 
@@ -65,9 +65,69 @@ class GraphType:
     def modifiable(self):
         """Tells if the graph is modifiable or not.
         
-        :returns True if the graph is modifiable, False otherwise.
+        :returns: True if the graph is modifiable, False otherwise.
         """
         return self._modifiable
+
+    def as_directed(self):
+        """Return a directed version of this graph type.
+        :returns: a directed version of this graph type
+        """
+        return GraphType(
+            directed=True,
+            allowing_self_loops=self._allowing_self_loops,
+            allowing_multiple_edges=self._allowing_multiple_edges,
+            weighted=self._weighted,
+            modifiable=self._modifiable,
+        )
+
+    def as_undirected(self):
+        """Return an undirected version of this graph type.
+        :returns: an undirected version of this graph type
+        """
+        return GraphType(
+            directed=False,
+            allowing_self_loops=self._allowing_self_loops,
+            allowing_multiple_edges=self._allowing_multiple_edges,
+            weighted=self._weighted,
+            modifiable=self._modifiable,
+        )
+
+    def as_weighted(self):
+        """Return a weighted version of this graph type.
+        :returns: a weighted version of this graph type
+        """
+        return GraphType(
+            directed=self._directed,
+            allowing_self_loops=self._allowing_self_loops,
+            allowing_multiple_edges=self._allowing_multiple_edges,
+            weighted=True,
+            modifiable=self._modifiable,
+        )
+
+    def as_unweighted(self):
+        """Return an unweighted version of this graph type.
+        :returns: an unweighted version of this graph type
+        """
+        return GraphType(
+            directed=self._directed,
+            allowing_self_loops=self._allowing_self_loops,
+            allowing_multiple_edges=self._allowing_multiple_edges,
+            weighted=False,
+            modifiable=self._modifiable,
+        )    
+
+    def as_unmodifiable(self):
+        """Return an unmodifiable version of this graph type.
+        :returns: an unmodifiable version of this graph type
+        """
+        return GraphType(
+            directed=self._directed,
+            allowing_self_loops=self._allowing_self_loops,
+            allowing_multiple_edges=self._allowing_multiple_edges,
+            weighted=self._weighted,
+            modifiable=False,
+        )    
 
     def __repr__(self):
         return {

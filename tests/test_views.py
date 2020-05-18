@@ -3,10 +3,11 @@ import pytest
 from jgrapht import create_graph
 from jgrapht.views import (
     as_undirected,
-    as_edgereversed,
+    as_edge_reversed,
     as_unmodifiable,
     as_unweighted,
     as_masked_subgraph,
+    as_weighted,
 )
 
 def test_as_unweighted():
@@ -98,7 +99,7 @@ def test_as_unmodifiable():
         g3.create_edge(v2, v2)
 
 
-def test_as_edgereversed():
+def test_as_edge_reversed():
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
     g.add_vertex(0)
@@ -120,7 +121,7 @@ def test_as_edgereversed():
     g.create_edge(v5, v1)
 
     # edge reversed
-    g4 = as_edgereversed(g)
+    g4 = as_edge_reversed(g)
     assert g.edge_source(e45) == v4
     assert g.edge_target(e45) == v5
     assert g4.edge_source(e45) == v5
@@ -167,3 +168,139 @@ def test_as_masked_subgraph():
     # test that we are unmodifiable
     with pytest.raises(ValueError):
         masked_graph.add_vertex(6)
+
+
+def test_as_weighted():
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.create_edge(0, 1)
+
+    with pytest.raises(ValueError):
+        g.set_edge_weight(0, 5.0)
+
+    assert g.get_edge_weight(0) == 1.0
+
+    def edge_weight(e): 
+        return 100.5
+
+    wg = as_weighted(g, edge_weight, cache_weights=False, write_weights_through=False)
+
+    assert wg.get_edge_weight(0) == 100.5
+
+    with pytest.raises(ValueError):
+        wg.set_edge_weight(0, 5.0)
+
+
+def test_as_weighted_with_None_function():
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.create_edge(0, 1)
+
+    with pytest.raises(ValueError):
+        g.set_edge_weight(0, 5.0)
+
+    assert g.get_edge_weight(0) == 1.0
+
+    def edge_weight(e): 
+        return 100.5
+
+    wg = as_weighted(g, edge_weight_cb=None, cache_weights=False, write_weights_through=False)
+
+    assert wg.get_edge_weight(0) == 1.0
+
+    with pytest.raises(ValueError):
+        wg.set_edge_weight(0, 5.0)
+
+
+def test_as_weighted_with_caching():
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.create_edge(0, 1)
+
+    with pytest.raises(ValueError):
+        g.set_edge_weight(0, 5.0)
+
+    assert g.get_edge_weight(0) == 1.0
+
+    def edge_weight(e): 
+        return 100.5
+
+    wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=False)
+
+    assert wg.get_edge_weight(0) == 100.5
+
+    wg.set_edge_weight(0, 5.0)
+
+    assert wg.get_edge_weight(0) == 5.0
+
+
+def test_as_weighted_with_caching_and_write_throught_with_unweighted():
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.create_edge(0, 1)
+
+    with pytest.raises(ValueError):
+        g.set_edge_weight(0, 5.0)
+
+    assert g.get_edge_weight(0) == 1.0
+
+    def edge_weight(e): 
+        return 100.5
+
+    with pytest.raises(ValueError):
+        wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=True)
+
+
+def test_as_weighted_with_caching_and_write_throught():
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.create_edge(0, 1)
+
+    g.set_edge_weight(0, 200.0)
+    assert g.get_edge_weight(0) == 200.0
+
+    def edge_weight(e): 
+        return 100.5
+
+    wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=True)
+
+    assert wg.get_edge_weight(0) == 100.5
+
+    wg.set_edge_weight(0, 5.0)
+
+    assert wg.get_edge_weight(0) == 5.0
+
+    assert g.get_edge_weight(0) == 5.0
+
+
+def test_as_weighted_with_no_caching_and_write_through():
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.create_edge(0, 1)
+
+    g.set_edge_weight(0, 5.0)
+    assert g.get_edge_weight(0) == 5.0
+
+    def edge_weight(e): 
+        return 100.5
+
+    wg = as_weighted(g, edge_weight, cache_weights=False, write_weights_through=True)
+
+    assert wg.get_edge_weight(0) == 100.5
+
+    with pytest.raises(ValueError):
+        wg.set_edge_weight(0, 5.0)
+
+    assert wg.get_edge_weight(0) == 100.5    
