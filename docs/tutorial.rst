@@ -213,7 +213,7 @@ following classic pattern::
 
   v = 0
   for e in g.outedges_of(v):
-      u = g.opposite(v, e)
+      u = g.opposite(e, v)
       print ('Vertex {} is opposite {} in edge {}.format(u, v, e))
 
 Similar behavior can be seen when using methods:
@@ -242,7 +242,7 @@ Let us implement a breadth-first search using |Project| in order to get familiar
           yield v
 
           for e in graph.outedges_of(v):
-              u = graph.opposite(v, e)
+              u = graph.opposite(e, v)
               if u not in visited:
                   visited.add(u)
                   queue.append(u)

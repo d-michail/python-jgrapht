@@ -215,6 +215,8 @@ int jgrapht_clique_exec_bron_kerbosch_pivot(void *, long long int, void** OUTPUT
 
 int jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(void *, long long int, void** OUTPUT);
 
+int jgrapht_clique_exec_chordal_max_clique(void *, void** OUTPUT);
+
 // clustering
 
 int jgrapht_clustering_exec_k_spanning_tree(void *, int, void** OUTPUT);
@@ -242,6 +244,8 @@ int jgrapht_coloring_exec_greedy_random_with_seed(void *, long long int, int* OU
 int jgrapht_coloring_exec_greedy_dsatur(void *, int* OUTPUT, void** OUTPUT);
 
 int jgrapht_coloring_exec_color_refinement(void *, int* OUTPUT, void** OUTPUT);
+
+int jgrapht_coloring_exec_chordal_minimum_coloring(void *, int* OUTPUT, void** OUTPUT);
 
 // connectivity
 
@@ -276,7 +280,6 @@ int jgrapht_cycles_fundamental_basis_exec_queue_bfs(void *, double* OUTPUT, void
 int jgrapht_cycles_fundamental_basis_exec_stack_bfs(void *, double* OUTPUT, void** OUTPUT);
 
 int jgrapht_cycles_fundamental_basis_exec_paton(void *, double* OUTPUT, void** OUTPUT);
-
 
 // exporter
 
@@ -353,6 +356,26 @@ int jgrapht_generate_scalefree(void *, int, long long int);
 int jgrapht_generate_watts_strogatz(void *, int, int, double, int, long long int);
 
 int jgrapht_generate_kleinberg_smallworld(void *, int, int, int, int, long long int);
+
+int jgrapht_generate_complement(void *, void *, int);
+
+int jgrapht_generate_generalized_petersen(void *, int, int);
+
+int jgrapht_generate_grid(void *, int, int);
+
+int jgrapht_generate_hypercube(void *, int);
+
+int jgrapht_generate_linear(void *, int);
+
+int jgrapht_generate_random_regular(void *, int, int, long long int);
+
+int jgrapht_generate_star(void *, int);
+
+int jgrapht_generate_wheel(void *, int, int);
+
+int jgrapht_generate_windmill(void *, int, int, int);
+
+int jgrapht_generate_linearized_chord_diagram(void *, int, int, long long int);
 
 // graph
 
@@ -442,10 +465,6 @@ int jgrapht_graph_metrics_triangles(void *, long long int* OUTPUT);
 
 int jgrapht_graph_metrics_measure_graph(void *, double* OUTPUT, double* OUTPUT, void** OUTPUT, void** OUTPUT, void** OUTPUT, void** OUTPUT);
 
-// graph path 
-
-int jgrapht_graphpath_get_fields(void *, double* OUTPUT, int* OUTPUT, int* OUTPUT, void** OUTPUT);
-
 // graph test
 
 int jgrapht_graph_test_is_empty(void *, int* OUTPUT);
@@ -499,6 +518,12 @@ int jgrapht_graph_test_is_k5_subdivision(void *, int* OUTPUT);
 int jgrapht_handles_destroy(void *);
 
 int jgrapht_handles_get_ccharpointer(void *, char** OUTPUT);
+
+int jgrapht_handles_get_edge_pair(void *, int* OUTPUT, int* OUTPUT);
+
+int jgrapht_handles_get_edge_triple(void *, int* OUTPUT, int* OUTPUT, double* OUTPUT);
+
+int jgrapht_handles_get_graphpath(void *, double* OUTPUT, int* OUTPUT, int* OUTPUT, void** OUTPUT);
 
 // importers
 

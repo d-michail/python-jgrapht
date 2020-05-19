@@ -89,6 +89,10 @@ int jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(void *g, long lo
     return jgrapht_capi_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(thread, g, timeout, res);
 }
 
+int jgrapht_clique_exec_chordal_max_clique(void *g, void** res) { 
+    return jgrapht_capi_clique_exec_chordal_max_clique(thread, g, res);
+}
+
 // clustering
 
 int jgrapht_clustering_exec_k_spanning_tree(void *g, int k, void**res) { 
@@ -139,6 +143,10 @@ int jgrapht_coloring_exec_greedy_dsatur(void *g, int* colors_res, void** res) {
 
 int jgrapht_coloring_exec_color_refinement(void *g, int* colors_res, void** res) {
     return jgrapht_capi_coloring_exec_color_refinement(thread, g, colors_res, res);
+}
+
+int jgrapht_coloring_exec_chordal_minimum_coloring(void *g, int* colors_res, void** res) { 
+    return jgrapht_capi_coloring_exec_chordal_minimum_coloring(thread, g, colors_res, res);
 }
 
 // connectivity
@@ -379,6 +387,46 @@ int jgrapht_generate_kleinberg_smallworld(void *g, int n, int p, int q, int r, l
     return jgrapht_capi_generate_kleinberg_smallworld(thread, g, n, p, q, r, seed);
 }
 
+int jgrapht_generate_complement(void *g, void *g_source, int generate_self_loops) { 
+    return jgrapht_capi_generate_complement(thread, g, g_source, generate_self_loops);
+}
+
+int jgrapht_generate_generalized_petersen(void *g, int n, int k) { 
+    return jgrapht_capi_generate_generalized_petersen(thread, g, n, k);
+}
+
+int jgrapht_generate_grid(void *g, int rows, int cols) { 
+    return jgrapht_capi_generate_grid(thread, g, rows, cols);
+}
+
+int jgrapht_generate_hypercube(void *g, int dims) { 
+    return jgrapht_capi_generate_hypercube(thread, g, dims);
+}
+
+int jgrapht_generate_linear(void *g, int n) { 
+    return jgrapht_capi_generate_linear(thread, g, n);
+}
+
+int jgrapht_generate_random_regular(void *g, int n, int d, long long int seed) { 
+    return jgrapht_capi_generate_random_regular(thread, g, n, d, seed);
+}
+
+int jgrapht_generate_star(void *g, int order) { 
+    return jgrapht_capi_generate_star(thread, g, order);
+}
+
+int jgrapht_generate_wheel(void *g, int size, int inward_spokes) { 
+    return jgrapht_capi_generate_wheel(thread, g, size, inward_spokes);
+}
+
+int jgrapht_generate_windmill(void *g, int m, int n, int dutch) { 
+    return jgrapht_capi_generate_windmill(thread, g, m, n, dutch);
+}
+
+int jgrapht_generate_linearized_chord_diagram(void *g, int n, int m, long long int seed) { 
+    return jgrapht_capi_generate_linearized_chord_diagram(thread, g, n, m, seed);
+}
+
 // graph
 
 int jgrapht_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, void** res) { 
@@ -551,12 +599,6 @@ int jgrapht_graph_metrics_measure_graph(void *g, double* diameter_res, double* r
     return jgrapht_capi_graph_metrics_measure_graph(thread, g, diameter_res, radius_res, center_res, periphery_res, pseudo_periphery_res, vertex_eccentricity_map_res);
 }
 
-// graph path 
-
-int jgrapht_graphpath_get_fields(void *graph_path, double* weight, int* start_vertex, int* end_vertex, void** eit) {
-    return jgrapht_capi_graphpath_get_fields(thread, graph_path, weight, start_vertex, end_vertex, eit);
-}
-
 // graph test
 
 int jgrapht_graph_test_is_empty(void *g, int* res) { 
@@ -659,6 +701,18 @@ int jgrapht_handles_destroy(void *handle) {
 
 int jgrapht_handles_get_ccharpointer(void *handle, char** res) { 
     return jgrapht_capi_handles_get_ccharpointer(thread, handle, res);
+}
+
+int jgrapht_handles_get_edge_pair(void *handle, int* s, int* t) { 
+    return jgrapht_capi_handles_get_edge_pair(thread, handle, s, t);
+}
+
+int jgrapht_handles_get_edge_triple(void *handle, int* s, int* t, double* w) { 
+    return jgrapht_capi_handles_get_edge_triple(thread, handle, s, t, w);
+}
+
+int jgrapht_handles_get_graphpath(void *graph_path, double* weight, int* start_vertex, int* end_vertex, void** eit) {
+    return jgrapht_capi_handles_get_graphpath(thread, graph_path, weight, start_vertex, end_vertex, eit);
 }
 
 // importers

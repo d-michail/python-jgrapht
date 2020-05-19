@@ -26,7 +26,7 @@ def eulerian_cycle(graph):
     :returns: An Eulerian cycle as a :py:class:`.GraphPath` or None if the graph is not Eulerian
     """
     is_eulerian, gp = backend.jgrapht_cycles_eulerian_exec_hierholzer(graph.handle)
-    return _JGraphTGraphPath(gp) if is_eulerian else None
+    return _JGraphTGraphPath(gp, graph) if is_eulerian else None
 
 
 def chinese_postman(graph):
@@ -49,7 +49,7 @@ def chinese_postman(graph):
     :returns: a closed-walk of minimum weight which visits every edge at least once
     """
     gp = backend.jgrapht_cycles_chinese_postman_exec_edmonds_johnson(graph.handle)
-    return _JGraphTGraphPath(gp)
+    return _JGraphTGraphPath(gp, graph)
 
 
 def fundamental_cycle_basis_paton(graph):
@@ -72,7 +72,7 @@ def fundamental_cycle_basis_paton(graph):
     weight, cycles_it = backend.jgrapht_cycles_fundamental_basis_exec_paton(
         graph.handle
     )
-    return weight, _JGraphTGraphPathIterator(cycles_it)
+    return weight, _JGraphTGraphPathIterator(cycles_it, graph)
 
 
 def fundamental_cycle_basis_bfs_with_stack(graph):
@@ -98,7 +98,7 @@ def fundamental_cycle_basis_bfs_with_stack(graph):
     weight, cycles_it = backend.jgrapht_cycles_fundamental_basis_exec_stack_bfs(
         graph.handle
     )
-    return weight, _JGraphTGraphPathIterator(cycles_it)
+    return weight, _JGraphTGraphPathIterator(cycles_it, graph)
 
 
 def fundamental_cycle_basis_bfs_with_queue(graph):
@@ -123,7 +123,7 @@ def fundamental_cycle_basis_bfs_with_queue(graph):
     weight, cycles_it = backend.jgrapht_cycles_fundamental_basis_exec_queue_bfs(
         graph.handle
     )
-    return weight, _JGraphTGraphPathIterator(cycles_it)
+    return weight, _JGraphTGraphPathIterator(cycles_it, graph)
 
 
 def enumerate_simple_cycles_tarjan(graph):

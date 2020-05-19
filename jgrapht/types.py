@@ -177,8 +177,36 @@ class GraphPath(ABC):
         pass
 
     @abstractmethod
+    def graph(self):
+        """The graph that this graph path refers to.
+
+        :rtype: :class:`jgrapht.types.Graph`
+        """
+        pass
+
+    @abstractmethod
     def __iter__(self):
         pass
+
+    @property
+    def vertices(self):
+        """Vertices of the path."""
+        v_list = []
+        
+        if len(self.edges) == 0:
+            start = self.start_vertex
+            if start is not None and start == self.end_vertex:
+                v_list.append(start)
+            return v_list
+        
+        v = self.start_vertex
+        v_list.append(v)
+        for e in self.edges:
+            v = self.graph.opposite(e, v)
+            v_list.append(v)
+
+        return v_list
+
 
 
 class SingleSourcePaths(ABC):
@@ -362,11 +390,11 @@ class Graph(ABC):
         """
         pass
 
-    def opposite(self, u, e):
+    def opposite(self, e, u):
         """Get the opposite vertex of an edge.
 
-        :param u: one endpoint of an edge
         :param e: the edge
+        :param u: one endpoint of an edge
         :returns: the opposite vertex of the edge
         """
         a, b, _ = self.edge_tuple(e)

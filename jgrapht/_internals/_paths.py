@@ -14,8 +14,9 @@ from ._wrappers import (
 class _JGraphTGraphPath(_HandleWrapper, GraphPath):
     """A class representing a graph path."""
 
-    def __init__(self, handle, **kwargs):
+    def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
+        self._graph = graph
         self._weight = None
         self._start_vertex = None
         self._end_vertex = None
@@ -45,6 +46,10 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
         self._cache()
         return self._edges
 
+    @property
+    def graph(self):
+        return self._graph
+
     def __iter__(self):
         self._cache()
         return self._edges.__iter__()
@@ -53,7 +58,7 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
         if self._edges is not None:
             return
 
-        (weight, start_vertex, end_vertex, eit,) = backend.jgrapht_graphpath_get_fields(
+        weight, start_vertex, end_vertex, eit = backend.jgrapht_handles_get_graphpath(
             self._handle
         )
 
@@ -69,11 +74,12 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
 class _JGraphTGraphPathIterator(_JGraphTObjectIterator):
     """A graph path iterator"""
 
-    def __init__(self, handle, **kwargs):
+    def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
+        self._graph = graph
 
     def __next__(self):
-        return _JGraphTGraphPath(super().__next__())
+        return _JGraphTGraphPath(super().__next__(), self._graph)
 
     def __repr__(self):
         return "_JGraphTGraphPathIterator(%r)" % self._handle
@@ -86,8 +92,9 @@ class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
     to all other vertices in the graph.
     """
 
-    def __init__(self, handle, source_vertex, **kwargs):
+    def __init__(self, handle, graph, source_vertex, **kwargs):
         super().__init__(handle=handle, **kwargs)
+        self._graph = graph
         self._source_vertex = source_vertex
 
     @property
@@ -104,7 +111,7 @@ class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
         gp = backend.jgrapht_sp_singlesource_get_path_to_vertex(
             self._handle, target_vertex
         )
-        return _JGraphTGraphPath(gp) if gp is not None else None
+        return _JGraphTGraphPath(gp, self._graph) if gp is not None else None
 
     def __repr__(self):
         return "_JGraphTSingleSourcePaths(%r)" % self._handle
@@ -113,20 +120,21 @@ class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
 class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
     """Wrapper class around the AllPairsPaths"""
 
-    def __init__(self, handle, **kwargs):
+    def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
+        self._graph = graph
 
     def get_path(self, source_vertex, target_vertex):
         gp = backend.jgrapht_sp_allpairs_get_path_between_vertices(
             self._handle, source_vertex, target_vertex
         )
-        return _JGraphTGraphPath(gp) if gp is not None else None
+        return _JGraphTGraphPath(gp, self._graph) if gp is not None else None
 
     def get_paths_from(self, source_vertex):
         singlesource = backend.jgrapht_sp_allpairs_get_singlesource_from_vertex(
             self._handle, source_vertex
         )
-        return _JGraphTSingleSourcePaths(singlesource, source_vertex)
+        return _JGraphTSingleSourcePaths(singlesource, self._graph, source_vertex)
 
     def __repr__(self):
         return "_JGraphTAllPairsPaths(%r)" % self._handle

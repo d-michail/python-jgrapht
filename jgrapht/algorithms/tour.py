@@ -5,7 +5,7 @@ from .._internals._wrappers import _JGraphTIntegerIterator
 from .._internals._paths import _JGraphTGraphPath
 
 
-def _tour_tsp_alg(name, graph_or_graph_path, *args):
+def _tour_tsp_alg(name, graph, *args):
     alg_method_name = "jgrapht_tour_" + name
 
     try:
@@ -13,9 +13,9 @@ def _tour_tsp_alg(name, graph_or_graph_path, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    graph_path = alg_method(graph_or_graph_path.handle, *args)
+    graph_path = alg_method(graph.handle, *args)
 
-    return _JGraphTGraphPath(graph_path)
+    return _JGraphTGraphPath(graph_path, graph)
 
 
 def tsp_random(graph, seed=None):
@@ -175,5 +175,6 @@ def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=
     """
     if seed is None:
         seed = time.time()
-    custom = [min_cost_improvement, seed]
-    return _tour_tsp_alg("tsp_two_opt_heuristic_improve", graph_path, *custom)
+
+    new_graph_path_handle = backend.jgrapht_tour_tsp_two_opt_heuristic_improve(graph_path.handle, min_cost_improvement, seed)
+    return _JGraphTGraphPath(new_graph_path_handle, graph_path.graph)

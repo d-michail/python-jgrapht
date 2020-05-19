@@ -19,7 +19,7 @@ def _sp_singlesource_alg(name, graph, source_vertex):
 
     handle = alg_method(graph.handle, source_vertex)
 
-    return _JGraphTSingleSourcePaths(handle, source_vertex)
+    return _JGraphTSingleSourcePaths(handle, graph, source_vertex)
 
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
@@ -32,7 +32,7 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
 
     handle = alg_method(graph.handle, source_vertex, target_vertex, *args)
 
-    return _JGraphTGraphPath(handle) if handle is not None else None
+    return _JGraphTGraphPath(handle, graph) if handle is not None else None
 
 
 def _sp_allpairs_alg(name, graph):
@@ -45,7 +45,7 @@ def _sp_allpairs_alg(name, graph):
 
     handle = alg_method(graph.handle)
 
-    return _JGraphTAllPairsPaths(handle)
+    return _JGraphTAllPairsPaths(handle, graph)
 
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
@@ -58,7 +58,7 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
 
     handle = alg_method(graph.handle, source_vertex, target_vertex, k, *args)
 
-    return _JGraphTGraphPathIterator(handle)
+    return _JGraphTGraphPathIterator(handle, graph)
 
 
 def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
