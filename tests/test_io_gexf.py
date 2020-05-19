@@ -46,8 +46,8 @@ def test_input_gexf(tmpdir):
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     parse_gexf(g, input1, validate_schema=True)
     
-    assert len(g.vertices()) == 3
-    assert len(g.edges()) == 3
+    assert len(g.vertices) == 3
+    assert len(g.edges) == 3
 
 
 def test_input_gexf_with_renumbering(tmpdir):
@@ -58,8 +58,8 @@ def test_input_gexf_with_renumbering(tmpdir):
 
     parse_gexf(g, input1, import_id_cb=import_id, validate_schema=True)
     
-    assert len(g.vertices()) == 3
-    assert len(g.edges()) == 3
+    assert len(g.vertices) == 3
+    assert len(g.edges) == 3
 
     assert not g.contains_vertex(1)
     assert g.contains_vertex(6)
@@ -92,7 +92,7 @@ def test_export_import(tmpdir):
     g.create_edge(8, 9)
     g.create_edge(9, 1, weight=33.3)
 
-    assert len(g.edges()) == 18
+    assert len(g.edges) == 18
 
     tmpfile = tmpdir.join('gexf.out')
     tmpfilename = str(tmpfile)
@@ -140,10 +140,10 @@ def test_export_import(tmpdir):
 
     read_gexf(g1, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
-    assert g1.vertices() == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    assert g1.vertices == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     assert g1.contains_edge_between(6, 7)
     assert not g1.contains_edge_between(6, 8)
-    assert len(g1.edges()) == 18
+    assert len(g1.edges) == 18
 
     assert g1.get_edge_weight(17) == 33.3
 

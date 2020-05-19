@@ -35,14 +35,14 @@ class _JGraphTGraphMapping(_HandleWrapper, GraphMapping):
     def vertices_correspondence(self, forward=True):
         vertices = self._graph1.vertices if forward else self._graph2.vertices
         result = dict()
-        for v in vertices():
+        for v in vertices:
             result[v] = self.vertex_correspondence(v, forward=forward)
         return result
 
     def edges_correspondence(self, forward=True):
         edges = self._graph1.edges if forward else self._graph2.edges
         result = dict()
-        for e in edges():
+        for e in edges:
             result[e] = self.edge_correspondence(e, forward=forward)
         return result
 

@@ -103,17 +103,21 @@ class _JGraphTGraph(_HandleWrapper, Graph):
     def set_edge_weight(self, e, weight):
         backend.jgrapht_graph_set_edge_weight(self._handle, e, weight)
 
+    @property
     def number_of_vertices(self):
-        return len(self.vertices())
+        return len(self.vertices)
 
+    @property
     def vertices(self):
         if self._vertex_set is None:
             self._vertex_set = self._VertexSet(self._handle)
         return self._vertex_set
 
+    @property
     def number_of_edges(self):
-        return len(self.edges())
+        return len(self.edges)
 
+    @property
     def edges(self):
         if self._edge_set is None:
             self._edge_set = self._EdgeSet(self._handle)
@@ -263,15 +267,11 @@ def as_sparse_graph(graph):
     :returns: a sparse graph 
     :rtype: :class:`jgrapht.types.Graph`
     """
-    if len(graph.vertices()) == 0:
+    if len(graph.vertices) == 0:
         raise ValueError("Graph with no vertices")
 
-    max_vertex = max(graph.vertices())
-
-    if graph.type.weighted:
-        edgelist = [graph.edge_tuple(e) for e in graph.edges()]
-    else:
-        edgelist = [graph.edge_tuple(e) for e in graph.edges()]
+    max_vertex = max(graph.vertices)
+    edgelist = [graph.edge_tuple(e) for e in graph.edges]
 
     return create_sparse_graph(
         max_vertex + 1, edgelist, graph.type.directed, graph.type.weighted

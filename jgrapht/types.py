@@ -513,7 +513,7 @@ class Graph(ABC):
 
     def number_of_vertices(self):
         """Get the number of vertices in the graph."""
-        return len(self.vertices())
+        return len(self.vertices)
 
     @abstractmethod
     def vertices(self):
@@ -522,7 +522,7 @@ class Graph(ABC):
 
     def number_of_edges(self):
         """Get the number of edges in the graph."""
-        return len(self.edges())
+        return len(self.edges)
 
     @abstractmethod
     def edges(self):
@@ -578,10 +578,10 @@ class Graph(ABC):
         pass
 
     def __str__(self):
-        vertex_set = str(self.vertices())
+        vertex_set = str(self.vertices)
         e_l_delim = "(" if self.type.directed else "{"
         e_r_delim = ")" if self.type.directed else "}"
-        edges = [(e, *self.edge_tuple(e)) for e in self.edges()]
+        edges = [(e, *self.edge_tuple(e)) for e in self.edges]
         edges = [
             str(e) + "=" + e_l_delim + str(u) + "," + str(v) + e_r_delim
             for e, u, v, w in edges

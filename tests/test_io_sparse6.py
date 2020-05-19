@@ -40,8 +40,8 @@ def test_output_sparse6(tmpdir):
     g1 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     read_graph6sparse6(g1, tmpfilename, vertex_attribute_cb=va_cb)
 
-    assert len(g1.vertices()) == 4
-    assert len(g1.edges()) == 5
+    assert len(g1.vertices) == 4
+    assert len(g1.edges) == 5
 
 
 def test_output_graph6(tmpdir):
@@ -62,8 +62,8 @@ def test_output_graph6(tmpdir):
     g1 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     read_graph6sparse6(g1, tmpfilename, vertex_attribute_cb=va_cb)
 
-    assert len(g1.vertices()) == 4
-    assert len(g1.edges()) == 5
+    assert len(g1.vertices) == 4
+    assert len(g1.edges) == 5
 
 def test_output_to_string(): 
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)

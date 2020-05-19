@@ -40,8 +40,8 @@ def get_graph_with_negative_edges():
     g.create_edge(0, 6, weight=1000.0)
     g.create_edge(6, 3, weight=-900.0)
 
-    assert len(g.vertices()) == 7
-    assert len(g.edges()) == 9
+    assert len(g.vertices) == 7
+    assert len(g.edges) == 9
 
     return g    
 

@@ -36,7 +36,7 @@ def build_graph():
 def test_pagerank():
     g = build_graph()
     scores = scoring.pagerank(g)
-    result = [scores[v] for v in g.vertices()]
+    result = [scores[v] for v in g.vertices]
     expected = [0.2324869499599194, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115, 0.08527922778223115]
     assert result == expected
 
@@ -44,28 +44,28 @@ def test_pagerank():
 def test_harmonic_centrality():
     g = build_graph()
     scores = scoring.harmonic_centrality(g)
-    result = [scores[v] for v in g.vertices()]
+    result = [scores[v] for v in g.vertices]
     expected = [1.0, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666]
     assert result == expected
 
 def test_closeness_centrality():
     g = build_graph()
     scores = scoring.closeness_centrality(g)
-    result = [scores[v] for v in g.vertices()]
+    result = [scores[v] for v in g.vertices]
     expected = [1.0, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6]
     assert result == expected
 
 def test_betweenness_centrality():
     g = build_graph()
     scores = scoring.betweenness_centrality(g)
-    result = [scores[v] for v in g.vertices()]
+    result = [scores[v] for v in g.vertices]
     expected = [22.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
     assert result == expected
 
 def test_alpha_centrality():
     g = build_graph()
     scores = scoring.alpha_centrality(g)
-    result = [scores[v] for v in g.vertices()]
+    result = [scores[v] for v in g.vertices]
     expected = [1.09284015241, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011, 1.03155950011]
     assert result == expected
 
@@ -74,7 +74,7 @@ def test_coreness():
     g = build_graph()
     degeneracy, scores = scoring.coreness(g)
     assert degeneracy == 3
-    result = [scores[v] for v in g.vertices()]
+    result = [scores[v] for v in g.vertices]
     expected = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
     assert result == expected
 
@@ -84,7 +84,7 @@ def test_clustering_coefficient():
     global_cc, avg_cc, local_cc = scoring.clustering_coefficient(g)
     assert global_cc == 0.42857142857142855
     assert avg_cc == 0.6250000000000001
-    result = [local_cc[v] for v in g.vertices()]
+    result = [local_cc[v] for v in g.vertices]
     expected = [0.25, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 
         0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666, 0.6666666666666666 ]
     assert result == expected

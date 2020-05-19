@@ -329,7 +329,7 @@ def test_input_gml_from_string_create_new_vertices():
 
 	parse_gml(g, input_string, preserve_ids_from_input=False) 
 
-	assert g.vertices() == set([0, 1])
+	assert g.vertices == set([0, 1])
 
 
 def test_input_gml_from_string_preserve_ids():
@@ -340,7 +340,7 @@ def test_input_gml_from_string_preserve_ids():
 
 	parse_gml(g, input_string, preserve_ids_from_input=True) 
 
-	assert g.vertices() == set([5, 7])
+	assert g.vertices == set([5, 7])
 
 
 def test_output_to_string(): 

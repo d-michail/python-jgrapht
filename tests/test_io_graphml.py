@@ -112,7 +112,7 @@ def test_export_import(tmpdir):
     g.create_edge(8, 9)
     g.create_edge(9, 1, weight=33.3)
 
-    assert len(g.edges()) == 18
+    assert len(g.edges) == 18
 
     tmpfile = tmpdir.join('graphml.out')
     tmpfilename = str(tmpfile)
@@ -160,10 +160,10 @@ def test_export_import(tmpdir):
 
     read_graphml(g1, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
-    assert g1.vertices() == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    assert g1.vertices == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     assert g1.contains_edge_between(6, 7)
     assert not g1.contains_edge_between(6, 8)
-    assert len(g1.edges()) == 18
+    assert len(g1.edges) == 18
 
     assert g1.get_edge_weight(17) == 33.3
 
@@ -172,10 +172,10 @@ def test_export_import(tmpdir):
 
     read_graphml(g2, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb, simple=False)
 
-    assert g2.vertices() == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    assert g2.vertices == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     assert g2.contains_edge_between(6, 7)
     assert not g2.contains_edge_between(6, 8)
-    assert len(g2.edges()) == 18
+    assert len(g2.edges) == 18
 
     assert g2.get_edge_weight(17) == 33.3
 
@@ -238,7 +238,7 @@ def test_output_to_string_with_attrs():
     g.create_edge(8, 9)
     g.create_edge(9, 1, weight=33.3)
 
-    assert len(g.edges()) == 18
+    assert len(g.edges) == 18
 
     attrs = [('cost', 'edge', 'double', None), ('name', 'node', 'string', None)]
 

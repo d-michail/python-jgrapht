@@ -13,11 +13,11 @@ def test_input_csv_from_string_create_new_vertices():
 4,1
 """
 
-    print (set(g.vertices())) 
+    print (set(g.vertices)) 
     parse_csv(g, input_string)
-    print (set(g.vertices())) 
-    print (set(g.edges())) 
-    assert g.vertices() == set([0, 1, 2, 3])
+    print (set(g.vertices)) 
+    print (set(g.edges)) 
+    assert g.vertices == set([0, 1, 2, 3])
 
 
 def test_input_csv_from_string_preserve_ids():
@@ -33,9 +33,9 @@ def test_input_csv_from_string_preserve_ids():
         return int(file_id)
 
     parse_csv(g, input_string, import_id_cb=import_id)
-    print (set(g.vertices())) 
-    print (set(g.edges())) 
-    assert g.vertices() == set([1, 2, 3, 4])
+    print (set(g.vertices)) 
+    print (set(g.edges)) 
+    assert g.vertices == set([1, 2, 3, 4])
 
 
 def test_export_import(tmpdir):
@@ -65,7 +65,7 @@ def test_export_import(tmpdir):
     g.create_edge(8, 9)
     g.create_edge(9, 1)
 
-    assert len(g.edges()) == 18
+    assert len(g.edges) == 18
 
     tmpfile = tmpdir.join('csv.out')
     tmpfilename = str(tmpfile)
@@ -78,10 +78,10 @@ def test_export_import(tmpdir):
 
     read_csv(g1, tmpfilename)
 
-    assert g1.vertices() == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    assert g1.vertices == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     assert g1.contains_edge_between(6, 7)
     assert not g1.contains_edge_between(6, 8)
-    assert len(g1.edges()) == 18
+    assert len(g1.edges) == 18
 
 
 def test_output_to_string(): 

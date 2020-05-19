@@ -12,7 +12,7 @@ def build_graph():
 
     rng = Random(17)
 
-    for e in g.edges():
+    for e in g.edges:
         g.set_edge_weight(e, rng.randint(0,10))
 
     return g

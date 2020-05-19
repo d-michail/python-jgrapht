@@ -19,7 +19,7 @@ def test_k_spanning_tree():
 
     g.create_edge(2, 3, weight=100.0)
 
-    assert len(g.edges()) == 7
+    assert len(g.edges) == 7
 
     c = clustering.k_spanning_tree(g, k=2)
 
@@ -43,7 +43,7 @@ def test_label_propagation():
 
     g.create_edge(2, 3, weight=100.0)
 
-    assert len(g.edges()) == 7
+    assert len(g.edges) == 7
 
     c = clustering.label_propagation(g, seed=17)
 

@@ -19,9 +19,10 @@ Let us start by creating a graph.
   >>>                          allowing_multiple_edges=False)
 
 This is the most general call. Sensible defaults are also provided, thus someone can create
-a graph simply by calling ``jgrapht.create_graph()``. 
-The graph is a collection of vertices (aka nodes) and edges. Note that in |Project| vertices
-and edges are always integers.
+a graph simply by calling :py:meth:`jgrapht.create_graph()`. 
+The graph is a collection of vertices (aka nodes) and edges. 
+In |Project| vertices and edges are always integers. 
+
 
 Adding vertices
 ---------------
@@ -57,14 +58,14 @@ Now the graph contains 4 vertices.  You can find how many vertices the graph con
 
 .. nbplot::
 
-  >>> len(g.vertices())
+  >>> len(g.vertices)
 
-The method :py:meth:`.Graph.vertices()` returns the set of vertices, which is also 
+The property :py:meth:`.Graph.vertices` returns the set of vertices, which is also 
 helpful in order to iterate over them.
 
 .. nbplot::
 
-  >>> for v in g.vertices(): 
+  >>> for v in g.vertices: 
   >>>     print ('Vertex {}'.format(v))
 
 
@@ -133,11 +134,11 @@ Care must be taken to not try to adjust the weight if the graph is unweighted. I
 Edge Set
 --------
 
-Edges can be iterated using the set returned by method :py:meth:`.Graph.edges()`,
+Edges can be iterated using the set returned by :py:meth:`.Graph.edges`,
 
 .. nbplot::
 
-  >>> for e in g.edges(): 
+  >>> for e in g.edges: 
   >>>     print ('Edge {} has source {}'.format(e, g.edge_source(e)))
   >>>     print ('Edge {} has target {}'.format(e, g.edge_target(e)))
 
@@ -147,14 +148,14 @@ the graph is unweighted, the weight returned is always 1.0.
 
 .. nbplot::
 
-  >>> for e in g.edges(): 
+  >>> for e in g.edges: 
   >>>     print ('Edge {}'.format(g.edge_tuple(e)))
 
 Finding the number of edges can be performed by executing,
 
 .. nbplot::
 
-  >>> len(g.edges())
+  >>> len(g.edges)
 
 Graph Types
 -----------

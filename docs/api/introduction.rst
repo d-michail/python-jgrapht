@@ -41,3 +41,11 @@ importing graphs, by using callback functions. Storing such attributes, however,
 graph. The user is responsible to maintain external dictionaries with the vertex and edge identifier as
 the key.
 
+.. note::
+
+  While this might seen like a restriction at first, it allows for several optimizations.
+  Combined with the simplicity and power of dictionaries in Python, it should pose no real 
+  restriction to the user, except possibly some aesthetic effect. Vertex and edge attributes are fully
+  supported in exporters and importers.
+
+

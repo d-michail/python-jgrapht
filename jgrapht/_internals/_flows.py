@@ -49,7 +49,7 @@ class _JGraphTCut(Cut):
         if self._edges is not None:
             return
 
-        self._target_partition = set(self._graph.vertices()).difference(
+        self._target_partition = set(self._graph.vertices).difference(
             self._source_partition
         )
 
@@ -60,7 +60,7 @@ class _JGraphTCut(Cut):
                     if self._graph.edge_target(e) not in self._source_partition:
                         self._edges.add(e)
         else:
-            for e in self._graph.edges():
+            for e in self._graph.edges:
                 s_in_s = self._graph.edge_source(e) in self._source_partition
                 t_in_s = self._graph.edge_target(e) in self._source_partition
                 if s_in_s ^ t_in_s:

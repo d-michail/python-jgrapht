@@ -48,8 +48,8 @@ def test_output_dot(tmpdir):
     g1 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     read_dot(g1, tmpfilename, edge_attribute_cb=ea_cb)
 
-    assert len(g1.vertices()) == 3
-    assert len(g1.edges()) == 3
+    assert len(g1.vertices) == 3
+    assert len(g1.edges) == 3
 
     
 def test_output_to_string(): 

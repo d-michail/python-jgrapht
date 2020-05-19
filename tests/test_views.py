@@ -158,14 +158,14 @@ def test_as_masked_subgraph():
     
     masked_graph = as_masked_subgraph(g, vertex_mask_cb=vertex_mask, edge_mask_cb=edge_mask)
 
-    assert masked_graph.vertices() == {0,1,2,4}
-    assert masked_graph.edges() == {0,1}
+    assert masked_graph.vertices == {0,1,2,4}
+    assert masked_graph.edges == {0,1}
     assert not masked_graph.type.modifiable
 
     # test that we see changed in the original graph
     g.add_vertex(5)
 
-    assert masked_graph.vertices() == {0, 1, 2, 4, 5}
+    assert masked_graph.vertices == {0, 1, 2, 4, 5}
 
     # test that we are unmodifiable
     with pytest.raises(ValueError):

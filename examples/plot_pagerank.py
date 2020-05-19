@@ -34,7 +34,7 @@ for v in range(0, 11):
 # %% 
 # Our graph's vertex set now looks like
 
-print (g.vertices())
+print (g.vertices)
 
 # %%
 # We also add the edges
@@ -45,7 +45,7 @@ g.create_edges_from([(1, 2), (2, 1), (3, 0), (3, 1), (4, 1), (4, 3), (4, 5), (5,
 # %%
 # We now have the following edges
 
-print(g.edges())
+print(g.edges)
 
 # %%
 # Execute Pagerank using
@@ -55,6 +55,6 @@ pagerank = scoring.pagerank(g)
 # The returned object is a dictionary from vertices to floating point values.
 # Let us store it in a list
 
-result = [pagerank[v] for v in g.vertices()]
+result = [pagerank[v] for v in g.vertices]
 print(result)
 

@@ -27,12 +27,12 @@ def test_graph_directed_inoutedges():
     assert g.add_vertex(4)
     v5 = 4
 
-    vcount = len(g.vertices())
+    vcount = len(g.vertices)
     assert vcount == 5
 
-    assert g.number_of_vertices() == 5
+    assert g.number_of_vertices == 5
 
-    assert_same_set(set(g.vertices()), set([0, 1, 2, 3, 4]))
+    assert_same_set(set(g.vertices), set([0, 1, 2, 3, 4]))
 
     e12 = g.create_edge(v1, v2)
     assert e12 == 0
@@ -55,7 +55,7 @@ def test_graph_directed_inoutedges():
     e51_2 = g.create_edge(v5, v1)
     assert e51_2 == 6
 
-    assert len(g.edges()) == 7
+    assert len(g.edges) == 7
 
     assert g.contains_edge_between(v1, v4)
     assert not g.contains_edge_between(v1, v5)
@@ -95,7 +95,7 @@ def test_graph_directed_inoutedges():
     assert g.outdegree_of(v5) == 2
     assert g.indegree_of(v5) == 1    
 
-    assert_same_set(set(g.edges()), set([0, 1, 2, 3, 4, 5, 6]))
+    assert_same_set(set(g.edges), set([0, 1, 2, 3, 4, 5, 6]))
 
 
 def test_graph_undirected_inoutedges():
@@ -118,10 +118,10 @@ def test_graph_undirected_inoutedges():
     assert g.add_vertex(4)
     v5 = 4
 
-    vcount = len(g.vertices())
+    vcount = len(g.vertices)
     assert vcount == 5
 
-    assert_same_set(set(g.vertices()), set([0, 1, 2, 3, 4]))
+    assert_same_set(set(g.vertices), set([0, 1, 2, 3, 4]))
 
     e12 = g.create_edge(v1, v2)
     assert e12 == 0
@@ -144,7 +144,7 @@ def test_graph_undirected_inoutedges():
     e51_2 = g.create_edge(v5, v1)
     assert e51_2 == 6
 
-    assert len(g.edges()) == 7
+    assert len(g.edges) == 7
 
     assert g.contains_edge_between(v1, v4)
     assert g.contains_edge_between(v1, v5)
@@ -186,7 +186,7 @@ def test_graph_undirected_inoutedges():
     assert g.outdegree_of(v5) == 3
     assert g.indegree_of(v5) == 3  
 
-    assert_same_set(set(g.edges()), set([0, 1, 2, 3, 4, 5, 6]))
+    assert_same_set(set(g.edges), set([0, 1, 2, 3, 4, 5, 6]))
 
 
 def test_graph_no_allow_self_loops():
@@ -286,12 +286,12 @@ def test_graph_add_vertex():
     assert g.create_vertex() == 0
     assert g.create_vertex() == 1
     g.add_vertices_from([2, 3, 4])
-    assert len(g.vertices()) == 5
+    assert len(g.vertices) == 5
 
     assert g.create_vertex() == 5
     assert not g.add_vertex(5)
 
-    assert len(g.vertices()) == 6
+    assert len(g.vertices) == 6
 
 
 def test_graph_sparse():
@@ -302,10 +302,10 @@ def test_graph_sparse():
     assert g.type.directed
     assert not g.type.weighted
 
-    assert g.vertices() == set([0, 1, 2, 3, 4, 5, 6])
+    assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
 
     edgelist2 = []
-    for e in g.edges(): 
+    for e in g.edges: 
         u, v, w = g.edge_tuple(e)
         edgelist2.append((u,v))
     assert edgelist2 == edgelist
@@ -323,10 +323,10 @@ def test_graph_sparse_weighted():
     assert not g.type.directed
     assert g.type.weighted
 
-    assert g.vertices() == set([0, 1, 2, 3, 4, 5, 6])
+    assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
 
     edgelist2 = []
-    for e in g.edges(): 
+    for e in g.edges: 
         edgelist2.append(g.edge_tuple(e))
     assert edgelist2 == edgelist
 
@@ -355,7 +355,7 @@ def test_graph_copy_to_sparse():
     assert g.add_vertex(4)
     v5 = 4
 
-    assert g.vertices(), set([0, 1, 2, 3, 4])
+    assert g.vertices, set([0, 1, 2, 3, 4])
 
     e12 = g.create_edge(v1, v2)
     e23 = g.create_edge(v2, v3)
@@ -365,12 +365,12 @@ def test_graph_copy_to_sparse():
     e51_1 = g.create_edge(v5, v1)
     e51_2 = g.create_edge(v5, v1)
 
-    assert len(g.edges()) == 7
+    assert len(g.edges) == 7
 
     gs = as_sparse_graph(g)
 
-    assert gs.vertices(), set([0, 1, 2, 3, 4])
-    assert len(gs.edges()) == 7
+    assert gs.vertices, set([0, 1, 2, 3, 4])
+    assert len(gs.edges) == 7
 
 
 def test_graph_copy_to_sparse():
@@ -390,11 +390,11 @@ def test_graph_copy_to_sparse():
     g.create_edge(0, 5)
     g.create_edge(10, 5)
 
-    assert len(g.edges()) == 3
+    assert len(g.edges) == 3
 
     gs = as_sparse_graph(g)
 
-    assert gs.vertices(), set(range(0, 11))
-    assert len(gs.edges()) == 3
+    assert gs.vertices, set(range(0, 11))
+    assert len(gs.edges) == 3
     assert gs.type.weighted
     assert gs.type.directed

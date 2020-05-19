@@ -14,7 +14,7 @@ If you want to use `virtualenv` or `venv` module, you can easily write::
   $ source venv/bin/activate
   $ pip install python-jgrapht
 
-Installation on the user directory is also possible::
+Installation in the user directory is also possible::
 
   $ pip install --user python-jgrapht
 

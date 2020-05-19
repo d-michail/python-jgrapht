@@ -37,12 +37,12 @@ print(output)
 # Let us also export the graph using some custom attributes.
 
 vertex_attrs = {} 
-for v in g.vertices(): 
+for v in g.vertices: 
     vertex_attrs[v] = {}
     vertex_attrs[v]['label'] = 'vertex {}'.format(v)
 
 edge_attrs = {} 
-for e in g.edges(): 
+for e in g.edges: 
     u, v, _ = g.edge_tuple(e)
     edge_attrs[e] = {}
     edge_attrs[e]['name'] = 'edge {}-{}'.format(u, v)

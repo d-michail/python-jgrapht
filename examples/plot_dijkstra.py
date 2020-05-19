@@ -33,7 +33,7 @@ gen.barabasi_albert_graph(g, 3, 3, 10, seed=17)
 # We also assign some random weights from [0, 100) to the edges. 
 
 rng = random.Random(17)
-for e in g.edges(): 
+for e in g.edges: 
     g.set_edge_weight(e, 100 * rng.random())
 
 # %%
