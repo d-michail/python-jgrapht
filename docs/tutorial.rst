@@ -27,29 +27,25 @@ In |Project| vertices and edges are always integers.
 Adding vertices
 ---------------
 
-Vertices are added by calling method :py:meth:`.Graph.add_vertex` and providing the vertex
-identifier as a parameter.
+Vertices are added by calling method :py:meth:`.Graph.add_vertex`. The user can provide
+explicitly the vertex identifier as a parameter:
 
 .. nbplot::
 
   >>> g.add_vertex(0)
 
-The method returns `True` if the vertex is added and `False` if the 
-vertex was already a member of the graph. Multiple vertices can also be added using any
-iterable.
+It is also possible to let the graph create automatically one:
 
 .. nbplot::
 
-  >>> g.add_vertices_from([1, 2])
+  >>> g.add_vertex()
 
-If the user does not want to explicitly provide a vertex number, vertices can be automatically
-assigned identifiers by the graph using :py:meth:`.Graph.create_vertex`. 
+The newly created vertex identifier is returned by the call, in order to be used when 
+adding edges. Multiple vertices can also be added using any iterable.
 
 .. nbplot::
 
-  >>> g.create_vertex()
-
-The method returns the identifier of the newly created vertex.
+  >>> g.add_vertices_from([2, 3])
 
 Vertex Set
 ----------

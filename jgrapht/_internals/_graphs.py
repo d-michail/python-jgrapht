@@ -52,8 +52,12 @@ class _JGraphTGraph(_HandleWrapper, Graph):
     def create_vertex(self):
         return backend.jgrapht_graph_add_vertex(self._handle)
 
-    def add_vertex(self, vertex):
-        return backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
+    def add_vertex(self, vertex=None):
+        if vertex is not None: 
+            backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
+        else: 
+            vertex = backend.jgrapht_graph_add_vertex(self._handle)
+        return vertex
 
     def remove_vertex(self, v):
         backend.jgrapht_graph_remove_vertex(self._handle, v)

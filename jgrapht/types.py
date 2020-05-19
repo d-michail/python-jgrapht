@@ -270,21 +270,17 @@ class Graph(ABC):
         pass
 
     @abstractmethod
-    def create_vertex(self):
-        """Create a vertex in the graph.
-
-        :returns: the new vertex identifier
-        :rtype: int
-        """
-        pass
-
-    @abstractmethod
-    def add_vertex(self, vertex):
+    def add_vertex(self, vertex=None):
         """Add a vertex to the graph.
 
-        :param vertex: an integer identifier for the vertex.
-        :returns: True if the vertex was added to the graph, False if it was already present
-        :rtype: Boolean
+        If the user does not provide explicitly an integer vertex identifier, a 
+        new identifier is automatically created. If the user provides a vertex and the 
+        vertex is already in the graph, then this method does nothing.
+
+        :param vertex: an integer identifier for the vertex. If None then the graph
+          will automatically create a new vertex identifier
+        :returns: the newly created vertex identifier.
+        :rtype: int
         """
         pass
 

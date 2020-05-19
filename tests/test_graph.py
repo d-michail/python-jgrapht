@@ -16,15 +16,15 @@ def test_graph_directed_inoutedges():
     assert g.type.allowing_multiple_edges
     assert g.type.weighted
 
-    assert g.add_vertex(0)
+    assert g.add_vertex(0) == 0
     v1 = 0
-    assert g.add_vertex(1)
+    assert g.add_vertex(1) == 1
     v2 = 1
-    assert g.add_vertex(2)
+    assert g.add_vertex(2) == 2
     v3 = 2
-    assert g.add_vertex(3)
+    assert g.add_vertex(3) == 3
     v4 = 3
-    assert g.add_vertex(4)
+    assert g.add_vertex(4) == 4
     v5 = 4
 
     vcount = len(g.vertices)
@@ -107,15 +107,15 @@ def test_graph_undirected_inoutedges():
     assert g.type.allowing_multiple_edges
     assert g.type.weighted
 
-    assert g.add_vertex(0)
+    assert g.add_vertex(0) == 0
     v1 = 0
-    assert g.add_vertex(1)
+    assert g.add_vertex(1) == 1
     v2 = 1
-    assert g.add_vertex(2)
+    assert g.add_vertex(2) == 2
     v3 = 2
-    assert g.add_vertex(3)
+    assert g.add_vertex(3) == 3
     v4 = 3
-    assert g.add_vertex(4)
+    assert g.add_vertex(4) == 4
     v5 = 4
 
     vcount = len(g.vertices)
@@ -199,7 +199,7 @@ def test_graph_no_allow_self_loops():
     assert g.type.weighted
 
     v1 = 0
-    assert g.add_vertex(v1)
+    assert g.add_vertex(v1) == v1
 
     with pytest.raises(ValueError):
         g.create_edge(v1, v1)
@@ -215,9 +215,9 @@ def test_graph_no_allow_multiple_edges():
     assert g.type.weighted
 
     v1 = 0
-    assert g.add_vertex(v1)
+    assert g.add_vertex(v1) == v1
     v2 = 1
-    assert g.add_vertex(v2)
+    assert g.add_vertex(v2) == v2
 
     g.create_edge(v1, v2)
     with pytest.raises(ValueError):
@@ -234,9 +234,9 @@ def test_graph_no_weights():
     assert not g.type.weighted
 
     v1 = 0
-    assert g.add_vertex(v1)
+    assert g.add_vertex(v1) == v1
     v2 = 1
-    assert g.add_vertex(v2)
+    assert g.add_vertex(v2) == v2
 
     e12 = g.create_edge(v1, v2)
 
@@ -251,9 +251,9 @@ def test_graph_create_edge_with_weight():
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
 
     v1 = 0
-    assert g.add_vertex(v1)
+    assert g.add_vertex(v1) == v1
     v2 = 1
-    assert g.add_vertex(v2)
+    assert g.add_vertex(v2) == v2
 
     e12 = g.create_edge(v1, v2, weight=55.0)
     assert g.get_edge_weight(e12) == 55.0
@@ -283,15 +283,18 @@ def test_graph_add_vertex():
 
     g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
 
-    assert g.create_vertex() == 0
-    assert g.create_vertex() == 1
+    assert g.add_vertex() == 0
+    assert g.add_vertex() == 1
     g.add_vertices_from([2, 3, 4])
     assert len(g.vertices) == 5
 
-    assert g.create_vertex() == 5
-    assert not g.add_vertex(5)
+    assert g.add_vertex() == 5
+    assert g.add_vertex(5) == 5
 
     assert len(g.vertices) == 6
+
+    assert g.add_vertex(10) == 10
+    assert len(g.vertices) == 7
 
 
 def test_graph_sparse():
@@ -344,15 +347,15 @@ def test_graph_copy_to_sparse():
     assert g.type.allowing_multiple_edges
     assert g.type.weighted
 
-    assert g.add_vertex(0)
+    assert g.add_vertex(0) == 0
     v1 = 0
-    assert g.add_vertex(1)
+    assert g.add_vertex(1) == 1
     v2 = 1
-    assert g.add_vertex(2)
+    assert g.add_vertex(2) == 2
     v3 = 2
-    assert g.add_vertex(3)
+    assert g.add_vertex(3) == 3
     v4 = 3
-    assert g.add_vertex(4)
+    assert g.add_vertex(4) == 4
     v5 = 4
 
     assert g.vertices, set([0, 1, 2, 3, 4])
@@ -382,9 +385,9 @@ def test_graph_copy_to_sparse():
     assert g.type.allowing_multiple_edges
     assert g.type.weighted
 
-    assert g.add_vertex(0)
-    assert g.add_vertex(5)
-    assert g.add_vertex(10)
+    assert g.add_vertex(0) == 0
+    assert g.add_vertex(5) == 5
+    assert g.add_vertex(10) == 10
 
     g.create_edge(0, 10)
     g.create_edge(0, 5)

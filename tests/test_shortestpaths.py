@@ -28,7 +28,7 @@ def get_graph_with_negative_edges():
     assert g.type.directed
 
     for i in range(0, 7):
-        assert g.add_vertex(i)
+        assert g.add_vertex(i) == i
 
     g.create_edge(0, 1, weight=3.0)
     g.create_edge(1, 3, weight=100.0)
