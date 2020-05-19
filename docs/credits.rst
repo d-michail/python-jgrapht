@@ -3,7 +3,8 @@
 Credits
 =======
 
-The |Project| package and the `JGraphT-capi <https://github.com/d-michail/jgrapht-capi>`_
+The |Project| `package <https://github.com/d-michail/python-jgrapht>`_ and
+the `JGraphT-capi <https://github.com/d-michail/jgrapht-capi>`_
 project have been written by `Dimitrios Michail <https://github.com/d-michail>`_.
 
 Refactoring of the build system and CI/CD pipelines for Linux, Windows,
