@@ -208,7 +208,6 @@ class GraphPath(ABC):
         return v_list
 
 
-
 class SingleSourcePaths(ABC):
     """A set of paths starting from a single source vertex.
     
