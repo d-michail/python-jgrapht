@@ -23,7 +23,8 @@ def greedy_smallestnotusedcolor(graph):
     used by any neighbors. Subclasses may provide a different vertex ordering.
 
     :param graph: The input graph. Either directed or undirected.
-    :returns: A vertex coloring as a dictionary from vertices to integers.
+    :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
+      dictionary from vertices to integers.
     """
     return _coloring_alg("greedy", graph)
 
@@ -40,7 +41,8 @@ def greedy_smallestdegreelast(graph):
       Academic Press, 104--122, 1972.
 
     :param graph: The input graph. Either directed or undirected.
-    :returns: A vertex coloring as a dictionary from vertices to integers.
+    :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
+      dictionary from vertices to integers.
     """
     return _coloring_alg("greedy_smallestdegreelast", graph)
 
@@ -55,7 +57,8 @@ def greedy_largestdegreefirst(graph):
       application to timetabling problems. The Computer Journal, 10(1):85--86, 1967.
  
     :param graph: The input graph. Either directed or undirected.
-    :returns: A vertex coloring as a dictionary from vertices to integers.    
+    :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
+      dictionary from vertices to integers.
     """
     return _coloring_alg("greedy_largestdegreefirst", graph)
 
@@ -66,7 +69,8 @@ def greedy_random(graph, seed=None):
     :param graph: The input graph. Either directed or undirected.
     :param seed: Seed for the random number generator. If None then the time 
                  is used to select a seed.
-    :returns: A vertex coloring as a dictionary from vertices to integers.             
+    :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
+      dictionary from vertices to integers.
     """
     if seed is None:
         return _coloring_alg("greedy_random", graph)
@@ -95,7 +99,8 @@ def greedy_dsatur(graph):
     * J. S. Turner. Almost all $k$-colorable graphs are easy to color. Journal of Algorithms. 9(1):63--82, 1988.
     
     :param graph: The input graph. Either directed or undirected.
-    :returns: A vertex coloring as a dictionary from vertices to integers.             
+    :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
+      dictionary from vertices to integers.             
     """
     return _coloring_alg("greedy_dsatur", graph)
 
@@ -111,7 +116,8 @@ def color_refinement(graph):
     The complexity of this algorithm is :math:`\mathcal{O}((n + m) \log n)`.
 
     :param graph: The input graph. Either directed or undirected.
-    :returns: A vertex coloring as a dictionary from vertices to integers.             
+    :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
+      dictionary from vertices to integers.
     """
     return _coloring_alg("color_refinement", graph)
 
@@ -120,6 +126,21 @@ def backtracking_brown(graph):
     """Brown backtracking graph coloring algorithm.
 
     :param graph: The input graph. Either directed or undirected.
-    :returns: A vertex coloring as a dictionary from vertices to integers.
+    :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
+      dictionary from vertices to integers.
     """
     return _coloring_alg("backtracking_brown", graph)
+
+
+def chordal_min_coloring(graph):
+    r"""Find a minimum vertex coloring for a chordal graph.
+
+    The algorithms first computes a perfect elimination ordering and then a
+    vertex coloring. Running time :math:`\mathcal{O}(n+m)`. 
+
+    :param graph: the chordal graph. If the graph is not chordal an error is raised
+    :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
+      dictionary from vertices to integers.
+    """
+    colors, res = backend.jgrapht_coloring_exec_chordal_minimum_coloring(graph.handle)
+    return colors, _JGraphTIntegerIntegerMap(handle=res)

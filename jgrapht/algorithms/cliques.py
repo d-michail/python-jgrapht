@@ -1,5 +1,8 @@
 from .. import backend
-from .._internals._collections import _JGraphTIntegerSetIterator
+from .._internals._collections import (
+    _JGraphTIntegerSet,
+    _JGraphTIntegerSetIterator,
+)
 
 
 def _clique_enumeration_alg(name, graph, *args):
@@ -83,3 +86,16 @@ def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
     """
     custom = [timeout]
     return _clique_enumeration_alg("bron_kerbosch_pivot", graph, *custom)
+
+
+def chordal_max_clique(graph):
+    r"""Find a maximum clique in a chordal graph.
+
+    The algorithms first computes a perfect elimination ordering and then a
+    maximum clique. Running time :math:`\mathcal{O}(n+m)`. 
+
+    :param graph: the chordal graph. If the graph is not chordal an error is raised
+    :returns: a clique as a vertex set
+    """
+    res = backend.jgrapht_clique_exec_chordal_max_clique(graph.handle)
+    return _JGraphTIntegerSet(handle=res)

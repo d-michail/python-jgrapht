@@ -56,3 +56,23 @@ def test_bron():
 
     with pytest.raises(StopIteration):
         next(clique_it)
+
+def test_chordal(): 
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+
+    for i in range(0, 6):
+        g.add_vertex(i)
+
+    g.create_edge(0, 1)
+    g.create_edge(1, 2)
+    g.create_edge(2, 3)
+    g.create_edge(4, 5)
+    g.create_edge(5, 0)
+    g.create_edge(0, 3)
+    g.create_edge(0, 4)
+    g.create_edge(1, 5)
+    g.create_edge(1, 3)
+
+    clique = cliques.chordal_max_clique(g)
+
+    assert clique == { 0, 1, 3 }
