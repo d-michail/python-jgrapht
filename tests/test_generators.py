@@ -6,7 +6,7 @@ import jgrapht.generators as generators
 
 def test_barabasi_albert():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
-    generators.barabasi_albert_graph(g, 10, 5, 100)
+    generators.barabasi_albert(g, 10, 5, 100)
     assert len(g.vertices) == 100
 
 def test_barabasi_albert_forest():
@@ -58,3 +58,69 @@ def test_kleinberg_smallworld():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     generators.kleinberg_smallworld_graph(g, 10, 2, 2, 1)
     assert len(g.vertices) == 100
+
+def test_complement():
+    g_source = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g_source.add_vertex(0)
+    g_source.add_vertex(1)
+    g_source.add_vertex(2)
+    g_source.create_edge(0,1)
+    g_source.create_edge(0,2)
+
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+
+    generators.complement_graph(g, g_source)
+
+    assert g.vertices == {0, 1, 2}
+    assert g.edges == {0}
+    assert g.edge_tuple(0) == (1, 2, 1.0)
+
+def test_generalized_petersen():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    generators.generalized_petersen(g, 10, 4)
+    assert len(g.vertices) == 20
+
+def test_grid():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    generators.grid(g, 10, 4)
+    assert len(g.vertices) == 40
+
+def test_hypercube():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    generators.hypercube(g, 4)
+    assert len(g.vertices) == 16
+
+def test_linear():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    generators.linear(g, 10)
+    assert len(g.vertices) == 10
+
+def test_random_regular():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    generators.random_regular(g, 10, 3, 17)
+    assert len(g.vertices) == 10
+
+def test_star():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    generators.star(g, 10)
+    assert len(g.vertices) == 10
+
+def test_wheel():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    generators.wheel(g, 10, False)
+    assert len(g.vertices) == 10
+
+def test_windmill():
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    generators.windmill(g, 3, 3, dutch=False)
+    assert len(g.vertices) == 7
+
+def test_linearized_chord_diagram():
+    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+    generators.linearized_chord_diagram(g, 100, 3, 17)
+    assert len(g.vertices) == 100
+
+    # test that error is raised if the graph does not support self loops and multiple edges
+    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    with pytest.raises(ValueError):
+        generators.linearized_chord_diagram(g, 100, 3, 17)

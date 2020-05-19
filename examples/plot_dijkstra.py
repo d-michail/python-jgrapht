@@ -27,7 +27,7 @@ g = jgrapht.create_graph(directed=False, weighted=True)
 # complete graph of 3 vertices and reach 10 vertices. Each of the last 7 vertices 
 # gets connected with the previous ones using preferential attachment.
 
-gen.barabasi_albert_graph(g, 3, 3, 10, seed=17)
+gen.barabasi_albert(g, 3, 3, 10, seed=17)
 
 # %%
 # We also assign some random weights from [0, 100) to the edges. 

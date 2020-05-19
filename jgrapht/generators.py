@@ -3,7 +3,7 @@ import time
 from . import backend
 
 
-def barabasi_albert_graph(graph, m0, m, n, seed=None):
+def barabasi_albert(graph, m0, m, n, seed=None):
     """Barabási-Albert growth and preferential attachment graph generator.
  
     The generator is described in the paper: A.-L. Barabási and R. Albert. Emergence of scaling in
@@ -250,3 +250,122 @@ def kleinberg_smallworld_graph(graph, n, p, q, r, seed=None):
         seed = int(time.time())
 
     backend.jgrapht_generate_kleinberg_smallworld(graph.handle, n, p, q, r, seed)
+
+
+def complement_graph(graph, source_graph, generate_self_loops=False):
+    """Generate the `complement graph <https://mathworld.wolfram.com/GraphComplement.html>`_.
+
+    The completement is not defined in case of graphs with multiple-edges. This generators treats
+    such cases as simple graphs.
+
+    :param graph: the graph to populate
+    :param source_graph: the source graph whose complement this function computes
+    :param generate_self_loops: whether to generate self-loops
+    """
+    backend.jgrapht_generate_complement(graph.handle, source_graph.handle, generate_self_loops)
+
+def generalized_petersen(graph, n, k):
+    """Generate `Generalized Petersen <https://mathworld.wolfram.com/GeneralizedPetersenGraph.html>`_ graphs.
+
+    :param graph: the graph to populate
+    :param n: size of the regular polygon (cycle graph :math:`C_n`)
+    :param k: size of the star polygon
+    """
+    backend.jgrapht_generate_generalized_petersen(graph.handle, n, k)
+
+def grid(graph, rows, columns):
+    """Generate a bidirectional grid graph.
+
+    :param graph: graph to populate
+    :param rows: number of rows
+    :param columns: number of columns
+    """
+    backend.jgrapht_generate_grid(graph.handle, rows, columns)
+
+def hypercube(graph, dimension):
+    """Generate a hypercube.
+
+    :param graph: graph to populate
+    :param dimension: the dimension of the hypercube
+    """
+    backend.jgrapht_generate_hypercube(graph.handle, dimension)
+
+def linear(graph, n):
+    """Generate a linear graph.
+
+    :param graph: graph to populate
+    :param n: number of vertices
+    """
+    backend.jgrapht_generate_linear(graph.handle, n)
+
+def random_regular(graph, n, d, seed=None):
+    """Generate a random regular graph.
+
+    :param graph: graph to populate
+    :param n: number of vertices
+    :param d: degree of each vertex
+    :param seed: seed for the random number generator. If None then the system time is used
+    """
+    if seed is None: 
+        seed = int(time.time())
+    backend.jgrapht_generate_random_regular(graph.handle, n, d, seed)
+
+def star(graph, n):
+    """Generate a star graph.
+
+    :param graph: graph to populate
+    :param n: number of vertices
+    """
+    backend.jgrapht_generate_star(graph.handle, n)
+
+def wheel(graph, n, inward_spokes=False):
+    """Generate a wheel graph.
+
+    :param graph: graph to populate
+    :param n: number of vertices
+    :param inward_spokes: if the graph is directed, then generate the spokes in an
+      inward direction
+    """
+    backend.jgrapht_generate_wheel(graph.handle, n, inward_spokes)
+
+def windmill(graph, m, n, dutch=False):
+    """Generate a `windmill <https://mathworld.wolfram.com/WindmillGraph.html>`_ graph.
+
+    Using parameter dutch the generator can also generate 
+    `Dutch windmill <https://mathworld.wolfram.com/DutchWindmillGraph.html>`_ graphs.
+
+    :param graph: graph to populate
+    :param m: how many copies of the complete graph to use
+    :param n: the size of the complete graph
+    :dutch: if true then Dutch windmill are generated
+    """
+    backend.jgrapht_generate_windmill(graph.handle, m, n, dutch)
+
+def linearized_chord_diagram(graph, n, m, seed=None):
+    """The linearized chord diagram graph model generator.
+
+    The generator makes precise several unspecified mathematical details of the Barabási-Albert
+    model, such as the initial configuration of the first nodes, and whether the m links
+    assigned to a new node are added one by one, or simultaneously, etc. The generator is
+    described in the paper:
+      
+      * Bélaa Bollobás and Oliver Riordan. The Diameter of a Scale-Free Random Graph.
+        Journal Combinatorica, 24(1): 5--34, 2004.
+
+    In contrast with the Barabási-Albert model, the model of Bollobás and Riordan allows for
+    multiple edges and self-loops. They show, however, that their number will be small. This
+    means that this generator works only on graphs which allow multiple edges and self-loops.
+
+    The generator starts with a graph of one node and grows the network by adding n−1 additional
+    nodes. The additional nodes are added one by one and each of them is connected to m previously
+    added nodes (or to itself with a small probability), where the probability of connecting to
+    a node is proportional to its degree.
+
+    :param graph: graph to populate
+    :param n: how many nodes to generate
+    :param m: how many connections to add to each node
+    :param seed: seed for the random number generator. If None then the system time is used 
+    """
+    if seed is None: 
+        seed = int(time.time())    
+    backend.jgrapht_generate_linearized_chord_diagram(graph.handle, n, m, seed)
