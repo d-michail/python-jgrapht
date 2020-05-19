@@ -92,25 +92,25 @@ def test_export_import(tmpdir):
     for i in range(0, 10):
         g.add_vertex(i)
 
-    g.create_edge(0, 1)
-    g.create_edge(0, 2)
-    g.create_edge(0, 3)
-    g.create_edge(0, 4)
-    g.create_edge(0, 5)
-    g.create_edge(0, 6)
-    g.create_edge(0, 7)
-    g.create_edge(0, 8)
-    g.create_edge(0, 9)
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(0, 4)
+    g.add_edge(0, 5)
+    g.add_edge(0, 6)
+    g.add_edge(0, 7)
+    g.add_edge(0, 8)
+    g.add_edge(0, 9)
 
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 4)
-    g.create_edge(4, 5)
-    g.create_edge(5, 6)
-    g.create_edge(6, 7)
-    g.create_edge(7, 8)
-    g.create_edge(8, 9)
-    g.create_edge(9, 1, weight=33.3)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 6)
+    g.add_edge(6, 7)
+    g.add_edge(7, 8)
+    g.add_edge(8, 9)
+    g.add_edge(9, 1, weight=33.3)
 
     assert len(g.edges) == 18
 
@@ -186,10 +186,10 @@ def test_output_to_string():
 
     g.add_vertices_from(range(0,4))
 
-    g.create_edge(0, 1)
-    g.create_edge(0, 2)
-    g.create_edge(0, 3)
-    g.create_edge(2, 3)
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
 
     out = generate_graphml(g)
 
@@ -201,10 +201,10 @@ def test_output_to_string_with_weights():
 
     g.add_vertices_from(range(0,4))
 
-    g.create_edge(0, 1, weight=3.3)
-    g.create_edge(0, 2, weight=4.4)
-    g.create_edge(0, 3)
-    g.create_edge(2, 3)
+    g.add_edge(0, 1, weight=3.3)
+    g.add_edge(0, 2, weight=4.4)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
 
     out = generate_graphml(g, export_edge_weights=True)
 
@@ -218,25 +218,25 @@ def test_output_to_string_with_attrs():
     for i in range(0, 10):
         g.add_vertex(i)
 
-    g.create_edge(0, 1)
-    g.create_edge(0, 2)
-    g.create_edge(0, 3)
-    g.create_edge(0, 4)
-    g.create_edge(0, 5)
-    g.create_edge(0, 6)
-    g.create_edge(0, 7)
-    g.create_edge(0, 8)
-    g.create_edge(0, 9)
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(0, 4)
+    g.add_edge(0, 5)
+    g.add_edge(0, 6)
+    g.add_edge(0, 7)
+    g.add_edge(0, 8)
+    g.add_edge(0, 9)
 
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 4)
-    g.create_edge(4, 5)
-    g.create_edge(5, 6)
-    g.create_edge(6, 7)
-    g.create_edge(7, 8)
-    g.create_edge(8, 9)
-    g.create_edge(9, 1, weight=33.3)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 6)
+    g.add_edge(6, 7)
+    g.add_edge(7, 8)
+    g.add_edge(8, 9)
+    g.add_edge(9, 1, weight=33.3)
 
     assert len(g.edges) == 18
 

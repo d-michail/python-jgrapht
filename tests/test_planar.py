@@ -14,12 +14,12 @@ def build_graph():
     g.add_vertex(4)
 
 
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 4)
-    g.create_edge(4, 0)
-    g.create_edge(2, 0)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 4)
+    g.add_edge(4, 0)
+    g.add_edge(2, 0)
 
     return g
 

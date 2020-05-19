@@ -8,10 +8,10 @@ def test_hierholzer():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     
     g.add_vertices_from([0,1,2,3])
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 0)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
 
     cycle = cycles.eulerian_cycle(g)
 
@@ -23,11 +23,11 @@ def test_chinese_postman():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     
     g.add_vertices_from([0,1,2,3,4])
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 0)
-    g.create_edge(3, 4)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(3, 4)
 
     closed_walk = cycles.chinese_postman(g)
 
@@ -38,13 +38,13 @@ def test_fundamental_cycle_basis_paton():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     
     g.add_vertices_from([0,1,2,3,4,5])
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 0)
-    g.create_edge(1, 4)
-    g.create_edge(4, 5)
-    g.create_edge(5, 2)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(1, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 2)
 
     fcb_weight, fcb_it = cycles.fundamental_cycle_basis_paton(g)
 
@@ -62,13 +62,13 @@ def test_fundamental_cycle_basis_queuebfs():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     
     g.add_vertices_from([0,1,2,3,4,5])
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 0)
-    g.create_edge(1, 4)
-    g.create_edge(4, 5)
-    g.create_edge(5, 2)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(1, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 2)
 
     fcb_weight, fcb_it = cycles.fundamental_cycle_basis_bfs_with_queue(g)
 
@@ -86,13 +86,13 @@ def test_fundamental_cycle_basis_stackbfs():
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
     
     g.add_vertices_from([0,1,2,3,4,5])
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 0)
-    g.create_edge(1, 4)
-    g.create_edge(4, 5)
-    g.create_edge(5, 2)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(1, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 2)
 
     fcb_weight, fcb_it = cycles.fundamental_cycle_basis_bfs_with_stack(g)
 
@@ -111,13 +111,13 @@ def test_simple_cycles_tiernan():
 
     g.add_vertices_from([0,1,2,3,4,5])
 
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 0)
-    g.create_edge(1, 4)
-    g.create_edge(4, 5)
-    g.create_edge(5, 2)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(1, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 2)
 
     it = cycles.enumerate_simple_cycles_tiernan(g)    
 
@@ -136,13 +136,13 @@ def test_simple_cycles_johnson():
 
     g.add_vertices_from([0,1,2,3,4,5])
 
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 0)
-    g.create_edge(1, 4)
-    g.create_edge(4, 5)
-    g.create_edge(5, 2)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(1, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 2)
 
     it = cycles.enumerate_simple_cycles_johnson(g)
 
@@ -160,13 +160,13 @@ def test_simple_cycles_tarjan():
 
     g.add_vertices_from([0,1,2,3,4,5])
 
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 0)
-    g.create_edge(1, 4)
-    g.create_edge(4, 5)
-    g.create_edge(5, 2)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(1, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 2)
 
     it = cycles.enumerate_simple_cycles_tarjan(g)    
 
@@ -185,13 +185,13 @@ def test_simple_cycles_szwarcfiter_lauer():
 
     g.add_vertices_from([0,1,2,3,4,5])
 
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 0)
-    g.create_edge(1, 4)
-    g.create_edge(4, 5)
-    g.create_edge(5, 2)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(1, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 2)
 
     it = cycles.enumerate_simple_cycles_szwarcfiter_lauer(g)    
 
@@ -210,13 +210,13 @@ def test_simple_cycles_hawick_james():
 
     g.add_vertices_from([0,1,2,3,4,5])
 
-    g.create_edge(0, 1)
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(3, 0)
-    g.create_edge(1, 4)
-    g.create_edge(4, 5)
-    g.create_edge(5, 2)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(1, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 2)
 
     it = cycles.enumerate_simple_cycles_hawick_james(g)    
 

@@ -74,26 +74,25 @@ automatically given to the edge when they are first added to the graph,
 
 .. nbplot::
 
-  >>> e1 = g.create_edge(0, 1)
+  >>> e1 = g.add_edge(0, 1)
 
 The call above creates a new edge from vertex 0 to vertex 1 and returns its identifier.
 Multiple edges can be created in one go by using,
 
 .. nbplot::
 
-  >>> g.create_edges_from([(0, 2), (1, 2)])
+  >>> g.add_edges_from([(0, 2), (1, 2)])
 
 The method returns the identifiers of the newly created edges. Note also that it is possible to
 provide the edge identifier using,
 
 .. nbplot::
 
-  >>> added = g.add_edge(0, 1, 5)
+  >>> g.add_edge(0, 1, edge=5)
 
-In the example above we explicitly request to add edge `5` in the graph. A boolean value is returned 
-which designates whether the edge was indeed added in the graph or not (in case it was already present).
-When using :py:meth:`.Graph.create_edge()` the graph is smart enough to not reuse identifiers that have
-already been added in the graph.
+In the example above we explicitly request to add edge `5` in the graph. If the graph already 
+contains such an edge, the graph is not altered.
+
 
 Edge Information
 ----------------
@@ -121,7 +120,7 @@ The user can also provide the weight directly when adding the edge to the graph,
 
 .. nbplot::
 
-  >>> e2 = g.create_edge(1, 3, weight=10.0)
+  >>> e2 = g.add_edge(1, 3, weight=10.0)
 
 Care must be taken to not try to adjust the weight if the graph is unweighted. In such a case a 
 :py:class:`ValueError` is raised.

@@ -24,15 +24,13 @@ g = jgrapht.create_graph(directed=False)
 for i in range(0, 6):
     g.add_vertex(i)
 
-g.create_edge(0, 1)
-g.create_edge(0, 2)
-g.create_edge(1, 2)
-
-g.create_edge(3, 4)
-g.create_edge(3, 5)
-g.create_edge(4, 5)
-
-g.create_edge(2, 3)
+g.add_edge(0, 1)
+g.add_edge(0, 2)
+g.add_edge(1, 2)
+g.add_edge(3, 4)
+g.add_edge(3, 5)
+g.add_edge(4, 5)
+g.add_edge(2, 3)
 
 print(g)
 

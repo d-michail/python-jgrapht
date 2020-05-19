@@ -25,12 +25,12 @@ def test_as_unweighted():
     v4 = 3
     g.add_vertex(4)
     v5 = 4
-    g.create_edge(v1, v2)
-    g.create_edge(v2, v3)
-    g.create_edge(v1, v4)
-    g.create_edge(v1, v1)
-    e45 = g.create_edge(v4, v5)
-    g.create_edge(v5, v1)
+    g.add_edge(v1, v2)
+    g.add_edge(v2, v3)
+    g.add_edge(v1, v4)
+    g.add_edge(v1, v1)
+    e45 = g.add_edge(v4, v5)
+    g.add_edge(v5, v1)
 
     g.set_edge_weight(e45, 100.0)
 
@@ -58,12 +58,12 @@ def test_as_undirected():
     g.add_vertex(4)
     v5 = 4
 
-    g.create_edge(v1, v2)
-    g.create_edge(v2, v3)
-    g.create_edge(v1, v4)
-    g.create_edge(v1, v1)
-    g.create_edge(v4, v5)
-    g.create_edge(v5, v1)
+    g.add_edge(v1, v2)
+    g.add_edge(v2, v3)
+    g.add_edge(v1, v4)
+    g.add_edge(v1, v1)
+    g.add_edge(v4, v5)
+    g.add_edge(v5, v1)
 
     # undirected
     g2 = as_undirected(g)
@@ -87,18 +87,18 @@ def test_as_unmodifiable():
     g.add_vertex(4)
     v5 = 4
 
-    g.create_edge(v1, v2)
-    g.create_edge(v2, v3)
-    g.create_edge(v1, v4)
-    g.create_edge(v1, v1)
-    g.create_edge(v4, v5)
-    g.create_edge(v5, v1)
+    g.add_edge(v1, v2)
+    g.add_edge(v2, v3)
+    g.add_edge(v1, v4)
+    g.add_edge(v1, v1)
+    g.add_edge(v4, v5)
+    g.add_edge(v5, v1)
 
     # unmodifiable
     g3 = as_unmodifiable(g)
     assert g3.type.modifiable is False
     with pytest.raises(ValueError):
-        g3.create_edge(v2, v2)
+        g3.add_edge(v2, v2)
 
 
 def test_as_edge_reversed():
@@ -115,12 +115,12 @@ def test_as_edge_reversed():
     g.add_vertex(4)
     v5 = 4
     
-    g.create_edge(v1, v2)
-    g.create_edge(v2, v3)
-    g.create_edge(v1, v4)
-    g.create_edge(v1, v1)
-    e45 = g.create_edge(v4, v5)
-    g.create_edge(v5, v1)
+    g.add_edge(v1, v2)
+    g.add_edge(v2, v3)
+    g.add_edge(v1, v4)
+    g.add_edge(v1, v1)
+    e45 = g.add_edge(v4, v5)
+    g.add_edge(v5, v1)
 
     # edge reversed
     g4 = as_edge_reversed(g)
@@ -139,12 +139,12 @@ def test_as_masked_subgraph():
     g.add_vertex(3)
     g.add_vertex(4)
     
-    g.create_edge(0, 1)
-    g.create_edge(0, 2)
-    g.create_edge(0, 3)
-    g.create_edge(2, 3)
-    g.create_edge(1, 3)
-    g.create_edge(2, 4)
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
+    g.add_edge(1, 3)
+    g.add_edge(2, 4)
 
     def vertex_mask(v): 
         if v == 3: 
@@ -177,7 +177,7 @@ def test_as_weighted():
 
     g.add_vertex(0)
     g.add_vertex(1)
-    g.create_edge(0, 1)
+    g.add_edge(0, 1)
 
     with pytest.raises(ValueError):
         g.set_edge_weight(0, 5.0)
@@ -200,7 +200,7 @@ def test_as_weighted_with_None_function():
 
     g.add_vertex(0)
     g.add_vertex(1)
-    g.create_edge(0, 1)
+    g.add_edge(0, 1)
 
     with pytest.raises(ValueError):
         g.set_edge_weight(0, 5.0)
@@ -223,7 +223,7 @@ def test_as_weighted_with_caching():
 
     g.add_vertex(0)
     g.add_vertex(1)
-    g.create_edge(0, 1)
+    g.add_edge(0, 1)
 
     with pytest.raises(ValueError):
         g.set_edge_weight(0, 5.0)
@@ -247,7 +247,7 @@ def test_as_weighted_with_caching_and_write_throught_with_unweighted():
 
     g.add_vertex(0)
     g.add_vertex(1)
-    g.create_edge(0, 1)
+    g.add_edge(0, 1)
 
     with pytest.raises(ValueError):
         g.set_edge_weight(0, 5.0)
@@ -266,7 +266,7 @@ def test_as_weighted_with_caching_and_write_throught():
 
     g.add_vertex(0)
     g.add_vertex(1)
-    g.create_edge(0, 1)
+    g.add_edge(0, 1)
 
     g.set_edge_weight(0, 200.0)
     assert g.get_edge_weight(0) == 200.0
@@ -290,7 +290,7 @@ def test_as_weighted_with_no_caching_and_write_through():
 
     g.add_vertex(0)
     g.add_vertex(1)
-    g.create_edge(0, 1)
+    g.add_edge(0, 1)
 
     g.set_edge_weight(0, 5.0)
     assert g.get_edge_weight(0) == 5.0
@@ -342,8 +342,8 @@ def test_listenable():
     lg.add_vertex(0)
     lg.add_vertex(1)
     lg.add_vertex(2)
-    lg.create_edge(0, 1)
-    lg.create_edge(1, 2)
+    lg.add_edge(0, 1)
+    lg.add_edge(1, 2)
 
     listener_id_2 = lg.add_listener(listener2)
 

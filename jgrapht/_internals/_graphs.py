@@ -49,9 +49,6 @@ class _JGraphTGraph(_HandleWrapper, Graph):
     def type(self):
         return self._type
 
-    def create_vertex(self):
-        return backend.jgrapht_graph_add_vertex(self._handle)
-
     def add_vertex(self, vertex=None):
         if vertex is not None: 
             backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
@@ -65,17 +62,16 @@ class _JGraphTGraph(_HandleWrapper, Graph):
     def contains_vertex(self, v):
         return backend.jgrapht_graph_contains_vertex(self._handle, v)
 
-    def create_edge(self, u, v, weight=None):
-        res = backend.jgrapht_graph_add_edge(self._handle, u, v)
-        if weight is not None:
-            self.set_edge_weight(res, weight)
-        return res
+    def add_edge(self, u, v, weight=None, edge=None):
+        added = True
+        if edge is not None:
+            added = backend.jgrapht_graph_add_given_edge(self._handle, u, v, edge)
+        else:
+            edge = backend.jgrapht_graph_add_edge(self._handle, u, v)
 
-    def add_edge(self, u, v, edge, weight=None):
-        added = backend.jgrapht_graph_add_given_edge(self._handle, u, v, edge)
         if added and weight is not None:
-            self.set_edge_weight(edge, weight)
-        return added
+            self.set_edge_weight(edge, weight)                
+        return edge
 
     def remove_edge(self, e):
         return backend.jgrapht_graph_remove_edge(self._handle, e)

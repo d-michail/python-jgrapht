@@ -14,11 +14,11 @@ def build_graph():
     g.add_vertex(2)
     g.add_vertex(3)
 
-    g.create_edge(0, 1)
-    g.create_edge(0, 2)    
-    g.create_edge(1, 2)
-    g.create_edge(2, 3)
-    g.create_edge(1, 3)
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)    
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(1, 3)
 
     return g
 
@@ -70,10 +70,10 @@ def test_output_to_string():
 
     g.add_vertices_from(range(0,4))
 
-    g.create_edge(0, 1)
-    g.create_edge(0, 2)
-    g.create_edge(0, 3)
-    g.create_edge(2, 3)
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(2, 3)
 
     out = generate_sparse6(g)
     assert out == ':Cca'

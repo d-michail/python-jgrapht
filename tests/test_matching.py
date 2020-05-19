@@ -12,11 +12,11 @@ def test_bipartite_max_cardinality():
     for i in range(0, 6):
         g.add_vertex(i)
 
-    e03 = g.create_edge(0, 3)
-    e13 = g.create_edge(1, 3)
-    g.create_edge(2, 3)
-    e14 = g.create_edge(1, 4)
-    e25 = g.create_edge(2, 5)
+    e03 = g.add_edge(0, 3)
+    e13 = g.add_edge(1, 3)
+    g.add_edge(2, 3)
+    e14 = g.add_edge(1, 4)
+    e25 = g.add_edge(2, 5)
     g.set_edge_weight(e13, 15.0)
 
     weight, m = matching.bipartite_max_cardinality(g)

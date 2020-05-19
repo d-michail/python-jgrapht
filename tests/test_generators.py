@@ -64,8 +64,8 @@ def test_complement():
     g_source.add_vertex(0)
     g_source.add_vertex(1)
     g_source.add_vertex(2)
-    g_source.create_edge(0,1)
-    g_source.create_edge(0,2)
+    g_source.add_edge(0,1)
+    g_source.add_edge(0,2)
 
     g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
 

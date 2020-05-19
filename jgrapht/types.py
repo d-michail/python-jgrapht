@@ -316,42 +316,34 @@ class Graph(ABC):
         pass
 
     @abstractmethod
-    def create_edge(self, u, v, weight=None):
-        """Create an edge in the graph.
+    def add_edge(self, u, v, weight=None, edge=None):
+        """Add an edge to the graph.
+
+        If the user does not provide explicitly an integer edge identifier, a 
+        new identifier is automatically created. If the user provides an edge and the 
+        edge is already in the graph, then this method does nothing.
 
         :param u: the first endpoint (vertex) of the edge
         :param v: the second endpoint (vertex) of the edge
-        :param weight: an optional weight to use for the edge.
+        :param weight: an optional weight to use for the edge. If the edge is already 
+          present, its weight is not adjusted.
+        :param edge: the integer edge identifier. If None then the graph will automatically
+          create a new edge identifier
         :returns: the new edge identifier
         :rtype: int
         """
         pass
 
-    @abstractmethod
-    def add_edge(self, u, v, edge, weight=None):
-        """Add an edge to the graph.
+    def add_edges_from(self, edges):
+        """Add all edges from an iterable.
 
-        :param u: the first endpoint (vertex) of the edge
-        :param v: the second endpoint (vertex) of the edge
-        :param edge: the integer edge identifier
-        :param weight: an optional weight to use for the edge. If the edge is present,
-          its weight is not adjusted.
-        :returns: True if the edge was added, False if it was already present
-        :rtype: int
-        """
-        pass
-
-    def create_edges_from(self, edges):
-        """Add all edges for an iterable.
-
-        :param edges: any iterable of edges. Each edge is (u,v) or (u,v,weight)  
+        :param edges: any iterable of edges. Each edge is (u, v, weight, id) where possibly weight 
+          and id are missing.
         :returns: list of added edge identifiers
         """
         created = []
-        for edge in edges:
-            u = edge[0]
-            v = edge[1]
-            e = self.create_edge(u, v, weight=edge[2] if len(edge) > 2 else None)
+        for u, v, *rest in edges:
+            e = self.add_edge(u, v, *rest)
             created.append(e)
         return created
 
@@ -445,7 +437,7 @@ class Graph(ABC):
         pass
 
     def edge_tuple(self, e):
-        """Get an edge as a tuple. 
+        """Get an edge as a tuple.
 
         :param e: the edge
         :returns: the edge as (u, v, weight). If the graph is unweighted the 
