@@ -56,7 +56,7 @@ Now the graph contains 4 vertices.  You can find how many vertices the graph con
 
   >>> len(g.vertices)
 
-The property :py:meth:`.Graph.vertices` returns the set of vertices, which is also 
+The property :py:attr:`.Graph.vertices` returns the set of vertices, which is also 
 helpful in order to iterate over them.
 
 .. nbplot::
@@ -129,7 +129,7 @@ Care must be taken to not try to adjust the weight if the graph is unweighted. I
 Edge Set
 --------
 
-Edges can be iterated using the set returned by :py:meth:`.Graph.edges`,
+Edges can be iterated using the set returned by :py:attr:`.Graph.edges`,
 
 .. nbplot::
 
@@ -155,7 +155,7 @@ Finding the number of edges can be performed by executing,
 Graph Types
 -----------
 
-The type of the graph can be queried during runtime using :py:meth:`.Graph.type` which
+The type of the graph can be queried during runtime using :py:attr:`.Graph.type` which
 returns instances of :py:class:`.GraphType`. This allows algorithms to alter their behavior
 based on the actual graph that they are running on. The following properties can be 
 queried,
