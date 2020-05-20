@@ -1,0 +1,21 @@
+language: minimal
+
+jobs:
+  include:
+    - os: linux
+      services:
+        - docker
+      env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64
+      install:
+        - docker pull $DOCKER_IMAGE
+      script:
+        - docker run --rm -v `pwd`:/io $DOCKER_IMAGE /io/travis/build-manylinux2010_x86_64.sh
+      deploy:
+        provider: pypi
+        distributions: "sdist bdist_wheel"
+        skip_cleanup: true
+        user: __token__
+        # PyPI password should be stored on Travis CI as a secret env variable named PYPI_PASSWORD
+        on:
+          tags: true
+

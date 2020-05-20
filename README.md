@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/d-michail/python-jgrapht.svg?branch=master)](https://travis-ci.org/d-michail/python-jgrapht)
 
 # Python-JGraphT
 
