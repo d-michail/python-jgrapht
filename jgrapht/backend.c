@@ -521,6 +521,14 @@ int jgrapht_graph_is_allowing_multipleedges(void *g, int* res) {
     return jgrapht_capi_graph_is_allowing_multipleedges(thread, g, res);
 }
 
+int jgrapht_graph_is_allowing_cycles(void *g, int* res) { 
+    return jgrapht_capi_graph_is_allowing_cycles(thread, g, res);
+}
+
+int jgrapht_graph_is_modifiable(void *g, int* res) { 
+    return jgrapht_capi_graph_is_modifiable(thread, g, res);
+}
+
 int jgrapht_graph_get_edge_weight(void *g, int e, double* res) { 
     return jgrapht_capi_graph_get_edge_weight(thread, g, e, res);
 }
@@ -575,6 +583,26 @@ int jgrapht_graph_as_weighted(void *g, void *weight_function, int cache_weights,
 
 int jgrapht_graph_as_masked_subgraph(void *g, void *vertex_mask_function, void *edge_mask_function, void** res) {
     return jgrapht_capi_graph_as_masked_subgraph(thread, g, vertex_mask_function, edge_mask_function, res);
+}
+
+int jgrapht_graph_as_graph_union(void *g1, void *g2, void *weight_combiner_function, void** res) { 
+    return jgrapht_capi_graph_as_graph_union(thread, g1, g2, weight_combiner_function, res);
+}
+
+int jgrapht_graph_dag_create(int allowing_multiple_edges, int weighted, void** res) { 
+    return jgrapht_capi_graph_dag_create(thread, allowing_multiple_edges, weighted, res);
+}
+
+int jgrapht_graph_dag_topological_it(void *g, void** res) { 
+    return jgrapht_capi_graph_dag_topological_it(thread, g, res);
+}
+
+int jgrapht_graph_dag_vertex_descendants(void *g, int vertex, void** res) { 
+    return jgrapht_capi_graph_dag_vertex_descendants(thread, g, vertex, res);
+}
+
+int jgrapht_graph_dag_vertex_ancestors(void *g, int vertex, void** res) { 
+    return jgrapht_capi_graph_dag_vertex_ancestors(thread, g, vertex, res);
 }
 
 // graph metrics

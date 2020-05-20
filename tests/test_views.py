@@ -10,6 +10,7 @@ from jgrapht.views import (
     as_masked_subgraph,
     as_weighted,
     as_listenable,
+    as_graph_union,
 )
 
 def test_as_unweighted():
@@ -356,3 +357,99 @@ def test_listenable():
 
     assert listener1_results == listener1_expected.splitlines()
     assert listener2_results == listener2_expected.splitlines()
+
+
+def test_union():
+
+    g1 = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g2 = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+
+    g = as_graph_union(g1, g2)
+
+    assert not g.type.directed
+    assert g.type.allowing_multiple_edges
+    assert not g.type.modifiable
+
+    g1.add_vertex(0)
+    g1.add_vertex(1)
+    g1.add_vertex(2)
+    g1.add_vertex(3)
+
+    g1.add_edge(2, 3, weight=7.0, edge = 0)
+    g1.add_edge(0, 1, weight=5.0, edge = 1)
+    g1.add_edge(1, 2, weight=6.0, edge = 2)
+
+    g2.add_vertex(2)
+    g2.add_vertex(3)
+    g2.add_vertex(4)
+    g2.add_vertex(5)
+    g2.add_vertex(6)
+
+    g2.add_edge(2, 3, weight=8.0, edge = 0)
+    g2.add_edge(3, 4, weight=9.0, edge = 1)
+    g2.add_edge(4, 5, weight=9.0, edge = 2)
+    g2.add_edge(5, 6, weight=10.0, edge = 3)
+
+    assert g.vertices == {0, 1, 2, 3, 4, 5, 6}
+    assert g.edges == {0, 1, 2, 3}
+
+    assert g.edge_tuple(0) == (2, 3, 15.0)
+    assert g.edge_tuple(1) == (0, 1, 14.0)
+    assert g.edge_tuple(2) == (1, 2, 15.0)
+    assert g.edge_tuple(3) == (5, 6, 10.0)
+
+
+def test_union_with_combiner():
+
+    g1 = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g2 = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+
+    def max_weight_combiner(x,y):
+        return max(x,y)
+
+    g = as_graph_union(g1, g2, edge_weight_combiner_cb=max_weight_combiner)
+
+    assert g.type.directed
+    assert g.type.allowing_multiple_edges
+    assert not g.type.modifiable
+
+    g1.add_vertex(0)
+    g1.add_vertex(1)
+    g1.add_vertex(2)
+    g1.add_vertex(3)
+
+    g1.add_edge(2, 3, weight=7.0, edge = 0)
+    g1.add_edge(0, 1, weight=5.0, edge = 1)
+    g1.add_edge(1, 2, weight=6.0, edge = 2)
+
+    g2.add_vertex(2)
+    g2.add_vertex(3)
+    g2.add_vertex(4)
+    g2.add_vertex(5)
+    g2.add_vertex(6)
+
+    g2.add_edge(3, 2, weight=8.0, edge = 0)
+    g2.add_edge(3, 4, weight=9.0, edge = 1)
+    g2.add_edge(4, 5, weight=3.0, edge = 2)
+    g2.add_edge(5, 6, weight=10.0, edge = 3)
+
+    assert g.vertices == {0, 1, 2, 3, 4, 5, 6}
+    assert g.edges == {0, 1, 2, 3}
+
+    assert g.edge_tuple(0) == (2, 3, 8.0)
+    assert g.edge_tuple(1) == (0, 1, 9.0)
+    assert g.edge_tuple(2) == (1, 2, 6.0)
+    assert g.edge_tuple(3) == (5, 6, 10.0)
+
+
+def test_bad_union():
+
+    g1 = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g2 = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+
+    with pytest.raises(ValueError):
+        g = as_graph_union(g1, g2)
+
+    with pytest.raises(ValueError):
+        g = as_graph_union(g2, g1)    
+    

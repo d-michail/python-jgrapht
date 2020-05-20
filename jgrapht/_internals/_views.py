@@ -206,3 +206,23 @@ class _ListenableView(_JGraphTGraph):
         backend.jgrapht_listenable_remove_graph_listener(self.handle, listener_handle)
         backend.jgrapht_handles_destroy(listener_handle)
         
+
+class _GraphUnion(_JGraphTGraph):
+
+    def __init__(self, graph1, graph2, edge_weight_combiner_cb=None):
+
+        # Create callbacks and keep a reference
+        self._edge_weight_combiner_cb_fptr, self._edge_weight_combiner_cb = _create_wrapped_callback(
+            edge_weight_combiner_cb, ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_double, ctypes.c_double)
+        )
+
+        # create graph union at the backend
+        res = backend.jgrapht_graph_as_graph_union(graph1.handle, graph2.handle, self._edge_weight_combiner_cb_fptr)
+
+        super().__init__(res)
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph1 = graph1
+        self._graph2 = graph2

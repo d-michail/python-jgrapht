@@ -425,6 +425,10 @@ int jgrapht_graph_is_allowing_selfloops(void *, int* OUTPUT);
 
 int jgrapht_graph_is_allowing_multipleedges(void *, int* OUTPUT);
 
+int jgrapht_graph_is_allowing_cycles(void *, int* OUTPUT);
+
+int jgrapht_graph_is_modifiable(void *, int* OUTPUT);
+
 int jgrapht_graph_get_edge_weight(void *, int, double* OUTPUT);
 
 int jgrapht_graph_set_edge_weight(void *, int, double);
@@ -452,6 +456,16 @@ int jgrapht_graph_as_edgereversed(void *, void** OUTPUT);
 int jgrapht_graph_as_weighted(void *, void *LONG_TO_FUNCTION_POINTER, int, int, void** OUTPUT);
 
 int jgrapht_graph_as_masked_subgraph(void *, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_graph_as_graph_union(void *, void *, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_graph_dag_create(int, int, void** OUTPUT);
+
+int jgrapht_graph_dag_topological_it(void *, void** OUTPUT);
+
+int jgrapht_graph_dag_vertex_descendants(void *, int, void** OUTPUT);
+
+int jgrapht_graph_dag_vertex_ancestors(void *, int, void** OUTPUT);
 
 // graph metrics
 

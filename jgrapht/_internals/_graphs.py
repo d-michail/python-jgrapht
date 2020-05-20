@@ -2,48 +2,46 @@ from .. import backend
 from ..types import (
     Graph,
     GraphType,
+    DirectedAcyclicGraph,
 )
 from collections.abc import Set
 from ._wrappers import _HandleWrapper
-from ._collections import _JGraphTIntegerIterator
+from ._collections import (
+    _JGraphTIntegerIterator,
+    _JGraphTIntegerSet,
+)
 
 
 class _JGraphTGraph(_HandleWrapper, Graph):
     """The actual graph implementation."""
 
-    def __init__(
-        self,
-        handle=None,
-        directed=True,
-        allowing_self_loops=True,
-        allowing_multiple_edges=True,
-        weighted=True,
-        **kwargs
-    ):
-        creating_graph = handle is None
-        if creating_graph:
-            handle = backend.jgrapht_graph_create(
-                directed, allowing_self_loops, allowing_multiple_edges, weighted
-            )
+    def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
-        self._vertex_set = None
-        self._edge_set = None
-
-        if not creating_graph:
-            # read attributes from backend
-            directed = backend.jgrapht_graph_is_directed(self._handle)
-            allowing_self_loops = backend.jgrapht_graph_is_allowing_selfloops(
-                self._handle
-            )
-            allowing_multiple_edges = backend.jgrapht_graph_is_allowing_multipleedges(
-                self._handle
-            )
-            weighted = backend.jgrapht_graph_is_weighted(self._handle)
+        # read attributes from backend
+        directed = backend.jgrapht_graph_is_directed(self._handle)
+        allowing_self_loops = backend.jgrapht_graph_is_allowing_selfloops(
+            self._handle
+        )
+        allowing_multiple_edges = backend.jgrapht_graph_is_allowing_multipleedges(
+            self._handle
+        )
+        allowing_cycles = backend.jgrapht_graph_is_allowing_cycles(
+            self._handle
+        )
+        weighted = backend.jgrapht_graph_is_weighted(self._handle)
+        modifiable = backend.jgrapht_graph_is_modifiable(self._handle)
 
         self._type = GraphType(
-            directed, allowing_self_loops, allowing_multiple_edges, weighted
+            directed=directed,
+            allowing_self_loops=allowing_self_loops,
+            allowing_multiple_edges=allowing_multiple_edges,
+            allowing_cycles=allowing_cycles,
+            weighted=weighted,
+            modifiable=modifiable,
         )
+        self._vertex_set = None
+        self._edge_set = None
 
     @property
     def type(self):
@@ -187,6 +185,25 @@ class _JGraphTGraph(_HandleWrapper, Graph):
         return '_JGraphTGraph(%r)' % self._handle
 
 
+class _JGraphTDirectedAcyclicGraph(_JGraphTGraph, DirectedAcyclicGraph):
+    """The directed acyclic graph wrapper."""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def descendants(self, vertex):
+        set_handle = backend.jgrapht_graph_dag_vertex_descendants(self.handle, vertex)
+        return _JGraphTIntegerSet(handle=set_handle)
+
+    def ancestors(self, vertex):
+        set_handle = backend.jgrapht_graph_dag_vertex_ancestors(self.handle, vertex)
+        return _JGraphTIntegerSet(handle=set_handle)
+
+    def __iter__(self):
+        it_handle = backend.jgrapht_graph_dag_topological_it(self.handle)
+        return _JGraphTIntegerIterator(handle=it_handle)
+
+
 def create_graph(
     directed=True,
     allowing_self_loops=False,
@@ -200,14 +217,12 @@ def create_graph(
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
     :returns: a graph
-    :rtype: :class:`type <.types.Graph>`
+    :rtype: :class:`~jgrapht.types.Graph`    
     """
-    return _JGraphTGraph(
-        directed=directed,
-        allowing_self_loops=allowing_self_loops,
-        allowing_multiple_edges=allowing_multiple_edges,
-        weighted=weighted,
+    handle = backend.jgrapht_graph_create(
+        directed, allowing_self_loops, allowing_multiple_edges, weighted
     )
+    return _JGraphTGraph(handle)
 
 
 def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True):
@@ -234,7 +249,7 @@ def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True)
     :param directed: whether the graph will be directed or undirected
     :param weighted: whether the graph will be weighted or not
     :returns: a graph
-    :rtype: :class:`jgrapht.types.Graph`
+    :rtype: :class:`~jgrapht.types.Graph`
     """
     e_list = backend.jgrapht_list_create()
     if weighted:
@@ -276,3 +291,20 @@ def as_sparse_graph(graph):
     return create_sparse_graph(
         max_vertex + 1, edgelist, graph.type.directed, graph.type.weighted
     )
+
+
+def create_dag(
+    allowing_multiple_edges=False,
+    weighted=True,
+):
+    """Create a directed acyclic graph.
+
+    :param allowing_multiple_edges: if True the graph will allow multiple-edges
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph`    
+    """
+    handle = backend.jgrapht_graph_dag_create(
+        allowing_multiple_edges, weighted, 
+    )
+    return _JGraphTDirectedAcyclicGraph(handle)

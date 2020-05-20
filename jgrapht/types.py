@@ -10,12 +10,14 @@ class GraphType:
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
+        allowing_cycles=True,
         weighted=True,
         modifiable=True,
     ):
         self._directed = directed
         self._allowing_self_loops = allowing_self_loops
         self._allowing_multiple_edges = allowing_multiple_edges
+        self._allowing_cycles = allowing_cycles
         self._weighted = weighted
         self._modifiable = modifiable
 
@@ -68,62 +70,80 @@ class GraphType:
         """
         return self._modifiable
 
+    @property
+    def allowing_cycles(self):
+        """Tells if the graph allows cycles.
+        
+        :returns: True if the graph allows cycles, False otherwise.
+        """
+        return self._allowing_cycles
+
     def as_directed(self):
         """Return a directed version of this graph type.
+
         :returns: a directed version of this graph type
         """
         return GraphType(
             directed=True,
             allowing_self_loops=self._allowing_self_loops,
             allowing_multiple_edges=self._allowing_multiple_edges,
+            allowing_cycles=self._allowing_cycles,
             weighted=self._weighted,
             modifiable=self._modifiable,
         )
 
     def as_undirected(self):
         """Return an undirected version of this graph type.
+
         :returns: an undirected version of this graph type
         """
         return GraphType(
             directed=False,
             allowing_self_loops=self._allowing_self_loops,
             allowing_multiple_edges=self._allowing_multiple_edges,
+            allowing_cycles=self._allowing_cycles,
             weighted=self._weighted,
             modifiable=self._modifiable,
         )
 
     def as_weighted(self):
         """Return a weighted version of this graph type.
+
         :returns: a weighted version of this graph type
         """
         return GraphType(
             directed=self._directed,
             allowing_self_loops=self._allowing_self_loops,
             allowing_multiple_edges=self._allowing_multiple_edges,
+            allowing_cycles=self._allowing_cycles,
             weighted=True,
             modifiable=self._modifiable,
         )
 
     def as_unweighted(self):
         """Return an unweighted version of this graph type.
+
         :returns: an unweighted version of this graph type
         """
         return GraphType(
             directed=self._directed,
             allowing_self_loops=self._allowing_self_loops,
             allowing_multiple_edges=self._allowing_multiple_edges,
+            allowing_cycles=self._allowing_cycles,
             weighted=False,
             modifiable=self._modifiable,
         )    
 
     def as_unmodifiable(self):
         """Return an unmodifiable version of this graph type.
+        
         :returns: an unmodifiable version of this graph type
         """
         return GraphType(
             directed=self._directed,
             allowing_self_loops=self._allowing_self_loops,
             allowing_multiple_edges=self._allowing_multiple_edges,
+            allowing_cycles=self._allowing_cycles,
             weighted=self._weighted,
             modifiable=False,
         )    
@@ -133,15 +153,17 @@ class GraphType:
             "directed": self._directed,
             "allowing_self_loops": self._allowing_self_loops,
             "allowing_multiple_edges": self._allowing_multiple_edges,
+            "allowing_cycles": self._allowing_cycles,
             "weighted": self._weighted,
             "modifiable": self._modifiable,
         }
 
     def __str__(self):
-        return "GraphType(directed={}, allowing-self-loops={}, allowing-multiple-edges={}, weighted={}, modifiable={})".format(
+        return "GraphType(directed={}, allowing-self-loops={}, allowing-multiple-edges={}, allowing-cycles={}, weighted={}, modifiable={})".format(
             self._directed,
             self._allowing_self_loops,
             self._allowing_multiple_edges,
+            self._allowing_cycles,
             self._weighted,
             self._modifiable,
         )
@@ -715,4 +737,29 @@ class ListenableGraph(Graph):
         """
         pass
 
+class DirectedAcyclicGraph(Graph):
+    """A directed acyclic graph."""
+
+    @abstractmethod
+    def descendants(self, vertex):
+        """Get the descendants of a vertex
+
+        :param vertex: vertex
+        :returns: a vertex set
+        """
+        pass
+
+    @abstractmethod
+    def ancestors(self, vertex):
+        """Get the ancestors of a vertex
+
+        :param vertex: a vertex
+        :returns: a vertex set
+        """
+        pass
+
+    @abstractmethod
+    def __iter__(self):
+        """Get a topological order iterator"""
+        pass
 

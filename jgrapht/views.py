@@ -7,6 +7,7 @@ from ._internals._views import (
     _MaskedSubgraphView,
     _WeightedView,
     _ListenableView,
+    _GraphUnion,
 )
 
 
@@ -108,3 +109,25 @@ def as_listenable(graph):
     :returns: a listenable graph which is an instance of type :py:class:`~jgrapht.types.ListenableGraph`.
     """
     return _ListenableView(graph)
+
+
+def as_graph_union(graph1, graph2, edge_weight_combiner_cb=None):
+    """Create a graph union view of two graphs. Any updates in the original graphs are reflected
+    in the view.
+
+    The resulting graph is unmodifiable and may contain multiple-edges even if the input graphs did
+    not contain multiple edges. If both graphs contain an edge with the same identifier, but the 
+    edge endpoints are different in the two graphs, then the graph union contains the edge with the
+    endpoints from the first graph. The weight of edge is computed using the combiner provided as 
+    parameter.
+
+    .. note:: Graph types must be the same. You cannot union a directed with an undirected graph.
+
+    :param graph1: the first graph
+    :param graph2: the second graph
+    :param edge_weight_combiner_cb: function responsible for combining weights in edges which belong
+       to both graphs. If None then the default combiner is addition. The callback must accept two 
+       double parameters and return one.
+    :returns: a graph which is the union of the two graphs
+    """
+    return _GraphUnion(graph1, graph2, edge_weight_combiner_cb)
