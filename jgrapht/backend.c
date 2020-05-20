@@ -817,6 +817,12 @@ int jgrapht_import_string_graph6sparse6(void *g, char* input, void *import_verte
     return jgrapht_capi_import_string_graph6sparse6(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
+// independent set
+
+int jgrapht_independent_set_exec_chordal_max_independent_set(void *g, void** res) { 
+    return jgrapht_capi_independent_set_exec_chordal_max_independent_set(thread, g, res);
+}
+
 // isomorphism
 
 int jgrapht_isomorphism_exec_vf2(void *g1, void *g2, int* exist_iso_res, void** graph_mapping_it_res) { 
@@ -1223,6 +1229,14 @@ int jgrapht_sp_exec_yen_get_k_loopless_paths_between_vertices(void *g, int sourc
 
 int jgrapht_sp_exec_eppstein_get_k_paths_between_vertices(void *g, int source, int target, int k, void** res) { 
     return jgrapht_capi_sp_exec_eppstein_get_k_paths_between_vertices(thread, g, source, target, k, res);
+}
+
+int jgrapht_sp_exec_delta_stepping_get_path_between_vertices(void *g, int source, int target, double delta, int parallelism, void**res) { 
+    return jgrapht_capi_sp_exec_delta_stepping_get_path_between_vertices(thread, g, source, target, delta, parallelism, res);
+}
+
+int jgrapht_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, int source, double delta, int parallelism, void** res) { 
+    return jgrapht_capi_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, delta, parallelism, res);
 }
 
 // spanner

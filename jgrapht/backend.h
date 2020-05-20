@@ -418,6 +418,10 @@ int jgrapht_import_file_graph6sparse6(void *, char*, void *, void *, void *);
 
 int jgrapht_import_string_graph6sparse6(void *, char*, void *, void *, void *);
 
+// independent set
+
+int jgrapht_independent_set_exec_chordal_max_independent_set(void *, void**);
+
 // isomorphism
 
 int jgrapht_isomorphism_exec_vf2(void *, void *, int*, void**);
@@ -633,6 +637,10 @@ int jgrapht_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(
 int jgrapht_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, int, int, int, void**);
 
 int jgrapht_sp_exec_eppstein_get_k_paths_between_vertices(void *, int, int, int, void**);
+
+int jgrapht_sp_exec_delta_stepping_get_path_between_vertices(void *, int, int, double, int, void**);
+
+int jgrapht_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, int, double, int, void**);
 
 // spanner
 

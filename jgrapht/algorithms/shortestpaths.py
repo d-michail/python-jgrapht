@@ -6,10 +6,12 @@ from .._internals._paths import (
     _JGraphTAllPairsPaths,
 )
 from .._internals._collections import _JGraphTIntegerSet
+
 import ctypes
+import multiprocessing
 
 
-def _sp_singlesource_alg(name, graph, source_vertex):
+def _sp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
 
     try:
@@ -17,7 +19,7 @@ def _sp_singlesource_alg(name, graph, source_vertex):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    handle = alg_method(graph.handle, source_vertex)
+    handle = alg_method(graph.handle, source_vertex, *args)
 
     return _JGraphTSingleSourcePaths(handle, graph, source_vertex)
 
@@ -305,3 +307,36 @@ def eppstein_k(graph, source_vertex, target_vertex, k):
     return _sp_k_between_alg(
         "eppstein_get_k_paths_between_vertices", graph, source_vertex, target_vertex, k
     )
+
+def delta_stepping(graph, source_vertex, target_vertex=None, delta=None, parallelism=None):
+    """Delta stepping algorithm to compute single-source shortest paths. 
+
+    :param graph: the graph
+    :param source_vertex: the source vertex
+    :param target_vertex: the target vertex. If None then shortest paths to all vertices are computed 
+           and returned as an instance of :py:class:`.SingleSourcePaths`
+    :param delta: the delta parameter. If None then it is automatically calculated, by traversing
+      the graph at least once.
+    :param parallelism: amount of parallelism to use. If None the cpu cores are used
+    :returns: either a :py:class:`.GraphPath` or :py:class:`.SingleSourcePaths` depending on whether a
+              target vertex is provided
+    """
+    if parallelism is None: 
+        parallelism = multiprocessing.cpu_count()
+    if delta is None: 
+        delta = 0.0
+
+    custom = [delta, parallelism]
+
+    if target_vertex is None:
+        return _sp_singlesource_alg(
+            "delta_stepping_get_singlesource_from_vertex", graph, source_vertex, *custom
+        )
+    else:
+        return _sp_between_alg(
+            "delta_stepping_get_path_between_vertices",
+            graph,
+            source_vertex,
+            target_vertex,
+            *custom
+        )

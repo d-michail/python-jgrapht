@@ -257,3 +257,45 @@ def test_eppstein_k():
     assert p2.edges == [0, 1, 4]
     assert p2.weight == 105.0
     assert next(it, None) == None
+
+
+def test_delta_stepping():
+    g = get_graph()
+
+    single_path = sp.delta_stepping(g, 0, 5)
+    assert single_path.weight == 62.0
+    assert single_path.start_vertex == 0
+    assert single_path.end_vertex == 5
+    assert list(single_path.edges) == [2, 3, 5]
+
+    single_path = sp.delta_stepping(g, 0, 5, delta=20.0)
+    assert single_path.weight == 62.0
+    assert single_path.start_vertex == 0
+    assert single_path.end_vertex == 5
+    assert list(single_path.edges) == [2, 3, 5]
+
+    from_paths = sp.delta_stepping(g, 0)
+    assert from_paths.source_vertex == 0
+    single_path = from_paths.get_path(5)
+    assert single_path.weight == 62.0
+    assert single_path.start_vertex == 0
+    assert single_path.end_vertex == 5
+    assert list(single_path.edges) == [2, 3, 5]
+
+    single_path = from_paths.get_path(3)
+    assert single_path.weight == 103.0
+    assert single_path.start_vertex == 0
+    assert single_path.end_vertex == 3
+    assert list(single_path.edges) == [0, 1]
+
+    single_path = sp.delta_stepping(g, 0, 5, delta=10.0, parallelism=2)
+    assert single_path.weight == 62.0
+    assert single_path.start_vertex == 0
+    assert single_path.end_vertex == 5
+    assert list(single_path.edges) == [2, 3, 5]
+
+    single_path = sp.delta_stepping(g, 0, 5, delta=10.0, parallelism=16)
+    assert single_path.weight == 62.0
+    assert single_path.start_vertex == 0
+    assert single_path.end_vertex == 5
+    assert list(single_path.edges) == [2, 3, 5]

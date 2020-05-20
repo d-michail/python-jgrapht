@@ -24,4 +24,5 @@ The JGraphT contains a large collection of advanced algorithms.
    isomorphism
    tour
    cliques
+   independent
    vertexcover
