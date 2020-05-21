@@ -31,3 +31,7 @@ return instances from these classes.
 
 .. autoclass:: jgrapht.types.AllPairsPaths
    :members:
+
+.. autoclass:: jgrapht.types.MultiObjectiveSingleSourcePaths
+   :members:
+

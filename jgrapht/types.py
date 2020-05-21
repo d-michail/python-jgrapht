@@ -278,6 +278,24 @@ class AllPairsPaths(ABC):
         """
         pass
 
+class MultiObjectiveSingleSourcePaths(ABC):
+    """A set of paths starting from a single source vertex.
+    """
+
+    @abstractmethod
+    def source_vertex(self):
+        """The source vertex."""
+        pass
+
+    @abstractmethod
+    def get_paths(self, target_vertex):
+        """Get the set of paths to the target vertex.
+
+        :param target_vertex: The target vertex.
+        :returns: an iterator over all paths from the source to the
+          target vertex
+        """
+        pass
 
 class Graph(ABC):
     """A graph."""

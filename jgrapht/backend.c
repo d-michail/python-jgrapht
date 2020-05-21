@@ -1195,16 +1195,16 @@ int jgrapht_sp_exec_floydwarshall_get_allpairs(void *g, void** res) {
     return jgrapht_capi_sp_exec_floydwarshall_get_allpairs(thread, g, res);
 }
 
-int jgrapht_sp_singlesource_get_path_to_vertex(void *g, int target, void** res) {
-    return jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, g, target, res);
+int jgrapht_sp_singlesource_get_path_to_vertex(void *singlesource, int target, void** res) {
+    return jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, target, res);
 }
 
-int jgrapht_sp_allpairs_get_path_between_vertices(void *g, int source, int target, void** res) {
-    return jgrapht_capi_sp_allpairs_get_path_between_vertices(thread, g, source, target, res);
+int jgrapht_sp_allpairs_get_path_between_vertices(void *allpairs, int source, int target, void** res) {
+    return jgrapht_capi_sp_allpairs_get_path_between_vertices(thread, allpairs, source, target, res);
 }
 
-int jgrapht_sp_allpairs_get_singlesource_from_vertex(void *g, int source, void** res) {
-    return jgrapht_capi_sp_allpairs_get_singlesource_from_vertex(thread, g, source, res);
+int jgrapht_sp_allpairs_get_singlesource_from_vertex(void *allpairs, int source, void** res) {
+    return jgrapht_capi_sp_allpairs_get_singlesource_from_vertex(thread, allpairs, source, res);
 }
 
 int jgrapht_sp_exec_astar_get_path_between_vertices(void *g, int source, int target, void *heuristic, void** res) { 
@@ -1237,6 +1237,20 @@ int jgrapht_sp_exec_delta_stepping_get_path_between_vertices(void *g, int source
 
 int jgrapht_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, int source, double delta, int parallelism, void** res) { 
     return jgrapht_capi_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, delta, parallelism, res);
+}
+
+// multi objective shortest paths
+
+int jgrapht_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *g, int source, void *cost_function, int dimensions, void** res) { 
+    return jgrapht_capi_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(thread, g, source, cost_function, dimensions, res);
+}
+
+int jgrapht_multisp_exec_martin_get_paths_between_vertices(void *g, int source, int target, void *cost_function, int dimensions, void** res) { 
+    return jgrapht_capi_multisp_exec_martin_get_paths_between_vertices(thread, g, source, target, cost_function, dimensions, res);    
+}
+
+int jgrapht_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *multiobjectivesinglesource, int target, void** res) { 
+    return jgrapht_capi_multisp_multiobjectivesinglesource_get_paths_to_vertex(thread, multiobjectivesinglesource, target, res);
 }
 
 // spanner

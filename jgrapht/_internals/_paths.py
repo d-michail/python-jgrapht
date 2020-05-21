@@ -2,6 +2,7 @@ from .. import backend
 from ..types import (
     GraphPath,
     SingleSourcePaths,
+    MultiObjectiveSingleSourcePaths,
     AllPairsPaths,
 )
 from ._wrappers import (
@@ -138,3 +139,28 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
 
     def __repr__(self):
         return "_JGraphTAllPairsPaths(%r)" % self._handle
+
+
+class _JGraphTMultiObjectiveSingleSourcePaths(_HandleWrapper, MultiObjectiveSingleSourcePaths):
+    """A set of paths starting from a single source vertex. This is the 
+    multi objective case, where for each target vertex we might have a set of paths.
+    """
+
+    def __init__(self, handle, graph, source_vertex, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+        self._source_vertex = source_vertex
+
+    @property
+    def source_vertex(self):
+        """The source vertex"""
+        return self._source_vertex
+
+    def get_paths(self, target_vertex):
+        gp_it = backend.jgrapht_multisp_multiobjectivesinglesource_get_paths_to_vertex(
+            self._handle, target_vertex
+        )
+        return _JGraphTGraphPathIterator(handle=gp_it, graph=self._graph)
+
+    def __repr__(self):
+        return "_JGraphTMultiObjectiveSingleSourcePaths(%r)" % self._handle

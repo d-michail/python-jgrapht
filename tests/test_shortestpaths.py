@@ -299,3 +299,54 @@ def test_delta_stepping():
     assert single_path.start_vertex == 0
     assert single_path.end_vertex == 5
     assert list(single_path.edges) == [2, 3, 5]
+
+
+def test_martin():
+ 
+    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=False)
+
+    g.add_vertices_from(range(1, 6))
+
+    g.add_edge(1, 2)
+    g.add_edge(1, 3)
+    g.add_edge(1, 4)
+    g.add_edge(2, 4)
+    g.add_edge(2, 5)
+    g.add_edge(3, 4)
+    g.add_edge(3, 5)
+    g.add_edge(4, 5)
+
+    costs = { 
+        0: [1.0, 5.0],
+        1: [4.0, 2.0],
+        2: [4.0, 4.0],
+        3: [1.0, 2.0],
+        4: [2.0, 5.0], 
+        5: [2.0, 3.0], 
+        6: [6.0, 1.0],
+        7: [3.0, 3.0],
+    }
+
+    def cost_function(e):
+        return costs[e]; 
+
+    multi_paths = sp.martin_multiobjective(g, cost_function, 2, 1)
+
+    it = multi_paths.get_paths(5)
+    p1 = next(it)
+    assert p1.edges == [0, 4]
+    p2 = next(it)
+    assert p2.edges == [1, 6]
+    p3 = next(it)
+    assert p3.edges == [2, 7]
+    assert next(it, 'Exhausted') == 'Exhausted'
+
+    it = sp.martin_multiobjective(g, cost_function, 2, 1, 5)
+    p1 = next(it)
+    assert p1.edges == [0, 4]
+    p2 = next(it)
+    assert p2.edges == [1, 6]
+    p3 = next(it)
+    assert p3.edges == [2, 7]
+    assert next(it, 'Exhausted') == 'Exhausted'
+

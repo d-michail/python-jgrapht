@@ -642,6 +642,14 @@ int jgrapht_sp_exec_delta_stepping_get_path_between_vertices(void *, int, int, d
 
 int jgrapht_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, int, double, int, void**);
 
+// multi objective shortest paths
+
+int jgrapht_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *, int, void *, int, void**);
+
+int jgrapht_multisp_exec_martin_get_paths_between_vertices(void *, int, int, void *, int, void**);
+
+int jgrapht_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *, int, void**);
+
 // spanner
 
 int jgrapht_spanner_exec_greedy_multiplicative(void *, int, double*, void**);

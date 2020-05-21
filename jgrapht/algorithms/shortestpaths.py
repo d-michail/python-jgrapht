@@ -3,9 +3,11 @@ from .._internals._paths import (
     _JGraphTGraphPath,
     _JGraphTGraphPathIterator,
     _JGraphTSingleSourcePaths,
+    _JGraphTMultiObjectiveSingleSourcePaths,
     _JGraphTAllPairsPaths,
 )
 from .._internals._collections import _JGraphTIntegerSet
+from .._internals._callbacks import _create_wrapped_callback
 
 import ctypes
 import multiprocessing
@@ -61,6 +63,18 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
     handle = alg_method(graph.handle, source_vertex, target_vertex, k, *args)
 
     return _JGraphTGraphPathIterator(handle, graph)
+
+def _multisp_singlesource_alg(name, graph, source_vertex, *args):
+    alg_method_name = "jgrapht_multisp_exec_" + name
+
+    try:
+        alg_method = getattr(backend, alg_method_name)
+    except AttributeError:
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
+
+    handle = alg_method(graph.handle, source_vertex, *args)
+
+    return _JGraphTMultiObjectiveSingleSourcePaths(handle, graph, source_vertex)
 
 
 def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
@@ -340,3 +354,54 @@ def delta_stepping(graph, source_vertex, target_vertex=None, delta=None, paralle
             target_vertex,
             *custom
         )
+
+
+def martin_multiobjective(graph, edge_weight_cb, edge_weight_dimension, source_vertex, target_vertex=None): 
+    """Martin's algorithm for the multi-objective shortest paths problem.
+
+    Martin's label setting algorithm is a multiple objective extension of Dijkstra's algorithm, where
+    the minimum operator is replaced by a dominance test. It computes a maximal complete set of efficient
+    paths when all the weight values are non-negative.
+
+    .. note :: Note that the multi-objective shortest path problem is a well-known NP-hard problem.
+
+    :param graph: the graph
+    :param edge_weight_cb: edge weight callback. It should accept an edge as a parameter and return a list of 
+      weights.
+    :param edge_weight_dimension: dimension of the edge weight function
+    :param source_vertex: the source vertex
+    :param target_vertex: the target vertex. If None the paths to all vertices are computed 
+           and returned as an instance of :py:class:`.MultiObjectiveSingleSourcePaths`
+    :returns: either an iterator of :py:class:`.GraphPath` or :py:class:`.MultiObjectiveSingleSourcePaths`
+       depending on whether a target vertex is provided
+    """
+    if edge_weight_dimension < 1: 
+        raise ValueError('Cost function needs to have a positive dimension')
+
+    # we need a function which accepts an edge and returns a pointer to an 
+    # array with double values
+    def inner_edge_weight_cb(edge):
+        weights = edge_weight_cb(edge)[:edge_weight_dimension]
+        array = (ctypes.c_double * len(weights))(*weights)
+        array_ptr = ctypes.cast(array, ctypes.c_void_p)
+        return array_ptr.value
+
+    cb_fptr, cb = _create_wrapped_callback(
+        inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_int)
+    )
+
+    custom = [ cb_fptr, edge_weight_dimension ]
+
+    if target_vertex is None: 
+        return _multisp_singlesource_alg(
+            'martin_get_multiobjectivesinglesource_from_vertex', graph, source_vertex, *custom
+        )
+    else:
+        res = backend.jgrapht_multisp_exec_martin_get_paths_between_vertices(
+            graph.handle, 
+            source_vertex, 
+            target_vertex,
+            *custom
+        )
+        return _JGraphTGraphPathIterator(res, graph)
+
