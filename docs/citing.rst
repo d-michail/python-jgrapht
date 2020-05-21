@@ -11,13 +11,17 @@ sources in your research. If you’re not sure whether or not to cite something,
 Below you can find the bibtex entry::
 
   @article{jgrapht,
-    title={{J}{G}raph{T}--{A} {J}ava library for graph data structures and algorithms},
-    author={Michail, Dimitrios and Kinable, Joris and Naveh, Barak and Sichi, John V},
-    journal={ACM Transactions on Mathematical Software (TOMS)},
-    volume={46},
-    number={2},
-    year={2020},
-    publisher={ACM New York, NY, USA},
-    note={to appear}
+    title = {{J}{G}raph{T}--{A} {J}ava {L}ibrary for {G}raph {D}ata {S}tructures and {A}lgorithms},
+    author = {Michail, Dimitrios and Kinable, Joris and Naveh, Barak and Sichi, John V.},
+    year = {2020},
+    issue_date = {May 2020},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    volume = {46},
+    number = {2},
+    journal = {ACM Trans. Math. Softw.},
+    month = may,
+    articleno = {16},
+    numpages = {29},
   }
 
