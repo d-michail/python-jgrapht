@@ -6,16 +6,23 @@ import jgrapht.algorithms.tour as tour
 
 from random import Random
 
+
 def build_graph():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
     complete_graph(g, 8)
 
     rng = Random(17)
 
     for e in g.edges:
-        g.set_edge_weight(e, rng.randint(0,10))
+        g.set_edge_weight(e, rng.randint(0, 10))
 
     return g
+
 
 def test_random_tsp():
     g = build_graph()
@@ -93,15 +100,13 @@ def test_tsp_two_opt_heuristic():
 
 def test_tsp_two_opt_improve():
     g = build_graph()
-    
+
     path1 = tour.tsp_nearest_insertion_heuristic(g)
     assert path1.weight == 30.0
     assert path1.start_vertex == path1.end_vertex
-    assert path1.start_vertex == 1    
+    assert path1.start_vertex == 1
 
     path2 = tour.tsp_two_opt_heuristic_improve(path1, seed=17)
     assert path2.weight == 27.0
     assert path2.start_vertex == path2.end_vertex
     assert path2.start_vertex == 1
-
-

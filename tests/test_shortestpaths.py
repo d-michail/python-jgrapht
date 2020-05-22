@@ -4,8 +4,14 @@ from jgrapht import create_graph
 import jgrapht.algorithms.shortestpaths as sp
 import math
 
+
 def get_graph():
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     for i in range(0, 6):
         g.add_vertex(i)
@@ -23,7 +29,12 @@ def get_graph():
 
 
 def get_graph_with_negative_edges():
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     assert g.type.directed
 
@@ -43,7 +54,8 @@ def get_graph_with_negative_edges():
     assert len(g.vertices) == 7
     assert len(g.edges) == 9
 
-    return g    
+    return g
+
 
 def test_dijkstra():
     g = get_graph()
@@ -130,7 +142,6 @@ def test_johnsons():
     assert list(path05.edges) == [2, 3, 5]
 
 
-
 def test_floyd_warshall():
     g = get_graph_with_negative_edges()
 
@@ -156,7 +167,12 @@ def test_floyd_warshall():
 
 def test_a_star():
 
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
@@ -172,16 +188,26 @@ def test_a_star():
     g.add_edge(5, 8)
 
     def heuristic(source, target):
-        coordinates = { 0: (2,0), 1: (2,1), 2:(2,2), 3:(1,0), 4:(1,1), 5:(1,2), 6:(0,0), 7:(0,1), 8:(0,2) }
+        coordinates = {
+            0: (2, 0),
+            1: (2, 1),
+            2: (2, 2),
+            3: (1, 0),
+            4: (1, 1),
+            5: (1, 2),
+            6: (0, 0),
+            7: (0, 1),
+            8: (0, 2),
+        }
         sx = coordinates[source][0]
         sy = coordinates[source][1]
 
         tx = coordinates[target][0]
         ty = coordinates[target][1]
 
-        dx = sx-tx
-        dy = sy-ty
-        d = math.sqrt(dx*dx + dy*dy)
+        dx = sx - tx
+        dy = sy - ty
+        d = math.sqrt(dx * dx + dy * dy)
 
         return d
 
@@ -200,7 +226,12 @@ def test_a_star():
 
 def test_a_star_with_alt_heuristic():
 
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
@@ -221,7 +252,9 @@ def test_a_star_with_alt_heuristic():
     assert path.start_vertex == 0
     assert path.end_vertex == 8
 
-    path1 = sp.a_star_with_alt_heuristic(g, 0, 8, landmarks=set([2, 7]), use_bidirectional=True)
+    path1 = sp.a_star_with_alt_heuristic(
+        g, 0, 8, landmarks=set([2, 7]), use_bidirectional=True
+    )
 
     assert path1.edges == [0, 2, 4, 9]
     assert path1.start_vertex == 0
@@ -302,8 +335,13 @@ def test_delta_stepping():
 
 
 def test_martin():
- 
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=False)
+
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=False,
+    )
 
     g.add_vertices_from(range(1, 6))
 
@@ -316,19 +354,19 @@ def test_martin():
     g.add_edge(3, 5)
     g.add_edge(4, 5)
 
-    costs = { 
+    costs = {
         0: [1.0, 5.0],
         1: [4.0, 2.0],
         2: [4.0, 4.0],
         3: [1.0, 2.0],
-        4: [2.0, 5.0], 
-        5: [2.0, 3.0], 
+        4: [2.0, 5.0],
+        5: [2.0, 3.0],
         6: [6.0, 1.0],
         7: [3.0, 3.0],
     }
 
     def cost_function(e):
-        return costs[e]; 
+        return costs[e]
 
     multi_paths = sp.martin_multiobjective(g, cost_function, 2, 1)
 
@@ -339,7 +377,7 @@ def test_martin():
     assert p2.edges == [1, 6]
     p3 = next(it)
     assert p3.edges == [2, 7]
-    assert next(it, 'Exhausted') == 'Exhausted'
+    assert next(it, "Exhausted") == "Exhausted"
 
     it = sp.martin_multiobjective(g, cost_function, 2, 1, 5)
     p1 = next(it)
@@ -348,5 +386,4 @@ def test_martin():
     assert p2.edges == [1, 6]
     p3 = next(it)
     assert p3.edges == [2, 7]
-    assert next(it, 'Exhausted') == 'Exhausted'
-
+    assert next(it, "Exhausted") == "Exhausted"

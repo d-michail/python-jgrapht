@@ -3,8 +3,14 @@ import pytest
 from jgrapht import create_graph
 import jgrapht.algorithms.isomorphism as iso
 
+
 def test_iso():
-    g1 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+    g1 = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     g1.add_vertices_from([0, 1, 2, 3])
 
@@ -13,7 +19,12 @@ def test_iso():
     g1.add_edge(2, 3)
     g1.add_edge(3, 0)
 
-    g2 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+    g2 = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     g2.add_vertices_from([5, 6, 7, 8])
 
@@ -54,7 +65,12 @@ def test_iso():
 
 
 def test_iso_induced_subgraph():
-    g1 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+    g1 = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     g1.add_vertices_from([0, 1, 2, 3])
 
@@ -63,7 +79,12 @@ def test_iso_induced_subgraph():
     g1.add_edge(2, 3)
     g1.add_edge(3, 0)
 
-    g2 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+    g2 = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     g2.add_vertices_from([5, 6, 7])
 
@@ -93,7 +114,12 @@ def test_iso_induced_subgraph():
 
 
 def test_iso_not_induced_subgraph():
-    g1 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+    g1 = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     g1.add_vertices_from([0, 1, 2, 3])
 
@@ -104,7 +130,12 @@ def test_iso_not_induced_subgraph():
     g1.add_edge(0, 2)
     g1.add_edge(1, 3)
 
-    g2 = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+    g2 = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     g2.add_vertices_from([5, 6, 7])
 
@@ -114,4 +145,3 @@ def test_iso_not_induced_subgraph():
     it = iso.vf2_subgraph(g1, g2)
 
     assert it is None
-

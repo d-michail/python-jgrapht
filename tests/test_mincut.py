@@ -3,8 +3,14 @@ import pytest
 from jgrapht import create_graph
 import jgrapht.algorithms.cuts as cuts
 
+
 def build_graph():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     for i in range(0, 10):
         g.add_vertex(i)
@@ -30,6 +36,7 @@ def build_graph():
     g.add_edge(9, 1)
 
     return g
+
 
 def test_stoer_wagner():
     g = build_graph()

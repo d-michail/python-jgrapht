@@ -5,9 +5,14 @@ import jgrapht.algorithms.connectivity as connectivity
 
 
 def test_weakly():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
-    g.add_vertices_from([0,1,2,3])
+    g.add_vertices_from([0, 1, 2, 3])
     g.add_edge(0, 1)
     g.add_edge(1, 2)
     g.add_edge(2, 3)
@@ -18,11 +23,11 @@ def test_weakly():
     component1 = next(components)
     with pytest.raises(StopIteration):
         next(components)
-    
+
     assert component1 == set([0, 1, 2, 3])
 
-    g.add_vertices_from([4,5])
-    g.add_edge(4,5)
+    g.add_vertices_from([4, 5])
+    g.add_edge(4, 5)
 
     is_connected, components = connectivity.is_weakly_connected(g)
     assert not is_connected
@@ -36,9 +41,14 @@ def test_weakly():
 
 
 def test_weakly_directed():
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
-    g.add_vertices_from([0,1,2,3])
+    g.add_vertices_from([0, 1, 2, 3])
     g.add_edge(0, 1)
     g.add_edge(1, 2)
     g.add_edge(2, 3)
@@ -49,11 +59,11 @@ def test_weakly_directed():
     component1 = next(components)
     with pytest.raises(StopIteration):
         next(components)
-    
+
     assert component1 == set([0, 1, 2, 3])
 
-    g.add_vertices_from([4,5])
-    g.add_edge(4,5)
+    g.add_vertices_from([4, 5])
+    g.add_edge(4, 5)
 
     is_connected, components = connectivity.is_weakly_connected(g)
     assert not is_connected
@@ -67,9 +77,14 @@ def test_weakly_directed():
 
 
 def test_strongly_kosaraju():
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
-    g.add_vertices_from([0,1,2,3,4,5])
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
     g.add_edge(0, 1)
     g.add_edge(1, 2)
     g.add_edge(2, 0)
@@ -86,11 +101,11 @@ def test_strongly_kosaraju():
     component2 = next(components)
     with pytest.raises(StopIteration):
         next(components)
-    
+
     assert component1 == set([0, 1, 2])
     assert component2 == set([3, 4, 5])
 
-    g.add_edge(3,2)
+    g.add_edge(3, 2)
 
     is_connected, components = connectivity.is_weakly_connected(g)
     assert is_connected
@@ -102,9 +117,14 @@ def test_strongly_kosaraju():
 
 
 def test_strongly_gabow():
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
-    g.add_vertices_from([0,1,2,3,4,5])
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
     g.add_edge(0, 1)
     g.add_edge(1, 2)
     g.add_edge(2, 0)
@@ -121,11 +141,11 @@ def test_strongly_gabow():
     component2 = next(components)
     with pytest.raises(StopIteration):
         next(components)
-    
+
     assert component1 == set([3, 4, 5])
     assert component2 == set([0, 1, 2])
 
-    g.add_edge(3,2)
+    g.add_edge(3, 2)
 
     is_connected, components = connectivity.is_weakly_connected(g)
     assert is_connected
@@ -138,9 +158,14 @@ def test_strongly_gabow():
 
 def test_is_connected():
     # directed
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
-    g.add_vertices_from([0,1])
+    g.add_vertices_from([0, 1])
     g.add_edge(0, 1)
 
     is_connected, components = connectivity.is_connected(g)
@@ -151,9 +176,13 @@ def test_is_connected():
     assert is_connected
 
     # undirected
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
-    g.add_vertices_from([0,1])
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+    g.add_vertices_from([0, 1])
     g.add_edge(0, 1)
     is_connected, components = connectivity.is_connected(g)
     assert is_connected
-

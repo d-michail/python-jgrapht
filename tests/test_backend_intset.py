@@ -2,6 +2,7 @@ import pytest
 
 from jgrapht._internals._collections import _JGraphTIntegerSet
 
+
 def test_Integerset():
 
     s = _JGraphTIntegerSet()
@@ -36,10 +37,11 @@ def test_Integerset():
     s.discard(17)
     assert len(s) == 4
 
-    with pytest.raises(KeyError):    
+    with pytest.raises(KeyError):
         s.remove(17)
 
     assert set(s) == set([5, 9, 11, 13])
+
 
 def test_Integerset_linked():
 
@@ -75,8 +77,7 @@ def test_Integerset_linked():
     s.discard(17)
     assert len(s) == 4
 
-    with pytest.raises(KeyError):    
-        s.remove(17)    
+    with pytest.raises(KeyError):
+        s.remove(17)
 
     assert set(s) == set([5, 9, 11, 13])
-

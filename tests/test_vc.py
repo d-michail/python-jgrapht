@@ -5,19 +5,25 @@ import jgrapht.algorithms.vertexcover as vc
 
 
 def build_graph():
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     for i in range(0, 10):
         g.add_vertex(i)
-    for i in range(1,10):
-        g.add_edge(0, i)    
+    for i in range(1, 10):
+        g.add_edge(0, i)
 
     vertex_weights = dict()
-    vertex_weights[0] = 1000.0   
+    vertex_weights[0] = 1000.0
     for i in range(1, 10):
         vertex_weights[i] = 1.0
 
     return g, vertex_weights
+
 
 def test_greedy():
     g, _ = build_graph()
@@ -52,6 +58,3 @@ def test_edgebased():
     vc_weight, vc_vertices = vc.edgebased(g)
     assert vc_weight == 2.0
     assert set(vc_vertices) == set([0, 1])
-
-
-

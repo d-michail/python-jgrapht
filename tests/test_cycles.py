@@ -5,9 +5,14 @@ import jgrapht.algorithms.cycles as cycles
 
 
 def test_hierholzer():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
-    
-    g.add_vertices_from([0,1,2,3])
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3])
     g.add_edge(0, 1)
     g.add_edge(1, 2)
     g.add_edge(2, 3)
@@ -20,9 +25,14 @@ def test_hierholzer():
 
 
 def test_chinese_postman():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
-    
-    g.add_vertices_from([0,1,2,3,4])
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3, 4])
     g.add_edge(0, 1)
     g.add_edge(1, 2)
     g.add_edge(2, 3)
@@ -34,10 +44,16 @@ def test_chinese_postman():
     assert closed_walk is not None
     assert closed_walk.edges == [4, 3, 0, 1, 2, 4]
 
+
 def test_fundamental_cycle_basis_paton():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
-    
-    g.add_vertices_from([0,1,2,3,4,5])
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
     g.add_edge(0, 1)
     g.add_edge(1, 2)
     g.add_edge(2, 3)
@@ -59,9 +75,14 @@ def test_fundamental_cycle_basis_paton():
 
 
 def test_fundamental_cycle_basis_queuebfs():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
-    
-    g.add_vertices_from([0,1,2,3,4,5])
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
     g.add_edge(0, 1)
     g.add_edge(1, 2)
     g.add_edge(2, 3)
@@ -83,9 +104,14 @@ def test_fundamental_cycle_basis_queuebfs():
 
 
 def test_fundamental_cycle_basis_stackbfs():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
-    
-    g.add_vertices_from([0,1,2,3,4,5])
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
     g.add_edge(0, 1)
     g.add_edge(1, 2)
     g.add_edge(2, 3)
@@ -105,11 +131,17 @@ def test_fundamental_cycle_basis_stackbfs():
     assert cycle1.edges == [0, 1, 2, 3]
     assert cycle2.edges == [0, 4, 5, 6, 2, 3]
 
-def test_simple_cycles_tiernan(): 
 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+def test_simple_cycles_tiernan():
 
-    g.add_vertices_from([0,1,2,3,4,5])
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
 
     g.add_edge(0, 1)
     g.add_edge(1, 2)
@@ -119,7 +151,7 @@ def test_simple_cycles_tiernan():
     g.add_edge(4, 5)
     g.add_edge(5, 2)
 
-    it = cycles.enumerate_simple_cycles_tiernan(g)    
+    it = cycles.enumerate_simple_cycles_tiernan(g)
 
     cycle1 = next(it)
     assert list(cycle1) == [0, 1, 2, 3]
@@ -130,11 +162,16 @@ def test_simple_cycles_tiernan():
         next(it)
 
 
-def test_simple_cycles_johnson(): 
+def test_simple_cycles_johnson():
 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
-    g.add_vertices_from([0,1,2,3,4,5])
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
 
     g.add_edge(0, 1)
     g.add_edge(1, 2)
@@ -154,11 +191,17 @@ def test_simple_cycles_johnson():
     with pytest.raises(StopIteration):
         next(it)
 
-def test_simple_cycles_tarjan(): 
 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+def test_simple_cycles_tarjan():
 
-    g.add_vertices_from([0,1,2,3,4,5])
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
 
     g.add_edge(0, 1)
     g.add_edge(1, 2)
@@ -168,7 +211,7 @@ def test_simple_cycles_tarjan():
     g.add_edge(4, 5)
     g.add_edge(5, 2)
 
-    it = cycles.enumerate_simple_cycles_tarjan(g)    
+    it = cycles.enumerate_simple_cycles_tarjan(g)
 
     cycle1 = next(it)
     assert list(cycle1) == [0, 1, 2, 3]
@@ -179,11 +222,16 @@ def test_simple_cycles_tarjan():
         next(it)
 
 
-def test_simple_cycles_szwarcfiter_lauer(): 
+def test_simple_cycles_szwarcfiter_lauer():
 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
-    g.add_vertices_from([0,1,2,3,4,5])
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
 
     g.add_edge(0, 1)
     g.add_edge(1, 2)
@@ -193,7 +241,7 @@ def test_simple_cycles_szwarcfiter_lauer():
     g.add_edge(4, 5)
     g.add_edge(5, 2)
 
-    it = cycles.enumerate_simple_cycles_szwarcfiter_lauer(g)    
+    it = cycles.enumerate_simple_cycles_szwarcfiter_lauer(g)
 
     cycle1 = next(it)
     assert list(cycle1) == [2, 3, 0, 1]
@@ -204,11 +252,16 @@ def test_simple_cycles_szwarcfiter_lauer():
         next(it)
 
 
-def test_simple_cycles_hawick_james(): 
+def test_simple_cycles_hawick_james():
 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
-    g.add_vertices_from([0,1,2,3,4,5])
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
 
     g.add_edge(0, 1)
     g.add_edge(1, 2)
@@ -218,7 +271,7 @@ def test_simple_cycles_hawick_james():
     g.add_edge(4, 5)
     g.add_edge(5, 2)
 
-    it = cycles.enumerate_simple_cycles_hawick_james(g)    
+    it = cycles.enumerate_simple_cycles_hawick_james(g)
 
     cycle1 = next(it)
     assert list(cycle1) == [0, 1, 2, 3]
@@ -227,5 +280,3 @@ def test_simple_cycles_hawick_james():
 
     with pytest.raises(StopIteration):
         next(it)
-
-

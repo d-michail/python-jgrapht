@@ -577,6 +577,24 @@ int jgrapht_import_file_graph6sparse6(void *, char* BYTEARRAY, void *LONG_TO_FUN
 
 int jgrapht_import_string_graph6sparse6(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
+// edgelist
+
+int jgrapht_import_edgelist_noattrs_file_json(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_import_edgelist_noattrs_string_json(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_import_edgelist_attrs_file_json(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_import_edgelist_attrs_string_json(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_import_edgelist_noattrs_file_gexf(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
+
+int jgrapht_import_edgelist_noattrs_string_gexf(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
+
+int jgrapht_import_edgelist_attrs_file_gexf(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_import_edgelist_attrs_string_gexf(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
 // independent set
 
 int jgrapht_independent_set_exec_chordal_max_independent_set(void *, void** OUTPUT);
@@ -596,6 +614,8 @@ int jgrapht_isomorphism_graph_mapping_vertex_correspondence(void *, int, int, in
 int jgrapht_it_next_int(void *, int* OUTPUT);
 
 int jgrapht_it_next_double(void *, double* OUTPUT);
+
+int jgrapht_it_next_edge_triple(void *, int *OUTPUT, int *OUTPUT, double* OUTPUT);
 
 int jgrapht_it_next_object(void *, void** OUTPUT);
 

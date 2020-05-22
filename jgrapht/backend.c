@@ -817,6 +817,40 @@ int jgrapht_import_string_graph6sparse6(void *g, char* input, void *import_verte
     return jgrapht_capi_import_string_graph6sparse6(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
+// edgelist
+
+int jgrapht_import_edgelist_noattrs_file_json(char* filename, void *import_vertex_id_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_file_json(thread, filename, import_vertex_id_fptr, res);
+}
+
+int jgrapht_import_edgelist_noattrs_string_json(char* input, void *import_vertex_id_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_string_json(thread, input, import_vertex_id_fptr, res);
+}
+
+int jgrapht_import_edgelist_attrs_file_json(char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
+    return jgrapht_capi_import_edgelist_attrs_file_json(thread, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_import_edgelist_attrs_string_json(char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
+    return jgrapht_capi_import_edgelist_attrs_string_json(thread, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_import_edgelist_noattrs_file_gexf(char* filename, void *import_vertex_id_fptr, int validate_schema, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_file_gexf(thread, filename, import_vertex_id_fptr, validate_schema, res);
+}
+
+int jgrapht_import_edgelist_noattrs_string_gexf(char* input, void *import_vertex_id_fptr, int validate_schema, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_string_gexf(thread, input, import_vertex_id_fptr, validate_schema, res);
+}
+
+int jgrapht_import_edgelist_attrs_file_gexf(char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_file_gexf(thread, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_import_edgelist_attrs_string_gexf(char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_string_gexf(thread, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
 // independent set
 
 int jgrapht_independent_set_exec_chordal_max_independent_set(void *g, void** res) { 
@@ -849,6 +883,10 @@ int jgrapht_it_next_int(void *it, int* res) {
 
 int jgrapht_it_next_double(void *it, double* res) { 
     return jgrapht_capi_it_next_double(thread, it, res);
+}
+
+int jgrapht_it_next_edge_triple(void *it, int *source, int *target, double* weight) { 
+    return jgrapht_capi_it_next_edge_triple(thread, it, source, target, weight);
 }
 
 int jgrapht_it_next_object(void *it, void** res) { 

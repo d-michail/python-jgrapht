@@ -5,7 +5,12 @@ import jgrapht.traversal as traversal
 
 
 def test_traversals():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     for i in range(0, 10):
         g.add_vertex(i)
@@ -60,7 +65,12 @@ def test_traversals():
 
 def test_dag():
     # Create a dag to test top
-    g1 = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g1 = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
     g1.add_vertex(0)
     g1.add_vertex(1)
     g1.add_vertex(2)
@@ -72,6 +82,3 @@ def test_dag():
 
     topo = list(traversal.topological_order_traversal(g1))
     assert topo == [0, 3, 1, 2]
-
-    
-

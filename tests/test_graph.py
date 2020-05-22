@@ -14,7 +14,12 @@ def assert_same_set(set1, set2):
 
 def test_graph_directed_inoutedges():
 
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
     assert g.type.directed
     assert g.type.allowing_self_loops
@@ -68,7 +73,7 @@ def test_graph_directed_inoutedges():
     assert_same_set(set(g.edges_of(v1)), set([e12, e14, e11, e51_1, e51_2]))
     assert_same_set(set(g.outedges_of(v1)), set([e12, e14, e11]))
     assert_same_set(set(g.inedges_of(v1)), set([e51_1, e51_2, e11]))
-    assert g.degree_of(v1) == 6 # self-loops count twice!
+    assert g.degree_of(v1) == 6  # self-loops count twice!
     assert g.outdegree_of(v1) == 3
     assert g.indegree_of(v1) == 3
 
@@ -98,14 +103,19 @@ def test_graph_directed_inoutedges():
     assert_same_set(set(g.inedges_of(v5)), set([e45]))
     assert g.degree_of(v5) == 3
     assert g.outdegree_of(v5) == 2
-    assert g.indegree_of(v5) == 1    
+    assert g.indegree_of(v5) == 1
 
     assert_same_set(set(g.edges), set([0, 1, 2, 3, 4, 5, 6]))
 
 
 def test_graph_undirected_inoutedges():
 
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
     assert not g.type.directed
     assert g.type.allowing_self_loops
@@ -159,7 +169,7 @@ def test_graph_undirected_inoutedges():
     assert_same_set(set(g.edges_of(v1)), set([e12, e14, e11, e51_1, e51_2]))
     assert_same_set(set(g.outedges_of(v1)), set([e12, e14, e11, e51_1, e51_2]))
     assert_same_set(set(g.inedges_of(v1)), set([e12, e14, e11, e51_1, e51_2]))
-    assert g.degree_of(v1) == 6 # self-loops count twice!
+    assert g.degree_of(v1) == 6  # self-loops count twice!
     assert g.outdegree_of(v1) == 6
     assert g.indegree_of(v1) == 6
 
@@ -189,14 +199,19 @@ def test_graph_undirected_inoutedges():
     assert_same_set(set(g.inedges_of(v5)), set([e45, e51_1, e51_2]))
     assert g.degree_of(v5) == 3
     assert g.outdegree_of(v5) == 3
-    assert g.indegree_of(v5) == 3  
+    assert g.indegree_of(v5) == 3
 
     assert_same_set(set(g.edges), set([0, 1, 2, 3, 4, 5, 6]))
 
 
 def test_graph_no_allow_self_loops():
 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
     assert g.type.directed
     assert not g.type.allowing_self_loops
@@ -212,7 +227,12 @@ def test_graph_no_allow_self_loops():
 
 def test_graph_no_allow_multiple_edges():
 
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     assert g.type.directed
     assert g.type.allowing_self_loops
@@ -231,7 +251,12 @@ def test_graph_no_allow_multiple_edges():
 
 def test_graph_no_weights():
 
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     assert g.type.directed
     assert g.type.allowing_self_loops
@@ -253,7 +278,12 @@ def test_graph_no_weights():
 
 def test_graph_add_edge_with_weight():
 
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     v1 = 0
     assert g.add_vertex(v1) == v1
@@ -266,20 +296,25 @@ def test_graph_add_edge_with_weight():
 
 def test_graph_add_edge():
 
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
-    g.add_vertices_from([1,2])
+    g.add_vertices_from([1, 2])
 
-    assert g.add_edge(1,2) == 0
-    assert g.add_edge(1,2) == 1
-    assert g.add_edge(1,2) == 2
-    assert g.add_edge(1,2) == 3
+    assert g.add_edge(1, 2) == 0
+    assert g.add_edge(1, 2) == 1
+    assert g.add_edge(1, 2) == 2
+    assert g.add_edge(1, 2) == 3
 
     assert g.add_edge(1, 2, edge=5)
     assert g.contains_edge(5)
 
-    assert g.add_edge(1,2) == 4
-    assert g.add_edge(1,2) == 6
+    assert g.add_edge(1, 2) == 4
+    assert g.add_edge(1, 2) == 6
 
     assert g.add_edge(1, 2, edge=5) == 5
     assert g.add_edge(1, 2) == 7
@@ -288,11 +323,16 @@ def test_graph_add_edge():
 
 def test_graph_add_edges_from():
 
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
     g.add_vertices_from([1, 2, 3, 4, 5])
 
-    g.add_edges_from([(1,2), (2,3), (3,4), (1, 5, 5.5), (2, 4, 1.0, 13)])
+    g.add_edges_from([(1, 2), (2, 3), (3, 4), (1, 5, 5.5), (2, 4, 1.0, 13)])
 
     assert len(g.edges) == 5
     assert g.edges == {0, 1, 2, 3, 13}
@@ -306,7 +346,12 @@ def test_graph_add_edges_from():
 
 def test_graph_add_vertex():
 
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
     assert g.add_vertex() == 0
     assert g.add_vertex() == 1
@@ -324,7 +369,7 @@ def test_graph_add_vertex():
 
 def test_graph_sparse():
 
-    edgelist = [(0,1), (0,2), (0,3), (1,3), (2,3), (2,4), (2,5), (0,4), (2, 6)]
+    edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
     g = create_sparse_graph(7, edgelist, weighted=False)
 
     assert g.type.directed
@@ -333,19 +378,29 @@ def test_graph_sparse():
     assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
 
     edgelist2 = []
-    for e in g.edges: 
+    for e in g.edges:
         u, v, w = g.edge_tuple(e)
-        edgelist2.append((u,v))
+        edgelist2.append((u, v))
     assert edgelist2 == edgelist
 
     # sparse graphs cannot be modified
     with pytest.raises(ValueError):
-        g.add_edge(0,5)
+        g.add_edge(0, 5)
 
 
 def test_graph_sparse_weighted():
 
-    edgelist = [(0,1,5), (0,2,2), (0,3,3), (1,3,1), (2,3,7.7), (2,4,3.3), (2,5,13.0), (0,4,9.999), (2,6,3.0)]
+    edgelist = [
+        (0, 1, 5),
+        (0, 2, 2),
+        (0, 3, 3),
+        (1, 3, 1),
+        (2, 3, 7.7),
+        (2, 4, 3.3),
+        (2, 5, 13.0),
+        (0, 4, 9.999),
+        (2, 6, 3.0),
+    ]
     g = create_sparse_graph(7, edgelist, directed=False)
 
     assert not g.type.directed
@@ -354,18 +409,23 @@ def test_graph_sparse_weighted():
     assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
 
     edgelist2 = []
-    for e in g.edges: 
+    for e in g.edges:
         edgelist2.append(g.edge_tuple(e))
     assert edgelist2 == edgelist
 
     # sparse graphs cannot be modified
     with pytest.raises(ValueError):
-        g.add_edge(0,5)
+        g.add_edge(0, 5)
 
 
 def test_graph_copy_to_sparse():
 
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
     assert not g.type.directed
     assert g.type.allowing_self_loops
@@ -403,7 +463,12 @@ def test_graph_copy_to_sparse():
 
 def test_graph_copy_to_sparse():
 
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
     assert g.type.directed
     assert g.type.allowing_self_loops
@@ -438,7 +503,7 @@ def test_dag():
     assert g.type.weighted
     assert not g.type._allowing_cycles
 
-    g.add_vertices_from(range(0,11))
+    g.add_vertices_from(range(0, 11))
     g.add_edge(0, 1)
     g.add_edge(1, 3)
     g.add_edge(0, 2)
@@ -462,7 +527,6 @@ def test_dag():
     assert g.ancestors(5) == {0, 1, 2, 3, 4}
     assert g.descendants(5) == {6, 7, 8}
     assert g.descendants(9) == {10, 8}
-
 
     g1 = create_dag(allowing_multiple_edges=False, weighted=False)
 

@@ -4,12 +4,15 @@ from ._wrappers import (
     _HandleWrapper,
     _JGraphTObjectIterator,
     _JGraphTIntegerIterator,
+    _JGraphTEdgeTripleIterator,
 )
 
 from collections.abc import (
     MutableSet,
     Collection,
     MutableMapping,
+    Iterable,
+    Sized,
 )
 
 
@@ -259,3 +262,25 @@ class _JGraphTIntegerIntegerMap(_HandleWrapper, MutableMapping):
     def __str__(self):
         items = ['{}: {}'.format(k, v) for k, v in self.items()]
         return '{' + ', '.join(items) + '}'
+
+
+class _JGraphTEdgeTripleList(_HandleWrapper, Iterable, Sized):
+    """JGraphT list which contains edge triples"""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def __iter__(self):
+        res = backend.jgrapht_list_it_create(self._handle)
+        return _JGraphTEdgeTripleIterator(res)
+
+    def __len__(self):
+        res = backend.jgrapht_list_size(self._handle)
+        return res
+
+    def __repr__(self):
+        return '_JGraphTEdgeTripleList(%r)' % self._handle
+
+    def __str__(self):
+        return '[' + ', '.join(str(x) for x in self) + ']'
+

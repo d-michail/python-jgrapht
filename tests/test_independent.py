@@ -4,8 +4,13 @@ from jgrapht import create_graph
 import jgrapht.algorithms.independent as independent
 
 
-def test_chordal(): 
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+def test_chordal():
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     for i in range(0, 6):
         g.add_vertex(i)
@@ -22,4 +27,4 @@ def test_chordal():
 
     ind = independent.chordal_max_independent_set(g)
 
-    assert ind == { 2, 4 }
+    assert ind == {2, 4}

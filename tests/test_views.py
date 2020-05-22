@@ -13,8 +13,14 @@ from jgrapht.views import (
     as_graph_union,
 )
 
+
 def test_as_unweighted():
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     g.add_vertex(0)
     v1 = 0
@@ -46,7 +52,12 @@ def test_as_unweighted():
 
 
 def test_as_undirected():
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     g.add_vertex(0)
     v1 = 0
@@ -75,7 +86,12 @@ def test_as_undirected():
 
 def test_as_unmodifiable():
 
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     g.add_vertex(0)
     v1 = 0
@@ -103,7 +119,12 @@ def test_as_unmodifiable():
 
 
 def test_as_edge_reversed():
-    g = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     g.add_vertex(0)
     v1 = 0
@@ -115,7 +136,7 @@ def test_as_edge_reversed():
     v4 = 3
     g.add_vertex(4)
     v5 = 4
-    
+
     g.add_edge(v1, v2)
     g.add_edge(v2, v3)
     g.add_edge(v1, v4)
@@ -132,14 +153,19 @@ def test_as_edge_reversed():
 
 
 def test_as_masked_subgraph():
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     g.add_vertex(0)
     g.add_vertex(1)
     g.add_vertex(2)
     g.add_vertex(3)
     g.add_vertex(4)
-    
+
     g.add_edge(0, 1)
     g.add_edge(0, 2)
     g.add_edge(0, 3)
@@ -147,20 +173,22 @@ def test_as_masked_subgraph():
     g.add_edge(1, 3)
     g.add_edge(2, 4)
 
-    def vertex_mask(v): 
-        if v == 3: 
+    def vertex_mask(v):
+        if v == 3:
             return True
         return False
 
-    def edge_mask(e): 
-        if e == 5: 
+    def edge_mask(e):
+        if e == 5:
             return True
         return False
-    
-    masked_graph = as_masked_subgraph(g, vertex_mask_cb=vertex_mask, edge_mask_cb=edge_mask)
 
-    assert masked_graph.vertices == {0,1,2,4}
-    assert masked_graph.edges == {0,1}
+    masked_graph = as_masked_subgraph(
+        g, vertex_mask_cb=vertex_mask, edge_mask_cb=edge_mask
+    )
+
+    assert masked_graph.vertices == {0, 1, 2, 4}
+    assert masked_graph.edges == {0, 1}
     assert not masked_graph.type.modifiable
 
     # test that we see changed in the original graph
@@ -174,7 +202,12 @@ def test_as_masked_subgraph():
 
 
 def test_as_weighted():
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     g.add_vertex(0)
     g.add_vertex(1)
@@ -185,7 +218,7 @@ def test_as_weighted():
 
     assert g.get_edge_weight(0) == 1.0
 
-    def edge_weight(e): 
+    def edge_weight(e):
         return 100.5
 
     wg = as_weighted(g, edge_weight, cache_weights=False, write_weights_through=False)
@@ -197,7 +230,12 @@ def test_as_weighted():
 
 
 def test_as_weighted_with_None_function():
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     g.add_vertex(0)
     g.add_vertex(1)
@@ -208,10 +246,12 @@ def test_as_weighted_with_None_function():
 
     assert g.get_edge_weight(0) == 1.0
 
-    def edge_weight(e): 
+    def edge_weight(e):
         return 100.5
 
-    wg = as_weighted(g, edge_weight_cb=None, cache_weights=False, write_weights_through=False)
+    wg = as_weighted(
+        g, edge_weight_cb=None, cache_weights=False, write_weights_through=False
+    )
 
     assert wg.get_edge_weight(0) == 1.0
 
@@ -220,7 +260,12 @@ def test_as_weighted_with_None_function():
 
 
 def test_as_weighted_with_caching():
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     g.add_vertex(0)
     g.add_vertex(1)
@@ -231,7 +276,7 @@ def test_as_weighted_with_caching():
 
     assert g.get_edge_weight(0) == 1.0
 
-    def edge_weight(e): 
+    def edge_weight(e):
         return 100.5
 
     wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=False)
@@ -244,7 +289,12 @@ def test_as_weighted_with_caching():
 
 
 def test_as_weighted_with_caching_and_write_throught_with_unweighted():
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=False)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     g.add_vertex(0)
     g.add_vertex(1)
@@ -255,7 +305,7 @@ def test_as_weighted_with_caching_and_write_throught_with_unweighted():
 
     assert g.get_edge_weight(0) == 1.0
 
-    def edge_weight(e): 
+    def edge_weight(e):
         return 100.5
 
     with pytest.raises(ValueError):
@@ -263,7 +313,12 @@ def test_as_weighted_with_caching_and_write_throught_with_unweighted():
 
 
 def test_as_weighted_with_caching_and_write_throught():
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     g.add_vertex(0)
     g.add_vertex(1)
@@ -272,7 +327,7 @@ def test_as_weighted_with_caching_and_write_throught():
     g.set_edge_weight(0, 200.0)
     assert g.get_edge_weight(0) == 200.0
 
-    def edge_weight(e): 
+    def edge_weight(e):
         return 100.5
 
     wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=True)
@@ -287,7 +342,12 @@ def test_as_weighted_with_caching_and_write_throught():
 
 
 def test_as_weighted_with_no_caching_and_write_through():
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     g.add_vertex(0)
     g.add_vertex(1)
@@ -296,7 +356,7 @@ def test_as_weighted_with_no_caching_and_write_through():
     g.set_edge_weight(0, 5.0)
     assert g.get_edge_weight(0) == 5.0
 
-    def edge_weight(e): 
+    def edge_weight(e):
         return 100.5
 
     wg = as_weighted(g, edge_weight, cache_weights=False, write_weights_through=True)
@@ -306,7 +366,7 @@ def test_as_weighted_with_no_caching_and_write_through():
     with pytest.raises(ValueError):
         wg.set_edge_weight(0, 5.0)
 
-    assert wg.get_edge_weight(0) == 100.5    
+    assert wg.get_edge_weight(0) == 100.5
 
 
 listener1_expected = """element 0, event GraphEvent.VERTEX_ADDED
@@ -323,20 +383,26 @@ element 2, event GraphEvent.VERTEX_REMOVED
 element 0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
 
 
-def test_listenable(): 
+def test_listenable():
 
-    g = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     lg = as_listenable(g)
 
-
     listener1_results = []
+
     def listener1(vertex, event):
-        listener1_results.append('element {}, event {}'.format(vertex, event))
+        listener1_results.append("element {}, event {}".format(vertex, event))
 
     listener2_results = []
+
     def listener2(vertex, event):
-        listener2_results.append('element {}, event {}'.format(vertex, event))
+        listener2_results.append("element {}, event {}".format(vertex, event))
 
     listener_id_1 = lg.add_listener(listener1)
 
@@ -361,8 +427,18 @@ def test_listenable():
 
 def test_union():
 
-    g1 = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
-    g2 = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g1 = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+    g2 = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     g = as_graph_union(g1, g2)
 
@@ -375,9 +451,9 @@ def test_union():
     g1.add_vertex(2)
     g1.add_vertex(3)
 
-    g1.add_edge(2, 3, weight=7.0, edge = 0)
-    g1.add_edge(0, 1, weight=5.0, edge = 1)
-    g1.add_edge(1, 2, weight=6.0, edge = 2)
+    g1.add_edge(2, 3, weight=7.0, edge=0)
+    g1.add_edge(0, 1, weight=5.0, edge=1)
+    g1.add_edge(1, 2, weight=6.0, edge=2)
 
     g2.add_vertex(2)
     g2.add_vertex(3)
@@ -385,10 +461,10 @@ def test_union():
     g2.add_vertex(5)
     g2.add_vertex(6)
 
-    g2.add_edge(2, 3, weight=8.0, edge = 0)
-    g2.add_edge(3, 4, weight=9.0, edge = 1)
-    g2.add_edge(4, 5, weight=9.0, edge = 2)
-    g2.add_edge(5, 6, weight=10.0, edge = 3)
+    g2.add_edge(2, 3, weight=8.0, edge=0)
+    g2.add_edge(3, 4, weight=9.0, edge=1)
+    g2.add_edge(4, 5, weight=9.0, edge=2)
+    g2.add_edge(5, 6, weight=10.0, edge=3)
 
     assert g.vertices == {0, 1, 2, 3, 4, 5, 6}
     assert g.edges == {0, 1, 2, 3}
@@ -401,11 +477,21 @@ def test_union():
 
 def test_union_with_combiner():
 
-    g1 = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
-    g2 = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g1 = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+    g2 = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
-    def max_weight_combiner(x,y):
-        return max(x,y)
+    def max_weight_combiner(x, y):
+        return max(x, y)
 
     g = as_graph_union(g1, g2, edge_weight_combiner_cb=max_weight_combiner)
 
@@ -418,9 +504,9 @@ def test_union_with_combiner():
     g1.add_vertex(2)
     g1.add_vertex(3)
 
-    g1.add_edge(2, 3, weight=7.0, edge = 0)
-    g1.add_edge(0, 1, weight=5.0, edge = 1)
-    g1.add_edge(1, 2, weight=6.0, edge = 2)
+    g1.add_edge(2, 3, weight=7.0, edge=0)
+    g1.add_edge(0, 1, weight=5.0, edge=1)
+    g1.add_edge(1, 2, weight=6.0, edge=2)
 
     g2.add_vertex(2)
     g2.add_vertex(3)
@@ -428,10 +514,10 @@ def test_union_with_combiner():
     g2.add_vertex(5)
     g2.add_vertex(6)
 
-    g2.add_edge(3, 2, weight=8.0, edge = 0)
-    g2.add_edge(3, 4, weight=9.0, edge = 1)
-    g2.add_edge(4, 5, weight=3.0, edge = 2)
-    g2.add_edge(5, 6, weight=10.0, edge = 3)
+    g2.add_edge(3, 2, weight=8.0, edge=0)
+    g2.add_edge(3, 4, weight=9.0, edge=1)
+    g2.add_edge(4, 5, weight=3.0, edge=2)
+    g2.add_edge(5, 6, weight=10.0, edge=3)
 
     assert g.vertices == {0, 1, 2, 3, 4, 5, 6}
     assert g.edges == {0, 1, 2, 3}
@@ -444,12 +530,21 @@ def test_union_with_combiner():
 
 def test_bad_union():
 
-    g1 = create_graph(directed=False, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
-    g2 = create_graph(directed=True, allowing_self_loops=True, allowing_multiple_edges=False, weighted=True)
+    g1 = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+    g2 = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     with pytest.raises(ValueError):
         g = as_graph_union(g1, g2)
 
     with pytest.raises(ValueError):
-        g = as_graph_union(g2, g1)    
-    
+        g = as_graph_union(g2, g1)

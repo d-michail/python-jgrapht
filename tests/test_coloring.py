@@ -3,8 +3,14 @@ import pytest
 from jgrapht import create_graph
 import jgrapht.algorithms.coloring as coloring
 
+
 def test_coloring():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     for i in range(0, 10):
         g.add_vertex(i)
@@ -36,30 +42,91 @@ def test_coloring():
 
     color_count, color_map = coloring.greedy_smallestnotusedcolor(g)
     assert color_count == 4
-    assert all([a == b for a,b in zip([color_map[v] for v in g.vertices], [0, 1, 2, 1, 2, 1, 2, 1, 2, 3])]) 
-    assert all([color_map[u]!=color_map[v] for u, v in zip([g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges])])
-    
+    assert all(
+        [
+            a == b
+            for a, b in zip(
+                [color_map[v] for v in g.vertices], [0, 1, 2, 1, 2, 1, 2, 1, 2, 3]
+            )
+        ]
+    )
+    assert all(
+        [
+            color_map[u] != color_map[v]
+            for u, v in zip(
+                [g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges]
+            )
+        ]
+    )
+
     color_count, color_map = coloring.greedy_random(g, seed=17)
     assert color_count == 4
-    assert all([a == b for a,b in zip([color_map[v] for v in g.vertices], [1, 2, 0, 2, 0, 2, 3, 0, 2, 0])])
-    assert all([color_map[u]!=color_map[v] for u, v in zip([g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges])]) 
+    assert all(
+        [
+            a == b
+            for a, b in zip(
+                [color_map[v] for v in g.vertices], [1, 2, 0, 2, 0, 2, 3, 0, 2, 0]
+            )
+        ]
+    )
+    assert all(
+        [
+            color_map[u] != color_map[v]
+            for u, v in zip(
+                [g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges]
+            )
+        ]
+    )
 
     color_count, color_map = coloring.greedy_dsatur(g)
     assert color_count == 4
-    assert all([a == b for a,b in zip([color_map[v] for v in g.vertices], [0, 1, 2, 1, 2, 1, 3, 2, 1, 2])])
-    assert all([color_map[u]!=color_map[v] for u, v in zip([g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges])])     
+    assert all(
+        [
+            a == b
+            for a, b in zip(
+                [color_map[v] for v in g.vertices], [0, 1, 2, 1, 2, 1, 3, 2, 1, 2]
+            )
+        ]
+    )
+    assert all(
+        [
+            color_map[u] != color_map[v]
+            for u, v in zip(
+                [g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges]
+            )
+        ]
+    )
 
     color_count, color_map = coloring.backtracking_brown(g)
     assert color_count == 4
-    assert all([a == b for a,b in zip([color_map[v] for v in g.vertices], [1, 2, 3, 2, 3, 2, 3, 2, 3, 4])])    
-    assert all([color_map[u]!=color_map[v] for u, v in zip([g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges])])         
+    assert all(
+        [
+            a == b
+            for a, b in zip(
+                [color_map[v] for v in g.vertices], [1, 2, 3, 2, 3, 2, 3, 2, 3, 4]
+            )
+        ]
+    )
+    assert all(
+        [
+            color_map[u] != color_map[v]
+            for u, v in zip(
+                [g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges]
+            )
+        ]
+    )
 
     color_count, color_map = coloring.color_refinement(g)
     assert color_count == 10
 
 
-def test_chordal(): 
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+def test_chordal():
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     for i in range(0, 6):
         g.add_vertex(i)

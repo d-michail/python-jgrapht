@@ -5,7 +5,12 @@ from jgrapht.io.exporters import write_lemon, generate_lemon
 
 
 def build_graph():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     for i in range(0, 10):
         g.add_vertex(i)
@@ -31,6 +36,7 @@ def build_graph():
     g.add_edge(9, 1)
 
     return g
+
 
 lemon_expected = """#Creator: JGraphT Lemon (LGF) Exporter
 #Version: 1
@@ -71,7 +77,7 @@ label
 
 """
 
-expected2=r"""#Creator: JGraphT Lemon (LGF) Exporter
+expected2 = r"""#Creator: JGraphT Lemon (LGF) Exporter
 #Version: 1
 
 @nodes
@@ -90,23 +96,29 @@ label
 
 """
 
+
 def test_lemon(tmpdir):
     g = build_graph()
-    tmpfile = tmpdir.join('lemon.out')
+    tmpfile = tmpdir.join("lemon.out")
     tmpfilename = str(tmpfile)
     write_lemon(g, tmpfilename)
 
-    with open(tmpfilename, "r") as f: 
+    with open(tmpfilename, "r") as f:
         contents = f.read()
-        print (contents)
-        
+        print(contents)
+
     assert contents == lemon_expected
 
 
-def test_output_to_string(): 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
+def test_output_to_string():
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=False,
+    )
 
-    g.add_vertices_from(range(0,4))
+    g.add_vertices_from(range(0, 4))
 
     g.add_edge(0, 1)
     g.add_edge(0, 2)

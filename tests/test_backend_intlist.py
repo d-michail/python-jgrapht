@@ -37,7 +37,6 @@ def test_Integerlist():
     s.discard(17)
     assert len(s) == 4
 
-    s.discard(17)    
+    s.discard(17)
 
     assert set(s) == set([5, 9, 11, 13])
-

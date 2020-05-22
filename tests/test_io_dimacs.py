@@ -5,7 +5,12 @@ from jgrapht.io.exporters import write_dimacs, generate_dimacs
 
 
 def build_graph():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=True)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
 
     for i in range(0, 10):
         g.add_vertex(i)
@@ -31,6 +36,7 @@ def build_graph():
     g.add_edge(9, 1)
 
     return g
+
 
 dimacs_sp_expected = """c
 c SOURCE: Generated using the JGraphT library
@@ -104,46 +110,47 @@ e 9 10
 e 10 2
 """
 
+
 def test_dimacs(tmpdir):
     g = build_graph()
-    tmpfile = tmpdir.join('dimacs.out')
+    tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
-    write_dimacs(g, tmpfilename, format='shortestpath')
+    write_dimacs(g, tmpfilename, format="shortestpath")
 
-    with open(tmpfilename, "r") as f: 
+    with open(tmpfilename, "r") as f:
         contents = f.read()
-        print (contents)
-        
+        print(contents)
+
     assert contents == dimacs_sp_expected
 
 
 def test_dimacs_coloring(tmpdir):
     g = build_graph()
-    tmpfile = tmpdir.join('dimacs.out')
+    tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
-    write_dimacs(g, tmpfilename, format='coloring')
+    write_dimacs(g, tmpfilename, format="coloring")
 
-    with open(tmpfilename, "r") as f: 
+    with open(tmpfilename, "r") as f:
         contents = f.read()
-        print (contents)
-        
+        print(contents)
+
     assert contents == dimacs_coloring_expected
 
 
 def test_dimacs_maxclique(tmpdir):
     g = build_graph()
-    tmpfile = tmpdir.join('dimacs.out')
+    tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
-    write_dimacs(g, tmpfilename, format='maxclique')
+    write_dimacs(g, tmpfilename, format="maxclique")
 
-    with open(tmpfilename, "r") as f: 
+    with open(tmpfilename, "r") as f:
         contents = f.read()
-        print (contents)
-        
+        print(contents)
+
     assert contents == dimacs_maxclique_expected
 
 
-def test_dimacs_output_to_string(): 
+def test_dimacs_output_to_string():
     g = build_graph()
 
     out = generate_dimacs(g)

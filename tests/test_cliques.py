@@ -3,8 +3,14 @@ import pytest
 from jgrapht import create_graph
 import jgrapht.algorithms.cliques as cliques
 
+
 def build_graph():
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     for i in range(0, 6):
         g.add_vertex(i)
@@ -21,6 +27,7 @@ def build_graph():
 
     return g
 
+
 def test_bron_with_degeneracy():
     g = build_graph()
 
@@ -32,6 +39,7 @@ def test_bron_with_degeneracy():
 
     with pytest.raises(StopIteration):
         next(clique_it)
+
 
 def test_bron_with_pivot():
     g = build_graph()
@@ -45,6 +53,7 @@ def test_bron_with_pivot():
     with pytest.raises(StopIteration):
         next(clique_it)
 
+
 def test_bron():
     g = build_graph()
 
@@ -57,8 +66,14 @@ def test_bron():
     with pytest.raises(StopIteration):
         next(clique_it)
 
-def test_chordal(): 
-    g = create_graph(directed=False, allowing_self_loops=False, allowing_multiple_edges=False, weighted=False)
+
+def test_chordal():
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
 
     for i in range(0, 6):
         g.add_vertex(i)
@@ -75,4 +90,4 @@ def test_chordal():
 
     clique = cliques.chordal_max_clique(g)
 
-    assert clique == { 0, 1, 3 }
+    assert clique == {0, 1, 3}

@@ -418,6 +418,25 @@ int jgrapht_import_file_graph6sparse6(void *, char*, void *, void *, void *);
 
 int jgrapht_import_string_graph6sparse6(void *, char*, void *, void *, void *);
 
+// edgelist
+
+int jgrapht_import_edgelist_noattrs_file_json(char*, void *, void**);
+
+int jgrapht_import_edgelist_noattrs_string_json(char*, void *, void**);
+
+int jgrapht_import_edgelist_attrs_file_json(char*, void *, void *, void *, void**);
+
+int jgrapht_import_edgelist_attrs_string_json(char*, void *, void *, void *, void**);
+
+int jgrapht_import_edgelist_noattrs_file_gexf(char*, void *, int, void**);
+
+int jgrapht_import_edgelist_noattrs_string_gexf(char*, void *, int, void**);
+
+int jgrapht_import_edgelist_attrs_file_gexf(char*, void *, int, void *, void *, void**);
+
+int jgrapht_import_edgelist_attrs_string_gexf(char*, void *, int, void *, void *, void**);
+
+
 // independent set
 
 int jgrapht_independent_set_exec_chordal_max_independent_set(void *, void**);
@@ -437,6 +456,8 @@ int jgrapht_isomorphism_graph_mapping_vertex_correspondence(void *, int, int, in
 int jgrapht_it_next_int(void *, int*);
 
 int jgrapht_it_next_double(void *, double*);
+
+int jgrapht_it_next_edge_triple(void *, int *, int *, double*);
 
 int jgrapht_it_next_object(void *, void**);
 

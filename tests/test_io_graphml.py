@@ -5,7 +5,7 @@ from jgrapht import create_graph
 from jgrapht.io.exporters import write_graphml, generate_graphml
 from jgrapht.io.importers import read_graphml, parse_graphml
 
-expected1=r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+expected1 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <graph edgedefault="directed">
         <node id="0"/>
         <node id="1"/>
@@ -19,7 +19,7 @@ expected1=r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graph
 </graphml>"""
 
 
-expected2=r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+expected2 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <key id="edge_weight_key" for="edge" attr.name="weight" attr.type="double">
         <default>1.0</default>
     </key>
@@ -40,7 +40,7 @@ expected2=r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graph
 </graphml>"""
 
 
-expected3=r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+expected3 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <key id="edge_weight_key" for="edge" attr.name="weight" attr.type="double">
         <default>1.0</default>
     </key>
@@ -85,9 +85,15 @@ expected3=r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graph
     </graph>
 </graphml>"""
 
+
 def test_export_import(tmpdir):
 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
     for i in range(0, 10):
         g.add_vertex(i)
@@ -114,49 +120,60 @@ def test_export_import(tmpdir):
 
     assert len(g.edges) == 18
 
-    tmpfile = tmpdir.join('graphml.out')
+    tmpfile = tmpdir.join("graphml.out")
     tmpfilename = str(tmpfile)
 
-    attrs = [('cost', 'edge', 'double', None), ('name', 'node', 'string', None)]
+    attrs = [("cost", "edge", "double", None), ("name", "node", "string", None)]
 
-    v_dict = { 
-        0: { 'name': 'κόμβος 0' }, 
-	    1: { 'name': 'node 1'   } 
-    }
-    e_dict = {
-        17: {
-            'cost': '48.5'
-        }
-    }
+    v_dict = {0: {"name": "κόμβος 0"}, 1: {"name": "node 1"}}
+    e_dict = {17: {"cost": "48.5"}}
 
-    write_graphml(g, tmpfilename, attrs=attrs, per_vertex_attrs_dict=v_dict, per_edge_attrs_dict=e_dict, export_edge_weights=True)
+    write_graphml(
+        g,
+        tmpfilename,
+        attrs=attrs,
+        per_vertex_attrs_dict=v_dict,
+        per_edge_attrs_dict=e_dict,
+        export_edge_weights=True,
+    )
 
-    # read back 
+    # read back
 
-    g1 = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
+    g1 = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
     def va_cb(vertex, attribute_name, attribute_value):
-        print('Vertex {}, attr {}, value {}'.format(vertex, attribute_name, attribute_value))
+        print(
+            "Vertex {}, attr {}, value {}".format(
+                vertex, attribute_name, attribute_value
+            )
+        )
         if vertex == 0:
-            if attribute_name == 'name':
-                assert attribute_value == 'κόμβος 0'
+            if attribute_name == "name":
+                assert attribute_value == "κόμβος 0"
         if vertex == 1:
-            if attribute_name == 'name': 
-                assert attribute_value == 'node 1'
+            if attribute_name == "name":
+                assert attribute_value == "node 1"
 
     def ea_cb(edge, attribute_name, attribute_value):
-        print('Edge {}, attr {}, value {}'.format(edge, attribute_name, attribute_value))
-        if edge == 17: 
-            if attribute_name == 'cost': 
-                assert attribute_value == '48.5'
-            if attribute_name == 'weight': 
-                assert attribute_value == '33.3'
-            if attribute_name == 'source': 
-                assert attribute_value == '9'
-            if attribute_name == 'target': 
-                assert attribute_value == '1'
-            if attribute_name == 'id': 
-                assert attribute_value == '17'                
+        print(
+            "Edge {}, attr {}, value {}".format(edge, attribute_name, attribute_value)
+        )
+        if edge == 17:
+            if attribute_name == "cost":
+                assert attribute_value == "48.5"
+            if attribute_name == "weight":
+                assert attribute_value == "33.3"
+            if attribute_name == "source":
+                assert attribute_value == "9"
+            if attribute_name == "target":
+                assert attribute_value == "1"
+            if attribute_name == "id":
+                assert attribute_value == "17"
 
     read_graphml(g1, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
@@ -168,9 +185,20 @@ def test_export_import(tmpdir):
     assert g1.get_edge_weight(17) == 33.3
 
     # read back with non simple
-    g2 = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
+    g2 = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
-    read_graphml(g2, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb, simple=False)
+    read_graphml(
+        g2,
+        tmpfilename,
+        vertex_attribute_cb=va_cb,
+        edge_attribute_cb=ea_cb,
+        simple=False,
+    )
 
     assert g2.vertices == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     assert g2.contains_edge_between(6, 7)
@@ -180,11 +208,15 @@ def test_export_import(tmpdir):
     assert g2.get_edge_weight(17) == 33.3
 
 
+def test_output_to_string():
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=False,
+    )
 
-def test_output_to_string(): 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=False)
-
-    g.add_vertices_from(range(0,4))
+    g.add_vertices_from(range(0, 4))
 
     g.add_edge(0, 1)
     g.add_edge(0, 2)
@@ -196,10 +228,15 @@ def test_output_to_string():
     assert out.splitlines() == expected1.splitlines()
 
 
-def test_output_to_string_with_weights(): 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
+def test_output_to_string_with_weights():
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
-    g.add_vertices_from(range(0,4))
+    g.add_vertices_from(range(0, 4))
 
     g.add_edge(0, 1, weight=3.3)
     g.add_edge(0, 2, weight=4.4)
@@ -213,7 +250,12 @@ def test_output_to_string_with_weights():
 
 def test_output_to_string_with_attrs():
 
-    g = create_graph(directed=True, allowing_self_loops=False, allowing_multiple_edges=True, weighted=True)
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
 
     for i in range(0, 10):
         g.add_vertex(i)
@@ -240,19 +282,17 @@ def test_output_to_string_with_attrs():
 
     assert len(g.edges) == 18
 
-    attrs = [('cost', 'edge', 'double', None), ('name', 'node', 'string', None)]
+    attrs = [("cost", "edge", "double", None), ("name", "node", "string", None)]
 
-    v_dict = { 
-        0: { 'name': 'κόμβος 0' }, 
-	    1: { 'name': 'node 1'   } 
-    }
-    e_dict = {
-        17: {
-            'cost': '48.5'
-        }
-    }
+    v_dict = {0: {"name": "κόμβος 0"}, 1: {"name": "node 1"}}
+    e_dict = {17: {"cost": "48.5"}}
 
-    out = generate_graphml(g, attrs=attrs, per_vertex_attrs_dict=v_dict, per_edge_attrs_dict=e_dict, export_edge_weights=True)
+    out = generate_graphml(
+        g,
+        attrs=attrs,
+        per_vertex_attrs_dict=v_dict,
+        per_edge_attrs_dict=e_dict,
+        export_edge_weights=True,
+    )
 
     assert out.splitlines() == expected3.splitlines()
-
