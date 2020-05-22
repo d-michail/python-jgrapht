@@ -9,6 +9,7 @@ from ._wrappers import _HandleWrapper
 from ._collections import (
     _JGraphTIntegerIterator,
     _JGraphTIntegerSet,
+    _JGraphTEdgeTripleList,
 )
 
 
@@ -251,17 +252,26 @@ def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True)
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
-    e_list = backend.jgrapht_list_create()
-    if weighted:
-        for u, v, w in edgelist:
-            backend.jgrapht_list_edge_triple_add(e_list, u, v, w)
+    if isinstance(edgelist, _JGraphTEdgeTripleList):
+        # special case for internal edge list, to avoid copying
+        e_list_owner = False
+        e_list = edgelist.handle
     else:
-        for u, v in edgelist:
-            backend.jgrapht_list_edge_pair_add(e_list, u, v)
+        e_list_owner = True
+        e_list = backend.jgrapht_list_create()
+        if weighted:
+            for u, v, w in edgelist:
+                backend.jgrapht_list_edge_triple_add(e_list, u, v, w)
+        else:
+            for u, v in edgelist:
+                backend.jgrapht_list_edge_pair_add(e_list, u, v)
 
     handle = backend.jgrapht_graph_sparse_create(
         directed, weighted, num_of_vertices, e_list
     )
+
+    if e_list_owner:
+        backend.jgrapht_handles_destroy(e_list)
 
     return _JGraphTGraph(handle)
 
