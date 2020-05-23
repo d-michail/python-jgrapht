@@ -1,7 +1,7 @@
 from .. import backend
 
 from .._internals._collections import _JGraphTEdgeTripleList
-from .._internals._ioutils import _create_wrapped_import_id_callback
+from .._internals._ioutils import _create_wrapped_import_string_id_callback
 from .._internals._ioutils import _create_wrapped_attribute_callback
 
 
@@ -76,7 +76,7 @@ def read_edgelist_json(
     :returns: an edge list. This is an iterator which returns named tuples(source, target, weight)
     :raises IOError: In case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
+    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
 
     if vertex_attribute_cb is None and edge_attribute_cb is None: 
         with_attrs = False
@@ -145,7 +145,7 @@ def parse_edgelist_json(
     :returns: an edge list. This is an iterator which returns named tuples(source, target, weight)    
     :raises IOError: In case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
+    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
 
     if vertex_attribute_cb is None and edge_attribute_cb is None: 
         with_attrs = False
@@ -226,7 +226,7 @@ def read_edgelist_gexf(
     :returns: an edge list. This is an iterator which returns named tuples(source, target, weight)        
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
+    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
 
     if vertex_attribute_cb is None and edge_attribute_cb is None: 
         with_attrs = False
@@ -306,7 +306,7 @@ def parse_edgelist_gexf(
     :returns: an edge list. This is an iterator which returns named tuples(source, target, weight)        
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_id_callback(import_id_cb)
+    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
 
     if vertex_attribute_cb is None and edge_attribute_cb is None: 
         with_attrs = False

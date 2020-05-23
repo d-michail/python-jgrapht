@@ -541,13 +541,13 @@ int jgrapht_handles_get_graphpath(void *, double* OUTPUT, int* OUTPUT, int* OUTP
 
 // importers
 
-int jgrapht_import_file_dimacs(void *, char* BYTEARRAY, int);
+int jgrapht_import_file_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_dimacs(void *, char* BYTEARRAY, int);
+int jgrapht_import_string_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_file_gml(void *, char* BYTEARRAY, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_gml(void *, char* BYTEARRAY, void* LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
-int jgrapht_import_string_gml(void *, char* BYTEARRAY, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_gml(void *, char* BYTEARRAY, void* LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 
 int jgrapht_import_file_json(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
 

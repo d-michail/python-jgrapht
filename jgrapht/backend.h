@@ -382,13 +382,13 @@ int jgrapht_handles_get_graphpath(void *, double*, int*, int*, void**);
 
 // importers
 
-int jgrapht_import_file_dimacs(void *, char*, int);
+int jgrapht_import_file_dimacs(void *, char*, void *);
 
-int jgrapht_import_string_dimacs(void *, char*, int);
+int jgrapht_import_string_dimacs(void *, char*, void *);
 
-int jgrapht_import_file_gml(void *, char*, int, void *, void *);
+int jgrapht_import_file_gml(void *, char*, void *, void *, void *);
 
-int jgrapht_import_string_gml(void *, char*, int, void *, void *);
+int jgrapht_import_string_gml(void *, char*, void *, void *, void *);
 
 int jgrapht_import_file_json(void *, char*, void *, void *, void *);
 

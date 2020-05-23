@@ -23,7 +23,7 @@ def _create_wrapped_attribute_callback(callback):
         return (0, None)
 
 
-def _create_wrapped_import_id_callback(callback):
+def _create_wrapped_import_string_id_callback(callback):
     if callback is not None:
         callback_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
 
@@ -36,5 +36,13 @@ def _create_wrapped_import_id_callback(callback):
             return callback(decoded_id)
 
         return _create_wrapped_callback(decoder_callback, callback_ctype)
+    else:
+        return (0, None)
+
+
+def _create_wrapped_import_integer_id_callback(callback):
+    if callback is not None:
+        callback_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_int)
+        return _create_wrapped_callback(callback, callback_ctype)
     else:
         return (0, None)

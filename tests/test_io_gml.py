@@ -217,6 +217,28 @@ graph
 ]
 """
 
+expected3 = r"""Creator "JGraphT GML Exporter"
+Version 1
+graph
+[
+	label ""
+	directed 1
+	node
+	[
+		id 0
+	]
+	node
+	[
+		id 1
+	]
+	edge
+	[
+		source 0
+		target 1
+	]
+]
+"""
+
 
 def build_graph():
     g = create_graph(
@@ -367,7 +389,7 @@ def test_input_gml_from_string_create_new_vertices():
 
     input_string = "Version 1 graph [ directed 0 node [ id 5 ] node [ id 7 ] edge [ source 5 target 7 ] ]"
 
-    parse_gml(g, input_string, preserve_ids_from_input=False)
+    parse_gml(g, input_string)
 
     assert g.vertices == set([0, 1])
 
@@ -383,7 +405,10 @@ def test_input_gml_from_string_preserve_ids():
 
     input_string = "Version 1 graph [ directed 0 node [ id 5 ] node [ id 7 ] edge [ source 5 target 7 ] ]"
 
-    parse_gml(g, input_string, preserve_ids_from_input=True)
+    def identity(x):
+        return x
+
+    parse_gml(g, input_string, identity)
 
     assert g.vertices == set([5, 7])
 
@@ -405,3 +430,20 @@ def test_output_to_string():
 
     out = generate_gml(g)
     assert out.splitlines() == expected2.splitlines()
+
+
+def test_input_gml_from_string_rename_ids(tmpdir):
+
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    def import_id(id):
+        return id+5
+
+    parse_gml(g, expected3, import_id_cb=import_id)
+
+    assert g.vertices == {5, 6}

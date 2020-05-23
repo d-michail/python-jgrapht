@@ -745,20 +745,20 @@ int jgrapht_handles_get_graphpath(void *graph_path, double* weight, int* start_v
 
 // importers
 
-int jgrapht_import_file_dimacs(void *g, char* filename, int preserve_ids_from_input) { 
-    return jgrapht_capi_import_file_dimacs(thread, g, filename, preserve_ids_from_input);
+int jgrapht_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr) { 
+    return jgrapht_capi_import_file_dimacs(thread, g, filename, import_vertex_id_fptr);
 }
 
-int jgrapht_import_string_dimacs(void *g, char* input, int preserve_ids_from_input) { 
-    return jgrapht_capi_import_string_dimacs(thread, g, input, preserve_ids_from_input);
+int jgrapht_import_string_dimacs(void *g, char* input, void *import_vertex_id_fptr) { 
+    return jgrapht_capi_import_string_dimacs(thread, g, input, import_vertex_id_fptr);
 }
 
-int jgrapht_import_file_gml(void *g, char* filename, int preserve_ids_from_input, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
-    return jgrapht_capi_import_file_gml(thread, g, filename, preserve_ids_from_input, vertex_attribute_fptr, edge_attribute_fptr);
+int jgrapht_import_file_gml(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_file_gml(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
-int jgrapht_import_string_gml(void *g, char* input, int preserve_ids_from_input, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
-    return jgrapht_capi_import_string_gml(thread, g, input, preserve_ids_from_input, vertex_attribute_fptr, edge_attribute_fptr);
+int jgrapht_import_string_gml(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
+    return jgrapht_capi_import_string_gml(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr);
 }
 
 int jgrapht_import_file_json(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr) { 
