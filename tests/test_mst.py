@@ -1,7 +1,10 @@
 import pytest
 
+import time
+
 from jgrapht import create_graph
 import jgrapht.algorithms.spanning as spanning
+import jgrapht.generators as generators
 
 
 def build_graph():
@@ -63,3 +66,12 @@ def test_boruvka():
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
     solution = set(mst_edges)
     assert expected == solution
+
+
+def test_small_graph_prim():
+    g = create_graph(directed=False)
+
+    generators.gnp_random_graph(g, n=500, p=0.1, seed=17)
+
+    mst_w, mst_edges = spanning.prim(g)
+    assert mst_w == 499.0
