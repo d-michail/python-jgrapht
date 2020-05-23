@@ -340,25 +340,25 @@ def test_input_gml_from_string(tmpdir):
         weighted=True,
     )
 
+    v_attrs = dict()
+    e_attrs = dict()
+
+    # test that you read back unescaped
     def va_cb(vertex, attribute_name, attribute_value):
-        print(
-            "Vertex {}, attr {}, value {}".format(
-                vertex, attribute_name, attribute_value
-            )
-        )
-        if vertex == 2 and attribute_name == "label":
-            assert attribute_value == "label 2"
-        if vertex == 5 and attribute_name == "label":
-            assert attribute_value == "5"
+        if vertex not in v_attrs: 
+            v_attrs[vertex] = {}
+        v_attrs[vertex][attribute_name] = attribute_value    
 
     def ea_cb(edge, attribute_name, attribute_value):
-        print(
-            "Edge {}, attr {}, value {}".format(edge, attribute_name, attribute_value)
-        )
-        if edge == 9 and attribute_name == "label":
-            assert attribute_value == "edge 1-2"
+        if edge not in e_attrs: 
+            e_attrs[edge] = {}
+        e_attrs[edge][attribute_name] = attribute_value
 
     parse_gml(g, expected, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
+
+    assert v_attrs[2]['label'] == 'label 2'
+    assert v_attrs[5]['label'] == '5'
+    assert e_attrs[9]['label'] == 'edge 1-2'
 
 
 def test_input_gml_nocallbacks(tmpdir):

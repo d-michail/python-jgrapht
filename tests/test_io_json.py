@@ -117,27 +117,27 @@ def test_input_json(tmpdir):
         weighted=True,
     )
 
+    v_attrs = dict()
+    e_attrs = dict()
+
     # test that you read back unescaped
     def va_cb(vertex, attribute_name, attribute_value):
-        print(
-            "Vertex {}, attr {}, value {}".format(
-                vertex, attribute_name, attribute_value
-            )
-        )
-        if vertex == 0 and attribute_name == "label":
-            assert attribute_value == "κόμβος 0"
-        if vertex == 5 and attribute_name == "label":
-            assert attribute_value == "5"
+        if vertex not in v_attrs: 
+            v_attrs[vertex] = {}
+        v_attrs[vertex][attribute_name] = attribute_value    
 
     def ea_cb(edge, attribute_name, attribute_value):
-        print(
-            "Edge {}, attr {}, value {}".format(edge, attribute_name, attribute_value)
-        )
-        if edge == 9 and attribute_name == "label":
-            assert attribute_value == "edge 1-2"
+        if edge not in e_attrs: 
+            e_attrs[edge] = {}
+        e_attrs[edge][attribute_name] = attribute_value
 
     read_json(g, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
+    assert v_attrs[0]['label'] == 'κόμβος 0'
+    assert v_attrs[1]['ID'] == '1'
+    assert v_attrs[1]['label'] == 'label 1'
+    assert v_attrs[2]['label'] == 'label 2'
+    assert e_attrs[9]['label'] == 'edge 1-2'
 
 def test_input_json_nocallbacks(tmpdir):
     tmpfile = tmpdir.join("json.out")
@@ -209,18 +209,23 @@ def test_input_from_string_with_labels():
     def import_id(file_id):
         return int(file_id)
 
+    v_attrs = dict()
+    e_attrs = dict()
+
     # test that you read back unescaped
     def va_cb(vertex, attribute_name, attribute_value):
-        print(
-            "Vertex {}, attr {}, value {}".format(
-                vertex, attribute_name, attribute_value
-            )
-        )
-        if vertex == 0 and attribute_name == "label":
-            assert attribute_value == "κόμβος 0"
+        if vertex not in v_attrs: 
+            v_attrs[vertex] = {}
+        v_attrs[vertex][attribute_name] = attribute_value    
+
+    def ea_cb(edge, attribute_name, attribute_value):
+        if edge not in e_attrs: 
+            e_attrs[edge] = {}
+        e_attrs[edge][attribute_name] = attribute_value
 
     parse_json(
         g, expected1_unescaped, import_id_cb=import_id, vertex_attribute_cb=va_cb
     )
+    assert v_attrs[0]['label'] == "κόμβος 0"
     assert g.vertices == set([0])
     assert len(g.edges) == 0

@@ -126,7 +126,7 @@ def test_export_import(tmpdir):
     attrs = [("cost", "edge", "double", None), ("name", "node", "string", None)]
 
     v_dict = {0: {"name": "κόμβος 0"}, 1: {"name": "node 1"}}
-    e_dict = {17: {"cost": "48.5"}}
+    e_dict = {11: {"cost": "100.0"}, 17: {"cost": "48.5"}}
 
     write_graphml(
         g,
@@ -146,36 +146,31 @@ def test_export_import(tmpdir):
         weighted=True,
     )
 
+    v_attrs = dict()
+    e_attrs = dict()
+
+    # test that you read back unescaped
     def va_cb(vertex, attribute_name, attribute_value):
-        print(
-            "Vertex {}, attr {}, value {}".format(
-                vertex, attribute_name, attribute_value
-            )
-        )
-        if vertex == 0:
-            if attribute_name == "name":
-                assert attribute_value == "κόμβος 0"
-        if vertex == 1:
-            if attribute_name == "name":
-                assert attribute_value == "node 1"
+        if vertex not in v_attrs: 
+            v_attrs[vertex] = {}
+        v_attrs[vertex][attribute_name] = attribute_value    
 
     def ea_cb(edge, attribute_name, attribute_value):
-        print(
-            "Edge {}, attr {}, value {}".format(edge, attribute_name, attribute_value)
-        )
-        if edge == 17:
-            if attribute_name == "cost":
-                assert attribute_value == "48.5"
-            if attribute_name == "weight":
-                assert attribute_value == "33.3"
-            if attribute_name == "source":
-                assert attribute_value == "9"
-            if attribute_name == "target":
-                assert attribute_value == "1"
-            if attribute_name == "id":
-                assert attribute_value == "17"
+        if edge not in e_attrs: 
+            e_attrs[edge] = {}
+        e_attrs[edge][attribute_name] = attribute_value
 
-    read_graphml(g1, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
+    read_graphml(g1, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb, simple=False)
+
+    print(e_attrs)
+
+    assert v_attrs[0]['name'] == "κόμβος 0"
+    assert v_attrs[1]['name'] == "node 1"
+    assert e_attrs[8]['weight'] == "1.0"
+    assert e_attrs[11]['cost'] == "100.0"
+    assert e_attrs[11]['weight'] == "1.0"
+    assert e_attrs[17]['cost'] == "48.5"
+    assert e_attrs[17]['weight'] == "33.3"
 
     assert g1.vertices == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     assert g1.contains_edge_between(6, 7)
@@ -184,7 +179,7 @@ def test_export_import(tmpdir):
 
     assert g1.get_edge_weight(17) == 33.3
 
-    # read back with non simple
+    # read back with simple
     g2 = create_graph(
         directed=True,
         allowing_self_loops=False,
@@ -197,7 +192,7 @@ def test_export_import(tmpdir):
         tmpfilename,
         vertex_attribute_cb=va_cb,
         edge_attribute_cb=ea_cb,
-        simple=False,
+        simple=True,
     )
 
     assert g2.vertices == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
