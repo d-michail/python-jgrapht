@@ -1,5 +1,5 @@
 
-.. _algorithms/exporters:
+.. _io/exporters:
 
 Exporters
 *********

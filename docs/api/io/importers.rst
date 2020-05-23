@@ -1,5 +1,5 @@
 
-.. _algorithms/importers:
+.. _io/importers:
 
 Importers
 *********

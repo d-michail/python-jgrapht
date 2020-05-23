@@ -73,7 +73,8 @@ def read_edgelist_json(
     :param import_id_cb: Callback to transform identifiers from file to integer vertices.
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
-    :returns: an edge list. This is an iterator which returns named tuples(source, target, weight)
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)
     :raises IOError: In case of an import error    
     """
     import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
@@ -142,7 +143,8 @@ def parse_edgelist_json(
     :param import_id_cb: Callback to transform identifiers from file to integer vertices.  
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
-    :returns: an edge list. This is an iterator which returns named tuples(source, target, weight)    
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)    
     :raises IOError: In case of an import error    
     """
     import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
@@ -223,7 +225,8 @@ def read_edgelist_gexf(
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
-    :returns: an edge list. This is an iterator which returns named tuples(source, target, weight)        
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)        
     :raises IOError: in case of an import error    
     """
     import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
@@ -303,7 +306,8 @@ def parse_edgelist_gexf(
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
-    :returns: an edge list. This is an iterator which returns named tuples(source, target, weight)        
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)        
     :raises IOError: in case of an import error    
     """
     import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)

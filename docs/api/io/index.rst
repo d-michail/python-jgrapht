@@ -14,4 +14,5 @@ to read/write graph from files and strings.
 
    importers
    exporters
+   edgelist
 
