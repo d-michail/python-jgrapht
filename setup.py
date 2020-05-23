@@ -26,7 +26,7 @@ if sys.platform.startswith('linux'):
 elif sys.platform.startswith('darwin'):
     so_ext = '.dylib'
     capi_filename = 'libjgrapht_capi' + so_ext
-    extra_link_args = ['-Wl,-rpath,@loader_path']
+    extra_link_args = ['-Wl,-rpath,@loader_path/../python_jgrapht.libs']
 
 
 class BuildCapiCommand(Command):
@@ -144,7 +144,7 @@ setup(
     platforms=['any'],
     packages=setuptools.find_packages(),
     classifiers = [
-        'Development Status :: 3 - Beta',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
