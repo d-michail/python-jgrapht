@@ -1,4 +1,3 @@
-from . import backend
 from ._internals._views import (
     _UnweightedGraphView,
     _UnmodifiableGraphView,

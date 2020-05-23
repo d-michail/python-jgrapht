@@ -1,4 +1,4 @@
-from . import backend
+from . import backend as _backend
 from ._internals._collections import (
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerSet,
@@ -15,7 +15,7 @@ def diameter(graph):
     :param graph: the input graph
     :returns: the graph diameter
     """
-    return backend.jgrapht_graph_metrics_diameter(graph.handle)
+    return _backend.jgrapht_graph_metrics_diameter(graph.handle)
 
 
 def radius(graph):
@@ -31,7 +31,7 @@ def radius(graph):
     :param graph: the input graph
     :returns: the graph diameter
     """
-    return backend.jgrapht_graph_metrics_radius(graph.handle)
+    return _backend.jgrapht_graph_metrics_radius(graph.handle)
 
 
 def girth(graph):
@@ -47,7 +47,7 @@ def girth(graph):
     :param graph: the input graph
     :returns: the graph girth
     """
-    return backend.jgrapht_graph_metrics_girth(graph.handle)
+    return _backend.jgrapht_graph_metrics_girth(graph.handle)
 
 
 def count_triangles(graph):
@@ -60,7 +60,7 @@ def count_triangles(graph):
     :returns: the number of triangles in the graph 
     :raises ValueError: if the graph is not undirected
     """
-    return backend.jgrapht_graph_metrics_triangles(graph.handle)
+    return _backend.jgrapht_graph_metrics_triangles(graph.handle)
 
 
 def measure(graph):
@@ -86,7 +86,7 @@ def measure(graph):
         periphery_handle,
         pseudo_periphery_handle,
         vertex_eccentricity_map_handle,
-    ) = backend.jgrapht_graph_metrics_measure_graph(graph.handle)
+    ) = _backend.jgrapht_graph_metrics_measure_graph(graph.handle)
 
     return (
         diameter,

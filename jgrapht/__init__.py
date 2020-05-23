@@ -39,7 +39,16 @@ from ._internals._graphs import (
     create_sparse_graph,
     as_sparse_graph,
 )
-from . import types
+
+from . import (
+    types,
+    views,
+    properties,
+    metrics,
+    traversal,
+    generators,
+    algorithms,
+)
 
 
 # Set default logging handler to avoid "No handler found" warnings.
