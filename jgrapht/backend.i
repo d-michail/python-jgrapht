@@ -587,6 +587,14 @@ int jgrapht_import_edgelist_attrs_file_json(char* BYTEARRAY, void *LONG_TO_FUNCT
 
 int jgrapht_import_edgelist_attrs_string_json(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
 
+int jgrapht_import_edgelist_noattrs_file_csv(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int, void** OUTPUT);
+
+int jgrapht_import_edgelist_noattrs_string_csv(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int, void** OUTPUT);
+
+int jgrapht_import_edgelist_attrs_file_csv(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int, void** OUTPUT);
+
+int jgrapht_import_edgelist_attrs_string_csv(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int, void** OUTPUT);
+
 int jgrapht_import_edgelist_noattrs_file_gexf(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
 
 int jgrapht_import_edgelist_noattrs_string_gexf(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);

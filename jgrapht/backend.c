@@ -835,6 +835,22 @@ int jgrapht_import_edgelist_attrs_string_json(char* input, void *import_vertex_i
     return jgrapht_capi_import_edgelist_attrs_string_json(thread, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
+int jgrapht_import_edgelist_noattrs_file_csv(char* filename, void *import_vertex_id_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_file_csv(thread, filename, import_vertex_id_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);
+}
+
+int jgrapht_import_edgelist_noattrs_string_csv(char* input, void *import_vertex_id_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_string_csv(thread, input, import_vertex_id_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
+}
+
+int jgrapht_import_edgelist_attrs_file_csv(char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_file_csv(thread, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
+}
+
+int jgrapht_import_edgelist_attrs_string_csv(char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_string_csv(thread, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
+}
+
 int jgrapht_import_edgelist_noattrs_file_gexf(char* filename, void *import_vertex_id_fptr, int validate_schema, void** res) { 
     return jgrapht_capi_import_edgelist_noattrs_file_gexf(thread, filename, import_vertex_id_fptr, validate_schema, res);
 }

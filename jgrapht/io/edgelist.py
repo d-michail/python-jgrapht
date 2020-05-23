@@ -161,6 +161,92 @@ def parse_edgelist_json(
     return _import_edgelist('string_json', with_attrs, input_string, *args)
 
 
+from .importers import CSV_FORMATS
+
+
+def read_edgelist_csv(
+    filename,
+    import_id_cb,
+    format="adjacencylist",
+    import_edge_weights=False,
+    matrix_format_node_id=False,
+    matrix_format_zero_when_noedge=True,
+):
+    """Imports a graph as an edgelist from a file in CSV Format.
+
+    The importer supports various different formats which can be adjusted using the format parameter.
+    The supported formats are the same CSV formats used by Gephi. The importer respects rfc4180. 
+
+    .. note:: The import identifier callback accepts a single parameter which is the identifier read
+              from the input file as a string. It should return a integer with the identifier of the 
+              graph vertex.
+
+    :param filename: the filename to read from
+    :param import_id_cb: callback to transform identifiers from file to integer vertices.
+    :param format: format to use. One of "edgelist", "adjacencylist" and "matrix"    
+    :param import_edge_weights: whether to import edge weights
+    :param matrix_format_node_id: only for the matrix format, whether to import node identifiers
+    :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)    
+    :raises IOError: in case of an import error    
+    """
+    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+
+    format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_EDGE_LIST)
+    args = [
+        import_id_f_ptr,
+        format_to_use,
+        import_edge_weights,
+        matrix_format_node_id,
+        matrix_format_zero_when_noedge,
+    ]
+
+    return _import_edgelist('file_csv', False, filename, *args)
+
+
+def parse_edgelist_csv(
+    input_string,
+    import_id_cb,
+    format="adjacencylist",
+    import_edge_weights=False,
+    matrix_format_node_id=False,
+    matrix_format_zero_when_noedge=True,
+):
+    """Imports a graph as an edgelist from a string in CSV Format.
+
+    The importer supports various different formats which can be adjusted using the format parameter.
+    The supported formats are the same CSV formats used by Gephi. The importer respects rfc4180. 
+
+    .. note:: The import identifier callback accepts a single parameter which is the identifier read
+              from the input file as a string. It should return an integer with the identifier of the 
+              graph vertex.
+
+    :param input_string: the input string to read from
+    :param import_id_cb: callback to transform identifiers from file to integer vertices
+    :param format: format to use. One of "edgelist", "adjacencylist" and "matrix"    
+    :param import_edge_weights: whether to import edge weights
+    :param matrix_format_node_id: only for the matrix format, whether to import node identifiers
+    :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains
+      zero for missing edges
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)      
+    :raises IOError: in case of an import error    
+    """
+    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+
+    format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
+    args = [
+        import_id_f_ptr,
+        format_to_use,
+        import_edge_weights,
+        matrix_format_node_id,
+        matrix_format_zero_when_noedge,
+    ]
+
+    return _import_edgelist('string_csv', False, input_string, *args)
+
+
 def read_edgelist_gexf(
     filename,
     import_id_cb,
