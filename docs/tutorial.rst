@@ -15,8 +15,7 @@ Let us start by creating a graph.
 .. nbplot::
 
   >>> import jgrapht
-  >>> g = jgrapht.create_graph(directed=True, weighted=True, allowing_self_loops=False,
-  >>>                          allowing_multiple_edges=False)
+  >>> g = jgrapht.create_graph(directed=True, weighted=True, allowing_self_loops=False, allowing_multiple_edges=False)
 
 This is the most general call. Sensible defaults are also provided, thus someone can create
 a graph simply by calling :py:meth:`jgrapht.create_graph()`. 
