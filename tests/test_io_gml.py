@@ -345,20 +345,20 @@ def test_input_gml_from_string(tmpdir):
 
     # test that you read back unescaped
     def va_cb(vertex, attribute_name, attribute_value):
-        if vertex not in v_attrs: 
+        if vertex not in v_attrs:
             v_attrs[vertex] = {}
-        v_attrs[vertex][attribute_name] = attribute_value    
+        v_attrs[vertex][attribute_name] = attribute_value
 
     def ea_cb(edge, attribute_name, attribute_value):
-        if edge not in e_attrs: 
+        if edge not in e_attrs:
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
     parse_gml(g, expected, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
-    assert v_attrs[2]['label'] == 'label 2'
-    assert v_attrs[5]['label'] == '5'
-    assert e_attrs[9]['label'] == 'edge 1-2'
+    assert v_attrs[2]["label"] == "label 2"
+    assert v_attrs[5]["label"] == "5"
+    assert e_attrs[9]["label"] == "edge 1-2"
 
 
 def test_input_gml_nocallbacks(tmpdir):
@@ -442,7 +442,7 @@ def test_input_gml_from_string_rename_ids(tmpdir):
     )
 
     def import_id(id):
-        return id+5
+        return id + 5
 
     parse_gml(g, expected3, import_id_cb=import_id)
 

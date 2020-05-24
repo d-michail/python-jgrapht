@@ -25,12 +25,12 @@ def test_input_json(tmpdir):
 
     # test that you read back unescaped
     def va_cb(vertex, attribute_name, attribute_value):
-        if vertex not in v_attrs: 
+        if vertex not in v_attrs:
             v_attrs[vertex] = {}
-        v_attrs[vertex][attribute_name] = attribute_value    
+        v_attrs[vertex][attribute_name] = attribute_value
 
     def ea_cb(edge, attribute_name, attribute_value):
-        if edge not in e_attrs: 
+        if edge not in e_attrs:
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
@@ -69,6 +69,7 @@ def test_input_json(tmpdir):
         (9, 1, 1.0),
     ]
 
+
 def test_input_json_no_attrs(tmpdir):
     tmpfile = tmpdir.join("json.out")
     tmpfilename = str(tmpfile)
@@ -105,7 +106,6 @@ def test_input_json_no_attrs(tmpdir):
 
 
 def test_input_json_no_attrs_from_string():
-
     def import_id_cb(id):
         return int(id)
 
@@ -140,12 +140,12 @@ def test_input_json_from_string():
 
     # test that you read back unescaped
     def va_cb(vertex, attribute_name, attribute_value):
-        if vertex not in v_attrs: 
+        if vertex not in v_attrs:
             v_attrs[vertex] = {}
-        v_attrs[vertex][attribute_name] = attribute_value    
+        v_attrs[vertex][attribute_name] = attribute_value
 
     def ea_cb(edge, attribute_name, attribute_value):
-        if edge not in e_attrs: 
+        if edge not in e_attrs:
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
@@ -186,7 +186,6 @@ def test_input_json_from_string():
 
 
 def test_graph_sparse_weighted():
-
     def import_id_cb(id):
         return int(id)
 

@@ -2,6 +2,7 @@ from .. import backend
 
 from .._internals._collections import _JGraphTEdgeTripleList
 from .._internals._ioutils import _create_wrapped_import_string_id_callback
+from .._internals._ioutils import _create_wrapped_import_integer_id_callback
 from .._internals._ioutils import _create_wrapped_attribute_callback
 
 
@@ -22,6 +23,187 @@ def _import_edgelist(name, with_attrs, filename_or_string, *args):
 
     res = alg_method(filename_or_string_as_bytearray, *args)
     return _JGraphTEdgeTripleList(res)
+
+
+def read_edgelist_gml(
+    filename,
+    import_id_cb,
+    vertex_attribute_cb=None,
+    edge_attribute_cb=None,
+):
+    """Read a graph as an edgelist from a file in GML format (Graph Modelling Language).
+
+    For a description of the format see http://www.infosun.fmi.uni-passau.de/Graphlet/GML/.
+    Below is small example of a graph in GML format.::
+
+        graph [
+            node [ 
+                id 1
+            ]
+            node [
+                id 2
+                label "Node 2 has an optional label"
+            ]
+            node [
+                id 3
+            ]
+            edge [
+                source 1
+                target 2 
+                weight 2.0
+                label "Edge between 1 and 2"
+            ]
+            edge [
+                source 2
+                target 3
+                weight 3.0
+                label "Edge between 2 and 3"
+            ]
+        ]
+
+    The importer also supports reading additional string attributes such as label or custom
+    user attributes. String attributes are unescaped as if they are Java strings.
+
+    The parser completely ignores elements from the input that are not related to vertices or
+    edges of the graph. Moreover, complicated nested structures are simply returned as a whole.
+    For example, in the following graph::
+
+        graph [
+            node [ 
+                id 1
+            ]
+            node [ 
+                id 2
+            ]
+            edge [
+                source 1
+                target 2 
+                points [ x 1.0 y 2.0 ]
+            ]
+        ]
+
+    the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
+
+    .. note:: The import identifier callback accepts a single parameter which is the identifier read
+              from the input file as an integer. It should return a integer with the identifier of the 
+              graph vertex. If you want to preserve the identifiers from the file, the identity
+              function can be used.
+
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+              or edge identifier. The second is the attribute key and the third is the 
+              attribute value.
+
+    :param filename: Filename to read from
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices.    
+    :param vertex_attribute_cb: Callback function for vertex attributes
+    :param edge_attribute_cb: Callback function for edge attributes
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)    
+    :raises IOError: In case of an import error 
+    """
+    import_id_f_ptr, _ = _create_wrapped_import_integer_id_callback(import_id_cb)
+
+    if vertex_attribute_cb is None and edge_attribute_cb is None: 
+        with_attrs = False
+        args = [import_id_f_ptr]
+    else:
+        with_attrs = True
+        vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+        edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+        args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+
+    return _import_edgelist('file_gml', with_attrs, filename, *args)
+
+
+def parse_edgelist_gml(
+    input_string,
+    import_id_cb,
+    vertex_attribute_cb=None,
+    edge_attribute_cb=None,
+):
+    """Read a graph as an edgelist from a string in GML format (Graph Modelling Language).
+
+    For a description of the format see http://www.infosun.fmi.uni-passau.de/Graphlet/GML/.
+    Below is small example of a graph in GML format.::
+
+        graph [
+            node [ 
+                id 1
+            ]
+            node [
+                id 2
+                label "Node 2 has an optional label"
+            ]
+            node [
+                id 3
+            ]
+            edge [
+                source 1
+                target 2 
+                weight 2.0
+                label "Edge between 1 and 2"
+            ]
+            edge [
+                source 2
+                target 3
+                weight 3.0
+                label "Edge between 2 and 3"
+            ]
+        ]
+
+    The importer also supports reading additional string attributes such as label or custom
+    user attributes. String attributes are unescaped as if they are Java strings.
+
+    The parser completely ignores elements from the input that are not related to vertices or
+    edges of the graph. Moreover, complicated nested structures are simply returned as a whole.
+    For example, in the following graph::
+
+        graph [
+            node [ 
+                id 1
+            ]
+            node [ 
+                id 2
+            ]
+            edge [
+                source 1
+                target 2 
+                points [ x 1.0 y 2.0 ]
+            ]
+        ]
+
+    the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
+
+    .. note:: The import identifier callback accepts a single parameter which is the identifier read
+              from the input file as an integer. It should return an integer with the identifier of the 
+              graph vertex. If you want to preserve the identifiers from the file, the identity
+              function can be used.
+
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+              or edge identifier. The second is the attribute key and the third is the 
+              attribute value.
+
+    :param graph: The graph to read into
+    :param input_string: Input string to read from 
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices.     
+    :param vertex_attribute_cb: Callback function for vertex attributes
+    :param edge_attribute_cb: Callback function for edge attributes
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)    
+    :raises IOError: In case of an import error 
+    """
+    import_id_f_ptr, _ = _create_wrapped_import_integer_id_callback(import_id_cb)
+
+    if vertex_attribute_cb is None and edge_attribute_cb is None: 
+        with_attrs = False
+        args = [import_id_f_ptr]
+    else:
+        with_attrs = True
+        vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
+        edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+        args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+
+    return _import_edgelist('string_gml', with_attrs, input_string, *args)
 
 
 def read_edgelist_json(

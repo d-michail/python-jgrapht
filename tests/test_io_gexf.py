@@ -141,24 +141,24 @@ def test_export_import(tmpdir):
 
     # test that you read back unescaped
     def va_cb(vertex, attribute_name, attribute_value):
-        if vertex not in v_attrs: 
+        if vertex not in v_attrs:
             v_attrs[vertex] = {}
-        v_attrs[vertex][attribute_name] = attribute_value    
+        v_attrs[vertex][attribute_name] = attribute_value
 
     def ea_cb(edge, attribute_name, attribute_value):
-        if edge not in e_attrs: 
+        if edge not in e_attrs:
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
     read_gexf(g1, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
-    assert v_attrs[0]['name'] == "κόμβος 0"
-    assert v_attrs[1]['name'] == "node 1"
-    assert e_attrs[17]['cost'] == "48.5"
-    assert e_attrs[17]['weight'] == "33.3"
-    assert e_attrs[17]['source'] == "9"
-    assert e_attrs[17]['target'] == "1"
-    assert e_attrs[17]['id'] == "17"
+    assert v_attrs[0]["name"] == "κόμβος 0"
+    assert v_attrs[1]["name"] == "node 1"
+    assert e_attrs[17]["cost"] == "48.5"
+    assert e_attrs[17]["weight"] == "33.3"
+    assert e_attrs[17]["source"] == "9"
+    assert e_attrs[17]["target"] == "1"
+    assert e_attrs[17]["id"] == "17"
 
     assert g1.vertices == set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     assert g1.contains_edge_between(6, 7)

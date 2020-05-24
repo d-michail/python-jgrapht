@@ -175,12 +175,11 @@ def test_read_dimacs_from_string(tmpdir):
     )
 
     def identity(x):
-        return x;
+        return x
 
     parse_dimacs(g, dimacs_sp_expected, identity)
 
     assert g.vertices == {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 
-    again = generate_dimacs(g, format='shortestpath')
+    again = generate_dimacs(g, format="shortestpath")
     assert again.splitlines() == dimacs_sp_expected.splitlines()
-

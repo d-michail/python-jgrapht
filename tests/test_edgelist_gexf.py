@@ -42,6 +42,7 @@ expected = r"""<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.gex
 </gexf>
 """
 
+
 def test_input_gexf(tmpdir):
     tmpfile = tmpdir.join("gexf.out")
     tmpfilename = str(tmpfile)
@@ -55,12 +56,12 @@ def test_input_gexf(tmpdir):
 
     # test that you read back unescaped
     def va_cb(vertex, attribute_name, attribute_value):
-        if vertex not in v_attrs: 
+        if vertex not in v_attrs:
             v_attrs[vertex] = {}
-        v_attrs[vertex][attribute_name] = attribute_value    
+        v_attrs[vertex][attribute_name] = attribute_value
 
     def ea_cb(edge, attribute_name, attribute_value):
-        if edge not in e_attrs: 
+        if edge not in e_attrs:
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
@@ -77,10 +78,13 @@ def test_input_gexf(tmpdir):
     assert v_attrs[1]["label"] == "κόμβος 1"
     assert v_attrs[2]["label"] == "mylabel 2"
 
-    assert e_attrs == {0: {'id': '1', 'source': '2', 'target': '3'}, 1: {'id': '0', 'source': '1', 'target': '2'}, 2: {'id': '2', 'source': '3', 'target': '1'}}
+    assert e_attrs == {
+        0: {"id": "1", "source": "2", "target": "3"},
+        1: {"id": "0", "source": "1", "target": "2"},
+        2: {"id": "2", "source": "3", "target": "1"},
+    }
 
-    assert list(edgelist) == [(2,3,1), (1,2,1), (3,1,1)]
-
+    assert list(edgelist) == [(2, 3, 1), (1, 2, 1), (3, 1, 1)]
 
 
 def test_input_gexf_no_attrs(tmpdir):
@@ -94,24 +98,18 @@ def test_input_gexf_no_attrs(tmpdir):
     def import_id_cb(id):
         return int(id)
 
-    edgelist = read_edgelist_gexf(
-        tmpfilename,
-        import_id_cb=import_id_cb,
-    )
+    edgelist = read_edgelist_gexf(tmpfilename, import_id_cb=import_id_cb,)
 
-    assert list(edgelist) == [(2,3,1), (1,2,1), (3,1,1)]
+    assert list(edgelist) == [(2, 3, 1), (1, 2, 1), (3, 1, 1)]
 
 
 def test_input_gexf_from_string_no_attrs(tmpdir):
     def import_id_cb(id):
         return int(id)
 
-    edgelist = parse_edgelist_gexf(
-        input1,
-        import_id_cb=import_id_cb,
-    )
+    edgelist = parse_edgelist_gexf(input1, import_id_cb=import_id_cb,)
 
-    assert list(edgelist) == [(2,3,1), (1,2,1), (3,1,1)]
+    assert list(edgelist) == [(2, 3, 1), (1, 2, 1), (3, 1, 1)]
 
 
 def test_input_gexf_from_string(tmpdir):
@@ -120,12 +118,12 @@ def test_input_gexf_from_string(tmpdir):
 
     # test that you read back unescaped
     def va_cb(vertex, attribute_name, attribute_value):
-        if vertex not in v_attrs: 
+        if vertex not in v_attrs:
             v_attrs[vertex] = {}
-        v_attrs[vertex][attribute_name] = attribute_value    
+        v_attrs[vertex][attribute_name] = attribute_value
 
     def ea_cb(edge, attribute_name, attribute_value):
-        if edge not in e_attrs: 
+        if edge not in e_attrs:
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
@@ -142,7 +140,10 @@ def test_input_gexf_from_string(tmpdir):
     assert v_attrs[1]["label"] == "κόμβος 1"
     assert v_attrs[2]["label"] == "mylabel 2"
 
-    assert e_attrs == {0: {'id': '1', 'source': '2', 'target': '3'}, 1: {'id': '0', 'source': '1', 'target': '2'}, 2: {'id': '2', 'source': '3', 'target': '1'}}
+    assert e_attrs == {
+        0: {"id": "1", "source": "2", "target": "3"},
+        1: {"id": "0", "source": "1", "target": "2"},
+        2: {"id": "2", "source": "3", "target": "1"},
+    }
 
-    assert list(edgelist) == [(2,3,1), (1,2,1), (3,1,1)]
-    
+    assert list(edgelist) == [(2, 3, 1), (1, 2, 1), (3, 1, 1)]
