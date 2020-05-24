@@ -420,6 +420,14 @@ int jgrapht_import_string_graph6sparse6(void *, char*, void *, void *, void *);
 
 // edgelist
 
+int jgrapht_import_edgelist_noattrs_file_gml(char*, void *, void**);
+
+int jgrapht_import_edgelist_noattrs_string_gml(char*, void *, void**);
+
+int jgrapht_import_edgelist_attrs_file_gml(char*, void *, void *, void *, void**);
+
+int jgrapht_import_edgelist_attrs_string_gml(char*, void *, void *, void *, void**);
+
 int jgrapht_import_edgelist_noattrs_file_json(char*, void *, void**);
 
 int jgrapht_import_edgelist_noattrs_string_json(char*, void *, void**);
@@ -444,6 +452,37 @@ int jgrapht_import_edgelist_attrs_file_gexf(char*, void *, int, void *, void *, 
 
 int jgrapht_import_edgelist_attrs_string_gexf(char*, void *, int, void *, void *, void**);
 
+int jgrapht_import_edgelist_noattrs_file_graphml_simple(char*, void *, int, void**);
+
+int jgrapht_import_edgelist_noattrs_string_graphml_simple(char*, void *, int, void**);
+
+int jgrapht_import_edgelist_attrs_file_graphml_simple(char*, void *, int, void *, void *, void**);
+
+int jgrapht_import_edgelist_attrs_string_graphml_simple(char*, void *, int, void *, void *, void**);
+
+int jgrapht_import_edgelist_noattrs_file_graphml(char*, void *, int, void**);
+
+int jgrapht_import_edgelist_noattrs_string_graphml(char*, void *, int, void**);
+
+int jgrapht_import_edgelist_attrs_file_graphml(char*, void *, int, void *, void *, void**);
+
+int jgrapht_import_edgelist_attrs_string_graphml(char*, void *, int, void *, void *, void**);
+
+int jgrapht_import_edgelist_noattrs_file_dot(char*, void *, void**);
+
+int jgrapht_import_edgelist_noattrs_string_dot(char*, void *, void**);
+
+int jgrapht_import_edgelist_attrs_file_dot(char*, void *, void *, void *, void**);
+
+int jgrapht_import_edgelist_attrs_string_dot(char*, void *, void *, void *, void**);
+
+int jgrapht_import_edgelist_noattrs_file_graph6sparse6(char*, void *, void**);
+
+int jgrapht_import_edgelist_noattrs_string_graph6sparse6(char*, void *, void**);
+
+int jgrapht_import_edgelist_attrs_file_graph6sparse6(char*, void *, void *, void *, void**);
+
+int jgrapht_import_edgelist_attrs_string_graph6sparse6(char*, void *, void *, void *, void**);
 
 // independent set
 
