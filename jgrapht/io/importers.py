@@ -65,7 +65,9 @@ def read_dimacs(graph, filename, import_id_cb=None):
                          None to allow the graph to assign identifiers to new vertices.
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, _ = _create_wrapped_import_integer_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
+        import_id_cb
+    )
 
     return _import("file_dimacs", graph, filename, import_id_f_ptr)
 
@@ -114,7 +116,9 @@ def parse_dimacs(graph, input_string, import_id_cb=None):
                          None to allow the graph to assign identifiers to new vertices.    
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, _ = _create_wrapped_import_integer_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
+        import_id_cb
+    )
 
     return _import("string_dimacs", graph, input_string, import_id_f_ptr)
 
@@ -198,9 +202,15 @@ def read_gml(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, _ = _create_wrapped_import_integer_id_callback(import_id_cb)    
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
+        import_id_cb
+    )
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("file_gml", graph, filename, *args)
@@ -285,9 +295,15 @@ def parse_gml(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, _ = _create_wrapped_import_integer_id_callback(import_id_cb)
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
+        import_id_cb
+    )
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("string_gml", graph, input_string, *args)
@@ -347,9 +363,15 @@ def read_json(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("file_json", graph, filename, *args)
@@ -413,9 +435,15 @@ def parse_json(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("string_json", graph, input_string, *args)
@@ -458,7 +486,9 @@ def read_csv(
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
 
     format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_EDGE_LIST)
     args = [
@@ -500,7 +530,9 @@ def parse_csv(
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
 
     format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
     args = [
@@ -590,10 +622,16 @@ def read_gexf(
     :param edge_attribute_cb: callback function for edge attributes
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
 
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [
         import_id_f_ptr,
@@ -681,10 +719,16 @@ def parse_gexf(
     :param edge_attribute_cb: callback function for edge attributes
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
 
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [
         import_id_f_ptr,
@@ -734,10 +778,16 @@ def read_dot(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
 
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("file_dot", graph, filename, *args)
@@ -781,9 +831,15 @@ def parse_dot(
     :param edge_attribute_cb: callback function for edge attributes
     :raises IOError: in case of an import error 
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("string_dot", graph, input_string, *args)
@@ -829,10 +885,16 @@ def read_graph6sparse6(
     :param edge_attribute_cb: callback function for edge attributes
     :raises IOError: in case of an import error 
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
 
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("file_graph6sparse6", graph, filename, *args)
@@ -879,9 +941,15 @@ def parse_graph6sparse6(
     :param edge_attribute_cb: callback function for edge attributes
     :raises IOError: in case of an import error 
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
     return _import("string_graph6sparse6", graph, input_string, *args)
@@ -987,10 +1055,16 @@ def read_graphml(
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
 
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [
         import_id_f_ptr,
@@ -1105,10 +1179,16 @@ def parse_graphml(
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
+        import_id_cb
+    )
 
-    vertex_attribute_f_ptr, _ = _create_wrapped_attribute_callback(vertex_attribute_cb)
-    edge_attribute_f_ptr, _ = _create_wrapped_attribute_callback(edge_attribute_cb)
+    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_cb
+    )
+    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+        edge_attribute_cb
+    )
 
     args = [
         import_id_f_ptr,
