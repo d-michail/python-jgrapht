@@ -275,8 +275,7 @@ class _JGraphTEdgeTripleList(_HandleWrapper, Iterable, Sized):
         return _JGraphTEdgeTripleIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_list_size(self._handle)
-        return res
+        return backend.jgrapht_list_size(self._handle)
 
     def __repr__(self):
         return '_JGraphTEdgeTripleList(%r)' % self._handle

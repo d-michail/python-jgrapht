@@ -487,7 +487,6 @@ def read_edgelist_gexf(
               or edge identifier. The second is the attribute key and the third is the 
               attribute value.
 
-    :param graph: the graph to read into
     :param filename: the input file to read from
     :param import_id_cb: callback to transform identifiers from file to integer vertices.
     :param validate_schema: whether to validate the XML schema    
@@ -497,7 +496,7 @@ def read_edgelist_gexf(
       tuples(source, target, weight)        
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(import_id_cb)
 
     if vertex_attribute_cb is None and edge_attribute_cb is None: 
         with_attrs = False
@@ -578,7 +577,7 @@ def parse_edgelist_gexf(
       tuples(source, target, weight)        
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, _ = _create_wrapped_import_string_id_callback(import_id_cb)
+    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(import_id_cb)
 
     if vertex_attribute_cb is None and edge_attribute_cb is None: 
         with_attrs = False
