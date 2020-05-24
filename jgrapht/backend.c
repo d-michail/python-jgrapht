@@ -21,8 +21,7 @@ void jgrapht_isolate_create() {
 void jgrapht_isolate_destroy() { 
     if (thread != NULL) { 
         if (graal_detach_thread(thread) != 0) {
-                fprintf(stderr, "graal_detach_thread error\n");
-                exit(EXIT_FAILURE);
+            fprintf(stderr, "graal_detach_thread error\n");
         }
         thread  = NULL;
         isolate = NULL;

@@ -3,8 +3,6 @@ from collections import namedtuple
 from collections.abc import Iterator
 
 
-
-
 class _HandleWrapper:
     """A handle wrapper. Keeps a handle to a backend object and cleans up
        on deletion.
@@ -27,7 +25,10 @@ class _HandleWrapper:
 
 
 class _JGraphTString(_HandleWrapper):
-    """A JGraphT string."""
+    """A JGraphT string.
+    
+       This object maintains a handle to a string inside the JVM.
+    """
 
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
