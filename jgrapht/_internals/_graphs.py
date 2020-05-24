@@ -21,15 +21,11 @@ class _JGraphTGraph(_HandleWrapper, Graph):
 
         # read attributes from backend
         directed = backend.jgrapht_graph_is_directed(self._handle)
-        allowing_self_loops = backend.jgrapht_graph_is_allowing_selfloops(
-            self._handle
-        )
+        allowing_self_loops = backend.jgrapht_graph_is_allowing_selfloops(self._handle)
         allowing_multiple_edges = backend.jgrapht_graph_is_allowing_multipleedges(
             self._handle
         )
-        allowing_cycles = backend.jgrapht_graph_is_allowing_cycles(
-            self._handle
-        )
+        allowing_cycles = backend.jgrapht_graph_is_allowing_cycles(self._handle)
         weighted = backend.jgrapht_graph_is_weighted(self._handle)
         modifiable = backend.jgrapht_graph_is_modifiable(self._handle)
 
@@ -49,9 +45,9 @@ class _JGraphTGraph(_HandleWrapper, Graph):
         return self._type
 
     def add_vertex(self, vertex=None):
-        if vertex is not None: 
+        if vertex is not None:
             backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
-        else: 
+        else:
             vertex = backend.jgrapht_graph_add_vertex(self._handle)
         return vertex
 
@@ -69,7 +65,7 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             edge = backend.jgrapht_graph_add_edge(self._handle, u, v)
 
         if added and weight is not None:
-            self.set_edge_weight(edge, weight)                
+            self.set_edge_weight(edge, weight)
         return edge
 
     def remove_edge(self, e):
@@ -155,10 +151,10 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             return backend.jgrapht_graph_contains_vertex(self._handle, v)
 
         def __repr__(self):
-            return '_JGraphTGraph-VertexSet(%r)' % self._handle
+            return "_JGraphTGraph-VertexSet(%r)" % self._handle
 
         def __str__(self):
-            return '{' + ', '.join(str(x) for x in self) + '}'
+            return "{" + ", ".join(str(x) for x in self) + "}"
 
     class _EdgeSet(Set):
         """Wrapper around the edges of a JGraphT graph"""
@@ -177,13 +173,13 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             return backend.jgrapht_graph_contains_edge(self._handle, v)
 
         def __repr__(self):
-            return '_JGraphTGraph-EdgeSet(%r)' % self._handle
+            return "_JGraphTGraph-EdgeSet(%r)" % self._handle
 
         def __str__(self):
-            return '{' + ', '.join(str(x) for x in self) + '}'
+            return "{" + ", ".join(str(x) for x in self) + "}"
 
     def __repr__(self):
-        return '_JGraphTGraph(%r)' % self._handle
+        return "_JGraphTGraph(%r)" % self._handle
 
 
 class _JGraphTDirectedAcyclicGraph(_JGraphTGraph, DirectedAcyclicGraph):
@@ -252,7 +248,7 @@ def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True)
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
-    if isinstance(edgelist, _JGraphTEdgeTripleList):
+    if weighted and isinstance(edgelist, _JGraphTEdgeTripleList):
         # special case for internal edge list, to avoid copying
         e_list_owner = False
         e_list = edgelist.handle
@@ -304,8 +300,7 @@ def as_sparse_graph(graph):
 
 
 def create_dag(
-    allowing_multiple_edges=False,
-    weighted=True,
+    allowing_multiple_edges=False, weighted=True,
 ):
     """Create a directed acyclic graph.
 
@@ -314,7 +309,5 @@ def create_dag(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph`    
     """
-    handle = backend.jgrapht_graph_dag_create(
-        allowing_multiple_edges, weighted, 
-    )
+    handle = backend.jgrapht_graph_dag_create(allowing_multiple_edges, weighted,)
     return _JGraphTDirectedAcyclicGraph(handle)

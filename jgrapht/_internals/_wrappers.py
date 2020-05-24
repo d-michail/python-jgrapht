@@ -35,8 +35,7 @@ class _JGraphTString(_HandleWrapper):
     def __str__(self):
         # SWIG automatically converts the ccharpointer in utf-8
         # coming from the capi to a python string
-        res = backend.jgrapht_handles_get_ccharpointer(self._handle)
-        return res
+        return backend.jgrapht_handles_get_ccharpointer(self._handle)
 
     def __repr__(self):
         return "_JGraphTString(%r)" % self._handle
