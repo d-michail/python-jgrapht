@@ -192,7 +192,7 @@ def test_input3_graphml_simple(tmpdir):
         14: {"source": "6", "target": "7"},
         15: {"source": "7", "target": "8"},
         16: {"source": "8", "target": "9"},
-        17: {"source": "9", "target": "1", "weight": "33.3"},
+        17: {"source": "9", "target": "1", "cost": "48.5", "weight": "33.3"},
     }
 
     assert list(edgelist) == [
@@ -326,7 +326,7 @@ def test_input3_from_string_graphml_simple(tmpdir):
         8: {"id": "8"},
         9: {"id": "9"},
     }
-
+    
     assert e_attrs == {
         0: {"source": "0", "target": "1"},
         1: {"source": "0", "target": "2"},
@@ -345,7 +345,7 @@ def test_input3_from_string_graphml_simple(tmpdir):
         14: {"source": "6", "target": "7"},
         15: {"source": "7", "target": "8"},
         16: {"source": "8", "target": "9"},
-        17: {"source": "9", "target": "1", "weight": "33.3"},
+        17: {"source": "9", "target": "1", "cost": "48.5", "weight": "33.3"},
     }
 
     assert list(edgelist) == [
