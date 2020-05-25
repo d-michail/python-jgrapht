@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 from .._internals._collections import _JGraphTIntegerSet
 
 
@@ -6,7 +6,7 @@ def _mst_alg(name, graph):
     alg_method_name = "jgrapht_mst_exec_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -84,7 +84,7 @@ def multiplicative_greedy(graph, k):
     :param k: integer
     :returns: tuple of the form (weight, spanner_edges)
     """
-    weight, spanner = backend.jgrapht_spanner_exec_greedy_multiplicative(
+    weight, spanner = _backend.jgrapht_spanner_exec_greedy_multiplicative(
         graph.handle, k
     )
     return weight, _JGraphTIntegerSet(spanner)

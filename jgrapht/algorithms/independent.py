@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 from .._internals._collections import (
     _JGraphTIntegerSet,
 )
@@ -12,5 +12,5 @@ def chordal_max_independent_set(graph):
     :param graph: the chordal graph. If the graph is not chordal an error is raised
     :returns: an independent set as a vertex set
     """
-    res = backend.jgrapht_independent_set_exec_chordal_max_independent_set(graph.handle)
+    res = _backend.jgrapht_independent_set_exec_chordal_max_independent_set(graph.handle)
     return _JGraphTIntegerSet(handle=res)

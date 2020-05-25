@@ -1,6 +1,6 @@
 import time
 
-from .. import backend
+from .. import backend as _backend
 from .._internals._wrappers import _JGraphTIntegerIterator
 from .._internals._paths import _JGraphTGraphPath
 
@@ -9,7 +9,7 @@ def _tour_tsp_alg(name, graph, *args):
     alg_method_name = "jgrapht_tour_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -176,5 +176,5 @@ def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=
     if seed is None:
         seed = time.time()
 
-    new_graph_path_handle = backend.jgrapht_tour_tsp_two_opt_heuristic_improve(graph_path.handle, min_cost_improvement, seed)
+    new_graph_path_handle = _backend.jgrapht_tour_tsp_two_opt_heuristic_improve(graph_path.handle, min_cost_improvement, seed)
     return _JGraphTGraphPath(new_graph_path_handle, graph_path.graph)

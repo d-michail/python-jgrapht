@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 from .._internals._flows import _JGraphTCut, _JGraphTFlow
 
 
@@ -7,7 +7,7 @@ def _maxflow_alg(name, graph, source, sink, *args):
     alg_method_name = "jgrapht_maxflow_exec_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 

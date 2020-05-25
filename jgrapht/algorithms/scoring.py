@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 from .._internals._collections import (
     _JGraphTIntegerIterator,
     _JGraphTIntegerDoubleMap,
@@ -14,7 +14,7 @@ def _scoring_alg(name, graph, *args):
     alg_method_name += name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 
@@ -215,7 +215,7 @@ def coreness(graph):
     :returns: a tuple containing the degeneracy and a dictionary from vertices to integer
       values (coreness of each vertex)
     """
-    degeneracy, scores_handle = backend.jgrapht_scoring_exec_coreness(graph.handle)
+    degeneracy, scores_handle = _backend.jgrapht_scoring_exec_coreness(graph.handle)
     return degeneracy, _JGraphTIntegerIntegerMap(scores_handle)
 
 
@@ -243,5 +243,5 @@ def clustering_coefficient(graph):
     :param graph: the graph
     :returns: a tuple (global, avg, local coefficients dictionary)
     """
-    global_cc, avg_cc, cc_map_handle = backend.jgrapht_scoring_exec_clustering_coefficient(graph.handle)
+    global_cc, avg_cc, cc_map_handle = _backend.jgrapht_scoring_exec_clustering_coefficient(graph.handle)
     return global_cc, avg_cc, _JGraphTIntegerDoubleMap(cc_map_handle)

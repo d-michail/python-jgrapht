@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 from .._internals._collections import _JGraphTIntegerSetIterator
 
 
@@ -15,7 +15,7 @@ def is_weakly_connected(graph):
       and an iterator over all connected components. Each component is represented
       as a vertex set
     """
-    connected, sets = backend.jgrapht_connectivity_weak_exec_bfs(graph.handle)
+    connected, sets = _backend.jgrapht_connectivity_weak_exec_bfs(graph.handle)
     return connected, _JGraphTIntegerSetIterator(sets)
 
 
@@ -34,7 +34,7 @@ def is_strongly_connected_gabow(graph):
       and an iterator over all connected components. Each component is represented as a 
       vertex set
     """
-    connected, sets = backend.jgrapht_connectivity_strong_exec_gabow(graph.handle)
+    connected, sets = _backend.jgrapht_connectivity_strong_exec_gabow(graph.handle)
     return connected, _JGraphTIntegerSetIterator(sets)
 
 
@@ -53,7 +53,7 @@ def is_strongly_connected_kosaraju(graph):
       and an iterator over all connected components. Each component is represented as a 
       vertex set
     """
-    connected, sets = backend.jgrapht_connectivity_strong_exec_kosaraju(graph.handle)
+    connected, sets = _backend.jgrapht_connectivity_strong_exec_kosaraju(graph.handle)
     return connected, _JGraphTIntegerSetIterator(sets)
 
 

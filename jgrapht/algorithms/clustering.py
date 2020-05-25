@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 from .._internals._clustering import _JGraphTClustering
 
 import time
@@ -9,7 +9,7 @@ def _clustering_alg(name, graph, *args):
     alg_method_name += name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 

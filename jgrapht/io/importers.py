@@ -1,6 +1,6 @@
 import time
 
-from .. import backend
+from .. import backend as _backend
 
 from .._internals._paths import _JGraphTGraphPath
 
@@ -13,7 +13,7 @@ def _import(name, graph, filename_or_string, *args):
     alg_method_name = "jgrapht_import_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -451,9 +451,9 @@ def parse_json(
 
 CSV_FORMATS = dict(
     {
-        "adjacencylist": backend.CSV_FORMAT_ADJACENCY_LIST,
-        "edgelist": backend.CSV_FORMAT_EDGE_LIST,
-        "matrix": backend.CSV_FORMAT_MATRIX,
+        "adjacencylist": _backend.CSV_FORMAT_ADJACENCY_LIST,
+        "edgelist": _backend.CSV_FORMAT_EDGE_LIST,
+        "matrix": _backend.CSV_FORMAT_MATRIX,
     }
 )
 
@@ -490,7 +490,7 @@ def read_csv(
         import_id_cb
     )
 
-    format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_EDGE_LIST)
+    format_to_use = CSV_FORMATS.get(format, _backend.CSV_FORMAT_EDGE_LIST)
     args = [
         import_id_f_ptr,
         format_to_use,
@@ -534,7 +534,7 @@ def parse_csv(
         import_id_cb
     )
 
-    format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
+    format_to_use = CSV_FORMATS.get(format, _backend.CSV_FORMAT_ADJACENCY_LIST)
     args = [
         import_id_f_ptr,
         format_to_use,

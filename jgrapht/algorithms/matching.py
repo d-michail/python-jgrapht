@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 from .._internals._collections import _JGraphTIntegerSet
 
 
@@ -10,7 +10,7 @@ def _matching_alg(name, graph, *args, no_custom_prefix=False):
     alg_method_name += name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 

@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 from .._internals._flows import _JGraphTCut
 
 
@@ -7,7 +7,7 @@ def _cut_alg(name, graph, *args):
     alg_method_name = "jgrapht_cut_exec_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm not supported.")
 

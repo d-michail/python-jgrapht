@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 from .._internals._collections import _JGraphTIntegerSet
 
 
@@ -10,5 +10,5 @@ def bipartite_partitions(graph):
     :param graph: The input graph
     :returns: A tuple (result, partition1, partition2)
     """
-    res, part1, part2 = backend.jgrapht_partition_exec_bipartite(graph.handle)
+    res, part1, part2 = _backend.jgrapht_partition_exec_bipartite(graph.handle)
     return res, _JGraphTIntegerSet(part1), _JGraphTIntegerSet(part2)

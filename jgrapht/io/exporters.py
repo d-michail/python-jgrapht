@@ -1,7 +1,7 @@
 import time
 import ctypes
 
-from .. import backend
+from .. import backend as _backend
 from .._internals._wrappers import _JGraphTString
 from .._internals._attributes import (
     _JGraphTAttributeStore,
@@ -14,7 +14,7 @@ def _export_to_file(name, graph, filename, *args):
     alg_method_name = "jgrapht_export_file_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -25,7 +25,7 @@ def _export_to_string(name, graph, *args):
     alg_method_name = "jgrapht_export_string_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -50,9 +50,9 @@ def _attributes_to_store(attributes_dict):
 
 DIMACS_FORMATS = dict(
     {
-        "shortestpath": backend.DIMACS_FORMAT_SHORTEST_PATH,
-        "maxclique": backend.DIMACS_FORMAT_MAX_CLIQUE,
-        "coloring": backend.DIMACS_FORMAT_COLORING,
+        "shortestpath": _backend.DIMACS_FORMAT_SHORTEST_PATH,
+        "maxclique": _backend.DIMACS_FORMAT_MAX_CLIQUE,
+        "coloring": _backend.DIMACS_FORMAT_COLORING,
     }
 )
 
@@ -93,7 +93,7 @@ def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False)
                    and `coloring`.
     :param export_edge_weights: whether to also export edge weights               
     """
-    format = DIMACS_FORMATS.get(format, backend.DIMACS_FORMAT_MAX_CLIQUE)
+    format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
     custom = [format, export_edge_weights]
     return _export_to_file("dimacs", graph, filename, *custom)
 
@@ -135,7 +135,7 @@ def generate_dimacs(graph, format="maxclique", export_edge_weights=False):
     :returns: a string contains the exported graph    
     :returns: a string with the generated output               
     """
-    format = DIMACS_FORMATS.get(format, backend.DIMACS_FORMAT_MAX_CLIQUE)
+    format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
     custom = [format, export_edge_weights]
     return _export_to_string("dimacs", graph, *custom)
 
@@ -352,9 +352,9 @@ def generate_json(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
 
 CSV_FORMATS = dict(
     {
-        "adjacencylist": backend.CSV_FORMAT_ADJACENCY_LIST,
-        "edgelist": backend.CSV_FORMAT_EDGE_LIST,
-        "matrix": backend.CSV_FORMAT_MATRIX,
+        "adjacencylist": _backend.CSV_FORMAT_ADJACENCY_LIST,
+        "edgelist": _backend.CSV_FORMAT_EDGE_LIST,
+        "matrix": _backend.CSV_FORMAT_MATRIX,
     }
 )
 
@@ -382,7 +382,7 @@ def write_csv(
            zero for missing edges
     :raises IOError: in case of an export error
     """
-    format = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
+    format = CSV_FORMATS.get(format, _backend.CSV_FORMAT_ADJACENCY_LIST)
     custom = [
         format,
         export_edge_weights,
@@ -414,7 +414,7 @@ def generate_csv(
     :returns: a string contains the exported graph           
     :raises IOError: in case of an export error
     """
-    format = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
+    format = CSV_FORMATS.get(format, _backend.CSV_FORMAT_ADJACENCY_LIST)
     custom = [
         format,
         export_edge_weights,

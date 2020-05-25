@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 from .._internals._paths import (
     _JGraphTGraphPath,
     _JGraphTGraphPathIterator,
@@ -17,7 +17,7 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -30,7 +30,7 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -43,7 +43,7 @@ def _sp_allpairs_alg(name, graph):
     alg_method_name = "jgrapht_sp_exec_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -56,7 +56,7 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -68,7 +68,7 @@ def _multisp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method_name = "jgrapht_multisp_exec_" + name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -397,7 +397,7 @@ def martin_multiobjective(graph, edge_weight_cb, edge_weight_dimension, source_v
             'martin_get_multiobjectivesinglesource_from_vertex', graph, source_vertex, *custom
         )
     else:
-        res = backend.jgrapht_multisp_exec_martin_get_paths_between_vertices(
+        res = _backend.jgrapht_multisp_exec_martin_get_paths_between_vertices(
             graph.handle, 
             source_vertex, 
             target_vertex,

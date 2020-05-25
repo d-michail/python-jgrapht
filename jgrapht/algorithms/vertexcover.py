@@ -1,5 +1,8 @@
-from .. import backend
-from .._internals._collections import _JGraphTIntegerDoubleMap, _JGraphTIntegerSet
+from .. import backend as _backend
+from .._internals._collections import (
+    _JGraphTIntegerDoubleMap,
+    _JGraphTIntegerSet,
+)
 
 
 def _vertexcover_alg(name, graph, vertex_weights=None):
@@ -9,7 +12,7 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
         alg_method_name += "_weighted"
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         if vertex_weights is not None:
             raise NotImplementedError(

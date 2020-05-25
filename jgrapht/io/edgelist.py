@@ -1,4 +1,4 @@
-from .. import backend
+from .. import backend as _backend
 
 from .._internals._collections import _JGraphTEdgeTripleList
 from .._internals._ioutils import _create_wrapped_import_string_id_callback
@@ -15,7 +15,7 @@ def _import_edgelist(name, with_attrs, filename_or_string, *args):
     alg_method_name += name
 
     try:
-        alg_method = getattr(backend, alg_method_name)
+        alg_method = getattr(_backend, alg_method_name)
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
@@ -555,7 +555,7 @@ def read_edgelist_csv(
         _import_string_id if import_id_cb is None else import_id_cb
     )
 
-    format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_EDGE_LIST)
+    format_to_use = CSV_FORMATS.get(format, _backend.CSV_FORMAT_EDGE_LIST)
     args = [
         import_id_f_ptr,
         format_to_use,
@@ -600,7 +600,7 @@ def parse_edgelist_csv(
         _import_string_id if import_id_cb is None else import_id_cb
     )
 
-    format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
+    format_to_use = CSV_FORMATS.get(format, _backend.CSV_FORMAT_ADJACENCY_LIST)
     args = [
         import_id_f_ptr,
         format_to_use,

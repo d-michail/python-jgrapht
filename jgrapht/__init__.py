@@ -32,7 +32,6 @@ def _module_cleanup_function():
 atexit.register(_module_cleanup_function)
 del atexit
 
-
 from ._internals._graphs import (
     create_graph,
     create_directed_graph,
@@ -50,8 +49,8 @@ from . import (
     traversal,
     generators,
     algorithms,
+    io,
 )
-
 
 # Set default logging handler to avoid "No handler found" warnings.
 import logging
