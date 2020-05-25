@@ -9,6 +9,5 @@ python:
   version: 3.7
   install:
     - requirements: requirements/doc.txt
-    - method: pip
-      path: python-jgrapht
+    - requirements: requirements/docself.txt
 
