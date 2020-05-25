@@ -10,12 +10,30 @@ jobs:
         - docker pull $DOCKER_IMAGE
       script:
         - docker run --rm -v `pwd`:/io $DOCKER_IMAGE /io/travis/build-manylinux2010_x86_64.sh
-      deploy:
-        provider: pypi
-        distributions: "sdist bdist_wheel"
-        skip_cleanup: true
-        user: __token__
-        # PyPI password should be stored on Travis CI as a secret env variable named PYPI_PASSWORD
-        on:
-          tags: true
-
+        - ls -l dist/
+    - os: osx
+      language: shell
+      sudo: required
+      install:
+        - brew cask install graalvm/tap/graalvm-ce-java11
+        - export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-20.1.0/Contents/Home/bin:"$PATH"
+        - gu install native-image
+        - brew install swig
+        - pip3 install twine
+        - pyenv install 3.6.9
+        - pyenv install 3.7.5
+        - pyenv install 3.8.0
+      script:
+        - travis/build-macos.sh
+        - ls -l dist/
+deploy:
+  provider: pypi
+  distributions: "sdist bdist_wheel"
+  # Do not delete generated build files (i.e. wheels)
+  skip_cleanup: true
+  # Do not attempt to upload to PyPI an already uploaded wheel
+  skip_existing: true
+  user: __token__
+  # PyPI password should be stored on Travis CI as a secret env variable named PYPI_PASSWORD
+  on:
+    tags: true
