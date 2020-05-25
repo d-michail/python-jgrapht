@@ -681,6 +681,7 @@ def generate_sparse6(graph):
     """
     return _export_to_string("sparse6", graph)
 
+
 def write_graphml(
     graph,
     filename,

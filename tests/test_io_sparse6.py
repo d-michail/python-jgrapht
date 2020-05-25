@@ -104,3 +104,4 @@ def test_output_to_string():
 
     out = generate_graph6(g)
     assert out == "Ct"
+

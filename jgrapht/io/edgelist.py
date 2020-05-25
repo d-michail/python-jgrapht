@@ -7,19 +7,19 @@ from .._internals._ioutils import _create_wrapped_attribute_callback
 
 
 def _import_edgelist(name, with_attrs, filename_or_string, *args):
-    alg_method_name = "jgrapht_import_edgelist_"
+    alg_method_name = 'jgrapht_import_edgelist_'
     if with_attrs:
-        alg_method_name += "attrs_"
+        alg_method_name += 'attrs_'
     else:
-        alg_method_name += "noattrs_"
+        alg_method_name += 'noattrs_'
     alg_method_name += name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise NotImplementedError("Algorithm {} not supported.".format(name))
+        raise NotImplementedError('Algorithm {} not supported.'.format(name))
 
-    filename_or_string_as_bytearray = bytearray(filename_or_string, encoding="utf-8")
+    filename_or_string_as_bytearray = bytearray(filename_or_string, encoding='utf-8')
 
     res = alg_method(filename_or_string_as_bytearray, *args)
     return _JGraphTEdgeTripleList(res)
@@ -724,6 +724,111 @@ def parse_edgelist_dot(
             edge_attribute_f_ptr,
         ]
     return _import_edgelist("string_dot", with_attrs, input_string, *args)
+
+
+
+def read_edgelist_graph6sparse6(
+    filename,
+    import_id_cb,
+    vertex_attribute_cb=None,
+    edge_attribute_cb=None,
+):
+    """Read a graph as an edgelist from a file in graph6 or sparse6 format.
+
+    See https://users.cecs.anu.edu.au/~bdm/data/formats.txt for a description of the format. Both graph6
+    and sparse6 are formats for storing undirected graphs, using a small number of printable ASCII
+    characters. Graph6 is suitable for small graphs or large dense graphs while sparse6 is better for 
+    large sparse graphs. Moreover, sparse6 supports self-loops and multiple-edges while graph6 does not.
+
+    .. note:: The import identifier callback accepts a single parameter which is the integer identifier
+              read from the input file. It should return a integer with the identifier of the graph vertex.
+              Preserving the vertex identifiers can be performed using the identity function.
+
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+              or edge identifier. The second is the attribute key and the third is the attribute value.
+
+    :param filename: filename to read from
+    :param import_id_cb: callback to transform identifiers from file to integer vertices                  
+    :param vertex_attribute_cb: callback function for vertex attributes
+    :param edge_attribute_cb: callback function for edge attributes
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)    
+    :raises IOError: in case of an import error 
+    """
+    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
+        import_id_cb
+    )
+
+    if vertex_attribute_cb is None and edge_attribute_cb is None:
+        with_attrs = False
+        args = [import_id_f_ptr]
+    else:
+        with_attrs = True
+        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+            vertex_attribute_cb
+        )
+        edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+            edge_attribute_cb
+        )
+        args = [
+            import_id_f_ptr,
+            vertex_attribute_f_ptr,
+            edge_attribute_f_ptr,
+        ]
+    return _import_edgelist("file_graph6sparse6", with_attrs, filename, *args)
+
+
+def parse_edgelist_graph6sparse6(
+    input_string,
+    import_id_cb,
+    vertex_attribute_cb=None,
+    edge_attribute_cb=None,
+):
+    """Read a graph as an edgelist from a string in graph6 or sparse6 format.
+
+    See https://users.cecs.anu.edu.au/~bdm/data/formats.txt for a description of the format. Both
+    graph6 and sparse6 are formats for storing undirected graphs, using a small number of printable
+    ASCII characters. Graph6 is suitable for small graphs or large dense graphs while sparse6 is
+    better for large sparse graphs. Moreover, sparse6 supports self-loops and multiple-edges while
+    graph6 does not.
+
+    .. note:: The import identifier callback accepts a single parameter which is the integer
+              identifier read from the input file. It should return a integer with the identifier
+              of the graph vertex. Preserving the identifiers can be done using the identity function.
+
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+              or edge identifier. The second is the attribute key and the third is the 
+              attribute value.
+
+    :param input_string: the input string
+    :param import_id_cb: callback to transform identifiers from file to integer vertices        
+    :param vertex_attribute_cb: callback function for vertex attributes
+    :param edge_attribute_cb: callback function for edge attributes
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)    
+    :raises IOError: in case of an import error 
+    """
+    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
+        import_id_cb
+    )
+
+    if vertex_attribute_cb is None and edge_attribute_cb is None:
+        with_attrs = False
+        args = [import_id_f_ptr]
+    else:
+        with_attrs = True
+        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+            vertex_attribute_cb
+        )
+        edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+            edge_attribute_cb
+        )
+        args = [
+            import_id_f_ptr,
+            vertex_attribute_f_ptr,
+            edge_attribute_f_ptr,
+        ]
+    return _import_edgelist("string_graph6sparse6", with_attrs, input_string, *args)
 
 
 def read_edgelist_graphml(
