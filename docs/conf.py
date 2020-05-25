@@ -21,9 +21,13 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
+
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+
+if not on_rtd:
+    sys.path.insert(0, os.path.abspath('..'))
 
 import jgrapht
 
@@ -107,7 +111,6 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-on_rtd = os.environ.get('READTHEDOCS') == 'True'
 if on_rtd:
     html_theme = 'default'
 else:
