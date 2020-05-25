@@ -21,10 +21,10 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-on_rtd = os.environ.get('READTHEDOCS') == 'True'
-
 import os
 import sys
+
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 if not on_rtd:
     sys.path.insert(0, os.path.abspath('..'))
