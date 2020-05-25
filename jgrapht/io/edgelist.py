@@ -24,9 +24,15 @@ def _import_edgelist(name, with_attrs, filename_or_string, *args):
     res = alg_method(filename_or_string_as_bytearray, *args)
     return _JGraphTEdgeTripleList(res)
 
+def _import_integer_id(id): 
+    return id
+
+def _import_string_id(id): 
+    return int(id)
+
 
 def read_edgelist_gml(
-    filename, import_id_cb, vertex_attribute_cb=None, edge_attribute_cb=None,
+    filename, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a file in GML format (Graph Modelling Language).
 
@@ -91,7 +97,8 @@ def read_edgelist_gml(
               attribute value.
 
     :param filename: Filename to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices.    
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used.
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
@@ -99,7 +106,7 @@ def read_edgelist_gml(
     :raises IOError: In case of an import error 
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        import_id_cb
+        _import_integer_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -119,7 +126,7 @@ def read_edgelist_gml(
 
 
 def parse_edgelist_gml(
-    input_string, import_id_cb, vertex_attribute_cb=None, edge_attribute_cb=None,
+    input_string, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a string in GML format (Graph Modelling Language).
 
@@ -185,7 +192,8 @@ def parse_edgelist_gml(
 
     :param graph: The graph to read into
     :param input_string: Input string to read from 
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices.     
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
@@ -193,7 +201,7 @@ def parse_edgelist_gml(
     :raises IOError: In case of an import error 
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        import_id_cb
+        _import_integer_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -213,7 +221,7 @@ def parse_edgelist_gml(
 
 
 def read_edgelist_json(
-    filename, import_id_cb, vertex_attribute_cb=None, edge_attribute_cb=None
+    filename, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None
 ):
     """Read a graph as an edgelist from a JSON file. 
 
@@ -258,7 +266,8 @@ def read_edgelist_json(
               attribute value.
 
     :param filename: Filename to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices.
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
@@ -266,7 +275,7 @@ def read_edgelist_json(
     :raises IOError: In case of an import error    
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        _import_string_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -286,7 +295,7 @@ def read_edgelist_json(
 
 
 def parse_edgelist_json(
-    input_string, import_id_cb, vertex_attribute_cb=None, edge_attribute_cb=None,
+    input_string, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Import a graph as an edgelist from a JSON string. 
 
@@ -331,7 +340,8 @@ def parse_edgelist_json(
               attribute value.
 
     :param input_string: The input string to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices.  
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used 
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
@@ -339,7 +349,7 @@ def parse_edgelist_json(
     :raises IOError: In case of an import error    
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        _import_string_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -363,7 +373,7 @@ from .importers import CSV_FORMATS
 
 def read_edgelist_csv(
     filename,
-    import_id_cb,
+    import_id_cb=None,
     format="adjacencylist",
     import_edge_weights=False,
     matrix_format_node_id=False,
@@ -379,17 +389,19 @@ def read_edgelist_csv(
               graph vertex.
 
     :param filename: the filename to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices.
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param format: format to use. One of "edgelist", "adjacencylist" and "matrix"    
     :param import_edge_weights: whether to import edge weights
     :param matrix_format_node_id: only for the matrix format, whether to import node identifiers
-    :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
+    :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero
+      for missing edges
     :returns: an edge list. This is an iterable which returns iterators of named
       tuples(source, target, weight)    
     :raises IOError: in case of an import error    
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        _import_string_id if import_id_cb is None else import_id_cb
     )
 
     format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_EDGE_LIST)
@@ -406,7 +418,7 @@ def read_edgelist_csv(
 
 def parse_edgelist_csv(
     input_string,
-    import_id_cb,
+    import_id_cb=None,
     format="adjacencylist",
     import_edge_weights=False,
     matrix_format_node_id=False,
@@ -422,7 +434,8 @@ def parse_edgelist_csv(
               graph vertex.
 
     :param input_string: the input string to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param format: format to use. One of "edgelist", "adjacencylist" and "matrix"    
     :param import_edge_weights: whether to import edge weights
     :param matrix_format_node_id: only for the matrix format, whether to import node identifiers
@@ -433,7 +446,7 @@ def parse_edgelist_csv(
     :raises IOError: in case of an import error    
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        _import_string_id if import_id_cb is None else import_id_cb
     )
 
     format_to_use = CSV_FORMATS.get(format, backend.CSV_FORMAT_ADJACENCY_LIST)
@@ -450,7 +463,7 @@ def parse_edgelist_csv(
 
 def read_edgelist_gexf(
     filename,
-    import_id_cb,
+    import_id_cb=None,
     validate_schema=True,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
@@ -507,7 +520,8 @@ def read_edgelist_gexf(
               attribute value.
 
     :param filename: the input file to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices.
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
@@ -516,7 +530,7 @@ def read_edgelist_gexf(
     :raises IOError: in case of an import error    
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        _import_string_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -542,7 +556,7 @@ def read_edgelist_gexf(
 
 def parse_edgelist_gexf(
     input_string,
-    import_id_cb,
+    import_id_cb=None,
     validate_schema=True,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
@@ -599,7 +613,8 @@ def parse_edgelist_gexf(
               attribute value.
 
     :param input_string: the input string to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices.
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
@@ -608,7 +623,7 @@ def parse_edgelist_gexf(
     :raises IOError: in case of an import error    
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        _import_string_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -633,7 +648,7 @@ def parse_edgelist_gexf(
 
 
 def read_edgelist_dot(
-    filename, import_id_cb, vertex_attribute_cb=None, edge_attribute_cb=None,
+    filename, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a file in DOT format.
 
@@ -649,7 +664,8 @@ def read_edgelist_dot(
               attribute value.
 
     :param filename: Filename to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices.                 
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
@@ -657,7 +673,7 @@ def read_edgelist_dot(
     :raises IOError: In case of an import error 
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        _import_string_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -680,7 +696,7 @@ def read_edgelist_dot(
 
 
 def parse_edgelist_dot(
-    input_string, import_id_cb, vertex_attribute_cb=None, edge_attribute_cb=None,
+    input_string, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a string in DOT format.
 
@@ -696,7 +712,8 @@ def parse_edgelist_dot(
               attribute value.
 
     :param input_string: the input string to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices                  
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
@@ -704,7 +721,7 @@ def parse_edgelist_dot(
     :raises IOError: in case of an import error 
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        _import_string_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -729,7 +746,7 @@ def parse_edgelist_dot(
 
 def read_edgelist_graph6sparse6(
     filename,
-    import_id_cb,
+    import_id_cb=None,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
 ):
@@ -748,7 +765,8 @@ def read_edgelist_graph6sparse6(
               or edge identifier. The second is the attribute key and the third is the attribute value.
 
     :param filename: filename to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices                  
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
@@ -756,7 +774,7 @@ def read_edgelist_graph6sparse6(
     :raises IOError: in case of an import error 
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        import_id_cb
+        _import_integer_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -780,7 +798,7 @@ def read_edgelist_graph6sparse6(
 
 def parse_edgelist_graph6sparse6(
     input_string,
-    import_id_cb,
+    import_id_cb=None,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
 ):
@@ -801,7 +819,8 @@ def parse_edgelist_graph6sparse6(
               attribute value.
 
     :param input_string: the input string
-    :param import_id_cb: callback to transform identifiers from file to integer vertices        
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
@@ -809,7 +828,7 @@ def parse_edgelist_graph6sparse6(
     :raises IOError: in case of an import error 
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        import_id_cb
+        _import_integer_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -833,7 +852,7 @@ def parse_edgelist_graph6sparse6(
 
 def read_edgelist_graphml(
     filename,
-    import_id_cb,
+    import_id_cb=None,
     validate_schema=True,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
@@ -912,8 +931,8 @@ def read_edgelist_graphml(
               for parsing speed. 
 
     :param filename: the input file to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
@@ -923,7 +942,7 @@ def read_edgelist_graphml(
     :raises IOError: in case of an import error    
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        _import_string_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:
@@ -952,7 +971,7 @@ def read_edgelist_graphml(
 
 def parse_edgelist_graphml(
     input_string,
-    import_id_cb,
+    import_id_cb=None,
     validate_schema=True,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
@@ -1032,7 +1051,8 @@ def parse_edgelist_graphml(
               for parsing speed. 
 
     :param input_string: the input string to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
+      the identity function is used
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
@@ -1042,7 +1062,7 @@ def parse_edgelist_graphml(
     :raises IOError: in case of an import error    
     """
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        _import_string_id if import_id_cb is None else import_id_cb
     )
 
     if vertex_attribute_cb is None and edge_attribute_cb is None:

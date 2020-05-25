@@ -382,3 +382,69 @@ def test_input_gml_from_string(tmpdir):
         (8, 9, 1.0),
         (9, 1, 1.0),
     ]
+
+def test_input_gml_from_string_with_identity(tmpdir):
+    v_attrs = dict()
+    e_attrs = dict()
+
+    # test that you read back unescaped
+    def va_cb(vertex, attribute_name, attribute_value):
+        if vertex not in v_attrs:
+            v_attrs[vertex] = {}
+        v_attrs[vertex][attribute_name] = attribute_value
+
+    def ea_cb(edge, attribute_name, attribute_value):
+        if edge not in e_attrs:
+            e_attrs[edge] = {}
+        e_attrs[edge][attribute_name] = attribute_value
+
+    edgelist = parse_edgelist_gml(
+        input1,
+        vertex_attribute_cb=va_cb,
+        edge_attribute_cb=ea_cb,
+    )
+
+    assert v_attrs[1]["label"] == "label 1"
+    assert v_attrs[2]["label"] == "label 2"
+
+    assert e_attrs == {
+        0: {"label": "0"},
+        1: {"label": "1"},
+        2: {"label": "2"},
+        3: {"label": "3"},
+        4: {"label": "4"},
+        5: {"label": "5"},
+        6: {"label": "6"},
+        7: {"label": "7"},
+        8: {"label": "8"},
+        9: {"label": "edge 1-2"},
+        10: {"label": "10"},
+        11: {"label": "11"},
+        12: {"label": "12"},
+        13: {"label": "13"},
+        14: {"label": "14"},
+        15: {"label": "15"},
+        16: {"label": "16"},
+        17: {"label": "17"},
+    }
+
+    assert list(edgelist) == [
+        (0, 1, 1.0),
+        (0, 2, 1.0),
+        (0, 3, 1.0),
+        (0, 4, 1.0),
+        (0, 5, 1.0),
+        (0, 6, 1.0),
+        (0, 7, 1.0),
+        (0, 8, 1.0),
+        (0, 9, 1.0),
+        (1, 2, 1.0),
+        (2, 3, 1.0),
+        (3, 4, 1.0),
+        (4, 5, 1.0),
+        (5, 6, 1.0),
+        (6, 7, 1.0),
+        (7, 8, 1.0),
+        (8, 9, 1.0),
+        (9, 1, 1.0),
+    ]

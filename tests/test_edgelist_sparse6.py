@@ -181,3 +181,12 @@ def test_input_graph6_from_string(tmpdir):
     print(edgelist)
 
     assert list(edgelist) == [(1, 0, 1.0), (2, 0, 1.0), (3, 0, 1.0), (3, 2, 1.0)]
+
+
+def test_input_graph6_no_import_cb(tmpdir):
+
+    edgelist = parse_edgelist_graph6sparse6("Ct")
+
+    print(edgelist)
+
+    assert list(edgelist) == [(1, 0, 1.0), (2, 0, 1.0), (3, 0, 1.0), (3, 2, 1.0)]
