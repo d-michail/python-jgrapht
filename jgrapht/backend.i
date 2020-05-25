@@ -579,6 +579,14 @@ int jgrapht_import_string_graph6sparse6(void *, char* BYTEARRAY, void *LONG_TO_F
 
 // edgelist
 
+int jgrapht_import_edgelist_noattrs_file_dimacs(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_import_edgelist_noattrs_string_dimacs(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_import_edgelist_attrs_file_dimacs(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
+int jgrapht_import_edgelist_attrs_string_dimacs(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+
 int jgrapht_import_edgelist_noattrs_file_gml(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
 
 int jgrapht_import_edgelist_noattrs_string_gml(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);

@@ -35,6 +35,8 @@ del atexit
 
 from ._internals._graphs import (
     create_graph,
+    create_directed_graph,
+    create_undirected_graph,
     create_dag,
     create_sparse_graph,
     as_sparse_graph,

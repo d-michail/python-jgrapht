@@ -818,6 +818,22 @@ int jgrapht_import_string_graph6sparse6(void *g, char* input, void *import_verte
 
 // edgelist
 
+int jgrapht_import_edgelist_noattrs_file_dimacs(char* filename, void *import_vertex_id_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_file_dimacs(thread, filename, import_vertex_id_fptr, res);
+}
+
+int jgrapht_import_edgelist_noattrs_string_dimacs(char* input, void *import_vertex_id_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_string_dimacs(thread, input, import_vertex_id_fptr, res);
+}
+
+int jgrapht_import_edgelist_attrs_file_dimacs(char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_file_dimacs(thread, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, res);    
+}
+
+int jgrapht_import_edgelist_attrs_string_dimacs(char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_string_dimacs(thread, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, res);        
+}
+
 int jgrapht_import_edgelist_noattrs_file_gml(char* filename, void *import_vertex_id_fptr, void** res) { 
     return jgrapht_capi_import_edgelist_noattrs_file_gml(thread, filename, import_vertex_id_fptr, res);
 }

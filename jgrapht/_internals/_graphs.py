@@ -222,6 +222,44 @@ def create_graph(
     return _JGraphTGraph(handle)
 
 
+def create_directed_graph(
+    allowing_self_loops=False, allowing_multiple_edges=False, weighted=True,
+):
+    """Create a directed graph.
+
+    :param allowing_self_loops: if True the graph will allow the addition of self-loops
+    :param allowing_multiple_edges: if True the graph will allow multiple-edges
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.Graph`    
+    """
+    return create_graph(
+        directed=True,
+        allowing_self_loops=allowing_self_loops,
+        allowing_multiple_edges=allowing_multiple_edges,
+        weighted=weighted,
+    )
+
+
+def create_undirected_graph(
+    allowing_self_loops=False, allowing_multiple_edges=False, weighted=True,
+):
+    """Create an undirected graph.
+
+    :param allowing_self_loops: if True the graph will allow the addition of self-loops
+    :param allowing_multiple_edges: if True the graph will allow multiple-edges
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.Graph`    
+    """
+    return create_graph(
+        directed=False,
+        allowing_self_loops=allowing_self_loops,
+        allowing_multiple_edges=allowing_multiple_edges,
+        weighted=weighted,
+    )
+
+
 def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True):
     """Create a sparse graph. 
 
@@ -249,7 +287,8 @@ def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True)
     :rtype: :class:`~jgrapht.types.Graph`
     """
     if weighted and isinstance(edgelist, _JGraphTEdgeTripleList):
-        # special case for internal edge list, to avoid copying
+        # Special case for internal edge list, created using the edgelist 
+        # importers. This avoids copying.
         e_list_owner = False
         e_list = edgelist.handle
     else:
@@ -276,10 +315,10 @@ def as_sparse_graph(graph):
     """Copy a graph to a sparse graph.
 
     .. note :: The resulting graph might have more vertices that the source graph. The reason is 
-    that sparse graphs have a continuous range of vertices. Thus, if your input graph contains 
-    vertices 0, 5, 10 the resulting sparse graph will contain all vertices from 0 up to 10
-    (inclusive). The extra vertices will be isolated, meaning that they will have not incident
-    edges.
+      that sparse graphs have a continuous range of vertices. Thus, if your input graph contains 
+      three vertices 0, 5, and 10 the resulting sparse graph will contain all vertices from 0 up to
+      10 (inclusive). The extra vertices will be isolated, meaning that they will not have any incident
+      edges.
 
     .. note :: Sparse graphs are unmodifiable. Attempting to alter one will result in an error 
       being raised.

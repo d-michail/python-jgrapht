@@ -420,6 +420,14 @@ int jgrapht_import_string_graph6sparse6(void *, char*, void *, void *, void *);
 
 // edgelist
 
+int jgrapht_import_edgelist_noattrs_file_dimacs(char*, void *, void**);
+
+int jgrapht_import_edgelist_noattrs_string_dimacs(char*, void *, void**);
+
+int jgrapht_import_edgelist_attrs_file_dimacs(char*, void *, void *, void *, void**);
+
+int jgrapht_import_edgelist_attrs_string_dimacs(char*, void *, void *, void *, void**);
+
 int jgrapht_import_edgelist_noattrs_file_gml(char*, void *, void**);
 
 int jgrapht_import_edgelist_noattrs_string_gml(char*, void *, void**);

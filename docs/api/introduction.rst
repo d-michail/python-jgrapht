@@ -43,9 +43,9 @@ the key.
 
 .. note::
 
-  While this might seen like a restriction at first, it allows for several optimizations.
+  While this might seem like a restriction at first, it allows for several optimizations on the graph level.
   Combined with the simplicity and power of dictionaries in Python, it should pose no real 
   restriction to the user, except possibly some aesthetic effect. Vertex and edge attributes are fully
-  supported in exporters and importers.
+  supported in importers and exporters.
 
 

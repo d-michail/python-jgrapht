@@ -7,28 +7,179 @@ from .._internals._ioutils import _create_wrapped_attribute_callback
 
 
 def _import_edgelist(name, with_attrs, filename_or_string, *args):
-    alg_method_name = 'jgrapht_import_edgelist_'
+    alg_method_name = "jgrapht_import_edgelist_"
     if with_attrs:
-        alg_method_name += 'attrs_'
+        alg_method_name += "attrs_"
     else:
-        alg_method_name += 'noattrs_'
+        alg_method_name += "noattrs_"
     alg_method_name += name
 
     try:
         alg_method = getattr(backend, alg_method_name)
     except AttributeError:
-        raise NotImplementedError('Algorithm {} not supported.'.format(name))
+        raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    filename_or_string_as_bytearray = bytearray(filename_or_string, encoding='utf-8')
+    filename_or_string_as_bytearray = bytearray(filename_or_string, encoding="utf-8")
 
     res = alg_method(filename_or_string_as_bytearray, *args)
     return _JGraphTEdgeTripleList(res)
 
-def _import_integer_id(id): 
+
+def _import_integer_id(id):
     return id
 
-def _import_string_id(id): 
+
+def _import_string_id(id):
     return int(id)
+
+
+def read_edgelist_dimacs(
+    filename, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None
+):
+    """Read a graph as an edgelist from a file in DIMACS format. 
+
+    For a description of the formats see http://dimacs.rutgers.edu/Challenges . Note that
+    there a lot of different formats based on each different challenge. The importer supports
+    the shortest path challenge format, the coloring format and the maximum-clique challenge
+    formats.
+
+    .. note:: In DIMACS formats the vertices are integers numbered from one.
+                 The importer automatically translates them to zero-based numbering. 
+
+    Briefly, one of the most common DIMACS formats is the
+    `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the 
+    following structure::
+
+      DIMACS G {
+        c <comments> ignored during parsing of the graph
+        p edge <number of nodes> <number of edges>
+        e <edge source 1> <edge target 1>
+        e <edge source 2> <edge target 2>
+        e <edge source 3> <edge target 3>
+        e <edge source 4> <edge target 4>
+        ...
+      }
+
+    Although not specified directly in the DIMACS format documentation, this implementation also
+    allows for the a weighted variant::
+ 
+      e <edge source 1> <edge target 1> <edge_weight>
+
+    .. note:: This implementation does not fully implement the DIMACS specifications! Special
+              fields specified as 'Optional Descriptors' are ignored.
+
+    .. note:: The import identifier callback accepts a single parameter which is the identifier read
+              from the input file as an integer. It should return a integer with the identifier of the 
+              graph vertex. If you want to preserve the identifiers from the file, the identity
+              function can be used.
+
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+              or edge identifier. The second is the attribute key and the third is the 
+              attribute value.
+
+    :param filename: filename to read from
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None then 
+      the identity function is used.
+    :param vertex_attribute_cb: Callback function for vertex attributes
+    :param edge_attribute_cb: Callback function for edge attributes    
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)      
+    :raises IOError: In case of an import error 
+    """
+    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
+        _import_integer_id if import_id_cb is None else import_id_cb
+    )
+
+    if vertex_attribute_cb is None and edge_attribute_cb is None:
+        with_attrs = False
+        args = [import_id_f_ptr]
+    else:
+        with_attrs = True
+        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+            vertex_attribute_cb
+        )
+        edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+            edge_attribute_cb
+        )
+        args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+
+    return _import_edgelist("file_dimacs", with_attrs, filename, *args)
+
+
+def parse_edgelist_dimacs(
+    input_string,
+    import_id_cb=None,
+    vertex_attribute_cb=None,
+    edge_attribute_cb=None,
+):
+    """Read graph in DIMACS format from string. 
+
+    For a description of the formats see http://dimacs.rutgers.edu/Challenges . Note that
+    there a lot of different formats based on each different challenge. The importer supports
+    the shortest path challenge format, the coloring format and the maximum-clique challenge
+    formats.
+
+    .. note:: In DIMACS formats the vertices are integers numbered from one.
+                 The importer automatically translates them to zero-based numbering. 
+
+    Briefly, one of the most common DIMACS formats is the
+    `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the 
+    following structure::
+
+      DIMACS G {
+        c <comments> ignored during parsing of the graph
+        p edge <number of nodes> <number of edges>
+        e <edge source 1> <edge target 1>
+        e <edge source 2> <edge target 2>
+        e <edge source 3> <edge target 3>
+        e <edge source 4> <edge target 4>
+        ...
+      }
+
+    Although not specified directly in the DIMACS format documentation, this implementation also
+    allows for the a weighted variant::
+ 
+      e <edge source 1> <edge target 1> <edge_weight>
+
+    .. note:: This implementation does not fully implement the DIMACS specifications! Special
+              fields specified as 'Optional Descriptors' are ignored.
+
+    .. note:: The import identifier callback accepts a single parameter which is the identifier read
+              from the input file as an integer. It should return a integer with the identifier of the 
+              graph vertex. If you want to preserve the identifiers from the file, the identity
+              function can be used.
+
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+              or edge identifier. The second is the attribute key and the third is the 
+              attribute value.              
+
+    :param input_string: Input string to read from
+    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None then 
+      the identity function is used.
+    :param vertex_attribute_cb: Callback function for vertex attributes
+    :param edge_attribute_cb: Callback function for edge attributes
+    :returns: an edge list. This is an iterable which returns iterators of named
+      tuples(source, target, weight)            
+    :raises IOError: In case of an import error 
+    """
+    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
+        _import_integer_id if import_id_cb is None else import_id_cb
+    )
+
+    if vertex_attribute_cb is None and edge_attribute_cb is None:
+        with_attrs = False
+        args = [import_id_f_ptr]
+    else:
+        with_attrs = True
+        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+            vertex_attribute_cb
+        )
+        edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
+            edge_attribute_cb
+        )
+        args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+
+    return _import_edgelist("string_dimacs", with_attrs, input_string, *args)
 
 
 def read_edgelist_gml(
@@ -743,12 +894,8 @@ def parse_edgelist_dot(
     return _import_edgelist("string_dot", with_attrs, input_string, *args)
 
 
-
 def read_edgelist_graph6sparse6(
-    filename,
-    import_id_cb=None,
-    vertex_attribute_cb=None,
-    edge_attribute_cb=None,
+    filename, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a file in graph6 or sparse6 format.
 
@@ -797,10 +944,7 @@ def read_edgelist_graph6sparse6(
 
 
 def parse_edgelist_graph6sparse6(
-    input_string,
-    import_id_cb=None,
-    vertex_attribute_cb=None,
-    edge_attribute_cb=None,
+    input_string, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a string in graph6 or sparse6 format.
 
