@@ -26,6 +26,23 @@ jobs:
       script:
         - travis/build-macos.sh
         - ls -l dist/
+    - os: windows
+      language: shell
+      install:
+        - choco install pyenv-win
+        - export PATH="C:\Users\travis\.pyenv\pyenv-win\bin:C:\Users\travis\.pyenv\pyenv-win\shims:$PATH"
+        - pyenv install -q 3.6.8-amd64
+        - pyenv install -q 3.7.5-amd64
+        - pyenv install -q 3.8.0-amd64
+        - choco install maven --version=3.6.3
+        - export PATH="/c/ProgramData/chocolatey/lib/maven/apache-maven-3.6.3/bin:$PATH"
+        - choco install graalvm --version=20.0.0
+        - export PATH="/c/Program Files/GraalVM/graalvm-ce-java11-20.0.0/bin:$PATH"
+        - choco install swig --version=4.0.1
+        - gu.cmd install native-image
+      script:
+        - travis/build.bat
+        - ls -l dist/
 deploy:
   provider: pypi
   distributions: "sdist bdist_wheel"
