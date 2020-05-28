@@ -57,6 +57,6 @@ mv /io/wheelhouse/*.whl /io/dist/
 # Install generated wheels and run the tests
 for PYBIN in /opt/python/cp3{6..8}*/bin; do
     "${PYBIN}/pip" install -r requirements/test.txt
-    "${PYBIN}/pip" install python-jgrapht --no-index -f /io/dist
+    "${PYBIN}/pip" install jgrapht --no-index -f /io/dist
     (cd /io; "${PYBIN}/pytest")
 done

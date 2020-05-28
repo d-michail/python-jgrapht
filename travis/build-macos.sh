@@ -13,6 +13,6 @@ done
 # Install generated wheels and run the tests
 for PYBIN in /Users/travis/.pyenv/versions/3*/bin; do
     "${PYBIN}/pip" install -r requirements/test.txt
-    "${PYBIN}/pip" install python-jgrapht --no-index -f dist/
+    "${PYBIN}/pip" install jgrapht --no-index -f dist/
     "${PYBIN}/pytest"
 done

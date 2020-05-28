@@ -13,7 +13,7 @@
 
  4. Add the version number as a tag in git::
 
-    git tag -s [-u <key-id>] python-jgrapht-<backendversion>.<minor> -m 'signed <backendversion>.<minor> tag'
+    git tag -s [-u <key-id>] jgrapht-<backendversion>.<minor> -m 'signed <backendversion>.<minor> tag'
 
     (If you do not have a gpg key, use -m instead; it is important for
     Debian packaging that the tags are annotated)

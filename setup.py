@@ -1,6 +1,6 @@
 import sys
 if sys.version_info < (3, 6):
-    raise Exception('Building python-jgrapht requires Python 3.6 or higher.')
+    raise Exception('Building jgrapht requires Python 3.6 or higher.')
 import os
 import codecs
 
@@ -22,11 +22,11 @@ if sys.platform.startswith('linux'):
     so_ext = '.so'
     capi_filename = 'libjgrapht_capi' + so_ext
     # Make sure that _backend.so will be able to load jgrapht_capi.so
-    runtime_library_dirs=['$ORIGIN/../python_jgrapht.libs']
+    runtime_library_dirs=['$ORIGIN/../jgrapht.libs']
 elif sys.platform.startswith('darwin'):
     so_ext = '.dylib'
     capi_filename = 'libjgrapht_capi' + so_ext
-    extra_link_args = ['-Wl,-rpath,@loader_path/../python_jgrapht.libs']
+    extra_link_args = ['-Wl,-rpath,@loader_path/../jgrapht.libs']
 
 
 class BuildCapiCommand(Command):
@@ -75,9 +75,9 @@ class BuildCapiCommand(Command):
         # inplace will is set to 1 when the develop command runs.
         # Copy the JgraphT C API directly to the development area
         if self.inplace:
-            lib_target_path = 'python_jgrapht.libs'
+            lib_target_path = 'jgrapht.libs'
         else:
-            lib_target_path = os.path.join(self.build_lib, 'python_jgrapht.libs')
+            lib_target_path = os.path.join(self.build_lib, 'jgrapht.libs')
         self.mkpath(lib_target_path)
         self.copy_file(lib_source_path, os.path.join(lib_target_path, self.filename))
 
@@ -126,7 +126,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='python-jgrapht',
+    name='jgrapht',
     cmdclass={
         'build_capi': BuildCapiCommand,
         'build_ext': CustomBuildExt,
@@ -134,7 +134,7 @@ setup(
     },
     ext_modules=[_backend_extension],
     version=get_version('jgrapht/__version__.py'),
-    description='Python-JGraphT graph library',
+    description='JGraphT graph library',
     long_description=long_description,
     long_description_content_type='text/markdown',
     author='Dimitrios Michail',
