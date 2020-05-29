@@ -3,7 +3,7 @@
 Credits
 =======
 
-The |Project| `package <https://github.com/d-michail/python-jgrapht>`_ and
+The `Python bindings of JGraphT <https://github.com/d-michail/python-jgrapht>`_ and
 the `JGraphT-capi <https://github.com/d-michail/jgrapht-capi>`_
 project have been written by `Dimitrios Michail <https://github.com/d-michail>`_.
 

@@ -12,8 +12,8 @@ or the
 
  * Eclipse Public License (EPL) https://www.eclipse.org/legal/epl-v20.html
 
-As a recipient of |Project|, you may choose which license to receive the code under.
-Please note that |Project| is distributed WITHOUT ANY WARRANTY; without even the implied warranty
+As a recipient of the |Bindings|, you may choose which license to receive the code under.
+Please note that the |Bindings| is distributed WITHOUT ANY WARRANTY; without even the implied warranty
 of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 Please refer to the license for details.

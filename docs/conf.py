@@ -82,6 +82,7 @@ backend_version = jgrapht.__backend_version__
 rst_prolog = """
 .. |BackendVersion| replace:: {backend_version}
 .. |Project| replace:: {project}
+.. |Bindings| replace:: Python bindings of {project}
 """.format(
     backend_version=backend_version,
     project=project

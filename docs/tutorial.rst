@@ -20,7 +20,7 @@ Let us start by creating a graph.
 This is the most general call. Sensible defaults are also provided, thus someone can create
 a graph simply by calling :py:meth:`jgrapht.create_graph()`. 
 The graph is a collection of vertices (aka nodes) and edges. 
-In |Project| vertices and edges are always integers. 
+In the |Bindings|, vertices and edges are always integers. 
 
 
 Adding vertices
@@ -68,8 +68,8 @@ Adding edges
 ------------
 
 Edges are pair of vertices, either ordered or unordered, depending on the type of the graph. 
-In |Project| edges are also identified using integers. These edge identifiers are 
-automatically given to the edge when they are first added to the graph,
+In the |Bindings| edges are also identified using integers. These edge
+identifiers are automatically given to the edge when they are first added to the graph,
 
 .. nbplot::
 
@@ -170,7 +170,7 @@ queried,
 Now that we have seen a little bit how to create graphs, let us discuss what it means to 
 contain self-loops or multiple-edges:
 
-  * **self-loops** are edges which start at a vertex `v` and edge at the same vertex `v`,
+  * **self-loops** are edges which start at a vertex `v` and end at the same vertex `v`,
   * **multiple-edges** are edges which have the exact same endpoints.
 
 Some algorithms are able to tolerate this, others do not. Thus, it is important to read the 

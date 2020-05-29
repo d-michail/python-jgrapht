@@ -8,7 +8,7 @@ Graph Factories
 
 Creating graphs can be accomplished using factory methods. During runtime the 
 type of the graph can be queried using :py:attr:`.Graph.type` which returns a 
-:class:`GraphType <jgrapht.types.GraphType>` instance. This allows algorithms to adjust their 
+:py:class:`GraphType <jgrapht.types.GraphType>` instance. This allows algorithms to adjust their 
 behavior depending on the graph they are working on.
 
 Default Graph
@@ -16,13 +16,14 @@ Default Graph
 
 The main factory function which creates graphs is :py:meth:`jgrapht.create_graph`. 
 Depending on the given parameters different types of graphs can be represented. All graphs 
-returned by this function are instances of :py:class`jgrapht.types.Graph`. Most users 
+returned by this function are instances of :py:class:`jgrapht.types.Graph`. Most users 
 should create graphs using this function:
 
 .. autofunction:: jgrapht.create_graph
 
 Helper factory functions :py:meth:`jgrapht.create_directed_graph` and 
-:py:meth:`jgrapht.create_undirected_graph` provide the same functionality.
+:py:meth:`jgrapht.create_undirected_graph` provide the same functionality restricted forces
+directed and undirected graphs.
 
 .. autofunction:: jgrapht.create_directed_graph
 .. autofunction:: jgrapht.create_undirected_graph
