@@ -44,7 +44,6 @@ print(g)
 # %%
 # Then, we execute Dijkstra starting from vertex 6.
 
-g.add_vertex(100)
 tree = sp.dijkstra(g, source_vertex=6)
 
 # %%
