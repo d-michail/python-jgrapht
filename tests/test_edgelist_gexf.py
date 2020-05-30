@@ -48,7 +48,7 @@ def test_input_gexf(tmpdir):
     tmpfilename = str(tmpfile)
 
     # write file json with escaped characters
-    with open(tmpfilename, "w") as f:
+    with open(tmpfilename, "w", encoding='utf-8') as f:
         f.write(input1)
 
     v_attrs = dict()
@@ -92,7 +92,7 @@ def test_input_gexf_no_attrs(tmpdir):
     tmpfilename = str(tmpfile)
 
     # write file json with escaped characters
-    with open(tmpfilename, "w") as f:
+    with open(tmpfilename, "w", encoding='utf-8') as f:
         f.write(input1)
 
     def import_id_cb(id):
