@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/d-michail/python-jgrapht.svg?branch=master)](https://travis-ci.org/d-michail/python-jgrapht)
 
-# JGraphT
+# Python-JGraphT
 
 A python version of the  [JGraphT graph library](https://jgrapht.org/).
 
