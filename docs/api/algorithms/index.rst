@@ -21,8 +21,10 @@ The JGraphT contains a large collection of advanced algorithms.
    planar
    cuts
    flow
+   drawing
    isomorphism
    tour
    cliques
    independent
    vertexcover
+   

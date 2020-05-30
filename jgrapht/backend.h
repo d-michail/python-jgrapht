@@ -16,6 +16,20 @@ void jgrapht_isolate_destroy();
 
 int jgrapht_isolate_is_attached();
 
+// error
+
+void jgrapht_error_clear_errno();
+
+int jgrapht_error_get_errno();
+
+char *jgrapht_error_get_errno_msg();
+
+void jgrapht_error_print_stack_trace();
+
+// vm
+
+void jgrapht_vmLocatorSymbol();
+
 // attribute store 
 
 int jgrapht_attributes_store_create(void**);
@@ -112,15 +126,27 @@ int jgrapht_cycles_fundamental_basis_exec_stack_bfs(void *, double*, void**);
 
 int jgrapht_cycles_fundamental_basis_exec_paton(void *, double*, void**);
 
-// error
+// drawing
 
-void jgrapht_error_clear_errno();
+int jgrapht_drawing_layout_model_2d_create(double, double, double, double, void**);
 
-int jgrapht_error_get_errno();
+int jgrapht_drawing_layout_model_2d_get_drawable_area(void *, double*, double*, double*, double*);
 
-char *jgrapht_error_get_errno_msg();
+int jgrapht_drawing_layout_model_2d_get_vertex(void *, int, double*, double*);
 
-void jgrapht_error_print_stack_trace();
+int jgrapht_drawing_layout_model_2d_put_vertex(void *, int, double, double);
+
+int jgrapht_drawing_layout_model_2d_get_fixed(void *, int, int*);
+
+int jgrapht_drawing_layout_model_2d_set_fixed(void *, int, int);
+
+int jgrapht_drawing_exec_random_layout_2d(void *, void *, long long int);
+
+int jgrapht_drawing_exec_circular_layout_2d(void *, void *, double, void *);
+
+int jgrapht_drawing_exec_fr_layout_2d(void *, void *, int, double, long long int);
+
+int jgrapht_drawing_exec_indexed_fr_layout_2d(void *, void *, int, double, long long int, double, double);
 
 // exporter
 
@@ -798,9 +824,6 @@ int jgrapht_vertexcover_exec_exact(void *, double*, void**);
 
 int jgrapht_vertexcover_exec_exact_weighted(void *, void *, double*, void**);
 
-// vm
-
-void jgrapht_vmLocatorSymbol();
 
 #if defined(__cplusplus)
 }

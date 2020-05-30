@@ -781,3 +781,32 @@ class DirectedAcyclicGraph(Graph):
         """Get a topological order iterator"""
         pass
 
+
+class LayoutModel2D:
+    """A 2D Layout Model."""
+
+    @abstractmethod
+    def area(self):
+        """The 2D drawable area."""
+        pass
+
+    @abstractmethod
+    def get_vertex_location(self, vertex):
+        """Get the location of a vertex."""
+        pass
+
+    @abstractmethod
+    def set_vertex_location(self, vertex, point_2d):
+        """Set the location of a vertex."""
+        pass
+
+    @abstractmethod        
+    def is_fixed(self, vertex, fixed):
+        """Check if a vertex is fixed."""
+        pass
+
+    @abstractmethod
+    def set_fixed(self, vertex, fixed):
+        """Set the fixed status of a vertex."""
+        pass
+

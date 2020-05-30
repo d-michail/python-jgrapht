@@ -32,6 +32,30 @@ int jgrapht_isolate_is_attached() {
     return thread != NULL; 
 }
 
+// error
+
+void jgrapht_error_clear_errno() { 
+    jgrapht_capi_error_clear_errno(thread);
+}
+
+status_t jgrapht_error_get_errno() { 
+    return jgrapht_capi_error_get_errno(thread);
+}
+
+char * jgrapht_error_get_errno_msg() { 
+    return jgrapht_capi_error_get_errno_msg(thread);
+}
+
+void jgrapht_error_print_stack_trace() { 
+    jgrapht_capi_error_print_stack_trace(thread);
+}
+
+// vm
+
+void jgrapht_vmLocatorSymbol() {
+    vmLocatorSymbol(thread);
+}
+
 // attribute store
 
 int jgrapht_attributes_store_create(void** res) { 
@@ -210,22 +234,46 @@ int jgrapht_cycles_fundamental_basis_exec_paton(void *g, double* weight_res, voi
     return jgrapht_capi_cycles_fundamental_basis_exec_paton(thread, g, weight_res, res);
 }
 
-// errors
+// drawing
 
-void jgrapht_error_clear_errno() { 
-    jgrapht_capi_error_clear_errno(thread);
+int jgrapht_drawing_layout_model_2d_create(double x_min, double y_min, double width, double height, void** res) { 
+    return jgrapht_capi_drawing_layout_model_2d_create(thread, x_min, y_min, width, height, res);
 }
 
-status_t jgrapht_error_get_errno() { 
-    return jgrapht_capi_error_get_errno(thread);
+int jgrapht_drawing_layout_model_2d_get_drawable_area(void *model, double* x_min, double* y_min, double* width, double* height) { 
+    return jgrapht_capi_drawing_layout_model_2d_get_drawable_area(thread, model, x_min, y_min, width, height);
 }
 
-char * jgrapht_error_get_errno_msg() { 
-    return jgrapht_capi_error_get_errno_msg(thread);
+int jgrapht_drawing_layout_model_2d_get_vertex(void *model, int vertex, double* x_res, double* y_res) { 
+    return jgrapht_capi_drawing_layout_model_2d_get_vertex(thread, model, vertex, x_res, y_res);
 }
 
-void jgrapht_error_print_stack_trace() { 
-    jgrapht_capi_error_print_stack_trace(thread);
+int jgrapht_drawing_layout_model_2d_put_vertex(void *model, int vertex, double x, double y) { 
+    return jgrapht_capi_drawing_layout_model_2d_put_vertex(thread, model, vertex, x, y);
+}
+
+int jgrapht_drawing_layout_model_2d_get_fixed(void *model, int vertex, int* res) { 
+    return jgrapht_capi_drawing_layout_model_2d_get_fixed(thread, model, vertex, res);
+}
+
+int jgrapht_drawing_layout_model_2d_set_fixed(void *model, int vertex, int res) { 
+    return jgrapht_capi_drawing_layout_model_2d_set_fixed(thread, model, vertex, res);
+}
+
+int jgrapht_drawing_exec_random_layout_2d(void *g, void *model, long long int seed) { 
+    return jgrapht_capi_drawing_exec_random_layout_2d(thread, g, model, seed);
+}
+
+int jgrapht_drawing_exec_circular_layout_2d(void *g, void *model, double radius, void *vertex_comparator_fptr) { 
+    return jgrapht_capi_drawing_exec_circular_layout_2d(thread, g, model, radius, vertex_comparator_fptr);
+}
+
+int jgrapht_drawing_exec_fr_layout_2d(void *g, void *model, int iterations, double norm_factor, long long int seed) { 
+    return jgrapht_capi_drawing_exec_fr_layout_2d(thread, g, model, iterations, norm_factor, seed);
+}
+
+int jgrapht_drawing_exec_indexed_fr_layout_2d(void *g, void *model, int iterations, double norm_factor, long long int seed, double theta, double tolerance) { 
+    return jgrapht_capi_drawing_exec_indexed_fr_layout_2d(thread, g, model, iterations, norm_factor, seed, theta, iterations);
 }
 
 // exporter
@@ -1537,15 +1585,5 @@ int jgrapht_vertexcover_exec_exact(void *g, double* weight_res, void** res) {
 int jgrapht_vertexcover_exec_exact_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
     return jgrapht_capi_vertexcover_exec_exact_weighted(thread, g, weight_vertex_map, weight_res, res);    
 }
-
-// vm
-
-void jgrapht_vmLocatorSymbol() {
-    vmLocatorSymbol(thread);
-}
-
-
-
-
 
 
