@@ -30,26 +30,20 @@ make install
 
 cd /io
 # Build wheels for Python 3.6, 3.7, 3.8
-for PYBIN in /opt/python/cp3{6..8}*/bin; do
-    "${PYBIN}/python" setup.py bdist_wheel
-done
-
 # Although we have a manylinux compatible wheel generated directly from
 # setup.py, PyPI requires that the platform tag is set to a manylinux one
-# (e.g. manylinux_x86_64 instead of linux_x86_64). Therefore we auditwheel repair
-# our wheels anyway.
-# Note that this leads to some trouble with RPATH overriding, so extra care had to
-# be taken in setup.py.
-for WHL in dist/*.whl
-do
-    auditwheel repair "$WHL"
+# (e.g. manylinux_x86_64 instead of linux_x86_64).
+# Because auditwheel repair unecessarily bundles in zlib and breaks our
+# RPATH we don't use it, instead we directly specify the tag with --plat-name
+for PYBIN in /opt/python/cp3{6..8}*/bin; do
+    "${PYBIN}/python" setup.py bdist_wheel --plat-name=manylinux2010_x86_64
 done
 
-# auditwheel repair creates new wheels and puts them at wheelhouse/
-# Travis CI pypi deploy provider expects to find the wheels to
-# upload at dist/
-rm /io/dist/*.whl
-mv /io/wheelhouse/*.whl /io/dist/
+# Show if our wheels are consistent with auditwheel (they should be)
+for WHL in dist/*.whl
+do
+    auditwheel show "$WHL"
+done
 
 # Generate source distribution with sdist so Travis can upload it to PyPI
 /opt/python/cp38-cp38/bin/python setup.py sdist
