@@ -55,7 +55,7 @@ def test_input3_graphml(tmpdir):
     tmpfilename = str(tmpfile)
 
     # write file json with escaped characters
-    with open(tmpfilename, "w") as f:
+    with open(tmpfilename, "w", encoding='utf-8') as f:
         f.write(input3)
 
     v_attrs = dict()
