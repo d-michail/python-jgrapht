@@ -22,11 +22,11 @@ if sys.platform.startswith('linux'):
     so_ext = '.so'
     capi_filename = 'libjgrapht_capi' + so_ext
     # Make sure that _backend.so will be able to load jgrapht_capi.so
-    runtime_library_dirs=['$ORIGIN/../jgrapht.libs']
+    runtime_library_dirs=['$ORIGIN']
 elif sys.platform.startswith('darwin'):
     so_ext = '.dylib'
     capi_filename = 'libjgrapht_capi' + so_ext
-    extra_link_args = ['-Wl,-rpath,@loader_path/../jgrapht.libs']
+    extra_link_args = ['-Wl,-rpath,@loader_path']
 
 
 class BuildCapiCommand(Command):
@@ -75,10 +75,10 @@ class BuildCapiCommand(Command):
         # inplace will is set to 1 when the develop command runs.
         # Copy the JgraphT C API directly to the development area
         if self.inplace:
-            lib_target_path = 'jgrapht.libs'
+            lib_target_path = self.package_name
         else:
-            lib_target_path = os.path.join(self.build_lib, 'jgrapht.libs')
-        self.mkpath(lib_target_path)
+            lib_target_path = os.path.join(self.build_lib, self.package_name)
+            self.mkpath(lib_target_path)
         self.copy_file(lib_source_path, os.path.join(lib_target_path, self.filename))
 
 
