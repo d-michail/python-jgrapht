@@ -69,6 +69,8 @@ class BuildCapiCommand(Command):
             print("")
             return False
         print("Found source at {}".format(self.src_dir))
+        # Additional CMake parameters should be set as environment variables
+        # before calling setup.py depending on the platform and toolchain.
         self.spawn(['cmake', '-B{}'.format(self.build_dir), '-H{}'.format(self.src_dir)])
         self.spawn(['cmake', '--build', self.build_dir])
         lib_source_path = os.path.join(self.build_dir, self.filename)
