@@ -388,6 +388,34 @@ int jgrapht_mincostflow_exec_capacity_scaling(void *g, void *node_supply_fptr, v
         arc_capacity_upper_bound_fptr, scaling_factor, cost_res, flow_res, dual_res);
 }
 
+int jgrapht_gomoryhu_exec_gusfield(void *g, void** gh_res) { 
+    return jgrapht_capi_gomoryhu_exec_gusfield(thread, g, gh_res);
+}
+
+int jgrapht_gomoryhu_min_st_cut(void *gh, int source, int sink, double* value_res, void** source_partition_res) { 
+    return jgrapht_capi_gomoryhu_min_st_cut(thread, gh, source, sink, value_res, source_partition_res);
+}
+
+int jgrapht_gomoryhu_min_cut(void *gh, double* value_res, void** source_partition_res) { 
+    return jgrapht_capi_gomoryhu_min_cut(thread, gh, value_res, source_partition_res);
+}
+
+int jgrapht_gomoryhu_tree(void *gh, void** tree_res) { 
+    return jgrapht_capi_gomoryhu_tree(thread, gh, tree_res);
+}
+
+int jgrapht_equivalentflowtree_exec_gusfield(void *g, void** eft_res) { 
+    return jgrapht_capi_equivalentflowtree_exec_gusfield(thread, g, eft_res);
+}
+
+int jgrapht_equivalentflowtree_max_st_flow(void *eft, int source, int sink, double* value_res) { 
+    return jgrapht_capi_equivalentflowtree_max_st_flow(thread, eft, source, sink, value_res);
+}
+
+int jgrapht_equivalentflowtree_tree(void *eft, void** tree_res) { 
+    return jgrapht_capi_equivalentflowtree_tree(thread, eft, tree_res);
+}
+
 // generate
 
 int jgrapht_generate_barabasi_albert(void *g, int m0, int m, int n, long long int seed) { 

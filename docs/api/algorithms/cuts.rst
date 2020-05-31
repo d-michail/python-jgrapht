@@ -13,7 +13,12 @@ Algorithms
 Types
 -----
 
-Cuts are represented using instances of the following class.
+Cuts are represented using instances of the following classes.
 
 .. autoclass:: jgrapht.types.Cut
    :members:
+
+.. autoclass:: jgrapht.types.GomoryHuTree
+   :members:
+
+

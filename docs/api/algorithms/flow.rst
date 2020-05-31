@@ -30,12 +30,21 @@ algorithm, the following functions are provided.
 .. automodule:: jgrapht.algorithms.flow
    :members: push_relabel, dinic, edmonds_karp
 
+Computing maximum flow values between all pairs of vertices in an undirected network can 
+be performed using:
+
+.. autofunction:: jgrapht.algorithms.flow.equivalent_flow_tree_gusfield
+
+
 Types
 -----
 
-Flows are represented using instances of the following class.
+Flows are represented using instances of the following classes.
 
 .. autoclass:: jgrapht.types.Flow
    :members:
 
    This is a dictionary from edges to double values.   
+
+.. autoclass:: jgrapht.types.EquivalentFlowTree
+   :members:

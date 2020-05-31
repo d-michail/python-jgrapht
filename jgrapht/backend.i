@@ -355,6 +355,20 @@ int jgrapht_maxflow_exec_edmonds_karp(void *, int, int, double* OUTPUT, void** O
 
 int jgrapht_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double* OUTPUT, void** OUTPUT, void** OUTPUT);
 
+int jgrapht_gomoryhu_exec_gusfield(void *, void** OUTPUT);
+
+int jgrapht_gomoryhu_min_st_cut(void *, int, int, double* OUTPUT, void** OUTPUT);
+
+int jgrapht_gomoryhu_min_cut(void *, double* OUTPUT, void** OUTPUT);
+
+int jgrapht_gomoryhu_tree(void *, void** OUTPUT);
+
+int jgrapht_equivalentflowtree_exec_gusfield(void *, void** OUTPUT);
+
+int jgrapht_equivalentflowtree_max_st_flow(void *, int, int, double* OUTPUT);
+
+int jgrapht_equivalentflowtree_tree(void *, void** OUTPUT);
+
 // generate
 
 int jgrapht_generate_barabasi_albert(void *, int, int, int, long long int);

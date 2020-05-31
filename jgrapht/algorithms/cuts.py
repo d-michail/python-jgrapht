@@ -1,5 +1,8 @@
 from .. import backend as _backend
-from .._internals._flows import _JGraphTCut
+from .._internals._flows import (
+    _JGraphTCut,
+    _JGraphTGomoryHuTree,
+)
 
 
 def _cut_alg(name, graph, *args):
@@ -26,3 +29,25 @@ def stoer_wagner(graph):
     :returns: a min cut as an instance of :py:class:`.Cut`.
     """
     return _cut_alg("stoer_wagner", graph)
+
+
+def gomory_hu_gusfield(graph):
+    """Computes a Gomory-Hu Tree using Gusfield's algorithm.
+    
+    Gomory-Hu Trees can be used to calculate the maximum s-t flow value and the minimum
+    s-t cut between all pairs of vertices. It does so by performing :math:`n-1` max flow
+    computations. 
+
+    For more details see: 
+
+      * Gusfield, D, Very simple methods for all pairs network flow analysis. SIAM Journal
+        on Computing, 19(1), p142-155, 1990
+
+    This implementation uses the push-relabel algorithm for the minimum s-t cut which
+    is :math:`\mathcal{O}(n^3)`. The total complexity is, therefore, :math:`\mathcal{O}(n^4)`.
+
+    :param graph: an undirected network    
+    :returns: a Gomory-Hu tree as an instance of :py:class:`jgrapht.types.GomoryHuTree`
+    """
+    handle = _backend.jgrapht_gomoryhu_exec_gusfield(graph.handle)
+    return _JGraphTGomoryHuTree(handle, graph)

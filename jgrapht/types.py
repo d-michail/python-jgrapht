@@ -692,6 +692,39 @@ class Cut:
         pass
 
 
+class GomoryHuTree:
+    """A Gomory-Hu Tree."""
+
+    @abstractmethod
+    def as_graph(self):
+        """Compute the Gomory-Hu tree as a graph."""
+        pass
+
+    @abstractmethod
+    def min_cut(self):
+        """Compute the minimum cut of the graph."""
+        pass        
+
+    @abstractmethod
+    def min_st_cut(self, s, t):
+        """Compute the minimum s-t cut."""
+        pass        
+
+
+class EquivalentFlowTree:
+    """An Equivalent Flow Tree."""
+
+    @abstractmethod
+    def as_graph(self):
+        """Compute the equivalent flow tree as a graph."""
+        pass
+
+    @abstractmethod
+    def max_st_flow_value(self, s, t):
+        """Compute the maximum s-t flow value."""
+        pass        
+
+
 class GraphMapping:
     """A graph mapping between two graphs g1 and g2."""
 

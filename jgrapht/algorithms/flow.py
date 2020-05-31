@@ -1,5 +1,9 @@
 from .. import backend as _backend
-from .._internals._flows import _JGraphTCut, _JGraphTFlow
+from .._internals._flows import (
+    _JGraphTCut, 
+    _JGraphTFlow,
+    _JGraphTEquivalentFlowTree,
+)
 
 
 def _maxflow_alg(name, graph, source, sink, *args):
@@ -120,3 +124,25 @@ def min_st_cut(graph, source, sink):
     """
     _, cut = push_relabel(graph, source, sink)
     return cut
+
+
+def equivalent_flow_tree_gusfield(graph):
+    """Computes an Equivalent Flow Tree using Gusfield's algorithm.
+    
+    Equivalent flow trees can be used to calculate the maximum flow value between all pairs 
+    of vertices in an undirected network. It does so by performing :math:`n-1` minimum 
+    s-t cut computations. 
+
+    For more details see: 
+
+      * Gusfield, D, Very simple methods for all pairs network flow analysis. SIAM Journal
+        on Computing, 19(1), p142-155, 1990
+
+    This implementation uses the push-relabel algorithm for the minimum s-t cut which
+    is :math:`\mathcal{O}(n^3)`. The total complexity is, therefore, :math:`\mathcal{O}(n^4)`.
+
+    :param graph: an undirected network    
+    :returns: an equivalent flow tree as an instance of :py:class:`jgrapht.types.EquivalentFlowTree`
+    """
+    handle = _backend.jgrapht_equivalentflowtree_exec_gusfield(graph.handle)
+    return _JGraphTEquivalentFlowTree(handle, graph)

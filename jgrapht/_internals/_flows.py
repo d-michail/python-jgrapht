@@ -1,12 +1,16 @@
 from ..types import (
     Cut,
     Flow,
+    GomoryHuTree,
+    EquivalentFlowTree,
 )
-
+from ._wrappers import _HandleWrapper
 from ._collections import (
     _JGraphTIntegerSet,
     _JGraphTIntegerDoubleMap,
 )
+from ._graphs import _JGraphTGraph
+from .. import backend as _backend
 
 
 class _JGraphTCut(Cut):
@@ -67,7 +71,10 @@ class _JGraphTCut(Cut):
                     self._edges.add(e)
 
     def __repr__(self):
-        return "_JGraphTCut(%r)" % self._handle
+        return "_JGraphTCut(%f, %r)" % (self.capacity, self.source_partition)
+
+    def __str__(self):
+        return str(self.edges)
 
 
 class _JGraphTFlow(_JGraphTIntegerDoubleMap, Flow):
@@ -96,3 +103,48 @@ class _JGraphTFlow(_JGraphTIntegerDoubleMap, Flow):
 
     def __repr__(self):
         return "_JGraphTFlow(%r)" % self._handle
+
+
+class _JGraphTGomoryHuTree(_HandleWrapper, GomoryHuTree):
+    """Gomory-Hu Tree."""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def as_graph(self):
+        tree_handle = _backend.jgrapht_gomoryhu_tree(self.handle)
+        return _JGraphTGraph(tree_handle)
+
+    def min_cut(self):
+        cut_value, cut_source_partition_handle = _backend.jgrapht_gomoryhu_min_cut(
+            self.handle
+        )
+        return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)
+
+    def min_st_cut(self, s, t):
+        cut_value, cut_source_partition_handle = _backend.jgrapht_gomoryhu_min_st_cut(
+            self.handle, s, t
+        )
+        return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)
+
+    def __repr__(self):
+        return "_JGraphTGomoryHuTree(%r)" % self._handle
+
+
+class _JGraphTEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
+    """An Equivalent Flow Tree."""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def as_graph(self):
+        tree_handle = _backend.jgrapht_equivalentflowtree_tree(self.handle)
+        return _JGraphTGraph(tree_handle)
+
+    def max_st_flow_value(self, s, t):
+        return _backend.jgrapht_equivalentflowtree_max_st_flow(self.handle, s, t)
+
+    def __repr__(self):
+        return "_JGraphTEquivalentFlowTree(%r)" % self._handle
