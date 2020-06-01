@@ -5,9 +5,11 @@ from ._internals._views import (
     _EdgeReversedGraphView,
     _MaskedSubgraphView,
     _WeightedView,
-    _ListenableView,
     _GraphUnion,
 )
+
+from ._internals._listenable_view import _ListenableView
+from ._internals._property_graph_view import _PropertyGraphView
 
 
 def as_unweighted(graph):
@@ -50,7 +52,7 @@ def as_edge_reversed(graph):
     return _EdgeReversedGraphView(graph)
 
 
-def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None): 
+def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):
     """Create a masked subgraph view. 
 
     This is an unmodifiable subgraph induced by the vertex/edge masking callbacks. The subgraph
@@ -130,3 +132,12 @@ def as_graph_union(graph1, graph2, edge_weight_combiner_cb=None):
     :returns: a graph which is the union of the two graphs
     """
     return _GraphUnion(graph1, graph2, edge_weight_combiner_cb)
+
+
+def as_property_graph(graph):
+    """Create a property graph view of a graph.
+
+    :param graph: the original graph
+    :returns: a property graph which is an instance of type :py:class:`~jgrapht.types.PropertyGraph`.
+    """
+    return _PropertyGraphView(graph)

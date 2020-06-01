@@ -1,9 +1,7 @@
 import pytest
 
-from jgrapht._internals._any_graph_view import _JGraphTAnyGraphView
-
 from jgrapht import create_graph
-
+from jgrapht.views import as_property_graph
 
 def test_any_graph():
 
@@ -19,7 +17,7 @@ def test_any_graph():
     assert g.type.allowing_multiple_edges
     assert g.type.weighted
 
-    g = _JGraphTAnyGraphView(g)
+    g = as_property_graph(g)
 
     assert g.type.directed
     assert g.type.allowing_self_loops
@@ -188,7 +186,7 @@ def test_any_graph_of_graphs():
         allowing_multiple_edges=True,
         weighted=True,
     )
-    g = _JGraphTAnyGraphView(g)
+    g = as_property_graph(g)
 
     g.add_vertex(g1)
     g.add_vertex(g2)

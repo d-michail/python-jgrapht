@@ -11,10 +11,11 @@ from ..types import (
     GraphEvent,
     PropertyGraph,
 )
-from ..views import as_listenable
+
+from ._listenable_view import _ListenableView
 
 
-class _JGraphTAnyGraphView(Graph, PropertyGraph):
+class _PropertyGraphView(Graph, PropertyGraph):
     """A graph view which allows the use of any hashable as vertex and edges.
     This is a wrapper around the default graph which has integer identifiers, 
     which means that there is a performance penalty involved. The graph also 
@@ -27,7 +28,7 @@ class _JGraphTAnyGraphView(Graph, PropertyGraph):
         def structural_cb(element, event_type):
             self._structural_event_listener(element, event_type)
 
-        self._graph = as_listenable(graph)
+        self._graph = _ListenableView(graph)
         self._graph.add_listener(structural_cb)
 
         # initialize vertex maps
@@ -43,6 +44,11 @@ class _JGraphTAnyGraphView(Graph, PropertyGraph):
         self._edge_attrs = self._EdgeAttributes(self, self._edge_hash_to_attrs)
 
         self._graph_attrs = {}
+
+    @property
+    def handle(self):
+        """Handle to the backend graph."""
+        return self._graph.handle
 
     @property
     def type(self):
@@ -220,7 +226,7 @@ class _JGraphTAnyGraphView(Graph, PropertyGraph):
             self._edge_hash_to_attrs.pop(e, None)
 
     def __repr__(self):
-        return "_JGraphTAnyGraphView(%r)" % self._graph.handle
+        return "_PropertyGraphView(%r)" % self._graph.handle
 
     class _VertexAttributes(MutableMapping):
         """Wrapper around a dictionary to ensure vertex existence."""
@@ -250,7 +256,7 @@ class _JGraphTAnyGraphView(Graph, PropertyGraph):
             return iter(self._storage)
 
         def __repr__(self):
-            return "_JGraphTAnyGraphView-VertexAttibutes(%r)" % repr(self._storage)
+            return "_PropertyGraphView-VertexAttibutes(%r)" % repr(self._storage)
 
     class _EdgeAttributes(MutableMapping):
         """Wrapper around a dictionary to ensure edge existence."""
@@ -280,4 +286,4 @@ class _JGraphTAnyGraphView(Graph, PropertyGraph):
             return iter(self._storage)
 
         def __repr__(self):
-            return "_JGraphTAnyGraphView-EdgeAttibutes(%r)" % repr(self._storage)
+            return "_PropertyGraphView-EdgeAttibutes(%r)" % repr(self._storage)
