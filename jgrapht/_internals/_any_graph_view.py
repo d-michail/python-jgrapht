@@ -1,3 +1,9 @@
+from collections.abc import (
+    Set,
+    MutableMapping,
+)
+from collections import defaultdict
+
 from .. import backend
 from ..types import (
     Graph,
@@ -6,13 +12,14 @@ from ..types import (
     PropertyGraph,
 )
 from ..views import as_listenable
-from collections.abc import Set
 
 
 class _JGraphTAnyGraphView(Graph, PropertyGraph):
     """A graph view which allows the use of any hashable as vertex and edges.
     This is a wrapper around the default graph which has integer identifiers, 
-    which means that there is a performance penalty involved.
+    which means that there is a performance penalty involved. The graph also 
+    supports properties (attributes) on graph vertices/edges and the graph 
+    itself.
     """
 
     def __init__(self, graph, **kwargs):
@@ -23,13 +30,18 @@ class _JGraphTAnyGraphView(Graph, PropertyGraph):
         self._graph = as_listenable(graph)
         self._graph.add_listener(structural_cb)
 
-        # initialize maps from hashable to graph
+        # initialize vertex maps
         self._vertex_hash_to_id = {}
         self._vertex_id_to_hash = {}
-        self._vertex_hash_to_attrs = {}
+        self._vertex_hash_to_attrs = defaultdict(lambda: {})
+        self._vertex_attrs = self._VertexAttributes(self, self._vertex_hash_to_attrs)
+        
+        # initialize edge maps
         self._edge_hash_to_id = {}
         self._edge_id_to_hash = {}
-        self._edge_hash_to_attrs = {}
+        self._edge_hash_to_attrs = defaultdict(lambda: {})
+        self._edge_attrs = self._EdgeAttributes(self, self._edge_hash_to_attrs)
+
         self._graph_attrs = {}
 
     @property
@@ -41,7 +53,6 @@ class _JGraphTAnyGraphView(Graph, PropertyGraph):
             return
         vid = self._graph.add_vertex()
         self._vertex_hash_to_id[v] = vid
-        self._vertex_hash_to_attrs[v] = {}
         self._vertex_id_to_hash[vid] = v
 
     def remove_vertex(self, v):
@@ -67,7 +78,6 @@ class _JGraphTAnyGraphView(Graph, PropertyGraph):
 
         eid = self._graph.add_edge(uid, vid)
         self._edge_hash_to_id[e] = eid
-        self._edge_hash_to_attrs[e] = {}
         self._edge_id_to_hash[eid] = e
         return True
 
@@ -192,7 +202,7 @@ class _JGraphTAnyGraphView(Graph, PropertyGraph):
 
     @property
     def edge_props(self):
-        return self._edge_attrs                
+        return self._edge_attrs
 
     def _create_edge_it(self, edge_id_it):
         for eid in edge_id_it:
@@ -203,11 +213,71 @@ class _JGraphTAnyGraphView(Graph, PropertyGraph):
         if event_type == GraphEvent.VERTEX_REMOVED:
             v = self._vertex_id_to_hash.pop(element)
             self._vertex_hash_to_id.pop(v)
-            self._vertex_hash_to_attrs.pop(v)
+            self._vertex_hash_to_attrs.pop(v, None)
         elif event_type == GraphEvent.EDGE_REMOVED:
             e = self._edge_id_to_hash.pop(element)
             self._edge_hash_to_id.pop(e)
-            self._edge_hash_to_attrs.pop(e)
+            self._edge_hash_to_attrs.pop(e, None)
 
     def __repr__(self):
         return "_JGraphTAnyGraphView(%r)" % self._graph.handle
+
+    class _VertexAttributes(MutableMapping):
+        """Wrapper around a dictionary to ensure vertex existence."""
+        def __init__(self, graph, storage):
+            self._graph = graph
+            self._storage = storage
+
+        def __getitem__(self, key):
+            if key not in self._graph.vertices: 
+                raise ValueError('Vertex {} not in graph'.format(key))
+            return self._storage[key]
+
+        def __setitem__(self, key, value):
+            if key not in self._graph.vertices: 
+                raise ValueError('Vertex {} not in graph'.format(key))
+            self._storage[key] = value
+
+        def __delitem__(self, key):
+            if key not in self._graph.vertices: 
+                raise ValueError('Vertex {} not in graph'.format(key))
+            del self._storage[key]
+
+        def __len__(self):
+            return len(self._storage)
+
+        def __iter__(self):
+            return iter(self._storage)
+
+        def __repr__(self):
+            return "_JGraphTAnyGraphView-VertexAttibutes(%r)" % repr(self._storage)
+
+    class _EdgeAttributes(MutableMapping):
+        """Wrapper around a dictionary to ensure edge existence."""
+        def __init__(self, graph, storage):
+            self._graph = graph
+            self._storage = storage
+
+        def __getitem__(self, key):
+            if key not in self._graph.edges: 
+                raise ValueError('Edge {} not in graph'.format(key))
+            return self._storage[key]
+
+        def __setitem__(self, key, value):
+            if key not in self._graph.edges: 
+                raise ValueError('Edge {} not in graph'.format(key))
+            self._storage[key] = value
+
+        def __delitem__(self, key):
+            if key not in self._graph.edges: 
+                raise ValueError('Edge {} not in graph'.format(key))
+            del self._storage[key]
+
+        def __len__(self):
+            return len(self._storage)
+
+        def __iter__(self):
+            return iter(self._storage)
+
+        def __repr__(self):
+            return "_JGraphTAnyGraphView-EdgeAttibutes(%r)" % repr(self._storage)
