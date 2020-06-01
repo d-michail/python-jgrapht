@@ -14,7 +14,10 @@ from ._collections import (
 
 
 class _JGraphTGraph(_HandleWrapper, Graph):
-    """The actual graph implementation."""
+    """The actual graph implementation. This implementation always uses integers
+    for the vertices and the edges of the graph. All operations are delegated to
+    the backend.
+    """
 
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)

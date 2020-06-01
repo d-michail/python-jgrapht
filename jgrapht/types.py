@@ -606,7 +606,8 @@ class Graph(ABC):
         pass
 
     def __str__(self):
-        vertex_set = str(self.vertices)
+        vertices = [str(v) for v in self.vertices]
+        vertex_set = "{" + ", ".join(vertices) + "}"
         e_l_delim = "(" if self.type.directed else "{"
         e_r_delim = ")" if self.type.directed else "}"
         edges = [(e, *self.edge_tuple(e)) for e in self.edges]

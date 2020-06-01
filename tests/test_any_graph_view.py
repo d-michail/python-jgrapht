@@ -148,3 +148,61 @@ def test_any_graph():
     with pytest.raises(ValueError):
         g.edge_props["e13"]
 
+
+def test_any_graph_of_graphs():
+
+    g1 = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+    g1.add_vertex(0)
+    g1.add_vertex(1)
+    g1.add_edge(0,1)
+
+    g2 = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+    g2.add_vertex(2)
+    g2.add_vertex(3)
+    g2.add_edge(2,3)
+
+    g3 = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+    g3.add_vertex(4)
+    g3.add_vertex(5)
+    g3.add_edge(4,5)
+
+    # create the graph of graphs
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+    g = _JGraphTAnyGraphView(g)
+
+    g.add_vertex(g1)
+    g.add_vertex(g2)
+
+    g.add_edge(g1, g2, g3)
+
+    assert str(g) == '({({0, 1}, {0=(0,1)}), ({2, 3}, {0=(2,3)})}, {({4, 5}, {0=(4,5)})=(({0, 1}, {0=(0,1)}),({2, 3}, {0=(2,3)}))})'
+
+    assert g.contains_vertex(g1)
+    assert g.contains_vertex(g2)
+    assert g.contains_edge(g3)
+
+    assert len(g.vertices) == 2
+    assert len(g.edges) == 1
+
+    assert g.edge_source(g3) == g1
+    assert g.edge_target(g3) == g2
