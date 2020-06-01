@@ -1,6 +1,8 @@
 import time
 import ctypes
 
+from ..types import PropertyGraph
+
 from .. import backend as _backend
 from .._internals._wrappers import _JGraphTString
 from .._internals._collections import _JGraphTIntegerStringMap
@@ -35,25 +37,9 @@ def _export_to_string(name, graph, *args):
     return str(_JGraphTString(handle))
 
 
-def _attributes_to_store(attributes_dict):
-    """Take a per element (edge/vertex) attributes dictionary and create an
-    equivalent structure in the capi. This can then be used in order to export
-    a graph with attributes.
-    """
-    vertex_attribute_store = None
-    if attributes_dict is not None:
-        vertex_attribute_store = _JGraphTAttributeStore()
-        for element, attr_dict in attributes_dict.items():
-            for key, value in attr_dict.items():
-                vertex_attribute_store.put(element, key, value)
-
-    return vertex_attribute_store
-
-
 def _vertex_id_store(graph):
     """Create a vertex identifier store inside the capi backend. This only 
-    something in case the graph is a property graph. Otherwise None is 
-    returned.
+    works for property graphs, otherwise it returns None.
     """
     vertex_id_store = None
     if isinstance(graph, _PropertyGraphView):
@@ -64,10 +50,38 @@ def _vertex_id_store(graph):
     return vertex_id_store
 
 
+def _vertex_attributes_store(graph, attributes_dict):
+    """Combine the attributes from a property graph and a per-vertex attributes
+    dictionary and create an equivalent structure in the capi. This can then be
+    used in order to export a graph with attributes.
+    """
+    attribute_store = None
+    if isinstance(graph, _PropertyGraphView):
+        # property graph
+        attribute_store = _JGraphTAttributeStore()
+        for v in graph.vertices: 
+            for key, value in graph.vertex_props[v].items():
+                attribute_store.put(graph._vertex_hash_to_id[v], key, str(value))
+        if attributes_dict is not None:
+            for v, attr_dict in attributes_dict.items():
+                for key, value in attr_dict.items():
+                    attribute_store.put(graph._vertex_hash_to_id[v], key, str(value))
+    else:
+        # default graph
+        if attributes_dict is not None:
+            if attribute_store is None:
+                attribute_store = _JGraphTAttributeStore()
+
+            for v, attr_dict in attributes_dict.items():
+                for key, value in attr_dict.items():
+                    attribute_store.put(v, key, str(value))
+
+    return attribute_store
+
+
 def _edge_id_store(graph):
     """Create an edge identifier store inside the capi backend. This only 
-    something in case the graph is a property graph. Otherwise None is 
-    returned.
+    works for property graphs, otherwise it returns None.
     """
     edge_id_store = None
     if isinstance(graph, _PropertyGraphView):
@@ -76,6 +90,35 @@ def _edge_id_store(graph):
         for k, v in graph._edge_id_to_hash.items():
             edge_id_store[k] = str(v)
     return edge_id_store
+
+
+def _edge_attributes_store(graph, attributes_dict):
+    """Combine the attributes from a property graph and a per-edge attributes
+    dictionary and create an equivalent structure in the capi. This can then be
+    used in order to export a graph with attributes.
+    """
+    attribute_store = None
+    if isinstance(graph, _PropertyGraphView):
+        # property graph
+        attribute_store = _JGraphTAttributeStore()
+        for e in graph.edges: 
+            for key, value in graph.edge_props[e].items():
+                attribute_store.put(graph._edge_hash_to_id[e], key, str(value))
+        if attributes_dict is not None:
+            for e, attr_dict in attributes_dict.items():
+                for key, value in attr_dict.items():
+                    attribute_store.put(graph._edge_hash_to_id[e], key, str(value))
+    else:
+        # default graph
+        if attributes_dict is not None:
+            if attribute_store is None:
+                attribute_store = _JGraphTAttributeStore()
+
+            for e, attr_dict in attributes_dict.items():
+                for key, value in attr_dict.items():
+                    attribute_store.put(e, key, str(value))
+
+    return attribute_store
 
 
 DIMACS_FORMATS = dict(
@@ -266,8 +309,8 @@ def write_gml(
     :param per_edge_attrs_dict: per edge attribute dicts
     :raises IOError: In case of an export error 
     """
-    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
-    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph)
 
     custom = [
@@ -326,8 +369,8 @@ def generate_gml(
     :returns: a string contains the exported graph    
     :raises IOError: In case of an export error 
     """
-    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
-    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph)
 
     custom = [
@@ -361,8 +404,8 @@ def write_json(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=
     :param per_edge_attrs_dict: per edge attribute dicts
     :raises IOError: In case of an export error 
     """
-    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
-    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph)
 
     custom = [
@@ -395,8 +438,8 @@ def generate_json(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
     :returns: a string contains the exported graph    
     :raises IOError: In case of an export error 
     """
-    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
-    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph)
 
     custom = [
@@ -551,8 +594,8 @@ def write_gexf(
     for name, category, attr_type, default_value in attrs:
         attrs_registry.put(name, category, attr_type, default_value)
 
-    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
-    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph)
     edge_id_store = _edge_id_store(graph)
 
@@ -635,8 +678,8 @@ def generate_gexf(
     for name, category, type, default_value in attrs:
         attrs_registry.put(name, category, type, default_value)
 
-    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
-    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph)
     edge_id_store = _edge_id_store(graph)
 
@@ -668,8 +711,8 @@ def write_dot(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=N
     :param per_edge_attrs_dict: per edge attribute dicts
     :raises IOError: In case of an export error         
     """
-    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
-    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph)
 
     custom = [
@@ -694,8 +737,8 @@ def generate_dot(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
     :returns: a string contains the exported graph    
     :raises IOError: In case of an export error         
     """
-    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
-    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph)
 
     custom = [
@@ -788,8 +831,8 @@ def write_graphml(
     for name, category, attr_type, default_value in attrs:
         attrs_registry.put(name, category, attr_type, default_value)
 
-    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
-    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph)
 
     custom = [
@@ -836,8 +879,8 @@ def generate_graphml(
     for name, category, type, default_value in attrs:
         attrs_registry.put(name, category, type, default_value)
 
-    vertex_attribute_store = _attributes_to_store(per_vertex_attrs_dict)
-    edge_attribute_store = _attributes_to_store(per_edge_attrs_dict)
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph)
 
     custom = [
