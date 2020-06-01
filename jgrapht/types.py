@@ -697,17 +697,26 @@ class GomoryHuTree:
 
     @abstractmethod
     def as_graph(self):
-        """Compute the Gomory-Hu tree as a graph."""
+        """Compute the Gomory-Hu tree as a graph.
+
+        :returns: the Gomory-Hu tree as an instance of :py:class:`~jgrapht.types.Graph`
+        """
         pass
 
     @abstractmethod
     def min_cut(self):
-        """Compute the minimum cut of the graph."""
+        """Compute the minimum cut of the graph.
+        
+        :returns: a cut as an instance of :py:class:`~jgrapht.types.Cut`        
+        """
         pass        
 
     @abstractmethod
     def min_st_cut(self, s, t):
-        """Compute the minimum s-t cut."""
+        """Compute the minimum s-t cut.
+        
+        :returns: a cut as an instance of :py:class:`~jgrapht.types.Cut`        
+        """
         pass        
 
 

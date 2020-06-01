@@ -4,32 +4,6 @@ from jgrapht import create_graph
 import jgrapht.algorithms.flow as flow
 
 
-def _do_run_cut(algo):
-    g = create_graph(
-        directed=True,
-        allowing_self_loops=False,
-        allowing_multiple_edges=False,
-        weighted=True,
-    )
-
-    g.add_vertex(0)
-    g.add_vertex(1)
-    g.add_vertex(2)
-    g.add_vertex(3)
-
-    e01 = g.add_edge(0, 1, weight=20)
-    e02 = g.add_edge(0, 2, weight=10)
-    g.add_edge(1, 2, weight=30)
-    g.add_edge(1, 3, weight=10)
-    g.add_edge(2, 3, weight=20)
-
-    cut = algo(g, 0, 3)
-
-    assert cut.capacity == 30.0
-    assert cut.edges == set([e01, e02])
-    assert cut.source_partition == set([0])
-    assert cut.target_partition == set([1, 2, 3])
-
 
 def _do_run_both(algo):
     g = create_graph(
@@ -108,10 +82,6 @@ def test_push_relabel():
 
 def test_edmonds_karp():
     _do_run_both(flow.edmonds_karp)
-
-
-def test_min_st_cut():
-    _do_run_cut(flow.min_st_cut)
 
 
 def test_max_st_flow():

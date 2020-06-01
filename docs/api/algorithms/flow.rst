@@ -7,7 +7,6 @@ Flows
 Algorithms
 ----------
 
-
 We are given a weighted directed or undirected graph :math:`G(V,E)`. Each edge :math:`e \in E` has 
 an associated non-negative capacity :math:`c_e \ge 0`. The maximum flow problem involves 
 finding a feasible flow :math:`f: E \mapsto \mathbb{R}_{0+}` of maximum value.
@@ -17,12 +16,9 @@ A flow is feasible if:
  * for each vertex except the source and sink, the sum of incoming flows is equal to the sum 
    of outgoing flows.
 
-Computing maximum s-t flows and minimum s-t cuts can be performed using the following 
-functions.
+Computing maximum s-t flows can be performed using the following function.
 
 .. autofunction:: jgrapht.algorithms.flow.max_st_flow
-
-.. autofunction:: jgrapht.algorithms.flow.min_st_cut
 
 When the user requires more advanced control over the selected 
 algorithm, the following functions are provided.

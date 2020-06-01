@@ -102,7 +102,17 @@ int jgrapht_connectivity_weak_exec_bfs(void *, int*, void**);
 
 // cut
 
-int jgrapht_cut_exec_stoer_wagner(void *, double*, void**);
+int jgrapht_cut_mincut_exec_stoer_wagner(void *, double*, void**);
+
+int jgrapht_cut_gomoryhu_exec_gusfield(void *, void**);
+
+int jgrapht_cut_gomoryhu_min_st_cut(void *, int, int, double*, void**);
+
+int jgrapht_cut_gomoryhu_min_cut(void *, double*, void**);
+
+int jgrapht_cut_gomoryhu_tree(void *, void**);
+
+int jgrapht_cut_oddmincutset_exec_padberg_rao(void *, void *, int, double*, void**);
 
 // cycles
 
@@ -199,14 +209,6 @@ int jgrapht_maxflow_exec_dinic(void *, int, int, double*, void**, void**);
 int jgrapht_maxflow_exec_edmonds_karp(void *, int, int, double*, void**, void**);
 
 int jgrapht_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double*, void**, void**);
-
-int jgrapht_gomoryhu_exec_gusfield(void *, void**);
-
-int jgrapht_gomoryhu_min_st_cut(void *, int, int, double*, void**);
-
-int jgrapht_gomoryhu_min_cut(void *, double*, void**);
-
-int jgrapht_gomoryhu_tree(void *, void**);
 
 int jgrapht_equivalentflowtree_exec_gusfield(void *, void**);
 

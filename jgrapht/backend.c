@@ -188,8 +188,28 @@ int jgrapht_connectivity_weak_exec_bfs(void *g, int* is_connected_res, void** re
 
 // cut
 
-int jgrapht_cut_exec_stoer_wagner(void *g, double* weight, void** res) { 
-    return jgrapht_capi_cut_exec_stoer_wagner(thread, g, weight, res);
+int jgrapht_cut_mincut_exec_stoer_wagner(void *g, double* weight, void** res) { 
+    return jgrapht_capi_cut_mincut_exec_stoer_wagner(thread, g, weight, res);
+}
+
+int jgrapht_cut_gomoryhu_exec_gusfield(void *g, void** gh_res) { 
+    return jgrapht_capi_cut_gomoryhu_exec_gusfield(thread, g, gh_res);
+}
+
+int jgrapht_cut_gomoryhu_min_st_cut(void *gh, int source, int sink, double* value_res, void** source_partition_res) { 
+    return jgrapht_capi_cut_gomoryhu_min_st_cut(thread, gh, source, sink, value_res, source_partition_res);
+}
+
+int jgrapht_cut_gomoryhu_min_cut(void *gh, double* value_res, void** source_partition_res) { 
+    return jgrapht_capi_cut_gomoryhu_min_cut(thread, gh, value_res, source_partition_res);
+}
+
+int jgrapht_cut_gomoryhu_tree(void *gh, void** tree_res) { 
+    return jgrapht_capi_cut_gomoryhu_tree(thread, gh, tree_res);
+}
+
+int jgrapht_cut_oddmincutset_exec_padberg_rao(void *g, void *odd_vertices, int use_tree_compression, double* value_res, void** source_partition_res) { 
+    return jgrapht_capi_cut_oddmincutset_exec_padberg_rao(thread, g, odd_vertices, use_tree_compression, value_res, source_partition_res);
 }
 
 // cycles
@@ -386,22 +406,6 @@ int jgrapht_mincostflow_exec_capacity_scaling(void *g, void *node_supply_fptr, v
    void *arc_capacity_upper_bound_fptr, int scaling_factor, double* cost_res, void** flow_res, void** dual_res) { 
     return jgrapht_capi_mincostflow_exec_capacity_scaling(thread, g, node_supply_fptr, arc_capacity_lower_bound_fptr, \
         arc_capacity_upper_bound_fptr, scaling_factor, cost_res, flow_res, dual_res);
-}
-
-int jgrapht_gomoryhu_exec_gusfield(void *g, void** gh_res) { 
-    return jgrapht_capi_gomoryhu_exec_gusfield(thread, g, gh_res);
-}
-
-int jgrapht_gomoryhu_min_st_cut(void *gh, int source, int sink, double* value_res, void** source_partition_res) { 
-    return jgrapht_capi_gomoryhu_min_st_cut(thread, gh, source, sink, value_res, source_partition_res);
-}
-
-int jgrapht_gomoryhu_min_cut(void *gh, double* value_res, void** source_partition_res) { 
-    return jgrapht_capi_gomoryhu_min_cut(thread, gh, value_res, source_partition_res);
-}
-
-int jgrapht_gomoryhu_tree(void *gh, void** tree_res) { 
-    return jgrapht_capi_gomoryhu_tree(thread, gh, tree_res);
 }
 
 int jgrapht_equivalentflowtree_exec_gusfield(void *g, void** eft_res) { 

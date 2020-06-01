@@ -113,17 +113,17 @@ class _JGraphTGomoryHuTree(_HandleWrapper, GomoryHuTree):
         self._graph = graph
 
     def as_graph(self):
-        tree_handle = _backend.jgrapht_gomoryhu_tree(self.handle)
+        tree_handle = _backend.jgrapht_cut_gomoryhu_tree(self.handle)
         return _JGraphTGraph(tree_handle)
 
     def min_cut(self):
-        cut_value, cut_source_partition_handle = _backend.jgrapht_gomoryhu_min_cut(
+        cut_value, cut_source_partition_handle = _backend.jgrapht_cut_gomoryhu_min_cut(
             self.handle
         )
         return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)
 
     def min_st_cut(self, s, t):
-        cut_value, cut_source_partition_handle = _backend.jgrapht_gomoryhu_min_st_cut(
+        cut_value, cut_source_partition_handle = _backend.jgrapht_cut_gomoryhu_min_st_cut(
             self.handle, s, t
         )
         return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)

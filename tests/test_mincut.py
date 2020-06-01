@@ -38,9 +38,57 @@ def build_graph():
     return g
 
 
-def test_stoer_wagner():
+def test_mincut_stoer_wagner():
     g = build_graph()
-    cut = cuts.stoer_wagner(g)
+    cut = cuts.mincut_stoer_wagner(g)
     assert cut.weight == 3.0
     assert cut.edges == set([8, 16, 17])
     assert cut.source_partition == set([9])
+
+
+
+def test_oddmincutset_padberg_rao():
+    g = build_graph()
+
+    cut = cuts.oddmincutset_padberg_rao(g, {1, 3, 4, 6})
+
+    assert cut.weight == 3.0
+    assert cut.edges == set([3, 11, 12])
+    assert cut.source_partition == set([4])
+
+    cut = cuts.oddmincutset_padberg_rao(g, {1, 3, 4, 6}, use_tree_compression=True)
+
+    assert cut.weight == 3.0
+    assert cut.edges == set([3, 11, 12])
+    assert cut.target_partition == set([4])
+
+    with pytest.raises(ValueError):
+        cuts.oddmincutset_padberg_rao(g, {1, 3, 4})
+
+
+
+def test_min_st_cut():
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_vertex(2)
+    g.add_vertex(3)
+
+    e01 = g.add_edge(0, 1, weight=20)
+    e02 = g.add_edge(0, 2, weight=10)
+    g.add_edge(1, 2, weight=30)
+    g.add_edge(1, 3, weight=10)
+    g.add_edge(2, 3, weight=20)
+
+    cut = cuts.min_st_cut(g, 0, 3)
+
+    assert cut.capacity == 30.0
+    assert cut.edges == set([e01, e02])
+    assert cut.source_partition == set([0])
+    assert cut.target_partition == set([1, 2, 3])
