@@ -12,6 +12,7 @@ from ..types import (
     PropertyGraph,
 )
 
+from ._collections import _JGraphTIntegerStringMap
 from ._listenable_view import _ListenableView
 
 
@@ -210,12 +211,18 @@ class _PropertyGraphView(Graph, PropertyGraph):
     def edge_props(self):
         return self._edge_attrs
 
+    def __repr__(self):
+        return "_PropertyGraphView(%r)" % self._graph.handle
+
     def _create_edge_it(self, edge_id_it):
+        """Transform an integer edge iteration into an edge iterator."""
         for eid in edge_id_it:
             yield self._edge_id_to_hash[eid]
 
     def _structural_event_listener(self, element, event_type):
-        # cleanup
+        """Listener for removal events. This is needed, as removing
+        a graph vertex might also remove edges.
+        """
         if event_type == GraphEvent.VERTEX_REMOVED:
             v = self._vertex_id_to_hash.pop(element)
             self._vertex_hash_to_id.pop(v)
@@ -224,9 +231,6 @@ class _PropertyGraphView(Graph, PropertyGraph):
             e = self._edge_id_to_hash.pop(element)
             self._edge_hash_to_id.pop(e)
             self._edge_hash_to_attrs.pop(e, None)
-
-    def __repr__(self):
-        return "_PropertyGraphView(%r)" % self._graph.handle
 
     class _VertexAttributes(MutableMapping):
         """Wrapper around a dictionary to ensure vertex existence."""
@@ -287,3 +291,4 @@ class _PropertyGraphView(Graph, PropertyGraph):
 
         def __repr__(self):
             return "_PropertyGraphView-EdgeAttibutes(%r)" % repr(self._storage)
+    

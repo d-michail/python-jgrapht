@@ -12,7 +12,7 @@ expected1_unescaped = r'{"creator":"JGraphT JSON Exporter","version":"1","nodes"
 
 expected2 = r'{"creator":"JGraphT JSON Exporter","version":"1","nodes":[{"id":"0"},{"id":"1"},{"id":"2"},{"id":"3"}],"edges":[{"source":"0","target":"1"},{"source":"0","target":"2"},{"source":"0","target":"3"},{"source":"2","target":"3"}]}'
 expected3 = r'{"creator":"JGraphT JSON Exporter","version":"1","nodes":[{"id":"0","label":"label 0"},{"id":"1","label":"label 1"},{"id":"2","label":"label 2"},{"id":"3","label":"label 3"},{"id":"4"},{"id":"5"},{"id":"6"},{"id":"7"},{"id":"8"},{"id":"9"}],"edges":[{"source":"0","target":"1"},{"source":"0","target":"2"},{"source":"0","target":"3"},{"source":"0","target":"4"},{"source":"0","target":"5"},{"source":"0","target":"6"},{"source":"0","target":"7"},{"source":"0","target":"8"},{"source":"0","target":"9"},{"source":"1","target":"2","label":"edge 1-2"},{"source":"2","target":"3"},{"source":"3","target":"4"},{"source":"4","target":"5"},{"source":"5","target":"6"},{"source":"6","target":"7"},{"source":"7","target":"8"},{"source":"8","target":"9"},{"source":"9","target":"1"}]}'
-
+expected4 = r'{"creator":"JGraphT JSON Exporter","version":"1","nodes":[{"id":"v0"},{"id":"v1"},{"id":"v2"},{"id":"v3"}],"edges":[{"source":"v0","target":"v1"},{"source":"v0","target":"v2"},{"source":"v0","target":"v3"},{"source":"v2","target":"v3"}]}'
 
 def build_graph():
     g = create_graph(
@@ -253,5 +253,6 @@ def test_property_graph_output_to_string():
     pg.add_edge('v0', 'v3', 'e03')
     pg.add_edge('v2', 'v3', 'e23')
 
-    out = generate_json(g)
-    assert out.splitlines() == expected2.splitlines()
+    out = generate_json(pg)
+
+    assert out.splitlines() == expected4.splitlines()
