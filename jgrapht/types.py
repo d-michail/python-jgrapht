@@ -824,6 +824,25 @@ class DirectedAcyclicGraph(Graph):
         pass
 
 
+class PropertyGraph(ABC):
+    """A graph which contains vertex/edge/graph properties."""
+
+    @abstractmethod
+    def vertex_props(self):
+        """Dictionary with vertex properties."""
+        pass
+
+    @abstractmethod
+    def edge_props(self):
+        """Dictionary with edge properties."""
+        pass
+
+    @abstractmethod
+    def graph_props(self):
+        """Dictionary with graph properties."""
+        pass
+
+
 class LayoutModel2D:
     """A 2D Layout Model."""
 
