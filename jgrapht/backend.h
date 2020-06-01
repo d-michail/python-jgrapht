@@ -612,15 +612,21 @@ int jgrapht_map_int_double_put(void *, int, double);
 
 int jgrapht_map_int_int_put(void *, int, int);
 
+int jgrapht_map_int_string_put(void *, int, char*);
+
 int jgrapht_map_int_double_get(void *, int, double*);
 
 int jgrapht_map_int_int_get(void *, int, int*);
+
+int jgrapht_map_int_string_get(void *, int, void**);
 
 int jgrapht_map_int_contains_key(void *, int, int*);
 
 int jgrapht_map_int_double_remove(void *, int, double*);
 
 int jgrapht_map_int_int_remove(void *, int, int*);
+
+int jgrapht_map_int_string_remove(void *, int, void**);
 
 int jgrapht_map_clear(void *);
 

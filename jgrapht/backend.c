@@ -1186,12 +1186,20 @@ int jgrapht_map_int_int_put(void *map, int key, int value) {
     return jgrapht_capi_map_int_int_put(thread, map, key, value);
 }
 
+int jgrapht_map_int_string_put(void *map, int key, char* value) { 
+    return jgrapht_capi_map_int_string_put(thread, map, key, value);
+}
+
 int jgrapht_map_int_double_get(void *map, int key, double* res) { 
     return jgrapht_capi_map_int_double_get(thread, map, key, res);
 }
 
 int jgrapht_map_int_int_get(void *map, int key, int* res) { 
     return jgrapht_capi_map_int_int_get(thread, map, key, res);
+}
+
+int jgrapht_map_int_string_get(void *map, int key, void** res) { 
+    return jgrapht_capi_map_int_string_get(thread, map, key, res);
 }
 
 int jgrapht_map_int_contains_key(void *map, int key, int* res) { 
@@ -1204,6 +1212,10 @@ int jgrapht_map_int_double_remove(void *map, int key, double* res) {
 
 int jgrapht_map_int_int_remove(void *map, int key, int* res) {
     return jgrapht_capi_map_int_int_remove(thread, map, key, res);
+}
+
+int jgrapht_map_int_string_remove(void *map, int key, void** res) { 
+    return jgrapht_capi_map_int_string_remove(thread, map, key, res);
 }
 
 int jgrapht_map_clear(void *map) { 
