@@ -3,6 +3,7 @@ import pytest
 from jgrapht import create_graph
 from jgrapht.io.exporters import write_dot, generate_dot
 from jgrapht.io.importers import read_dot, parse_dot
+from jgrapht.views import as_property_graph
 
 
 def build_graph():
@@ -80,3 +81,34 @@ def test_output_to_string():
         out.splitlines()
         == "digraph G {\n  0;\n  1;\n  2;\n  3;\n  0 -> 1;\n  0 -> 2;\n  0 -> 3;\n  2 -> 3;\n}\n".splitlines()
     )
+
+
+
+def test_property_graph_output_to_string():
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=False,
+    )
+
+    g = as_property_graph(g)
+
+    g.add_vertex('v1')
+    g.add_vertex('v2')
+    g.add_edge('v1', 'v2', 'e12')
+
+    g.vertex_props['v1']['color'] = 'red'
+    g.vertex_props['v2']['color'] = 'blue'
+    g.edge_props['e12']['capacity'] = 5.0
+
+    out = generate_dot(g)
+
+    expected=r"""digraph G {
+  v1 [ color="red" ];
+  v2 [ color="blue" ];
+  v1 -> v2 [ capacity="5.0" ];
+}
+"""
+
+    assert out.splitlines() == expected.splitlines()
