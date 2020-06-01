@@ -5,6 +5,9 @@ from jgrapht import create_graph
 from jgrapht.io.exporters import write_graphml, generate_graphml
 from jgrapht.io.importers import read_graphml, parse_graphml
 
+from jgrapht.views import as_property_graph
+
+
 expected1 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <graph edgedefault="directed">
         <node id="0"/>
@@ -85,6 +88,52 @@ expected3 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://gra
     </graph>
 </graphml>"""
 
+
+expected4=r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <key id="edge_weight_key" for="edge" attr.name="weight" attr.type="double">
+        <default>1.0</default>
+    </key>
+    <key id="key0" for="edge" attr.name="cost" attr.type="double"/>
+    <key id="key1" for="node" attr.name="name" attr.type="string"/>
+    <graph edgedefault="directed">
+        <node id="0">
+            <data key="key1">κόμβος 0</data>
+        </node>
+        <node id="1">
+            <data key="key1">node 1</data>
+        </node>
+        <node id="2"/>
+        <node id="3"/>
+        <node id="4"/>
+        <node id="5"/>
+        <node id="6"/>
+        <node id="7"/>
+        <node id="8"/>
+        <node id="9"/>
+        <edge source="0" target="1"/>
+        <edge source="0" target="2"/>
+        <edge source="0" target="3"/>
+        <edge source="0" target="4"/>
+        <edge source="0" target="5"/>
+        <edge source="0" target="6"/>
+        <edge source="0" target="7"/>
+        <edge source="0" target="8"/>
+        <edge source="0" target="9"/>
+        <edge source="1" target="2"/>
+        <edge source="2" target="3"/>
+        <edge source="3" target="4"/>
+        <edge source="4" target="5"/>
+        <edge source="5" target="6"/>
+        <edge source="6" target="7"/>
+        <edge source="7" target="8"/>
+        <edge source="8" target="9">
+            <data key="key0">48.5</data>
+        </edge>
+        <edge source="9" target="1">
+            <data key="edge_weight_key">33.3</data>
+        </edge>
+    </graph>
+</graphml>"""
 
 def test_export_import(tmpdir):
 
@@ -297,3 +346,57 @@ def test_output_to_string_with_attrs():
     )
 
     assert out.splitlines() == expected3.splitlines()
+
+
+def test_property_graph_output_to_string_with_attrs():
+
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+
+    g = as_property_graph(g)
+
+    for i in range(0, 10):
+        g.add_vertex(i)
+
+    g.add_edge(0, 1, "e01")
+    g.add_edge(0, 2, "e02")
+    g.add_edge(0, 3, "e03")
+    g.add_edge(0, 4, "e04")
+    g.add_edge(0, 5, "e05")
+    g.add_edge(0, 6, "e06")
+    g.add_edge(0, 7, "e07")
+    g.add_edge(0, 8, "e08")
+    g.add_edge(0, 9, "e09")
+
+    g.add_edge(1, 2, "e12")
+    g.add_edge(2, 3, "e23")
+    g.add_edge(3, 4, "e34")
+    g.add_edge(4, 5, "e45")
+    g.add_edge(5, 6, "e56")
+    g.add_edge(6, 7, "e67")
+    g.add_edge(7, 8, "e78")
+    g.add_edge(8, 9, "e89")
+    g.add_edge(9, 1, "e91")
+
+    g.set_edge_weight("e91", 33.3)
+
+    assert len(g.edges) == 18
+
+    attrs = [("cost", "edge", "double", None), ("name", "node", "string", None)]
+
+    v_dict = {0: {"name": "κόμβος 0"}, 1: {"name": "node 1"}}
+    e_dict = {"e89": {"cost": "48.5"}}
+
+    out = generate_graphml(
+        g,
+        attrs=attrs,
+        per_vertex_attrs_dict=v_dict,
+        per_edge_attrs_dict=e_dict,
+        export_edge_weights=True,
+    )
+
+    assert out.splitlines() == expected4.splitlines()

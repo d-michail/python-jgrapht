@@ -65,7 +65,11 @@ def _vertex_attributes_store(graph, attributes_dict):
         if attributes_dict is not None:
             for v, attr_dict in attributes_dict.items():
                 for key, value in attr_dict.items():
-                    attribute_store.put(graph._vertex_hash_to_id[v], key, str(value))
+                    try:
+                        attribute_store.put(graph._vertex_hash_to_id[v], key, str(value))
+                    except KeyError:
+                        # ignore
+                        pass
     else:
         # default graph
         if attributes_dict is not None:
@@ -107,7 +111,11 @@ def _edge_attributes_store(graph, attributes_dict):
         if attributes_dict is not None:
             for e, attr_dict in attributes_dict.items():
                 for key, value in attr_dict.items():
-                    attribute_store.put(graph._edge_hash_to_id[e], key, str(value))
+                    try:
+                        attribute_store.put(graph._edge_hash_to_id[e], key, str(value))
+                    except KeyError:
+                        # just ignore
+                        pass
     else:
         # default graph
         if attributes_dict is not None:
