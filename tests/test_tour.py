@@ -85,7 +85,7 @@ def test_tsp_held_karp():
 def test_hamiltonian_palmer():
     g = build_graph()
     path = tour.hamiltonian_palmer(g)
-    assert path.weight == 8.0
+    assert path.weight == 52.0
     assert path.start_vertex == path.end_vertex
     assert path.start_vertex == 0
 
