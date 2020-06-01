@@ -675,8 +675,8 @@ def generate_gexf(
     :raises IOError: In case of an export error         
     """
     attrs_registry = _JGraphTAttributesRegistry()
-    for name, category, type, default_value in attrs:
-        attrs_registry.put(name, category, type, default_value)
+    for name, category, attr_type, default_value in attrs:
+        attrs_registry.put(name, category, attr_type, default_value)
 
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)

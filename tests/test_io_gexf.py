@@ -3,6 +3,7 @@ import pytest
 from jgrapht import create_graph
 from jgrapht.io.importers import read_gexf, parse_gexf
 from jgrapht.io.exporters import write_gexf, generate_gexf
+from jgrapht.views import as_property_graph
 
 input1 = r"""<?xml version="1.0" encoding="UTF-8"?>
 <gexf xmlns="http://www.gexf.net/1.2draft"
@@ -42,6 +43,49 @@ expected = r"""<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.gex
 </gexf>
 """
 
+expected1 = r"""<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.gexf.net/1.2draft" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <graph defaultedgetype="directed">
+        <nodes>
+            <node id="v1" label="0"/>
+            <node id="v2" label="1"/>
+            <node id="v3" label="2"/>
+        </nodes>
+        <edges>
+            <edge id="e12" source="v1" target="v2"/>
+            <edge id="e13" source="v1" target="v3"/>
+        </edges>
+    </graph>
+</gexf>
+"""
+
+expected2 = r"""<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.gexf.net/1.2draft" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <graph defaultedgetype="directed">
+        <attributes class="node">
+            <attribute id="0" title="name" type="string"/>
+        </attributes>
+        <nodes>
+            <node id="v1" label="0">
+                <attvalues>
+                    <attvalue for="0" value="v1"/>
+                </attvalues>
+            </node>
+            <node id="v2" label="1">
+                <attvalues>
+                    <attvalue for="0" value="v2"/>
+                </attvalues>
+            </node>
+            <node id="v3" label="2">
+                <attvalues>
+                    <attvalue for="0" value="v3"/>
+                </attvalues>
+            </node>
+        </nodes>
+        <edges>
+            <edge id="e12" source="v1" target="v2"/>
+            <edge id="e23" source="v2" target="v3"/>
+        </edges>
+    </graph>
+</gexf>"""
 
 def test_input_gexf(tmpdir):
     g = create_graph(
@@ -186,3 +230,29 @@ def test_output_to_string():
     out = generate_gexf(g)
 
     assert out.splitlines() == expected.splitlines()
+
+
+def test_property_graph_output_to_string():
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=False,
+    )
+
+    g = as_property_graph(g)
+
+    g.add_vertices_from(['v1', 'v2', 'v3'])
+    g.add_edge('v1', 'v2', 'e12')
+    g.add_edge('v2', 'v3', 'e23')
+
+    g.vertex_props['v1']['label'] = "0"
+    g.vertex_props['v1']['name'] = "v1"
+    g.vertex_props['v2']['label'] = "1"
+    g.vertex_props['v2']['name'] = "v2"
+    g.vertex_props['v3']['label'] = "2"
+    g.vertex_props['v3']['name'] = "v3"
+
+    out = generate_gexf(g, attrs=[('name', 'node', None, None)])
+
+    assert out.splitlines() == expected2.splitlines()
