@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 from jgrapht.generators import complete_graph
 import jgrapht.algorithms.tour as tour
 
@@ -110,3 +110,26 @@ def test_tsp_two_opt_improve():
     assert path2.weight == 27.0
     assert path2.start_vertex == path2.end_vertex
     assert path2.start_vertex == 1
+
+
+def test_random_tsp():
+    g = create_property_graph(directed=False, weighted=True)
+
+    g.add_vertex("0")
+    g.add_vertex("1")
+    g.add_vertex("2")
+
+    g.add_edge("0","1",edge="0")
+    g.add_edge("1","2",edge="1")
+    g.add_edge("2","0",edge="2")
+
+    path = tour.tsp_random(g, 17)
+
+    assert path.weight == 3.0
+    assert path.start_vertex == path.end_vertex
+    assert path.start_vertex == "2"
+
+    path2 = tour.tsp_two_opt_heuristic_improve(path, seed=17)
+    assert path2.weight == 3.0
+    assert path2.start_vertex == path2.end_vertex
+    assert path2.start_vertex == "2"

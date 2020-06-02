@@ -1,9 +1,12 @@
 import time
 
 from .. import backend as _backend
+
 from .._internals._wrappers import _JGraphTIntegerIterator
 from .._internals._paths import _JGraphTGraphPath
 
+from .._internals._pg import is_property_graph
+from .._internals._pg_paths import _PropertyGraphGraphPath
 
 def _tour_tsp_alg(name, graph, *args):
     alg_method_name = "jgrapht_tour_" + name
@@ -15,7 +18,10 @@ def _tour_tsp_alg(name, graph, *args):
 
     graph_path = alg_method(graph.handle, *args)
 
-    return _JGraphTGraphPath(graph_path, graph)
+    if is_property_graph(graph):
+        return _PropertyGraphGraphPath(graph_path, graph)
+    else:
+        return _JGraphTGraphPath(graph_path, graph)
 
 
 def tsp_random(graph, seed=None):
@@ -177,4 +183,9 @@ def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=
         seed = time.time()
 
     new_graph_path_handle = _backend.jgrapht_tour_tsp_two_opt_heuristic_improve(graph_path.handle, min_cost_improvement, seed)
-    return _JGraphTGraphPath(new_graph_path_handle, graph_path.graph)
+
+    graph = graph_path.graph
+    if is_property_graph(graph):
+        return _PropertyGraphGraphPath(new_graph_path_handle, graph)
+    else:
+        return _JGraphTGraphPath(new_graph_path_handle, graph)
