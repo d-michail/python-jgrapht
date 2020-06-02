@@ -1,8 +1,8 @@
+from collections import defaultdict
 from collections.abc import (
     Set,
     MutableMapping,
 )
-from collections import defaultdict
 
 from .. import backend
 from ..types import (
@@ -12,16 +12,20 @@ from ..types import (
     PropertyGraph,
 )
 
+from ._views import _ListenableView
 from ._collections import _JGraphTIntegerStringMap
-from ._listenable_view import _ListenableView
 
 
-class _PropertyGraphView(Graph, PropertyGraph):
+class _PropertyGraph(Graph, PropertyGraph):
     """A graph view which allows the use of any hashable as vertex and edges.
     This is a wrapper around the default graph which has integer identifiers, 
     which means that there is a performance penalty involved. The graph also 
     supports properties (attributes) on graph vertices/edges and the graph 
     itself.
+
+    This graphs does not directly wrap a backend graph, but it passes through 
+    the handle which means that it is usable in all algorithms. The result 
+    however will refer to the actual graph and not the property graph wrapper.
     """
 
     def __init__(self, graph, **kwargs):
@@ -220,7 +224,7 @@ class _PropertyGraphView(Graph, PropertyGraph):
         return self._edge_attrs
 
     def __repr__(self):
-        return "_PropertyGraphView(%r)" % self._graph.handle
+        return "_PropertyGraph(%r)" % self._graph.handle
 
     def _create_edge_it(self, edge_id_it):
         """Transform an integer edge iteration into an edge iterator."""
@@ -268,7 +272,7 @@ class _PropertyGraphView(Graph, PropertyGraph):
             return iter(self._storage)
 
         def __repr__(self):
-            return "_PropertyGraphView-VertexAttibutes(%r)" % repr(self._storage)
+            return "_PropertyGraph-VertexAttibutes(%r)" % repr(self._storage)
 
     class _EdgeAttributes(MutableMapping):
         """Wrapper around a dictionary to ensure edge existence."""
@@ -298,5 +302,10 @@ class _PropertyGraphView(Graph, PropertyGraph):
             return iter(self._storage)
 
         def __repr__(self):
-            return "_PropertyGraphView-EdgeAttibutes(%r)" % repr(self._storage)
+            return "_PropertyGraph-EdgeAttibutes(%r)" % repr(self._storage)
+    
+
+def is_property_graph(graph):
+    """Check if a graph instance is a property graph."""
+    return isinstance(graph, (_PropertyGraph, PropertyGraph))
     

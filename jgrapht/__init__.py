@@ -14,13 +14,13 @@ from .__version__ import __author__, __author_email__, __license__
 from .__version__ import __copyright__
 from .__version__ import __bibtex__
 
+
+
 # Create main thread and setup cleanup
 from . import backend
 import atexit
-
 backend.jgrapht_isolate_create()
 del backend
-
 
 def _module_cleanup_function():
     from . import backend
@@ -28,10 +28,14 @@ def _module_cleanup_function():
     if backend.jgrapht_isolate_is_attached():
         backend.jgrapht_isolate_destroy()
 
-
 atexit.register(_module_cleanup_function)
 del atexit
 
+# Set default logging handler to avoid "No handler found" warnings.
+import logging
+logging.getLogger(__name__).addHandler(logging.NullHandler())
+
+# Import graph api
 from ._internals._graphs import (
     create_graph,
     create_directed_graph,
@@ -40,6 +44,8 @@ from ._internals._graphs import (
     create_sparse_graph,
     as_sparse_graph,
 )
+
+from ._internals._property_graphs import is_property_graph
 
 from . import (
     types,
@@ -51,8 +57,3 @@ from . import (
     algorithms,
     io,
 )
-
-# Set default logging handler to avoid "No handler found" warnings.
-import logging
-
-logging.getLogger(__name__).addHandler(logging.NullHandler())

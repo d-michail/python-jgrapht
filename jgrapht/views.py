@@ -6,10 +6,10 @@ from ._internals._views import (
     _MaskedSubgraphView,
     _WeightedView,
     _GraphUnion,
+    _ListenableView,
 )
 
-from ._internals._listenable_view import _ListenableView
-from ._internals._property_graph_view import _PropertyGraphView
+from ._internals._property_graphs import _PropertyGraph
 
 
 def as_unweighted(graph):
@@ -140,4 +140,4 @@ def as_property_graph(graph):
     :param graph: the original graph
     :returns: a property graph which is an instance of type :py:class:`~jgrapht.types.PropertyGraph`.
     """
-    return _PropertyGraphView(graph)
+    return _PropertyGraph(graph)
