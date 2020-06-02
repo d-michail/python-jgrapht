@@ -96,7 +96,7 @@ def test_property_graph_output_to_string():
 
     g.add_vertex('v1')
     g.add_vertex('v2')
-    g.add_edge('v1', 'v2', 'e12')
+    g.add_edge('v1', 'v2', edge='e12')
 
     g.vertex_props['v1']['color'] = 'red'
     g.vertex_props['v2']['color'] = 'blue'

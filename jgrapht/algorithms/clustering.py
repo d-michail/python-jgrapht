@@ -1,7 +1,10 @@
-from .. import backend as _backend
-from .._internals._clustering import _JGraphTClustering
-
 import time
+from .. import backend as _backend
+
+from .._internals._pg import is_property_graph
+from .._internals._clustering import _JGraphTClustering
+from .._internals._pg_clustering import _PropertyGraphClustering
+
 
 
 def _clustering_alg(name, graph, *args):
@@ -15,7 +18,10 @@ def _clustering_alg(name, graph, *args):
 
     handle = alg_method(graph.handle, *args)
 
-    return _JGraphTClustering(handle)
+    if is_property_graph(graph):
+        return _PropertyGraphClustering(handle, graph)
+    else:
+        return _JGraphTClustering(handle)
 
 
 def k_spanning_tree(graph, k):

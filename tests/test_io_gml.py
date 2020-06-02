@@ -660,8 +660,8 @@ def test_output_property_graph_to_string():
     g.add_vertex(0)
     g.add_vertex(2)
 
-    g.add_edge(0, 2, 'e1')
-    g.add_edge(2, 0, 'e2')
+    g.add_edge(0, 2, edge='e1')
+    g.add_edge(2, 0, edge='e2')
 
     g.vertex_props[0]['color'] = 'red'
 

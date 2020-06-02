@@ -250,10 +250,10 @@ def test_property_graph_output_to_string():
     pg.add_vertex("v2")
     pg.add_vertex("v3")
 
-    pg.add_edge("v0", "v1", "e01")
-    pg.add_edge("v0", "v2", "e02")
-    pg.add_edge("v0", "v3", "e03")
-    pg.add_edge("v2", "v3", "e23")
+    pg.add_edge("v0", "v1", edge="e01")
+    pg.add_edge("v0", "v2", edge="e02")
+    pg.add_edge("v0", "v3", edge="e03")
+    pg.add_edge("v2", "v3", edge="e23")
 
     out = generate_json(pg)
 
@@ -275,10 +275,10 @@ def test_property_graph_with_labels_output_to_string():
     pg.add_vertex("v2")
     pg.add_vertex("v3")
 
-    pg.add_edge("v0", "v1", "e01")
-    pg.add_edge("v0", "v2", "e02")
-    pg.add_edge("v0", "v3", "e03")
-    pg.add_edge("v2", "v3", "e23")
+    pg.add_edge("v0", "v1", edge="e01")
+    pg.add_edge("v0", "v2", edge="e02")
+    pg.add_edge("v0", "v3", edge="e03")
+    pg.add_edge("v2", "v3", edge="e23")
 
     pg.vertex_props["v0"]["color"] = "red"
     pg.vertex_props["v1"]["color"] = "blue"
@@ -308,10 +308,10 @@ def test_property_graph_output_to_file_json(tmpdir):
     pg.add_vertex("v2")
     pg.add_vertex("v3")
 
-    pg.add_edge("v0", "v1", "e01")
-    pg.add_edge("v0", "v2", "e02")
-    pg.add_edge("v0", "v3", "e03")
-    pg.add_edge("v2", "v3", "e23")
+    pg.add_edge("v0", "v1", edge="e01")
+    pg.add_edge("v0", "v2", edge="e02")
+    pg.add_edge("v0", "v3", edge="e03")
+    pg.add_edge("v2", "v3", edge="e23")
 
     tmpfile = tmpdir.join("json.out")
     tmpfilename = str(tmpfile)

@@ -243,8 +243,8 @@ def test_property_graph_output_to_string():
     g = as_property_graph(g)
 
     g.add_vertices_from(['v1', 'v2', 'v3'])
-    g.add_edge('v1', 'v2', 'e12')
-    g.add_edge('v2', 'v3', 'e23')
+    g.add_edge('v1', 'v2', edge='e12')
+    g.add_edge('v2', 'v3', edge='e23')
 
     g.vertex_props['v1']['label'] = "0"
     g.vertex_props['v1']['name'] = "v1"

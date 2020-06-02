@@ -79,9 +79,9 @@ class _PropertyGraph(Graph, PropertyGraph):
     def type(self):
         return self._graph.type
 
-    def add_vertex(self, v=None):
-        if v is not None and v in self._vertex_hash_to_id:
-            return v
+    def add_vertex(self, vertex=None):
+        if vertex is not None and vertex in self._vertex_hash_to_id:
+            return vertex
 
         vid = self._graph.add_vertex()
 
@@ -92,15 +92,15 @@ class _PropertyGraph(Graph, PropertyGraph):
 
         # Override if user has given an explicit vertex. This will bypass values
         # in the vertex supplier.
-        if v is not None:
+        if vertex is not None:
             oldv = self._vertex_id_to_hash[vid]
             del self._vertex_hash_to_id[oldv]
-            self._vertex_hash_to_id[v] = vid
-            self._vertex_id_to_hash[vid] = v
+            self._vertex_hash_to_id[vertex] = vid
+            self._vertex_id_to_hash[vid] = vertex
         else:
-            v = self._vertex_id_to_hash[vid]
+            vertex = self._vertex_id_to_hash[vid]
 
-        return v
+        return vertex
 
     def remove_vertex(self, v):
         if v is None:
@@ -114,9 +114,9 @@ class _PropertyGraph(Graph, PropertyGraph):
     def contains_vertex(self, v):
         return v in self._vertex_hash_to_id
 
-    def add_edge(self, u, v, e=None):
-        if e is not None and e in self._edge_hash_to_id:
-            return e
+    def add_edge(self, u, v, weight=None, edge=None):
+        if edge is not None and edge in self._edge_hash_to_id:
+            return edge
 
         uid = self._vertex_hash_to_id.get(u)
         if uid is None:
@@ -134,15 +134,18 @@ class _PropertyGraph(Graph, PropertyGraph):
 
         # Override if user has given an explicit edge. This will bypass values
         # in the edge supplier.
-        if e is not None:
+        if edge is not None:
             olde = self._edge_id_to_hash[eid]
             del self._edge_hash_to_id[olde]
-            self._edge_hash_to_id[e] = eid
-            self._edge_id_to_hash[eid] = e
+            self._edge_hash_to_id[edge] = eid
+            self._edge_id_to_hash[eid] = edge
         else:
-            e = self._edge_id_to_hash[eid]
+            edge = self._edge_id_to_hash[eid]
 
-        return e
+        if weight is not None:
+            self._graph.set_edge_weight(eid, weight) 
+
+        return edge
 
     def remove_edge(self, e):
         if e is None:

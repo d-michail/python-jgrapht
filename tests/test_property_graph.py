@@ -37,14 +37,14 @@ def test_any_graph():
     assert g.vertices == {"v1", "v2", "v3", "v4", "v5", "v6"}
     assert len(g.vertices) == 6
 
-    g.add_edge("v1", "v2", "e12")
-    g.add_edge("v1", "v3", "e13")
-    g.add_edge("v1", "v4", "e14")
-    g.add_edge("v1", "v5", "e15")
-    g.add_edge("v5", "v1", "e51_1")
-    g.add_edge("v5", "v1", "e51_2")
-    g.add_edge("v3", "v6", "e36")
-    g.add_edge("v6", "v6", "e66")
+    g.add_edge("v1", "v2", edge="e12")
+    g.add_edge("v1", "v3", edge="e13")
+    g.add_edge("v1", "v4", edge="e14")
+    g.add_edge("v1", "v5", edge="e15")
+    g.add_edge("v5", "v1", edge="e51_1")
+    g.add_edge("v5", "v1", edge="e51_2")
+    g.add_edge("v3", "v6", edge="e36")
+    g.add_edge("v6", "v6", edge="e66")
 
     assert len(g.edges) == 8
 
@@ -191,7 +191,7 @@ def test_any_graph_of_graphs():
     g.add_vertex(g1)
     g.add_vertex(g2)
 
-    g.add_edge(g1, g2, g3)
+    g.add_edge(g1, g2, edge=g3)
 
     assert str(g) == '({({0, 1}, {0=(0,1)}), ({2, 3}, {0=(2,3)})}, {({4, 5}, {0=(4,5)})=(({0, 1}, {0=(0,1)}),({2, 3}, {0=(2,3)}))})'
 
