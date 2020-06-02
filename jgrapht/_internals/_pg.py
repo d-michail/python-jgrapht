@@ -29,7 +29,16 @@ class _PropertyGraph(Graph, PropertyGraph):
     however will refer to the actual graph and not the property graph wrapper.
     """
 
-    def __init__(self, graph, **kwargs):
+    def __init__(self, graph, vertex_supplier=None, edge_supplier=None, **kwargs):
+        """Initialize a property graph
+
+        :param graph: the actual graph which we are wrapping. Must have integer 
+          vertices and edges.
+        :param vertex_supplier: function which returns new vertices on each call. If
+          None then object instances are used.
+        :param edge_supplier: function which returns new edge on each call. If
+          None then object instances are used.
+        """
         # setup structural events callback
         def structural_cb(element, event_type):
             self._structural_event_listener(element, event_type)
@@ -49,7 +58,16 @@ class _PropertyGraph(Graph, PropertyGraph):
         self._edge_hash_to_attrs = defaultdict(lambda: {})
         self._edge_attrs = self._EdgeAttributes(self, self._edge_hash_to_attrs)
 
+        # initialize graph maps
         self._graph_attrs = {}
+
+        # initialize suppliers
+        if vertex_supplier is None:
+            vertex_supplier = lambda: object()
+        self._vertex_supplier = vertex_supplier
+        if edge_supplier is None:
+            edge_supplier = lambda: object()
+        self._edge_supplier = edge_supplier
 
     @property
     def handle(self):
@@ -60,14 +78,20 @@ class _PropertyGraph(Graph, PropertyGraph):
     def type(self):
         return self._graph.type
 
-    def add_vertex(self, v):
+    def add_vertex(self, v=None):
         if v is None:
-            raise ValueError("Vertex cannot be None")
-        if v in self._vertex_hash_to_id:
-            return
+            v = self._vertex_supplier()
+            if v in self._vertex_hash_to_id:
+                raise ValueError(
+                    "Vertex supplier returns vertices already in the graph"
+                )
+        else:
+            if v in self._vertex_hash_to_id:
+                return v
         vid = self._graph.add_vertex()
         self._vertex_hash_to_id[v] = vid
         self._vertex_id_to_hash[vid] = v
+        return v
 
     def remove_vertex(self, v):
         if v is None:
@@ -81,11 +105,14 @@ class _PropertyGraph(Graph, PropertyGraph):
     def contains_vertex(self, v):
         return v in self._vertex_hash_to_id
 
-    def add_edge(self, u, v, e):
+    def add_edge(self, u, v, e=None):
         if e is None:
-            raise ValueError("Edge cannot be None")
-        if e in self._edge_hash_to_id:
-            return False
+            e = self._edge_supplier()
+            if e in self._edge_hash_to_id:
+                raise ValueError("Edge supplier returns edges already in the graph")
+        else:
+            if e in self._edge_hash_to_id:
+                return e
 
         uid = self._vertex_hash_to_id.get(u)
         if uid is None:
@@ -97,7 +124,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         eid = self._graph.add_edge(uid, vid)
         self._edge_hash_to_id[e] = eid
         self._edge_id_to_hash[eid] = e
-        return True
+        return e
 
     def remove_edge(self, e):
         if e is None:
@@ -332,6 +359,8 @@ def create_property_graph(
     allowing_self_loops=False,
     allowing_multiple_edges=False,
     weighted=True,
+    vertex_supplier=None,
+    edge_supplier=None,
 ):
     """Create a property graph.
 
@@ -339,6 +368,10 @@ def create_property_graph(
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
+    :param vertex_supplier: function which returns new vertices on each call. If
+        None then object instances are used.
+    :param edge_supplier: function which returns new edges on each call. If
+        None then object instances are used.    
     :returns: a graph
     :rtype: :class:`~jgrapht.types.PropertyGraph`    
     """
@@ -348,17 +381,27 @@ def create_property_graph(
         allowing_multiple_edges=allowing_multiple_edges,
         weighted=weighted,
     )
-    return _PropertyGraph(g)
+    return _PropertyGraph(
+        g, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
+    )
 
 
 def create_directed_property_graph(
-    allowing_self_loops=False, allowing_multiple_edges=False, weighted=True,
+    allowing_self_loops=False,
+    allowing_multiple_edges=False,
+    weighted=True,
+    vertex_supplier=None,
+    edge_supplier=None,
 ):
     """Create a directed property graph.
 
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
+    :param vertex_supplier: function which returns new vertices on each call. If
+        None then object instances are used.
+    :param edge_supplier: function which returns new edge on each call. If
+        None then object instances are used.        
     :returns: a graph
     :rtype: :class:`~jgrapht.types.PropertyGraph`    
     """
@@ -367,17 +410,27 @@ def create_directed_property_graph(
         allowing_self_loops=allowing_self_loops,
         allowing_multiple_edges=allowing_multiple_edges,
         weighted=weighted,
+        vertex_supplier=vertex_supplier,
+        edge_supplier=edge_supplier,
     )
 
 
 def create_undirected_property_graph(
-    allowing_self_loops=False, allowing_multiple_edges=False, weighted=True,
+    allowing_self_loops=False,
+    allowing_multiple_edges=False,
+    weighted=True,
+    vertex_supplier=None,
+    edge_supplier=None,
 ):
     """Create an undirected property graph.
 
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
+    :param vertex_supplier: function which returns new vertices on each call. If
+        None then object instances are used.
+    :param edge_supplier: function which returns new edge on each call. If
+        None then object instances are used.        
     :returns: a graph
     :rtype: :class:`~jgrapht.types.PropertyGraph`    
     """
@@ -386,4 +439,6 @@ def create_undirected_property_graph(
         allowing_self_loops=allowing_self_loops,
         allowing_multiple_edges=allowing_multiple_edges,
         weighted=weighted,
+        vertex_supplier=vertex_supplier,
+        edge_supplier=edge_supplier,
     )

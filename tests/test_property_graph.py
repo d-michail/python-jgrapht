@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 from jgrapht.views import as_property_graph
 
 def test_any_graph():
@@ -204,3 +204,91 @@ def test_any_graph_of_graphs():
 
     assert g.edge_source(g3) == g1
     assert g.edge_target(g3) == g2
+
+
+def test_suppliers_graph():
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+
+    assert g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
+
+    v0 = g.add_vertex()
+    g.add_vertex("v1")
+    v2 = g.add_vertex()
+
+    assert g.contains_vertex(v0)
+    assert g.contains_vertex("v1")
+    assert g.contains_vertex(v2)
+    assert not g.contains_vertex("v7")
+
+    assert g.vertices == {v0, "v1", v2}
+    assert len(g.vertices) == 3
+
+    e02 = g.add_edge(v0, v2)
+
+    assert g.edge_source(e02) == v0
+    assert g.edge_target(e02) == v2
+
+    assert len(g.edges) == 1
+
+    assert g.edges == {e02}
+
+
+def test_with_string_suppliers_graph():
+
+    class StringSupplier:
+        def __init__(self):
+            self._count = 0
+        
+        def __call__(self):
+            self._count += 1
+            return str(self._count)
+
+    supplier = StringSupplier()
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+        vertex_supplier=supplier, 
+        edge_supplier=supplier,
+    )
+
+    assert g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
+
+    g.add_vertex()
+    g.add_vertex("v1")
+    g.add_vertex()
+
+    assert g.contains_vertex("1")
+    assert g.contains_vertex("v1")
+    assert g.contains_vertex("2")
+
+    assert g.vertices == {"1", "v1", "2"}
+    assert len(g.vertices) == 3
+
+    g.add_edge("1", "2")
+
+    assert g.edge_source("3") == "1"
+    assert g.edge_target("3") == "2"
+
+    assert len(g.edges) == 1
+
+    assert g.edges == {"3"}
+
+    g.add_vertex("4")
+
+    with pytest.raises(ValueError):
+        g.add_vertex()
