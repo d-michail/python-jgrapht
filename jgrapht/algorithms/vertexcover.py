@@ -1,8 +1,12 @@
 from .. import backend as _backend
+
 from .._internals._collections import (
     _JGraphTIntegerDoubleMutableMap,
     _JGraphTIntegerSet,
 )
+
+from .._internals._pg import is_property_graph, vertex_pg_to_g as _vertex_pg_to_g
+from .._internals._pg_collections import _PropertyGraphVertexSet
 
 
 def _vertexcover_alg(name, graph, vertex_weights=None):
@@ -23,13 +27,20 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
 
     if vertex_weights is not None:
         jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
-        for key, val in vertex_weights.items():
-            jgrapht_vertex_weights[key] = val
+        if is_property_graph(graph):
+            for key, val in vertex_weights.items():
+                jgrapht_vertex_weights[graph._vertex_hash_to_id[key]] = val
+        else:
+            for key, val in vertex_weights.items():
+                jgrapht_vertex_weights[key] = val
         weight, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
     else:
         weight, vc_handle = alg_method(graph.handle)
 
-    return weight, _JGraphTIntegerSet(vc_handle)
+    if is_property_graph(graph):
+        return weight, _PropertyGraphVertexSet(vc_handle, graph)
+    else:
+        return weight, _JGraphTIntegerSet(vc_handle)
 
 
 def greedy(graph, vertex_weights=None):
