@@ -159,4 +159,6 @@ def as_property_graph(graph):
     :param graph: the original graph
     :returns: a property graph which is an instance of type :py:class:`~jgrapht.types.PropertyGraph`.
     """
+    if is_property_graph(graph):
+        raise ValueError("Cannot recursively create a property graph view")    
     return _PropertyGraph(graph)
