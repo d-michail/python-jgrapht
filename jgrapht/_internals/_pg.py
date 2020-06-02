@@ -24,9 +24,10 @@ class _PropertyGraph(Graph, PropertyGraph):
     supports properties (attributes) on graph vertices/edges and the graph 
     itself.
 
-    This graphs does not directly wrap a backend graph, but it passes through 
+    This graph does not directly wrap a backend graph, but it passes through 
     the handle which means that it is usable in all algorithms. The result 
-    however will refer to the actual graph and not the property graph wrapper.
+    however will refer to the actual graph and not the property graph wrapper which 
+    means that it needs to be translated back when returning from the call.
     """
 
     def __init__(self, graph, vertex_supplier=None, edge_supplier=None, **kwargs):
@@ -79,18 +80,26 @@ class _PropertyGraph(Graph, PropertyGraph):
         return self._graph.type
 
     def add_vertex(self, v=None):
-        if v is None:
-            v = self._vertex_supplier()
-            if v in self._vertex_hash_to_id:
-                raise ValueError(
-                    "Vertex supplier returns vertices already in the graph"
-                )
-        else:
-            if v in self._vertex_hash_to_id:
-                return v
+        if v is not None and v in self._vertex_hash_to_id:
+            return v
+
         vid = self._graph.add_vertex()
-        self._vertex_hash_to_id[v] = vid
-        self._vertex_id_to_hash[vid] = v
+
+        # At this point, a new vertex has been created by the structural callback.
+        # This is necessary in order to automatically reflect the backend view of
+        # the graph. Imagine that some algorithm decides to add a new vertex to the 
+        # backend graph.
+
+        # Override if user has given an explicit vertex. This will bypass values
+        # in the vertex supplier.
+        if v is not None:
+            oldv = self._vertex_id_to_hash[vid]
+            del self._vertex_hash_to_id[oldv]
+            self._vertex_hash_to_id[v] = vid
+            self._vertex_id_to_hash[vid] = v
+        else:
+            v = self._vertex_id_to_hash[vid]
+
         return v
 
     def remove_vertex(self, v):
@@ -106,13 +115,8 @@ class _PropertyGraph(Graph, PropertyGraph):
         return v in self._vertex_hash_to_id
 
     def add_edge(self, u, v, e=None):
-        if e is None:
-            e = self._edge_supplier()
-            if e in self._edge_hash_to_id:
-                raise ValueError("Edge supplier returns edges already in the graph")
-        else:
-            if e in self._edge_hash_to_id:
-                return e
+        if e is not None and e in self._edge_hash_to_id:
+            return e
 
         uid = self._vertex_hash_to_id.get(u)
         if uid is None:
@@ -122,8 +126,22 @@ class _PropertyGraph(Graph, PropertyGraph):
             raise ValueError("Vertex {} not in graph".format(v))
 
         eid = self._graph.add_edge(uid, vid)
-        self._edge_hash_to_id[e] = eid
-        self._edge_id_to_hash[eid] = e
+
+        # At this point, a new edge has been created by the structural callback.
+        # This is necessary in order to automatically reflect the backend view of
+        # the graph. Imagine that some algorithm decides to add a new edge to the 
+        # backend graph.
+
+        # Override if user has given an explicit edge. This will bypass values
+        # in the edge supplier.
+        if e is not None:
+            olde = self._edge_id_to_hash[eid]
+            del self._edge_hash_to_id[olde]
+            self._edge_hash_to_id[e] = eid
+            self._edge_id_to_hash[eid] = e
+        else:
+            e = self._edge_id_to_hash[eid]
+
         return e
 
     def remove_edge(self, e):
@@ -263,10 +281,24 @@ class _PropertyGraph(Graph, PropertyGraph):
         """Listener for removal events. This is needed, as removing
         a graph vertex might also remove edges.
         """
-        if event_type == GraphEvent.VERTEX_REMOVED:
+        if event_type == GraphEvent.VERTEX_ADDED:
+            v = self._vertex_supplier()
+            if v in self._vertex_hash_to_id:
+                raise ValueError(
+                    "Vertex supplier returns vertices already in the graph"
+                )
+            self._vertex_hash_to_id[v] = element
+            self._vertex_id_to_hash[element] = v
+        elif event_type == GraphEvent.VERTEX_REMOVED:
             v = self._vertex_id_to_hash.pop(element)
             self._vertex_hash_to_id.pop(v)
             self._vertex_hash_to_attrs.pop(v, None)
+        elif event_type == GraphEvent.EDGE_ADDED:
+            e = self._edge_supplier()
+            if e in self._edge_hash_to_id:
+                raise ValueError("Edge supplier returns vertices already in the graph")
+            self._edge_hash_to_id[e] = element
+            self._edge_id_to_hash[element] = e
         elif event_type == GraphEvent.EDGE_REMOVED:
             e = self._edge_id_to_hash.pop(element)
             self._edge_hash_to_id.pop(e)

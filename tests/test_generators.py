@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 import jgrapht.generators as generators
 
 
@@ -33,6 +33,21 @@ def test_complete():
         allowing_multiple_edges=False,
         weighted=True,
     )
+    generators.complete_graph(g, 10)
+    assert len(g.vertices) == 10
+
+def test_complete_property_graph():
+
+    # Test that changes performed by the generators in the 
+    # backend graph are propagated to the property graph.
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
     generators.complete_graph(g, 10)
     assert len(g.vertices) == 10
 

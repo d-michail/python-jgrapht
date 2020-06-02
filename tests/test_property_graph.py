@@ -274,21 +274,17 @@ def test_with_string_suppliers_graph():
 
     assert g.contains_vertex("1")
     assert g.contains_vertex("v1")
-    assert g.contains_vertex("2")
+    assert g.contains_vertex("3")
 
-    assert g.vertices == {"1", "v1", "2"}
+    assert g.vertices == {"1", "v1", "3"}
     assert len(g.vertices) == 3
 
-    g.add_edge("1", "2")
+    g.add_edge("1", "3")
 
-    assert g.edge_source("3") == "1"
-    assert g.edge_target("3") == "2"
+    assert g.edge_source("4") == "1"
+    assert g.edge_target("4") == "3"
 
     assert len(g.edges) == 1
 
-    assert g.edges == {"3"}
+    assert g.edges == {"4"}
 
-    g.add_vertex("4")
-
-    with pytest.raises(ValueError):
-        g.add_vertex()
