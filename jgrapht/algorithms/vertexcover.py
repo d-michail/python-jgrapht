@@ -1,6 +1,6 @@
 from .. import backend as _backend
 from .._internals._collections import (
-    _JGraphTIntegerDoubleMap,
+    _JGraphTIntegerDoubleMutableMap,
     _JGraphTIntegerSet,
 )
 
@@ -22,7 +22,7 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
             raise NotImplementedError("Algorithm not supported.")
 
     if vertex_weights is not None:
-        jgrapht_vertex_weights = _JGraphTIntegerDoubleMap()
+        jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
         weight, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)

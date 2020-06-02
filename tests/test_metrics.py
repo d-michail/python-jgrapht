@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 import jgrapht.metrics as metrics
 
 
@@ -38,6 +38,44 @@ def create_test_graph():
     return g
 
 
+def create_test_property_graph():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertex("0")
+    for i in range(1, 5):
+        g.add_vertex(i)
+    g.add_vertex("5")    
+    for i in range(6, 10):
+        g.add_vertex(i)    
+
+    g.add_edge("0", 1, "e01")
+    g.add_edge("0", 2, "e02")
+    g.add_edge("0", 3, "e03")
+    g.add_edge("0", 4, "e04")
+    g.add_edge("0", "5", "e05")
+    g.add_edge("0", 6, "e06")
+    g.add_edge("0", 7, "e07")
+    g.add_edge("0", 8, "e08")
+    g.add_edge("0", 9, "e09")
+
+    g.add_edge(1, 2, "e12")
+    g.add_edge(2, 3, "e23")
+    g.add_edge(3, 4, "e34")
+    g.add_edge(4, "5", "e45")
+    g.add_edge("5", 6, "e56")
+    g.add_edge(6, 7, "e67")
+    g.add_edge(7, 8, "e67")
+    g.add_edge(8, 9, "e89")
+    g.add_edge(9, 1, "e91")
+
+    return g
+
+
 def test_diameter():
     g = create_test_graph()
     assert metrics.diameter(g) == 2.0
@@ -71,4 +109,23 @@ def test_measure():
 
     assert eccentricity_map[0] == 1.0
     for i in range(1, 10):
+        assert eccentricity_map[i] == 2.0
+
+
+def test_property_graph_measure():
+    g = create_test_property_graph()
+
+    d, r, center, periphery, pseudo_periphery, eccentricity_map = metrics.measure(g)
+
+    assert d == 2.0
+    assert r == 1.0
+    assert center == set(["0"])
+    assert periphery == set([1, 2, 3, 4, "5", 6, 7, 8, 9])
+    assert pseudo_periphery == set([1, 2, 3, 4, "5", 6, 7, 8, 9])
+
+    assert eccentricity_map["0"] == 1.0
+    for i in range(1, 5):
+        assert eccentricity_map[i] == 2.0
+    assert eccentricity_map["5"] == 2.0
+    for i in range(6, 10):
         assert eccentricity_map[i] == 2.0

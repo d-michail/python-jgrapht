@@ -1,7 +1,14 @@
 from . import backend as _backend
+
 from ._internals._collections import (
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerSet,
+)
+
+from ._internals._pg import is_property_graph
+from ._internals._pg_collections import (
+    _PropertyGraphVertexSet,
+    _PropertyGraphVertexDoubleMap,
 )
 
 
@@ -88,11 +95,26 @@ def measure(graph):
         vertex_eccentricity_map_handle,
     ) = _backend.jgrapht_graph_metrics_measure_graph(graph.handle)
 
+    if is_property_graph(graph):
+        centers = _PropertyGraphVertexSet(center_handle, graph)
+        periphery = _PropertyGraphVertexSet(periphery_handle, graph)
+        pseudo_periphery = _PropertyGraphVertexSet(pseudo_periphery_handle, graph)
+        vertex_eccentricity_map = _PropertyGraphVertexDoubleMap(
+            vertex_eccentricity_map_handle, graph
+        )
+    else:
+        centers = _JGraphTIntegerSet(center_handle)
+        periphery = _JGraphTIntegerSet(periphery_handle)
+        pseudo_periphery = _JGraphTIntegerSet(pseudo_periphery_handle)
+        vertex_eccentricity_map = _JGraphTIntegerDoubleMap(
+            vertex_eccentricity_map_handle
+        )
+
     return (
         diameter,
         radius,
-        _JGraphTIntegerSet(handle=center_handle),
-        _JGraphTIntegerSet(handle=periphery_handle),
-        _JGraphTIntegerSet(handle=pseudo_periphery_handle),
-        _JGraphTIntegerDoubleMap(handle=vertex_eccentricity_map_handle),
+        centers,
+        periphery,
+        pseudo_periphery,
+        vertex_eccentricity_map,
     )

@@ -3,7 +3,7 @@ from .._internals._flows import (
     _JGraphTCut,
     _JGraphTGomoryHuTree,
 )
-from .._internals._collections import _JGraphTIntegerSet
+from .._internals._collections import _JGraphTIntegerMutableSet
 from .flow import push_relabel
 
 
@@ -83,7 +83,7 @@ def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
     :param use_tree_compression: whether to use the tree compression technique    
     :returns: a cut as an instance of :py:class:`.Cut`.
     """
-    odd_set = _JGraphTIntegerSet()
+    odd_set = _JGraphTIntegerMutableSet()
     for x in odd_vertices:
         odd_set.add(x)
 

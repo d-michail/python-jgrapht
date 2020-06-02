@@ -6,7 +6,7 @@ from .._internals._paths import (
     _JGraphTMultiObjectiveSingleSourcePaths,
     _JGraphTAllPairsPaths,
 )
-from .._internals._collections import _JGraphTIntegerSet
+from .._internals._collections import _JGraphTIntegerMutableSet
 from .._internals._callbacks import _create_wrapped_callback
 
 import ctypes
@@ -254,7 +254,7 @@ def a_star_with_alt_heuristic(
     :returns: a :py:class:`.GraphPath`
     """
 
-    landmarks_set = _JGraphTIntegerSet(linked=True)
+    landmarks_set = _JGraphTIntegerMutableSet(linked=True)
     for landmark in landmarks:
         landmarks_set.add(landmark)
 
