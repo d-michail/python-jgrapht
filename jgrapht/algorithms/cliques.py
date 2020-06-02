@@ -1,8 +1,12 @@
 from .. import backend as _backend
+
 from .._internals._collections import (
     _JGraphTIntegerSet,
     _JGraphTIntegerSetIterator,
 )
+
+from .._internals._pg import is_property_graph
+from .._internals._pg_collections import _PropertyGraphVertexSetIterator
 
 
 def _clique_enumeration_alg(name, graph, *args):
@@ -16,7 +20,10 @@ def _clique_enumeration_alg(name, graph, *args):
 
     clique_it = alg_method(graph.handle, *args)
 
-    return _JGraphTIntegerSetIterator(handle=clique_it)
+    if is_property_graph(graph):
+        return _PropertyGraphVertexSetIterator(clique_it, graph)
+    else:
+        return _JGraphTIntegerSetIterator(clique_it)
 
 
 def bron_kerbosch(graph, timeout=0):

@@ -5,7 +5,7 @@ from .._internals._collections import (
     _JGraphTIntegerSet,
 )
 
-from .._internals._pg import is_property_graph, vertex_pg_to_g as _vertex_pg_to_g
+from .._internals._pg import is_property_graph
 from .._internals._pg_collections import _PropertyGraphVertexSet
 
 

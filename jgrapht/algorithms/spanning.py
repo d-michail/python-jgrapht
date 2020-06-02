@@ -1,5 +1,9 @@
 from .. import backend as _backend
+
 from .._internals._collections import _JGraphTIntegerSet
+
+from .._internals._pg import is_property_graph
+from .._internals._pg_collections import _PropertyGraphEdgeSet
 
 
 def _mst_alg(name, graph):
@@ -12,7 +16,10 @@ def _mst_alg(name, graph):
 
     weight, mst_handle = alg_method(graph.handle)
 
-    return weight, _JGraphTIntegerSet(mst_handle)
+    if is_property_graph(graph):
+        return weight, _PropertyGraphEdgeSet(mst_handle, graph)
+    else:
+        return weight, _JGraphTIntegerSet(mst_handle)
 
 
 def kruskal(graph):

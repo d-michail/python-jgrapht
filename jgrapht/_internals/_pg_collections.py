@@ -2,7 +2,8 @@ from .. import backend
 from collections import namedtuple
 from collections.abc import Iterator
 
-from ._pg_wrappers import _PropertyGraphVertexIterator
+from ._wrappers import _JGraphTObjectIterator
+from ._pg_wrappers import _PropertyGraphVertexIterator, _PropertyGraphEdgeIterator
 from ._collections import _JGraphTIntegerSet, _JGraphTIntegerDoubleMap
 
 
@@ -23,6 +24,28 @@ class _PropertyGraphVertexSet(_JGraphTIntegerSet):
 
     def __repr__(self):
         return "_PropertyGraphVertexSet(%r)" % self._handle
+
+    def __str__(self):
+        return "{" + ", ".join(str(x) for x in self) + "}"
+
+
+class _PropertyGraphEdgeSet(_JGraphTIntegerSet):
+    """An edge set for property graphs."""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def __iter__(self):
+        res = backend.jgrapht_set_it_create(self._handle)
+        return _PropertyGraphEdgeIterator(res, self._graph)
+
+    def __contains__(self, x):
+        x = self._graph._edge_hash_to_id[x]
+        return backend.jgrapht_set_int_contains(self._handle, x)
+
+    def __repr__(self):
+        return "_PropertyGraphEdgeSet(%r)" % self._handle
 
     def __str__(self):
         return "{" + ", ".join(str(x) for x in self) + "}"
@@ -66,4 +89,18 @@ class _PropertyGraphVertexDoubleMap(_JGraphTIntegerDoubleMap):
     def __str__(self):
         items = ["{}: {}".format(k, v) for k, v in self.items()]
         return "{" + ", ".join(items) + "}"
+
+
+class _PropertyGraphVertexSetIterator(_JGraphTObjectIterator):
+    """An iterator which returns sets with vertices."""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def __next__(self):
+        return _PropertyGraphVertexSet(super().__next__(), self._graph)
+
+    def __repr__(self):
+        return "_PropertyGraphVertexSetIterator(%r)" % self._handle
 
