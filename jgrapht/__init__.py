@@ -45,7 +45,12 @@ from ._internals._graphs import (
     as_sparse_graph,
 )
 
-from ._internals._property_graphs import is_property_graph
+from ._internals._pg import (
+    create_property_graph,
+    create_directed_property_graph,
+    create_undirected_property_graph,
+    is_property_graph,
+)
 
 from . import (
     types,

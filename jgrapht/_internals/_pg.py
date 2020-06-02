@@ -12,6 +12,7 @@ from ..types import (
     PropertyGraph,
 )
 
+from ._graphs import create_graph as _create_graph
 from ._views import _ListenableView
 from ._collections import _JGraphTIntegerStringMap
 
@@ -41,7 +42,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         self._vertex_id_to_hash = {}
         self._vertex_hash_to_attrs = defaultdict(lambda: {})
         self._vertex_attrs = self._VertexAttributes(self, self._vertex_hash_to_attrs)
-        
+
         # initialize edge maps
         self._edge_hash_to_id = {}
         self._edge_id_to_hash = {}
@@ -60,7 +61,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         return self._graph.type
 
     def add_vertex(self, v):
-        if v is None: 
+        if v is None:
             raise ValueError("Vertex cannot be None")
         if v in self._vertex_hash_to_id:
             return
@@ -69,7 +70,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         self._vertex_id_to_hash[vid] = v
 
     def remove_vertex(self, v):
-        if v is None: 
+        if v is None:
             raise ValueError("Vertex cannot be None")
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
@@ -81,7 +82,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         return v in self._vertex_hash_to_id
 
     def add_edge(self, u, v, e):
-        if e is None: 
+        if e is None:
             raise ValueError("Edge cannot be None")
         if e in self._edge_hash_to_id:
             return False
@@ -99,7 +100,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         return True
 
     def remove_edge(self, e):
-        if e is None: 
+        if e is None:
             raise ValueError("Edge cannot be None")
         eid = self._edge_hash_to_id.get(e)
         if eid is None:
@@ -246,23 +247,24 @@ class _PropertyGraph(Graph, PropertyGraph):
 
     class _VertexAttributes(MutableMapping):
         """Wrapper around a dictionary to ensure vertex existence."""
+
         def __init__(self, graph, storage):
             self._graph = graph
             self._storage = storage
 
         def __getitem__(self, key):
-            if key not in self._graph.vertices: 
-                raise ValueError('Vertex {} not in graph'.format(key))
+            if key not in self._graph.vertices:
+                raise ValueError("Vertex {} not in graph".format(key))
             return self._storage[key]
 
         def __setitem__(self, key, value):
-            if key not in self._graph.vertices: 
-                raise ValueError('Vertex {} not in graph'.format(key))
+            if key not in self._graph.vertices:
+                raise ValueError("Vertex {} not in graph".format(key))
             self._storage[key] = value
 
         def __delitem__(self, key):
-            if key not in self._graph.vertices: 
-                raise ValueError('Vertex {} not in graph'.format(key))
+            if key not in self._graph.vertices:
+                raise ValueError("Vertex {} not in graph".format(key))
             del self._storage[key]
 
         def __len__(self):
@@ -276,23 +278,24 @@ class _PropertyGraph(Graph, PropertyGraph):
 
     class _EdgeAttributes(MutableMapping):
         """Wrapper around a dictionary to ensure edge existence."""
+
         def __init__(self, graph, storage):
             self._graph = graph
             self._storage = storage
 
         def __getitem__(self, key):
-            if key not in self._graph.edges: 
-                raise ValueError('Edge {} not in graph'.format(key))
+            if key not in self._graph.edges:
+                raise ValueError("Edge {} not in graph".format(key))
             return self._storage[key]
 
         def __setitem__(self, key, value):
-            if key not in self._graph.edges: 
-                raise ValueError('Edge {} not in graph'.format(key))
+            if key not in self._graph.edges:
+                raise ValueError("Edge {} not in graph".format(key))
             self._storage[key] = value
 
         def __delitem__(self, key):
-            if key not in self._graph.edges: 
-                raise ValueError('Edge {} not in graph'.format(key))
+            if key not in self._graph.edges:
+                raise ValueError("Edge {} not in graph".format(key))
             del self._storage[key]
 
         def __len__(self):
@@ -303,9 +306,84 @@ class _PropertyGraph(Graph, PropertyGraph):
 
         def __repr__(self):
             return "_PropertyGraph-EdgeAttibutes(%r)" % repr(self._storage)
-    
+
 
 def is_property_graph(graph):
     """Check if a graph instance is a property graph."""
     return isinstance(graph, (_PropertyGraph, PropertyGraph))
-    
+
+
+def vertex_pg_to_g(graph, vertex):
+    """Translate from a property graph vertex to a graph vertex."""
+    if is_property_graph(graph):
+        vertex = graph._vertex_hash_to_id[vertex]
+    return vertex
+
+
+def vertex_g_to_pg(graph, vertex):
+    """Translate from a graph vertex to a property graph vertex."""
+    if is_property_graph(graph):
+        vertex = graph._vertex_id_to_hash[vertex]
+    return vertex
+
+
+def create_property_graph(
+    directed=True,
+    allowing_self_loops=False,
+    allowing_multiple_edges=False,
+    weighted=True,
+):
+    """Create a property graph.
+
+    :param directed: if True the graph will be directed, otherwise undirected
+    :param allowing_self_loops: if True the graph will allow the addition of self-loops
+    :param allowing_multiple_edges: if True the graph will allow multiple-edges
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.PropertyGraph`    
+    """
+    g = _create_graph(
+        directed=directed,
+        allowing_self_loops=allowing_self_loops,
+        allowing_multiple_edges=allowing_multiple_edges,
+        weighted=weighted,
+    )
+    return _PropertyGraph(g)
+
+
+def create_directed_property_graph(
+    allowing_self_loops=False, allowing_multiple_edges=False, weighted=True,
+):
+    """Create a directed property graph.
+
+    :param allowing_self_loops: if True the graph will allow the addition of self-loops
+    :param allowing_multiple_edges: if True the graph will allow multiple-edges
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.PropertyGraph`    
+    """
+    return create_property_graph(
+        directed=True,
+        allowing_self_loops=allowing_self_loops,
+        allowing_multiple_edges=allowing_multiple_edges,
+        weighted=weighted,
+    )
+
+
+def create_undirected_property_graph(
+    allowing_self_loops=False, allowing_multiple_edges=False, weighted=True,
+):
+    """Create an undirected property graph.
+
+    :param allowing_self_loops: if True the graph will allow the addition of self-loops
+    :param allowing_multiple_edges: if True the graph will allow multiple-edges
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.PropertyGraph`    
+    """
+    return create_property_graph(
+        directed=False,
+        allowing_self_loops=allowing_self_loops,
+        allowing_multiple_edges=allowing_multiple_edges,
+        weighted=weighted,
+    )

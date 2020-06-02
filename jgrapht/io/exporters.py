@@ -11,7 +11,7 @@ from .._internals._attributes import (
     _JGraphTAttributesRegistry,
 )
 from .._internals._paths import _JGraphTGraphPath
-from .._internals._property_graphs import is_property_graph
+from .._internals._pg import is_property_graph
 
 
 def _export_to_file(name, graph, filename, *args):

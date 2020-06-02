@@ -9,7 +9,7 @@ from ._internals._views import (
     _ListenableView,
 )
 
-from ._internals._property_graphs import (
+from ._internals._pg import (
     _PropertyGraph, 
     is_property_graph,
 )
