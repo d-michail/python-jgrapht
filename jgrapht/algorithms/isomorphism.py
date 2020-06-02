@@ -1,5 +1,12 @@
 from .. import backend as _backend
+
 from .._internals._mapping import _JGraphTGraphMapping, _JGraphTGraphMappingIterator
+
+from .._internals._pg import is_property_graph
+from .._internals._pg_mapping import (
+    _PropertyGraphGraphMapping,
+    _PropertyGraphMappingIterator,
+)
 
 
 def _isomorphism_alg(name, graph1, graph2, *args):
@@ -12,11 +19,17 @@ def _isomorphism_alg(name, graph1, graph2, *args):
 
     exists, map_it_handle = alg_method(graph1.handle, graph2.handle, *args)
 
-    return (
-        _JGraphTGraphMappingIterator(handle=map_it_handle, graph1=graph1, graph2=graph2)
-        if exists
-        else None
-    )
+    if not exists:
+        return None
+
+    if is_property_graph(graph1) or is_property_graph(graph2):
+        return _PropertyGraphMappingIterator(
+            handle=map_it_handle, graph1=graph1, graph2=graph2
+        )
+    else:
+        return _JGraphTGraphMappingIterator(
+            handle=map_it_handle, graph1=graph1, graph2=graph2
+        )
 
 
 def vf2(graph1, graph2):
