@@ -4,6 +4,8 @@ from jgrapht import create_graph
 from jgrapht.io.exporters import write_gml, generate_gml
 from jgrapht.io.importers import read_gml, parse_gml
 
+from jgrapht.views import as_property_graph
+
 
 expected = """Creator "JGraphT GML Exporter"
 Version 1
@@ -240,6 +242,181 @@ graph
 """
 
 
+expected4 = r"""Creator "JGraphT GML Exporter"
+Version 1
+graph
+[
+	label ""
+	directed 0
+	node
+	[
+		id 0
+		label "label 0"
+	]
+	node
+	[
+		id 1
+		label "label 1"
+	]
+	node
+	[
+		id 2
+		label "label 2"
+	]
+	node
+	[
+		id 3
+		label "label 3"
+	]
+	node
+	[
+		id 4
+	]
+	node
+	[
+		id 5
+	]
+	node
+	[
+		id 6
+	]
+	node
+	[
+		id 7
+	]
+	node
+	[
+		id 8
+	]
+	node
+	[
+		id 9
+	]
+	edge
+	[
+		source 0
+		target 1
+	]
+	edge
+	[
+		source 0
+		target 2
+	]
+	edge
+	[
+		source 0
+		target 3
+	]
+	edge
+	[
+		source 0
+		target 4
+	]
+	edge
+	[
+		source 0
+		target 5
+	]
+	edge
+	[
+		source 0
+		target 6
+	]
+	edge
+	[
+		source 0
+		target 7
+	]
+	edge
+	[
+		source 0
+		target 8
+	]
+	edge
+	[
+		source 0
+		target 9
+	]
+	edge
+	[
+		source 1
+		target 2
+		label "edge 1-2"
+	]
+	edge
+	[
+		source 2
+		target 3
+	]
+	edge
+	[
+		source 3
+		target 4
+	]
+	edge
+	[
+		source 4
+		target 5
+	]
+	edge
+	[
+		source 5
+		target 6
+	]
+	edge
+	[
+		source 6
+		target 7
+	]
+	edge
+	[
+		source 7
+		target 8
+	]
+	edge
+	[
+		source 8
+		target 9
+	]
+	edge
+	[
+		source 9
+		target 1
+	]
+]
+"""
+
+expected5 = r"""Creator "JGraphT GML Exporter"
+Version 1
+graph
+[
+	label ""
+	directed 1
+	node
+	[
+		id 0
+		color "red"
+	]
+	node
+	[
+		id 2
+	]
+	edge
+	[
+		source 0
+		target 2
+		type "forward"
+	]
+	edge
+	[
+		source 2
+		target 0
+		type "backward"
+	]
+]
+"""
+
+
 def build_graph():
     g = create_graph(
         directed=False,
@@ -286,7 +463,7 @@ def test_output_gml(tmpdir):
         3: {"label": "label 3"},
     }
     e_labels = {9: {"label": "edge 1-2"}}
-    write_gml(g, tmpfilename, False, v_labels, e_labels)
+    write_gml(g, tmpfilename, False, True, True, v_labels, e_labels)
 
     with open(tmpfilename, "r", encoding="utf-8") as f:
         contents = f.read()
@@ -294,6 +471,28 @@ def test_output_gml(tmpdir):
     print(contents)
 
     assert contents == expected
+
+
+def test_output_gml_without_automatic_labels(tmpdir):
+    g = build_graph()
+    tmpfile = tmpdir.join("gml.out")
+    tmpfilename = str(tmpfile)
+
+    v_labels = {
+        0: {"label": "label 0"},
+        1: {"label": "label 1"},
+        2: {"label": "label 2"},
+        3: {"label": "label 3"},
+    }
+    e_labels = {9: {"label": "edge 1-2"}}
+    write_gml(g, tmpfilename, False, False, False, v_labels, e_labels)
+
+    with open(tmpfilename, "r", encoding="utf-8") as f:
+        contents = f.read()
+
+    print(contents)
+
+    assert contents == expected4
 
 
 def test_input_gml(tmpdir):
@@ -447,3 +646,30 @@ def test_input_gml_from_string_rename_ids(tmpdir):
     parse_gml(g, expected3, import_id_cb=import_id)
 
     assert g.vertices == {5, 6}
+
+
+def test_output_property_graph_to_string():
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=False,
+    )
+    g = as_property_graph(g)
+
+    g.add_vertex(0)
+    g.add_vertex(2)
+
+    g.add_edge(0, 2, 'e1')
+    g.add_edge(2, 0, 'e2')
+
+    g.vertex_props[0]['color'] = 'red'
+
+    g.edge_props['e1']['type'] = 'forward'
+    g.edge_props['e2']['type'] = 'backward'
+
+    out = generate_gml(g)
+
+    print(out)
+
+    assert out.splitlines() == expected5.splitlines()

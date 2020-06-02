@@ -306,12 +306,12 @@ int jgrapht_export_string_dimacs(void *g, dimacs_format_t format, int export_edg
     return jgrapht_capi_export_string_dimacs(thread, g, format, export_edge_weights, vertex_id_store, res);
 }
 
-int jgrapht_export_file_gml(void *g, char* filename, int export_edge_weights, void* vertex_attribute_store, void* edge_attribute_store, void* vertex_id_store) { 
-    return jgrapht_capi_export_file_gml(thread, g, filename, export_edge_weights, vertex_attribute_store, edge_attribute_store, vertex_id_store);
+int jgrapht_export_file_gml(void *g, char* filename, int export_edge_weights, int export_vertex_labels, int export_edge_labels, void* vertex_attribute_store, void* edge_attribute_store, void* vertex_id_store) { 
+    return jgrapht_capi_export_file_gml(thread, g, filename, export_edge_weights, export_vertex_labels, export_edge_labels, vertex_attribute_store, edge_attribute_store, vertex_id_store);
 }
 
-int jgrapht_export_string_gml(void *g, int export_edge_weights, void* vertex_attribute_store, void* edge_attribute_store, void* vertex_id_store, void **res) { 
-    return jgrapht_capi_export_string_gml(thread, g, export_edge_weights, vertex_attribute_store, edge_attribute_store, vertex_id_store, res);
+int jgrapht_export_string_gml(void *g, int export_edge_weights, int export_vertex_labels, int export_edge_labels, void* vertex_attribute_store, void* edge_attribute_store, void* vertex_id_store, void **res) { 
+    return jgrapht_capi_export_string_gml(thread, g, export_edge_weights, export_vertex_labels, export_edge_labels, vertex_attribute_store, edge_attribute_store, vertex_id_store, res);
 }
 
 int jgrapht_export_file_json(void *g, char* filename, void* vertex_attribute_store, void* edge_attribute_store, void* vertex_id_store) { 

@@ -56,6 +56,8 @@ class _PropertyGraphView(Graph, PropertyGraph):
         return self._graph.type
 
     def add_vertex(self, v):
+        if v is None: 
+            raise ValueError("Vertex cannot be None")
         if v in self._vertex_hash_to_id:
             return
         vid = self._graph.add_vertex()
@@ -63,6 +65,8 @@ class _PropertyGraphView(Graph, PropertyGraph):
         self._vertex_id_to_hash[vid] = v
 
     def remove_vertex(self, v):
+        if v is None: 
+            raise ValueError("Vertex cannot be None")
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             return False
@@ -73,6 +77,8 @@ class _PropertyGraphView(Graph, PropertyGraph):
         return v in self._vertex_hash_to_id
 
     def add_edge(self, u, v, e):
+        if e is None: 
+            raise ValueError("Edge cannot be None")
         if e in self._edge_hash_to_id:
             return False
 
@@ -89,6 +95,8 @@ class _PropertyGraphView(Graph, PropertyGraph):
         return True
 
     def remove_edge(self, e):
+        if e is None: 
+            raise ValueError("Edge cannot be None")
         eid = self._edge_hash_to_id.get(e)
         if eid is None:
             return False

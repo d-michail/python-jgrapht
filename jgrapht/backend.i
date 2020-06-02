@@ -319,9 +319,9 @@ int jgrapht_export_file_dimacs(void *, char*, dimacs_format_t, int, void*);
 
 int jgrapht_export_string_dimacs(void *, dimacs_format_t, int, void*, void** OUTPUT);
 
-int jgrapht_export_file_gml(void *, char*, int, void *, void *, void *);
+int jgrapht_export_file_gml(void *, char*, int, int, int, void *, void *, void *);
 
-int jgrapht_export_string_gml(void *, int, void *, void *, void *, void **OUTPUT);
+int jgrapht_export_string_gml(void *, int, int, int, void *, void *, void *, void **OUTPUT);
 
 int jgrapht_export_file_json(void *, char*, void *, void *, void *);
 
