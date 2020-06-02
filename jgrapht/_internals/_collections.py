@@ -97,24 +97,34 @@ class _JGraphTIntegerList(_HandleWrapper, Collection):
         res = backend.jgrapht_list_size(self._handle)
         return res
 
-    def add(self, x):
-        backend.jgrapht_list_int_add(self._handle, x)
-
-    def discard(self, x):
-        backend.jgrapht_list_int_remove(self._handle, x)
-
     def __contains__(self, x):
         res = backend.jgrapht_list_int_contains(self._handle, x)
         return res
-
-    def clear(self):
-        backend.jgrapht_list_clear(self._handle)
 
     def __repr__(self):
         return '_JGraphTIntegerList(%r)' % self._handle
 
     def __str__(self):
         return '{' + ', '.join(str(x) for x in self) + '}'
+
+
+class _JGraphTIntegerMutableList(_JGraphTIntegerList):
+    """JGraphT Integer List"""
+
+    def __init__(self, handle=None, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def add(self, x):
+        backend.jgrapht_list_int_add(self._handle, x)
+
+    def discard(self, x):
+        backend.jgrapht_list_int_remove(self._handle, x)
+
+    def clear(self):
+        backend.jgrapht_list_clear(self._handle)
+
+    def __repr__(self):
+        return '_JGraphTIntegerMutableList(%r)' % self._handle
 
 
 class _JGraphTIntegerListIterator(_JGraphTObjectIterator):

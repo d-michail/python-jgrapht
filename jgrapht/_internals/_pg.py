@@ -378,15 +378,30 @@ def is_property_graph(graph):
 def vertex_pg_to_g(graph, vertex):
     """Translate from a property graph vertex to a graph vertex."""
     if is_property_graph(graph):
-        vertex = graph._vertex_hash_to_id[vertex]
+        return graph._vertex_hash_to_id[vertex] if vertex is not None else None
     return vertex
 
 
 def vertex_g_to_pg(graph, vertex):
     """Translate from a graph vertex to a property graph vertex."""
     if is_property_graph(graph):
-        vertex = graph._vertex_id_to_hash[vertex]
+        return graph._vertex_id_to_hash[vertex] if vertex is not None else None
     return vertex
+
+
+def edge_pg_to_g(graph, edge):
+    """Translate from a property graph edge to a graph edge."""
+    if is_property_graph(graph):
+        return graph._edge_hash_to_id[edge] if edge is not None else None
+    return edge
+
+
+def edge_g_to_pg(graph, edge):
+    """Translate from a graph edge to a property graph edge."""
+    if is_property_graph(graph):
+        return graph._edge_id_to_hash[edge] if edge is not None else None
+    return edge
+
 
 
 def create_property_graph(

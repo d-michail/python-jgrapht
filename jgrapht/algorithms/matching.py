@@ -1,5 +1,9 @@
 from .. import backend as _backend
+
 from .._internals._collections import _JGraphTIntegerSet
+
+from .._internals._pg import is_property_graph
+from .._internals._pg_collections import _PropertyGraphEdgeSet
 
 
 def _matching_alg(name, graph, *args, no_custom_prefix=False):
@@ -16,7 +20,10 @@ def _matching_alg(name, graph, *args, no_custom_prefix=False):
 
     weight, m_handle = alg_method(graph.handle, *args)
 
-    return weight, _JGraphTIntegerSet(handle=m_handle)
+    if is_property_graph(graph):
+        return weight, _PropertyGraphEdgeSet(m_handle, graph)
+    else:    
+        return weight, _JGraphTIntegerSet(m_handle)
 
 
 def greedy_max_cardinality(graph, sort=False):

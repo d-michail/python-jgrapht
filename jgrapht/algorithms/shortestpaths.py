@@ -9,6 +9,20 @@ from .._internals._paths import (
 from .._internals._collections import _JGraphTIntegerMutableSet
 from .._internals._callbacks import _create_wrapped_callback
 
+from .._internals._pg import (
+    is_property_graph,
+    vertex_pg_to_g as _vertex_pg_to_g,
+    vertex_g_to_pg as _vertex_g_to_pg,
+    edge_g_to_pg as _edge_g_to_pg,
+)
+from .._internals._pg_paths import (
+    _PropertyGraphGraphPath,
+    _PropertyGraphGraphPathIterator,
+    _PropertyGraphSingleSourcePaths,
+    _PropertyGraphMultiObjectiveSingleSourcePaths,
+    _PropertyGraphAllPairsPaths,
+)
+
 import ctypes
 import multiprocessing
 
@@ -21,9 +35,12 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    handle = alg_method(graph.handle, source_vertex, *args)
+    handle = alg_method(graph.handle, _vertex_pg_to_g(graph, source_vertex), *args)
 
-    return _JGraphTSingleSourcePaths(handle, graph, source_vertex)
+    if is_property_graph(graph):
+        return _PropertyGraphSingleSourcePaths(handle, graph, source_vertex)
+    else:
+        return _JGraphTSingleSourcePaths(handle, graph, source_vertex)
 
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
@@ -34,9 +51,19 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    handle = alg_method(graph.handle, source_vertex, target_vertex, *args)
+    handle = alg_method(
+        graph.handle,
+        _vertex_pg_to_g(graph, source_vertex),
+        _vertex_pg_to_g(graph, target_vertex),
+        *args
+    )
+    if handle is None:
+        return None
 
-    return _JGraphTGraphPath(handle, graph) if handle is not None else None
+    if is_property_graph(graph):
+        return _PropertyGraphGraphPath(handle, graph)
+    else:
+        return _JGraphTGraphPath(handle, graph)
 
 
 def _sp_allpairs_alg(name, graph):
@@ -49,7 +76,10 @@ def _sp_allpairs_alg(name, graph):
 
     handle = alg_method(graph.handle)
 
-    return _JGraphTAllPairsPaths(handle, graph)
+    if is_property_graph(graph):
+        return _PropertyGraphAllPairsPaths(handle, graph)
+    else:
+        return _JGraphTAllPairsPaths(handle, graph)
 
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
@@ -60,9 +90,19 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    handle = alg_method(graph.handle, source_vertex, target_vertex, k, *args)
+    handle = alg_method(
+        graph.handle,
+        _vertex_pg_to_g(graph, source_vertex),
+        _vertex_pg_to_g(graph, target_vertex),
+        k,
+        *args
+    )
 
-    return _JGraphTGraphPathIterator(handle, graph)
+    if is_property_graph(graph):
+        return _PropertyGraphGraphPathIterator(handle, graph)
+    else:
+        return _JGraphTGraphPathIterator(handle, graph)
+
 
 def _multisp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method_name = "jgrapht_multisp_exec_" + name
@@ -72,9 +112,14 @@ def _multisp_singlesource_alg(name, graph, source_vertex, *args):
     except AttributeError:
         raise NotImplementedError("Algorithm {} not supported.".format(name))
 
-    handle = alg_method(graph.handle, source_vertex, *args)
+    handle = alg_method(graph.handle, _vertex_pg_to_g(graph, source_vertex), *args)
 
-    return _JGraphTMultiObjectiveSingleSourcePaths(handle, graph, source_vertex)
+    if is_property_graph(graph):
+        return _PropertyGraphMultiObjectiveSingleSourcePaths(
+            handle, graph, source_vertex
+        )
+    else:
+        return _JGraphTMultiObjectiveSingleSourcePaths(handle, graph, source_vertex)
 
 
 def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
@@ -188,10 +233,19 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
     :param use_bidirectional: use a bidirectional search
     :returns: a :py:class:`.GraphPath`
     """
+
+    if is_property_graph(graph):
+        # redefine in order to translate from integer to user vertices
+        def actual_heuristic_cb(s, t):
+            return heuristic_cb(_vertex_g_to_pg(graph, s), _vertex_g_to_pg(graph, t))
+
+    else:
+        actual_heuristic_cb = heuristic_cb
+
     heuristic_f_type = ctypes.CFUNCTYPE(
         ctypes.c_double, ctypes.c_longlong, ctypes.c_longlong
     )
-    heuristic_f = heuristic_f_type(heuristic_cb)
+    heuristic_f = heuristic_f_type(actual_heuristic_cb)
     heuristic_f_ptr = ctypes.cast(heuristic_f, ctypes.c_void_p).value
 
     custom = [heuristic_f_ptr]
@@ -255,8 +309,12 @@ def a_star_with_alt_heuristic(
     """
 
     landmarks_set = _JGraphTIntegerMutableSet(linked=True)
-    for landmark in landmarks:
-        landmarks_set.add(landmark)
+    if is_property_graph(graph):
+        for landmark in landmarks:
+            landmarks_set.add(_vertex_pg_to_g(graph, landmark))
+    else:
+        for landmark in landmarks:
+            landmarks_set.add(landmark)
 
     custom = [landmarks_set.handle]
 
@@ -322,7 +380,10 @@ def eppstein_k(graph, source_vertex, target_vertex, k):
         "eppstein_get_k_paths_between_vertices", graph, source_vertex, target_vertex, k
     )
 
-def delta_stepping(graph, source_vertex, target_vertex=None, delta=None, parallelism=None):
+
+def delta_stepping(
+    graph, source_vertex, target_vertex=None, delta=None, parallelism=None
+):
     """Delta stepping algorithm to compute single-source shortest paths. 
 
     :param graph: the graph
@@ -335,9 +396,9 @@ def delta_stepping(graph, source_vertex, target_vertex=None, delta=None, paralle
     :returns: either a :py:class:`.GraphPath` or :py:class:`.SingleSourcePaths` depending on whether a
               target vertex is provided
     """
-    if parallelism is None: 
+    if parallelism is None:
         parallelism = multiprocessing.cpu_count()
-    if delta is None: 
+    if delta is None:
         delta = 0.0
 
     custom = [delta, parallelism]
@@ -356,7 +417,9 @@ def delta_stepping(graph, source_vertex, target_vertex=None, delta=None, paralle
         )
 
 
-def martin_multiobjective(graph, edge_weight_cb, edge_weight_dimension, source_vertex, target_vertex=None): 
+def martin_multiobjective(
+    graph, edge_weight_cb, edge_weight_dimension, source_vertex, target_vertex=None
+):
     """Martin's algorithm for the multi-objective shortest paths problem.
 
     Martin's label setting algorithm is a multiple objective extension of Dijkstra's algorithm, where
@@ -375,33 +438,46 @@ def martin_multiobjective(graph, edge_weight_cb, edge_weight_dimension, source_v
     :returns: either an iterator of :py:class:`.GraphPath` or :py:class:`.MultiObjectiveSingleSourcePaths`
        depending on whether a target vertex is provided
     """
-    if edge_weight_dimension < 1: 
-        raise ValueError('Cost function needs to have a positive dimension')
+    if edge_weight_dimension < 1:
+        raise ValueError("Cost function needs to have a positive dimension")
 
-    # we need a function which accepts an edge and returns a pointer to an 
+    # we need a function which accepts an edge and returns a pointer to an
     # array with double values
-    def inner_edge_weight_cb(edge):
-        weights = edge_weight_cb(edge)[:edge_weight_dimension]
-        array = (ctypes.c_double * len(weights))(*weights)
-        array_ptr = ctypes.cast(array, ctypes.c_void_p)
-        return array_ptr.value
+    if is_property_graph(graph):
+        def inner_edge_weight_cb(edge):
+            edge = _edge_g_to_pg(graph, edge)
+            weights = edge_weight_cb(edge)[:edge_weight_dimension]
+            array = (ctypes.c_double * len(weights))(*weights)
+            array_ptr = ctypes.cast(array, ctypes.c_void_p)
+            return array_ptr.value
+    else:
+        def inner_edge_weight_cb(edge):
+            weights = edge_weight_cb(edge)[:edge_weight_dimension]
+            array = (ctypes.c_double * len(weights))(*weights)
+            array_ptr = ctypes.cast(array, ctypes.c_void_p)
+            return array_ptr.value
 
     cb_fptr, cb = _create_wrapped_callback(
         inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_int)
     )
 
-    custom = [ cb_fptr, edge_weight_dimension ]
+    custom = [cb_fptr, edge_weight_dimension]
 
-    if target_vertex is None: 
+    if target_vertex is None:
         return _multisp_singlesource_alg(
-            'martin_get_multiobjectivesinglesource_from_vertex', graph, source_vertex, *custom
+            "martin_get_multiobjectivesinglesource_from_vertex",
+            graph,
+            source_vertex,
+            *custom
         )
     else:
         res = _backend.jgrapht_multisp_exec_martin_get_paths_between_vertices(
-            graph.handle, 
-            source_vertex, 
-            target_vertex,
+            graph.handle,
+            _vertex_pg_to_g(graph, source_vertex),
+            _vertex_pg_to_g(graph, target_vertex),
             *custom
         )
-        return _JGraphTGraphPathIterator(res, graph)
-
+        if is_property_graph(graph):
+            return _PropertyGraphGraphPathIterator(res, graph)
+        else:
+            return _JGraphTGraphPathIterator(res, graph)

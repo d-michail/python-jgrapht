@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht._internals._collections import _JGraphTIntegerList
+from jgrapht._internals._collections import _JGraphTIntegerMutableList
 
 
 def test_Integerlist():
 
-    s = _JGraphTIntegerList()
+    s = _JGraphTIntegerMutableList()
 
     s.add(5)
     s.add(7)

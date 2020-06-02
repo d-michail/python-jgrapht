@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 import jgrapht.algorithms.cycles as cycles
 
 
@@ -17,6 +17,26 @@ def test_hierholzer():
     g.add_edge(1, 2)
     g.add_edge(2, 3)
     g.add_edge(3, 0)
+
+    cycle = cycles.eulerian_cycle(g)
+
+    assert cycle is not None
+    assert cycle.edges == [3, 0, 1, 2]
+
+
+def test_pg_hierholzer():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3])
+    g.add_edge(0, 1, edge=0)
+    g.add_edge(1, 2, edge=1)
+    g.add_edge(2, 3, edge=2)
+    g.add_edge(3, 0, edge=3)
 
     cycle = cycles.eulerian_cycle(g)
 
@@ -61,6 +81,35 @@ def test_fundamental_cycle_basis_paton():
     g.add_edge(1, 4)
     g.add_edge(4, 5)
     g.add_edge(5, 2)
+
+    fcb_weight, fcb_it = cycles.fundamental_cycle_basis_paton(g)
+
+    assert fcb_weight == 8.0
+    cycle1 = next(fcb_it)
+    cycle2 = next(fcb_it)
+    with pytest.raises(StopIteration):
+        next(fcb_it)
+
+    assert cycle1.edges == [1, 2, 3, 0]
+    assert cycle2.edges == [4, 5, 6, 1]
+
+
+def test_pg_fundamental_cycle_basis_paton():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
+    g.add_edge(0, 1, edge=0)
+    g.add_edge(1, 2, edge=1)
+    g.add_edge(2, 3, edge=2)
+    g.add_edge(3, 0, edge=3)
+    g.add_edge(1, 4, edge=4)
+    g.add_edge(4, 5, edge=5)
+    g.add_edge(5, 2, edge=6)
 
     fcb_weight, fcb_it = cycles.fundamental_cycle_basis_paton(g)
 
@@ -150,6 +199,36 @@ def test_simple_cycles_tiernan():
     g.add_edge(1, 4)
     g.add_edge(4, 5)
     g.add_edge(5, 2)
+
+    it = cycles.enumerate_simple_cycles_tiernan(g)
+
+    cycle1 = next(it)
+    assert list(cycle1) == [0, 1, 2, 3]
+    cycle2 = next(it)
+    assert list(cycle2) == [0, 1, 4, 5, 2, 3]
+
+    with pytest.raises(StopIteration):
+        next(it)
+
+
+def test_pg_simple_cycles_tiernan():
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
+
+    g.add_edge(0, 1, edge=0)
+    g.add_edge(1, 2, edge=1)
+    g.add_edge(2, 3, edge=2)
+    g.add_edge(3, 0, edge=3)
+    g.add_edge(1, 4, edge=4)
+    g.add_edge(4, 5, edge=5)
+    g.add_edge(5, 2, edge=6)
 
     it = cycles.enumerate_simple_cycles_tiernan(g)
 

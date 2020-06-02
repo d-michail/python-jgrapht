@@ -6,6 +6,7 @@ from ._wrappers import _JGraphTObjectIterator
 from ._pg_wrappers import _PropertyGraphVertexIterator, _PropertyGraphEdgeIterator
 from ._collections import (
     _JGraphTIntegerSet,
+    _JGraphTIntegerList,
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerIntegerMap,
 )
@@ -140,3 +141,36 @@ class _PropertyGraphVertexIntegerMap(_JGraphTIntegerIntegerMap):
 
     def __repr__(self):
         return "_PropertyGraphVertexIntegerMap(%r)" % self._handle
+
+
+class _PropertyGraphVertexList(_JGraphTIntegerList):
+    """A vertex set for property graphs."""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def __iter__(self):
+        res = backend.jgrapht_list_it_create(self._handle)
+        return _PropertyGraphVertexIterator(res, self._graph)
+
+    def __contains__(self, x):
+        x = self._graph._vertex_hash_to_id[x]
+        return backend.jgrapht_list_int_contains(self._handle, x)
+
+    def __repr__(self):
+        return '_PropertyGraphVertexList(%r)' % self._handle
+
+
+class _PropertyGraphVertexListIterator(_JGraphTObjectIterator):
+    """An iterator which returns lists of vertices."""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def __next__(self):
+        return _PropertyGraphVertexList(super().__next__(), self._graph)
+
+    def __repr__(self):
+        return '_PropertyGraphVertexListIterator(%r)' % self._handle

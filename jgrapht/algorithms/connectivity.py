@@ -1,5 +1,9 @@
 from .. import backend as _backend
+
 from .._internals._collections import _JGraphTIntegerSetIterator
+
+from .._internals._pg import is_property_graph
+from .._internals._pg_collections import _PropertyGraphVertexSetIterator
 
 
 def is_weakly_connected(graph):
@@ -16,7 +20,11 @@ def is_weakly_connected(graph):
       as a vertex set
     """
     connected, sets = _backend.jgrapht_connectivity_weak_exec_bfs(graph.handle)
-    return connected, _JGraphTIntegerSetIterator(sets)
+
+    if is_property_graph(graph):
+        return connected, _PropertyGraphVertexSetIterator(sets, graph)
+    else:
+        return connected, _JGraphTIntegerSetIterator(sets)
 
 
 def is_strongly_connected_gabow(graph):
@@ -35,7 +43,11 @@ def is_strongly_connected_gabow(graph):
       vertex set
     """
     connected, sets = _backend.jgrapht_connectivity_strong_exec_gabow(graph.handle)
-    return connected, _JGraphTIntegerSetIterator(sets)
+
+    if is_property_graph(graph):
+        return connected, _PropertyGraphVertexSetIterator(sets, graph)
+    else:
+        return connected, _JGraphTIntegerSetIterator(sets)
 
 
 def is_strongly_connected_kosaraju(graph):
@@ -54,7 +66,11 @@ def is_strongly_connected_kosaraju(graph):
       vertex set
     """
     connected, sets = _backend.jgrapht_connectivity_strong_exec_kosaraju(graph.handle)
-    return connected, _JGraphTIntegerSetIterator(sets)
+
+    if is_property_graph(graph):
+        return connected, _PropertyGraphVertexSetIterator(sets, graph)
+    else:
+        return connected, _JGraphTIntegerSetIterator(sets)    
 
 
 def is_connected(graph):

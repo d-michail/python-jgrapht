@@ -28,8 +28,8 @@ class _PropertyGraphEdgeIterator(_JGraphTIntegerIterator):
         self._graph = graph
 
     def __next__(self):
-        v = super().__next__()
-        return self._graph._edge_id_to_hash[v]
+        e = super().__next__()
+        return self._graph._edge_id_to_hash[e]
 
     def __repr__(self):
         return "_PropertyGraphEdgeIterator(%r)" % self._handle
