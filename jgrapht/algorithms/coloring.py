@@ -1,5 +1,9 @@
 from .. import backend as _backend
+
 from .._internals._collections import _JGraphTIntegerIntegerMap
+
+from .._internals._pg import is_property_graph
+from .._internals._pg_collections import _PropertyGraphVertexIntegerMap
 
 
 def _coloring_alg(name, graph, *args):
@@ -13,7 +17,10 @@ def _coloring_alg(name, graph, *args):
 
     num_colors, color_map_handle = alg_method(graph.handle, *args)
 
-    return (num_colors, _JGraphTIntegerIntegerMap(handle=color_map_handle))
+    if is_property_graph(graph):
+        return num_colors, _PropertyGraphVertexIntegerMap(color_map_handle, graph)
+    else:
+        return num_colors, _JGraphTIntegerIntegerMap(color_map_handle)
 
 
 def greedy_smallestnotusedcolor(graph):
@@ -143,4 +150,9 @@ def chordal_min_coloring(graph):
       dictionary from vertices to integers.
     """
     colors, res = _backend.jgrapht_coloring_exec_chordal_minimum_coloring(graph.handle)
-    return colors, _JGraphTIntegerIntegerMap(handle=res)
+
+    if is_property_graph(graph):
+        return colors, _PropertyGraphVertexIntegerMap(res, graph)
+    else:
+        return colors, _JGraphTIntegerIntegerMap(res)
+

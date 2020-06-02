@@ -219,8 +219,7 @@ class _JGraphTIntegerDoubleMutableMap(_JGraphTIntegerDoubleMap, MutableMapping):
         return '_JGraphTIntegerDoubleMutableMap(%r)' % self._handle
 
 
-
-class _JGraphTIntegerIntegerMap(_HandleWrapper, MutableMapping):
+class _JGraphTIntegerIntegerMap(_HandleWrapper, Mapping):
     """JGraphT Map with integer keys and integer values"""
 
     def __init__(self, handle=None, linked=True, **kwargs):
@@ -249,6 +248,31 @@ class _JGraphTIntegerIntegerMap(_HandleWrapper, MutableMapping):
         res = backend.jgrapht_map_int_int_get(self._handle, key)
         return res
 
+    def __contains__(self, key):
+        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        return res
+
+    def __getitem__(self, key):
+        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        if not res:
+            raise KeyError()
+        res = backend.jgrapht_map_int_int_get(self._handle, key)
+        return res
+
+    def __repr__(self):
+        return '_JGraphTIntegerIntegerMap(%r)' % self._handle
+
+    def __str__(self):
+        items = ['{}: {}'.format(k, v) for k, v in self.items()]
+        return '{' + ', '.join(items) + '}'
+
+
+class _JGraphTIntegerIntegerMutableMap(_JGraphTIntegerIntegerMap, MutableMapping):
+    """JGraphT Mutable Map with integer keys and integer values"""
+
+    def __init__(self, handle=None, linked=True, **kwargs):
+        super().__init__(handle=handle, linked=linked, **kwargs)
+
     def add(self, key, value):
         backend.jgrapht_map_int_int_put(self._handle, key, value)
 
@@ -261,17 +285,6 @@ class _JGraphTIntegerIntegerMap(_HandleWrapper, MutableMapping):
                 return defaultvalue
             else:
                 raise KeyError()
-
-    def __contains__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
-        return res
-
-    def __getitem__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
-        if not res:
-            raise KeyError()
-        res = backend.jgrapht_map_int_int_get(self._handle, key)
-        return res
 
     def __setitem__(self, key, value):
         backend.jgrapht_map_int_int_put(self._handle, key, value)
@@ -286,11 +299,7 @@ class _JGraphTIntegerIntegerMap(_HandleWrapper, MutableMapping):
         backend.jgrapht_map_clear(self._handle)
 
     def __repr__(self):
-        return '_JGraphTIntegerIntegerMap(%r)' % self._handle
-
-    def __str__(self):
-        items = ['{}: {}'.format(k, v) for k, v in self.items()]
-        return '{' + ', '.join(items) + '}'
+        return '_JGraphTIntegerIntegerMutableMap(%r)' % self._handle
 
 
 class _JGraphTIntegerStringMap(_HandleWrapper, MutableMapping):

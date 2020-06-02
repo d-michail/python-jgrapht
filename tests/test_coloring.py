@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 import jgrapht.algorithms.coloring as coloring
 
 
@@ -145,3 +145,35 @@ def test_chordal():
 
     assert color_count == 3
     assert color_map == {0: 0, 1: 1, 2: 0, 3: 2, 4: 1, 5: 2}
+
+
+def test_pg_chordal():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
+
+    for i in range(0, 6):
+        g.add_vertex(str(i))
+
+    g.add_edge(str(0), str(1))
+    g.add_edge(str(1), str(2))
+    g.add_edge(str(2), str(3))
+    g.add_edge(str(4), str(5))
+    g.add_edge(str(5), str(0))
+    g.add_edge(str(0), str(3))
+    g.add_edge(str(0), str(4))
+    g.add_edge(str(1), str(5))
+    g.add_edge(str(1), str(3))
+
+    color_count, color_map = coloring.chordal_min_coloring(g)
+
+    assert color_count == 3
+    assert color_map == {"0": 0, "1": 1, "2": 0, "3": 2, "4": 1, "5": 2}
+
+
+    color_count, color_map = coloring.backtracking_brown(g)
+    assert color_count == 3
+    assert color_map == {"0": 1, "1": 2, "2": 1, "3": 3, "4": 2, "5": 3}
