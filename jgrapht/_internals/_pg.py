@@ -3,6 +3,7 @@ from collections.abc import (
     Set,
     MutableMapping,
 )
+import copy
 
 from .. import backend
 from ..types import (
@@ -13,7 +14,12 @@ from ..types import (
 )
 
 from ._graphs import create_graph as _create_graph, create_dag as _create_dag
-from ._views import _ListenableView
+from ._views import (
+    _ListenableView,
+    _UnweightedGraphView,
+    _UndirectedGraphView,
+    _UnmodifiableGraphView,
+)
 from ._collections import _JGraphTIntegerStringMap
 from ._pg_collections import _PropertyGraphVertexSet, _PropertyGraphVertexIterator
 
@@ -33,7 +39,18 @@ class _PropertyGraph(Graph, PropertyGraph):
     Most algorithms do such a check and perform the translation automatically.
     """
 
-    def __init__(self, graph, vertex_supplier=None, edge_supplier=None, **kwargs):
+    def __init__(
+        self,
+        graph,
+        vertex_supplier=None,
+        edge_supplier=None,
+        vertex_id_to_hash=None,
+        edge_id_to_hash=None,
+        graph_props=None,
+        vertex_props=None,
+        edge_props=None,
+        **kwargs
+    ):
         """Initialize a property graph
 
         :param graph: the actual graph which we are wrapping. Must have integer 
@@ -42,29 +59,37 @@ class _PropertyGraph(Graph, PropertyGraph):
           None then object instances are used.
         :param edge_supplier: function which returns new edge on each call. If
           None then object instances are used.
+        :param vertex_id_to_hash: initial mapping from integer vertices to hash values
+          for the vertices already in the graph
+        :param edge_id_to_hash: initial mapping from integer edge to hash values
+          for the edge already in the graph
+        :param graph_props: graph properties
+        :param vertex_props: vertex properties
+        :param edge_props: edge properties
         """
+        self._graph = graph
+
         # setup structural events callback
         def structural_cb(element, event_type):
             self._structural_event_listener(element, event_type)
 
-        self._graph = graph
         self._listenable_graph = _ListenableView(graph)
         self._listenable_graph.add_listener(structural_cb)
 
         # initialize vertex maps
         self._vertex_hash_to_id = {}
         self._vertex_id_to_hash = {}
-        self._vertex_hash_to_attrs = defaultdict(lambda: {})
-        self._vertex_attrs = self._VertexAttributes(self, self._vertex_hash_to_attrs)
+        self._vertex_hash_to_props = defaultdict(lambda: {})
+        self._vertex_props = self._VertexProperties(self, self._vertex_hash_to_props)
 
         # initialize edge maps
         self._edge_hash_to_id = {}
         self._edge_id_to_hash = {}
-        self._edge_hash_to_attrs = defaultdict(lambda: {})
-        self._edge_attrs = self._EdgeAttributes(self, self._edge_hash_to_attrs)
+        self._edge_hash_to_props = defaultdict(lambda: {})
+        self._edge_props = self._EdgeProperties(self, self._edge_hash_to_props)
 
         # initialize graph maps
-        self._graph_attrs = {}
+        self._graph_props = {}
 
         # initialize suppliers
         if vertex_supplier is None:
@@ -74,15 +99,36 @@ class _PropertyGraph(Graph, PropertyGraph):
             edge_supplier = lambda: object()
         self._edge_supplier = edge_supplier
 
-        # Check if the graph already contains vertices/edges
+        # Check if the graph already contains vertices
         for vid in self._listenable_graph.vertices:
-            vertex = self._vertex_supplier()
+            if not vertex_id_to_hash is None and vid in vertex_id_to_hash:
+                vertex = vertex_id_to_hash[vid]
+            else:
+                vertex = self._vertex_supplier()
             self._vertex_hash_to_id[vertex] = vid
             self._vertex_id_to_hash[vid] = vertex
+
+        # Check if the graph already contains edges
         for eid in self._listenable_graph.edges:
-            edge = self._edge_supplier()
+            if not edge_id_to_hash is None and eid in edge_id_to_hash:
+                edge = edge_id_to_hash[eid]
+            else:
+                edge = self._edge_supplier()
             self._edge_hash_to_id[edge] = eid
             self._edge_id_to_hash[eid] = edge
+
+        # Copy attributes
+        if graph_props is not None:
+            for k, v in graph_props.items():
+                self._graph_props[k] = v
+        if vertex_props is not None:
+            for v in self._vertex_hash_to_id.keys():
+                if v in vertex_props:
+                    self._vertex_hash_to_props[v] = vertex_props[v]
+        if edge_props is not None:
+            for e in self._edge_hash_to_id.keys():
+                if e in edge_props:
+                    self._edge_hash_to_props[e] = edge_props[e]
 
     @property
     def handle(self):
@@ -286,15 +332,15 @@ class _PropertyGraph(Graph, PropertyGraph):
 
     @property
     def graph_props(self):
-        return self._graph_attrs
+        return self._graph_props
 
     @property
     def vertex_props(self):
-        return self._vertex_attrs
+        return self._vertex_props
 
     @property
     def edge_props(self):
-        return self._edge_attrs
+        return self._edge_props
 
     def __repr__(self):
         return "_PropertyGraph(%r)" % self._graph.handle
@@ -319,7 +365,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         elif event_type == GraphEvent.VERTEX_REMOVED:
             v = self._vertex_id_to_hash.pop(element)
             self._vertex_hash_to_id.pop(v)
-            self._vertex_hash_to_attrs.pop(v, None)
+            self._vertex_hash_to_props.pop(v, None)
         elif event_type == GraphEvent.EDGE_ADDED:
             e = self._edge_supplier()
             if e in self._edge_hash_to_id:
@@ -329,9 +375,9 @@ class _PropertyGraph(Graph, PropertyGraph):
         elif event_type == GraphEvent.EDGE_REMOVED:
             e = self._edge_id_to_hash.pop(element)
             self._edge_hash_to_id.pop(e)
-            self._edge_hash_to_attrs.pop(e, None)
+            self._edge_hash_to_props.pop(e, None)
 
-    class _VertexAttributes(MutableMapping):
+    class _VertexProperties(MutableMapping):
         """Wrapper around a dictionary to ensure vertex existence."""
 
         def __init__(self, graph, storage):
@@ -360,9 +406,9 @@ class _PropertyGraph(Graph, PropertyGraph):
             return iter(self._storage)
 
         def __repr__(self):
-            return "_PropertyGraph-VertexAttibutes(%r)" % repr(self._storage)
+            return "_PropertyGraph-VertexProperties(%r)" % repr(self._storage)
 
-    class _EdgeAttributes(MutableMapping):
+    class _EdgeProperties(MutableMapping):
         """Wrapper around a dictionary to ensure edge existence."""
 
         def __init__(self, graph, storage):
@@ -391,7 +437,7 @@ class _PropertyGraph(Graph, PropertyGraph):
             return iter(self._storage)
 
         def __repr__(self):
-            return "_PropertyGraph-EdgeAttibutes(%r)" % repr(self._storage)
+            return "_PropertyGraph-EdgeProperties(%r)" % repr(self._storage)
 
 
 class _PropertyDirectedAcyclicGraph(_PropertyGraph):
@@ -433,7 +479,9 @@ class _PropertyDirectedAcyclicGraph(_PropertyGraph):
         return _PropertyGraphVertexIterator(it_handle, self)
 
 
-def _create_property_graph_subgraph(property_graph, subgraph):
+def _create_property_graph_subgraph(
+    property_graph, subgraph, properties_deepcopy=False
+):
     """Create a property graph subgraph. 
 
     This function create a property graph with the identical structure as the 
@@ -462,6 +510,10 @@ def _create_property_graph_subgraph(property_graph, subgraph):
     for vid in subgraph.vertices:
         v = vertex_g_to_pg(property_graph, vid)
         res.add_vertex(vertex=v)
+        if properties_deepcopy:
+            res.vertex_props[v] = copy.deepcopy(property_graph.vertex_props[v])
+        else:
+            res.vertex_props[v] = copy.copy(property_graph.vertex_props[v])
         vertex_map[vid] = v
 
     weighted = subgraph.type.weighted
@@ -472,8 +524,69 @@ def _create_property_graph_subgraph(property_graph, subgraph):
             res.add_edge(vertex_map[s], vertex_map[t], weight=w, edge=e)
         else:
             res.add_edge(vertex_map[s], vertex_map[t], edge=e)
+        if properties_deepcopy:
+            res.edge_props[e] = copy.deepcopy(property_graph.edge_props[e])
+        else:
+            res.edge_props[e] = copy.copy(property_graph.edge_props[e])
 
     return res
+
+
+def as_unweighted_property_graph(property_graph):
+    """Create an unweighted view of a property graph."""
+    graph = property_graph._graph
+    unweighted_graph = _UnweightedGraphView(graph)
+
+    unweighted_property_graph = _PropertyGraph(
+        unweighted_graph,
+        property_graph.vertex_supplier,
+        property_graph.edge_supplier,
+        property_graph._vertex_id_to_hash,
+        property_graph._edge_id_to_hash,
+        copy.copy(property_graph._graph_props),
+        copy.copy(property_graph._vertex_props),
+        copy.copy(property_graph._edge_props),
+    )
+
+    return unweighted_property_graph
+
+
+def as_undirected_property_graph(property_graph):
+    """Create an undirected view of a property graph."""
+    graph = property_graph._graph
+    undirected_graph = _UndirectedGraphView(graph)
+
+    undirected_property_graph = _PropertyGraph(
+        undirected_graph,
+        property_graph.vertex_supplier,
+        property_graph.edge_supplier,
+        property_graph._vertex_id_to_hash,
+        property_graph._edge_id_to_hash,
+        copy.copy(property_graph._graph_props),
+        copy.copy(property_graph._vertex_props),
+        copy.copy(property_graph._edge_props),
+    )
+
+    return undirected_property_graph
+
+
+def as_unmodifiable_property_graph(property_graph):
+    """Create an unmodifiable view of a property graph."""
+    graph = property_graph._graph
+    unmodifiable_graph = _UnmodifiableGraphView(graph)
+
+    unmodifiable_property_graph = _PropertyGraph(
+        unmodifiable_graph,
+        property_graph.vertex_supplier,
+        property_graph.edge_supplier,
+        property_graph._vertex_id_to_hash,
+        property_graph._edge_id_to_hash,
+        copy.copy(property_graph._graph_props),
+        copy.copy(property_graph._vertex_props),
+        copy.copy(property_graph._edge_props),
+    )
+
+    return unmodifiable_property_graph
 
 
 def is_property_graph(graph):

@@ -321,3 +321,4 @@ def test_on_already_initialized_graph():
 
     assert pg.vertices == {'v0', 'v1', 'new2'}
     assert pg.edges == {'e0', 'e1'}
+

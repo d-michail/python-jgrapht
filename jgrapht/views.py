@@ -12,6 +12,9 @@ from ._internals._views import (
 from ._internals._pg import (
     _PropertyGraph,
     is_property_graph,
+    as_unweighted_property_graph as _as_unweighted_property_graph,
+    as_undirected_property_graph as _as_undirected_property_graph,
+    as_unmodifiable_property_graph as _as_unmodifiable_property_graph,
 )
 
 
@@ -23,8 +26,9 @@ def as_unweighted(graph):
     :returns: an unweighted graph
     """
     if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")
-    return _UnweightedGraphView(graph)
+        return _as_unweighted_property_graph(graph)
+    else:
+        return _UnweightedGraphView(graph)
 
 
 def as_undirected(graph):
@@ -35,8 +39,9 @@ def as_undirected(graph):
     :returns: an undirected graph
     """
     if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")
-    return _UndirectedGraphView(graph)
+        return _as_undirected_property_graph(graph)
+    else:
+        return _UndirectedGraphView(graph)
 
 
 def as_unmodifiable(graph):
@@ -47,8 +52,9 @@ def as_unmodifiable(graph):
     :returns: an unmodifiable graph
     """
     if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")
-    return _UnmodifiableGraphView(graph)
+        return _as_unmodifiable_property_graph(graph)
+    else:
+        return _UnmodifiableGraphView(graph)
 
 
 def as_edge_reversed(graph):

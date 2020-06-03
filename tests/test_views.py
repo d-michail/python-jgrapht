@@ -1,6 +1,7 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
+
 from jgrapht.types import GraphEvent
 from jgrapht.views import (
     as_undirected,
@@ -548,3 +549,104 @@ def test_bad_union():
 
     with pytest.raises(ValueError):
         g = as_graph_union(g2, g1)
+
+
+
+def test_pg_as_unweighted():
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertex("0")
+    g.add_vertex("1")
+    g.add_edge("0", "1", edge="e1")
+    g.set_edge_weight("e1", 100.0)
+
+    assert g.get_edge_weight("e1") == 100.0
+
+    ug = as_unweighted(g)
+
+    assert g.type.directed == ug.type.directed
+    assert g.type.allowing_self_loops == ug.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges == ug.type.allowing_multiple_edges
+    assert g.type.weighted != ug.type.weighted
+
+    assert g.get_edge_weight("e1") == 100.0
+    assert ug.get_edge_weight("e1") == 1.0
+
+
+def test_pg_as_undirected():
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertex("0")
+    g.add_vertex("1")
+    g.add_edge("0", "1", edge="e1")
+
+    assert not g.contains_edge_between("1", "0")
+
+    ug = as_undirected(g)
+
+    assert g.type.directed != ug.type.directed
+    assert g.type.allowing_self_loops == ug.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges == ug.type.allowing_multiple_edges
+    assert g.type.weighted == ug.type.weighted
+
+    assert ug.contains_edge_between("1", "0")
+
+
+def test_pg_as_unmodifiable():
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertex("0")
+    g.add_vertex("1")
+    g.add_edge("0", "1", edge="e1")
+
+    ug = as_unmodifiable(g)
+
+    assert g.type.directed == ug.type.directed
+    assert g.type.allowing_self_loops == ug.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges == ug.type.allowing_multiple_edges
+    assert g.type.weighted == ug.type.weighted
+
+    with pytest.raises(ValueError):
+        ug.add_vertex("2")
+
+    
+def test_pg_two_wrappers():
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertex("0")
+    g.add_vertex("1")
+    g.add_edge("0", "1", edge="e1")
+
+    ug = as_undirected(g)
+    ug = as_unmodifiable(ug)
+
+    assert g.type.directed != ug.type.directed
+    assert g.type.allowing_self_loops == ug.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges == ug.type.allowing_multiple_edges
+    assert g.type.weighted == ug.type.weighted
+    assert g.type.modifiable != ug.type.modifiable
+
+    with pytest.raises(ValueError):
+        ug.add_vertex("2")
+
+    assert ug.contains_edge_between("1", "0")
