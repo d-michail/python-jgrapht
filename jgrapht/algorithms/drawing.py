@@ -1,7 +1,14 @@
 from time import time
+
 from .. import backend as _backend
-from .._internals._drawing import _create_layout_model_2d
+
 from .._internals._callbacks import _create_wrapped_vertex_comparator_callback
+
+from .._internals._pg import is_property_graph, vertex_pg_to_g as _vertex_pg_to_g
+from .._internals._drawing import _create_layout_model_2d as create_layout_model_2d
+from .._internals._pg_drawing import (
+    _create_property_graph_layout_model_2d as create_property_graph_layout_model_2d,
+)
 
 
 def _drawing_alg(name, graph, model, *args):
@@ -16,9 +23,6 @@ def _drawing_alg(name, graph, model, *args):
     alg_method(graph.handle, model.handle, *args)
 
 
-from .._internals._drawing import _create_layout_model_2d as create_layout_model_2d
-
-
 def random_layout_2d(graph, area, seed=None):
     r"""Random 2d layout. 
 
@@ -31,9 +35,15 @@ def random_layout_2d(graph, area, seed=None):
     """
     if seed is None:
         seed = time.time()
-    model = create_layout_model_2d(*area)
+
+    if is_property_graph(graph):
+        model = create_property_graph_layout_model_2d(graph, *area)
+    else:
+        model = create_layout_model_2d(*area)
+
     custom = [seed]
     _drawing_alg("random_layout_2d", graph, model, *custom)
+
     return model
 
 
@@ -52,7 +62,15 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
       v1 > v2 in the ordering
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
-    model = create_layout_model_2d(*area)
+    if is_property_graph(graph):
+        model = create_property_graph_layout_model_2d(graph, *area)
+        def actual_vertex_comparator_cb(v1, v2):
+            v1 = _vertex_pg_to_g(v1)
+            v2 = _vertex_pg_to_g(v2)
+            return vertex_comparator_cb(v1, v2)
+    else:
+        model = create_layout_model_2d(*area)
+        actual_vertex_comparator_cb = vertex_comparator_cb
 
     (
         vertex_comparator_f_ptr,
@@ -87,14 +105,25 @@ def fruchterman_reingold_layout_2d(
     """
     if seed is None:
         seed = time.time()
-    model = create_layout_model_2d(*area)
+
+    if is_property_graph(graph):
+        model = create_property_graph_layout_model_2d(graph, *area)
+    else:
+        model = create_layout_model_2d(*area)    
+
     custom = [iterations, normalization_factor, seed]
     _drawing_alg("fr_layout_2d", graph, model, *custom)
-    return model    
+    return model
 
 
 def fruchterman_reingold_indexed_layout_2d(
-    graph, area, iterations=100, normalization_factor=0.5, seed=None, theta=0.5, tolerance=None
+    graph,
+    area,
+    iterations=100,
+    normalization_factor=0.5,
+    seed=None,
+    theta=0.5,
+    tolerance=None,
 ):
     """Fruchterman and Reingold Force-Directed Placement.
 
@@ -126,9 +155,14 @@ def fruchterman_reingold_indexed_layout_2d(
     """
     if seed is None:
         seed = time.time()
-    if tolerance is None: 
+    if tolerance is None:
         tolerance = 1e-9
-    model = create_layout_model_2d(*area)
+
+    if is_property_graph(graph):
+        model = create_property_graph_layout_model_2d(graph, *area)
+    else:
+        model = create_layout_model_2d(*area)
+
     custom = [iterations, normalization_factor, seed, theta, tolerance]
     _drawing_alg("indexed_fr_layout_2d", graph, model, *custom)
     return model
