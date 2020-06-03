@@ -35,7 +35,11 @@ del atexit
 import logging
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
-# Import graph api
+#
+# The graph API.
+#
+# Graphs always use integer vertex and edges.
+#
 from ._internals._graphs import (
     create_graph,
     create_directed_graph,
@@ -45,6 +49,12 @@ from ._internals._graphs import (
     as_sparse_graph,
 )
 
+#
+# The property graph API.
+#
+# Property graphs allow the use of any hashable
+# for the vertices and edges.
+#
 from ._internals._pg import (
     create_property_graph,
     create_directed_property_graph,
