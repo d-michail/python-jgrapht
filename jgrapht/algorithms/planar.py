@@ -1,6 +1,13 @@
 from .. import backend as _backend
+
 from .._internals._planar import _JGraphTPlanarEmbedding
 from .._internals._graphs import _JGraphTGraph
+
+from .._internals._pg import (
+    is_property_graph,
+    _create_property_graph_subgraph,
+)
+from .._internals._pg_planar import _PropertyGraphPlanarEmbedding
 
 
 def _planarity_alg(name, graph, *args):
@@ -15,9 +22,16 @@ def _planarity_alg(name, graph, *args):
     is_planar, embedding, kuratowski_subdivision = alg_method(graph.handle, *args)
 
     if is_planar:
-        return is_planar, _JGraphTPlanarEmbedding(embedding)
+        if is_property_graph(graph):
+            return is_planar, _PropertyGraphPlanarEmbedding(embedding, graph)
+        else:
+            return is_planar, _JGraphTPlanarEmbedding(embedding)
     else:
-        return is_planar, _JGraphTGraph(handle=kuratowski_subdivision)
+        kuratowski_as_graph = _JGraphTGraph(handle=kuratowski_subdivision)
+        if is_property_graph(graph):
+            return is_planar, _create_property_graph_subgraph(graph, kuratowski_as_graph)
+        else:
+            return is_planar, kuratowski_as_graph
 
 
 def boyer_myrvold(graph):

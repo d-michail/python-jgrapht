@@ -390,6 +390,49 @@ class _PropertyGraph(Graph, PropertyGraph):
             return "_PropertyGraph-EdgeAttibutes(%r)" % repr(self._storage)
 
 
+def _create_property_graph_subgraph(property_graph, subgraph):
+    """Create a property graph subgraph. 
+
+    This function create a property graph with the identical structure as the 
+    subgraph (which is a normal graph with integer vertices/edges). The assumption
+    is that the subgraph is actual subgraph of the backing graph of the property
+    graph. In other words, for each integer vertex or edge in the subgraph, the 
+    property graph contains a corresponding vertex or edge.
+    
+    The new property graph uses the same vertices and edges that the property graph
+    is using and has the same structure as the subgraph. However, its backing graph 
+    is a copy and therefore might have different integer vertices/edges.
+
+    :param property_graph: the property graph from which to copy vertices and edges
+    :param subgraph: the subgraph (must be a backend _JGraphTGraph)
+    """
+    res = create_property_graph(
+        directed=subgraph.type.directed,
+        allowing_self_loops=subgraph.type.allowing_self_loops,
+        allowing_multiple_edges=subgraph.type.allowing_multiple_edges,
+        weighted=subgraph.type.weighted,
+        vertex_supplier=property_graph.vertex_supplier,
+        edge_supplier=property_graph.edge_supplier,
+    )
+
+    vertex_map = {}
+    for vid in subgraph.vertices:
+        v = vertex_g_to_pg(property_graph, vid)
+        res.add_vertex(vertex=v)
+        vertex_map[vid] = v
+
+    weighted = subgraph.type.weighted
+    for eid in subgraph.edges:
+        e = edge_g_to_pg(property_graph, eid)
+        s, t, w = subgraph.edge_tuple(eid)
+        if weighted:
+            res.add_edge(vertex_map[s], vertex_map[t], weight=w, edge=e)
+        else: 
+            res.add_edge(vertex_map[s], vertex_map[t], edge=e)
+
+    return res
+
+
 def is_property_graph(graph):
     """Check if a graph instance is a property graph."""
     return isinstance(graph, (_PropertyGraph, PropertyGraph))
