@@ -70,6 +70,16 @@ class _PropertyGraph(Graph, PropertyGraph):
             edge_supplier = lambda: object()
         self._edge_supplier = edge_supplier
 
+        # Check if the graph already contains vertices/edges
+        for vid in self._graph.vertices:
+            vertex = self._vertex_supplier()
+            self._vertex_hash_to_id[vertex] = vid
+            self._vertex_id_to_hash[vid] = vertex
+        for eid in self._graph.edges:
+            edge = self._edge_supplier()
+            self._edge_hash_to_id[edge] = eid
+            self._edge_id_to_hash[eid] = edge
+
     @property
     def handle(self):
         """Handle to the backend graph."""
@@ -78,6 +88,16 @@ class _PropertyGraph(Graph, PropertyGraph):
     @property
     def type(self):
         return self._graph.type
+
+    @property
+    def vertex_supplier(self):
+        """The vertex supplier."""
+        return self._vertex_supplier
+
+    @property
+    def edge_supplier(self):
+        """The edge supplier."""
+        return self._edge_supplier
 
     def add_vertex(self, vertex=None):
         if vertex is not None and vertex in self._vertex_hash_to_id:

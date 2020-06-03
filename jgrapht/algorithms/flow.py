@@ -1,8 +1,16 @@
 from .. import backend as _backend
+
 from .._internals._flows import (
-    _JGraphTCut, 
+    _JGraphTCut,
     _JGraphTFlow,
     _JGraphTEquivalentFlowTree,
+)
+
+from .._internals._pg import is_property_graph, vertex_pg_to_g as _vertex_pg_to_g
+from .._internals._pg_flows import (
+    _PropertyGraphCut,
+    _PropertyGraphFlow,
+    _PropertyGraphEquivalentFlowTree,
 )
 
 
@@ -16,11 +24,18 @@ def _maxflow_alg(name, graph, source, sink, *args):
         raise NotImplementedError("Algorithm not supported.")
 
     flow_value, flow_handle, cut_source_partition_handle = alg_method(
-        graph.handle, source, sink, *args
+        graph.handle,
+        _vertex_pg_to_g(graph, source),
+        _vertex_pg_to_g(graph, sink),
+        *args
     )
 
-    flow = _JGraphTFlow(flow_handle, source, sink, flow_value)
-    cut = _JGraphTCut(graph, flow_value, cut_source_partition_handle)
+    if is_property_graph(graph):
+        flow = _PropertyGraphFlow(graph, flow_handle, source, sink, flow_value)
+        cut = _PropertyGraphCut(graph, flow_value, cut_source_partition_handle)
+    else:
+        flow = _JGraphTFlow(flow_handle, source, sink, flow_value)
+        cut = _JGraphTCut(graph, flow_value, cut_source_partition_handle)
 
     return flow, cut
 
@@ -124,4 +139,8 @@ def equivalent_flow_tree_gusfield(graph):
     :returns: an equivalent flow tree as an instance of :py:class:`jgrapht.types.EquivalentFlowTree`
     """
     handle = _backend.jgrapht_equivalentflowtree_exec_gusfield(graph.handle)
-    return _JGraphTEquivalentFlowTree(handle, graph)
+
+    if is_property_graph(graph):
+        return _PropertyGraphEquivalentFlowTree(handle, graph)
+    else:
+        return _JGraphTEquivalentFlowTree(handle, graph)

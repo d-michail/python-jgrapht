@@ -288,3 +288,36 @@ def test_with_string_suppliers_graph():
 
     assert g.edges == {"4"}
 
+
+def test_on_already_initialized_graph():
+    
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_edge(0,1)
+    g.add_edge(1,0)
+
+    class StringSupplier:
+        def __init__(self, prefix):
+            self._count = 0
+            self._prefix = prefix
+
+        def __call__(self):
+            ret = '{}{}'.format(self._prefix, self._count)
+            self._count += 1
+            return ret
+
+    pg = as_property_graph(g, vertex_supplier=StringSupplier('v'), edge_supplier=StringSupplier('e'))
+
+    pg.add_vertex(vertex='new2')
+
+    assert len(pg.vertices) == 3
+
+    assert pg.vertices == {'v0', 'v1', 'new2'}
+    assert pg.edges == {'e0', 'e1'}

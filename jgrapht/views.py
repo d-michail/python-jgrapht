@@ -10,7 +10,7 @@ from ._internals._views import (
 )
 
 from ._internals._pg import (
-    _PropertyGraph, 
+    _PropertyGraph,
     is_property_graph,
 )
 
@@ -47,7 +47,7 @@ def as_unmodifiable(graph):
     :returns: an unmodifiable graph
     """
     if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")    
+        raise ValueError("View not supported for property graphs")
     return _UnmodifiableGraphView(graph)
 
 
@@ -59,7 +59,7 @@ def as_edge_reversed(graph):
     :returns: a graph with reversed edges
     """
     if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")    
+        raise ValueError("View not supported for property graphs")
     return _EdgeReversedGraphView(graph)
 
 
@@ -81,7 +81,7 @@ def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):
     :returns: a masked subgraph 
     """
     if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")    
+        raise ValueError("View not supported for property graphs")
     return _MaskedSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
 
 
@@ -113,7 +113,7 @@ def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through
     :returns: a weighted view
     """
     if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")    
+        raise ValueError("View not supported for property graphs")
     return _WeightedView(graph, edge_weight_cb, cache_weights, write_weights_through)
 
 
@@ -125,7 +125,7 @@ def as_listenable(graph):
     :returns: a listenable graph which is an instance of type :py:class:`~jgrapht.types.ListenableGraph`.
     """
     if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")    
+        raise ValueError("View not supported for property graphs")
     return _ListenableView(graph)
 
 
@@ -149,16 +149,22 @@ def as_graph_union(graph1, graph2, edge_weight_combiner_cb=None):
     :returns: a graph which is the union of the two graphs
     """
     if is_property_graph(graph1) or is_property_graph(graph2):
-        raise ValueError("View not supported for property graphs")    
+        raise ValueError("View not supported for property graphs")
     return _GraphUnion(graph1, graph2, edge_weight_combiner_cb)
 
 
-def as_property_graph(graph):
+def as_property_graph(graph, vertex_supplier=None, edge_supplier=None):
     """Create a property graph view of a graph.
 
     :param graph: the original graph
+    :param vertex_supplier: function which returns new vertices on each call. If
+        None then object instances are used.
+    :param edge_supplier: function which returns new edge on each call. If
+        None then object instances are used.
     :returns: a property graph which is an instance of type :py:class:`~jgrapht.types.PropertyGraph`.
     """
     if is_property_graph(graph):
-        raise ValueError("Cannot recursively create a property graph view")    
-    return _PropertyGraph(graph)
+        raise ValueError("Cannot recursively create a property graph view")
+    return _PropertyGraph(
+        graph, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
+    )
