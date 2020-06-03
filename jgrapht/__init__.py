@@ -59,6 +59,7 @@ from ._internals._pg import (
     create_property_graph,
     create_directed_property_graph,
     create_undirected_property_graph,
+    create_property_dag,
     is_property_graph,
 )
 

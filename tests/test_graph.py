@@ -5,6 +5,7 @@ from jgrapht import (
     create_dag,
     create_sparse_graph,
     as_sparse_graph,
+    create_property_dag,
 )
 
 
@@ -542,3 +543,56 @@ def test_dag():
 
     with pytest.raises(ValueError):
         g1.add_edge(0, 1)
+
+
+def test_pg_dag():
+    g = create_property_dag(allowing_multiple_edges=True, weighted=True)
+
+    assert g.type.directed
+    assert not g.type.undirected
+    assert g.type.allowing_multiple_edges
+    assert not g.type.allowing_self_loops
+    assert g.type.weighted
+    assert not g.type._allowing_cycles
+
+    for i in range(0,11):
+        g.add_vertex(str(i))
+
+    g.add_edge("0", "1")
+    g.add_edge("1", "3")
+    g.add_edge("0", "2")
+    g.add_edge("2", "4")
+    g.add_edge("3", "5")
+    g.add_edge("4", "5")
+    g.add_edge("5", "6")
+    g.add_edge("5", "7")
+    g.add_edge("6", "8")
+    g.add_edge("7", "8")
+    g.add_edge("9", "10")
+    g.add_edge("10", "8")
+
+    with pytest.raises(ValueError):
+        g.add_edge("8", "1")
+
+    topological_order = [v for v in g]
+
+    assert topological_order == ["0", "1", "2", "3", "4", "5", "6", "7", "9", "10", "8"]
+
+    assert g.ancestors("5") == {"0", "1", "2", "3", "4"}
+    assert g.descendants("5") == {"6", "7", "8"}
+    assert g.descendants("9") == {"10", "8"}
+
+    g1 = create_property_dag(allowing_multiple_edges=False, weighted=False)
+
+    assert g1.type.directed
+    assert not g1.type.undirected
+    assert not g1.type.allowing_multiple_edges
+    assert not g1.type.allowing_self_loops
+    assert not g1.type.weighted
+    assert not g1.type._allowing_cycles
+
+    g1.add_vertices_from(["0", "1"])
+    g1.add_edge("0", "1")
+
+    with pytest.raises(ValueError):
+        g1.add_edge("0", "1")

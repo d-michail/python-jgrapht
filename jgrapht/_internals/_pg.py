@@ -12,13 +12,15 @@ from ..types import (
     PropertyGraph,
 )
 
-from ._graphs import create_graph as _create_graph
+from ._graphs import create_graph as _create_graph, create_dag as _create_dag
 from ._views import _ListenableView
 from ._collections import _JGraphTIntegerStringMap
+from ._pg_collections import _PropertyGraphVertexSet, _PropertyGraphVertexIterator
 
 
 class _PropertyGraph(Graph, PropertyGraph):
-    """A graph view which allows the use of any hashable as vertex and edges.
+    """A property graph allows the use of any hashable as vertex and edges.
+    
     This is a wrapper around the default graph which has integer identifiers, 
     which means that there is a performance penalty involved. The graph also 
     supports properties (attributes) on graph vertices/edges and the graph 
@@ -28,6 +30,7 @@ class _PropertyGraph(Graph, PropertyGraph):
     the handle which means that it is usable in all algorithms. The result 
     however will refer to the actual graph and not the property graph wrapper which 
     means that it needs to be translated back when returning from the call.
+    Most algorithms do such a check and perform the translation automatically.
     """
 
     def __init__(self, graph, vertex_supplier=None, edge_supplier=None, **kwargs):
@@ -44,8 +47,9 @@ class _PropertyGraph(Graph, PropertyGraph):
         def structural_cb(element, event_type):
             self._structural_event_listener(element, event_type)
 
-        self._graph = _ListenableView(graph)
-        self._graph.add_listener(structural_cb)
+        self._graph = graph
+        self._listenable_graph = _ListenableView(graph)
+        self._listenable_graph.add_listener(structural_cb)
 
         # initialize vertex maps
         self._vertex_hash_to_id = {}
@@ -71,11 +75,11 @@ class _PropertyGraph(Graph, PropertyGraph):
         self._edge_supplier = edge_supplier
 
         # Check if the graph already contains vertices/edges
-        for vid in self._graph.vertices:
+        for vid in self._listenable_graph.vertices:
             vertex = self._vertex_supplier()
             self._vertex_hash_to_id[vertex] = vid
             self._vertex_id_to_hash[vid] = vertex
-        for eid in self._graph.edges:
+        for eid in self._listenable_graph.edges:
             edge = self._edge_supplier()
             self._edge_hash_to_id[edge] = eid
             self._edge_id_to_hash[eid] = edge
@@ -83,11 +87,11 @@ class _PropertyGraph(Graph, PropertyGraph):
     @property
     def handle(self):
         """Handle to the backend graph."""
-        return self._graph.handle
+        return self._listenable_graph.handle
 
     @property
     def type(self):
-        return self._graph.type
+        return self._listenable_graph.type
 
     @property
     def vertex_supplier(self):
@@ -103,11 +107,11 @@ class _PropertyGraph(Graph, PropertyGraph):
         if vertex is not None and vertex in self._vertex_hash_to_id:
             return vertex
 
-        vid = self._graph.add_vertex()
+        vid = self._listenable_graph.add_vertex()
 
         # At this point, a new vertex has been created by the structural callback.
         # This is necessary in order to automatically reflect the backend view of
-        # the graph. Imagine that some algorithm decides to add a new vertex to the 
+        # the graph. Imagine that some algorithm decides to add a new vertex to the
         # backend graph.
 
         # Override if user has given an explicit vertex. This will bypass values
@@ -128,7 +132,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             return False
-        self._graph.remove_vertex(vid)
+        self._listenable_graph.remove_vertex(vid)
         return True
 
     def contains_vertex(self, v):
@@ -145,11 +149,11 @@ class _PropertyGraph(Graph, PropertyGraph):
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
 
-        eid = self._graph.add_edge(uid, vid)
+        eid = self._listenable_graph.add_edge(uid, vid)
 
         # At this point, a new edge has been created by the structural callback.
         # This is necessary in order to automatically reflect the backend view of
-        # the graph. Imagine that some algorithm decides to add a new edge to the 
+        # the graph. Imagine that some algorithm decides to add a new edge to the
         # backend graph.
 
         # Override if user has given an explicit edge. This will bypass values
@@ -163,7 +167,7 @@ class _PropertyGraph(Graph, PropertyGraph):
             edge = self._edge_id_to_hash[eid]
 
         if weight is not None:
-            self._graph.set_edge_weight(eid, weight) 
+            self._listenable_graph.set_edge_weight(eid, weight)
 
         return edge
 
@@ -173,7 +177,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         eid = self._edge_hash_to_id.get(e)
         if eid is None:
             return False
-        self._graph.remove_edge(eid)
+        self._listenable_graph.remove_edge(eid)
         return True
 
     def contains_edge(self, e):
@@ -186,51 +190,51 @@ class _PropertyGraph(Graph, PropertyGraph):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
-        return self._graph.contains_edge_between(uid, vid)
+        return self._listenable_graph.contains_edge_between(uid, vid)
 
     def degree_of(self, v):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
-        return self._graph.degree_of(vid)
+        return self._listenable_graph.degree_of(vid)
 
     def indegree_of(self, v):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
-        return self._graph.indegree_of(vid)
+        return self._listenable_graph.indegree_of(vid)
 
     def outdegree_of(self, v):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
-        return self._graph.outdegree_of(vid)
+        return self._listenable_graph.outdegree_of(vid)
 
     def edge_source(self, e):
         eid = self._edge_hash_to_id.get(e)
         if eid is None:
             raise ValueError("Edge {} not in graph".format(e))
-        vid = self._graph.edge_source(eid)
+        vid = self._listenable_graph.edge_source(eid)
         return self._vertex_id_to_hash[vid]
 
     def edge_target(self, e):
         eid = self._edge_hash_to_id.get(e)
         if eid is None:
             raise ValueError("Edge {} not in graph".format(e))
-        vid = self._graph.edge_target(eid)
+        vid = self._listenable_graph.edge_target(eid)
         return self._vertex_id_to_hash[vid]
 
     def get_edge_weight(self, e):
         eid = self._edge_hash_to_id.get(e)
         if eid is None:
             raise ValueError("Edge {} not in graph".format(e))
-        return self._graph.get_edge_weight(eid)
+        return self._listenable_graph.get_edge_weight(eid)
 
     def set_edge_weight(self, e, weight):
         eid = self._edge_hash_to_id.get(e)
         if eid is None:
             raise ValueError("Edge {} not in graph".format(e))
-        self._graph.set_edge_weight(eid, weight)
+        self._listenable_graph.set_edge_weight(eid, weight)
 
     @property
     def number_of_vertices(self):
@@ -256,28 +260,28 @@ class _PropertyGraph(Graph, PropertyGraph):
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
 
-        it = self._graph.edges_between(uid, vid)
+        it = self._listenable_graph.edges_between(uid, vid)
         return self._create_edge_it(it)
 
     def edges_of(self, v):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
-        it = self._graph.edges_of(vid)
+        it = self._listenable_graph.edges_of(vid)
         return self._create_edge_it(it)
 
     def inedges_of(self, v):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
-        it = self._graph.inedges_of(vid)
+        it = self._listenable_graph.inedges_of(vid)
         return self._create_edge_it(it)
 
     def outedges_of(self, v):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
-        it = self._graph.outedges_of(vid)
+        it = self._listenable_graph.outedges_of(vid)
         return self._create_edge_it(it)
 
     @property
@@ -390,6 +394,45 @@ class _PropertyGraph(Graph, PropertyGraph):
             return "_PropertyGraph-EdgeAttibutes(%r)" % repr(self._storage)
 
 
+class _PropertyDirectedAcyclicGraph(_PropertyGraph):
+    """The directed acyclic graph wrapper."""
+
+    def __init__(self, graph, vertex_supplier=None, edge_supplier=None, **kwargs):
+        """Initialize a property graph
+
+        :param graph: the actual graph which we are wrapping. Must have integer 
+          vertices and edges.
+        :param vertex_supplier: function which returns new vertices on each call. If
+          None then object instances are used.
+        :param edge_supplier: function which returns new edge on each call. If
+          None then object instances are used.
+        """
+        super().__init__(
+            graph=graph,
+            vertex_supplier=vertex_supplier,
+            edge_supplier=edge_supplier,
+            **kwargs
+        )
+
+    def descendants(self, v):
+        vid = self._vertex_hash_to_id.get(v)
+        if vid is None:
+            raise ValueError("Vertex {} not in graph".format(v))
+        set_handle = backend.jgrapht_graph_dag_vertex_descendants(self.handle, vid)
+        return _PropertyGraphVertexSet(set_handle, self)
+
+    def ancestors(self, v):
+        vid = self._vertex_hash_to_id.get(v)
+        if vid is None:
+            raise ValueError("Vertex {} not in graph".format(v))
+        set_handle = backend.jgrapht_graph_dag_vertex_ancestors(self.handle, vid)
+        return _PropertyGraphVertexSet(set_handle, self)
+
+    def __iter__(self):
+        it_handle = backend.jgrapht_graph_dag_topological_it(self.handle)
+        return _PropertyGraphVertexIterator(it_handle, self)
+
+
 def _create_property_graph_subgraph(property_graph, subgraph):
     """Create a property graph subgraph. 
 
@@ -427,14 +470,18 @@ def _create_property_graph_subgraph(property_graph, subgraph):
         s, t, w = subgraph.edge_tuple(eid)
         if weighted:
             res.add_edge(vertex_map[s], vertex_map[t], weight=w, edge=e)
-        else: 
+        else:
             res.add_edge(vertex_map[s], vertex_map[t], edge=e)
 
     return res
 
 
 def is_property_graph(graph):
-    """Check if a graph instance is a property graph."""
+    """Check if a graph instance is a property graph.
+    
+    :param graph: the graph
+    :returns: True if the graph is a property graph, False otherwise.
+    """
     return isinstance(graph, (_PropertyGraph, PropertyGraph))
 
 
@@ -464,7 +511,6 @@ def edge_g_to_pg(graph, edge):
     if is_property_graph(graph):
         return graph._edge_id_to_hash[edge] if edge is not None else None
     return edge
-
 
 
 def create_property_graph(
@@ -554,4 +600,23 @@ def create_undirected_property_graph(
         weighted=weighted,
         vertex_supplier=vertex_supplier,
         edge_supplier=edge_supplier,
+    )
+
+
+def create_property_dag(
+    allowing_multiple_edges=False,
+    weighted=True,
+    vertex_supplier=None,
+    edge_supplier=None,
+):
+    """Create a directed acyclic property graph.
+
+    :param allowing_multiple_edges: if True the graph will allow multiple-edges
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph` and :class:`~jgrapht.types.PropertyGraph`    
+    """
+    g = _create_dag(allowing_multiple_edges=allowing_multiple_edges, weighted=weighted)
+    return _PropertyDirectedAcyclicGraph(
+        g, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
     )
