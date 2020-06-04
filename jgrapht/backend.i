@@ -26,7 +26,7 @@
 }
 
 // convert a long to a void function pointer
-%typemap(in) void *LONG_TO_FUNCTION_POINTER { 
+%typemap(in) void *LONG_TO_FPTR { 
     $1 = PyLong_AsVoidPtr($input);    
 }
 
@@ -307,7 +307,7 @@ int jgrapht_drawing_layout_model_2d_set_fixed(void *, int, int);
 
 int jgrapht_drawing_exec_random_layout_2d(void *, void *, long long int);
 
-int jgrapht_drawing_exec_circular_layout_2d(void *, void *, double, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_drawing_exec_circular_layout_2d(void *, void *, double, void *LONG_TO_FPTR);
 
 int jgrapht_drawing_exec_fr_layout_2d(void *, void *, int, double, long long int);
 
@@ -491,11 +491,11 @@ int jgrapht_graph_as_unweighted(void *, void** OUTPUT);
 
 int jgrapht_graph_as_edgereversed(void *, void** OUTPUT);
 
-int jgrapht_graph_as_weighted(void *, void *LONG_TO_FUNCTION_POINTER, int, int, void** OUTPUT);
+int jgrapht_graph_as_weighted(void *, void *LONG_TO_FPTR, int, int, void** OUTPUT);
 
-int jgrapht_graph_as_masked_subgraph(void *, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_graph_as_masked_subgraph(void *, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_graph_as_graph_union(void *, void *, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_graph_as_graph_union(void *, void *, void *LONG_TO_FPTR, void** OUTPUT);
 
 int jgrapht_graph_dag_create(int, int, void** OUTPUT);
 
@@ -579,115 +579,115 @@ int jgrapht_handles_get_graphpath(void *, double* OUTPUT, int* OUTPUT, int* OUTP
 
 // importers
 
-int jgrapht_import_file_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_string_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_file_gml(void *, char* BYTEARRAY, void* LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_gml(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_string_gml(void *, char* BYTEARRAY, void* LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_gml(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_file_json(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_json(void *, char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_string_json(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_json(void *, char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_file_csv(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int);
+int jgrapht_import_file_csv(void *, char* BYTEARRAY, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR, csv_format_t, int, int, int);
 
-int jgrapht_import_string_csv(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int);
+int jgrapht_import_string_csv(void *, char* BYTEARRAY, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR, csv_format_t, int, int, int);
 
-int jgrapht_import_file_gexf(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_gexf(void *, char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_string_gexf(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_gexf(void *, char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_file_graphml_simple(void *, char* BYTEARRAY, void * LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_graphml_simple(void *, char* BYTEARRAY, void * LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_string_graphml_simple(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_graphml_simple(void *, char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_file_graphml(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_graphml(void *, char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_string_graphml(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_graphml(void *, char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_file_dot(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_dot(void *, char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_string_dot(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_dot(void *, char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_file_graph6sparse6(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_file_graph6sparse6(void *, char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
-int jgrapht_import_string_graph6sparse6(void *, char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER);
+int jgrapht_import_string_graph6sparse6(void *, char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 
 // edgelist
 
-int jgrapht_import_edgelist_noattrs_file_dimacs(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_dimacs(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_dimacs(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_dimacs(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_dimacs(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_dimacs(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_dimacs(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_dimacs(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_gml(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_gml(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_gml(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_gml(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_json(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_json(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_json(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_json(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_json(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_json(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_json(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_json(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_csv(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_csv(char* BYTEARRAY, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_csv(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_csv(char* BYTEARRAY, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_csv(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_csv(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_csv(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, csv_format_t, int, int, int, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_csv(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_gexf(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_gexf(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_gexf(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_gexf(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_gexf(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_gexf(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_gexf(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_gexf(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_graphml_simple(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_graphml_simple(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_graphml_simple(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_graphml_simple(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_graphml_simple(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_graphml_simple(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_graphml_simple(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_graphml_simple(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_graphml(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_graphml(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_graphml(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_graphml(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_graphml(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_graphml(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_graphml(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, int, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_graphml(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_dot(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_dot(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_dot(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_dot(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
 // independent set
 
@@ -745,7 +745,7 @@ int jgrapht_list_clear(void *);
 
 int jgrapht_listenable_as_listenable(void *, void** OUTPUT);
 
-int jgrapht_listenable_create_graph_listener(void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_listenable_create_graph_listener(void *LONG_TO_FPTR, void** OUTPUT);
 
 int jgrapht_listenable_add_graph_listener(void *, void *);
 
@@ -905,9 +905,9 @@ int jgrapht_sp_allpairs_get_path_between_vertices(void *, int, int, void** OUTPU
 
 int jgrapht_sp_allpairs_get_singlesource_from_vertex(void *, int, void** OUTPUT);
 
-int jgrapht_sp_exec_astar_get_path_between_vertices(void *, int, int, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_sp_exec_astar_get_path_between_vertices(void *, int, int, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_sp_exec_bidirectional_astar_get_path_between_vertices(void *, int, int, void *LONG_TO_FUNCTION_POINTER, void** OUTPUT);
+int jgrapht_sp_exec_bidirectional_astar_get_path_between_vertices(void *, int, int, void *LONG_TO_FPTR, void** OUTPUT);
 
 int jgrapht_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void** OUTPUT);
 
@@ -923,9 +923,9 @@ int jgrapht_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, int, dou
 
 // multi objective shortest paths
 
-int jgrapht_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *, int, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
+int jgrapht_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *, int, void *LONG_TO_FPTR, int, void** OUTPUT);
 
-int jgrapht_multisp_exec_martin_get_paths_between_vertices(void *, int, int, void *LONG_TO_FUNCTION_POINTER, int, void** OUTPUT);
+int jgrapht_multisp_exec_martin_get_paths_between_vertices(void *, int, int, void *LONG_TO_FPTR, int, void** OUTPUT);
 
 int jgrapht_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *, int, void** OUTPUT);
 

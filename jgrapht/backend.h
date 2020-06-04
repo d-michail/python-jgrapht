@@ -424,41 +424,41 @@ int jgrapht_handles_get_graphpath(void *, double*, int*, int*, void**);
 
 // importers
 
-int jgrapht_import_file_dimacs(void *, char*, void *);
+int jgrapht_import_file_dimacs(void *, char*, void *, void *, void*);
 
-int jgrapht_import_string_dimacs(void *, char*, void *);
+int jgrapht_import_string_dimacs(void *, char*, void *, void *, void*);
 
-int jgrapht_import_file_gml(void *, char*, void *, void *, void *);
+int jgrapht_import_file_gml(void *, char*, void *, void *, void *, void *, void*);
 
-int jgrapht_import_string_gml(void *, char*, void *, void *, void *);
+int jgrapht_import_string_gml(void *, char*, void *, void *, void *, void *, void*);
 
-int jgrapht_import_file_json(void *, char*, void *, void *, void *);
+int jgrapht_import_file_json(void *, char*, void *, void *, void *, void *, void*);
 
-int jgrapht_import_string_json(void *, char*, void *, void *, void *);
+int jgrapht_import_string_json(void *, char*, void *, void *, void *, void *, void*);
 
-int jgrapht_import_file_csv(void *, char*, void *, csv_format_t, int, int, int);
+int jgrapht_import_file_csv(void *, char*, void *, void *, void*, csv_format_t, int, int, int);
 
-int jgrapht_import_string_csv(void *, char*, void *, csv_format_t, int, int, int);
+int jgrapht_import_string_csv(void *, char*, void *, void *, void*, csv_format_t, int, int, int);
 
-int jgrapht_import_file_gexf(void *, char*, void *, int, void *, void *);
+int jgrapht_import_file_gexf(void *, char*, void *, int, void *, void *, void *, void*);
 
-int jgrapht_import_string_gexf(void *, char*, void *, int, void *, void *);
+int jgrapht_import_string_gexf(void *, char*, void *, int, void *, void *, void *, void*);
 
-int jgrapht_import_file_graphml_simple(void *, char*, void *, int, void *, void *);
+int jgrapht_import_file_graphml_simple(void *, char*, void *, int, void *, void *, void *, void*);
 
-int jgrapht_import_string_graphml_simple(void *, char*, void *, int, void *, void *);
+int jgrapht_import_string_graphml_simple(void *, char*, void *, int, void *, void *, void *, void*);
 
-int jgrapht_import_file_graphml(void *, char*, void *, int, void *, void *);
+int jgrapht_import_file_graphml(void *, char*, void *, int, void *, void *, void *, void*);
 
-int jgrapht_import_string_graphml(void *, char*, void *, int, void *, void *);
+int jgrapht_import_string_graphml(void *, char*, void *, int, void *, void *, void *, void*);
 
-int jgrapht_import_file_dot(void *, char*, void *, void *, void *);
+int jgrapht_import_file_dot(void *, char*, void *, void *, void *, void *, void*);
 
-int jgrapht_import_string_dot(void *, char*, void *, void *, void *);
+int jgrapht_import_string_dot(void *, char*, void *, void *, void *, void *, void*);
 
-int jgrapht_import_file_graph6sparse6(void *, char*, void *, void *, void *);
+int jgrapht_import_file_graph6sparse6(void *, char*, void *, void *, void *, void *, void*);
 
-int jgrapht_import_string_graph6sparse6(void *, char*, void *, void *, void *);
+int jgrapht_import_string_graph6sparse6(void *, char*, void *, void *, void *, void *, void*);
 
 // edgelist
 

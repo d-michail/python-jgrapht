@@ -341,10 +341,10 @@ def test_input_json_from_string_property_graph():
     input_string = r'{"version":"1","nodes":[{"id":"5"},{"id":"7"}],"edges":[{"source":"5","target":"7"}]}'
 
     def import_id(file_id):
-        return int(file_id)
+        return 'vertex-{}'.format(file_id)
 
     parse_json(g, input_string, import_id_cb=import_id)
-    assert g.vertices == set(['v0', 'v1'])
+    assert g.vertices == set(['vertex-5', 'vertex-7'])
     assert g.edges == set(['e0'])
 
     print(g)

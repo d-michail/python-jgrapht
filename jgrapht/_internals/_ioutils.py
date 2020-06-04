@@ -46,3 +46,12 @@ def _create_wrapped_import_integer_id_callback(callback):
         return _create_wrapped_callback(callback, callback_ctype)
     else:
         return (0, None)
+
+
+def _create_wrapped_notify_id_callback(callback):
+    if callback is not None:
+        callback_ctype = ctypes.CFUNCTYPE(None, ctypes.c_int)
+        return _create_wrapped_callback(callback, callback_ctype)
+    else:
+        return (0, None)     
+   

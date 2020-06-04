@@ -1,4 +1,5 @@
 import time
+from collections import defaultdict
 
 from .. import backend as _backend
 
@@ -7,6 +8,9 @@ from .._internals._paths import _JGraphTGraphPath
 from .._internals._ioutils import _create_wrapped_import_integer_id_callback
 from .._internals._ioutils import _create_wrapped_import_string_id_callback
 from .._internals._ioutils import _create_wrapped_attribute_callback
+from .._internals._ioutils import _create_wrapped_notify_id_callback
+
+from .._internals._pg import is_property_graph
 
 
 def _import(name, graph, filename_or_string, *args):
@@ -68,8 +72,16 @@ def read_dimacs(graph, filename, import_id_cb=None):
     import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
         import_id_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
-    return _import("file_dimacs", graph, filename, import_id_f_ptr)
+    args = [
+        import_id_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    ]
+
+    return _import("file_dimacs", graph, filename, *args)
 
 
 def parse_dimacs(graph, input_string, import_id_cb=None):
@@ -119,8 +131,16 @@ def parse_dimacs(graph, input_string, import_id_cb=None):
     import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
         import_id_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
-    return _import("string_dimacs", graph, input_string, import_id_f_ptr)
+    args = [
+        import_id_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    ]
+
+    return _import("string_dimacs", graph, input_string, *args)
 
 
 def read_gml(
@@ -211,8 +231,17 @@ def read_gml(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
-    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+    args = [
+        import_id_f_ptr,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    ]
+
     return _import("file_gml", graph, filename, *args)
 
 
@@ -304,8 +333,17 @@ def parse_gml(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
-    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+    args = [
+        import_id_f_ptr,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    ]
+
     return _import("string_gml", graph, input_string, *args)
 
 
@@ -372,8 +410,17 @@ def read_json(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
-    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+    args = [
+        import_id_f_ptr,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    ]
+
     return _import("file_json", graph, filename, *args)
 
 
@@ -435,18 +482,79 @@ def parse_json(
     :param edge_attribute_cb: Callback function for edge attributes
     :raises IOError: In case of an import error    
     """
+    if is_property_graph(graph):
+        next_vertex = max(graph._graph.vertices, default=-1) + 1
+        vertex_id_to_hash = {}
+        edge_id_to_hash = {}
+        vertex_id_to_props = defaultdict(lambda: {})
+        edge_id_to_props = defaultdict(lambda: {})
+
+        def use_import_id_cb(id_from_file):
+            # We assume that the user callback accepts the id from file and returns any hashable
+            nonlocal next_vertex
+            new_vertex = next_vertex
+            next_vertex += 1
+            vertex_id_to_hash[new_vertex] = import_id_cb(id_from_file)
+            return new_vertex
+
+        def use_notify_edge_id_cb(eid):
+            edge_id_to_hash[eid] = graph.edge_supplier()
+
+        def use_vertex_attribute_cb(id, key, value):
+            vertex_id_to_props[id][key] = value
+
+        def use_edge_attribute_cb(id, key, value):
+            edge_id_to_props[id][key] = value
+
+        use_graph_handle = graph._graph.handle
+
+    else:
+        use_import_id_cb = import_id_cb
+        use_notify_edge_id_cb = None
+        use_vertex_attribute_cb = vertex_attribute_cb
+        use_edge_attribute_cb = edge_attribute_cb
+        use_graph_handle = graph.handle
+
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
+        use_import_id_cb
     )
     vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-        vertex_attribute_cb
+        use_vertex_attribute_cb
     )
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
-        edge_attribute_cb
+        use_edge_attribute_cb
+    )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(
+        use_notify_edge_id_cb
     )
 
-    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
-    return _import("string_json", graph, input_string, *args)
+    string_as_bytearray = bytearray(input_string, encoding="utf-8")
+    result = _backend.jgrapht_import_string_json(
+        use_graph_handle,
+        string_as_bytearray,
+        *[
+            import_id_f_ptr,
+            vertex_attribute_f_ptr,
+            edge_attribute_f_ptr,
+            vertex_notify_f_ptr,
+            edge_notify_f_ptr,
+        ]
+    )
+
+    if is_property_graph(graph):
+        # After creating, populate the property graph with the new vertices and edges
+        for vid, vhash in vertex_id_to_hash.items():
+            graph._add_new_vertex(vid, vhash)
+            for key, value in vertex_id_to_props[vid].items():
+                graph.vertex_props[vhash][key] = value
+
+        for eid, ehash in edge_id_to_hash.items():
+            graph._add_new_edge(eid, ehash)
+            for key, value in edge_id_to_props[eid].items():
+                graph.edge_props[ehash][key] = value
+
+    return result
 
 
 CSV_FORMATS = dict(
@@ -489,10 +597,14 @@ def read_csv(
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
         import_id_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
     format_to_use = CSV_FORMATS.get(format, _backend.CSV_FORMAT_EDGE_LIST)
     args = [
         import_id_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
         format_to_use,
         import_edge_weights,
         matrix_format_node_id,
@@ -533,10 +645,14 @@ def parse_csv(
     import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
         import_id_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
     format_to_use = CSV_FORMATS.get(format, _backend.CSV_FORMAT_ADJACENCY_LIST)
     args = [
         import_id_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
         format_to_use,
         import_edge_weights,
         matrix_format_node_id,
@@ -632,12 +748,16 @@ def read_gexf(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
     args = [
         import_id_f_ptr,
         validate_schema,
         vertex_attribute_f_ptr,
         edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
     ]
 
     return _import("file_gexf", graph, filename, *args)
@@ -729,12 +849,16 @@ def parse_gexf(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
     args = [
         import_id_f_ptr,
         validate_schema,
         vertex_attribute_f_ptr,
         edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
     ]
 
     return _import("string_gexf", graph, input_string, *args)
@@ -788,8 +912,16 @@ def read_dot(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
-    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+    args = [
+        import_id_f_ptr,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    ]
     return _import("file_dot", graph, filename, *args)
 
 
@@ -840,8 +972,16 @@ def parse_dot(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
-    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+    args = [
+        import_id_f_ptr,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    ]
     return _import("string_dot", graph, input_string, *args)
 
 
@@ -895,8 +1035,16 @@ def read_graph6sparse6(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
-    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+    args = [
+        import_id_f_ptr,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    ]
     return _import("file_graph6sparse6", graph, filename, *args)
 
 
@@ -950,8 +1098,16 @@ def parse_graph6sparse6(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
-    args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+    args = [
+        import_id_f_ptr,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    ]
     return _import("string_graph6sparse6", graph, input_string, *args)
 
 
@@ -1065,12 +1221,16 @@ def read_graphml(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
     args = [
         import_id_f_ptr,
         validate_schema,
         vertex_attribute_f_ptr,
         edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
     ]
 
     if simple:
@@ -1189,12 +1349,16 @@ def parse_graphml(
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
         edge_attribute_cb
     )
+    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
+    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
 
     args = [
         import_id_f_ptr,
         validate_schema,
         vertex_attribute_f_ptr,
         edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
     ]
 
     if simple:
