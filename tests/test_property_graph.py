@@ -243,8 +243,9 @@ def test_with_string_suppliers_graph():
             self._count = 0
 
         def __call__(self):
+            ret = str(self._count)
             self._count += 1
-            return str(self._count)
+            return ret
 
     supplier = StringSupplier()
 
@@ -266,21 +267,21 @@ def test_with_string_suppliers_graph():
     g.add_vertex("v1")
     g.add_vertex()
 
-    assert g.contains_vertex("1")
+    assert g.contains_vertex("0")
     assert g.contains_vertex("v1")
-    assert g.contains_vertex("3")
+    assert g.contains_vertex("1")
 
-    assert g.vertices == {"1", "v1", "3"}
+    assert g.vertices == {"0", "v1", "1"}
     assert len(g.vertices) == 3
 
-    g.add_edge("1", "3")
+    g.add_edge("0", "1")
 
-    assert g.edge_source("4") == "1"
-    assert g.edge_target("4") == "3"
+    assert g.edge_source("2") == "0"
+    assert g.edge_target("2") == "1"
 
     assert len(g.edges) == 1
 
-    assert g.edges == {"4"}
+    assert g.edges == {"2"}
 
 
 def test_on_already_initialized_graph():
