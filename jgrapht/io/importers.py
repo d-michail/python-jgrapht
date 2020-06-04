@@ -467,8 +467,8 @@ def parse_json(
     The same is done for arrays or any other arbitrary nested structure.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a integer with the identifier of the 
-              graph vertex.
+              from the input file as a string. For normal graph it should return an integer with the 
+              identifier of the vertex. For property graphs is can return any hashable object.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the 
@@ -476,10 +476,12 @@ def parse_json(
 
     :param graph: The graph to read into
     :param input_string: The input string to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.    
-    :param vertex_attribute_cb: Callback function for vertex attributes
-    :param edge_attribute_cb: Callback function for edge attributes
+    :param import_id_cb: Callback to transform identifiers from file to vertices. For normal graphs
+      must return an integer, for property graphs any hashable.
+    :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
+      vertices.
+    :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
+      edges.
     :raises IOError: In case of an import error    
     """
     if is_property_graph(graph):
