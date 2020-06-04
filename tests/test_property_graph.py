@@ -1,23 +1,16 @@
 import pytest
 
 from jgrapht import create_graph, create_property_graph
-from jgrapht.views import as_property_graph
+
 
 def test_any_graph():
 
-    g = create_graph(
+    g = create_property_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
     )
-
-    assert g.type.directed
-    assert g.type.allowing_self_loops
-    assert g.type.allowing_multiple_edges
-    assert g.type.weighted
-
-    g = as_property_graph(g)
 
     assert g.type.directed
     assert g.type.allowing_self_loops
@@ -157,7 +150,7 @@ def test_any_graph_of_graphs():
     )
     g1.add_vertex(0)
     g1.add_vertex(1)
-    g1.add_edge(0,1)
+    g1.add_edge(0, 1)
 
     g2 = create_graph(
         directed=True,
@@ -167,7 +160,7 @@ def test_any_graph_of_graphs():
     )
     g2.add_vertex(2)
     g2.add_vertex(3)
-    g2.add_edge(2,3)
+    g2.add_edge(2, 3)
 
     g3 = create_graph(
         directed=True,
@@ -177,23 +170,25 @@ def test_any_graph_of_graphs():
     )
     g3.add_vertex(4)
     g3.add_vertex(5)
-    g3.add_edge(4,5)
+    g3.add_edge(4, 5)
 
     # create the graph of graphs
-    g = create_graph(
+    g = create_property_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
     )
-    g = as_property_graph(g)
 
     g.add_vertex(g1)
     g.add_vertex(g2)
 
     g.add_edge(g1, g2, edge=g3)
 
-    assert str(g) == '({({0, 1}, {0=(0,1)}), ({2, 3}, {0=(2,3)})}, {({4, 5}, {0=(4,5)})=(({0, 1}, {0=(0,1)}),({2, 3}, {0=(2,3)}))})'
+    assert (
+        str(g)
+        == "({({0, 1}, {0=(0,1)}), ({2, 3}, {0=(2,3)})}, {({4, 5}, {0=(4,5)})=(({0, 1}, {0=(0,1)}),({2, 3}, {0=(2,3)}))})"
+    )
 
     assert g.contains_vertex(g1)
     assert g.contains_vertex(g2)
@@ -243,11 +238,10 @@ def test_suppliers_graph():
 
 
 def test_with_string_suppliers_graph():
-
     class StringSupplier:
         def __init__(self):
             self._count = 0
-        
+
         def __call__(self):
             self._count += 1
             return str(self._count)
@@ -259,7 +253,7 @@ def test_with_string_suppliers_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        vertex_supplier=supplier, 
+        vertex_supplier=supplier,
         edge_supplier=supplier,
     )
 
@@ -290,35 +284,34 @@ def test_with_string_suppliers_graph():
 
 
 def test_on_already_initialized_graph():
-    
-    g = create_graph(
-        directed=True,
-        allowing_self_loops=True,
-        allowing_multiple_edges=True,
-        weighted=True,
-    )
-
-    g.add_vertex(0)
-    g.add_vertex(1)
-    g.add_edge(0,1)
-    g.add_edge(1,0)
-
     class StringSupplier:
         def __init__(self, prefix):
             self._count = 0
             self._prefix = prefix
 
         def __call__(self):
-            ret = '{}{}'.format(self._prefix, self._count)
+            ret = "{}{}".format(self._prefix, self._count)
             self._count += 1
             return ret
 
-    pg = as_property_graph(g, vertex_supplier=StringSupplier('v'), edge_supplier=StringSupplier('e'))
+    pg = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+        vertex_supplier=StringSupplier("v"),
+        edge_supplier=StringSupplier("e"),
+    )
 
-    pg.add_vertex(vertex='new2')
+    pg.add_vertex(0)
+    pg.add_vertex(1)
+    pg.add_edge(0, 1)
+    pg.add_edge(1, 0)
+
+    pg.add_vertex(vertex="new2")
 
     assert len(pg.vertices) == 3
 
-    assert pg.vertices == {'v0', 'v1', 'new2'}
-    assert pg.edges == {'e0', 'e1'}
+    assert pg.vertices == {0, 1, "new2"}
+    assert pg.edges == {"e0", "e1"}
 

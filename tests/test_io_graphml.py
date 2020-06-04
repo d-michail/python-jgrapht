@@ -1,11 +1,10 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 
 from jgrapht.io.exporters import write_graphml, generate_graphml
 from jgrapht.io.importers import read_graphml, parse_graphml
 
-from jgrapht.views import as_property_graph
 
 
 expected1 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -350,14 +349,12 @@ def test_output_to_string_with_attrs():
 
 def test_property_graph_output_to_string_with_attrs():
 
-    g = create_graph(
+    g = create_property_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
     )
-
-    g = as_property_graph(g)
 
     for i in range(0, 10):
         g.add_vertex(i)

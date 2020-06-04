@@ -1,10 +1,9 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 from jgrapht.io.exporters import write_gml, generate_gml
 from jgrapht.io.importers import read_gml, parse_gml
 
-from jgrapht.views import as_property_graph
 
 
 expected = """Creator "JGraphT GML Exporter"
@@ -649,13 +648,12 @@ def test_input_gml_from_string_rename_ids(tmpdir):
 
 
 def test_output_property_graph_to_string():
-    g = create_graph(
+    g = create_property_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
     )
-    g = as_property_graph(g)
 
     g.add_vertex(0)
     g.add_vertex(2)

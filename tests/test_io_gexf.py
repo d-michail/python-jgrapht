@@ -1,9 +1,9 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 from jgrapht.io.importers import read_gexf, parse_gexf
 from jgrapht.io.exporters import write_gexf, generate_gexf
-from jgrapht.views import as_property_graph
+
 
 input1 = r"""<?xml version="1.0" encoding="UTF-8"?>
 <gexf xmlns="http://www.gexf.net/1.2draft"
@@ -233,14 +233,12 @@ def test_output_to_string():
 
 
 def test_property_graph_output_to_string():
-    g = create_graph(
+    g = create_property_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
     )
-
-    g = as_property_graph(g)
 
     g.add_vertices_from(['v1', 'v2', 'v3'])
     g.add_edge('v1', 'v2', edge='e12')

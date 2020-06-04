@@ -1,9 +1,8 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 from jgrapht.io.exporters import write_dot, generate_dot
 from jgrapht.io.importers import read_dot, parse_dot
-from jgrapht.views import as_property_graph
 
 
 def build_graph():
@@ -85,14 +84,12 @@ def test_output_to_string():
 
 
 def test_property_graph_output_to_string():
-    g = create_graph(
+    g = create_property_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
     )
-
-    g = as_property_graph(g)
 
     g.add_vertex('v1')
     g.add_vertex('v2')

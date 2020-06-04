@@ -19,6 +19,7 @@ from ._views import (
     _UnweightedGraphView,
     _UndirectedGraphView,
     _UnmodifiableGraphView,
+    _EdgeReversedGraphView,
 )
 from ._collections import _JGraphTIntegerStringMap
 from ._pg_collections import _PropertyGraphVertexSet, _PropertyGraphVertexIterator
@@ -587,6 +588,25 @@ def as_unmodifiable_property_graph(property_graph):
     )
 
     return unmodifiable_property_graph
+
+
+def as_edgereversed_property_graph(property_graph):
+    """Create an edge reversed view of a property graph."""
+    graph = property_graph._graph
+    edgereversed_graph = _EdgeReversedGraphView(graph)
+
+    edgereversed_property_graph = _PropertyGraph(
+        edgereversed_graph,
+        property_graph.vertex_supplier,
+        property_graph.edge_supplier,
+        property_graph._vertex_id_to_hash,
+        property_graph._edge_id_to_hash,
+        copy.copy(property_graph._graph_props),
+        copy.copy(property_graph._vertex_props),
+        copy.copy(property_graph._edge_props),
+    )
+
+    return edgereversed_property_graph
 
 
 def is_property_graph(graph):
