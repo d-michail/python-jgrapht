@@ -316,3 +316,35 @@ def test_property_graph_output_to_file_json(tmpdir):
         contents = f.read()
 
     assert contents.splitlines() == expected4.splitlines()
+
+
+def test_input_json_from_string_property_graph():
+
+    class StringSupplier:
+        def __init__(self, prefix):
+            self._count = 0
+            self._prefix = prefix
+        
+        def __call__(self):
+            value = '{}{}'.format(self._prefix, self._count)
+            self._count += 1
+            return value
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=StringSupplier('v'), 
+        edge_supplier=StringSupplier('e'), 
+    )
+    input_string = r'{"version":"1","nodes":[{"id":"5"},{"id":"7"}],"edges":[{"source":"5","target":"7"}]}'
+
+    def import_id(file_id):
+        return int(file_id)
+
+    parse_json(g, input_string, import_id_cb=import_id)
+    assert g.vertices == set(['v0', 'v1'])
+    assert g.edges == set(['e0'])
+
+    print(g)
