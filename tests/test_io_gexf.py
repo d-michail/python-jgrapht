@@ -1,6 +1,8 @@
 import pytest
 
 from jgrapht import create_graph, create_property_graph
+from jgrapht.utils import create_vertex_supplier, create_edge_supplier
+
 from jgrapht.io.importers import read_gexf, parse_gexf
 from jgrapht.io.exporters import write_gexf, generate_gexf
 
@@ -254,3 +256,56 @@ def test_property_graph_output_to_string():
     out = generate_gexf(g, attrs=[('name', 'node', None, None)])
 
     assert out.splitlines() == expected2.splitlines()
+
+
+def test_read_gexf_property_graph_from_string():
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    def import_id_cb(id):
+        return 'v{}'.format(id)
+
+    parse_gexf(g, expected2, import_id_cb=import_id_cb)
+
+    print(g.vertices)
+    print(g.edges)
+    print(g.vertex_props)
+    print(g.edge_props)
+
+    assert g.vertices == {'vv1', 'vv2', 'vv3'}
+    assert g.edges == {'e0', 'e1'}
+    assert g.edge_tuple('e0') == ('vv1', 'vv2', 1.0)
+    assert g.vertex_props['vv1']['label'] == '0'
+    assert g.edge_props['e0']['id'] == 'e12'
+
+
+def test_read_gexf_property_graph_from_string1():
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    parse_gexf(g, expected2)
+
+    print(g.vertices)
+    print(g.edges)
+    print(g.vertex_props)
+    print(g.edge_props)
+
+    assert g.vertices == {'v0', 'v1', 'v2'}
+    assert g.edges == {'e0', 'e1'}
+    assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
+    assert g.vertex_props['v0']['label'] == '0'
+    assert g.edge_props['e0']['id'] == 'e12'

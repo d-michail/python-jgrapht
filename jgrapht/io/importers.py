@@ -21,6 +21,8 @@ from .._internals._importers import (
     _parse_property_graph_json,
     _parse_graph_csv,
     _parse_property_graph_csv,
+    _parse_graph_gexf,
+    _parse_property_graph_gexf,    
     _parse_graph_graphml,
     _parse_property_graph_graphml,
 )
@@ -655,45 +657,44 @@ def read_gexf(
     accepts as a parameter the vertex identifier read from file and should return the new vertex.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a integer with the identifier of the 
-              graph vertex.
+              from the input file as a string. For normal graphs it should return an integer for the 
+              graph vertex. For property graphs is may return any hashable object which will serve
+              as the graph vertex.
 
-    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+    .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. They are only used for normal graphs. Property graphs get the
+              attributes/properties automatically loaded.
 
     :param graph: the graph to read into
     :param filename: the input file to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.
+    :param import_id_cb: Callback to transform identifiers from file to vertices. For normal graphs
+      must return an integer, for property graphs any hashable.
     :param validate_schema: whether to validate the XML schema    
-    :param vertex_attribute_cb: callback function for vertex attributes
-    :param edge_attribute_cb: callback function for edge attributes
+    :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
+      vertices.
+    :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
+      edges.    
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
-    )
-
-    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-        vertex_attribute_cb
-    )
-    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
-        edge_attribute_cb
-    )
-    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
-    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
-
-    args = [
-        import_id_f_ptr,
-        validate_schema,
-        vertex_attribute_f_ptr,
-        edge_attribute_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    ]
-
-    return _import("file_gexf", graph, filename, *args)
+    if is_property_graph(graph):
+        _parse_property_graph_gexf(
+            graph,
+            filename,
+            import_id_cb=import_id_cb,
+            input_is_filename=True,
+            validate_schema=validate_schema,
+        )
+    else:
+        _parse_graph_gexf(
+            graph,
+            filename,
+            import_id_cb=import_id_cb,
+            vertex_attribute_cb=vertex_attribute_cb,
+            edge_attribute_cb=edge_attribute_cb,
+            input_is_filename=True,
+            validate_schema=validate_schema,
+        )
 
 
 def parse_gexf(
@@ -756,45 +757,45 @@ def parse_gexf(
     accepts as a parameter the vertex identifier read from file and should return the new vertex.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a integer with the identifier of the 
-              graph vertex.
+              from the input file as a string. For normal graphs it should return an integer for the 
+              graph vertex. For property graphs is may return any hashable object which will serve
+              as the graph vertex.
 
-    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+    .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. They are only used for normal graphs. Property graphs get the
+              attributes/properties automatically loaded.
 
     :param graph: the graph to read into
     :param input_string: the input string to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.
+    :param import_id_cb: Callback to transform identifiers from file to vertices. For normal graphs
+      must return an integer, for property graphs any hashable.
     :param validate_schema: whether to validate the XML schema    
-    :param vertex_attribute_cb: callback function for vertex attributes
-    :param edge_attribute_cb: callback function for edge attributes
+    :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
+      vertices.
+    :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
+      edges.    
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
-    )
+    if is_property_graph(graph):
+        _parse_property_graph_gexf(
+            graph,
+            input_string,
+            import_id_cb=import_id_cb,
+            input_is_filename=False,
+            validate_schema=validate_schema,
+        )
+    else:
+        _parse_graph_gexf(
+            graph,
+            input_string,
+            import_id_cb=import_id_cb,
+            vertex_attribute_cb=vertex_attribute_cb,
+            edge_attribute_cb=edge_attribute_cb,
+            input_is_filename=False,
+            validate_schema=validate_schema,
+        )
 
-    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-        vertex_attribute_cb
-    )
-    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
-        edge_attribute_cb
-    )
-    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
-    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
-
-    args = [
-        import_id_f_ptr,
-        validate_schema,
-        vertex_attribute_f_ptr,
-        edge_attribute_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    ]
-
-    return _import("string_gexf", graph, input_string, *args)
 
 
 def read_dot(

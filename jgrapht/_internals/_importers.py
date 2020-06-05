@@ -516,6 +516,103 @@ def _parse_property_graph_csv(
     _populate_properties(graph, *idmaps)
 
 
+def _parse_graph_gexf(
+    graph,
+    input,
+    import_id_cb=None,
+    vertex_attribute_cb=None,
+    edge_attribute_cb=None,
+    input_is_filename=False,
+    validate_schema=True,
+):
+    if is_property_graph(graph):
+        raise ValueError("Property graphs not supported")
+
+    (
+        import_id_f_ptr,
+        import_id_f,  # pylint: disable=unused-variable
+        vertex_attribute_f_ptr,
+        vertex_attribute_f,  # pylint: disable=unused-variable
+        edge_attribute_f_ptr,
+        edge_attribute_f,  # pylint: disable=unused-variable
+        vertex_notify_f_ptr,
+        vertex_notify_f,  # pylint: disable=unused-variable
+        edge_notify_f_ptr,
+        edge_notify_f,  # pylint: disable=unused-variable
+    ) = _create_graph_callbacks(
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        vertex_notify_id_cb=None,
+        edge_notify_id_cb=None,
+    )
+
+    string_as_bytearray = bytearray(input, encoding="utf-8")
+
+    if input_is_filename:
+        backend_function = _backend.jgrapht_import_file_gexf
+    else:
+        backend_function = _backend.jgrapht_import_string_gexf
+
+    backend_function(
+        graph.handle,
+        string_as_bytearray,
+        import_id_f_ptr,
+        validate_schema,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    )
+
+
+def _parse_property_graph_gexf(
+    graph,
+    input_string,
+    import_id_cb,
+    input_is_filename=False,
+    validate_schema=True,
+):
+    if not is_property_graph(graph):
+        raise ValueError("Only property graphs supported")
+
+    idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
+
+    (
+        import_id_f_ptr,
+        import_id_f,  # pylint: disable=unused-variable
+        vertex_attribute_f_ptr,
+        vertex_attribute_f,  # pylint: disable=unused-variable
+        edge_attribute_f_ptr,
+        edge_attribute_f,  # pylint: disable=unused-variable
+        vertex_notify_f_ptr,
+        vertex_notify_f,  # pylint: disable=unused-variable
+        edge_notify_f_ptr,
+        edge_notify_f,  # pylint: disable=unused-variable
+    ) = _create_property_graph_callbacks(graph, *idmaps, import_id_cb)
+
+    string_as_bytearray = bytearray(input_string, encoding="utf-8")
+
+    if input_is_filename:
+        backend_function = _backend.jgrapht_import_file_gexf
+    else:
+        backend_function = _backend.jgrapht_import_string_gexf
+
+    backend_function(
+        graph._graph.handle,
+        string_as_bytearray,
+        import_id_f_ptr,
+        validate_schema,
+        vertex_attribute_f_ptr,
+        edge_attribute_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+    )
+
+    _populate_properties(graph, *idmaps)
+
+
+
 def _parse_graph_graphml(
     graph,
     input,
