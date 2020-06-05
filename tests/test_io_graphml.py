@@ -1,6 +1,7 @@
 import pytest
 
 from jgrapht import create_graph, create_property_graph
+from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 
 from jgrapht.io.exporters import write_graphml, generate_graphml
 from jgrapht.io.importers import read_graphml, parse_graphml
@@ -397,3 +398,26 @@ def test_property_graph_output_to_string_with_attrs():
     )
 
     assert out.splitlines() == expected4.splitlines()
+
+
+def test_property_graph_from_string():
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    def import_id_cb(id): 
+        return 'vertex-{}'.format(id)        
+
+    parse_graphml(g, expected2, import_id_cb=import_id_cb, validate_schema=True, simple=True)
+
+    assert g.vertices == {'vertex-0', 'vertex-1', 'vertex-2', 'vertex-3'}
+    assert g.edges == {'e0', 'e1', 'e2', 'e3'}
+
+    assert g.edge_props['e1']['weight'] == '4.4'
+
