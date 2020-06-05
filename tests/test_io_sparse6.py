@@ -1,13 +1,15 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
+from jgrapht.utils import create_vertex_supplier, create_edge_supplier
+
 from jgrapht.io.exporters import (
     write_sparse6,
     write_graph6,
     generate_sparse6,
     generate_graph6,
 )
-from jgrapht.io.importers import read_graph6sparse6
+from jgrapht.io.importers import read_graph6sparse6, parse_graph6sparse6
 
 
 def build_graph():
@@ -105,3 +107,39 @@ def test_output_to_string():
     out = generate_graph6(g)
     assert out == "Ct"
 
+
+def test_read_sparse6_property_graph_from_string():
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    def import_id_cb(id):
+        return 'vv{}'.format(id)
+
+    parse_graph6sparse6(g, ':Cca', import_id_cb=import_id_cb)
+
+    assert g.vertices == {'vv0', 'vv1', 'vv2', 'vv3'}
+    assert g.edge_tuple('e0') == ('vv0', 'vv1', 1.0)
+
+
+def test_read_sparse6_property_graph_from_string1():
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    parse_graph6sparse6(g, ':Cca')
+
+    assert g.vertices == {'v0', 'v1', 'v2', 'v3'}
+    assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)

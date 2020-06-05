@@ -1,6 +1,8 @@
 import pytest
 
 from jgrapht import create_graph, create_property_graph
+from jgrapht.utils import create_vertex_supplier, create_edge_supplier
+
 from jgrapht.io.exporters import write_dot, generate_dot
 from jgrapht.io.importers import read_dot, parse_dot
 
@@ -109,3 +111,60 @@ def test_property_graph_output_to_string():
 """
 
     assert out.splitlines() == expected.splitlines()
+
+
+def test_read_dot_property_graph_from_string():
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    expected=r"""digraph G {
+  v1 [ color="red" ];
+  v2 [ color="blue" ];
+  v1 -> v2 [ capacity="5.0" ];
+}
+"""
+
+    def import_id_cb(id):
+        return 'v{}'.format(id)
+
+    parse_dot(g, expected, import_id_cb=import_id_cb)
+
+    assert g.vertices == {'vv1', 'vv2'}
+    assert g.edge_tuple('e0') == ('vv1', 'vv2', 1.0)
+    assert g.vertex_props['vv1']['color'] == 'red'
+    assert g.vertex_props['vv2']['color'] == 'blue'
+    assert g.edge_props['e0']['capacity'] == '5.0'
+
+
+def test_read_dot_property_graph_from_string1():
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    expected=r"""digraph G {
+  v1 [ color="red" ];
+  v2 [ color="blue" ];
+  v1 -> v2 [ capacity="5.0" ];
+}
+"""
+
+    parse_dot(g, expected)
+
+    assert g.vertices == {'v0', 'v1'}
+    assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
+    assert g.vertex_props['v0']['color'] == 'red'
+    assert g.vertex_props['v1']['color'] == 'blue'
+    assert g.edge_props['e0']['capacity'] == '5.0'
