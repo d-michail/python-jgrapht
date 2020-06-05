@@ -12,6 +12,8 @@ from .._internals._ioutils import _create_wrapped_notify_id_callback
 
 from .._internals._pg import is_property_graph
 
+from .._internals._importers import _parse_graph_json, _parse_property_graph_json
+
 
 def _import(name, graph, filename_or_string, *args):
     alg_method_name = "jgrapht_import_" + name
@@ -386,42 +388,38 @@ def read_json(
     The same is done for arrays or any other arbitrary nested structure.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a integer with the identifier of the 
-              graph vertex.
+              from the input file as a string. For normal graphs it should return an integer for the 
+              graph vertex. For property graphs is may return any hashable object which will serve
+              as the graph vertex.
 
-    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+    .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. They are only used for normal graphs. Property graphs get the
+              attributes/properties automatically loaded.
 
     :param graph: The graph to read into
-    :param filename: Filename to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.
-    :param vertex_attribute_cb: Callback function for vertex attributes
-    :param edge_attribute_cb: Callback function for edge attributes
+    :param input_string: The input string to read from
+    :param import_id_cb: Callback to transform identifiers from file to vertices. For normal graphs
+      must return an integer, for property graphs any hashable.
+    :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
+      vertices.
+    :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
+      edges.
     :raises IOError: In case of an import error    
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
-    )
-    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-        vertex_attribute_cb
-    )
-    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
-        edge_attribute_cb
-    )
-    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
-    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
-
-    args = [
-        import_id_f_ptr,
-        vertex_attribute_f_ptr,
-        edge_attribute_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    ]
-
-    return _import("file_json", graph, filename, *args)
+    if is_property_graph(graph):
+        _parse_property_graph_json(
+            graph, filename, import_id_cb=import_id_cb, input_is_filename=True
+        )
+    else:
+        _parse_graph_json(
+            graph,
+            filename,
+            import_id_cb=import_id_cb,
+            vertex_attribute_cb=vertex_attribute_cb,
+            edge_attribute_cb=edge_attribute_cb,
+            input_is_filename=True,
+        )
 
 
 def parse_json(
@@ -467,12 +465,14 @@ def parse_json(
     The same is done for arrays or any other arbitrary nested structure.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. For normal graph it should return an integer with the 
-              identifier of the vertex. For property graphs is can return any hashable object.
+              from the input file as a string. For normal graphs it should return an integer for the 
+              graph vertex. For property graphs is may return any hashable object which will serve
+              as the graph vertex.
 
-    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+    .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. They are only used for normal graphs. Property graphs get the
+              attributes/properties automatically loaded.
 
     :param graph: The graph to read into
     :param input_string: The input string to read from
@@ -485,78 +485,18 @@ def parse_json(
     :raises IOError: In case of an import error    
     """
     if is_property_graph(graph):
-        next_vertex = max(graph._graph.vertices, default=-1) + 1
-        vertex_id_to_hash = {}
-        edge_id_to_hash = {}
-        vertex_id_to_props = defaultdict(lambda: {})
-        edge_id_to_props = defaultdict(lambda: {})
-
-        def use_import_id_cb(id_from_file):
-            # We assume that the user callback accepts the id from file and returns any hashable
-            nonlocal next_vertex
-            new_vertex = next_vertex
-            next_vertex += 1
-            vertex_id_to_hash[new_vertex] = import_id_cb(id_from_file)
-            return new_vertex
-
-        def use_notify_edge_id_cb(eid):
-            edge_id_to_hash[eid] = graph.edge_supplier()
-
-        def use_vertex_attribute_cb(id, key, value):
-            vertex_id_to_props[id][key] = value
-
-        def use_edge_attribute_cb(id, key, value):
-            edge_id_to_props[id][key] = value
-
-        use_graph_handle = graph._graph.handle
-
+        _parse_property_graph_json(
+            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
+        )
     else:
-        use_import_id_cb = import_id_cb
-        use_notify_edge_id_cb = None
-        use_vertex_attribute_cb = vertex_attribute_cb
-        use_edge_attribute_cb = edge_attribute_cb
-        use_graph_handle = graph.handle
-
-    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        use_import_id_cb
-    )
-    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-        use_vertex_attribute_cb
-    )
-    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
-        use_edge_attribute_cb
-    )
-    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
-    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(
-        use_notify_edge_id_cb
-    )
-
-    string_as_bytearray = bytearray(input_string, encoding="utf-8")
-    result = _backend.jgrapht_import_string_json(
-        use_graph_handle,
-        string_as_bytearray,
-        *[
-            import_id_f_ptr,
-            vertex_attribute_f_ptr,
-            edge_attribute_f_ptr,
-            vertex_notify_f_ptr,
-            edge_notify_f_ptr,
-        ]
-    )
-
-    if is_property_graph(graph):
-        # After creating, populate the property graph with the new vertices and edges
-        for vid, vhash in vertex_id_to_hash.items():
-            graph._add_new_vertex(vid, vhash)
-            for key, value in vertex_id_to_props[vid].items():
-                graph.vertex_props[vhash][key] = value
-
-        for eid, ehash in edge_id_to_hash.items():
-            graph._add_new_edge(eid, ehash)
-            for key, value in edge_id_to_props[eid].items():
-                graph.edge_props[ehash][key] = value
-
-    return result
+        _parse_graph_json(
+            graph,
+            input_string,
+            import_id_cb=import_id_cb,
+            vertex_attribute_cb=vertex_attribute_cb,
+            edge_attribute_cb=edge_attribute_cb,
+            input_is_filename=False,
+        )
 
 
 CSV_FORMATS = dict(

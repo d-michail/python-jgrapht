@@ -319,14 +319,13 @@ def test_property_graph_output_to_file_json(tmpdir):
 
 
 def test_input_json_from_string_property_graph():
-
     class StringSupplier:
         def __init__(self, prefix):
             self._count = 0
             self._prefix = prefix
-        
+
         def __call__(self):
-            value = '{}{}'.format(self._prefix, self._count)
+            value = "{}{}".format(self._prefix, self._count)
             self._count += 1
             return value
 
@@ -335,16 +334,94 @@ def test_input_json_from_string_property_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        vertex_supplier=StringSupplier('v'), 
-        edge_supplier=StringSupplier('e'), 
+        vertex_supplier=StringSupplier("v"),
+        edge_supplier=StringSupplier("e"),
     )
     input_string = r'{"version":"1","nodes":[{"id":"5"},{"id":"7"}],"edges":[{"source":"5","target":"7"}]}'
 
-    def import_id(file_id):
-        return 'vertex-{}'.format(file_id)
+    def import_id_cb(file_id):
+        return "vertex-{}".format(file_id)
 
-    parse_json(g, input_string, import_id_cb=import_id)
-    assert g.vertices == set(['vertex-5', 'vertex-7'])
-    assert g.edges == set(['e0'])
+    parse_json(g, input_string, import_id_cb=import_id_cb)
+    assert g.vertices == set(["vertex-5", "vertex-7"])
+    assert g.edges == set(["e0"])
 
-    print(g)
+
+def test_input_json_from_file_property_graph(tmpdir):
+    class StringSupplier:
+        def __init__(self, prefix):
+            self._count = 0
+            self._prefix = prefix
+
+        def __call__(self):
+            value = "{}{}".format(self._prefix, self._count)
+            self._count += 1
+            return value
+
+    tmpfile = tmpdir.join("json.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(expected_escaped)
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=StringSupplier("v"),
+        edge_supplier=StringSupplier("e"),
+    )
+
+    def import_id_cb(file_id):
+        return "myvertex-{}".format(file_id)
+
+    read_json(g, tmpfilename, import_id_cb=import_id_cb)
+
+    assert g.vertices == set(
+        [
+            "myvertex-0",
+            "myvertex-1",
+            "myvertex-2",
+            "myvertex-3",
+            "myvertex-4",
+            "myvertex-5",
+            "myvertex-6",
+            "myvertex-7",
+            "myvertex-8",
+            "myvertex-9",
+        ]
+    )
+
+    assert g.edges == set(
+        [
+            "e0",
+            "e1",
+            "e2",
+            "e3",
+            "e4",
+            "e5",
+            "e6",
+            "e7",
+            "e8",
+            "e9",
+            "e10",
+            "e11",
+            "e12",
+            "e13",
+            "e14",
+            "e15",
+            "e16",
+            "e17",
+        ]
+    )
+
+    print (g.vertex_props)
+    print (g.edge_props)
+
+    assert g.vertex_props["myvertex-0"]["label"] == "κόμβος 0"
+    assert g.vertex_props["myvertex-1"]["ID"] == "1"
+    assert g.vertex_props["myvertex-1"]["label"] == "label 1"
+    assert g.vertex_props["myvertex-2"]["label"] == "label 2"
+    assert g.edge_props["e9"]["label"] == "edge 1-2"
