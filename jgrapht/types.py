@@ -664,7 +664,7 @@ class Flow(ABC, Mapping):
         pass
 
 
-class Cut:
+class Cut(ABC):
     """A graph cut."""
 
     @abstractmethod
@@ -693,7 +693,7 @@ class Cut:
         pass
 
 
-class GomoryHuTree:
+class GomoryHuTree(ABC):
     """A Gomory-Hu Tree."""
 
     @abstractmethod
@@ -721,7 +721,7 @@ class GomoryHuTree:
         pass        
 
 
-class EquivalentFlowTree:
+class EquivalentFlowTree(ABC):
     """An Equivalent Flow Tree."""
 
     @abstractmethod
@@ -735,7 +735,7 @@ class EquivalentFlowTree:
         pass        
 
 
-class GraphMapping:
+class GraphMapping(ABC):
     """A graph mapping between two graphs g1 and g2."""
 
     @abstractmethod
@@ -778,7 +778,7 @@ class GraphMapping:
         """
         pass
 
-class ListenableGraph(Graph):
+class ListenableGraph(ABC):
     """A listenable graph."""
 
     @abstractmethod
@@ -798,7 +798,7 @@ class ListenableGraph(Graph):
         """
         pass
 
-class DirectedAcyclicGraph(Graph):
+class DirectedAcyclicGraph(ABC):
     """A directed acyclic graph."""
 
     @abstractmethod
@@ -844,7 +844,7 @@ class PropertyGraph(ABC):
         pass
 
 
-class LayoutModel2D:
+class LayoutModel2D(ABC):
     """A 2D Layout Model."""
 
     @abstractmethod

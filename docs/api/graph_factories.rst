@@ -22,7 +22,7 @@ should create graphs using this function:
 .. autofunction:: jgrapht.create_graph
 
 Helper factory functions :py:meth:`jgrapht.create_directed_graph` and 
-:py:meth:`jgrapht.create_undirected_graph` provide the same functionality restricted forces
+:py:meth:`jgrapht.create_undirected_graph` provide the same functionality restricted for
 directed and undirected graphs.
 
 .. autofunction:: jgrapht.create_directed_graph
@@ -31,7 +31,7 @@ directed and undirected graphs.
 Directed Acyclic Graph (DAG)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A directed acyclic graph is a directed graphs with no cycles. The following function creates
+A directed acyclic graph is a directed graph with no cycles. The following function creates
 such a graph with dynamically enforces the property and maintains a topological ordering 
 of the vertices. The returned graph is iterable and returns topological ordering iterators.
 

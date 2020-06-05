@@ -1,5 +1,5 @@
 from .. import backend
-from ..types import GraphType, GraphEvent
+from ..types import GraphType, GraphEvent, ListenableGraph
 from ._graphs import _JGraphTGraph
 from ._callbacks import _create_wrapped_callback
 
@@ -191,7 +191,7 @@ class _GraphUnion(_JGraphTGraph):
         self._graph2 = graph2
 
 
-class _ListenableView(_JGraphTGraph):
+class _ListenableView(_JGraphTGraph, ListenableGraph):
     def __init__(self, graph):
         res = backend.jgrapht_listenable_as_listenable(graph.handle)
         super().__init__(res)

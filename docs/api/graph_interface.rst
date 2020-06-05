@@ -17,6 +17,16 @@ around it. The graph interface contains all the necessary methods to query or mo
    :inherited-members:
    :members:
 
+PropertyGraph
+^^^^^^^^^^^^^
+
+Some graph implementations are also property graphs which means that they can directly associate 
+attributes/properties with the vertices and edges of the graph.
+
+.. autoclass:: jgrapht.types.PropertyGraph
+   :inherited-members:
+   :members:
+
 GraphType
 ^^^^^^^^^
 
