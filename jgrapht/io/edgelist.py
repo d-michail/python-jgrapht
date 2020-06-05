@@ -519,7 +519,7 @@ def parse_edgelist_json(
     return _import_edgelist("string_json", with_attrs, input_string, *args)
 
 
-from .importers import CSV_FORMATS
+from .._internals._importers import CSV_FORMATS
 
 
 def read_edgelist_csv(

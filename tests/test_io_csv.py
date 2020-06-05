@@ -1,6 +1,8 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
+from jgrapht.utils import create_vertex_supplier, create_edge_supplier
+
 from jgrapht.io.importers import parse_csv, read_csv
 from jgrapht.io.exporters import write_csv, generate_csv
 
@@ -123,3 +125,60 @@ def test_output_to_string():
     out = generate_csv(g)
 
     assert out.splitlines() == ["0,1,2,3", "1", "2,3", "3"]
+
+
+def test_read_csv_property_graph_from_string():
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    input_string = """1,2
+2,3
+3,4
+4,1
+"""
+
+    def import_id_cb(id):
+        return 'v{}'.format(int(id)+1)
+
+    parse_csv(g, input_string, import_id_cb=import_id_cb)
+
+    print (g.vertices)
+
+    assert g.vertices == {'v2', 'v3', 'v4', 'v5'}
+    assert g.edge_tuple('e2') == ('v4', 'v5', 1.0)
+    assert g.vertex_props == {}
+    assert g.edge_props == {}
+
+
+def test_read_csv_property_graph_from_string1():
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    input_string = """1,2
+2,3
+3,4
+4,1
+"""
+
+    parse_csv(g, input_string)
+
+    print (g.vertices)
+
+    assert g.vertices == {'v0', 'v1', 'v2', 'v3'}
+    assert g.edge_tuple('e2') == ('v2', 'v3', 1.0)
+    assert g.vertex_props == {}
+    assert g.edge_props == {}

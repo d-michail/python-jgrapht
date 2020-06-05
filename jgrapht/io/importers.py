@@ -19,6 +19,8 @@ from .._internals._importers import (
     _parse_property_graph_gml,
     _parse_graph_json,
     _parse_property_graph_json,
+    _parse_graph_csv,
+    _parse_property_graph_csv,
     _parse_graph_graphml,
     _parse_property_graph_graphml,
 )
@@ -487,15 +489,6 @@ def parse_json(
         )
 
 
-CSV_FORMATS = dict(
-    {
-        "adjacencylist": _backend.CSV_FORMAT_ADJACENCY_LIST,
-        "edgelist": _backend.CSV_FORMAT_EDGE_LIST,
-        "matrix": _backend.CSV_FORMAT_MATRIX,
-    }
-)
-
-
 def read_csv(
     graph,
     filename,
@@ -511,37 +504,42 @@ def read_csv(
     The supported formats are the same CSV formats used by Gephi. The importer respects rfc4180. 
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a integer with the identifier of the 
-              graph vertex.
+              from the input file as a string. For normal graphs it should return an integer for the 
+              graph vertex. For property graphs is may return any hashable object which will serve
+              as the graph vertex.
 
     :param graph: the graph to read into
     :param filename: the filename to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.
+    :param import_id_cb: Callback to transform identifiers from file to vertices. For normal graphs
+      must return an integer, for property graphs any hashable.
     :param format: format to use. One of "edgelist", "adjacencylist" and "matrix"    
     :param import_edge_weights: whether to import edge weights
     :param matrix_format_node_id: only for the matrix format, whether to import node identifiers
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
-    )
-    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
-    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
-
-    format_to_use = CSV_FORMATS.get(format, _backend.CSV_FORMAT_EDGE_LIST)
-    args = [
-        import_id_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-        format_to_use,
-        import_edge_weights,
-        matrix_format_node_id,
-        matrix_format_zero_when_noedge,
-    ]
-
-    return _import("file_csv", graph, filename, *args)
+    if is_property_graph(graph):
+        _parse_property_graph_csv(
+            graph,
+            filename,
+            import_id_cb=import_id_cb,
+            format=format,
+            import_edge_weights=import_edge_weights,
+            matrix_format_node_id=matrix_format_node_id,
+            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
+            input_is_filename=True,
+        )
+    else:
+        _parse_graph_csv(
+            graph,
+            filename,
+            import_id_cb=import_id_cb,
+            format=format,
+            import_edge_weights=import_edge_weights,
+            matrix_format_node_id=matrix_format_node_id,
+            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,            
+            input_is_filename=True,
+        )
 
 
 def parse_csv(
@@ -559,37 +557,42 @@ def parse_csv(
     The supported formats are the same CSV formats used by Gephi. The importer respects rfc4180. 
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return an integer with the identifier of the 
-              graph vertex.
+              from the input file as a string. For normal graphs it should return an integer for the 
+              graph vertex. For property graphs is may return any hashable object which will serve
+              as the graph vertex.
 
     :param graph: the graph to read into
     :param input_string: the input string to read from
-    :param import_id_cb: callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.
+    :param import_id_cb: Callback to transform identifiers from file to vertices. For normal graphs
+      must return an integer, for property graphs any hashable.
     :param format: format to use. One of "edgelist", "adjacencylist" and "matrix"    
     :param import_edge_weights: whether to import edge weights
     :param matrix_format_node_id: only for the matrix format, whether to import node identifiers
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error    
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        import_id_cb
-    )
-    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
-    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
-
-    format_to_use = CSV_FORMATS.get(format, _backend.CSV_FORMAT_ADJACENCY_LIST)
-    args = [
-        import_id_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-        format_to_use,
-        import_edge_weights,
-        matrix_format_node_id,
-        matrix_format_zero_when_noedge,
-    ]
-
-    return _import("string_csv", graph, input_string, *args)
+    if is_property_graph(graph):
+        _parse_property_graph_csv(
+            graph,
+            input_string,
+            import_id_cb=import_id_cb,
+            format=format,
+            import_edge_weights=import_edge_weights,
+            matrix_format_node_id=matrix_format_node_id,
+            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
+            input_is_filename=False,
+        )
+    else:
+        _parse_graph_csv(
+            graph,
+            input_string,
+            import_id_cb=import_id_cb,
+            format=format,
+            import_edge_weights=import_edge_weights,
+            matrix_format_node_id=matrix_format_node_id,
+            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,            
+            input_is_filename=False,
+        )
 
 
 def read_gexf(

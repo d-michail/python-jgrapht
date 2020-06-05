@@ -274,10 +274,7 @@ def _parse_graph_gml(
 
 
 def _parse_property_graph_gml(
-    graph,
-    input_string,
-    import_id_cb,
-    input_is_filename=False,
+    graph, input_string, import_id_cb, input_is_filename=False,
 ):
 
     if not is_property_graph(graph):
@@ -310,7 +307,7 @@ def _parse_property_graph_gml(
         string_as_bytearray,
         import_id_f_ptr,
         vertex_attribute_f_ptr,
-        edge_attribute_f_ptr,        
+        edge_attribute_f_ptr,
         vertex_notify_f_ptr,
         edge_notify_f_ptr,
     )
@@ -403,6 +400,117 @@ def _parse_property_graph_json(
         edge_attribute_f_ptr,
         vertex_notify_f_ptr,
         edge_notify_f_ptr,
+    )
+
+    _populate_properties(graph, *idmaps)
+
+
+CSV_FORMATS = dict(
+    {
+        "adjacencylist": _backend.CSV_FORMAT_ADJACENCY_LIST,
+        "edgelist": _backend.CSV_FORMAT_EDGE_LIST,
+        "matrix": _backend.CSV_FORMAT_MATRIX,
+    }
+)
+
+
+def _parse_graph_csv(
+    graph,
+    input,
+    import_id_cb=None,
+    format="adjacencylist",
+    import_edge_weights=False,
+    matrix_format_node_id=False,
+    matrix_format_zero_when_noedge=True,
+    input_is_filename=False,
+):
+    if is_property_graph(graph):
+        raise ValueError("Property graphs not supported")
+
+    (
+        import_id_f_ptr,
+        import_id_f,  # pylint: disable=unused-variable
+        _,
+        _,
+        _,
+        _,
+        vertex_notify_f_ptr,
+        vertex_notify_f,  # pylint: disable=unused-variable
+        edge_notify_f_ptr,
+        edge_notify_f,  # pylint: disable=unused-variable
+    ) = _create_graph_callbacks(
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=None,
+        edge_attribute_cb=None,
+        vertex_notify_id_cb=None,
+        edge_notify_id_cb=None,
+    )
+
+    string_as_bytearray = bytearray(input, encoding="utf-8")
+
+    if input_is_filename:
+        backend_function = _backend.jgrapht_import_file_csv
+    else:
+        backend_function = _backend.jgrapht_import_string_csv
+
+    backend_function(
+        graph.handle,
+        string_as_bytearray,
+        import_id_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+        CSV_FORMATS.get(format, _backend.CSV_FORMAT_EDGE_LIST),
+        import_edge_weights,
+        matrix_format_node_id,
+        matrix_format_zero_when_noedge,
+    )
+
+
+def _parse_property_graph_csv(
+    graph,
+    input_string,
+    import_id_cb,
+    format="adjacencylist",
+    import_edge_weights=False,
+    matrix_format_node_id=False,
+    matrix_format_zero_when_noedge=True,
+    input_is_filename=False,
+):
+    if not is_property_graph(graph):
+        raise ValueError("Only property graphs supported")
+
+    idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
+
+    (
+        import_id_f_ptr,
+        import_id_f,  # pylint: disable=unused-variable
+        _,
+        _,
+        _,
+        _,
+        vertex_notify_f_ptr,
+        vertex_notify_f,  # pylint: disable=unused-variable
+        edge_notify_f_ptr,
+        edge_notify_f,  # pylint: disable=unused-variable
+    ) = _create_property_graph_callbacks(graph, *idmaps, import_id_cb)
+
+    string_as_bytearray = bytearray(input_string, encoding="utf-8")
+
+    if input_is_filename:
+        backend_function = _backend.jgrapht_import_file_csv
+    else:
+        backend_function = _backend.jgrapht_import_string_csv
+
+    backend_function(
+        graph._graph.handle,
+        string_as_bytearray,
+        import_id_f_ptr,
+        vertex_notify_f_ptr,
+        edge_notify_f_ptr,
+        CSV_FORMATS.get(format, _backend.CSV_FORMAT_EDGE_LIST),
+        import_edge_weights,
+        matrix_format_node_id,
+        matrix_format_zero_when_noedge,
     )
 
     _populate_properties(graph, *idmaps)
