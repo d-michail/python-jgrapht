@@ -15,6 +15,8 @@ from .._internals._pg import is_property_graph
 from .._internals._importers import (
     _parse_graph_dimacs,
     _parse_property_graph_dimacs,
+    _parse_graph_gml,
+    _parse_property_graph_gml,
     _parse_graph_json,
     _parse_property_graph_json,
     _parse_graph_graphml,
@@ -205,43 +207,37 @@ def read_gml(
     the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as an integer. It should return a integer with the identifier of the 
-              graph vertex. If you want to preserve the identifiers from the file, the identity
-              function can be used.
+              from the input file as a string. For normal graphs it should return an integer for the 
+              graph vertex. For property graphs is may return any hashable object which will serve
+              as the graph vertex.
 
-    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+    .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. They are only used for normal graphs. Property graphs get the
+              attributes/properties automatically loaded.
 
     :param graph: The graph to read into
     :param filename: Filename to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.      
-    :param vertex_attribute_cb: Callback function for vertex attributes
-    :param edge_attribute_cb: Callback function for edge attributes
+    :param import_id_cb: Callback to transform identifiers from file to vertices. For normal graphs
+      must return an integer, for property graphs any hashable. If None the graph assigns automatically.      
+    :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
+      vertices.
+    :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
+      edges.
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        import_id_cb
-    )
-    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-        vertex_attribute_cb
-    )
-    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
-        edge_attribute_cb
-    )
-    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
-    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
-
-    args = [
-        import_id_f_ptr,
-        vertex_attribute_f_ptr,
-        edge_attribute_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    ]
-
-    return _import("file_gml", graph, filename, *args)
+    if is_property_graph(graph):
+        _parse_property_graph_gml(
+            graph, filename, import_id_cb=import_id_cb, input_is_filename=True
+        )
+    else:
+        _parse_graph_gml(
+            graph,
+            filename,
+            import_id_cb=import_id_cb,
+            vertex_attribute_cb=vertex_attribute_cb,
+            input_is_filename=True,
+        )
 
 
 def parse_gml(
@@ -307,43 +303,38 @@ def parse_gml(
     the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as an integer. It should return a integer with the identifier of the 
-              graph vertex. If you want to preserve the identifiers from the file, the identity
-              function can be used.
+              from the input file as a string. For normal graphs it should return an integer for the 
+              graph vertex. For property graphs is may return any hashable object which will serve
+              as the graph vertex.
 
-    .. note:: Attribute callback functions accept three parameters. The first is the vertex
+    .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. They are only used for normal graphs. Property graphs get the
+              attributes/properties automatically loaded.
 
     :param graph: The graph to read into
     :param input_string: Input string to read from 
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.       
-    :param vertex_attribute_cb: Callback function for vertex attributes
-    :param edge_attribute_cb: Callback function for edge attributes
+    :param import_id_cb: Callback to transform identifiers from file to vertices. For normal graphs
+      must return an integer, for property graphs any hashable. If None the graph assigns automatically.       
+    :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
+      vertices.
+    :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
+      edges.
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        import_id_cb
-    )
-    vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-        vertex_attribute_cb
-    )
-    edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
-        edge_attribute_cb
-    )
-    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
-    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
-
-    args = [
-        import_id_f_ptr,
-        vertex_attribute_f_ptr,
-        edge_attribute_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    ]
-
-    return _import("string_gml", graph, input_string, *args)
+    if is_property_graph(graph):
+        _parse_property_graph_gml(
+            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
+        )
+    else:
+        _parse_graph_gml(
+            graph,
+            input_string,
+            import_id_cb=import_id_cb,
+            vertex_attribute_cb=vertex_attribute_cb,
+            edge_attribute_cb=edge_attribute_cb,
+            input_is_filename=False,
+        )
 
 
 def read_json(
