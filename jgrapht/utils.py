@@ -13,8 +13,41 @@ class StringSupplier:
         return '{}{}'.format(self._prefix, value)
 
 
-def create_vertex_supplier():
-    return StringSupplier(prefix='v')
+class IntegerSupplier:
 
-def create_edge_supplier():
-    return StringSupplier(prefix='e')
+    def __init__(self, start=0):
+        self._count = start
+
+    def __call__(self):
+        value = self._count
+        self._count += 1
+        return value
+
+
+def create_vertex_supplier(type='str', prefix='v', start=0):
+    """Create a vertex supplier. Vertex suppliers are called whenever a
+    property graph wants to create a new vertex.
+
+    :param type: type can be either 'str' or 'int'
+    :param prefix: if a string supplier, a prefix to use
+    :param start: where to start counting
+    :returns: a vertex supplier
+    """
+    if type == 'int':
+        return IntegerSupplier(start=start)
+    else:
+        return StringSupplier(prefix=prefix, start=start)
+
+def create_edge_supplier(type='str', prefix='e', start=0):
+    """Create an edge supplier. Εδδγε suppliers are called whenever a
+    property graph wants to create a new εδγε.
+
+    :param type: type can be either 'str' or 'int'
+    :param prefix: if a string supplier, a prefix to use
+    :param start: where to start counting
+    :returns: an edge supplier
+    """    
+    if type == 'int':
+        return IntegerSupplier(start=start)
+    else:
+        return StringSupplier(prefix=prefix, start=start)
