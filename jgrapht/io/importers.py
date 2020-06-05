@@ -12,8 +12,14 @@ from .._internals._ioutils import _create_wrapped_notify_id_callback
 
 from .._internals._pg import is_property_graph
 
-from .._internals._importers import _parse_graph_json, _parse_property_graph_json
-from .._internals._importers import _parse_graph_graphml, _parse_property_graph_graphml
+from .._internals._importers import (
+    _parse_graph_dimacs,
+    _parse_property_graph_dimacs,
+    _parse_graph_json,
+    _parse_property_graph_json,
+    _parse_graph_graphml,
+    _parse_property_graph_graphml,
+)
 
 
 def _import(name, graph, filename_or_string, *args):
@@ -37,7 +43,7 @@ def read_dimacs(graph, filename, import_id_cb=None):
     formats.
 
     .. note:: In DIMACS formats the vertices are integers numbered from one.
-                 The importer automatically translates them to zero-based numbering. 
+              The importer automatically translates them to zero-based numbering. 
 
     Briefly, one of the most common DIMACS formats is the
     `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the 
@@ -62,29 +68,24 @@ def read_dimacs(graph, filename, import_id_cb=None):
               fields specified as 'Optional Descriptors' are ignored.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as an integer. It should return a integer with the identifier of the 
-              graph vertex. If you want to preserve the identifiers from the file, the identity
-              function can be used.
+              from the input file as a string. For normal graphs it should return an integer for the 
+              graph vertex. For property graphs is may return any hashable object which will serve
+              as the graph vertex.              
 
     :param graph: the graph to read into
     :param filename: filename to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.
+    :param import_id_cb: Callback to transform identifiers from file to vertices. For normal graphs
+      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        import_id_cb
-    )
-    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
-    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
-
-    args = [
-        import_id_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    ]
-
-    return _import("file_dimacs", graph, filename, *args)
+    if is_property_graph(graph):
+        _parse_property_graph_dimacs(
+            graph, filename, import_id_cb=import_id_cb, input_is_filename=True
+        )
+    else:
+        _parse_graph_dimacs(
+            graph, filename, import_id_cb=import_id_cb, input_is_filename=True,
+        )
 
 
 def parse_dimacs(graph, input_string, import_id_cb=None):
@@ -121,29 +122,24 @@ def parse_dimacs(graph, input_string, import_id_cb=None):
               fields specified as 'Optional Descriptors' are ignored.
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as an integer. It should return a integer with the identifier of the 
-              graph vertex. If you want to preserve the identifiers from the file, the identity
-              function can be used.
+              from the input file as a string. For normal graphs it should return an integer for the 
+              graph vertex. For property graphs is may return any hashable object which will serve
+              as the graph vertex.              
 
-    :param graph: The graph to read into
-    :param input_string: Input string to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. Can be 
-                         None to allow the graph to assign identifiers to new vertices.    
+    :param graph: the graph to read into
+    :param filename: filename to read from
+    :param import_id_cb: Callback to transform identifiers from file to vertices. For normal graphs
+      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        import_id_cb
-    )
-    vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(None)
-    edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(None)
-
-    args = [
-        import_id_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    ]
-
-    return _import("string_dimacs", graph, input_string, *args)
+    if is_property_graph(graph):
+        _parse_property_graph_dimacs(
+            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
+        )
+    else:
+        _parse_graph_dimacs(
+            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
+        )
 
 
 def read_gml(
@@ -1301,6 +1297,6 @@ def parse_graphml(
             vertex_attribute_cb=vertex_attribute_cb,
             edge_attribute_cb=edge_attribute_cb,
             input_is_filename=False,
-            validate_schema=validate_schema, 
-            simple=simple
+            validate_schema=validate_schema,
+            simple=simple,
         )

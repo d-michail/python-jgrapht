@@ -421,3 +421,21 @@ def test_property_graph_from_string():
 
     assert g.edge_props['e1']['weight'] == '4.4'
 
+
+def test_property_graph_from_string_without_importid():
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    parse_graphml(g, expected2, validate_schema=True, simple=True)
+
+    assert g.vertices == {'v0', 'v1', 'v2', 'v3'}
+    assert g.edges == {'e0', 'e1', 'e2', 'e3'}
+
+    assert g.edge_props['e1']['weight'] == '4.4'
