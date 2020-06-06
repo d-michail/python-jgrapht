@@ -735,6 +735,10 @@ def create_property_dag(
 
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
+    :param vertex_supplier: function which returns new vertices on each call. If
+        None then object instances are used.
+    :param edge_supplier: function which returns new edge on each call. If
+        None then object instances are used.        
     :returns: a graph
     :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph` and :class:`~jgrapht.types.PropertyGraph`    
     """
