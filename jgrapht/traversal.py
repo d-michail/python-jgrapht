@@ -12,7 +12,7 @@ def bfs_traversal(graph, start_vertex=None):
 
     If a starting vertex is specified, the iteration will start there and will be limited to the 
     connected component that includes the vertex. If no starting vertex is specified, the iteration 
-    will start at an artitrary vertex and will not be limited, that is, will be able to traverse the 
+    will start at an arbitrary vertex and will not be limited, that is, will be able to traverse the 
     whole graph.
 
     :param graph: The input graph
@@ -58,7 +58,7 @@ def dfs_traversal(graph, start_vertex=None):
 
     If a starting vertex is specified, the iteration will start there and will be limited to the 
     connected component that includes the vertex. If no starting vertex is specified, the iteration 
-    will start at an artitrary vertex and will not be limited, that is, will be able to traverse the 
+    will start at an arbitrary vertex and will not be limited, that is, will be able to traverse the 
     whole graph.
 
     :param graph: The input graph
