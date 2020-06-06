@@ -588,7 +588,12 @@ def test_pg_as_undirected():
 
     g.add_vertex("0")
     g.add_vertex("1")
+    g.add_vertex("2")
     g.add_edge("0", "1", edge="e1")
+    g.add_edge("1", "2", edge="e2")
+
+    g.edge_props['e1']['capacity'] = 5.0
+    g.edge_props['e2']['capacity'] = 15.0
 
     assert not g.contains_edge_between("1", "0")
 
@@ -600,6 +605,15 @@ def test_pg_as_undirected():
     assert g.type.weighted == ug.type.weighted
 
     assert ug.contains_edge_between("1", "0")
+
+    assert ug.edge_props['e1']['capacity'] == 5.0
+    assert ug.edge_props['e2']['capacity'] == 15.0
+
+    # test that properties are shared
+    ug.edge_props['e1']['capacity'] = 105.0
+    assert g.edge_props['e1']['capacity'] == 105.0
+
+#    assert 0
 
 
 def test_pg_as_unmodifiable():

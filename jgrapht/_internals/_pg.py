@@ -42,16 +42,7 @@ class _PropertyGraph(Graph, PropertyGraph):
     """
 
     def __init__(
-        self,
-        graph,
-        vertex_supplier=None,
-        edge_supplier=None,
-        vertex_id_to_hash=None,
-        edge_id_to_hash=None,
-        graph_props=None,
-        vertex_props=None,
-        edge_props=None,
-        **kwargs
+        self, graph, vertex_supplier=None, edge_supplier=None, copy_from=None, **kwargs
     ):
         """Initialize a property graph
 
@@ -61,6 +52,7 @@ class _PropertyGraph(Graph, PropertyGraph):
           None then object instances are used.
         :param edge_supplier: function which returns new edge on each call. If
           None then object instances are used.
+
         :param vertex_id_to_hash: initial mapping from integer vertices to hash values
           for the vertices already in the graph
         :param edge_id_to_hash: initial mapping from integer edge to hash values
@@ -78,59 +70,53 @@ class _PropertyGraph(Graph, PropertyGraph):
         self._listenable_graph = _ListenableView(graph)
         self._listenable_graph.add_listener(structural_cb)
 
-        # initialize vertex maps
-        self._vertex_hash_to_id = {}
-        self._vertex_id_to_hash = {}
-        self._vertex_hash_to_props = defaultdict(lambda: {})
-        self._vertex_props = self._VertexProperties(self, self._vertex_hash_to_props)
+        if copy_from is not None:
+            # copy suppliers
+            self._vertex_supplier = copy_from._vertex_supplier
+            self._edge_supplier = copy_from._edge_supplier
 
-        # initialize edge maps
-        self._edge_hash_to_id = {}
-        self._edge_id_to_hash = {}
-        self._edge_hash_to_props = self._PerEdgeWeightAwareDict(self)
-        self._edge_props = self._EdgeProperties(self, self._edge_hash_to_props)
+            # copy vertex maps
+            self._vertex_hash_to_id = copy_from._vertex_hash_to_id
+            self._vertex_id_to_hash = copy_from._vertex_id_to_hash
+            self._vertex_hash_to_props = copy_from._vertex_hash_to_props
+            self._vertex_props = self._VertexProperties(
+                self, self._vertex_hash_to_props
+            )
 
-        # initialize graph maps
-        self._graph_props = {}
+            # copy edge maps
+            self._edge_hash_to_id = copy_from._edge_hash_to_id
+            self._edge_id_to_hash = copy_from._edge_id_to_hash
+            self._edge_hash_to_props = copy_from._edge_hash_to_props
+            self._edge_props = self._EdgeProperties(self, self._edge_hash_to_props)
 
-        # initialize suppliers
-        if vertex_supplier is None:
-            vertex_supplier = lambda: object()
-        self._vertex_supplier = vertex_supplier
-        if edge_supplier is None:
-            edge_supplier = lambda: object()
-        self._edge_supplier = edge_supplier
+            # initialize graph maps
+            self._graph_props = copy_from._graph_props
 
-        # Check if the graph already contains vertices
-        for vid in self._listenable_graph.vertices:
-            if not vertex_id_to_hash is None and vid in vertex_id_to_hash:
-                vertex = vertex_id_to_hash[vid]
-            else:
-                vertex = self._vertex_supplier()
-            self._vertex_hash_to_id[vertex] = vid
-            self._vertex_id_to_hash[vid] = vertex
+        else:
+            # initialize suppliers
+            if vertex_supplier is None:
+                vertex_supplier = lambda: object()
+            self._vertex_supplier = vertex_supplier
+            if edge_supplier is None:
+                edge_supplier = lambda: object()
+            self._edge_supplier = edge_supplier
 
-        # Check if the graph already contains edges
-        for eid in self._listenable_graph.edges:
-            if not edge_id_to_hash is None and eid in edge_id_to_hash:
-                edge = edge_id_to_hash[eid]
-            else:
-                edge = self._edge_supplier()
-            self._edge_hash_to_id[edge] = eid
-            self._edge_id_to_hash[eid] = edge
+            # initialize vertex maps
+            self._vertex_hash_to_id = {}
+            self._vertex_id_to_hash = {}
+            self._vertex_hash_to_props = defaultdict(lambda: {})
+            self._vertex_props = self._VertexProperties(
+                self, self._vertex_hash_to_props
+            )
 
-        # Copy attributes
-        if graph_props is not None:
-            for k, v in graph_props.items():
-                self._graph_props[k] = v
-        if vertex_props is not None:
-            for v in self._vertex_hash_to_id.keys():
-                if v in vertex_props:
-                    self._vertex_hash_to_props[v] = vertex_props[v]
-        if edge_props is not None:
-            for e in self._edge_hash_to_id.keys():
-                if e in edge_props:
-                    self._edge_hash_to_props[e] = edge_props[e]
+            # initialize edge maps
+            self._edge_hash_to_id = {}
+            self._edge_id_to_hash = {}
+            self._edge_hash_to_props = defaultdict(lambda: {})
+            self._edge_props = self._EdgeProperties(self, self._edge_hash_to_props)
+
+            # initialize graph maps
+            self._graph_props = {}
 
     @property
     def handle(self):
@@ -326,9 +312,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         if vertex is None:
             vertex = self._vertex_supplier()
         if vertex in self._vertex_hash_to_id:
-            raise ValueError(
-                "Vertex supplier returns vertices already in the graph"
-            )
+            raise ValueError("Vertex supplier returns vertices already in the graph")
         self._vertex_hash_to_id[vertex] = vid
         self._vertex_id_to_hash[vid] = vertex
         return vertex
@@ -337,9 +321,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         if edge is None:
             edge = self._edge_supplier()
         if edge in self._edge_hash_to_id:
-            raise ValueError(
-                "Edge supplier returns edges already in the graph"
-            )
+            raise ValueError("Edge supplier returns edges already in the graph")
         self._edge_hash_to_id[edge] = eid
         self._edge_id_to_hash[eid] = edge
         return edge
@@ -408,7 +390,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         def __getitem__(self, key):
             if key not in self._graph.edges:
                 raise ValueError("Edge {} not in graph".format(key))
-            return self._storage[key]
+            return self._graph._PerEdgeWeightAwareDict(self._graph, key, self._storage[key])
 
         def __setitem__(self, key, value):
             if key not in self._graph.edges:
@@ -429,41 +411,51 @@ class _PropertyGraph(Graph, PropertyGraph):
         def __repr__(self):
             return "_PropertyGraph-EdgeProperties(%r)" % repr(self._storage)
 
-    class _WeightAwareDict(dict):
-        def __init__(self, graph, edge, *args, **kwargs):
+    class _PerEdgeWeightAwareDict(MutableMapping):
+        """A dictionary view which knows about the special key weight and delegates
+        to the graph. This is only a view."""
+
+        def __init__(self, graph, edge, storage, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self._graph = graph
             self._edge = edge
+            self._storage = storage
 
         def __getitem__(self, key):
-            if key is 'weight':
+            if key is "weight":
                 return self._graph.get_edge_weight(self._edge)
             else:
-                return super().__getitem__(key)
+                return self._storage[key]
 
         def __setitem__(self, key, value):
-            if key is 'weight':
-                if not isinstance(value, (float)): 
-                    raise TypeError('Weight not a floating point number')
+            if key is "weight":
+                if not isinstance(value, (float)):
+                    raise TypeError("Weight not a floating point number")
                 self._graph.set_edge_weight(self._edge, value)
             else:
-                super().__setitem__(key, value)
+                self._storage[key] = value
 
         def __delitem__(self, key):
-            if key is 'weight':
+            if key is "weight":
                 self._graph.set_edge_weight(self._edge, 1.0)
             else:
-                super().__delitem__(key)
-        
+                del self._storage[key]
 
-    class _PerEdgeWeightAwareDict(dict):
-        def __init__(self, graph, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self._graph = graph
+        def __len__(self):
+            return len(self._storage)
 
-        def __missing__(self, key):
-            res = self[key] = self._graph._WeightAwareDict(self._graph, key)
-            return res
+        def __iter__(self):
+            return iter(self._storage)
+
+        def __repr__(self):
+            return "_PerEdgeWeightAwareDict(%r, %r, %r)" % (
+                repr(self._graph),
+                repr(self._edge),
+                repr(self._storage),
+            )
+
+        def __str__(self):
+            return str(self._storage)
 
 
 class _PropertyDirectedAcyclicGraph(_PropertyGraph, DirectedAcyclicGraph):
@@ -564,14 +556,7 @@ def as_unweighted_property_graph(property_graph):
     unweighted_graph = _UnweightedGraphView(graph)
 
     unweighted_property_graph = _PropertyGraph(
-        unweighted_graph,
-        property_graph.vertex_supplier,
-        property_graph.edge_supplier,
-        property_graph._vertex_id_to_hash,
-        property_graph._edge_id_to_hash,
-        copy.copy(property_graph._graph_props),
-        copy.copy(property_graph._vertex_props),
-        copy.copy(property_graph._edge_props),
+        unweighted_graph, copy_from=property_graph
     )
 
     return unweighted_property_graph
@@ -583,14 +568,7 @@ def as_undirected_property_graph(property_graph):
     undirected_graph = _UndirectedGraphView(graph)
 
     undirected_property_graph = _PropertyGraph(
-        undirected_graph,
-        property_graph.vertex_supplier,
-        property_graph.edge_supplier,
-        property_graph._vertex_id_to_hash,
-        property_graph._edge_id_to_hash,
-        copy.copy(property_graph._graph_props),
-        copy.copy(property_graph._vertex_props),
-        copy.copy(property_graph._edge_props),
+        undirected_graph, copy_from=property_graph
     )
 
     return undirected_property_graph
@@ -602,14 +580,7 @@ def as_unmodifiable_property_graph(property_graph):
     unmodifiable_graph = _UnmodifiableGraphView(graph)
 
     unmodifiable_property_graph = _PropertyGraph(
-        unmodifiable_graph,
-        property_graph.vertex_supplier,
-        property_graph.edge_supplier,
-        property_graph._vertex_id_to_hash,
-        property_graph._edge_id_to_hash,
-        copy.copy(property_graph._graph_props),
-        copy.copy(property_graph._vertex_props),
-        copy.copy(property_graph._edge_props),
+        unmodifiable_graph, copy_from=property_graph
     )
 
     return unmodifiable_property_graph
@@ -621,14 +592,7 @@ def as_edgereversed_property_graph(property_graph):
     edgereversed_graph = _EdgeReversedGraphView(graph)
 
     edgereversed_property_graph = _PropertyGraph(
-        edgereversed_graph,
-        property_graph.vertex_supplier,
-        property_graph.edge_supplier,
-        property_graph._vertex_id_to_hash,
-        property_graph._edge_id_to_hash,
-        copy.copy(property_graph._graph_props),
-        copy.copy(property_graph._vertex_props),
-        copy.copy(property_graph._edge_props),
+        edgereversed_graph, copy_from=property_graph
     )
 
     return edgereversed_property_graph
