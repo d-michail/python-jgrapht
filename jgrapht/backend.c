@@ -664,6 +664,10 @@ int jgrapht_graph_as_masked_subgraph(void *g, void *vertex_mask_function, void *
     return jgrapht_capi_graph_as_masked_subgraph(thread, g, vertex_mask_function, edge_mask_function, res);
 }
 
+int jgrapht_graph_as_subgraph(void *g, void *vertex_set, void *edge_set, void** res) { 
+    return jgrapht_capi_graph_as_subgraph(thread, g, vertex_set, edge_set, res);
+}
+
 int jgrapht_graph_as_graph_union(void *g1, void *g2, void *weight_combiner_function, void** res) { 
     return jgrapht_capi_graph_as_graph_union(thread, g1, g2, weight_combiner_function, res);
 }

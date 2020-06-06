@@ -495,6 +495,8 @@ int jgrapht_graph_as_weighted(void *, void *LONG_TO_FPTR, int, int, void** OUTPU
 
 int jgrapht_graph_as_masked_subgraph(void *, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
+int jgrapht_graph_as_subgraph(void *, void *, void *, void** OUTPUT);
+
 int jgrapht_graph_as_graph_union(void *, void *, void *LONG_TO_FPTR, void** OUTPUT);
 
 int jgrapht_graph_dag_create(int, int, void** OUTPUT);
