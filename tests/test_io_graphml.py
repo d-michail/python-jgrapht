@@ -7,7 +7,6 @@ from jgrapht.io.exporters import write_graphml, generate_graphml
 from jgrapht.io.importers import read_graphml, parse_graphml
 
 
-
 expected1 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <graph edgedefault="directed">
         <node id="0"/>
@@ -89,7 +88,7 @@ expected3 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://gra
 </graphml>"""
 
 
-expected4=r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+expected4 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <key id="edge_weight_key" for="edge" attr.name="weight" attr.type="double">
         <default>1.0</default>
     </key>
@@ -134,6 +133,7 @@ expected4=r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graph
         </edge>
     </graph>
 </graphml>"""
+
 
 def test_export_import(tmpdir):
 
@@ -407,19 +407,21 @@ def test_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
-    def import_id_cb(id): 
-        return 'vertex-{}'.format(id)        
+    def import_id_cb(id):
+        return "vertex-{}".format(id)
 
-    parse_graphml(g, expected2, import_id_cb=import_id_cb, validate_schema=True, simple=True)
+    parse_graphml(
+        g, expected2, import_id_cb=import_id_cb, validate_schema=True, simple=True
+    )
 
-    assert g.vertices == {'vertex-0', 'vertex-1', 'vertex-2', 'vertex-3'}
-    assert g.edges == {'e0', 'e1', 'e2', 'e3'}
+    assert g.vertices == {"vertex-0", "vertex-1", "vertex-2", "vertex-3"}
+    assert g.edges == {"e0", "e1", "e2", "e3"}
 
-    assert g.edge_props['e1']['weight'] == '4.4'
+    assert g.edge_props["e1"]["weight"] == 4.4
 
 
 def test_property_graph_from_string_without_importid():
@@ -429,13 +431,27 @@ def test_property_graph_from_string_without_importid():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     parse_graphml(g, expected2, validate_schema=True, simple=True)
 
-    assert g.vertices == {'v0', 'v1', 'v2', 'v3'}
-    assert g.edges == {'e0', 'e1', 'e2', 'e3'}
+    assert g.vertices == {"v0", "v1", "v2", "v3"}
+    assert g.edges == {"e0", "e1", "e2", "e3"}
 
-    assert g.edge_props['e1']['weight'] == '4.4'
+    assert g.edge_props == {
+        "e0": {"source": "0", "target": "1"},
+        "e1": {"source": "0", "target": "2"},
+        "e2": {"source": "0", "target": "3"},
+        "e3": {"source": "2", "target": "3"},
+    }
+
+    # check that we also see the weights, even if they do not appear in
+    # the properties
+    assert g.edge_props["e1"]["weight"] == 4.4
+
+    # test weight changes also by set
+    g.set_edge_weight("e1", 100.4)
+    assert g.edge_props["e1"]["weight"] == 100.4
+

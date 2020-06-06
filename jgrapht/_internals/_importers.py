@@ -61,6 +61,7 @@ def _create_property_graph_callbacks(
     edge_id_to_props,
     import_id_cb,
     integer_ids=False,
+    include_weights=False,
 ):
     next_vertex_id = max(graph._graph.vertices, default=-1) + 1
 
@@ -89,7 +90,8 @@ def _create_property_graph_callbacks(
         vertex_id_to_props[id][key] = value
 
     def use_edge_attribute_cb(id, key, value):
-        edge_id_to_props[id][key] = value
+        if key != 'weight' or include_weights:
+            edge_id_to_props[id][key] = value
 
     if integer_ids:
         import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(

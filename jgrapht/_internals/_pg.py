@@ -87,7 +87,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         # initialize edge maps
         self._edge_hash_to_id = {}
         self._edge_id_to_hash = {}
-        self._edge_hash_to_props = defaultdict(lambda: {})
+        self._edge_hash_to_props = self._PerEdgeWeightAwareDict(self)
         self._edge_props = self._EdgeProperties(self, self._edge_hash_to_props)
 
         # initialize graph maps
@@ -428,6 +428,42 @@ class _PropertyGraph(Graph, PropertyGraph):
 
         def __repr__(self):
             return "_PropertyGraph-EdgeProperties(%r)" % repr(self._storage)
+
+    class _WeightAwareDict(dict):
+        def __init__(self, graph, edge, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self._graph = graph
+            self._edge = edge
+
+        def __getitem__(self, key):
+            if key is 'weight':
+                return self._graph.get_edge_weight(self._edge)
+            else:
+                return super().__getitem__(key)
+
+        def __setitem__(self, key, value):
+            if key is 'weight':
+                if not isinstance(value, (float)): 
+                    raise TypeError('Weight not a floating point number')
+                self._graph.set_edge_weight(self._edge, value)
+            else:
+                super().__setitem__(key, value)
+
+        def __delitem__(self, key):
+            if key is 'weight':
+                self._graph.set_edge_weight(self._edge, 1.0)
+            else:
+                super().__delitem__(key)
+        
+
+    class _PerEdgeWeightAwareDict(dict):
+        def __init__(self, graph, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self._graph = graph
+
+        def __missing__(self, key):
+            res = self[key] = self._graph._WeightAwareDict(self._graph, key)
+            return res
 
 
 class _PropertyDirectedAcyclicGraph(_PropertyGraph, DirectedAcyclicGraph):
