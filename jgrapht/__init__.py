@@ -72,4 +72,5 @@ from . import (
     generators,
     algorithms,
     io,
+    utils,
 )

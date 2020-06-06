@@ -11,6 +11,7 @@ from ..types import (
     GraphType,
     GraphEvent,
     PropertyGraph,
+    DirectedAcyclicGraph,
 )
 
 from ._graphs import create_graph as _create_graph, create_dag as _create_dag
@@ -429,7 +430,7 @@ class _PropertyGraph(Graph, PropertyGraph):
             return "_PropertyGraph-EdgeProperties(%r)" % repr(self._storage)
 
 
-class _PropertyDirectedAcyclicGraph(_PropertyGraph):
+class _PropertyDirectedAcyclicGraph(_PropertyGraph, DirectedAcyclicGraph):
     """The directed acyclic graph wrapper."""
 
     def __init__(self, graph, vertex_supplier=None, edge_supplier=None, **kwargs):
