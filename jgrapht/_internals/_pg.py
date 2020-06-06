@@ -602,9 +602,12 @@ def as_edgereversed_property_graph(property_graph):
 def as_weighted_property_graph(property_graph, edge_weight_cb, cache_weights, write_weights_through):
     """Create a weighted view of a property graph."""
 
-    def actual_edge_weight_cb(e):
-        e = vertex_g_to_pg(property_graph, e)
-        return edge_weight_cb(e)
+    if edge_weight_cb is not None:
+        def actual_edge_weight_cb(e):
+            e = vertex_g_to_pg(property_graph, e)
+            return edge_weight_cb(e)
+    else:
+        actual_edge_weight_cb = None
 
     graph = property_graph._graph
     weighted_graph = _WeightedView(graph, actual_edge_weight_cb, cache_weights, write_weights_through)

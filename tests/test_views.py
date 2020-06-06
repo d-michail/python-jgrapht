@@ -753,7 +753,6 @@ def test_pg_as_weighted():
     assert g.get_edge_weight('0') == 1.0
 
     def edge_weight(e):
-        print ('Called with e = {} with type = {}'.format(e, type(e)))
         return 100.5
 
     wg = as_weighted(g, edge_weight, cache_weights=False, write_weights_through=False)
@@ -766,3 +765,164 @@ def test_pg_as_weighted():
     with pytest.raises(ValueError):
         wg.set_edge_weight('0', 5.0)
 
+
+
+def test_pg_as_weighted_with_None_function():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_edge(0, 1, edge=0)
+
+    with pytest.raises(ValueError):
+        g.set_edge_weight(0, 5.0)
+
+    assert g.get_edge_weight(0) == 1.0
+
+    def edge_weight(e):
+        return 100.5
+
+    wg = as_weighted(
+        g, edge_weight_cb=None, cache_weights=False, write_weights_through=False
+    )
+
+    assert wg.get_edge_weight(0) == 1.0
+
+    with pytest.raises(ValueError):
+        wg.set_edge_weight(0, 5.0)
+
+
+def test_pg_as_weighted_with_caching():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_edge(0, 1, edge=0)
+
+    with pytest.raises(ValueError):
+        g.set_edge_weight(0, 5.0)
+
+    with pytest.raises(ValueError):
+        g.edge_props[0]['weight'] = 5.0
+
+    assert g.get_edge_weight(0) == 1.0
+
+    def edge_weight(e):
+        return 100.5
+
+    wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=False)
+
+    assert wg.get_edge_weight(0) == 100.5
+
+    assert wg.edge_props[0]['weight'] == 100.5
+
+    wg.set_edge_weight(0, 5.0)
+
+    assert wg.get_edge_weight(0) == 5.0
+    assert wg.edge_props[0]['weight'] == 5.0
+
+
+def test_pg_as_weighted_with_caching_and_write_throught_with_unweighted():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_edge(0, 1, edge=0)
+
+    with pytest.raises(ValueError):
+        g.set_edge_weight(0, 5.0)
+
+    with pytest.raises(ValueError):
+        g.edge_props[0]['weight'] = 5.0
+
+    assert g.get_edge_weight(0) == 1.0
+
+    def edge_weight(e):
+        return 100.5
+
+    with pytest.raises(ValueError):
+        wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=True)
+
+
+def test_pg_as_weighted_with_caching_and_write_throught():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_edge(0, 1, edge=0)
+
+    g.set_edge_weight(0, 200.0)
+    assert g.get_edge_weight(0) == 200.0
+
+    assert g.edge_props[0]['weight'] == 200.0
+
+    def edge_weight(e):
+        return 100.5
+
+    wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=True)
+
+    assert wg.get_edge_weight(0) == 100.5
+
+    wg.set_edge_weight(0, 5.0)
+
+    assert wg.get_edge_weight(0) == 5.0
+
+    assert wg.edge_props[0]['weight'] == 5.0
+
+    assert g.get_edge_weight(0) == 5.0
+
+    assert g.edge_props[0]['weight'] == 5.0
+
+
+def test_pg_as_weighted_with_no_caching_and_write_through():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_edge(0, 1, edge=0)
+
+    g.set_edge_weight(0, 5.0)
+    assert g.get_edge_weight(0) == 5.0
+    assert g.edge_props[0]['weight'] == 5.0
+
+    def edge_weight(e):
+        return 100.5
+
+    wg = as_weighted(g, edge_weight, cache_weights=False, write_weights_through=True)
+
+    assert wg.get_edge_weight(0) == 100.5
+
+    with pytest.raises(ValueError):
+        wg.set_edge_weight(0, 5.0)
+
+    with pytest.raises(ValueError):
+        wg.edge_props[0]['weight'] = 5.0
+
+    assert wg.get_edge_weight(0) == 100.5
+
+    assert wg.edge_props[0]['weight'] == 100.5
