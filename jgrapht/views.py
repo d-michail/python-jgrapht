@@ -15,7 +15,8 @@ from ._internals._pg import (
     as_unweighted_property_graph as _as_unweighted_property_graph,
     as_undirected_property_graph as _as_undirected_property_graph,
     as_unmodifiable_property_graph as _as_unmodifiable_property_graph,
-    as_edgereversed_property_graph as _as_edgereversed_property_graph
+    as_edgereversed_property_graph as _as_edgereversed_property_graph,
+    as_weighted_property_graph as _as_weighted_property_graph,
 )
 
 
@@ -66,7 +67,7 @@ def as_edge_reversed(graph):
     :returns: a graph with reversed edges
     """
     if is_property_graph(graph):
-        return _as_edgereversed_property_graph(graph)    
+        return _as_edgereversed_property_graph(graph)
     else:
         return _EdgeReversedGraphView(graph)
 
@@ -121,8 +122,13 @@ def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through
     :returns: a weighted view
     """
     if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")
-    return _WeightedView(graph, edge_weight_cb, cache_weights, write_weights_through)
+        return _as_weighted_property_graph(
+            graph, edge_weight_cb, cache_weights, write_weights_through
+        )
+    else:
+        return _WeightedView(
+            graph, edge_weight_cb, cache_weights, write_weights_through
+        )
 
 
 def as_listenable(graph):
@@ -159,4 +165,3 @@ def as_graph_union(graph1, graph2, edge_weight_combiner_cb=None):
     if is_property_graph(graph1) or is_property_graph(graph2):
         raise ValueError("View not supported for property graphs")
     return _GraphUnion(graph1, graph2, edge_weight_combiner_cb)
-

@@ -53,76 +53,6 @@ def test_as_unweighted():
     assert g1.get_edge_weight(e45) == 1.0
 
 
-def test_as_unweighted_on_property_graphs():
-    g = create_property_graph(
-        directed=True,
-        allowing_self_loops=True,
-        allowing_multiple_edges=False,
-        weighted=True,
-        vertex_supplier=create_vertex_supplier(),
-        edge_supplier=create_edge_supplier(),
-    )
-
-    g.add_vertex()
-    g.add_vertex()
-    g.add_vertex()
-    g.add_vertex()
-    g.add_edge('v0', 'v1')
-    g.add_edge('v1', 'v2')
-    g.add_edge('v2', 'v3')
-
-    g.set_edge_weight('e0', 100.0)
-    g.set_edge_weight('e1', 50.0)
-    g.set_edge_weight('e2', 25.0)
-
-    g.vertex_props['v0']['before'] = 'v0'
-    g.vertex_props['v1']['before'] = 'v1'
-    g.edge_props['e0']['before'] = 'e0'
-    g.edge_props['e1']['before'] = 'e1'
-
-    g1 = as_unweighted(g)
-
-    assert g.type.directed == g1.type.directed
-    assert g.type.allowing_self_loops == g1.type.allowing_self_loops
-    assert g.type.allowing_multiple_edges == g1.type.allowing_multiple_edges
-    assert g.type.weighted != g1.type.weighted
-
-    assert g1.get_edge_weight('e0') == 1.0
-    assert g1.get_edge_weight('e1') == 1.0
-    assert g1.get_edge_weight('e2') == 1.0
-
-    # test that properties still exist
-    assert g.vertex_props['v0']['before'] == 'v0'
-    assert g.vertex_props['v1']['before'] == 'v1'
-    assert g.edge_props['e0']['before'] == 'e0'
-    assert g.edge_props['e1']['before'] == 'e1'
-
-    assert g1.vertex_props['v0']['before'] == 'v0'
-    assert g1.vertex_props['v1']['before'] == 'v1'
-    assert g1.edge_props['e0']['before'] == 'e0'
-    assert g1.edge_props['e1']['before'] == 'e1'
-
-    # test adding a property in g
-    g.vertex_props['v0']['after'] = 'v0'
-    assert g1.vertex_props['v0']['after'] == 'v0'
-
-    # test adding a property in g1
-    g1.edge_props['e0']['after'] = 'e0'
-    assert g.edge_props['e0']['after'] == 'e0'
-
-    # test deleting a property from g 
-    del g.vertex_props['v1']['before']
-    with pytest.raises(KeyError):
-        g1.vertex_props['v1']['before']
-
-    with pytest.raises(ValueError):
-        g1.edge_props['e0']['weight'] = 200.0
-
-    g.edge_props['e0']['weight'] = 200.0
-    assert g.edge_props['e0']['weight'] == 200.0
-    assert g1.edge_props['e0']['weight'] == 1.0
-
-
 def test_as_undirected():
     g = create_graph(
         directed=True,
@@ -684,8 +614,6 @@ def test_pg_as_undirected():
     ug.edge_props['e1']['capacity'] = 105.0
     assert g.edge_props['e1']['capacity'] == 105.0
 
-#    assert 0
-
 
 def test_pg_as_unmodifiable():
     g = create_property_graph(
@@ -735,3 +663,106 @@ def test_pg_two_wrappers():
         ug.add_vertex("2")
 
     assert ug.contains_edge_between("1", "0")
+
+
+def test_as_unweighted_on_property_graphs():
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
+    )
+
+    g.add_vertex()
+    g.add_vertex()
+    g.add_vertex()
+    g.add_vertex()
+    g.add_edge('v0', 'v1')
+    g.add_edge('v1', 'v2')
+    g.add_edge('v2', 'v3')
+
+    g.set_edge_weight('e0', 100.0)
+    g.set_edge_weight('e1', 50.0)
+    g.set_edge_weight('e2', 25.0)
+
+    g.vertex_props['v0']['before'] = 'v0'
+    g.vertex_props['v1']['before'] = 'v1'
+    g.edge_props['e0']['before'] = 'e0'
+    g.edge_props['e1']['before'] = 'e1'
+
+    g1 = as_unweighted(g)
+
+    assert g.type.directed == g1.type.directed
+    assert g.type.allowing_self_loops == g1.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges == g1.type.allowing_multiple_edges
+    assert g.type.weighted != g1.type.weighted
+
+    assert g1.get_edge_weight('e0') == 1.0
+    assert g1.get_edge_weight('e1') == 1.0
+    assert g1.get_edge_weight('e2') == 1.0
+
+    # test that properties still exist
+    assert g.vertex_props['v0']['before'] == 'v0'
+    assert g.vertex_props['v1']['before'] == 'v1'
+    assert g.edge_props['e0']['before'] == 'e0'
+    assert g.edge_props['e1']['before'] == 'e1'
+
+    assert g1.vertex_props['v0']['before'] == 'v0'
+    assert g1.vertex_props['v1']['before'] == 'v1'
+    assert g1.edge_props['e0']['before'] == 'e0'
+    assert g1.edge_props['e1']['before'] == 'e1'
+
+    # test adding a property in g
+    g.vertex_props['v0']['after'] = 'v0'
+    assert g1.vertex_props['v0']['after'] == 'v0'
+
+    # test adding a property in g1
+    g1.edge_props['e0']['after'] = 'e0'
+    assert g.edge_props['e0']['after'] == 'e0'
+
+    # test deleting a property from g 
+    del g.vertex_props['v1']['before']
+    with pytest.raises(KeyError):
+        g1.vertex_props['v1']['before']
+
+    with pytest.raises(ValueError):
+        g1.edge_props['e0']['weight'] = 200.0
+
+    g.edge_props['e0']['weight'] = 200.0
+    assert g.edge_props['e0']['weight'] == 200.0
+    assert g1.edge_props['e0']['weight'] == 1.0
+
+
+def test_pg_as_weighted():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=False,
+    )
+
+    g.add_vertex('0')
+    g.add_vertex('1')
+    g.add_edge('0', '1', edge='0')
+
+    with pytest.raises(ValueError):
+        g.set_edge_weight('0', 5.0)
+
+    assert g.get_edge_weight('0') == 1.0
+
+    def edge_weight(e):
+        print ('Called with e = {} with type = {}'.format(e, type(e)))
+        return 100.5
+
+    wg = as_weighted(g, edge_weight, cache_weights=False, write_weights_through=False)
+
+    assert wg.get_edge_weight('0') == 100.5
+
+    print(g)
+    print(wg)
+
+    with pytest.raises(ValueError):
+        wg.set_edge_weight('0', 5.0)
+

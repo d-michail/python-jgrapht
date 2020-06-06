@@ -28,6 +28,9 @@ class _UnweightedGraphView(_JGraphTGraph):
         """
         return self._type
 
+    def __repr__(self):
+        return "_UnweightedGraphView(%r)" % self._handle
+
 
 class _UndirectedGraphView(_JGraphTGraph):
     def __init__(self, graph):
@@ -49,6 +52,9 @@ class _UndirectedGraphView(_JGraphTGraph):
         :returns: The graph type.
         """
         return self._type
+
+    def __repr__(self):
+        return "_UndirectedGraphView(%r)" % self._handle
 
 
 class _UnmodifiableGraphView(_JGraphTGraph):
@@ -72,6 +78,9 @@ class _UnmodifiableGraphView(_JGraphTGraph):
         """
         return self._type
 
+    def __repr__(self):
+        return "_UnmodifiableGraphView(%r)" % self._handle
+
 
 class _EdgeReversedGraphView(_JGraphTGraph):
     def __init__(self, graph):
@@ -93,6 +102,9 @@ class _EdgeReversedGraphView(_JGraphTGraph):
         :returns: The graph type.
         """
         return self._type
+
+    def __repr__(self):
+        return "_EdgeReversedGraphView(%r)" % self._handle
 
 
 class _MaskedSubgraphView(_JGraphTGraph):
@@ -126,6 +138,9 @@ class _MaskedSubgraphView(_JGraphTGraph):
         """
         return self._type
 
+    def __repr__(self):
+        return "_MaskedSubgraphView(%r)" % self._handle
+
 
 class _WeightedView(_JGraphTGraph):
     def __init__(self, graph, edge_weight_cb, cache_weights, write_weights_through):
@@ -144,17 +159,11 @@ class _WeightedView(_JGraphTGraph):
         super().__init__(res)
 
         self._type = graph.type.as_weighted()
-        self._cache_weights = cache_weights
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
         # collected here, the same will happen inside the JVM.
         self._graph = graph
-
-    def set_edge_weight(self, e, weight):
-        if not self._cache_weights:
-            raise ValueError("Cannot set edge weight with caching disabled")
-        super().set_edge_weight(e, weight)
 
     @property
     def type(self):
@@ -163,6 +172,9 @@ class _WeightedView(_JGraphTGraph):
         :returns: The graph type.
         """
         return self._type
+
+    def __repr__(self):
+        return "_WeightedView(%r)" % self._handle
 
 
 class _GraphUnion(_JGraphTGraph):
@@ -233,3 +245,5 @@ class _ListenableView(_JGraphTGraph, ListenableGraph):
         backend.jgrapht_listenable_remove_graph_listener(self.handle, listener_handle)
         backend.jgrapht_handles_destroy(listener_handle)
 
+    def __repr__(self):
+        return "_ListenableView(%r)" % self._handle
