@@ -455,3 +455,33 @@ def test_property_graph_from_string_without_importid():
     g.set_edge_weight("e1", 100.4)
     assert g.edge_props["e1"]["weight"] == 100.4
 
+
+def test_property_graph_non_weighted_from_string_without_importid():
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=False,
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
+    )
+
+    parse_graphml(g, expected2, validate_schema=True, simple=True)
+
+    assert g.vertices == {"v0", "v1", "v2", "v3"}
+    assert g.edges == {"e0", "e1", "e2", "e3"}
+
+    assert g.edge_props == {
+        "e0": {"source": "0", "target": "1"},
+        "e1": {"source": "0", "target": "2"},
+        "e2": {"source": "0", "target": "3"},
+        "e3": {"source": "2", "target": "3"},
+    }
+
+    # check that we also see the weights, even if they do not appear in
+    # the properties
+    assert g.edge_props["e1"]["weight"] == 1.0
+
+    with pytest.raises(ValueError):
+        g.edge_props["e1"]["weight"] = 2.0
