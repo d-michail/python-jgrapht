@@ -2,7 +2,7 @@
 
 # Python-JGraphT
 
-A python version of the  [JGraphT graph library](https://jgrapht.org/).
+Python bindings of the  [JGraphT graph library](https://jgrapht.org/).
 
 The JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It
 contains very efficient and generic graph data-structures along with a sizeable collection of sophisticated
