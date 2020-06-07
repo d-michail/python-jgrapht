@@ -15,7 +15,7 @@ state-of-the-art graph data-structures as well as a multitude of sophisticated
 graph algorithms. It has been in development for many years already and is currently used
 in production both in research and industry. 
 
-This library is a pure python/native package having no dependency on the JVM. During the
+The |Bindings| is a pure python/native package having no dependency on the JVM. During the
 build process the backend JGraphT library is compiled as a shared library and bundled
 inside the python package.
 

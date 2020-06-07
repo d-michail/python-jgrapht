@@ -10,7 +10,8 @@ This guide will help you start using the library.
 Creating a graph
 ----------------
 
-Let us start by creating a graph.
+Let us start by creating a graph, which is a collection of vertices (aka nodes) and edges. 
+We will use the default graph which uses integers to represent vertices and edges.
 
 .. nbplot::
 
@@ -19,8 +20,6 @@ Let us start by creating a graph.
 
 This is the most general call. Sensible defaults are also provided, thus someone can create
 a graph simply by calling :py:meth:`jgrapht.create_graph()`. 
-The graph is a collection of vertices (aka nodes) and edges. 
-In the |Bindings|, vertices and edges are always integers. 
 
 
 Adding vertices
@@ -67,23 +66,23 @@ helpful in order to iterate over them.
 Adding edges
 ------------
 
-Edges are pair of vertices, either ordered or unordered, depending on the type of the graph. 
-In the |Bindings| edges are also identified using integers. These edge
-identifiers are automatically given to the edge when they are first added to the graph,
+Edges are pairs of vertices, either ordered or unordered, depending on whether the graph is
+directed or undirected. In the default graph, edges are represented using integers.
+These edges are automatically created by the graph.
 
 .. nbplot::
 
   >>> e1 = g.add_edge(0, 1)
 
-The call above creates a new edge from vertex 0 to vertex 1 and returns its identifier.
+The call above creates a new edge from vertex 0 to vertex 1 and returns its representation.
 Multiple edges can be created in one go by using,
 
 .. nbplot::
 
   >>> g.add_edges_from([(0, 2), (1, 2)])
 
-The method returns the identifiers of the newly created edges. Note also that it is possible to
-provide the edge identifier using,
+The method returns the newly created edges. Note also that it is possible to provide the edge
+representation explicitly using,
 
 .. nbplot::
 
@@ -96,7 +95,7 @@ contains such an edge, the graph is not altered.
 Edge Information
 ----------------
 
-Using the edge identifier we can retrieve the underlying information of the edge such as its source
+Using the edge we can retrieve the underlying information of the edge such as its source
 and its target. While in undirected graphs there is no source or target, we use the same naming scheme
 to keep a uniform interface. This is very helpful in order to implement algorithms which work both 
 in directed and undirected graphs. Let us now read the edge source and target from the graph,
@@ -137,7 +136,7 @@ Edges can be iterated using the set returned by :py:attr:`.Graph.edges`,
   >>>     print ('Edge {} has target {}'.format(e, g.edge_target(e)))
 
 The same effect can be performed using the helper method :py:meth:`.Graph.edge_tuple()` which 
-returns a tuple containing the source, the target of an edge, and the weight of the edge. If
+returns a tuple containing the source, the target, and the weight of the edge. If
 the graph is unweighted, the weight returned is always 1.0.
 
 .. nbplot::
