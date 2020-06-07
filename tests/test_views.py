@@ -224,6 +224,18 @@ def test_pg_as_masked_subgraph():
     g.add_edge('v1', 'v3', edge='e5')
     g.add_edge('v2', 'v4', edge='e6')
 
+    g.vertex_props['v0']['label'] = 'label0'
+    g.vertex_props['v1']['label'] = 'label1'
+    g.vertex_props['v2']['label'] = 'label2'
+    g.vertex_props['v3']['label'] = 'label3'
+    g.vertex_props['v4']['label'] = 'label4'
+
+    assert g.vertex_props['v0']['label'] == 'label0'
+    assert g.vertex_props['v1']['label'] == 'label1'
+    assert g.vertex_props['v2']['label'] == 'label2'
+    assert g.vertex_props['v3']['label'] == 'label3'
+    assert g.vertex_props['v4']['label'] == 'label4'
+
     def vertex_mask(v):
         if v == 'v3':
             return True
@@ -237,9 +249,6 @@ def test_pg_as_masked_subgraph():
     masked_graph = as_masked_subgraph(
         g, vertex_mask_cb=vertex_mask, edge_mask_cb=edge_mask
     )
-
-    print(g)
-    print(masked_graph)
 
 
     assert masked_graph.vertices == {'v0', 'v1', 'v2', 'v4'}
@@ -257,10 +266,25 @@ def test_pg_as_masked_subgraph():
 
     assert masked_graph.vertices == {'v0', 'v1', 'v2', 'v4', 'v5'}
 
+    g.add_edge('v5', 'v4', edge='e7')
+    g.edge_props['e7']['capacity'] = 9.0
+
+    assert masked_graph.edges == {'e1', 'e2', 'e6', 'e7'}
+
     # test that we are unmodifiable
     with pytest.raises(ValueError):
         masked_graph.add_vertex('v6')
 
+    # test properties
+    assert masked_graph.vertex_props['v0']['label'] == 'label0'
+    assert masked_graph.vertex_props['v1']['label'] == 'label1'
+    assert masked_graph.vertex_props['v2']['label'] == 'label2'
+    assert masked_graph.vertex_props['v4']['label'] == 'label4'
+
+    with pytest.raises(ValueError):
+        assert masked_graph.vertex_props['v3']['label'] == 'label3'
+
+    assert masked_graph.edge_props['e7']['capacity'] == 9.0
 
 
 def test_as_weighted():

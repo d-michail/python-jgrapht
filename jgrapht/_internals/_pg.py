@@ -386,12 +386,12 @@ class _PropertyGraph(Graph, PropertyGraph):
             self._storage = storage
 
         def __getitem__(self, key):
-            if key not in self._graph._vertex_hash_to_id:
+            if key not in self._graph.vertices:
                 raise ValueError("Vertex {} not in graph".format(key))
             return self._storage[key]
 
         def __setitem__(self, key, value):
-            if key not in self._graph._vertex_hash_to_id:
+            if key not in self._graph.vertices:
                 raise ValueError("Vertex {} not in graph".format(key))
             self._storage[key] = value
 
@@ -417,19 +417,19 @@ class _PropertyGraph(Graph, PropertyGraph):
             self._storage = storage
 
         def __getitem__(self, key):
-            if key not in self._graph._edge_hash_to_id:
+            if key not in self._graph.edges:
                 raise ValueError("Edge {} not in graph".format(key))
             return self._graph._PerEdgeWeightAwareDict(
                 self._graph, key, self._storage[key]
             )
 
         def __setitem__(self, key, value):
-            if key not in self._graph._edge_hash_to_id:
+            if key not in self._graph.edges:
                 raise ValueError("Edge {} not in graph".format(key))
             self._storage[key] = value
 
         def __delitem__(self, key):
-            if key not in self._graph._edge_hash_to_id:
+            if key not in self._graph.edges:
                 raise ValueError("Edge {} not in graph".format(key))
             del self._storage[key]
 
