@@ -25,7 +25,7 @@ Audience
 --------
 
 The audience of the library is any user who needs to use graphs or networks in their every 
-day work, including engineers or researchers either from the industry or academia.
+day work, including engineers and researchers either from the industry or academia.
 
 Why another library?
 --------------------

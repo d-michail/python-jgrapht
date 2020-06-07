@@ -61,13 +61,14 @@ is a static variant which can only be bulk-loaded from a list of edges. Its bene
 condiderably faster and less memory hungry, at the expense of not beeing modifiable. It is best suited 
 for less dynamic workloads where the user creates a graph once and executes complex algorithms on it.
 
-property graphs
-"""""""""""""""
+property graph
+""""""""""""""
    
-The property graph is a graph implementation which allows the use of any Python hashable as vertices 
+The *property graph* is a graph implementation which allows the use of any Python hashable as vertices 
 or edges. Additionally, it provides support for maintaining the attributes/properties dictionaries 
-inside the graph. During creation the user can explicitly provide a factory function which the graph 
-can use whenever it needs to create new vertices or edges. By default object instances are used. 
+inside the graph. During creation the user can provide a factory function which the graph 
+can use whenever it needs to create new vertices or edges. If not explicitly provided, the implementation 
+uses object instances for all automatically created vertices and edges. 
 Importers and exporters automatically support property graphs, by importing/exporting their associated
 properties.
 
