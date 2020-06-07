@@ -17,6 +17,7 @@ from ._internals._pg import (
     as_unmodifiable_property_graph as _as_unmodifiable_property_graph,
     as_edgereversed_property_graph as _as_edgereversed_property_graph,
     as_weighted_property_graph as _as_weighted_property_graph,
+    as_masked_subgraph_property_graph as _as_masked_subgraph_property_graph,
 )
 
 
@@ -90,8 +91,9 @@ def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):
     :returns: a masked subgraph 
     """
     if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")
-    return _MaskedSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
+        return _as_masked_subgraph_property_graph(graph, vertex_mask_cb, edge_mask_cb)
+    else:
+        return _MaskedSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
 
 
 def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through=False):

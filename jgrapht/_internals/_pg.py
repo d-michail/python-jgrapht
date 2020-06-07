@@ -22,9 +22,14 @@ from ._views import (
     _UnmodifiableGraphView,
     _EdgeReversedGraphView,
     _WeightedView,
+    _MaskedSubgraphView,
 )
 from ._collections import _JGraphTIntegerStringMap
-from ._pg_collections import _PropertyGraphVertexSet, _PropertyGraphVertexIterator
+from ._pg_collections import (
+    _PropertyGraphVertexSet,
+    _PropertyGraphVertexIterator,
+    _PropertyGraphEdgeIterator,
+)
 
 
 class _PropertyGraph(Graph, PropertyGraph):
@@ -68,6 +73,8 @@ class _PropertyGraph(Graph, PropertyGraph):
         def structural_cb(element, event_type):
             self._structural_event_listener(element, event_type)
 
+        self._vertex_set = None
+        self._edge_set = None
         self._listenable_graph = _ListenableView(graph)
         self._listenable_graph.add_listener(structural_cb)
 
@@ -121,12 +128,13 @@ class _PropertyGraph(Graph, PropertyGraph):
 
     @property
     def handle(self):
-        """Handle to the backend graph."""
+        # Handle to the backend graph. We return the listenable graph
+        # in order to track any changes, happening outside the graph.
         return self._listenable_graph.handle
 
     @property
     def type(self):
-        return self._listenable_graph.type
+        return self._graph.type
 
     @property
     def vertex_supplier(self):
@@ -139,7 +147,7 @@ class _PropertyGraph(Graph, PropertyGraph):
         return self._edge_supplier
 
     def add_vertex(self, vertex=None):
-        if vertex is not None and vertex in self._vertex_hash_to_id:
+        if vertex is not None and vertex in self.vertices:
             return vertex
         vid = self._graph.add_vertex()
         return self._add_new_vertex(vid, vertex)
@@ -150,25 +158,18 @@ class _PropertyGraph(Graph, PropertyGraph):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             return False
-        # Call on listenable graph, as it might remove edges also
+        # Call on listenable graph, as it might remove edges also.
         self._listenable_graph.remove_vertex(vid)
         return True
 
     def contains_vertex(self, v):
-        return v in self._vertex_hash_to_id
+        return v in self.vertices
 
     def add_edge(self, u, v, weight=None, edge=None):
-        if edge is not None and edge in self._edge_hash_to_id:
+        if edge is not None and edge in self.edges:
             return edge
 
-        uid = self._vertex_hash_to_id.get(u)
-        if uid is None:
-            raise ValueError("Vertex {} not in graph".format(u))
-        vid = self._vertex_hash_to_id.get(v)
-        if vid is None:
-            raise ValueError("Vertex {} not in graph".format(v))
-
-        eid = self._graph.add_edge(uid, vid)
+        eid = self._graph.add_edge(self._get_vertex_id(u), self._get_vertex_id(v))
         edge = self._add_new_edge(eid, edge)
 
         if weight is not None:
@@ -186,107 +187,70 @@ class _PropertyGraph(Graph, PropertyGraph):
         return True
 
     def contains_edge(self, e):
-        return e in self._edge_hash_to_id
+        return e in self.edges
 
     def contains_edge_between(self, u, v):
-        uid = self._vertex_hash_to_id.get(u)
-        if uid is None:
-            raise ValueError("Vertex {} not in graph".format(u))
-        vid = self._vertex_hash_to_id.get(v)
-        if vid is None:
-            raise ValueError("Vertex {} not in graph".format(v))
-        return self._listenable_graph.contains_edge_between(uid, vid)
+        return self._listenable_graph.contains_edge_between(
+            self._get_vertex_id(u), self._get_vertex_id(v)
+        )
 
     def degree_of(self, v):
-        vid = self._vertex_hash_to_id.get(v)
-        if vid is None:
-            raise ValueError("Vertex {} not in graph".format(v))
-        return self._listenable_graph.degree_of(vid)
+        return self._listenable_graph.degree_of(self._get_vertex_id(v))
 
     def indegree_of(self, v):
-        vid = self._vertex_hash_to_id.get(v)
-        if vid is None:
-            raise ValueError("Vertex {} not in graph".format(v))
-        return self._listenable_graph.indegree_of(vid)
+        return self._listenable_graph.indegree_of(self._get_vertex_id(v))
 
     def outdegree_of(self, v):
-        vid = self._vertex_hash_to_id.get(v)
-        if vid is None:
-            raise ValueError("Vertex {} not in graph".format(v))
-        return self._listenable_graph.outdegree_of(vid)
+        return self._listenable_graph.outdegree_of(self._get_vertex_id(v))
 
     def edge_source(self, e):
-        eid = self._edge_hash_to_id.get(e)
-        if eid is None:
-            raise ValueError("Edge {} not in graph".format(e))
-        vid = self._listenable_graph.edge_source(eid)
+        vid = self._listenable_graph.edge_source(self._get_edge_id(e))
         return self._vertex_id_to_hash[vid]
 
     def edge_target(self, e):
-        eid = self._edge_hash_to_id.get(e)
-        if eid is None:
-            raise ValueError("Edge {} not in graph".format(e))
-        vid = self._listenable_graph.edge_target(eid)
+        vid = self._listenable_graph.edge_target(self._get_edge_id(e))
         return self._vertex_id_to_hash[vid]
 
     def get_edge_weight(self, e):
-        eid = self._edge_hash_to_id.get(e)
-        if eid is None:
-            raise ValueError("Edge {} not in graph".format(e))
-        return self._listenable_graph.get_edge_weight(eid)
+        return self._listenable_graph.get_edge_weight(self._get_edge_id(e))
 
     def set_edge_weight(self, e, weight):
-        eid = self._edge_hash_to_id.get(e)
-        if eid is None:
-            raise ValueError("Edge {} not in graph".format(e))
-        self._listenable_graph.set_edge_weight(eid, weight)
+        self._listenable_graph.set_edge_weight(self._get_edge_id(e), weight)
 
     @property
     def number_of_vertices(self):
-        return len(self._vertex_hash_to_id)
+        return len(self.vertices)
 
     @property
     def vertices(self):
-        return self._vertex_hash_to_id.keys()
+        if self._vertex_set is None:
+            self._vertex_set = self._PropertyGraphVertexSet(self)
+        return self._vertex_set
 
     @property
     def number_of_edges(self):
-        return len(self._edge_hash_to_id)
+        return len(self.edges)
 
     @property
     def edges(self):
-        return self._edge_hash_to_id.keys()
+        if self._edge_set is None:
+            self._edge_set = self._PropertyGraphEdgeSet(self)
+        return self._edge_set
 
     def edges_between(self, u, v):
-        uid = self._vertex_hash_to_id.get(u)
-        if uid is None:
-            raise ValueError("Vertex {} not in graph".format(u))
-        vid = self._vertex_hash_to_id.get(v)
-        if vid is None:
-            raise ValueError("Vertex {} not in graph".format(v))
-
-        it = self._listenable_graph.edges_between(uid, vid)
+        it = self._listenable_graph.edges_between(self._get_vertex_id(u), self._get_vertex_id(v))
         return self._create_edge_it(it)
 
     def edges_of(self, v):
-        vid = self._vertex_hash_to_id.get(v)
-        if vid is None:
-            raise ValueError("Vertex {} not in graph".format(v))
-        it = self._listenable_graph.edges_of(vid)
+        it = self._listenable_graph.edges_of(self._get_vertex_id(v))
         return self._create_edge_it(it)
 
     def inedges_of(self, v):
-        vid = self._vertex_hash_to_id.get(v)
-        if vid is None:
-            raise ValueError("Vertex {} not in graph".format(v))
-        it = self._listenable_graph.inedges_of(vid)
+        it = self._listenable_graph.inedges_of(self._get_vertex_id(v))
         return self._create_edge_it(it)
 
     def outedges_of(self, v):
-        vid = self._vertex_hash_to_id.get(v)
-        if vid is None:
-            raise ValueError("Vertex {} not in graph".format(v))
-        it = self._listenable_graph.outedges_of(vid)
+        it = self._listenable_graph.outedges_of(self._get_vertex_id(v))
         return self._create_edge_it(it)
 
     @property
@@ -303,6 +267,18 @@ class _PropertyGraph(Graph, PropertyGraph):
 
     def __repr__(self):
         return "_PropertyGraph(%r)" % self._graph.handle
+
+    def _get_vertex_id(self, v):
+        vid = self._vertex_hash_to_id.get(v)
+        if vid is None:
+            raise ValueError("Vertex {} not in graph".format(v))
+        return vid
+
+    def _get_edge_id(self, e):
+        eid = self._edge_hash_to_id.get(e)
+        if eid is None:
+            raise ValueError("Edge {} not in graph".format(e))
+        return eid
 
     def _create_edge_it(self, edge_id_it):
         """Transform an integer edge iteration into an edge iterator."""
@@ -350,6 +326,58 @@ class _PropertyGraph(Graph, PropertyGraph):
         elif event_type == GraphEvent.EDGE_REMOVED:
             self._remove_edge(element)
 
+    class _PropertyGraphVertexSet(Set):
+        def __init__(self, graph):
+            self._graph = graph
+            self._handle = graph.handle
+
+        def __iter__(self):
+            res = backend.jgrapht_graph_create_all_vit(self._handle)
+            return _PropertyGraphVertexIterator(res, self._graph)
+
+        def __len__(self):
+            return backend.jgrapht_graph_vertices_count(self._handle)
+
+        def __contains__(self, v):
+            v = self._graph._vertex_hash_to_id.get(v)
+            if v is None: 
+                return False
+            # important to do both checks here, as some views might share 
+            # the _vertex_hash_to_id dictionary
+            return backend.jgrapht_graph_contains_vertex(self._handle, v)
+
+        def __repr__(self):
+            return "_PropertyGraphVertexSet(%r)" % self._handle
+
+        def __str__(self):
+            return "{" + ", ".join(str(x) for x in self) + "}"
+
+    class _PropertyGraphEdgeSet(Set):
+        def __init__(self, graph):
+            self._graph = graph
+            self._handle = graph.handle
+
+        def __iter__(self):
+            res = backend.jgrapht_graph_create_all_eit(self._handle)
+            return _PropertyGraphEdgeIterator(res, self._graph)
+
+        def __len__(self):
+            return backend.jgrapht_graph_edges_count(self._handle)
+
+        def __contains__(self, e):
+            e = self._graph._edge_hash_to_id.get(e)
+            if e is None: 
+                return False
+            # important to do both checks here, as some views might share 
+            # the _edge_hash_to_id dictionary    
+            return backend.jgrapht_graph_contains_edge(self._handle, e)
+
+        def __repr__(self):
+            return "_PropertyGraphEdgeSet(%r)" % self._handle
+
+        def __str__(self):
+            return "{" + ", ".join(str(x) for x in self) + "}"
+
     class _VertexProperties(MutableMapping):
         """Wrapper around a dictionary to ensure vertex existence."""
 
@@ -358,12 +386,12 @@ class _PropertyGraph(Graph, PropertyGraph):
             self._storage = storage
 
         def __getitem__(self, key):
-            if key not in self._graph.vertices:
+            if key not in self._graph._vertex_hash_to_id:
                 raise ValueError("Vertex {} not in graph".format(key))
             return self._storage[key]
 
         def __setitem__(self, key, value):
-            if key not in self._graph.vertices:
+            if key not in self._graph._vertex_hash_to_id:
                 raise ValueError("Vertex {} not in graph".format(key))
             self._storage[key] = value
 
@@ -389,17 +417,19 @@ class _PropertyGraph(Graph, PropertyGraph):
             self._storage = storage
 
         def __getitem__(self, key):
-            if key not in self._graph.edges:
+            if key not in self._graph._edge_hash_to_id:
                 raise ValueError("Edge {} not in graph".format(key))
-            return self._graph._PerEdgeWeightAwareDict(self._graph, key, self._storage[key])
+            return self._graph._PerEdgeWeightAwareDict(
+                self._graph, key, self._storage[key]
+            )
 
         def __setitem__(self, key, value):
-            if key not in self._graph.edges:
+            if key not in self._graph._edge_hash_to_id:
                 raise ValueError("Edge {} not in graph".format(key))
             self._storage[key] = value
 
         def __delitem__(self, key):
-            if key not in self._graph.edges:
+            if key not in self._graph._edge_hash_to_id:
                 raise ValueError("Edge {} not in graph".format(key))
             del self._storage[key]
 
@@ -496,6 +526,62 @@ class _PropertyDirectedAcyclicGraph(_PropertyGraph, DirectedAcyclicGraph):
     def __iter__(self):
         it_handle = backend.jgrapht_graph_dag_topological_it(self.handle)
         return _PropertyGraphVertexIterator(it_handle, self)
+
+
+class _MaskedSubgraphPropertyGraph(_PropertyGraph):
+    """A masked subgraph property graph."""
+
+    def __init__(
+        self,
+        graph,
+        vertex_supplier,
+        edge_supplier,
+        copy_from,
+        vertex_mask_cb,
+        edge_mask_cb,
+        **kwargs
+    ):
+        if not isinstance(graph, _MaskedSubgraphView):
+            raise TypeError("Can only be used with a masked subgraph backend")
+
+        super().__init__(graph, vertex_supplier, edge_supplier, copy_from)
+        self._vertex_mask_cb = vertex_mask_cb
+        self._edge_mask_cb = edge_mask_cb
+
+    def add_vertex(self, vertex=None):
+        raise ValueError("this graph is unmodifiable")
+
+    def remove_vertex(self, v):
+        raise ValueError("this graph is unmodifiable")
+
+    def contains_vertex(self, v):
+        return v in self.vertices and not self._vertex_mask_cb(v)
+
+    def add_edge(self, u, v, weight=None, edge=None):
+        raise ValueError("this graph is unmodifiable")
+
+    def remove_edge(self, e):
+        raise ValueError("this graph is unmodifiable")
+
+    def contains_edge(self, e):
+        return e in self.edges and not self._edge_mask_cb(e)
+
+    def __repr__(self):
+        return "_MaskedSubgraphPropertyGraph(%r)" % self._graph.handle
+
+    def _get_vertex_id(self, v):
+        vid = self._vertex_hash_to_id.get(v)
+        if vid is None or self._vertex_mask_cb(v):
+            raise ValueError("Vertex {} not in graph".format(v))
+        return vid
+
+    def _get_edge_id(self, e):
+        eid = self._edge_hash_to_id.get(e)
+        if eid is None or self._edge_mask_cb(e):
+            raise ValueError("Edge {} not in graph".format(e))
+        return eid    
+
+    # TODO: make sure properties work
 
 
 def _create_property_graph_subgraph(
@@ -599,24 +685,63 @@ def as_edgereversed_property_graph(property_graph):
     return edgereversed_property_graph
 
 
-def as_weighted_property_graph(property_graph, edge_weight_cb, cache_weights, write_weights_through):
+def as_weighted_property_graph(
+    property_graph, edge_weight_cb, cache_weights, write_weights_through
+):
     """Create a weighted view of a property graph."""
 
     if edge_weight_cb is not None:
+
         def actual_edge_weight_cb(e):
-            e = vertex_g_to_pg(property_graph, e)
+            e = edge_g_to_pg(property_graph, e)
             return edge_weight_cb(e)
+
     else:
         actual_edge_weight_cb = None
 
     graph = property_graph._graph
-    weighted_graph = _WeightedView(graph, actual_edge_weight_cb, cache_weights, write_weights_through)
-
-    weighted_property_graph = _PropertyGraph(
-        weighted_graph, copy_from=property_graph
+    weighted_graph = _WeightedView(
+        graph, actual_edge_weight_cb, cache_weights, write_weights_through
     )
 
+    weighted_property_graph = _PropertyGraph(weighted_graph, copy_from=property_graph)
+
     return weighted_property_graph
+
+
+def as_masked_subgraph_property_graph(
+    property_graph, vertex_mask_cb, edge_mask_cb=None
+):
+    """ Create a masked subgraph view of a property graph."""
+
+    def actual_vertex_mask_cb(v):
+        v = vertex_g_to_pg(property_graph, v)
+        return vertex_mask_cb(v)
+
+    if edge_mask_cb is not None:
+
+        def actual_edge_mask_cb(e):
+            e = edge_g_to_pg(property_graph, e)
+            return edge_mask_cb(e)
+
+    else:
+        actual_edge_mask_cb = None
+
+    graph = property_graph._graph
+    masked_subgraph = _MaskedSubgraphView(
+        graph, actual_vertex_mask_cb, actual_edge_mask_cb
+    )
+
+    masked_subgraph_property_graph = _MaskedSubgraphPropertyGraph(
+        masked_subgraph,
+        vertex_supplier=None,
+        edge_supplier=None,
+        copy_from=property_graph,
+        vertex_mask_cb=vertex_mask_cb,
+        edge_mask_cb=edge_mask_cb,
+    )
+
+    return masked_subgraph_property_graph
 
 
 def is_property_graph(graph):

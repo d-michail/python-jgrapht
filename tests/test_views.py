@@ -203,6 +203,66 @@ def test_as_masked_subgraph():
         masked_graph.add_vertex(6)
 
 
+def test_pg_as_masked_subgraph():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertex('v0')
+    g.add_vertex('v1')
+    g.add_vertex('v2')
+    g.add_vertex('v3')
+    g.add_vertex('v4')
+
+    g.add_edge('v0', 'v1', edge='e1')
+    g.add_edge('v0', 'v2', edge='e2')
+    g.add_edge('v0', 'v3', edge='e3')
+    g.add_edge('v2', 'v3', edge='e4')
+    g.add_edge('v1', 'v3', edge='e5')
+    g.add_edge('v2', 'v4', edge='e6')
+
+    def vertex_mask(v):
+        if v == 'v3':
+            return True
+        return False
+
+    def edge_mask(e):
+        if e == 'e5':
+            return True
+        return False
+
+    masked_graph = as_masked_subgraph(
+        g, vertex_mask_cb=vertex_mask, edge_mask_cb=edge_mask
+    )
+
+    print(g)
+    print(masked_graph)
+
+
+    assert masked_graph.vertices == {'v0', 'v1', 'v2', 'v4'}
+    assert masked_graph.edges == {'e1', 'e2', 'e6'}
+    assert not masked_graph.type.modifiable
+
+    # test that while the sets are shared, our view is masked
+    assert masked_graph._vertex_hash_to_id.__contains__('v3') == True
+    assert masked_graph.vertices.__contains__('v3') == False
+    assert masked_graph._edge_hash_to_id.__contains__('e5') == True
+    assert masked_graph.edges.__contains__('e5') == False
+
+    # test that we see changes in the original graph
+    g.add_vertex('v5')
+
+    assert masked_graph.vertices == {'v0', 'v1', 'v2', 'v4', 'v5'}
+
+    # test that we are unmodifiable
+    with pytest.raises(ValueError):
+        masked_graph.add_vertex('v6')
+
+
+
 def test_as_weighted():
     g = create_graph(
         directed=False,

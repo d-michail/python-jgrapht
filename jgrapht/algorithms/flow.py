@@ -121,7 +121,7 @@ def max_st_flow(graph, source, sink):
 
 
 def equivalent_flow_tree_gusfield(graph):
-    """Computes an Equivalent Flow Tree using Gusfield's algorithm.
+    r"""Computes an Equivalent Flow Tree using Gusfield's algorithm.
     
     Equivalent flow trees can be used to calculate the maximum flow value between all pairs 
     of vertices in an undirected network. It does so by performing :math:`n-1` minimum 
