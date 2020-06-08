@@ -1,9 +1,9 @@
-.. _tutorial:
+.. _tutorials/graph:
 
 .. currentmodule:: jgrapht
 
-Tutorial
-========
+Graph Tutorial
+==============
 
 This guide will help you start using the library.
 
@@ -45,7 +45,7 @@ adding edges. Multiple vertices can also be added using any iterable.
 
   >>> g.add_vertices_from([2, 3])
 
-Vertex Set
+Vertex set
 ----------
 
 Now the graph contains 4 vertices.  You can find how many vertices the graph contains using,
@@ -92,7 +92,7 @@ In the example above we explicitly request to add edge `5` in the graph. If the 
 contains such an edge, the graph is not altered.
 
 
-Edge Information
+Edge information
 ----------------
 
 Using the edge we can retrieve the underlying information of the edge such as its source
@@ -124,7 +124,7 @@ Care must be taken to not try to adjust the weight if the graph is unweighted. I
 :py:class:`ValueError` is raised.
 
 
-Edge Set
+Edge set
 --------
 
 Edges can be iterated using the set returned by :py:attr:`.Graph.edges`,
@@ -150,7 +150,7 @@ Finding the number of edges can be performed by executing,
 
   >>> len(g.edges)
 
-Graph Types
+Graph types
 -----------
 
 The type of the graph can be queried during runtime using :py:attr:`.Graph.type` which
@@ -219,7 +219,7 @@ Similar behavior can be seen when using methods:
 which return the vertex degrees. Again depending on directed or undirected the results might be 
 different. We refer the reader to the documentation of each method for details.
 
-BFS Implementation Example
+BFS implementation example
 --------------------------
 
 Let us implement a breadth-first search using |Project| in order to get familiar with the library::

@@ -50,7 +50,7 @@ Documentation
    :maxdepth: 2
 
    install
-   tutorial
+   tutorials/index
    api/index
    auto_examples/index
    license
