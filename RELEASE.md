@@ -8,6 +8,8 @@
  2. Make sure docs are correctly generated. Use `cd docs && make html` and inspect the 
     output.
 
+ 3. Open `requirements/docself.txt` and change the version of jgrapht.
+
  3. Commit changes
     `git commit -m "X.X release"`
 
