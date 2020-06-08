@@ -3,10 +3,10 @@
 
 .. currentmodule:: jgrapht.properties
 
-Properties
-**********
+Structural Properties
+*********************
 
-The following functions allow the user to check for certain graph properties.
+The following functions allow the user to check for certain structural graph properties.
 
 .. automodule:: jgrapht.properties
    :members:
