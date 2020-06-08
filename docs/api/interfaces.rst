@@ -60,3 +60,5 @@ also provided.
    A listenable graph has all the graph members and the following additional methods which 
    allow users to register and unregister listeners.
 
+.. autoclass:: jgrapht.types.GraphEvent
+   :members:

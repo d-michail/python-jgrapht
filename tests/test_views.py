@@ -1010,3 +1010,59 @@ def test_pg_as_weighted_with_no_caching_and_write_through():
     assert wg.get_edge_weight(0) == 100.5
 
     assert wg.edge_props[0]['weight'] == 100.5
+
+
+pg_listener1_expected = """element v0, event GraphEvent.VERTEX_ADDED
+element v1, event GraphEvent.VERTEX_ADDED
+element v2, event GraphEvent.VERTEX_ADDED
+element e0, event GraphEvent.EDGE_ADDED
+element e1, event GraphEvent.EDGE_ADDED
+element e1, event GraphEvent.EDGE_REMOVED
+element v2, event GraphEvent.VERTEX_REMOVED
+element e0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
+
+pg_listener2_expected = """element e1, event GraphEvent.EDGE_REMOVED
+element v2, event GraphEvent.VERTEX_REMOVED
+element e0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
+
+
+def test_pg_listenable():
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    lg = as_listenable(g)
+
+    listener1_results = []
+
+    def listener1(vertex, event):
+        listener1_results.append("element {}, event {}".format(vertex, event))
+
+    listener2_results = []
+
+    def listener2(vertex, event):
+        listener2_results.append("element {}, event {}".format(vertex, event))
+
+    listener_id_1 = lg.add_listener(listener1)
+
+    lg.add_vertex('v0')
+    lg.add_vertex('v1')
+    lg.add_vertex('v2')
+    lg.add_edge('v0', 'v1', edge='e0')
+    lg.add_edge('v1', 'v2', edge='e1')
+
+    listener_id_2 = lg.add_listener(listener2)
+
+    lg.remove_edge('e1')
+    lg.remove_vertex('v2')
+    lg.set_edge_weight('e0', 5.0)
+
+    lg.remove_listener(listener_id_1)
+    lg.remove_listener(listener_id_2)
+
+    assert listener1_results == pg_listener1_expected.splitlines()
+    assert listener2_results == pg_listener2_expected.splitlines()

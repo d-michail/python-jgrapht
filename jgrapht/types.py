@@ -779,22 +779,24 @@ class GraphMapping(ABC):
         pass
 
 class ListenableGraph(ABC):
-    """A listenable graph."""
+    """A listenable graph. The listener callbacks accept as the first parameter
+    the vertex or edge of the graph and as second the event type which is
+    :py:class:`~GraphEvent`.
+    """
 
     @abstractmethod
     def add_listener(self, listener_cb):
         """Add a listener
 
-        :returns: an identifer for the listener
-        :rtype: int
+        :returns: a handle for the listener
         """
         pass
 
     @abstractmethod
-    def remove_listener(self, listener_id):
+    def remove_listener(self, listener_handle):
         """Remove a listener
 
-        :param listener_id: the listener id returned when the listener was added
+        :param listener_id: the listener handle returned when the listener was added
         """
         pass
 

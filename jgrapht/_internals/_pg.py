@@ -12,6 +12,7 @@ from ..types import (
     GraphEvent,
     PropertyGraph,
     DirectedAcyclicGraph,
+    ListenableGraph,
 )
 
 from ._graphs import create_graph as _create_graph, create_dag as _create_dag
@@ -32,7 +33,7 @@ from ._pg_collections import (
 )
 
 
-class _PropertyGraph(Graph, PropertyGraph):
+class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
     """A property graph allows the use of any hashable as vertex and edges.
     
     This is a wrapper around the default graph which has integer identifiers, 
@@ -68,15 +69,16 @@ class _PropertyGraph(Graph, PropertyGraph):
         :param edge_props: edge properties
         """
         self._graph = graph
+        self._vertex_set = None
+        self._edge_set = None
 
         # setup structural events callback
         def structural_cb(element, event_type):
             self._structural_event_listener(element, event_type)
 
-        self._vertex_set = None
-        self._edge_set = None
         self._listenable_graph = _ListenableView(graph)
         self._listenable_graph.add_listener(structural_cb)
+        self._user_listeners = []
 
         if copy_from is not None:
             # copy suppliers
@@ -150,7 +152,10 @@ class _PropertyGraph(Graph, PropertyGraph):
         if vertex is not None and vertex in self.vertices:
             return vertex
         vid = self._graph.add_vertex()
-        return self._add_new_vertex(vid, vertex)
+        vertex = self._add_new_vertex(vid, vertex)
+        for listener in self._user_listeners:
+            listener(vertex, GraphEvent.VERTEX_ADDED)
+        return vertex
 
     def remove_vertex(self, v):
         if v is None:
@@ -171,6 +176,9 @@ class _PropertyGraph(Graph, PropertyGraph):
 
         eid = self._graph.add_edge(self._get_vertex_id(u), self._get_vertex_id(v))
         edge = self._add_new_edge(eid, edge)
+
+        for listener in self._user_listeners:
+            listener(edge, GraphEvent.EDGE_ADDED)
 
         if weight is not None:
             self._listenable_graph.set_edge_weight(eid, weight)
@@ -238,7 +246,9 @@ class _PropertyGraph(Graph, PropertyGraph):
         return self._edge_set
 
     def edges_between(self, u, v):
-        it = self._listenable_graph.edges_between(self._get_vertex_id(u), self._get_vertex_id(v))
+        it = self._listenable_graph.edges_between(
+            self._get_vertex_id(u), self._get_vertex_id(v)
+        )
         return self._create_edge_it(it)
 
     def edges_of(self, v):
@@ -264,6 +274,13 @@ class _PropertyGraph(Graph, PropertyGraph):
     @property
     def edge_props(self):
         return self._edge_props
+
+    def add_listener(self, listener_cb):
+        self._user_listeners.append(listener_cb)
+        return listener_cb
+
+    def remove_listener(self, listener_cb):
+        self._user_listeners.remove(listener_cb)
 
     def __repr__(self):
         return "_PropertyGraph(%r)" % self._graph.handle
@@ -307,24 +324,39 @@ class _PropertyGraph(Graph, PropertyGraph):
         v = self._vertex_id_to_hash.pop(vid)
         self._vertex_hash_to_id.pop(v)
         self._vertex_hash_to_props.pop(v, None)
+        return v
 
     def _remove_edge(self, eid):
         e = self._edge_id_to_hash.pop(eid)
         self._edge_hash_to_id.pop(e)
         self._edge_hash_to_props.pop(e, None)
+        return e
 
     def _structural_event_listener(self, element, event_type):
         """Listener for removal events. This is needed, as removing
         a graph vertex might also remove edges.
         """
+        # perform changes in the property graph
         if event_type == GraphEvent.VERTEX_ADDED:
             self._add_new_vertex(element)
+            for listener in self._user_listeners:
+                listener(self._vertex_id_to_hash[element], event_type)
         elif event_type == GraphEvent.VERTEX_REMOVED:
-            self._remove_vertex(element)
+            v = self._remove_vertex(element)
+            for listener in self._user_listeners:
+                listener(v, event_type)
         elif event_type == GraphEvent.EDGE_ADDED:
             self._add_new_edge(element)
+            for listener in self._user_listeners:
+                listener(self._edge_id_to_hash[element], event_type)
         elif event_type == GraphEvent.EDGE_REMOVED:
-            self._remove_edge(element)
+            e = self._remove_edge(element)
+            for listener in self._user_listeners:
+                listener(e, event_type)
+        elif event_type == GraphEvent.EDGE_WEIGHT_UPDATED:
+            e = self._edge_id_to_hash[element]
+            for listener in self._user_listeners:
+                listener(e, event_type)
 
     class _PropertyGraphVertexSet(Set):
         def __init__(self, graph):
@@ -340,9 +372,9 @@ class _PropertyGraph(Graph, PropertyGraph):
 
         def __contains__(self, v):
             v = self._graph._vertex_hash_to_id.get(v)
-            if v is None: 
+            if v is None:
                 return False
-            # important to do both checks here, as some views might share 
+            # important to do both checks here, as some views might share
             # the _vertex_hash_to_id dictionary
             return backend.jgrapht_graph_contains_vertex(self._handle, v)
 
@@ -366,10 +398,10 @@ class _PropertyGraph(Graph, PropertyGraph):
 
         def __contains__(self, e):
             e = self._graph._edge_hash_to_id.get(e)
-            if e is None: 
+            if e is None:
                 return False
-            # important to do both checks here, as some views might share 
-            # the _edge_hash_to_id dictionary    
+            # important to do both checks here, as some views might share
+            # the _edge_hash_to_id dictionary
             return backend.jgrapht_graph_contains_edge(self._handle, e)
 
         def __repr__(self):
@@ -579,7 +611,7 @@ class _MaskedSubgraphPropertyGraph(_PropertyGraph):
         eid = self._edge_hash_to_id.get(e)
         if eid is None or self._edge_mask_cb(e):
             raise ValueError("Edge {} not in graph".format(e))
-        return eid    
+        return eid
 
     # TODO: make sure properties work
 

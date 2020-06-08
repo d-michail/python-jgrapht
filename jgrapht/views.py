@@ -1,3 +1,8 @@
+
+from .types import (
+    ListenableGraph
+)
+
 from ._internals._views import (
     _UnweightedGraphView,
     _UnmodifiableGraphView,
@@ -140,8 +145,8 @@ def as_listenable(graph):
     :param graph: the original graph
     :returns: a listenable graph which is an instance of type :py:class:`~jgrapht.types.ListenableGraph`.
     """
-    if is_property_graph(graph):
-        raise ValueError("View not supported for property graphs")
+    if isinstance(graph, ListenableGraph) or is_property_graph(graph):
+        return graph
     return _ListenableView(graph)
 
 
