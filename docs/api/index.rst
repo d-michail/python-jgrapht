@@ -11,7 +11,7 @@ API
    :maxdepth: 2
 
    introduction
-   graph_interface
+   interfaces
    graph_factories
    property_graph_factories
    views

@@ -1,8 +1,8 @@
 
-.. _graph:
+.. _interfaces:
 
-Graph Interfaces
-****************
+Interfaces
+**********
 
 .. currentmodule:: jgrapht
 
