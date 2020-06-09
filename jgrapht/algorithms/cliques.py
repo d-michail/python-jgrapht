@@ -6,24 +6,10 @@ from .._internals._collections import (
 )
 
 from .._internals._pg import is_property_graph
-from .._internals._pg_collections import _PropertyGraphVertexSetIterator
-
-
-def _clique_enumeration_alg(name, graph, *args):
-    alg_method_name = "jgrapht_clique_exec_"
-    alg_method_name += name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm not supported.")
-
-    clique_it = alg_method(graph.handle, *args)
-
-    if is_property_graph(graph):
-        return _PropertyGraphVertexSetIterator(clique_it, graph)
-    else:
-        return _JGraphTIntegerSetIterator(clique_it)
+from .._internals._pg_collections import (
+    _PropertyGraphVertexSet,
+    _PropertyGraphVertexSetIterator,
+)
 
 
 def bron_kerbosch(graph, timeout=0):
@@ -42,7 +28,11 @@ def bron_kerbosch(graph, timeout=0):
     :returns: An iterator over maximal cliques
     """
     custom = [timeout]
-    return _clique_enumeration_alg("bron_kerbosch", graph, *custom)
+    res = _backend.jgrapht_clique_exec_bron_kerbosch(graph.handle, *custom)
+    if is_property_graph(graph):
+        return _PropertyGraphVertexSetIterator(res, graph)
+    else:
+        return _JGraphTIntegerSetIterator(res)
 
 
 def bron_kerbosch_with_pivot(graph, timeout=0):
@@ -65,7 +55,11 @@ def bron_kerbosch_with_pivot(graph, timeout=0):
     :returns: An iterator over maximal cliques
     """
     custom = [timeout]
-    return _clique_enumeration_alg("bron_kerbosch_pivot", graph, *custom)
+    res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot(graph.handle, *custom)
+    if is_property_graph(graph):
+        return _PropertyGraphVertexSetIterator(res, graph)
+    else:
+        return _JGraphTIntegerSetIterator(res)
 
 
 def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
@@ -92,7 +86,11 @@ def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
     :returns: An iterator over maximal cliques
     """
     custom = [timeout]
-    return _clique_enumeration_alg("bron_kerbosch_pivot", graph, *custom)
+    res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(graph.handle, *custom)
+    if is_property_graph(graph):
+        return _PropertyGraphVertexSetIterator(res, graph)
+    else:
+        return _JGraphTIntegerSetIterator(res)
 
 
 def chordal_max_clique(graph):
@@ -105,4 +103,8 @@ def chordal_max_clique(graph):
     :returns: a clique as a vertex set
     """
     res = _backend.jgrapht_clique_exec_chordal_max_clique(graph.handle)
-    return _JGraphTIntegerSet(handle=res)
+
+    if is_property_graph(graph):
+        return _PropertyGraphVertexSet(res, graph)
+    else:
+        return _JGraphTIntegerSet(res)

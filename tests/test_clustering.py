@@ -29,6 +29,8 @@ def test_k_spanning_tree():
 
     c = clustering.k_spanning_tree(g, k=2)
 
+    repr(c)
+
     assert c.number_of_clusters() == 2
     assert set(c.ith_cluster(0)) == set([0, 1, 2])
     assert set(c.ith_cluster(1)) == set([3, 4, 5])
