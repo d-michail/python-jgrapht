@@ -1,9 +1,37 @@
 import pytest
 
-from jgrapht._internals._collections import _JGraphTIntegerMutableList
+import jgrapht._backend as _backend
+from jgrapht._internals._collections import (
+    _JGraphTIntegerList,
+    _JGraphTIntegerMutableList,
+)
 
 
-def test_Integerlist():
+
+def test_IntegerList():
+
+    handle = _backend.jgrapht_list_create()
+    _backend.jgrapht_list_int_add(handle, 5)
+    _backend.jgrapht_list_int_add(handle, 7)
+    _backend.jgrapht_list_int_add(handle, 9)
+
+    s = _JGraphTIntegerList(handle=handle)
+
+    assert len(s) == 3
+
+    assert 5 in s
+    assert 6 not in s
+    assert 7 in s
+    assert 8 not in s
+    assert 9 in s
+
+    assert list(s) == list([5, 7, 9])
+
+    print(repr(s))
+    print(s)
+
+
+def test_IntegerMutableList():
 
     s = _JGraphTIntegerMutableList()
 
@@ -46,4 +74,3 @@ def test_Integerlist():
 
     str(s)
     repr(s)
-

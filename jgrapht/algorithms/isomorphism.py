@@ -9,29 +9,6 @@ from .._internals._pg_mapping import (
 )
 
 
-def _isomorphism_alg(name, graph1, graph2, *args):
-    alg_method_name = "jgrapht_isomorphism_exec_" + name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm not supported.")
-
-    exists, map_it_handle = alg_method(graph1.handle, graph2.handle, *args)
-
-    if not exists:
-        return None
-
-    if is_property_graph(graph1) or is_property_graph(graph2):
-        return _PropertyGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
-    else:
-        return _JGraphTGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
-
-
 def vf2(graph1, graph2):
     r"""The VF2 algorithm for detection of isomorphism between two graphs.
         
@@ -46,7 +23,18 @@ def vf2(graph1, graph2):
     :param graph2: the second graph
     :returns: an iterator over graph mappings if the graphs are isomorphic, otherwise None
     """
-    return _isomorphism_alg("vf2", graph1, graph2)
+    exists, map_it_handle = _backend.jgrapht_isomorphism_exec_vf2(graph1.handle, graph2.handle)
+    if not exists:
+        return None
+
+    if is_property_graph(graph1) or is_property_graph(graph2):
+        return _PropertyGraphMappingIterator(
+            handle=map_it_handle, graph1=graph1, graph2=graph2
+        )
+    else:
+        return _JGraphTGraphMappingIterator(
+            handle=map_it_handle, graph1=graph1, graph2=graph2
+        )
 
 
 def vf2_subgraph(graph1, graph2):
@@ -68,4 +56,16 @@ def vf2_subgraph(graph1, graph2):
     :param graph2: the second graph
     :returns: an iterator over graph mappings if the graphs are isomorphic, otherwise None
     """
-    return _isomorphism_alg("vf2_subgraph", graph1, graph2)
+    exists, map_it_handle = _backend.jgrapht_isomorphism_exec_vf2_subgraph(graph1.handle, graph2.handle)
+    if not exists:
+        return None
+
+    if is_property_graph(graph1) or is_property_graph(graph2):
+        return _PropertyGraphMappingIterator(
+            handle=map_it_handle, graph1=graph1, graph2=graph2
+        )
+    else:
+        return _JGraphTGraphMappingIterator(
+            handle=map_it_handle, graph1=graph1, graph2=graph2
+        )
+

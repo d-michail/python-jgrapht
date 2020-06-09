@@ -1,9 +1,35 @@
 import pytest
 
+import jgrapht._backend as _backend
+
 from jgrapht._internals._collections import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
 )
+
+
+def test_IntegerSet():
+
+    handle = _backend.jgrapht_set_linked_create()
+    _backend.jgrapht_set_int_add(handle, 5)
+    _backend.jgrapht_set_int_add(handle, 7)
+    _backend.jgrapht_set_int_add(handle, 9)
+
+    s = _JGraphTIntegerSet(handle=handle)
+
+    assert len(s) == 3
+
+    assert 5 in s
+    assert 6 not in s
+    assert 7 in s
+    assert 8 not in s
+    assert 9 in s
+
+    assert set(s) == set([5, 7, 9])
+
+    print(repr(s))
+    print(s)
+
 
 
 def test_IntegerMutableSet():
