@@ -6,6 +6,7 @@ from ._wrappers import _JGraphTObjectIterator
 from ._pg_wrappers import _PropertyGraphVertexIterator, _PropertyGraphEdgeIterator
 from ._collections import (
     _JGraphTIntegerSet,
+    _JGraphTIntegerMutableSet,
     _JGraphTIntegerList,
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerIntegerMap,
@@ -29,6 +30,36 @@ class _PropertyGraphVertexSet(_JGraphTIntegerSet):
 
     def __repr__(self):
         return "_PropertyGraphVertexSet(%r)" % self._handle
+
+    def __str__(self):
+        return "{" + ", ".join(str(x) for x in self) + "}"
+
+
+class _PropertyGraphMutableVertexSet(_JGraphTIntegerMutableSet):
+    """A vertex set for property graphs."""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def __iter__(self):
+        res = backend.jgrapht_set_it_create(self._handle)
+        return _PropertyGraphVertexIterator(res, self._graph)
+
+    def __contains__(self, x):
+        x = self._graph._vertex_hash_to_id[x]
+        return backend.jgrapht_set_int_contains(self._handle, x)
+
+    def add(self, x):
+        x = self._graph._vertex_hash_to_id[x]
+        backend.jgrapht_set_int_add(self._handle, x)
+
+    def discard(self, x):
+        x = self._graph._vertex_hash_to_id[x]
+        backend.jgrapht_set_int_remove(self._handle, x)
+
+    def __repr__(self):
+        return "_PropertyGraphMutableVertexSet(%r)" % self._handle
 
     def __str__(self):
         return "{" + ", ".join(str(x) for x in self) + "}"

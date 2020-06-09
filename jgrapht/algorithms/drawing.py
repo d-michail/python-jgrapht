@@ -34,7 +34,7 @@ def random_layout_2d(graph, area, seed=None):
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
     if seed is None:
-        seed = time.time()
+        seed = int(time.time())
 
     if is_property_graph(graph):
         model = create_property_graph_layout_model_2d(graph, *area)
@@ -104,7 +104,7 @@ def fruchterman_reingold_layout_2d(
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
     if seed is None:
-        seed = time.time()
+        seed = int(time.time())
 
     if is_property_graph(graph):
         model = create_property_graph_layout_model_2d(graph, *area)
@@ -154,7 +154,7 @@ def fruchterman_reingold_indexed_layout_2d(
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
     if seed is None:
-        seed = time.time()
+        seed = int(time.time())
     if tolerance is None:
         tolerance = 1e-9
 

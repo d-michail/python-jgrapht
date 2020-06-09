@@ -65,6 +65,10 @@ def test_label_propagation():
     assert set(c.ith_cluster(0)) == set([0, 1, 2])
     assert set(c.ith_cluster(1)) == set([3, 4, 5])
 
+    # test with auto seed
+    c = clustering.label_propagation(g)
+    assert c.number_of_clusters() > 0
+
 
 def test_pg_k_spanning_tree():
     g = create_property_graph(
@@ -92,3 +96,34 @@ def test_pg_k_spanning_tree():
     assert c.number_of_clusters() == 2
     assert set(c.ith_cluster(0)) == set(["0", "1", "2"])
     assert set(c.ith_cluster(1)) == set(["3", "4", "5"])
+
+
+def test_pg_label_propagation():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    for i in range(0, 6):
+        g.add_vertex(i)
+
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 0)
+
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 3)
+
+    g.add_edge(2, 3, weight=100.0)
+
+    assert len(g.edges) == 7
+
+    c = clustering.label_propagation(g, seed=17)
+
+    assert c.number_of_clusters() == 2
+    assert set(c.ith_cluster(0)) == set([0, 1, 2])
+    assert set(c.ith_cluster(1)) == set([3, 4, 5])
+

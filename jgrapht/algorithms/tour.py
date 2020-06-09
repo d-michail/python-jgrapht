@@ -36,7 +36,7 @@ def tsp_random(graph, seed=None):
     :rtype: :py:class:`.GraphPath`
     """
     if seed is None:
-        seed = time.time()
+        seed = int(time.time())
     return _tour_tsp_alg("tsp_random", graph, seed)
 
 
@@ -77,7 +77,7 @@ def tsp_nearest_neighbor_heuristic(graph, seed=None):
     :rtype: :py:class:`.GraphPath`
     """
     if seed is None:
-        seed = time.time()
+        seed = int(time.time())
     custom = [seed]
     return _tour_tsp_alg("tsp_nearest_neighbor_heuristic", graph, *custom)
 
@@ -159,7 +159,7 @@ def tsp_two_opt_heuristic(graph, k=1, min_cost_improvement=0.0001, seed=None):
     :rtype: :py:class:`.GraphPath`
     """
     if seed is None:
-        seed = time.time()
+        seed = int(time.time())
     custom = [k, min_cost_improvement, seed]
     return _tour_tsp_alg("tsp_two_opt_heuristic", graph, *custom)
 
@@ -180,7 +180,7 @@ def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=
     :rtype: :py:class:`.GraphPath`
     """
     if seed is None:
-        seed = time.time()
+        seed = int(time.time())
 
     new_graph_path_handle = _backend.jgrapht_tour_tsp_two_opt_heuristic_improve(graph_path.handle, min_cost_improvement, seed)
 

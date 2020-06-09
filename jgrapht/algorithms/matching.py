@@ -1,9 +1,13 @@
 from .. import backend as _backend
 
-from .._internals._collections import _JGraphTIntegerSet
+from .._internals._collections import _JGraphTIntegerSet, _JGraphTIntegerMutableSet
 
-from .._internals._pg import is_property_graph
-from .._internals._pg_collections import _PropertyGraphEdgeSet
+from .._internals._pg import is_property_graph, vertex_pg_to_g as _vertex_pg_to_g
+from .._internals._pg_collections import (
+    _PropertyGraphVertexSet,
+    _PropertyGraphEdgeSet,
+    _PropertyGraphMutableVertexSet,
+)
 
 
 def _wrap_result(graph, weight, matching_handle):
@@ -11,6 +15,21 @@ def _wrap_result(graph, weight, matching_handle):
         return weight, _PropertyGraphEdgeSet(matching_handle, graph)
     else:
         return weight, _JGraphTIntegerSet(matching_handle)
+
+
+def _to_wrapped_vertex_set(graph, vertex_set):
+    if is_property_graph(graph):
+        if isinstance(vertex_set, _PropertyGraphVertexSet):
+            return vertex_set
+        mutable_set = _PropertyGraphMutableVertexSet(handle=None, graph=graph)
+    else:
+        if isinstance(vertex_set, _JGraphTIntegerSet):
+            return vertex_set
+        mutable_set = _JGraphTIntegerMutableSet()
+
+    for v in vertex_set:
+        mutable_set.add(v)
+    return mutable_set
 
 
 def greedy_max_cardinality(graph, sort=False):
@@ -50,7 +69,7 @@ def pathgrowing_max_weight(graph):
     return _wrap_result(graph, weight, m_handle)
 
 
-def blossom5_max_weight(graph, perfect=True):
+def blossom5_max_weight(graph, perfect=False):
     if perfect:
         (
             weight,
@@ -65,7 +84,7 @@ def blossom5_max_weight(graph, perfect=True):
     return _wrap_result(graph, weight, m_handle)
 
 
-def blossom5_min_weight(graph, perfect=True):
+def blossom5_min_weight(graph, perfect=False):
     if perfect:
         (
             weight,
@@ -91,7 +110,11 @@ def bipartite_max_weight(graph):
 
 
 def bipartite_perfect_min_weight(graph, partition_a, partition_b):
+    partition_a = _to_wrapped_vertex_set(graph, partition_a)
+    partition_b = _to_wrapped_vertex_set(graph, partition_b)
+
     weight, m_handle = _backend.jgrapht_matching_exec_bipartite_perfect_min_weight(
         graph.handle, partition_a.handle, partition_b.handle
     )
+
     return _wrap_result(graph, weight, m_handle)

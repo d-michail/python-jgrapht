@@ -6,24 +6,6 @@ from .._internals._clustering import _JGraphTClustering
 from .._internals._pg_clustering import _PropertyGraphClustering
 
 
-
-def _clustering_alg(name, graph, *args):
-    alg_method_name = "jgrapht_clustering_exec_"
-    alg_method_name += name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm not supported.")
-
-    handle = alg_method(graph.handle, *args)
-
-    if is_property_graph(graph):
-        return _PropertyGraphClustering(handle, graph)
-    else:
-        return _JGraphTClustering(handle)
-
-
 def k_spanning_tree(graph, k):
     r"""The k spanning tree clustering algorithm. 
 
@@ -40,8 +22,11 @@ def k_spanning_tree(graph, k):
     :param k: integer k, denoting the number of clusters
     :returns: a clustering as an instance of :py:class:`.Clustering`
     """
-    args = [k]
-    return _clustering_alg("k_spanning_tree", graph, *args)
+    handle = _backend.jgrapht_clustering_exec_k_spanning_tree(graph.handle, k)
+    if is_property_graph(graph):
+        return _PropertyGraphClustering(handle, graph)
+    else:
+        return _JGraphTClustering(handle)
 
 
 def label_propagation(graph, max_iterations=None, seed=None):
@@ -67,8 +52,13 @@ def label_propagation(graph, max_iterations=None, seed=None):
     :returns: a clustering as an instance of :py:class:`.Clustering`
     """
     if seed is None:
-        seed = time.time()
+        seed = int(time.time())
     if max_iterations is None:
         max_iterations = 0
     args = [max_iterations, seed]
-    return _clustering_alg("label_propagation", graph, *args)
+
+    handle = _backend.jgrapht_clustering_exec_label_propagation(graph.handle, *args)
+    if is_property_graph(graph):
+        return _PropertyGraphClustering(handle, graph)
+    else:
+        return _JGraphTClustering(handle)
