@@ -6,71 +6,92 @@ from .._internals._pg import is_property_graph
 from .._internals._pg_collections import _PropertyGraphEdgeSet
 
 
-def _matching_alg(name, graph, *args, no_custom_prefix=False):
-
-    alg_method_name = "jgrapht_matching_exec_"
-    if args and not no_custom_prefix:
-        alg_method_name += "custom_"
-    alg_method_name += name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm not supported.")
-
-    weight, m_handle = alg_method(graph.handle, *args)
-
+def _wrap_result(graph, weight, matching_handle):
     if is_property_graph(graph):
-        return weight, _PropertyGraphEdgeSet(m_handle, graph)
-    else:    
-        return weight, _JGraphTIntegerSet(m_handle)
+        return weight, _PropertyGraphEdgeSet(matching_handle, graph)
+    else:
+        return weight, _JGraphTIntegerSet(matching_handle)
 
 
 def greedy_max_cardinality(graph, sort=False):
     custom = [sort]
-    return _matching_alg("greedy_general_max_card", graph, *custom)
+    weight, m_handle = _backend.jgrapht_matching_exec_custom_greedy_general_max_card(
+        graph.handle, *custom
+    )
+    return _wrap_result(graph, weight, m_handle)
 
 
 def edmonds_max_cardinality(graph, dense=False):
     if dense:
-        return _matching_alg("edmonds_general_max_card_dense", graph)
+        (
+            weight,
+            m_handle,
+        ) = _backend.jgrapht_matching_exec_edmonds_general_max_card_dense(graph.handle)
     else:
-        return _matching_alg("edmonds_general_max_card_sparse", graph)
+        (
+            weight,
+            m_handle,
+        ) = _backend.jgrapht_matching_exec_edmonds_general_max_card_sparse(graph.handle)
+    return _wrap_result(graph, weight, m_handle)
 
 
 def greedy_max_weight(graph, normalize_edge_costs=False, tolerance=1e-9):
     custom = [normalize_edge_costs, tolerance]
-    return _matching_alg("greedy_general_max_weight", graph, *custom)
+    weight, m_handle = _backend.jgrapht_matching_exec_custom_greedy_general_max_weight(
+        graph.handle, *custom
+    )
+    return _wrap_result(graph, weight, m_handle)
 
 
 def pathgrowing_max_weight(graph):
-    return _matching_alg("pathgrowing_max_weight", graph)
+    weight, m_handle = _backend.jgrapht_matching_exec_pathgrowing_max_weight(
+        graph.handle
+    )
+    return _wrap_result(graph, weight, m_handle)
 
 
 def blossom5_max_weight(graph, perfect=True):
     if perfect:
-        return _matching_alg("blossom5_general_perfect_max_weight", graph)
+        (
+            weight,
+            m_handle,
+        ) = _backend.jgrapht_matching_exec_blossom5_general_perfect_max_weight(
+            graph.handle
+        )
     else:
-        return _matching_alg("blossom5_general_max_weight", graph)
+        weight, m_handle = _backend.jgrapht_matching_exec_blossom5_general_max_weight(
+            graph.handle
+        )
+    return _wrap_result(graph, weight, m_handle)
 
 
 def blossom5_min_weight(graph, perfect=True):
     if perfect:
-        return _matching_alg("blossom5_general_perfect_min_weight", graph)
+        (
+            weight,
+            m_handle,
+        ) = _backend.jgrapht_matching_exec_blossom5_general_perfect_min_weight(
+            graph.handle
+        )
     else:
-        return _matching_alg("blossom5_general_min_weight", graph)
+        weight, m_handle = _backend.jgrapht_matching_exec_blossom5_general_min_weight(
+            graph.handle
+        )
+    return _wrap_result(graph, weight, m_handle)
 
 
 def bipartite_max_cardinality(graph):
-    return _matching_alg("bipartite_max_card", graph)
+    weight, m_handle = _backend.jgrapht_matching_exec_bipartite_max_card(graph.handle)
+    return _wrap_result(graph, weight, m_handle)
 
 
 def bipartite_max_weight(graph):
-    return _matching_alg("bipartite_max_weight", graph)
+    weight, m_handle = _backend.jgrapht_matching_exec_bipartite_max_weight(graph.handle)
+    return _wrap_result(graph, weight, m_handle)
 
 
 def bipartite_perfect_min_weight(graph, partition_a, partition_b):
-    custom = [partition_a.handle, partition_b.handle]
-    return _matching_alg(
-        "bipartite_perfect_min_weight", graph, *custom, no_custom_prefix=True
+    weight, m_handle = _backend.jgrapht_matching_exec_bipartite_perfect_min_weight(
+        graph.handle, partition_a.handle, partition_b.handle
     )
+    return _wrap_result(graph, weight, m_handle)
