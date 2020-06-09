@@ -195,23 +195,19 @@ class _JGraphTIntegerDoubleMutableMap(_JGraphTIntegerDoubleMap, MutableMapping):
     def __init__(self, handle=None, linked=True, **kwargs):
         super().__init__(handle=handle, linked=linked, **kwargs)
 
-    def __len__(self):
-        res = backend.jgrapht_map_size(self._handle)
-        return res
-
     def add(self, key, value):
         backend.jgrapht_map_int_double_put(self._handle, key, value)
 
-    def pop(self, key, defaultvalue):
+    __marker = object()
+
+    def pop(self, key, defaultvalue=__marker):
         try:
-            res = backend.jgrapht_map_int_double_remove(self._handle, key)
-            return res
+            return backend.jgrapht_map_int_double_remove(self._handle, key)
         except ValueError:
-            if defaultvalue is not None:
-                return defaultvalue
-            else:
+            if defaultvalue is self.__marker:
                 raise KeyError()
-            pass
+            else:
+                return defaultvalue
 
     def __setitem__(self, key, value):
         backend.jgrapht_map_int_double_put(self._handle, key, value)
@@ -286,15 +282,16 @@ class _JGraphTIntegerIntegerMutableMap(_JGraphTIntegerIntegerMap, MutableMapping
     def add(self, key, value):
         backend.jgrapht_map_int_int_put(self._handle, key, value)
 
-    def pop(self, key, defaultvalue):
+    __marker = object()
+
+    def pop(self, key, defaultvalue=__marker):
         try:
-            res = backend.jgrapht_map_int_int_remove(self._handle, key)
-            return res
+            return backend.jgrapht_map_int_int_remove(self._handle, key)
         except ValueError:
-            if defaultvalue is not None:
-                return defaultvalue
-            else:
+            if defaultvalue is self.__marker:
                 raise KeyError()
+            else:
+                return defaultvalue
 
     def __setitem__(self, key, value):
         backend.jgrapht_map_int_int_put(self._handle, key, value)
@@ -345,15 +342,17 @@ class _JGraphTIntegerStringMap(_HandleWrapper, MutableMapping):
         encoded_value = bytearray(value, encoding="utf-8")
         backend.jgrapht_map_int_string_put(self._handle, key, encoded_value)
 
-    def pop(self, key, defaultvalue):
+    __marker = object()
+
+    def pop(self, key, defaultvalue=__marker):
         try:
             res = backend.jgrapht_map_int_string_remove(self._handle, key)
             return _JGraphTString(res)
         except ValueError:
-            if defaultvalue is not None:
-                return defaultvalue
-            else:
+            if defaultvalue is self.__marker:
                 raise KeyError()
+            else:
+                return defaultvalue
 
     def __contains__(self, key):
         res = backend.jgrapht_map_int_contains_key(self._handle, key)

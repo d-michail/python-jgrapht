@@ -8,7 +8,7 @@ from jgrapht._internals._collections import (
 
 def test_IntegerMutableSet():
 
-    s = _JGraphTIntegerMutableSet()
+    s = _JGraphTIntegerMutableSet(linked=False)
 
     s.add(5)
     s.add(7)
@@ -44,6 +44,9 @@ def test_IntegerMutableSet():
         s.remove(17)
 
     assert set(s) == set([5, 9, 11, 13])
+
+    print(repr(s))
+    print(s)
 
 
 def test_IntegerMutableSet_linked():
@@ -84,4 +87,10 @@ def test_IntegerMutableSet_linked():
         s.remove(17)
 
     assert set(s) == set([5, 9, 11, 13])
+
+    s.clear()
+
+    assert len(s) == 0
+
+    assert repr(s) == '_JGraphTIntegerMutableSet(%r)' % (s.handle)
 

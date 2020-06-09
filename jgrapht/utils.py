@@ -10,7 +10,7 @@ class StringSupplier:
     def __call__(self):
         value = self._count
         self._count += 1
-        return '{}{}'.format(self._prefix, value)
+        return '{}{}'.format("" if self._prefix is None else self._prefix, value)
 
 
 class IntegerSupplier:
@@ -38,9 +38,10 @@ def create_vertex_supplier(type='str', prefix='v', start=0):
     else:
         return StringSupplier(prefix=prefix, start=start)
 
+
 def create_edge_supplier(type='str', prefix='e', start=0):
-    """Create an edge supplier. Εδδγε suppliers are called whenever a
-    property graph wants to create a new εδγε.
+    """Create an edge supplier. Εdge suppliers are called whenever a
+    property graph wants to create a new edge.
 
     :param type: type can be either 'str' or 'int'
     :param prefix: if a string supplier, a prefix to use

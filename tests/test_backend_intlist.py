@@ -40,3 +40,10 @@ def test_Integerlist():
     s.discard(17)
 
     assert set(s) == set([5, 9, 11, 13])
+
+    s.clear()
+    assert len(s) == 0
+
+    str(s)
+    repr(s)
+

@@ -636,6 +636,25 @@ def test_bad_union():
         g = as_graph_union(g2, g1)
 
 
+def test_pg_bad_union():
+
+    g1 = create_property_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+    g2 = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    with pytest.raises(ValueError):
+        g = as_graph_union(g1, g2)
+
+
 
 def test_pg_as_unweighted():
     g = create_property_graph(
@@ -1066,3 +1085,38 @@ def test_pg_listenable():
 
     assert listener1_results == pg_listener1_expected.splitlines()
     assert listener2_results == pg_listener2_expected.splitlines()
+
+
+
+def test_pg_as_edge_reversed():
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertex(0)
+    v1 = 0
+    g.add_vertex(1)
+    v2 = 1
+    g.add_vertex(2)
+    v3 = 2
+    g.add_vertex(3)
+    v4 = 3
+    g.add_vertex(4)
+    v5 = 4
+
+    g.add_edge(v1, v2)
+    g.add_edge(v2, v3)
+    g.add_edge(v1, v4)
+    g.add_edge(v1, v1)
+    e45 = g.add_edge(v4, v5)
+    g.add_edge(v5, v1)
+
+    # edge reversed
+    g4 = as_edge_reversed(g)
+    assert g.edge_source(e45) == v4
+    assert g.edge_target(e45) == v5
+    assert g4.edge_source(e45) == v5
+    assert g4.edge_target(e45) == v4
