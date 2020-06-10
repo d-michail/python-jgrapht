@@ -46,6 +46,17 @@ jobs:
       script:
         - travis/build.bat
         - ls -l dist/
+      deploy:
+        # https://github.com/travis-ci/dpl/issues/1009
+        provider: script
+        script: bash ./travis/deploy.sh
+        # Do not delete generated build files (i.e. wheels)
+        skip_cleanup: true
+        # Do not attempt to upload to PyPI an already uploaded wheel
+        skip_existing: true
+        on:
+          tags: true
+
 deploy:
   provider: pypi
   distributions: "sdist bdist_wheel"
