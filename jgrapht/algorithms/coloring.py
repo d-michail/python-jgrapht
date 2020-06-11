@@ -6,17 +6,7 @@ from .._internals._pg import is_property_graph
 from .._internals._pg_collections import _PropertyGraphVertexIntegerMap
 
 
-def _coloring_alg(name, graph, *args):
-    alg_method_name = "jgrapht_coloring_exec_"
-    alg_method_name += name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm not supported.")
-
-    num_colors, color_map_handle = alg_method(graph.handle, *args)
-
+def _wrap_result(graph, num_colors, color_map_handle):
     if is_property_graph(graph):
         return num_colors, _PropertyGraphVertexIntegerMap(color_map_handle, graph)
     else:
@@ -33,7 +23,8 @@ def greedy_smallestnotusedcolor(graph):
     :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
       dictionary from vertices to integers.
     """
-    return _coloring_alg("greedy", graph)
+    num_colors, color_map_handle = _backend.jgrapht_coloring_exec_greedy(graph.handle)
+    return _wrap_result(graph, num_colors, color_map_handle)
 
 
 def greedy_smallestdegreelast(graph):
@@ -51,7 +42,8 @@ def greedy_smallestdegreelast(graph):
     :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
       dictionary from vertices to integers.
     """
-    return _coloring_alg("greedy_smallestdegreelast", graph)
+    num_colors, color_map_handle = _backend.jgrapht_coloring_exec_greedy_smallestdegreelast(graph.handle)
+    return _wrap_result(graph, num_colors, color_map_handle)
 
 
 def greedy_largestdegreefirst(graph):
@@ -67,7 +59,8 @@ def greedy_largestdegreefirst(graph):
     :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
       dictionary from vertices to integers.
     """
-    return _coloring_alg("greedy_largestdegreefirst", graph)
+    num_colors, color_map_handle = _backend.jgrapht_coloring_exec_greedy_largestdegreefirst(graph.handle)
+    return _wrap_result(graph, num_colors, color_map_handle)
 
 
 def greedy_random(graph, seed=None):
@@ -80,9 +73,11 @@ def greedy_random(graph, seed=None):
       dictionary from vertices to integers.
     """
     if seed is None:
-        return _coloring_alg("greedy_random", graph)
+        num_colors, color_map_handle = _backend.jgrapht_coloring_exec_greedy_random(graph.handle)
     else:
-        return _coloring_alg("greedy_random_with_seed", graph, seed)
+        num_colors, color_map_handle = _backend.jgrapht_coloring_exec_greedy_random_with_seed(graph.handle, seed)
+    return _wrap_result(graph, num_colors, color_map_handle)
+    
 
 
 def greedy_dsatur(graph):
@@ -109,7 +104,8 @@ def greedy_dsatur(graph):
     :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
       dictionary from vertices to integers.             
     """
-    return _coloring_alg("greedy_dsatur", graph)
+    num_colors, color_map_handle = _backend.jgrapht_coloring_exec_greedy_dsatur(graph.handle)
+    return _wrap_result(graph, num_colors, color_map_handle)
 
 
 def color_refinement(graph):
@@ -126,7 +122,8 @@ def color_refinement(graph):
     :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
       dictionary from vertices to integers.
     """
-    return _coloring_alg("color_refinement", graph)
+    num_colors, color_map_handle = _backend.jgrapht_coloring_exec_color_refinement(graph.handle)
+    return _wrap_result(graph, num_colors, color_map_handle)    
 
 
 def backtracking_brown(graph):
@@ -136,7 +133,8 @@ def backtracking_brown(graph):
     :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
       dictionary from vertices to integers.
     """
-    return _coloring_alg("backtracking_brown", graph)
+    num_colors, color_map_handle = _backend.jgrapht_coloring_exec_backtracking_brown(graph.handle)
+    return _wrap_result(graph, num_colors, color_map_handle)        
 
 
 def chordal_min_coloring(graph):
@@ -149,10 +147,6 @@ def chordal_min_coloring(graph):
     :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
       dictionary from vertices to integers.
     """
-    colors, res = _backend.jgrapht_coloring_exec_chordal_minimum_coloring(graph.handle)
-
-    if is_property_graph(graph):
-        return colors, _PropertyGraphVertexIntegerMap(res, graph)
-    else:
-        return colors, _JGraphTIntegerIntegerMap(res)
+    num_colors, color_map_handle = _backend.jgrapht_coloring_exec_chordal_minimum_coloring(graph.handle)
+    return _wrap_result(graph, num_colors, color_map_handle)        
 

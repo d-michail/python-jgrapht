@@ -222,6 +222,17 @@ def test_random_regular():
     assert len(g.vertices) == 10
 
 
+def test_random_regular_no_seed():
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+    generators.random_regular(g, 10, 3)
+    assert len(g.vertices) == 10
+
+
 def test_star():
     g = create_graph(
         directed=False,
@@ -274,3 +285,14 @@ def test_linearized_chord_diagram():
     )
     with pytest.raises(ValueError):
         generators.linearized_chord_diagram(g, 100, 3, 17)
+
+
+def test_linearized_chord_diagram_no_seed():
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+    generators.linearized_chord_diagram(g, 100, 3)
+    assert len(g.vertices) == 100

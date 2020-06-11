@@ -78,6 +78,17 @@ def test_coloring():
         ]
     )
 
+    color_count, color_map = coloring.greedy_random(g)
+    assert color_count > 0
+    assert all(
+        [
+            color_map[u] != color_map[v]
+            for u, v in zip(
+                [g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges]
+            )
+        ]
+    )
+
     color_count, color_map = coloring.greedy_dsatur(g)
     assert color_count == 4
     assert all(
@@ -118,6 +129,29 @@ def test_coloring():
 
     color_count, color_map = coloring.color_refinement(g)
     assert color_count == 10
+
+
+    color_count, color_map = coloring.greedy_smallestdegreelast(g)
+    assert color_count == 4
+    assert all(
+        [
+            color_map[u] != color_map[v]
+            for u, v in zip(
+                [g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges]
+            )
+        ]
+    )
+
+    color_count, color_map = coloring.greedy_largestdegreefirst(g)
+    assert color_count == 4
+    assert all(
+        [
+            color_map[u] != color_map[v]
+            for u, v in zip(
+                [g.edge_source(e) for e in g.edges], [g.edge_target(e) for e in g.edges]
+            )
+        ]
+    )
 
 
 def test_chordal():

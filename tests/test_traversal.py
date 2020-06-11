@@ -60,7 +60,15 @@ def test_traversals():
     random_walk = list(traversal.random_walk_traversal(g, 0, False, 3, 17))
     assert random_walk == [7, 0, 2]
 
+    random_walk_it = traversal.random_walk_traversal(g, 0, False)
+    for i in range(0,100):
+        v = next(random_walk_it)
+        assert v is not None
+
     closest_first = list(traversal.closest_first_traversal(g, 0))
+    assert closest_first == [0, 1, 3, 5, 4, 9, 8, 2, 7, 6]
+
+    closest_first = list(traversal.closest_first_traversal(g, 0, radius=10))
     assert closest_first == [0, 1, 3, 5, 4, 9, 8, 2, 7, 6]
 
 
@@ -118,7 +126,10 @@ def test_property_graph_traversals():
     g.add_edge("8", "node9", edge="e79")
     g.add_edge("node9", "1", edge="e91")
 
-    bfs = list(traversal.bfs_traversal(g))
+
+    bfs_it = traversal.bfs_traversal(g)
+    repr(bfs_it)
+    bfs = list(bfs_it)
 
     assert bfs == ["0", "1", "2", "3", "4", "5", "6", "7", "8", "node9"]
 
@@ -145,3 +156,24 @@ def test_property_graph_traversals():
 
     closest_first = list(traversal.closest_first_traversal(g, "0"))
     assert closest_first == ["0", "1", "3", "5", "4", "node9", "8", "2", "7", "6"]
+
+
+def test_pg_dag():
+    # Create a dag to test top
+    g1 = create_property_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+    g1.add_vertex(0)
+    g1.add_vertex(1)
+    g1.add_vertex(2)
+    g1.add_vertex(3)
+
+    g1.add_edge(0, 1)
+    g1.add_edge(1, 2)
+    g1.add_edge(3, 2)
+
+    topo = list(traversal.topological_order_traversal(g1))
+    assert topo == [0, 3, 1, 2]

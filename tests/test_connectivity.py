@@ -224,3 +224,44 @@ def test_pg_strongly_gabow():
         next(components)
 
     assert component1 == set(["0", "1", "2", "3", "4", "5"])
+
+
+def test_pg_strongly_kosaraju():
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5])
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 0)
+
+    g.add_edge(2, 3)
+
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 3)
+
+    is_connected, components = connectivity.is_strongly_connected_kosaraju(g)
+    assert not is_connected
+    component1 = next(components)
+    component2 = next(components)
+    with pytest.raises(StopIteration):
+        next(components)
+
+    assert component1 == set([0, 1, 2])
+    assert component2 == set([3, 4, 5])
+
+    g.add_edge(3, 2)
+
+    is_connected, components = connectivity.is_weakly_connected(g)
+    assert is_connected
+    component1 = next(components)
+    with pytest.raises(StopIteration):
+        next(components)
+
+    assert component1 == set([0, 1, 2, 3, 4, 5])
+    
