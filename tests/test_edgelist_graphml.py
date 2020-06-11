@@ -368,3 +368,74 @@ def test_input3_from_string_graphml_simple(tmpdir):
         (8, 9, 1.0),
         (9, 1, 1.0),
     ]
+
+
+def test_input3_from_string_graphml_no_attrs(tmpdir):
+    def import_id_cb(id):
+        return int(id)
+
+    edgelist = parse_edgelist_graphml(
+        input3,
+        import_id_cb=import_id_cb,
+        simple=False,
+    )
+
+    assert list(edgelist) == [
+        (0, 1, 1.0),
+        (0, 2, 1.0),
+        (0, 3, 1.0),
+        (0, 4, 1.0),
+        (0, 5, 1.0),
+        (0, 6, 1.0),
+        (0, 7, 1.0),
+        (0, 8, 1.0),
+        (0, 9, 1.0),
+        (1, 2, 1.0),
+        (2, 3, 1.0),
+        (3, 4, 1.0),
+        (4, 5, 1.0),
+        (5, 6, 1.0),
+        (6, 7, 1.0),
+        (7, 8, 1.0),
+        (8, 9, 1.0),
+        (9, 1, 33.3),
+    ]
+
+
+def test_input3_graphml_no_attrs(tmpdir):
+    tmpfile = tmpdir.join("graphml.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w", encoding='utf-8') as f:
+        f.write(input3)
+
+    def import_id_cb(id):
+        return int(id)
+
+    edgelist = read_edgelist_graphml(
+        tmpfilename,
+        import_id_cb=import_id_cb,
+        simple=False,
+    )
+
+    assert list(edgelist) == [
+        (0, 1, 1.0),
+        (0, 2, 1.0),
+        (0, 3, 1.0),
+        (0, 4, 1.0),
+        (0, 5, 1.0),
+        (0, 6, 1.0),
+        (0, 7, 1.0),
+        (0, 8, 1.0),
+        (0, 9, 1.0),
+        (1, 2, 1.0),
+        (2, 3, 1.0),
+        (3, 4, 1.0),
+        (4, 5, 1.0),
+        (5, 6, 1.0),
+        (6, 7, 1.0),
+        (7, 8, 1.0),
+        (8, 9, 1.0),
+        (9, 1, 33.3),
+    ]
