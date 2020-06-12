@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Mapping
 from .backend import GraphEvent
 
+
 class GraphType:
     """Graph Type"""
 
@@ -132,7 +133,7 @@ class GraphType:
             allowing_cycles=self._allowing_cycles,
             weighted=False,
             modifiable=self._modifiable,
-        )    
+        )
 
     def as_unmodifiable(self):
         """Return an unmodifiable version of this graph type.
@@ -146,17 +147,17 @@ class GraphType:
             allowing_cycles=self._allowing_cycles,
             weighted=self._weighted,
             modifiable=False,
-        )    
+        )
 
     def __repr__(self):
-        return {
-            "directed": self._directed,
-            "allowing_self_loops": self._allowing_self_loops,
-            "allowing_multiple_edges": self._allowing_multiple_edges,
-            "allowing_cycles": self._allowing_cycles,
-            "weighted": self._weighted,
-            "modifiable": self._modifiable,
-        }
+        return "GraphType(%r,%r,%r,%r,%r,%r)" % (
+            self._directed,
+            self._allowing_self_loops,
+            self._allowing_multiple_edges,
+            self._allowing_cycles,
+            self._weighted,
+            self._modifiable,
+        )
 
     def __str__(self):
         return "GraphType(directed={}, allowing-self-loops={}, allowing-multiple-edges={}, allowing-cycles={}, weighted={}, modifiable={})".format(
@@ -214,13 +215,13 @@ class GraphPath(ABC):
     def vertices(self):
         """Vertices of the path."""
         v_list = []
-        
+
         if len(self.edges) == 0:
             start = self.start_vertex
             if start is not None and start == self.end_vertex:
                 v_list.append(start)
             return v_list
-        
+
         v = self.start_vertex
         v_list.append(v)
         for e in self.edges:
@@ -278,6 +279,7 @@ class AllPairsPaths(ABC):
         """
         pass
 
+
 class MultiObjectiveSingleSourcePaths(ABC):
     """A set of paths starting from a single source vertex.
     """
@@ -296,6 +298,7 @@ class MultiObjectiveSingleSourcePaths(ABC):
           target vertex
         """
         pass
+
 
 class Graph(ABC):
     """A graph."""
@@ -710,7 +713,7 @@ class GomoryHuTree(ABC):
         
         :returns: a cut as an instance of :py:class:`~jgrapht.types.Cut`        
         """
-        pass        
+        pass
 
     @abstractmethod
     def min_st_cut(self, s, t):
@@ -718,7 +721,7 @@ class GomoryHuTree(ABC):
         
         :returns: a cut as an instance of :py:class:`~jgrapht.types.Cut`        
         """
-        pass        
+        pass
 
 
 class EquivalentFlowTree(ABC):
@@ -732,7 +735,7 @@ class EquivalentFlowTree(ABC):
     @abstractmethod
     def max_st_flow_value(self, s, t):
         """Compute the maximum s-t flow value."""
-        pass        
+        pass
 
 
 class GraphMapping(ABC):
@@ -778,6 +781,7 @@ class GraphMapping(ABC):
         """
         pass
 
+
 class ListenableGraph(ABC):
     """A listenable graph. The listener callbacks accept as the first parameter
     the vertex or edge of the graph and as second the event type which is
@@ -799,6 +803,7 @@ class ListenableGraph(ABC):
         :param listener_id: the listener handle returned when the listener was added
         """
         pass
+
 
 class DirectedAcyclicGraph(ABC):
     """A directed acyclic graph."""
@@ -864,7 +869,7 @@ class LayoutModel2D(ABC):
         """Set the location of a vertex."""
         pass
 
-    @abstractmethod        
+    @abstractmethod
     def is_fixed(self, vertex, fixed):
         """Check if a vertex is fixed."""
         pass
@@ -873,4 +878,3 @@ class LayoutModel2D(ABC):
     def set_fixed(self, vertex, fixed):
         """Set the fixed status of a vertex."""
         pass
-

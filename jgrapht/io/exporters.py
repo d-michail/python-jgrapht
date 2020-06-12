@@ -16,28 +16,20 @@ from .._internals._pg import is_property_graph
 
 def _export_to_file(name, graph, filename, *args):
     alg_method_name = "jgrapht_export_file_" + name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm {} not supported.".format(name))
-
+    alg_method = getattr(_backend, alg_method_name)
     alg_method(graph.handle, filename, *args)
 
 
 def _export_to_string(name, graph, *args):
     alg_method_name = "jgrapht_export_string_" + name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm {} not supported.".format(name))
-
+    alg_method = getattr(_backend, alg_method_name)
     handle = alg_method(graph.handle, *args)
+    # We wrap around a python string which copies the result and 
+    # releases the actual object inside the backend
     return str(_JGraphTString(handle))
 
 
-def _vertex_id_store(graph):
+def _vertex_id_store(graph, check_valid_id=None):
     """Create a vertex identifier store inside the capi backend. This only 
     works for property graphs, otherwise it returns None.
     """
@@ -46,6 +38,8 @@ def _vertex_id_store(graph):
         # special case, read identifiers from property graph
         vertex_id_store = _JGraphTIntegerStringMap()
         for k, v in graph._vertex_id_to_hash.items():
+            if check_valid_id is not None: 
+                check_valid_id(v)
             vertex_id_store[k] = str(v)
     return vertex_id_store
 
@@ -147,7 +141,7 @@ def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False)
     formats. By default the maximum-clique is used.
 
     .. note:: In DIMACS formats the vertices are integers numbered from one.
-                 The exporter automatically translates them. 
+              The exporter automatically translates them. 
 
     Briefly, one of the most common DIMACS formats is the
     `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the 
@@ -175,7 +169,14 @@ def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False)
     :param export_edge_weights: whether to also export edge weights               
     """
     format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
-    vertex_id_store = _vertex_id_store(graph)
+
+    def check_valid_id(id):
+        if not isinstance(id, int): 
+            raise TypeError('Identifiers must integers')
+        if id <= 0:
+            raise ValueError('Identifiers must be positive')
+    
+    vertex_id_store = _vertex_id_store(graph, check_valid_id)
     custom = [
         format,
         export_edge_weights,
@@ -222,7 +223,14 @@ def generate_dimacs(graph, format="maxclique", export_edge_weights=False):
     :returns: a string with the generated output               
     """
     format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
-    vertex_id_store = _vertex_id_store(graph)
+
+    def check_valid_id(id):
+        if not isinstance(id, int): 
+            raise TypeError('Identifiers must integers')
+        if id <= 0:
+            raise ValueError('Identifiers must be positive')
+
+    vertex_id_store = _vertex_id_store(graph, check_valid_id)
     custom = [
         format,
         export_edge_weights,

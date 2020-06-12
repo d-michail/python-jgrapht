@@ -26,6 +26,7 @@ def test_graph_directed_inoutedges():
     assert g.type.allowing_self_loops
     assert g.type.allowing_multiple_edges
     assert g.type.weighted
+    assert g.type.allowing_cycles
 
     assert g.add_vertex(0) == 0
     v1 = 0
@@ -596,3 +597,38 @@ def test_pg_dag():
 
     with pytest.raises(ValueError):
         g1.add_edge("0", "1")
+
+def test_graph_type():
+
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+
+    assert g.type.allowing_cycles
+    assert g.type.directed
+    assert not g.type.undirected
+    assert g.type.allowing_multiple_edges
+    assert g.type.allowing_self_loops
+    assert g.type.modifiable
+
+    gtype_undirected = g.type.as_undirected()
+    assert gtype_undirected.allowing_cycles
+    assert not gtype_undirected.directed
+    assert gtype_undirected.undirected
+    assert gtype_undirected.allowing_multiple_edges
+    assert gtype_undirected.allowing_self_loops
+    assert gtype_undirected.modifiable
+
+    gtype_directed = gtype_undirected.as_directed()
+    assert gtype_directed.allowing_cycles
+    assert gtype_directed.directed
+    assert not gtype_directed.undirected
+    assert gtype_directed.allowing_multiple_edges
+    assert gtype_directed.allowing_self_loops
+    assert gtype_directed.modifiable
+
+    repr(gtype_directed)
+    str(gtype_directed)

@@ -7,7 +7,6 @@ from jgrapht.io.exporters import write_gml, generate_gml
 from jgrapht.io.importers import read_gml, parse_gml
 
 
-
 expected = """Creator "JGraphT GML Exporter"
 Version 1
 graph
@@ -556,7 +555,6 @@ def test_input_gml_from_string(tmpdir):
 
     parse_gml(g, expected, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
-
     assert v_attrs[2]["label"] == "label 2"
     assert v_attrs[5]["label"] == "5"
     assert e_attrs[9]["label"] == "edge 1-2"
@@ -661,15 +659,21 @@ def test_output_property_graph_to_string():
     g.add_vertex(0)
     g.add_vertex(2)
 
-    g.add_edge(0, 2, edge='e1')
-    g.add_edge(2, 0, edge='e2')
+    g.add_edge(0, 2, edge="e1")
+    g.add_edge(2, 0, edge="e2")
 
-    g.vertex_props[0]['color'] = 'red'
+    g.vertex_props[0]["color"] = "red"
 
-    g.edge_props['e1']['type'] = 'forward'
-    g.edge_props['e2']['type'] = 'backward'
+    g.edge_props["e1"]["type"] = "forward"
+    g.edge_props["e2"]["type"] = "backward"
 
-    out = generate_gml(g)
+    # test bad keys are ignores
+    more_vertex_props = {1: {"color": "green"}}
+    more_edge_props = {"e4": {"type": "forward"}}
+
+    out = generate_gml(
+        g, per_vertex_attrs_dict=more_vertex_props, per_edge_attrs_dict=more_edge_props
+    )
 
     print(out)
 
@@ -683,20 +687,20 @@ def test_read_gml_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     def import_id_cb(id):
-        return 'v{}'.format(id+1)
+        return "v{}".format(id + 1)
 
     parse_gml(g, expected, import_id_cb=import_id_cb)
 
-    assert g.vertices == {'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9', 'v10'}
+    assert g.vertices == {"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"}
     assert len(g.edges) == 18
-    assert g.edge_tuple('e6') == ('v1', 'v8', 1.0)
-    assert g.vertex_props['v2']['label'] == 'label 1'
-    assert g.edge_props['e15']['label'] == '15'
+    assert g.edge_tuple("e6") == ("v1", "v8", 1.0)
+    assert g.vertex_props["v2"]["label"] == "label 1"
+    assert g.edge_props["e15"]["label"] == "15"
 
 
 def test_read_gml_property_graph_from_string_no_id_map():
@@ -706,14 +710,14 @@ def test_read_gml_property_graph_from_string_no_id_map():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     parse_gml(g, expected)
 
-    assert g.vertices == {'v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'}
+    assert g.vertices == {"v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"}
     assert len(g.edges) == 18
-    assert g.edge_tuple('e6') == ('v0', 'v7', 1.0)
-    assert g.vertex_props['v1']['label'] == 'label 1'
-    assert g.edge_props['e15']['label'] == '15'
+    assert g.edge_tuple("e6") == ("v0", "v7", 1.0)
+    assert g.vertex_props["v1"]["label"] == "label 1"
+    assert g.edge_props["e15"]["label"] == "15"

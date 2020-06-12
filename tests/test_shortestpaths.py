@@ -790,6 +790,8 @@ def test_martin_bad_cost_function():
         weighted=False,
     )
 
+    assert g.type.allowing_cycles
+
     g.add_vertices_from(range(1, 6))
 
     g.add_edge(1, 2)

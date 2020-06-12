@@ -35,9 +35,12 @@ def test_iso():
 
     it = iso.vf2(g1, g2)
 
+    repr(it)
+
     assert it is not None
 
     gm = next(it)
+    repr(gm)
     assert gm.vertices_correspondence() == {0: 5, 1: 6, 2: 7, 3: 8}
     assert gm.vertices_correspondence(forward=False) == {5: 0, 6: 1, 7: 2, 8: 3}
     assert gm.edges_correspondence() == {0: 0, 1: 1, 2: 2, 3: 3}

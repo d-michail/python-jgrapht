@@ -12,14 +12,7 @@ from .._internals._pg_drawing import (
 
 
 def _drawing_alg(name, graph, model, *args):
-
-    alg_method_name = "jgrapht_drawing_exec_" + name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm not supported.")
-
+    alg_method = getattr(_backend, "jgrapht_drawing_exec_" + name)
     alg_method(graph.handle, model.handle, *args)
 
 

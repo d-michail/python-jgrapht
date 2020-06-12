@@ -13,11 +13,7 @@ def _import_edgelist(name, with_attrs, filename_or_string, *args):
     else:
         alg_method_name += "noattrs_"
     alg_method_name += name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm {} not supported.".format(name))
+    alg_method = getattr(_backend, alg_method_name)
 
     filename_or_string_as_bytearray = bytearray(filename_or_string, encoding="utf-8")
 

@@ -41,6 +41,41 @@ def build_graph():
     return g
 
 
+def build_property_graph():
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        edge_supplier=create_edge_supplier(type='int')
+    )
+
+    for i in range(1, 11):
+        g.add_vertex(i)
+
+    g.add_edge(10, 1)
+    g.add_edge(10, 2)
+    g.add_edge(10, 3)
+    g.add_edge(10, 4)
+    g.add_edge(10, 5)
+    g.add_edge(10, 6)
+    g.add_edge(10, 7)
+    g.add_edge(10, 8)
+    g.add_edge(10, 9)
+
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 6)
+    g.add_edge(6, 7)
+    g.add_edge(7, 8)
+    g.add_edge(8, 9)
+    g.add_edge(9, 1)
+
+    return g
+
+
 dimacs_sp_expected = """c
 c SOURCE: Generated using the JGraphT library
 c
@@ -111,6 +146,31 @@ e 7 8
 e 8 9
 e 9 10
 e 10 2
+"""
+
+
+dimacs_sp_expected2 = """c
+c SOURCE: Generated using the JGraphT library
+c
+p sp 10 18
+a 10 1
+a 10 2
+a 10 3
+a 10 4
+a 10 5
+a 10 6
+a 10 7
+a 10 8
+a 10 9
+a 1 2
+a 2 3
+a 3 4
+a 4 5
+a 5 6
+a 6 7
+a 7 8
+a 8 9
+a 9 1
 """
 
 
@@ -227,3 +287,15 @@ def test_read_dimacs_property_graph_from_string():
     assert g.vertex_props == {}
     assert g.edge_props == {}
 
+
+def test_pg_dimacs(tmpdir):
+    g = build_property_graph()
+    tmpfile = tmpdir.join("dimacs.out")
+    tmpfilename = str(tmpfile)
+    write_dimacs(g, tmpfilename, format="shortestpath")
+
+    with open(tmpfilename, "r") as f:
+        contents = f.read()
+        print(contents)
+
+    assert contents == dimacs_sp_expected2

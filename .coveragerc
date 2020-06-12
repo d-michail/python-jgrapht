@@ -1,6 +1,7 @@
 [run]
 omit =
   jgrapht/backend.py
+  jgrapht/types.py
   tests/*
   .tox/*
 

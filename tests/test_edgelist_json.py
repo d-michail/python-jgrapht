@@ -105,6 +105,38 @@ def test_input_json_no_attrs(tmpdir):
     ]
 
 
+def test_input_json_no_attrs_no_import_cb(tmpdir):
+    tmpfile = tmpdir.join("json.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(expected_escaped)
+
+    edgelist = read_edgelist_json(tmpfilename)
+
+    assert list(edgelist) == [
+        (0, 1, 1.0),
+        (0, 2, 1.0),
+        (0, 3, 1.0),
+        (0, 4, 1.0),
+        (0, 5, 1.0),
+        (0, 6, 1.0),
+        (0, 7, 1.0),
+        (0, 8, 1.0),
+        (0, 9, 1.0),
+        (1, 2, 1.0),
+        (2, 3, 1.0),
+        (3, 4, 1.0),
+        (4, 5, 1.0),
+        (5, 6, 1.0),
+        (6, 7, 1.0),
+        (7, 8, 1.0),
+        (8, 9, 1.0),
+        (9, 1, 1.0),
+    ]
+
+
 def test_input_json_no_attrs_from_string():
     def import_id_cb(id):
         return int(id)
