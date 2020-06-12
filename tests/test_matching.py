@@ -202,3 +202,17 @@ def test_blossom5_min_weight():
     weight, _ = matching.blossom5_min_weight(g, perfect=True)
 
     assert weight == 50.0
+
+
+def test_pg_bipartite_perfect_min_weight():
+    bg = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+    generators.complete_bipartite_graph(bg, 10, 10)
+    _, part1, part2 = partition.bipartite_partitions(bg)
+    weight, _ = matching.bipartite_perfect_min_weight(bg, part1, part2)
+
+    assert weight == 10.0

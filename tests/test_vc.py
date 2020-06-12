@@ -86,3 +86,31 @@ def test_pg_greedy_with_weights():
     vc_weight, vc_vertices = vc.greedy(g, vertex_weights=vertex_weights)
     assert vc_weight == 9.0
     assert set(vc_vertices) == set(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
+
+
+def test_baryehuda_even():
+    g, _ = build_graph()
+    vc_weight, vc_vertices = vc.baryehuda_even(g)
+    assert vc_weight == 1.0
+    assert set(vc_vertices) == set([0])
+
+
+def test_baryehuda_even_with_weights():
+    g, vertex_weights = build_graph()
+    vc_weight, vc_vertices = vc.baryehuda_even(g, vertex_weights=vertex_weights)
+    assert vc_weight == 9.0
+    assert set(vc_vertices) == set([1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+
+def test_exact():
+    g, _ = build_graph()
+    vc_weight, vc_vertices = vc.exact(g)
+    assert vc_weight == 1.0
+    assert set(vc_vertices) == set([0])
+
+
+def test_exact_with_weights():
+    g, vertex_weights = build_graph()
+    vc_weight, vc_vertices = vc.exact(g, vertex_weights=vertex_weights)
+    assert vc_weight == 9.0
+    assert set(vc_vertices) == set([1, 2, 3, 4, 5, 6, 7, 8, 9])

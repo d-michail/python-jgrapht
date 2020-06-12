@@ -6,16 +6,8 @@ from .._internals._pg import is_property_graph
 from .._internals._pg_collections import _PropertyGraphEdgeSet
 
 
-def _mst_alg(name, graph):
-    alg_method_name = "jgrapht_mst_exec_" + name
 
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm {} not supported.".format(name))
-
-    weight, mst_handle = alg_method(graph.handle)
-
+def _wrap_result(graph, weight, mst_handle):
     if is_property_graph(graph):
         return weight, _PropertyGraphEdgeSet(mst_handle, graph)
     else:
@@ -34,7 +26,8 @@ def kruskal(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    return _mst_alg("kruskal", graph)
+    weight, mst_handle = _backend.jgrapht_mst_exec_kruskal(graph.handle)
+    return _wrap_result(graph, weight, mst_handle)
 
 
 def prim(graph):
@@ -48,7 +41,8 @@ def prim(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    return _mst_alg("prim", graph)
+    weight, mst_handle = _backend.jgrapht_mst_exec_prim(graph.handle)
+    return _wrap_result(graph, weight, mst_handle)
 
 
 def boruvka(graph):
@@ -63,7 +57,8 @@ def boruvka(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    return _mst_alg("boruvka", graph)
+    weight, mst_handle = _backend.jgrapht_mst_exec_boruvka(graph.handle)
+    return _wrap_result(graph, weight, mst_handle)
 
 
 def multiplicative_greedy(graph, k):

@@ -13,20 +13,7 @@ from .._internals._pg_collections import (
 )
 
 
-def _scoring_alg(name, graph, *args):
-
-    alg_method_name = "jgrapht_scoring_exec_"
-    if args:
-        alg_method_name += "custom_"
-    alg_method_name += name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm not supported.")
-
-    scores_handle = alg_method(graph.handle, *args)
-
+def _wrap_result(graph, scores_handle):
     if is_property_graph(graph):
         return _PropertyGraphVertexDoubleMap(scores_handle, graph)
     else:
@@ -64,7 +51,8 @@ def alpha_centrality(
     :returns: a dictionary from vertices to double values
     """
     custom = [damping_factor, exogenous_factor, max_iterations, tolerance]
-    return _scoring_alg("alpha_centrality", graph, *custom)
+    scores_handle = _backend.jgrapht_scoring_exec_custom_alpha_centrality(graph.handle, *custom)
+    return _wrap_result(graph, scores_handle)
 
 
 def betweenness_centrality(graph, incoming=False, normalize=False):
@@ -88,7 +76,8 @@ def betweenness_centrality(graph, incoming=False, normalize=False):
     :returns: a dictionary from vertices to double values
     """
     custom = [normalize]
-    return _scoring_alg("betweenness_centrality", graph, *custom)
+    scores_handle = _backend.jgrapht_scoring_exec_custom_betweenness_centrality(graph.handle, *custom)
+    return _wrap_result(graph, scores_handle)
 
 
 def closeness_centrality(graph, incoming=False, normalize=True):
@@ -124,7 +113,8 @@ def closeness_centrality(graph, incoming=False, normalize=True):
     :returns: a dictionary from vertices to double values
     """
     custom = [incoming, normalize]
-    return _scoring_alg("closeness_centrality", graph, *custom)
+    scores_handle = _backend.jgrapht_scoring_exec_custom_closeness_centrality(graph.handle, *custom)
+    return _wrap_result(graph, scores_handle)
 
 
 def harmonic_centrality(graph, incoming=False, normalize=True):
@@ -162,7 +152,8 @@ def harmonic_centrality(graph, incoming=False, normalize=True):
     :returns: a dictionary from vertices to double values
     """
     custom = [incoming, normalize]
-    return _scoring_alg("harmonic_centrality", graph, *custom)
+    scores_handle = _backend.jgrapht_scoring_exec_custom_harmonic_centrality(graph.handle, *custom)
+    return _wrap_result(graph, scores_handle)
 
 
 def pagerank(graph, damping_factor=0.85, max_iterations=100, tolerance=0.0001):
@@ -195,7 +186,8 @@ def pagerank(graph, damping_factor=0.85, max_iterations=100, tolerance=0.0001):
     :returns: a dictionary from vertices to double values
     """
     custom = [damping_factor, max_iterations, tolerance]
-    return _scoring_alg("pagerank", graph, *custom)
+    scores_handle = _backend.jgrapht_scoring_exec_custom_pagerank(graph.handle, *custom)
+    return _wrap_result(graph, scores_handle)    
 
 
 def coreness(graph):

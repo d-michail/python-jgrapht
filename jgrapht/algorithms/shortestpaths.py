@@ -29,11 +29,7 @@ import multiprocessing
 
 def _sp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm {} not supported.".format(name))
+    alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _vertex_pg_to_g(graph, source_vertex), *args)
 
@@ -45,11 +41,7 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm {} not supported.".format(name))
+    alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
         graph.handle,
@@ -68,11 +60,7 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
 
 def _sp_allpairs_alg(name, graph):
     alg_method_name = "jgrapht_sp_exec_" + name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm {} not supported.".format(name))
+    alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle)
 
@@ -84,11 +72,7 @@ def _sp_allpairs_alg(name, graph):
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm {} not supported.".format(name))
+    alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
         graph.handle,
@@ -106,11 +90,7 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
 
 def _multisp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method_name = "jgrapht_multisp_exec_" + name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm {} not supported.".format(name))
+    alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _vertex_pg_to_g(graph, source_vertex), *args)
 

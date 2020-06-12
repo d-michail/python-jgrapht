@@ -16,12 +16,7 @@ from .._internals._pg_flows import (
 
 def _maxflow_alg(name, graph, source, sink, *args):
 
-    alg_method_name = "jgrapht_maxflow_exec_" + name
-
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm not supported.")
+    alg_method = getattr(_backend, "jgrapht_maxflow_exec_" + name)
 
     flow_value, flow_handle, cut_source_partition_handle = alg_method(
         graph.handle,

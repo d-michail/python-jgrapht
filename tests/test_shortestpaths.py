@@ -138,6 +138,11 @@ def test_dijkstra():
     assert single_path.end_vertex == 3
     assert list(single_path.edges) == [0, 1]
 
+    # test no path
+    g.add_vertex(100)
+    nopath = sp.dijkstra(g, 0, 100)
+    assert nopath is None
+
 
 def test_pg_dijkstra():
     g = get_pg_graph()
@@ -774,3 +779,43 @@ def test_pg_martin():
     p3 = next(it)
     assert p3.edges == ["e2", 7]
     assert next(it, "Exhausted") == "Exhausted"
+
+
+def test_martin_bad_cost_function():
+
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=False,
+    )
+
+    g.add_vertices_from(range(1, 6))
+
+    g.add_edge(1, 2)
+    g.add_edge(1, 3)
+    g.add_edge(1, 4)
+    g.add_edge(2, 4)
+    g.add_edge(2, 5)
+    g.add_edge(3, 4)
+    g.add_edge(3, 5)
+    g.add_edge(4, 5)
+
+    costs = {
+        0: [1.0, 5.0],
+        1: [4.0, 2.0],
+        2: [4.0, 4.0],
+        3: [1.0, 2.0],
+        4: [2.0, 5.0],
+        5: [2.0, 3.0],
+        6: [6.0, 1.0],
+        7: [3.0, 3.0],
+    }
+
+    def cost_function(e):
+        return costs[e]
+
+    bad_dimension = 0
+    with pytest.raises(ValueError):
+        multi_paths = sp.martin_multiobjective(g, cost_function, bad_dimension, 1)
+

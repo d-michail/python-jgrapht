@@ -14,11 +14,7 @@ def _planarity_alg(name, graph, *args):
     alg_method_name = "jgrapht_planarity_exec_"
     alg_method_name += name
 
-    try:
-        alg_method = getattr(_backend, alg_method_name)
-    except AttributeError:
-        raise NotImplementedError("Algorithm not supported.")
-
+    alg_method = getattr(_backend, alg_method_name)
     is_planar, embedding, kuratowski_subdivision = alg_method(graph.handle, *args)
 
     if is_planar:

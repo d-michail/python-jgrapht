@@ -1,12 +1,47 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, create_property_graph
 import jgrapht.algorithms.scoring as scoring
 
 
 def build_graph():
 
     g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    for i in range(0, 10):
+        g.add_vertex(i)
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(0, 4)
+    g.add_edge(0, 5)
+    g.add_edge(0, 6)
+    g.add_edge(0, 7)
+    g.add_edge(0, 8)
+    g.add_edge(0, 9)
+
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 6)
+    g.add_edge(6, 7)
+    g.add_edge(7, 8)
+    g.add_edge(8, 9)
+    g.add_edge(9, 1)
+
+    return g
+
+
+def build_pg_graph():
+
+    g = create_property_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -139,4 +174,54 @@ def test_clustering_coefficient():
         0.6666666666666666,
         0.6666666666666666,
     ]
+    assert result == expected
+
+
+def test_pg_pagerank():
+    g = build_pg_graph()
+    scores = scoring.pagerank(g)
+    result = [scores[v] for v in g.vertices]
+    expected = [
+        0.2324869499599194,
+        0.08527922778223115,
+        0.08527922778223115,
+        0.08527922778223115,
+        0.08527922778223115,
+        0.08527922778223115,
+        0.08527922778223115,
+        0.08527922778223115,
+        0.08527922778223115,
+        0.08527922778223115,
+    ]
+    assert result == expected
+
+
+def test_pg_clustering_coefficient():
+    g = build_pg_graph()
+    global_cc, avg_cc, local_cc = scoring.clustering_coefficient(g)
+    assert global_cc == 0.42857142857142855
+    assert avg_cc == 0.6250000000000001
+    result = [local_cc[v] for v in g.vertices]
+    expected = [
+        0.25,
+        0.6666666666666666,
+        0.6666666666666666,
+        0.6666666666666666,
+        0.6666666666666666,
+        0.6666666666666666,
+        0.6666666666666666,
+        0.6666666666666666,
+        0.6666666666666666,
+        0.6666666666666666,
+    ]
+    assert result == expected
+
+
+
+def test_pg_coreness():
+    g = build_pg_graph()
+    degeneracy, scores = scoring.coreness(g)
+    assert degeneracy == 3
+    result = [scores[v] for v in g.vertices]
+    expected = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
     assert result == expected
