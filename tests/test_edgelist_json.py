@@ -48,6 +48,8 @@ def test_input_json(tmpdir):
     assert v_attrs[3]["label"] == "label 3"
     assert e_attrs[9]["label"] == "edge 1-2"
 
+    repr(edgelist)
+
     assert list(edgelist) == [
         (0, 1, 1.0),
         (0, 2, 1.0),

@@ -1,8 +1,11 @@
 import pytest
 
+import jgrapht._backend as _backend
+
 from jgrapht._internals._collections import (
     _JGraphTIntegerStringMap,
     _JGraphTIntegerDoubleMutableMap,
+    _JGraphTIntegerIntegerMap,
     _JGraphTIntegerIntegerMutableMap,
 )
 
@@ -49,6 +52,23 @@ def test_JGraphTIntegerStringMap():
     assert str(s.__delitem__(200)) == "node 200"
     with pytest.raises(KeyError):
         s.__delitem__(200)
+
+    with pytest.raises(KeyError):
+        s.get(7)
+
+    with pytest.raises(KeyError):
+        s.pop(7)
+
+    assert str(s) == "{5: node 5, 6: κόμβος 6}"
+    
+
+    s.clear();    
+    assert len(s) == 0
+
+    another = _JGraphTIntegerStringMap(linked=False)
+    assert len(another) == 0
+
+    repr(another)
 
 
 def test_JGraphTIntegerDoubleMutableMap():
@@ -141,3 +161,53 @@ def test_JGraphTIntegerIntegerMutableMap():
 
     del s[1]
     assert 1 not in s
+
+    with pytest.raises(KeyError):
+        del s[1]
+
+    repr(s)
+
+    s.clear();
+    assert len(s) == 0
+
+
+def test_JGraphTIntegerIntegerMap():
+
+    handle = _backend.jgrapht_map_create()
+    _backend.jgrapht_map_int_int_put(handle, 1, 5)
+    _backend.jgrapht_map_int_int_put(handle, 2, 10)
+    _backend.jgrapht_map_int_int_put(handle, 3, 20)
+
+    s = _JGraphTIntegerIntegerMap(handle)
+    assert len(s) == 3
+
+    assert 1 in s
+    assert 2 in s
+    assert 3 in s
+    assert 4 not in s
+
+    assert s[1] == 5
+    assert s[2] == 10
+    assert s[3] == 20
+
+    keys = []
+    for k in s:
+        keys.append(k)
+    assert keys == [1, 2, 3]
+
+    assert s.get(1) == 5
+    assert s.get(2, 200) == 10
+    assert s.get(5, 200) == 200
+
+    with pytest.raises(KeyError):
+        s.get(4)
+
+    with pytest.raises(KeyError):
+        print(s[4])
+
+    assert str(s) == "{1: 5, 2: 10, 3: 20}"
+
+    repr(s)
+
+    another = _JGraphTIntegerIntegerMap(linked=False)
+    assert len(another) == 0
