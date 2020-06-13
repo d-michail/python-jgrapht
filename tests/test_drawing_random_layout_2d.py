@@ -48,6 +48,13 @@ def test_random_layout():
     ]
 
 
+    area = (0, 0, 10, 20)
+    model = drawing.random_layout_2d(g, area)
+    assert model.area == area
+    locations = [model.get_vertex_location(v) for v in g.vertices]
+    assert len(locations) == 6
+
+
 def build_pg_graph():
     g = create_property_graph(
         directed=False,
