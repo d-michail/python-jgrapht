@@ -328,21 +328,21 @@ class _JGraphTIntegerStringMap(_HandleWrapper, MutableMapping):
         res = backend.jgrapht_map_size(self._handle)
         return res
 
-    def get(self, key, value=None):
+    __marker = object()
+
+    def get(self, key, value=__marker):
         res = backend.jgrapht_map_int_contains_key(self._handle, key)
         if not res:
-            if value is not None:
-                return value
+            if value is self.__marker:
+                raise KeyError
             else:
-                raise KeyError()
+                return value
         res = backend.jgrapht_map_int_string_get(self._handle, key)
         return _JGraphTString(res)
 
     def add(self, key, value):
         encoded_value = bytearray(value, encoding="utf-8")
         backend.jgrapht_map_int_string_put(self._handle, key, encoded_value)
-
-    __marker = object()
 
     def pop(self, key, defaultvalue=__marker):
         try:

@@ -23,6 +23,33 @@ def test_JGraphTIntegerStringMap():
     assert str(s[5]) == "node 5"
     assert str(s[6]) == "κόμβος 6"
 
+    it = iter(s.items())
+    x, y = next(it)
+    assert x == 5
+    assert str(y) == "node 5"
+    x, y = next(it)
+    assert x == 6
+    assert str(y) == "κόμβος 6"
+
+
+    assert str(s.get(5)) == "node 5"
+    assert s.get(8, None) == None
+
+    s.add(8, "node 8")
+    assert str(s.get(8)) == "node 8"
+
+    with pytest.raises(KeyError):
+        s.__getitem__(10)
+
+    assert str(s.pop(8)) == "node 8"
+    assert s.pop(100, "notfound") == "notfound"
+
+
+    s.add(200, "node 200")
+    assert str(s.__delitem__(200)) == "node 200"
+    with pytest.raises(KeyError):
+        s.__delitem__(200)
+
 
 def test_JGraphTIntegerDoubleMutableMap():
 
