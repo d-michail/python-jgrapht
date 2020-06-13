@@ -117,6 +117,7 @@ def test_dijkstra():
     assert single_path.start_vertex == 0
     assert single_path.end_vertex == 5
     assert list(single_path.edges) == [2, 3, 5]
+    assert [e for e in single_path] == [2, 3, 5]
 
     single_path = sp.dijkstra(g, 0, 5, use_bidirectional=False)
     assert single_path.weight == 62.0
@@ -125,6 +126,7 @@ def test_dijkstra():
     assert list(single_path.edges) == [2, 3, 5]
 
     from_paths = sp.dijkstra(g, 0)
+    repr(from_paths)
     assert from_paths.source_vertex == 0
     single_path = from_paths.get_path(5)
     assert single_path.weight == 62.0
@@ -311,6 +313,8 @@ def test_pg_floyd_warshall():
     g = get_pg_graph_with_negative_edges()
 
     allpairs = sp.floyd_warshall_allpairs(g)
+    repr(allpairs)
+
     path05 = allpairs.get_path(0, 5)
     assert path05.weight == 62.0
     assert path05.start_vertex == 0
@@ -761,7 +765,8 @@ def test_pg_martin():
         return costs[e]
 
     multi_paths = sp.martin_multiobjective(g, cost_function, 2, 1)
-
+    
+    assert multi_paths.source_vertex == 1
     it = multi_paths.get_paths(5)
     p1 = next(it)
     assert p1.edges == [0, 4]
@@ -772,6 +777,7 @@ def test_pg_martin():
     assert next(it, "Exhausted") == "Exhausted"
 
     it = sp.martin_multiobjective(g, cost_function, 2, 1, 5)
+    repr(it)
     p1 = next(it)
     assert p1.edges == [0, 4]
     p2 = next(it)

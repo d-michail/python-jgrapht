@@ -4,6 +4,7 @@ import jgrapht._backend as _backend
 
 from jgrapht._internals._collections import (
     _JGraphTIntegerStringMap,
+    _JGraphTIntegerDoubleMap,
     _JGraphTIntegerDoubleMutableMap,
     _JGraphTIntegerIntegerMap,
     _JGraphTIntegerIntegerMutableMap,
@@ -211,3 +212,12 @@ def test_JGraphTIntegerIntegerMap():
 
     another = _JGraphTIntegerIntegerMap(linked=False)
     assert len(another) == 0
+
+
+def test_JGraphTIntegerDoubleMap():
+
+    s = _JGraphTIntegerDoubleMap(linked=False)
+    assert len(s) == 0
+    repr(s)
+
+    
