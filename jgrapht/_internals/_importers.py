@@ -147,9 +147,6 @@ def _populate_properties(
 def _parse_graph_dimacs(
     graph, input, import_id_cb=None, input_is_filename=False,
 ):
-    if is_property_graph(graph):
-        raise ValueError("Property graphs not supported")
-
     (
         import_id_f_ptr,
         import_id_f,  # pylint: disable=unused-variable
@@ -189,10 +186,6 @@ def _parse_graph_dimacs(
 def _parse_property_graph_dimacs(
     graph, input_string, import_id_cb, input_is_filename=False
 ):
-
-    if not is_property_graph(graph):
-        raise ValueError("Only property graphs supported")
-
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 
     (
@@ -234,9 +227,6 @@ def _parse_graph_gml(
     edge_attribute_cb=None,
     input_is_filename=False,
 ):
-    if is_property_graph(graph):
-        raise ValueError("Property graphs not supported")
-
     (
         import_id_f_ptr,
         import_id_f,  # pylint: disable=unused-variable
@@ -278,10 +268,6 @@ def _parse_graph_gml(
 def _parse_property_graph_gml(
     graph, input_string, import_id_cb, input_is_filename=False,
 ):
-
-    if not is_property_graph(graph):
-        raise ValueError("Only property graphs supported")
-
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 
     (
@@ -325,9 +311,6 @@ def _parse_graph_json(
     edge_attribute_cb=None,
     input_is_filename=False,
 ):
-    if is_property_graph(graph):
-        raise ValueError("Property graphs not supported")
-
     (
         import_id_f_ptr,
         import_id_f,  # pylint: disable=unused-variable
@@ -368,10 +351,6 @@ def _parse_graph_json(
 def _parse_property_graph_json(
     graph, input_string, import_id_cb, input_is_filename=False
 ):
-
-    if not is_property_graph(graph):
-        raise ValueError("Only property graphs supported")
-
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 
     (
@@ -426,9 +405,6 @@ def _parse_graph_csv(
     matrix_format_zero_when_noedge=True,
     input_is_filename=False,
 ):
-    if is_property_graph(graph):
-        raise ValueError("Property graphs not supported")
-
     (
         import_id_f_ptr,
         import_id_f,  # pylint: disable=unused-variable
@@ -478,9 +454,6 @@ def _parse_property_graph_csv(
     matrix_format_zero_when_noedge=True,
     input_is_filename=False,
 ):
-    if not is_property_graph(graph):
-        raise ValueError("Only property graphs supported")
-
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 
     (
@@ -527,9 +500,6 @@ def _parse_graph_gexf(
     input_is_filename=False,
     validate_schema=True,
 ):
-    if is_property_graph(graph):
-        raise ValueError("Property graphs not supported")
-
     (
         import_id_f_ptr,
         import_id_f,  # pylint: disable=unused-variable
@@ -575,9 +545,6 @@ def _parse_property_graph_gexf(
     input_is_filename=False,
     validate_schema=True,
 ):
-    if not is_property_graph(graph):
-        raise ValueError("Only property graphs supported")
-
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 
     (
@@ -622,9 +589,6 @@ def _parse_graph_dot(
     edge_attribute_cb=None,
     input_is_filename=False,
 ):
-    if is_property_graph(graph):
-        raise ValueError("Property graphs not supported")
-
     (
         import_id_f_ptr,
         import_id_f,  # pylint: disable=unused-variable
@@ -668,9 +632,6 @@ def _parse_property_graph_dot(
     import_id_cb,
     input_is_filename=False,
 ):
-    if not is_property_graph(graph):
-        raise ValueError("Only property graphs supported")
-
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 
     (
@@ -714,9 +675,6 @@ def _parse_graph_graph6sparse6(
     edge_attribute_cb=None,
     input_is_filename=False,
 ):
-    if is_property_graph(graph):
-        raise ValueError("Property graphs not supported")
-
     (
         import_id_f_ptr,
         import_id_f,  # pylint: disable=unused-variable
@@ -760,9 +718,6 @@ def _parse_property_graph_graph6sparse6(
     import_id_cb,
     input_is_filename=False,
 ):
-    if not is_property_graph(graph):
-        raise ValueError("Only property graphs supported")
-
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 
     (
@@ -808,9 +763,6 @@ def _parse_graph_graphml(
     validate_schema=True,
     simple=True,
 ):
-    if is_property_graph(graph):
-        raise ValueError("Property graphs not supported")
-
     (
         import_id_f_ptr,
         import_id_f,  # pylint: disable=unused-variable
@@ -863,10 +815,6 @@ def _parse_property_graph_graphml(
     validate_schema=True,
     simple=True,
 ):
-
-    if not is_property_graph(graph):
-        raise ValueError("Only property graphs supported")
-
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 
     (

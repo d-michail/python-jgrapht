@@ -135,6 +135,7 @@ def test_dijkstra():
     assert list(single_path.edges) == [2, 3, 5]
 
     single_path = from_paths.get_path(3)
+    repr(single_path)
     assert single_path.weight == 103.0
     assert single_path.start_vertex == 0
     assert single_path.end_vertex == 3
@@ -244,6 +245,7 @@ def test_johnsons():
     g = get_graph_with_negative_edges()
 
     allpairs = sp.johnson_allpairs(g)
+    repr(allpairs)
     path05 = allpairs.get_path(0, 5)
     assert path05.weight == 62.0
     assert path05.start_vertex == 0
@@ -708,8 +710,11 @@ def test_martin():
         return costs[e]
 
     multi_paths = sp.martin_multiobjective(g, cost_function, 2, 1)
+    repr(multi_paths)
 
+    assert multi_paths.source_vertex == 1
     it = multi_paths.get_paths(5)
+    repr(it)
     p1 = next(it)
     assert p1.edges == [0, 4]
     p2 = next(it)
@@ -748,8 +753,6 @@ def test_pg_martin():
     g.add_edge(3, 5, edge=6)
     g.add_edge(4, 5, edge=7)
 
-    print(g)
-
     costs = {
         0: [1.0, 5.0],
         1: [4.0, 2.0],
@@ -765,6 +768,7 @@ def test_pg_martin():
         return costs[e]
 
     multi_paths = sp.martin_multiobjective(g, cost_function, 2, 1)
+    repr(multi_paths)
     
     assert multi_paths.source_vertex == 1
     it = multi_paths.get_paths(5)

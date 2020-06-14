@@ -27,7 +27,7 @@ class _JGraphTLayoutModel2D(_HandleWrapper, LayoutModel2D):
     def set_vertex_location(self, vertex, point_2d):
         backend.jgrapht_drawing_layout_model_2d_put_vertex(self.handle, vertex, *point_2d)
 
-    def is_fixed(self, vertex, fixed):
+    def is_fixed(self, vertex):
         return backend.jgrapht_drawing_layout_model_2d_get_fixed(self.handle, vertex)
 
     def set_fixed(self, vertex, fixed):
