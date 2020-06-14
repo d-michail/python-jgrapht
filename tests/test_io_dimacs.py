@@ -174,6 +174,30 @@ a 9 1
 """
 
 
+dimacs_sp_expected100 = """c
+c SOURCE: Generated using the JGraphT library
+c
+p sp 10 18
+a 100 101
+a 100 102
+a 100 103
+a 100 104
+a 100 105
+a 100 106
+a 100 107
+a 100 108
+a 100 109
+a 101 102
+a 102 103
+a 103 104
+a 104 105
+a 105 106
+a 106 107
+a 107 108
+a 108 109
+a 109 101
+"""
+
 def test_dimacs(tmpdir):
     g = build_graph()
     tmpfile = tmpdir.join("dimacs.out")
@@ -185,6 +209,41 @@ def test_dimacs(tmpdir):
         print(contents)
 
     assert contents == dimacs_sp_expected
+
+
+def test_dimacs_with_custom_ids(tmpdir):
+    g = build_graph()
+    tmpfile = tmpdir.join("dimacs.out")
+    tmpfilename = str(tmpfile)
+
+    def custom_id(id):
+        return id+100
+
+    write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id)
+
+    with open(tmpfilename, "r") as f:
+        contents = f.read()
+        print(contents)
+
+    assert contents == dimacs_sp_expected100
+
+
+def test_dimacs_with_custom_ids_bad_function(tmpdir):
+    g = build_graph()
+    tmpfile = tmpdir.join("dimacs.out")
+    tmpfilename = str(tmpfile)
+
+    def custom_id(id):
+        return str(id+100)
+
+    with pytest.raises(TypeError):
+        write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id)
+
+    def custom_id2(id):
+        return -id
+
+    with pytest.raises(ValueError):
+        write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id2)
 
 
 def test_dimacs_coloring(tmpdir):
@@ -318,3 +377,73 @@ def test_pg_dimacs(tmpdir):
         print(contents)
 
     assert contents == dimacs_sp_expected2
+
+
+def test_pg_dimacs_increase_to_positive_id(tmpdir):
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        edge_supplier=create_edge_supplier(type='int')
+    )
+
+    for i in range(0, 10):
+        g.add_vertex(i)
+
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(0, 4)
+    g.add_edge(0, 5)
+    g.add_edge(0, 6)
+    g.add_edge(0, 7)
+    g.add_edge(0, 8)
+    g.add_edge(0, 9)
+
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 6)
+    g.add_edge(6, 7)
+    g.add_edge(7, 8)
+    g.add_edge(8, 9)
+    g.add_edge(9, 1)
+
+    def increase_vid(id):
+        return id+1
+
+    tmpfile = tmpdir.join("dimacs.out")
+    tmpfilename = str(tmpfile)
+    write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=increase_vid)
+
+    with open(tmpfilename, "r") as f:
+        contents = f.read()
+        print(contents)
+
+    assert contents == dimacs_sp_expected
+
+
+def test_dimacs_output_to_string():
+    g = build_graph()
+
+    def custom_id(id):
+        return id+1
+
+    out = generate_dimacs(g, export_vertex_id_cb=custom_id)
+
+    assert out.splitlines() == dimacs_maxclique_expected.splitlines()
+
+    def custom_id_bad1(id):
+        return str(id+1)
+
+    with pytest.raises(TypeError):
+        generate_dimacs(g, export_vertex_id_cb=custom_id_bad1)
+
+    def custom_id_bad2(id):
+        return -id
+
+    with pytest.raises(ValueError):
+        generate_dimacs(g, export_vertex_id_cb=custom_id_bad2)
+

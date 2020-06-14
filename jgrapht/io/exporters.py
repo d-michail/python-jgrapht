@@ -29,18 +29,38 @@ def _export_to_string(name, graph, *args):
     return str(_JGraphTString(handle))
 
 
-def _vertex_id_store(graph, check_valid_id=None):
-    """Create a vertex identifier store inside the capi backend. This only 
-    works for property graphs, otherwise it returns None.
+def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
+    """Create a vertex identifier store inside the capi backend.
+
+    :param graph: a graph
+    :param check_valid_id: a validator. If None no validation takes place.
+    :param export_vertex_id_cb: a function which converts from a graph vertex to
+      an identifier to be written to file.
     """
     vertex_id_store = None
     if is_property_graph(graph):
         # special case, read identifiers from property graph
         vertex_id_store = _JGraphTIntegerStringMap()
-        for k, v in graph._vertex_id_to_hash.items():
-            if check_valid_id is not None: 
-                check_valid_id(v)
-            vertex_id_store[k] = str(v)
+
+        if export_vertex_id_cb is not None: 
+            for k, v in graph._vertex_id_to_hash.items():
+                vid = export_vertex_id_cb(v)
+                if check_valid_id is not None: 
+                    check_valid_id(vid)
+                vertex_id_store[k] = str(vid)
+        else:
+            for k, v in graph._vertex_id_to_hash.items():
+                if check_valid_id is not None: 
+                    check_valid_id(v)
+                vertex_id_store[k] = str(v)
+    else:
+        if export_vertex_id_cb is not None: 
+            vertex_id_store = _JGraphTIntegerStringMap()
+            for v in graph.vertices:
+                vid = export_vertex_id_cb(v)
+                if check_valid_id is not None: 
+                    check_valid_id(vid)
+                vertex_id_store[v] = str(vid)
     return vertex_id_store
 
 
@@ -132,7 +152,7 @@ DIMACS_FORMATS = dict(
 )
 
 
-def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False):
+def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False, export_vertex_id_cb=None):
     """Export a graph using the DIMACS format.
 
     For a description of the formats see http://dimacs.rutgers.edu/Challenges . Note that
@@ -140,8 +160,11 @@ def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False)
     the shortest path challenge format, the coloring format and the maximum-clique challenge
     formats. By default the maximum-clique is used.
 
-    .. note:: In DIMACS formats the vertices are integers numbered from one.
-              The exporter automatically translates them. 
+    .. note:: In DIMACS formats the vertices are integers numbered from one. In case of default graphs 
+              (with integer vertices) this translation happens automatically. With property graphs the 
+              user must either use positive integers as vertices, or must explicitly provide a function 
+              which does the conversion to a positive integer (`export_vertex_id_cb`).
+
 
     Briefly, one of the most common DIMACS formats is the
     `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the 
@@ -166,17 +189,19 @@ def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False)
     :param filename: the filename
     :param format: a string with the format to use. Valid are `maxclique`, `shortestpath`
                    and `coloring`.
-    :param export_edge_weights: whether to also export edge weights               
+    :param export_edge_weights: whether to also export edge weights
+    :param export_vertex_id_cb: function which converts from vertex to positive integer identifiers to be written 
+      to the output
     """
     format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
 
     def check_valid_id(id):
         if not isinstance(id, int): 
-            raise TypeError('Identifiers must integers')
+            raise TypeError('Identifiers must be integers')
         if id <= 0:
             raise ValueError('Identifiers must be positive')
     
-    vertex_id_store = _vertex_id_store(graph, check_valid_id)
+    vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb)
     custom = [
         format,
         export_edge_weights,
@@ -185,7 +210,7 @@ def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False)
     return _export_to_file("dimacs", graph, filename, *custom)
 
 
-def generate_dimacs(graph, format="maxclique", export_edge_weights=False):
+def generate_dimacs(graph, format="maxclique", export_edge_weights=False, export_vertex_id_cb=None):
     """Export a graph to a string using the DIMACS format.
 
     For a description of the formats see http://dimacs.rutgers.edu/Challenges . Note that
@@ -193,8 +218,10 @@ def generate_dimacs(graph, format="maxclique", export_edge_weights=False):
     the shortest path challenge format, the coloring format and the maximum-clique challenge
     formats. By default the maximum-clique is used.
 
-    .. note:: In DIMACS formats the vertices are integers numbered from one.
-                 The exporter automatically translates them. 
+    .. note:: In DIMACS formats the vertices are integers numbered from one. In case of default graphs 
+              (with integer vertices) this translation happens automatically. With property graphs the 
+              user must either use positive integers as vertices, or must explicitly provide a function 
+              which does the conversion to a positive integer (`export_vertex_id_cb`). 
 
     Briefly, one of the most common DIMACS formats is the
     `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the 
@@ -219,8 +246,9 @@ def generate_dimacs(graph, format="maxclique", export_edge_weights=False):
     :param format: a string with the format to use. Valid are `maxclique`, `shortestpath`
                    and `coloring`.
     :param export_edge_weights: whether to also export edge weights
-    :returns: a string contains the exported graph    
-    :returns: a string with the generated output               
+    :param export_vertex_id_cb: function which converts from vertex to positive integer identifiers to be written 
+      to the output    
+    :returns: a string containing the exported graph    
     """
     format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
 
@@ -230,7 +258,7 @@ def generate_dimacs(graph, format="maxclique", export_edge_weights=False):
         if id <= 0:
             raise ValueError('Identifiers must be positive')
 
-    vertex_id_store = _vertex_id_store(graph, check_valid_id)
+    vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb)
     custom = [
         format,
         export_edge_weights,
