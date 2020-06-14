@@ -222,13 +222,6 @@ def test_dimacs_output_to_string():
 
 
 def test_read_dimacs_from_string(tmpdir):
-    tmpfile = tmpdir.join("dimacs.out")
-    tmpfilename = str(tmpfile)
-
-    # write file json with escaped characters
-    with open(tmpfilename, "w") as f:
-        f.write(dimacs_sp_expected)
-
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -240,6 +233,32 @@ def test_read_dimacs_from_string(tmpdir):
         return x
 
     parse_dimacs(g, dimacs_sp_expected, identity)
+
+    assert g.vertices == {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+    again = generate_dimacs(g, format="shortestpath")
+    assert again.splitlines() == dimacs_sp_expected.splitlines()
+
+
+def test_read_dimacs_from_file(tmpdir):
+    tmpfile = tmpdir.join("dimacs.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(dimacs_sp_expected)
+
+    g = create_graph( 
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    def identity(x):
+        return x
+
+    read_dimacs(g, tmpfilename, identity)
 
     assert g.vertices == {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 

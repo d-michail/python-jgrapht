@@ -143,3 +143,21 @@ def test_read_sparse6_property_graph_from_string1():
 
     assert g.vertices == {'v0', 'v1', 'v2', 'v3'}
     assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
+
+
+def test_read_sparse6_graph_from_string():
+
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    def import_id_cb(id):
+        return int(id)
+
+    parse_graph6sparse6(g, ':Cca', import_id_cb=import_id_cb)
+
+    assert g.vertices == {0, 1, 2, 3}
+    assert g.edge_tuple(0) == (0, 1, 1.0)

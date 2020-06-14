@@ -309,3 +309,38 @@ def test_read_gexf_property_graph_from_string1():
     assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
     assert g.vertex_props['v0']['label'] == '0'
     assert g.edge_props['e0']['id'] == 'e12'
+
+
+def test_read_gexf_property_graph_from_file(tmpdir):
+    tmpfile = tmpdir.join("gexf.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(expected2)
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    def import_id_cb(id):
+        return 'v{}'.format(id)
+
+    read_gexf(g, tmpfilename, import_id_cb=import_id_cb)
+
+    print(g.vertices)
+    print(g.edges)
+    print(g.vertex_props)
+    print(g.edge_props)
+
+    assert g.vertices == {'vv1', 'vv2', 'vv3'}
+    assert g.edges == {'e0', 'e1'}
+    assert g.edge_tuple('e0') == ('vv1', 'vv2', 1.0)
+    assert g.vertex_props['vv1']['label'] == '0'
+    assert g.edge_props['e0']['id'] == 'e12'
+    

@@ -441,6 +441,12 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
         def __repr__(self):
             return "_PropertyGraph-VertexProperties(%r)" % repr(self._storage)
 
+        def __str__(self):
+            items = []
+            for v in self._graph.vertices:
+                items.append('{}: {}'.format(v, self._storage[v]))
+            return '{' + ', '.join(items) + '}'    
+
     class _EdgeProperties(MutableMapping):
         """Wrapper around a dictionary to ensure edge existence."""
 
@@ -473,6 +479,12 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
 
         def __repr__(self):
             return "_PropertyGraph-EdgeProperties(%r)" % repr(self._storage)
+
+        def __str__(self):
+            items = []
+            for e in self._graph.edges:
+                items.append('{}: {}'.format(e, self._storage[e]))
+            return '{' + ', '.join(items) + '}'
 
     class _PerEdgeWeightAwareDict(MutableMapping):
         """A dictionary view which knows about the special key weight and delegates

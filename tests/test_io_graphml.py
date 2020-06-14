@@ -400,6 +400,28 @@ def test_property_graph_output_to_string_with_attrs():
     assert out.splitlines() == expected4.splitlines()
 
 
+def test_graph_from_string():
+
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+
+    def import_id_cb(id):
+        return int(id)
+
+    parse_graphml(
+        g, expected2, import_id_cb=import_id_cb, validate_schema=True, simple=True
+    )
+
+    assert g.vertices == {0, 1, 2, 3}
+    assert g.edges == {0, 1, 2, 3}
+
+    assert g.get_edge_weight(1) == 4.4
+
+
 def test_property_graph_from_string():
 
     g = create_property_graph(
@@ -446,6 +468,77 @@ def test_property_graph_from_string_without_importid():
         "e2": {"source": "0", "target": "3"},
         "e3": {"source": "2", "target": "3"},
     }
+
+    # check that we also see the weights, even if they do not appear in
+    # the properties
+    assert g.edge_props["e1"]["weight"] == 4.4
+
+    # test weight changes also by set
+    g.set_edge_weight("e1", 100.4)
+    assert g.edge_props["e1"]["weight"] == 100.4
+
+
+def test_property_graph_from_filename_without_importid(tmpdir):
+    tmpfile = tmpdir.join("graphml.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(expected2)
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
+    )
+
+    read_graphml(g, tmpfilename, validate_schema=True, simple=True)
+
+    assert g.vertices == {"v0", "v1", "v2", "v3"}
+    assert g.edges == {"e0", "e1", "e2", "e3"}
+
+    assert g.edge_props == {
+        "e0": {"source": "0", "target": "1"},
+        "e1": {"source": "0", "target": "2"},
+        "e2": {"source": "0", "target": "3"},
+        "e3": {"source": "2", "target": "3"},
+    }
+
+    # check that we also see the weights, even if they do not appear in
+    # the properties
+    assert g.edge_props["e1"]["weight"] == 4.4
+
+    # test weight changes also by set
+    g.set_edge_weight("e1", 100.4)
+    assert g.edge_props["e1"]["weight"] == 100.4
+
+
+def test_property_graph_from_filename_without_importid_no_simple(tmpdir):
+    tmpfile = tmpdir.join("graphml.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(expected2)
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
+    )
+
+    read_graphml(g, tmpfilename, validate_schema=True, simple=False)
+
+    assert g.vertices == {"v0", "v1", "v2", "v3"}
+    assert g.edges == {"e0", "e1", "e2", "e3"}
+
+    assert dict(g.edge_props) == {}
 
     # check that we also see the weights, even if they do not appear in
     # the properties

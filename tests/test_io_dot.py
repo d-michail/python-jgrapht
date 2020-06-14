@@ -1,5 +1,7 @@
 import pytest
 
+import re
+
 from jgrapht import create_graph, create_property_graph
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
@@ -168,3 +170,64 @@ def test_read_dot_property_graph_from_string1():
     assert g.vertex_props['v0']['color'] == 'red'
     assert g.vertex_props['v1']['color'] == 'blue'
     assert g.edge_props['e0']['capacity'] == '5.0'
+
+
+def test_read_dot_property_graph_from_filename(tmpdir):
+    tmpfile = tmpdir.join("dot.out")
+    tmpfilename = str(tmpfile)
+
+    expected=r"""digraph G {
+  v1 [ color="red" ];
+  v2 [ color="blue" ];
+  v1 -> v2 [ capacity="5.0" ];
+}
+"""
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(expected)
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    read_dot(g, tmpfilename)
+
+    assert g.vertices == {'v0', 'v1'}
+    assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
+    assert g.vertex_props['v0']['color'] == 'red'
+    assert g.vertex_props['v1']['color'] == 'blue'
+    assert g.edge_props['e0']['capacity'] == '5.0'
+
+
+def test_read_dot_graph_from_string():
+
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    expected=r"""digraph G {
+  v1 [ color="red" ];
+  v2 [ color="blue" ];
+  v1 -> v2 [ capacity="5.0" ];
+}
+"""
+
+    def import_id(id):
+        print(id)
+        m = re.match(r'v([0-9]+)', id)
+        vid = int(m.group(1))
+        return vid
+
+    parse_dot(g, expected, import_id_cb=import_id)
+
+    assert g.vertices == {1, 2}
+    assert g.edge_tuple(0) == (1, 2, 1.0)
