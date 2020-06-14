@@ -182,3 +182,38 @@ def test_read_csv_property_graph_from_string1():
     assert g.edge_tuple('e2') == ('v2', 'v3', 1.0)
     assert g.vertex_props == {}
     assert g.edge_props == {}
+
+
+def test_read_csv_property_graph_from_file(tmpdir):
+    tmpfile = tmpdir.join("csv.out")
+    tmpfilename = str(tmpfile)
+
+    input_string = """1,2
+2,3
+3,4
+4,1
+"""
+
+    with open(tmpfilename, "w") as f:
+        f.write(input_string)
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    def import_id_cb(id):
+        return 'v{}'.format(int(id)+1)
+
+    read_csv(g, tmpfilename, import_id_cb=import_id_cb)
+
+    print (g.vertices)
+
+    assert g.vertices == {'v2', 'v3', 'v4', 'v5'}
+    assert g.edge_tuple('e2') == ('v4', 'v5', 1.0)
+    assert g.vertex_props == {}
+    assert g.edge_props == {}

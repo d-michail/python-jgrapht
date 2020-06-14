@@ -325,6 +325,31 @@ def test_read_dimacs_from_file(tmpdir):
     assert again.splitlines() == dimacs_sp_expected.splitlines()
 
 
+def test_read_dimacs_property_graph_from_file(tmpdir):
+    tmpfile = tmpdir.join("dimacs.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(dimacs_sp_expected)
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()
+    )
+
+    read_dimacs(g, tmpfilename)
+
+    assert g.vertices == {'v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'}
+    assert g.edge_tuple('e6') == ('v0', 'v7', 1.0)
+    assert g.vertex_props == {}
+    assert g.edge_props == {}
+
+
 def test_read_dimacs_property_graph_from_string():
 
     g = create_property_graph(

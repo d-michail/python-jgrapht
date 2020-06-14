@@ -560,6 +560,28 @@ def test_input_gml_from_string(tmpdir):
     assert e_attrs[9]["label"] == "edge 1-2"
 
 
+def test_input_pg_gml_from_file(tmpdir):
+    tmpfile = tmpdir.join("gml.out")
+    tmpfilename = str(tmpfile)
+
+    with open(tmpfilename, "w") as f:
+        f.write(expected)
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+		vertex_supplier=create_vertex_supplier(),
+		edge_supplier=create_edge_supplier(),
+    )
+
+    read_gml(g, tmpfilename)
+
+    assert g.vertices == {'v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'}
+
+
+
 def test_input_gml_nocallbacks(tmpdir):
     tmpfile = tmpdir.join("gml.out")
     tmpfilename = str(tmpfile)

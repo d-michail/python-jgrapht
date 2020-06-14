@@ -161,3 +161,28 @@ def test_read_sparse6_graph_from_string():
 
     assert g.vertices == {0, 1, 2, 3}
     assert g.edge_tuple(0) == (0, 1, 1.0)
+
+
+def test_read_pg_sparse6_graph_from_file(tmpdir):
+    tmpfile = tmpdir.join("gml.out")
+    tmpfilename = str(tmpfile)
+
+    with open(tmpfilename, "w") as f:
+        f.write(":Cca")
+
+    g = create_property_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(type='int'),
+        edge_supplier=create_edge_supplier(type='int'),
+    )
+
+    def import_id_cb(id):
+        return int(id)
+
+    read_graph6sparse6(g, tmpfilename, import_id_cb=import_id_cb)
+
+    assert g.vertices == {0, 1, 2, 3}
+    assert g.edge_tuple(0) == (0, 1, 1.0)
