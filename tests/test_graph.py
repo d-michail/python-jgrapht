@@ -530,6 +530,9 @@ def test_dag():
     assert g.descendants(5) == {6, 7, 8}
     assert g.descendants(9) == {10, 8}
 
+    with pytest.raises(ValueError):
+        g.descendants(50)
+
     g1 = create_dag(allowing_multiple_edges=False, weighted=False)
 
     assert g1.type.directed
@@ -582,6 +585,12 @@ def test_pg_dag():
     assert g.ancestors("5") == {"0", "1", "2", "3", "4"}
     assert g.descendants("5") == {"6", "7", "8"}
     assert g.descendants("9") == {"10", "8"}
+
+    with pytest.raises(ValueError):
+        g.descendants("unknown")
+
+    with pytest.raises(ValueError):
+        g.ancestors("unknown")
 
     g1 = create_property_dag(allowing_multiple_edges=False, weighted=False)
 

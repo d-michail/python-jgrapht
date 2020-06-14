@@ -147,6 +147,19 @@ def test_any_graph():
     with pytest.raises(ValueError):
         g.vertex_props["v30"]["color"] = "blue"
 
+    with pytest.raises(ValueError):
+        g.vertex_props["v30"] = {}
+
+    with pytest.raises(ValueError):
+        del g.vertex_props["v30"]
+
+    del g.vertex_props["v3"]
+    assert len(g.vertex_props) == 1
+    g.vertex_props["v3"]["name"] = "vertex 3"
+    assert len(g.vertex_props) == 2
+
+    repr(g.vertex_props)
+
     g.edge_props["e13"]["length"] = 100.0
     g.edge_props["e13"]["color"] = "white"
     g.edge_props["e14"]["length"] = 150.0
@@ -168,6 +181,34 @@ def test_any_graph():
 
     with pytest.raises(ValueError):
         g.edge_props["e13"]
+
+    repr(g.edge_props)
+
+    with pytest.raises(ValueError):
+        g.edge_props["e53"] = {}
+    del g.edge_props["e14"]
+    with pytest.raises(ValueError):
+        del g.edge_props["e35"]
+    assert len(g.edge_props) == 0
+    g.edge_props["e14"]["color"] = "blue"
+    assert len(g.edge_props) == 1
+
+    with pytest.raises(TypeError):
+        g.edge_props["e14"]["weight"] = "5.0"
+
+    g.edge_props["e14"]["weight"] = 33.3
+    del g.edge_props["e14"]["weight"]
+    assert g.edge_props["e14"]["weight"] == 1.0
+
+    g.edge_props["e14"]["color"] = "blue"
+    del g.edge_props["e14"]["color"]
+
+    g.edge_props["e14"]["color"] = "blue"
+    repr(g.edge_props["e14"])
+
+    assert len(g.edge_props["e14"]) == 1
+
+    assert str(g.edge_props["e14"]) == "{'color': 'blue'}"
 
 
 def test_any_graph_of_graphs():
@@ -348,34 +389,32 @@ def test_on_already_initialized_graph():
 
 
 def test_bad_vertex_supplier_property_graph():
-
     def vertex_supplier():
-        return 'v0'
+        return "v0"
 
     g = create_property_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        vertex_supplier=vertex_supplier
+        vertex_supplier=vertex_supplier,
     )
 
     g.add_vertex()
     with pytest.raises(ValueError):
         g.add_vertex()
-    
+
 
 def test_bad_edge_supplier_property_graph():
-
     def edge_supplier():
-        return 'e0'
+        return "e0"
 
     g = create_property_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        edge_supplier=edge_supplier
+        edge_supplier=edge_supplier,
     )
 
     v0 = g.add_vertex()
@@ -388,7 +427,7 @@ def test_bad_edge_supplier_property_graph():
         g.add_edge(v1, v2)
 
 
-def test_listenable_property_graph(): 
+def test_listenable_property_graph():
 
     g = create_property_graph(
         directed=True,
@@ -400,6 +439,7 @@ def test_listenable_property_graph():
     )
 
     vertices = []
+
     def listener(element, event):
         if event == GraphEvent.VERTEX_ADDED:
             vertices.append(element)
@@ -408,5 +448,5 @@ def test_listenable_property_graph():
 
     complete_graph(g, 5)
 
-    assert vertices == ['v0', 'v1', 'v2', 'v3', 'v4']
+    assert vertices == ["v0", "v1", "v2", "v3", "v4"]
 

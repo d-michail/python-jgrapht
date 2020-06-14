@@ -286,6 +286,22 @@ def test_pg_as_masked_subgraph():
 
     assert masked_graph.edge_props['e7']['capacity'] == 9.0
 
+    with pytest.raises(ValueError):
+        masked_graph.add_vertex()
+
+    with pytest.raises(ValueError):
+        masked_graph.remove_vertex('v2')
+
+    with pytest.raises(ValueError):
+        masked_graph.add_edge('v0', 'v1')
+
+    with pytest.raises(ValueError):
+        masked_graph.remove_edge('e1')    
+
+    assert masked_graph.contains_vertex('v2')
+    assert masked_graph.contains_edge('e1')
+
+    repr(masked_graph)
 
 def test_as_weighted():
     g = create_graph(

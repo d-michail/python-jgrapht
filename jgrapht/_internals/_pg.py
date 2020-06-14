@@ -444,8 +444,8 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
         def __str__(self):
             items = []
             for v in self._graph.vertices:
-                items.append('{}: {}'.format(v, self._storage[v]))
-            return '{' + ', '.join(items) + '}'    
+                items.append("{}: {}".format(v, self._storage[v]))
+            return "{" + ", ".join(items) + "}"
 
     class _EdgeProperties(MutableMapping):
         """Wrapper around a dictionary to ensure edge existence."""
@@ -483,8 +483,8 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
         def __str__(self):
             items = []
             for e in self._graph.edges:
-                items.append('{}: {}'.format(e, self._storage[e]))
-            return '{' + ', '.join(items) + '}'
+                items.append("{}: {}".format(e, self._storage[e]))
+            return "{" + ", ".join(items) + "}"
 
     class _PerEdgeWeightAwareDict(MutableMapping):
         """A dictionary view which knows about the special key weight and delegates
@@ -505,7 +505,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
         def __setitem__(self, key, value):
             if key is "weight":
                 if not isinstance(value, (float)):
-                    raise TypeError("Weight not a floating point number")
+                    raise TypeError("Weight is not a floating point number")
                 self._graph.set_edge_weight(self._edge, value)
             else:
                 self._storage[key] = value
@@ -585,8 +585,9 @@ class _MaskedSubgraphPropertyGraph(_PropertyGraph):
         edge_mask_cb,
         **kwargs
     ):
-        if not isinstance(graph, _MaskedSubgraphView):
-            raise TypeError("Can only be used with a masked subgraph backend")
+        assert isinstance(
+            graph, _MaskedSubgraphView
+        ), "Can only be used with a masked subgraph backend"
 
         super().__init__(graph, vertex_supplier, edge_supplier, copy_from)
         self._vertex_mask_cb = vertex_mask_cb
@@ -627,7 +628,7 @@ class _MaskedSubgraphPropertyGraph(_PropertyGraph):
 
 
 def _create_property_graph_subgraph(
-    property_graph, subgraph, properties_deepcopy=False
+    property_graph, subgraph
 ):
     """Create a property graph subgraph. 
 
@@ -657,10 +658,7 @@ def _create_property_graph_subgraph(
     for vid in subgraph.vertices:
         v = vertex_g_to_pg(property_graph, vid)
         res.add_vertex(vertex=v)
-        if properties_deepcopy:
-            res.vertex_props[v] = copy.deepcopy(property_graph.vertex_props[v])
-        else:
-            res.vertex_props[v] = copy.copy(property_graph.vertex_props[v])
+        res.vertex_props[v] = copy.copy(property_graph.vertex_props[v])
         vertex_map[vid] = v
 
     weighted = subgraph.type.weighted
@@ -671,10 +669,7 @@ def _create_property_graph_subgraph(
             res.add_edge(vertex_map[s], vertex_map[t], weight=w, edge=e)
         else:
             res.add_edge(vertex_map[s], vertex_map[t], edge=e)
-        if properties_deepcopy:
-            res.edge_props[e] = copy.deepcopy(property_graph.edge_props[e])
-        else:
-            res.edge_props[e] = copy.copy(property_graph.edge_props[e])
+        res.edge_props[e] = copy.copy(property_graph.edge_props[e])
 
     return res
 
