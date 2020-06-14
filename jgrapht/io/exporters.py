@@ -24,7 +24,7 @@ def _export_to_string(name, graph, *args):
     alg_method_name = "jgrapht_export_string_" + name
     alg_method = getattr(_backend, alg_method_name)
     handle = alg_method(graph.handle, *args)
-    # We wrap around a python string which copies the result and 
+    # We wrap around a python string which copies the result and
     # releases the actual object inside the backend
     return str(_JGraphTString(handle))
 
@@ -42,23 +42,23 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
         # special case, read identifiers from property graph
         vertex_id_store = _JGraphTIntegerStringMap()
 
-        if export_vertex_id_cb is not None: 
+        if export_vertex_id_cb is not None:
             for k, v in graph._vertex_id_to_hash.items():
                 vid = export_vertex_id_cb(v)
-                if check_valid_id is not None: 
+                if check_valid_id is not None:
                     check_valid_id(vid)
                 vertex_id_store[k] = str(vid)
         else:
             for k, v in graph._vertex_id_to_hash.items():
-                if check_valid_id is not None: 
+                if check_valid_id is not None:
                     check_valid_id(v)
                 vertex_id_store[k] = str(v)
     else:
-        if export_vertex_id_cb is not None: 
+        if export_vertex_id_cb is not None:
             vertex_id_store = _JGraphTIntegerStringMap()
             for v in graph.vertices:
                 vid = export_vertex_id_cb(v)
-                if check_valid_id is not None: 
+                if check_valid_id is not None:
                     check_valid_id(vid)
                 vertex_id_store[v] = str(vid)
     return vertex_id_store
@@ -73,14 +73,16 @@ def _vertex_attributes_store(graph, attributes_dict):
     if is_property_graph(graph):
         # property graph
         attribute_store = _JGraphTAttributeStore()
-        for v in graph.vertices: 
+        for v in graph.vertices:
             for key, value in graph.vertex_props[v].items():
                 attribute_store.put(graph._vertex_hash_to_id[v], key, str(value))
         if attributes_dict is not None:
             for v, attr_dict in attributes_dict.items():
                 for key, value in attr_dict.items():
                     try:
-                        attribute_store.put(graph._vertex_hash_to_id[v], key, str(value))
+                        attribute_store.put(
+                            graph._vertex_hash_to_id[v], key, str(value)
+                        )
                     except KeyError:
                         # ignore
                         pass
@@ -119,7 +121,7 @@ def _edge_attributes_store(graph, attributes_dict):
     if is_property_graph(graph):
         # property graph
         attribute_store = _JGraphTAttributeStore()
-        for e in graph.edges: 
+        for e in graph.edges:
             for key, value in graph.edge_props[e].items():
                 attribute_store.put(graph._edge_hash_to_id[e], key, str(value))
         if attributes_dict is not None:
@@ -152,7 +154,13 @@ DIMACS_FORMATS = dict(
 )
 
 
-def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False, export_vertex_id_cb=None):
+def write_dimacs(
+    graph,
+    filename,
+    format="maxclique",
+    export_edge_weights=False,
+    export_vertex_id_cb=None,
+):
     """Export a graph using the DIMACS format.
 
     For a description of the formats see http://dimacs.rutgers.edu/Challenges . Note that
@@ -196,11 +204,11 @@ def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False,
     format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
 
     def check_valid_id(id):
-        if not isinstance(id, int): 
-            raise TypeError('Identifiers must be integers')
+        if not isinstance(id, int):
+            raise TypeError("Identifiers must be integers")
         if id <= 0:
-            raise ValueError('Identifiers must be positive')
-    
+            raise ValueError("Identifiers must be positive")
+
     vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb)
     custom = [
         format,
@@ -210,7 +218,9 @@ def write_dimacs(graph, filename, format="maxclique", export_edge_weights=False,
     return _export_to_file("dimacs", graph, filename, *custom)
 
 
-def generate_dimacs(graph, format="maxclique", export_edge_weights=False, export_vertex_id_cb=None):
+def generate_dimacs(
+    graph, format="maxclique", export_edge_weights=False, export_vertex_id_cb=None
+):
     """Export a graph to a string using the DIMACS format.
 
     For a description of the formats see http://dimacs.rutgers.edu/Challenges . Note that
@@ -253,10 +263,10 @@ def generate_dimacs(graph, format="maxclique", export_edge_weights=False, export
     format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
 
     def check_valid_id(id):
-        if not isinstance(id, int): 
-            raise TypeError('Identifiers must integers')
+        if not isinstance(id, int):
+            raise TypeError("Identifiers must integers")
         if id <= 0:
-            raise ValueError('Identifiers must be positive')
+            raise ValueError("Identifiers must be positive")
 
     vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb)
     custom = [
@@ -267,7 +277,13 @@ def generate_dimacs(graph, format="maxclique", export_edge_weights=False, export
     return _export_to_string("dimacs", graph, *custom)
 
 
-def write_lemon(graph, filename, export_edge_weights=False, escape_strings=False):
+def write_lemon(
+    graph,
+    filename,
+    export_edge_weights=False,
+    escape_strings=False,
+    export_vertex_id_cb=None,
+):
     """Exports a graph into Lemon graph format (LGF). This is the custom graph format
     used in the `Lemon <https://lemon.cs.elte.hu/trac/lemon>`_ graph library.
 
@@ -275,9 +291,11 @@ def write_lemon(graph, filename, export_edge_weights=False, escape_strings=False
     :param filename: the filename
     :param export_edge_weights: whether to also export edge weights
     :param escape_strings: whether to escape all strings as Java strings
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output    
     :raises IOError: In case of an export error        
     """
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
     custom = [
         export_edge_weights,
         escape_strings,
@@ -286,7 +304,9 @@ def write_lemon(graph, filename, export_edge_weights=False, escape_strings=False
     return _export_to_file("lemon", graph, filename, *custom)
 
 
-def generate_lemon(graph, export_edge_weights=False, escape_strings=False):
+def generate_lemon(
+    graph, export_edge_weights=False, escape_strings=False, export_vertex_id_cb=None
+):
     """Exports a graph to a string using the Lemon graph format (LGF).
     This is the custom graph format used in the 
     `Lemon <https://lemon.cs.elte.hu/trac/lemon>`_ graph library.
@@ -294,10 +314,12 @@ def generate_lemon(graph, export_edge_weights=False, escape_strings=False):
     :param graph: the graph
     :param export_edge_weights: whether to also export edge weights
     :param escape_strings: whether to escape all strings as Java strings
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output    
     :returns: a string contains the exported graph    
     :raises IOError: In case of an export error        
     """
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
     custom = [
         export_edge_weights,
         escape_strings,
@@ -314,6 +336,7 @@ def write_gml(
     export_edge_labels=False,
     per_vertex_attrs_dict=None,
     per_edge_attrs_dict=None,
+    export_vertex_id_cb=None,
 ):
     """Export a graph in GML format (Graph Modelling Language).
 
@@ -357,15 +380,26 @@ def write_gml(
       such an attribute is not provided explicitly, it will be autogenerated      
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output    
     :raises IOError: In case of an export error 
     """
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-    vertex_id_store = _vertex_id_store(graph)
+
+    def check_valid_id(id):
+        if not isinstance(id, int):
+            raise TypeError("Identifiers must be integers")
+        if id < 0:
+            raise ValueError("Identifiers must be non-negative")
+
+    vertex_id_store = _vertex_id_store(
+        graph, check_valid_id=check_valid_id, export_vertex_id_cb=export_vertex_id_cb
+    )
 
     custom = [
         export_edge_weights,
-        export_vertex_labels, 
+        export_vertex_labels,
         export_edge_labels,
         vertex_attribute_store.handle if vertex_attribute_store is not None else None,
         edge_attribute_store.handle if edge_attribute_store is not None else None,
@@ -382,6 +416,7 @@ def generate_gml(
     export_edge_labels=False,
     per_vertex_attrs_dict=None,
     per_edge_attrs_dict=None,
+    export_vertex_id_cb=None,
 ):
     """Export a graph to a string in GML format (Graph Modelling Language).
 
@@ -424,12 +459,23 @@ def generate_gml(
       such an attribute is not provided explicitly, it will be autogenerated          
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output    
     :returns: a string contains the exported graph    
     :raises IOError: In case of an export error 
     """
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-    vertex_id_store = _vertex_id_store(graph)
+
+    def check_valid_id(id):
+        if not isinstance(id, int):
+            raise TypeError("Identifiers must be integers")
+        if id < 0:
+            raise ValueError("Identifiers must be non-negative")
+
+    vertex_id_store = _vertex_id_store(
+        graph, check_valid_id=check_valid_id, export_vertex_id_cb=export_vertex_id_cb
+    )
 
     custom = [
         export_edge_weights,
@@ -443,7 +489,13 @@ def generate_gml(
     return _export_to_string("gml", graph, *custom)
 
 
-def write_json(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
+def write_json(
+    graph,
+    filename,
+    per_vertex_attrs_dict=None,
+    per_edge_attrs_dict=None,
+    export_vertex_id_cb=None,
+):
     """Exports a graph using `JSON <https://tools.ietf.org/html/rfc8259>`_.
 
     The output is one object which contains:
@@ -462,11 +514,13 @@ def write_json(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=
     :param filename: Filename to write
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output        
     :raises IOError: In case of an export error 
     """
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
 
     custom = [
         vertex_attribute_store.handle if vertex_attribute_store is not None else None,
@@ -477,7 +531,12 @@ def write_json(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=
     return _export_to_file("json", graph, filename, *custom)
 
 
-def generate_json(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
+def generate_json(
+    graph,
+    per_vertex_attrs_dict=None,
+    per_edge_attrs_dict=None,
+    export_vertex_id_cb=None,
+):
     """Exports a graph to string using `JSON <https://tools.ietf.org/html/rfc8259>`_.
 
     The output is one object which contains:
@@ -495,12 +554,14 @@ def generate_json(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
     :param graph: The graph to export
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output        
     :returns: a string contains the exported graph    
     :raises IOError: In case of an export error 
     """
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
 
     custom = [
         vertex_attribute_store.handle if vertex_attribute_store is not None else None,
@@ -527,6 +588,7 @@ def write_csv(
     export_edge_weights=False,
     matrix_format_nodeid=False,
     matrix_format_zero_when_no_edge=True,
+    export_vertex_id_cb=None,
 ):
     """Export a graph using the CSV format.
 
@@ -541,10 +603,12 @@ def write_csv(
     :param matrix_format_node_id: only for the matrix format, whether to export node identifiers
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the output should contain
            zero for missing edges
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output               
     :raises IOError: in case of an export error
     """
     format = CSV_FORMATS.get(format, _backend.CSV_FORMAT_ADJACENCY_LIST)
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
     custom = [
         format,
         export_edge_weights,
@@ -561,6 +625,7 @@ def generate_csv(
     export_edge_weights=False,
     matrix_format_nodeid=False,
     matrix_format_zero_when_no_edge=True,
+    export_vertex_id_cb=None,
 ):
     """Export a graph to string using the CSV format.
 
@@ -574,11 +639,13 @@ def generate_csv(
     :param matrix_format_node_id: only for the matrix format, whether to export node identifiers
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the output should contain
            zero for missing edges
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output               
     :returns: a string contains the exported graph           
     :raises IOError: in case of an export error
     """
     format = CSV_FORMATS.get(format, _backend.CSV_FORMAT_ADJACENCY_LIST)
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
     custom = [
         format,
         export_edge_weights,
@@ -599,6 +666,7 @@ def write_gexf(
     export_edge_labels=False,
     export_edge_types=False,
     export_meta=False,
+    export_vertex_id_cb=None,
 ):
     """Exports a graph to a GEXF file.
 
@@ -648,6 +716,8 @@ def write_gexf(
     :param export_edge_labels: whether to export edge labels
     :param export_edge_types: whether to export edge types
     :param export_meta: whether to export meta tag
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output        
     :raises IOError: In case of an export error         
     """
     attrs_registry = _JGraphTAttributesRegistry()
@@ -656,7 +726,7 @@ def write_gexf(
 
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
     edge_id_store = _edge_id_store(graph)
 
     custom = [
@@ -683,6 +753,7 @@ def generate_gexf(
     export_edge_labels=False,
     export_edge_types=False,
     export_meta=False,
+    export_vertex_id_cb=None,
 ):
     """Exports a graph to string using GEXF.
 
@@ -731,6 +802,8 @@ def generate_gexf(
     :param export_edge_labels: whether to export edge labels
     :param export_edge_types: whether to export edge types
     :param export_meta: whether to export meta tag
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output        
     :returns: a string contains the exported graph    
     :raises IOError: In case of an export error         
     """
@@ -740,7 +813,7 @@ def generate_gexf(
 
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
     edge_id_store = _edge_id_store(graph)
 
     custom = [
@@ -758,7 +831,13 @@ def generate_gexf(
     return _export_to_string("gexf", graph, *custom)
 
 
-def write_dot(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
+def write_dot(
+    graph,
+    filename,
+    per_vertex_attrs_dict=None,
+    per_edge_attrs_dict=None,
+    export_vertex_id_cb=None,
+):
     """Exports a graph to DOT format.
 
     For a description of the format see https://en.wikipedia.org/wiki/DOT_language.
@@ -769,11 +848,13 @@ def write_dot(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=N
     :param filename: Filename to write
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output        
     :raises IOError: In case of an export error         
     """
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
 
     custom = [
         vertex_attribute_store.handle if vertex_attribute_store is not None else None,
@@ -784,7 +865,12 @@ def write_dot(graph, filename, per_vertex_attrs_dict=None, per_edge_attrs_dict=N
     return _export_to_file("dot", graph, filename, *custom)
 
 
-def generate_dot(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
+def generate_dot(
+    graph,
+    per_vertex_attrs_dict=None,
+    per_edge_attrs_dict=None,
+    export_vertex_id_cb=None,
+):
     """Exports a graph to string using DOT format.
 
     For a description of the format see https://en.wikipedia.org/wiki/DOT_language.
@@ -794,12 +880,14 @@ def generate_dot(graph, per_vertex_attrs_dict=None, per_edge_attrs_dict=None):
     :param graph: The graph to export
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output        
     :returns: a string contains the exported graph    
     :raises IOError: In case of an export error         
     """
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
 
     custom = [
         vertex_attribute_store.handle if vertex_attribute_store is not None else None,
@@ -868,6 +956,7 @@ def write_graphml(
     export_edge_weights=False,
     export_vertex_labels=False,
     export_edge_labels=False,
+    export_vertex_id_cb=None,    
 ):
     """Exports a graph to a GraphML file.
 
@@ -885,6 +974,8 @@ def write_graphml(
     :param export_edge_weights: whether to export edge weights
     :param export_vertex_labels: whether to export vertex labels    
     :param export_edge_labels: whether to export edge labels
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output        
     :raises IOError: In case of an export error         
     """
     attrs_registry = _JGraphTAttributesRegistry()
@@ -893,7 +984,7 @@ def write_graphml(
 
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
 
     custom = [
         attrs_registry.handle,
@@ -916,6 +1007,7 @@ def generate_graphml(
     export_edge_weights=False,
     export_vertex_labels=False,
     export_edge_labels=False,
+    export_vertex_id_cb=None,    
 ):
     """Exports a graph to string using GraphML.
 
@@ -932,6 +1024,8 @@ def generate_graphml(
     :param export_edge_weights: whether to export edge weights
     :param export_vertex_labels: whether to export vertex labels    
     :param export_edge_labels: whether to export edge labels
+    :param export_vertex_id_cb: function which converts from vertex to identifier to be written 
+      to the output        
     :returns: a string contains the exported graph    
     :raises IOError: In case of an export error         
     """
@@ -941,7 +1035,7 @@ def generate_graphml(
 
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-    vertex_id_store = _vertex_id_store(graph)
+    vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
 
     custom = [
         attrs_registry.handle,

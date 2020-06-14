@@ -721,3 +721,113 @@ def test_read_gml_property_graph_from_string_no_id_map():
     assert g.edge_tuple("e6") == ("v0", "v7", 1.0)
     assert g.vertex_props["v1"]["label"] == "label 1"
     assert g.edge_props["e15"]["label"] == "15"
+
+
+def test_output_bad_property_graph_to_string():
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=False,
+    )
+
+    g.add_vertex('0')
+    g.add_vertex('2')
+
+    g.add_edge('0', '2', edge="e1")
+    g.add_edge('2', '0', edge="e2")
+
+    g.vertex_props['0']["color"] = "red"
+
+    g.edge_props["e1"]["type"] = "forward"
+    g.edge_props["e2"]["type"] = "backward"
+
+    # test bad keys are ignores
+    more_vertex_props = {1: {"color": "green"}}
+    more_edge_props = {"e4": {"type": "forward"}}
+
+    with pytest.raises(TypeError):
+        out = generate_gml(
+            g, per_vertex_attrs_dict=more_vertex_props, per_edge_attrs_dict=more_edge_props
+        )
+
+
+def test_output_bad_property_graph_to_string_with_convert():
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=True,
+        weighted=False,
+    )
+
+    g.add_vertex('0')
+    g.add_vertex('2')
+
+    g.add_edge('0', '2', edge="e1")
+    g.add_edge('2', '0', edge="e2")
+
+    g.vertex_props['0']["color"] = "red"
+
+    g.edge_props["e1"]["type"] = "forward"
+    g.edge_props["e2"]["type"] = "backward"
+
+    # test bad keys are ignores
+    more_vertex_props = {'1': {"color": "green"}}
+    more_edge_props = {"e4": {"type": "forward"}}
+
+    def convert(id): 
+        return int(id)
+
+    out = generate_gml(
+        g, per_vertex_attrs_dict=more_vertex_props, per_edge_attrs_dict=more_edge_props, export_vertex_id_cb=convert
+    )
+
+    assert out.splitlines() == expected5.splitlines()
+
+
+    def bad_convert(id):
+        return -int(id)
+    
+    with pytest.raises(ValueError):
+        out = generate_gml(
+            g, per_vertex_attrs_dict=more_vertex_props, per_edge_attrs_dict=more_edge_props, export_vertex_id_cb=bad_convert
+        )
+
+def test_write_gml_with_bad_converter(tmpdir):
+    g = build_graph()
+    tmpfile = tmpdir.join("gml.out")
+    tmpfilename = str(tmpfile)
+
+    v_labels = {
+        0: {"label": "label 0"},
+        1: {"label": "label 1"},
+        2: {"label": "label 2"},
+        3: {"label": "label 3"},
+    }
+    e_labels = {9: {"label": "edge 1-2"}}
+
+    def bad_convert(id):
+        return str(id)
+
+    with pytest.raises(TypeError):
+        write_gml(g, tmpfilename, False, True, True, v_labels, e_labels, export_vertex_id_cb=bad_convert)
+
+
+def test_write_gml_with_bad_converter2(tmpdir):
+    g = build_graph()
+    tmpfile = tmpdir.join("gml.out")
+    tmpfilename = str(tmpfile)
+
+    v_labels = {
+        0: {"label": "label 0"},
+        1: {"label": "label 1"},
+        2: {"label": "label 2"},
+        3: {"label": "label 3"},
+    }
+    e_labels = {9: {"label": "edge 1-2"}}
+
+    def bad_convert(id):
+        return -id
+
+    with pytest.raises(ValueError):
+        write_gml(g, tmpfilename, False, True, True, v_labels, e_labels, export_vertex_id_cb=bad_convert)
