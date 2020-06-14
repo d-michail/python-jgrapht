@@ -1,6 +1,9 @@
 import pytest
 
 from jgrapht import create_graph, create_property_graph
+from jgrapht.types import GraphEvent
+from jgrapht.utils import create_edge_supplier, create_vertex_supplier
+from jgrapht.generators import complete_graph
 
 
 def test_any_graph():
@@ -11,6 +14,8 @@ def test_any_graph():
         allowing_multiple_edges=True,
         weighted=True,
     )
+
+    assert repr(g) is not None
 
     assert g.type.directed
     assert g.type.allowing_self_loops
@@ -30,6 +35,12 @@ def test_any_graph():
     assert g.vertices == {"v1", "v2", "v3", "v4", "v5", "v6"}
     assert len(g.vertices) == 6
 
+    assert g.add_vertex("v1") == "v1"
+    assert len(g.vertices) == 6
+
+    repr(g.vertices)
+    repr(g.edges)
+
     g.add_edge("v1", "v2", edge="e12")
     g.add_edge("v1", "v3", edge="e13")
     g.add_edge("v1", "v4", edge="e14")
@@ -41,6 +52,9 @@ def test_any_graph():
 
     assert len(g.edges) == 8
 
+    with pytest.raises(ValueError):
+        g.add_edge("v1", "v18", edge="e118")
+
     assert g.edge_source("e51_1") == "v5"
     assert g.edge_target("e51_1") == "v1"
     assert g.edge_source("e51_2") == "v5"
@@ -48,6 +62,9 @@ def test_any_graph():
 
     assert g.edge_target("e66") == "v6"
     assert g.edge_target("e66") == "v6"
+
+    with pytest.raises(ValueError):
+        g.edge_source("e123")
 
     assert g.contains_edge("e13")
     assert not g.contains_edge("e31")
@@ -82,11 +99,21 @@ def test_any_graph():
     g.remove_vertex("v5")
     assert not g.contains_vertex("v5")
     assert len(g.vertices) == 5
+    assert g.number_of_vertices == 5
     assert g.vertices == {"v1", "v2", "v3", "v4", "v6"}
     assert not g.contains_edge("e51_1")
     assert not g.contains_edge("e51_2")
     assert not g.contains_edge("e15")
     assert len(g.edges) == 4
+    assert g.number_of_edges == 4
+
+    with pytest.raises(ValueError):
+        g.remove_vertex(None)
+
+    assert not g.remove_vertex("v5")
+
+    with pytest.raises(ValueError):
+        g.remove_edge(None)
 
     assert set(g.edges) == {"e12", "e13", "e14", "e66"}
 
@@ -116,6 +143,9 @@ def test_any_graph():
 
     with pytest.raises(ValueError):
         g.vertex_props["v20"]
+
+    with pytest.raises(ValueError):
+        g.vertex_props["v30"]["color"] = "blue"
 
     g.edge_props["e13"]["length"] = 100.0
     g.edge_props["e13"]["color"] = "white"
@@ -315,4 +345,68 @@ def test_on_already_initialized_graph():
 
     assert pg.vertices == {0, 1, "new2"}
     assert pg.edges == {"e0", "e1"}
+
+
+def test_bad_vertex_supplier_property_graph():
+
+    def vertex_supplier():
+        return 'v0'
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+        vertex_supplier=vertex_supplier
+    )
+
+    g.add_vertex()
+    with pytest.raises(ValueError):
+        g.add_vertex()
+    
+
+def test_bad_edge_supplier_property_graph():
+
+    def edge_supplier():
+        return 'e0'
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+        edge_supplier=edge_supplier
+    )
+
+    v0 = g.add_vertex()
+    v1 = g.add_vertex()
+    v2 = g.add_vertex()
+
+    g.add_edge(v0, v1)
+
+    with pytest.raises(ValueError):
+        g.add_edge(v1, v2)
+
+
+def test_listenable_property_graph(): 
+
+    g = create_property_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
+    )
+
+    vertices = []
+    def listener(element, event):
+        if event == GraphEvent.VERTEX_ADDED:
+            vertices.append(element)
+
+    g.add_listener(listener)
+
+    complete_graph(g, 5)
+
+    assert vertices == ['v0', 'v1', 'v2', 'v3', 'v4']
 

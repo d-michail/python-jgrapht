@@ -625,8 +625,6 @@ class _MaskedSubgraphPropertyGraph(_PropertyGraph):
             raise ValueError("Edge {} not in graph".format(e))
         return eid
 
-    # TODO: make sure properties work
-
 
 def _create_property_graph_subgraph(
     property_graph, subgraph, properties_deepcopy=False
