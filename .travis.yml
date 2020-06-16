@@ -29,9 +29,6 @@ jobs:
     - os: windows
       language: shell
       install:
-        - choco install python --version=3.8.0
-        - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
-        - python -m pip install twine
         - choco install pyenv-win
         - export PATH="C:\Users\travis\.pyenv\pyenv-win\bin:C:\Users\travis\.pyenv\pyenv-win\shims:$PATH"
         - pyenv install -q 3.6.8-amd64
