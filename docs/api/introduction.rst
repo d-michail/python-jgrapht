@@ -73,6 +73,11 @@ Importers and exporters automatically support property graphs, by importing/expo
 properties.
 
 .. note::
-
    Property graphs are implemented by wrapping the default graph which means that they incur a performance 
    penalty compared to the default graph.
+
+.. note::
+   Property graphs in the context of graph databases, usually support indexing and querying the graph using 
+   some graph query language such as Cypher. The current version of JGraphT does not provide such a
+   functionality, focusing mostly on the algorithmic part.
+   

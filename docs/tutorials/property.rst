@@ -18,7 +18,7 @@ Creating a property graph
   >>> g = jgrapht.create_property_graph(directed=True, weighted=True, allowing_self_loops=False, allowing_multiple_edges=False)
 
 The factory function accepts two additional parameters, called `vertex_supplier` and `edge_supplier`. These are callable instances
-whose job is to return a new object whenever the graph wants to create a vertec or an edge. When not explicitly provided, the 
+whose job is to return a new object whenever the graph wants to create a vertex or an edge. When not explicitly provided, the 
 default implementation creates new :py:class:`object` instances.
 
 Adding vertices
