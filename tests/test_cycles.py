@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 import jgrapht.algorithms.cycles as cycles
 
 
 def test_hierholzer():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -35,6 +35,7 @@ def test_pg_hierholzer():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3])
@@ -50,7 +51,7 @@ def test_pg_hierholzer():
 
 
 def test_chinese_postman():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -76,6 +77,7 @@ def test_pg_chinese_postman():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4])
@@ -92,7 +94,7 @@ def test_pg_chinese_postman():
 
 
 def test_fundamental_cycle_basis_paton():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -126,6 +128,7 @@ def test_pg_fundamental_cycle_basis_paton():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -150,7 +153,7 @@ def test_pg_fundamental_cycle_basis_paton():
 
 
 def test_fundamental_cycle_basis_queuebfs():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -179,7 +182,7 @@ def test_fundamental_cycle_basis_queuebfs():
 
 
 def test_fundamental_cycle_basis_stackbfs():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -209,7 +212,7 @@ def test_fundamental_cycle_basis_stackbfs():
 
 def test_simple_cycles_tiernan():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -244,6 +247,7 @@ def test_pg_simple_cycles_tiernan():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -269,7 +273,7 @@ def test_pg_simple_cycles_tiernan():
 
 def test_simple_cycles_johnson():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -299,7 +303,7 @@ def test_simple_cycles_johnson():
 
 def test_simple_cycles_tarjan():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -329,7 +333,7 @@ def test_simple_cycles_tarjan():
 
 def test_simple_cycles_szwarcfiter_lauer():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -359,7 +363,7 @@ def test_simple_cycles_szwarcfiter_lauer():
 
 def test_simple_cycles_hawick_james():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -393,6 +397,7 @@ def test_pg_fundamental_cycle_basis_queuebfs():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -422,6 +427,7 @@ def test_pg_fundamental_cycle_basis_stackbfs():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -452,6 +458,7 @@ def test_pg_simple_cycles_johnson():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -482,6 +489,7 @@ def test_pg_simple_cycles_tarjan():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -512,6 +520,7 @@ def test_pg_simple_cycles_szwarcfiter_lauer():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -542,6 +551,7 @@ def test_pg_simple_cycles_hawick_james():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])

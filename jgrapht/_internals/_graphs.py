@@ -204,7 +204,7 @@ class _JGraphTDirectedAcyclicGraph(_JGraphTGraph, DirectedAcyclicGraph):
         return _JGraphTIntegerIterator(handle=it_handle)
 
 
-def create_graph(
+def create_int_graph(
     directed=True,
     allowing_self_loops=False,
     allowing_multiple_edges=False,
@@ -225,7 +225,7 @@ def create_graph(
     return _JGraphTGraph(handle)
 
 
-def create_directed_graph(
+def create_int_directed_graph(
     allowing_self_loops=False, allowing_multiple_edges=False, weighted=True,
 ):
     """Create a directed graph.
@@ -236,7 +236,7 @@ def create_directed_graph(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`    
     """
-    return create_graph(
+    return create_int_graph(
         directed=True,
         allowing_self_loops=allowing_self_loops,
         allowing_multiple_edges=allowing_multiple_edges,
@@ -244,7 +244,7 @@ def create_directed_graph(
     )
 
 
-def create_undirected_graph(
+def create_int_undirected_graph(
     allowing_self_loops=False, allowing_multiple_edges=False, weighted=True,
 ):
     """Create an undirected graph.
@@ -255,7 +255,7 @@ def create_undirected_graph(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`    
     """
-    return create_graph(
+    return create_int_graph(
         directed=False,
         allowing_self_loops=allowing_self_loops,
         allowing_multiple_edges=allowing_multiple_edges,
@@ -263,7 +263,7 @@ def create_undirected_graph(
     )
 
 
-def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True):
+def create_sparse_int_graph(num_of_vertices, edgelist, directed=True, weighted=True):
     """Create a sparse graph. 
 
     A sparse graph uses a CSR (compressed-sparse-rows) representation. The result is 
@@ -314,7 +314,7 @@ def create_sparse_graph(num_of_vertices, edgelist, directed=True, weighted=True)
     return _JGraphTGraph(handle)
 
 
-def as_sparse_graph(graph):
+def as_sparse_int_graph(graph):
     """Copy a graph to a sparse graph.
 
     .. note :: The resulting graph might have more vertices that the source graph. The reason is 
@@ -336,12 +336,12 @@ def as_sparse_graph(graph):
     max_vertex = max(graph.vertices)
     edgelist = [graph.edge_tuple(e) for e in graph.edges]
 
-    return create_sparse_graph(
+    return create_sparse_int_graph(
         max_vertex + 1, edgelist, graph.type.directed, graph.type.weighted
     )
 
 
-def create_dag(
+def create_int_dag(
     allowing_multiple_edges=False, weighted=True,
 ):
     """Create a directed acyclic graph.

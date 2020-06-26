@@ -8,14 +8,13 @@ import copy
 from .. import backend
 from ..types import (
     Graph,
-    GraphType,
     GraphEvent,
     AttributesGraph,
     DirectedAcyclicGraph,
     ListenableGraph,
 )
 
-from ._graphs import create_graph as _create_graph, create_dag as _create_dag
+from ._graphs import create_int_graph as _create_int_graph, create_int_dag as _create_int_dag
 from ._views import (
     _ListenableView,
     _UnweightedGraphView,
@@ -25,7 +24,6 @@ from ._views import (
     _WeightedView,
     _MaskedSubgraphView,
 )
-from ._collections import _JGraphTIntegerStringMap
 from ._attrsg_collections import (
     _AttributesGraphVertexSet,
     _AttributesGraphVertexIterator,
@@ -824,7 +822,7 @@ def create_attrs_graph(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.AttributesGraph`    
     """
-    g = _create_graph(
+    g = _create_int_graph(
         directed=directed,
         allowing_self_loops=allowing_self_loops,
         allowing_multiple_edges=allowing_multiple_edges,
@@ -910,7 +908,7 @@ def create_attrs_dag(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph` and :class:`~jgrapht.types.AttributesGraph`
     """
-    g = _create_dag(allowing_multiple_edges=allowing_multiple_edges, weighted=weighted)
+    g = _create_int_dag(allowing_multiple_edges=allowing_multiple_edges, weighted=weighted)
     return _AttributesDirectedAcyclicGraph(
         g, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
     )
