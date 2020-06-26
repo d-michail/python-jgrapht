@@ -15,7 +15,7 @@ from jgrapht.io.importers import parse_graphml
 # %%
 # Let us create a directed graph
 
-g = jgrapht.create_graph(directed=True)
+g = jgrapht.create_int_graph(directed=True)
 
 # %%
 # Let us assume that we are reading the following graph

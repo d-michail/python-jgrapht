@@ -12,8 +12,8 @@ API
 
    introduction
    interfaces
+   int_graph_factories
    graph_factories
-   property_graph_factories
    views
    traversals
    properties

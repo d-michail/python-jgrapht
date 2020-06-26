@@ -2,8 +2,8 @@
 
 .. currentmodule:: jgrapht
 
-Property Graph Tutorial
-=======================
+Attributes Graph Tutorial
+=========================
 
 Property graphs are graphs which can have any Python hashable as vertices and edges. They 
 also provide explicit support for associating attributes/properties with vertices and edges 
@@ -15,7 +15,7 @@ Creating a property graph
 .. nbplot::
 
   >>> import jgrapht
-  >>> g = jgrapht.create_property_graph(directed=True, weighted=True, allowing_self_loops=False, allowing_multiple_edges=False)
+  >>> g = jgrapht.create_attrs_graph(directed=True, weighted=True, allowing_self_loops=False, allowing_multiple_edges=False)
 
 The factory function accepts two additional parameters, called `vertex_supplier` and `edge_supplier`. These are callable instances
 whose job is to return a new object whenever the graph wants to create a vertex or an edge. When not explicitly provided, the 
@@ -164,7 +164,12 @@ Let us associate a label with each vertex of the graph:
 
 .. nbplot::
 
-  >>> g.vertex_props['v0']['label'] = 'vertex 0'
+  >>> g.vertex_attrs['v0']['label'] = 'vertex 0'
+    >>> g.vertex_props['v1']['label'] = 'vertex 1'
+    >>> g.vertex_attrs['v2']['label'] = 'vertex 2'
+    >>> g.vertex_props[obj]['label'] = 'object vertex'
+
+  The same can be done with the edges:
   >>> g.vertex_props['v1']['label'] = 'vertex 1'
   >>> g.vertex_props['v2']['label'] = 'vertex 2'
   >>> g.vertex_props[obj]['label'] = 'object vertex'
@@ -174,14 +179,14 @@ The same can be done with the edges:
 .. nbplot::
 
   >>> for e in g.edges:
-  >>>     g.edge_props[e]['label'] = str(e)
+  >>>     g.edge_attrs[e]['label'] = str(e)
 
 The special attribute/property `weight` for the edges is respected. This means that writing this 
 property requires the property graph to be weighted.
 
 .. nbplot::
 
-  >>> print(g.edge_props[e2]['weight'])
+  >>> print(g.edge_attrs[e2]['weight'])
   >>> g.edge_props[e2]['weight'] = 16.0
 
 Properties are respected on all importers and exporters (whose format supports attributes/properties).

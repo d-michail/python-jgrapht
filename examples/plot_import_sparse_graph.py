@@ -59,7 +59,7 @@ print(edges)
 # contain all vertices from :math:`[0, n)` where :math:`n` is the number of vertices. 
 # Then we call the :py:meth:`jgrapht.create_sparse_graph()` factory.
 
-sparse = jgrapht.create_sparse_graph(5, edges, directed=True, weighted=True)
+sparse = jgrapht.create_sparse_int_graph(5, edges, directed=True, weighted=True)
 
 print(sparse)
 

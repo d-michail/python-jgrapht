@@ -39,45 +39,35 @@ Graph Implementations
 
 The |Bindings| contains two main graph implementations: 
 
- * the (default) graph, and
- * the property graph.
+integer graph
+"""""""""""""
 
-
-(default) graph
-"""""""""""""""
-
-The default graph is oriented torwards simplicity and performance. Its main characteristic is that 
+The *integer graph* is oriented torwards simplicity and performance. Its main characteristic is that 
 vertices and edges are always integers. When manipulating graphs, beside its structure (topology),
 users usually associate additional information with the vertices and edges. Such vertex and edge
 attributes/properties, are fully supported when exporting and importing graphs, by using callback
 functions. Storing such attributes/properties, however, is not performed inside the graph. The
 user is responsible to maintain external dictionaries with the vertex and edge identifier as the key.
-While this might seem like a restriction at first, it allows for several optimizations on the graph level.
-Combined with the simplicity and power of dictionaries in Python, it should pose no real 
+While this might seem like a restriction at first, it allows for several optimizations at the graph
+level. Combined with the simplicity and power of dictionaries in Python, it should pose no real 
 restriction to the user, except possibly some aesthetic effect. 
 
-A special version of the (default) graph which is also supported is the *sparse* graph. The sparse graph 
+A special version of the integer graph which is also supported is the *sparse* graph. The sparse graph 
 is a static variant which can only be bulk-loaded from a list of edges. Its benefits is that it is 
 condiderably faster and less memory hungry, at the expense of not beeing modifiable. It is best suited 
 for less dynamic workloads where the user creates a graph once and executes complex algorithms on it.
 
-property graph
-""""""""""""""
+graph
+"""""
    
-The *property graph* is a graph implementation which allows the use of any Python hashable as vertices 
+The *graph* is a graph implementation which allows the use of any Python hashable as vertices 
 or edges. Additionally, it provides support for maintaining the attributes/properties dictionaries 
 inside the graph. During creation the user can provide a factory function which the graph 
 can use whenever it needs to create new vertices or edges. If not explicitly provided, the implementation 
 uses object instances for all automatically created vertices and edges. 
-Importers and exporters automatically support property graphs, by importing/exporting their associated
-properties.
+Importers and exporters automatically support graphs, by importing/exporting their associated attributes.
 
 .. note::
-   Property graphs are implemented by wrapping the default graph which means that they incur a performance 
-   penalty compared to the default graph.
-
-.. note::
-   Property graphs in the context of graph databases, usually support indexing and querying the graph using 
-   some graph query language such as Cypher. The current version of JGraphT does not provide such a
-   functionality, focusing mostly on the algorithmic part.
+   Graphs are implemented by wrapping the integer graph which means that they incur a performance 
+   penalty compared to the integer graph.
    

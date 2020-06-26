@@ -19,7 +19,7 @@ import random
 # %%
 # Creating a graph is done using the factory method.
 
-g = jgrapht.create_graph(directed=False, weighted=True)
+g = jgrapht.create_int_graph(directed=False, weighted=True)
 
 
 # %%

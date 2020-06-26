@@ -11,19 +11,19 @@ Graph
 
 The main interface of the library is the :class:`Graph <jgrapht.types.Graph>`. All 
 graph instances returned by the library follow this interface and almost all library methods revolve 
-around it. The graph interface contains all the necessary methods to query or modify the graph.
+around it. The graph interface contains all the necessary methods to query or modify a graph.
 
 .. autoclass:: jgrapht.types.Graph
    :inherited-members:
    :members:
 
-PropertyGraph
-^^^^^^^^^^^^^
+AttributesGraph
+^^^^^^^^^^^^^^^
 
-Some graph implementations are also property graphs which means that they can directly associate 
+Some graph implementations are also attribute graphs which means that they can directly associate 
 attributes/properties with the vertices and edges of the graph.
 
-.. autoclass:: jgrapht.types.PropertyGraph
+.. autoclass:: jgrapht.types.AttributesGraph
    :inherited-members:
    :members:
 
