@@ -2,8 +2,8 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerSet
 
-from .._internals._pg import is_property_graph
-from .._internals._pg_collections import _PropertyGraphVertexSet
+from .._internals._attrsg import is_attrs_graph
+from .._internals._attrsg_collections import _AttributesGraphVertexSet
 
 
 def bipartite_partitions(graph):
@@ -16,7 +16,7 @@ def bipartite_partitions(graph):
     """
     res, part1, part2 = _backend.jgrapht_partition_exec_bipartite(graph.handle)
 
-    if is_property_graph(graph):
-        return res, _PropertyGraphVertexSet(part1, graph), _PropertyGraphVertexSet(part2, graph)
+    if is_attrs_graph(graph):
+        return res, _AttributesGraphVertexSet(part1, graph), _AttributesGraphVertexSet(part2, graph)
     else:
         return res, _JGraphTIntegerSet(part1), _JGraphTIntegerSet(part2)

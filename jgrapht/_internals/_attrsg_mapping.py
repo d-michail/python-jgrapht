@@ -7,11 +7,11 @@ from ._wrappers import (
     _JGraphTObjectIterator,
 )
 
-from ._pg import vertex_pg_to_g as _vertex_pg_to_g, vertex_g_to_pg as _vertex_g_to_pg
-from ._pg import edge_pg_to_g as _edge_pg_to_g, edge_g_to_pg as _edge_g_to_pg
+from ._attrsg import vertex_attrsg_to_g as _vertex_pg_to_g, vertex_g_to_attrsg as _vertex_g_to_pg
+from ._attrsg import edge_attrsg_to_g as _edge_pg_to_g, edge_g_to_attrsg as _edge_g_to_pg
 
 
-class _PropertyGraphGraphMapping(_HandleWrapper, GraphMapping):
+class _AttributesGraphGraphMapping(_HandleWrapper, GraphMapping):
     """A mapping between two graphs g1 and g2."""
 
     def __init__(self, handle, graph1, graph2, **kwargs):
@@ -72,10 +72,10 @@ class _PropertyGraphGraphMapping(_HandleWrapper, GraphMapping):
         return result
 
     def __repr__(self):
-        return "_PropertyGraphGraphMapping(%r)" % self._handle
+        return "_AttributesGraphGraphMapping(%r)" % self._handle
 
 
-class _PropertyGraphMappingIterator(_JGraphTObjectIterator):
+class _AttributesGraphMappingIterator(_JGraphTObjectIterator):
     """A graph mapping iterator"""
 
     def __init__(self, handle, graph1, graph2, **kwargs):
@@ -85,7 +85,7 @@ class _PropertyGraphMappingIterator(_JGraphTObjectIterator):
 
     def __next__(self):
         item = super().__next__()
-        return _PropertyGraphGraphMapping(item, self._graph1, self._graph2)
+        return _AttributesGraphGraphMapping(item, self._graph1, self._graph2)
 
     def __repr__(self):
-        return "_PropertyGraphMappingIterator(%r)" % self._handle
+        return "_AttributesGraphMappingIterator(%r)" % self._handle

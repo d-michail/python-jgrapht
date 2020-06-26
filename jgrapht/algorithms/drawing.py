@@ -4,10 +4,10 @@ from .. import backend as _backend
 
 from .._internals._callbacks import _create_wrapped_vertex_comparator_callback
 
-from .._internals._pg import is_property_graph, vertex_g_to_pg as _vertex_g_to_pg
+from .._internals._attrsg import is_attrs_graph, vertex_g_to_attrsg as _vertex_g_to_attrsg
 from .._internals._drawing import _create_layout_model_2d as create_layout_model_2d
-from .._internals._pg_drawing import (
-    _create_property_graph_layout_model_2d as create_property_graph_layout_model_2d,
+from .._internals._attrsg_drawing import (
+    _create_attrs_graph_layout_model_2d as create_attrs_graph_layout_model_2d,
 )
 
 
@@ -29,8 +29,8 @@ def random_layout_2d(graph, area, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    if is_property_graph(graph):
-        model = create_property_graph_layout_model_2d(graph, *area)
+    if is_attrs_graph(graph):
+        model = create_attrs_graph_layout_model_2d(graph, *area)
     else:
         model = create_layout_model_2d(*area)
 
@@ -55,11 +55,11 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
       v1 > v2 in the ordering
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
-    if is_property_graph(graph):
-        model = create_property_graph_layout_model_2d(graph, *area)
+    if is_attrs_graph(graph):
+        model = create_attrs_graph_layout_model_2d(graph, *area)
         def actual_vertex_comparator_cb(v1, v2):
-            v1 = _vertex_g_to_pg(graph, v1)
-            v2 = _vertex_g_to_pg(graph, v2)
+            v1 = _vertex_g_to_attrsg(graph, v1)
+            v2 = _vertex_g_to_attrsg(graph, v2)
             return vertex_comparator_cb(v1, v2)
     else:
         model = create_layout_model_2d(*area)
@@ -99,8 +99,8 @@ def fruchterman_reingold_layout_2d(
     if seed is None:
         seed = int(time.time())
 
-    if is_property_graph(graph):
-        model = create_property_graph_layout_model_2d(graph, *area)
+    if is_attrs_graph(graph):
+        model = create_attrs_graph_layout_model_2d(graph, *area)
     else:
         model = create_layout_model_2d(*area)    
 
@@ -151,8 +151,8 @@ def fruchterman_reingold_indexed_layout_2d(
     if tolerance is None:
         tolerance = 1e-9
 
-    if is_property_graph(graph):
-        model = create_property_graph_layout_model_2d(graph, *area)
+    if is_attrs_graph(graph):
+        model = create_attrs_graph_layout_model_2d(graph, *area)
     else:
         model = create_layout_model_2d(*area)
 

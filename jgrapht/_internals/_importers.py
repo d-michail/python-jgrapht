@@ -7,8 +7,6 @@ from ._ioutils import _create_wrapped_import_string_id_callback
 from ._ioutils import _create_wrapped_attribute_callback
 from ._ioutils import _create_wrapped_notify_id_callback
 
-from ._pg import is_property_graph
-
 
 def _create_graph_callbacks(
     import_id_cb,
@@ -53,7 +51,7 @@ def _create_graph_callbacks(
     )
 
 
-def _create_property_graph_callbacks(
+def _create_attrs_graph_callbacks(
     graph,
     vertex_id_to_hash,
     vertex_id_to_props,
@@ -129,19 +127,19 @@ def _create_property_graph_callbacks(
     )
 
 
-def _populate_properties(
-    graph, vertex_id_to_hash, vertex_id_to_props, edge_id_to_hash, edge_id_to_props
+def _populate_attrs(
+    graph, vertex_id_to_hash, vertex_id_to_props, edge_id_to_hash, edge_id_to_attrs
 ):
-    # After creating, populate the property graph with the new vertices and edges
+    # After creating, populate the attributes graph with the new vertices and edges
     for vid, vhash in vertex_id_to_hash.items():
         graph._add_new_vertex(vid, vhash)
         for key, value in vertex_id_to_props[vid].items():
-            graph.vertex_props[vhash][key] = value
+            graph.vertex_attrs[vhash][key] = value
 
     for eid, ehash in edge_id_to_hash.items():
         graph._add_new_edge(eid, ehash)
-        for key, value in edge_id_to_props[eid].items():
-            graph.edge_props[ehash][key] = value
+        for key, value in edge_id_to_attrs[eid].items():
+            graph.edge_attrs[ehash][key] = value
 
 
 def _parse_graph_dimacs(
@@ -183,7 +181,7 @@ def _parse_graph_dimacs(
     )
 
 
-def _parse_property_graph_dimacs(
+def _parse_attrs_graph_dimacs(
     graph, input_string, import_id_cb, input_is_filename=False
 ):
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
@@ -199,7 +197,7 @@ def _parse_property_graph_dimacs(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_property_graph_callbacks(graph, *idmaps, import_id_cb, integer_ids=True)
+    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb, integer_ids=True)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -216,7 +214,7 @@ def _parse_property_graph_dimacs(
         edge_notify_f_ptr,
     )
 
-    _populate_properties(graph, *idmaps)
+    _populate_attrs(graph, *idmaps)
 
 
 def _parse_graph_gml(
@@ -265,7 +263,7 @@ def _parse_graph_gml(
     )
 
 
-def _parse_property_graph_gml(
+def _parse_attrs_graph_gml(
     graph, input_string, import_id_cb, input_is_filename=False,
 ):
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
@@ -281,7 +279,7 @@ def _parse_property_graph_gml(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_property_graph_callbacks(graph, *idmaps, import_id_cb, integer_ids=True)
+    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb, integer_ids=True)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -300,7 +298,7 @@ def _parse_property_graph_gml(
         edge_notify_f_ptr,
     )
 
-    _populate_properties(graph, *idmaps)
+    _populate_attrs(graph, *idmaps)
 
 
 def _parse_graph_json(
@@ -348,7 +346,7 @@ def _parse_graph_json(
     )
 
 
-def _parse_property_graph_json(
+def _parse_attrs_graph_json(
     graph, input_string, import_id_cb, input_is_filename=False
 ):
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
@@ -364,7 +362,7 @@ def _parse_property_graph_json(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_property_graph_callbacks(graph, *idmaps, import_id_cb,)
+    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb, )
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -383,7 +381,7 @@ def _parse_property_graph_json(
         edge_notify_f_ptr,
     )
 
-    _populate_properties(graph, *idmaps)
+    _populate_attrs(graph, *idmaps)
 
 
 CSV_FORMATS = dict(
@@ -444,7 +442,7 @@ def _parse_graph_csv(
     )
 
 
-def _parse_property_graph_csv(
+def _parse_attrs_graph_csv(
     graph,
     input_string,
     import_id_cb,
@@ -467,7 +465,7 @@ def _parse_property_graph_csv(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_property_graph_callbacks(graph, *idmaps, import_id_cb)
+    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -488,7 +486,7 @@ def _parse_property_graph_csv(
         matrix_format_zero_when_noedge,
     )
 
-    _populate_properties(graph, *idmaps)
+    _populate_attrs(graph, *idmaps)
 
 
 def _parse_graph_gexf(
@@ -538,7 +536,7 @@ def _parse_graph_gexf(
     )
 
 
-def _parse_property_graph_gexf(
+def _parse_attrs_graph_gexf(
     graph,
     input_string,
     import_id_cb,
@@ -558,7 +556,7 @@ def _parse_property_graph_gexf(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_property_graph_callbacks(graph, *idmaps, import_id_cb)
+    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -578,7 +576,7 @@ def _parse_property_graph_gexf(
         edge_notify_f_ptr,
     )
 
-    _populate_properties(graph, *idmaps)
+    _populate_attrs(graph, *idmaps)
 
 
 def _parse_graph_dot(
@@ -626,7 +624,7 @@ def _parse_graph_dot(
     )
 
 
-def _parse_property_graph_dot(
+def _parse_attrs_graph_dot(
     graph,
     input_string,
     import_id_cb,
@@ -645,7 +643,7 @@ def _parse_property_graph_dot(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_property_graph_callbacks(graph, *idmaps, import_id_cb)
+    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -664,7 +662,7 @@ def _parse_property_graph_dot(
         edge_notify_f_ptr,
     )
 
-    _populate_properties(graph, *idmaps)
+    _populate_attrs(graph, *idmaps)
 
 
 def _parse_graph_graph6sparse6(
@@ -712,7 +710,7 @@ def _parse_graph_graph6sparse6(
     )
 
 
-def _parse_property_graph_graph6sparse6(
+def _parse_attrs_graph_graph6sparse6(
     graph,
     input_string,
     import_id_cb,
@@ -731,7 +729,7 @@ def _parse_property_graph_graph6sparse6(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_property_graph_callbacks(graph, *idmaps, import_id_cb)
+    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -750,7 +748,7 @@ def _parse_property_graph_graph6sparse6(
         edge_notify_f_ptr,
     )
 
-    _populate_properties(graph, *idmaps)
+    _populate_attrs(graph, *idmaps)
 
 
 def _parse_graph_graphml(
@@ -807,7 +805,7 @@ def _parse_graph_graphml(
     )
 
 
-def _parse_property_graph_graphml(
+def _parse_attrs_graph_graphml(
     graph,
     input_string,
     import_id_cb,
@@ -828,7 +826,7 @@ def _parse_property_graph_graphml(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_property_graph_callbacks(graph, *idmaps, import_id_cb)
+    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -854,4 +852,4 @@ def _parse_property_graph_graphml(
         edge_notify_f_ptr,
     )
 
-    _populate_properties(graph, *idmaps)
+    _populate_attrs(graph, *idmaps)

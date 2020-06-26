@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 
 from jgrapht.io.exporters import write_gml, generate_gml
@@ -418,7 +418,7 @@ graph
 
 
 def build_graph():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -502,7 +502,7 @@ def test_input_gml(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected)
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -532,7 +532,7 @@ def test_input_gml(tmpdir):
 
 def test_input_gml_from_string(tmpdir):
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -567,7 +567,7 @@ def test_input_pg_gml_from_file(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected)
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -589,7 +589,7 @@ def test_input_gml_nocallbacks(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected)
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -601,7 +601,7 @@ def test_input_gml_nocallbacks(tmpdir):
 
 def test_input_gml_from_string_create_new_vertices():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -617,7 +617,7 @@ def test_input_gml_from_string_create_new_vertices():
 
 def test_input_gml_from_string_preserve_ids():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -635,7 +635,7 @@ def test_input_gml_from_string_preserve_ids():
 
 
 def test_output_to_string():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -655,7 +655,7 @@ def test_output_to_string():
 
 def test_input_gml_from_string_rename_ids(tmpdir):
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -671,7 +671,7 @@ def test_input_gml_from_string_rename_ids(tmpdir):
 
 
 def test_output_property_graph_to_string():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -684,10 +684,10 @@ def test_output_property_graph_to_string():
     g.add_edge(0, 2, edge="e1")
     g.add_edge(2, 0, edge="e2")
 
-    g.vertex_props[0]["color"] = "red"
+    g.vertex_attrs[0]["color"] = "red"
 
-    g.edge_props["e1"]["type"] = "forward"
-    g.edge_props["e2"]["type"] = "backward"
+    g.edge_attrs["e1"]["type"] = "forward"
+    g.edge_attrs["e2"]["type"] = "backward"
 
     # test bad keys are ignores
     more_vertex_props = {1: {"color": "green"}}
@@ -704,7 +704,7 @@ def test_output_property_graph_to_string():
 
 def test_read_gml_property_graph_from_string():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -721,13 +721,13 @@ def test_read_gml_property_graph_from_string():
     assert g.vertices == {"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"}
     assert len(g.edges) == 18
     assert g.edge_tuple("e6") == ("v1", "v8", 1.0)
-    assert g.vertex_props["v2"]["label"] == "label 1"
-    assert g.edge_props["e15"]["label"] == "15"
+    assert g.vertex_attrs["v2"]["label"] == "label 1"
+    assert g.edge_attrs["e15"]["label"] == "15"
 
 
 def test_read_gml_property_graph_from_string_no_id_map():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -741,12 +741,12 @@ def test_read_gml_property_graph_from_string_no_id_map():
     assert g.vertices == {"v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"}
     assert len(g.edges) == 18
     assert g.edge_tuple("e6") == ("v0", "v7", 1.0)
-    assert g.vertex_props["v1"]["label"] == "label 1"
-    assert g.edge_props["e15"]["label"] == "15"
+    assert g.vertex_attrs["v1"]["label"] == "label 1"
+    assert g.edge_attrs["e15"]["label"] == "15"
 
 
 def test_output_bad_property_graph_to_string():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -759,10 +759,10 @@ def test_output_bad_property_graph_to_string():
     g.add_edge('0', '2', edge="e1")
     g.add_edge('2', '0', edge="e2")
 
-    g.vertex_props['0']["color"] = "red"
+    g.vertex_attrs['0']["color"] = "red"
 
-    g.edge_props["e1"]["type"] = "forward"
-    g.edge_props["e2"]["type"] = "backward"
+    g.edge_attrs["e1"]["type"] = "forward"
+    g.edge_attrs["e2"]["type"] = "backward"
 
     # test bad keys are ignores
     more_vertex_props = {1: {"color": "green"}}
@@ -775,7 +775,7 @@ def test_output_bad_property_graph_to_string():
 
 
 def test_output_bad_property_graph_to_string_with_convert():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -788,10 +788,10 @@ def test_output_bad_property_graph_to_string_with_convert():
     g.add_edge('0', '2', edge="e1")
     g.add_edge('2', '0', edge="e2")
 
-    g.vertex_props['0']["color"] = "red"
+    g.vertex_attrs['0']["color"] = "red"
 
-    g.edge_props["e1"]["type"] = "forward"
-    g.edge_props["e2"]["type"] = "backward"
+    g.edge_attrs["e1"]["type"] = "forward"
+    g.edge_attrs["e2"]["type"] = "backward"
 
     # test bad keys are ignores
     more_vertex_props = {'1': {"color": "green"}}

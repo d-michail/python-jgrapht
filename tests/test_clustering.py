@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 import jgrapht.algorithms.clustering as clustering
 
 
 def test_k_spanning_tree():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -37,7 +37,7 @@ def test_k_spanning_tree():
 
 
 def test_label_propagation():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -71,7 +71,7 @@ def test_label_propagation():
 
 
 def test_pg_k_spanning_tree():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -99,7 +99,7 @@ def test_pg_k_spanning_tree():
 
 
 def test_pg_label_propagation():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,

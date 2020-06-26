@@ -5,10 +5,10 @@ from .._internals._collections import (
     _JGraphTIntegerSetIterator,
 )
 
-from .._internals._pg import is_property_graph
-from .._internals._pg_collections import (
-    _PropertyGraphVertexSet,
-    _PropertyGraphVertexSetIterator,
+from .._internals._attrsg import is_attrs_graph
+from .._internals._attrsg_collections import (
+    _AttributesGraphVertexSet,
+    _AttributesGraphVertexSetIterator,
 )
 
 
@@ -29,8 +29,8 @@ def bron_kerbosch(graph, timeout=0):
     """
     custom = [timeout]
     res = _backend.jgrapht_clique_exec_bron_kerbosch(graph.handle, *custom)
-    if is_property_graph(graph):
-        return _PropertyGraphVertexSetIterator(res, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexSetIterator(res, graph)
     else:
         return _JGraphTIntegerSetIterator(res)
 
@@ -56,8 +56,8 @@ def bron_kerbosch_with_pivot(graph, timeout=0):
     """
     custom = [timeout]
     res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot(graph.handle, *custom)
-    if is_property_graph(graph):
-        return _PropertyGraphVertexSetIterator(res, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexSetIterator(res, graph)
     else:
         return _JGraphTIntegerSetIterator(res)
 
@@ -87,8 +87,8 @@ def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
     """
     custom = [timeout]
     res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(graph.handle, *custom)
-    if is_property_graph(graph):
-        return _PropertyGraphVertexSetIterator(res, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexSetIterator(res, graph)
     else:
         return _JGraphTIntegerSetIterator(res)
 
@@ -104,7 +104,7 @@ def chordal_max_clique(graph):
     """
     res = _backend.jgrapht_clique_exec_chordal_max_clique(graph.handle)
 
-    if is_property_graph(graph):
-        return _PropertyGraphVertexSet(res, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexSet(res, graph)
     else:
         return _JGraphTIntegerSet(res)

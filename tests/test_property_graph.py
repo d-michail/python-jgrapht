@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.types import GraphEvent
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 from jgrapht.generators import complete_graph
@@ -8,7 +8,7 @@ from jgrapht.generators import complete_graph
 
 def test_any_graph():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -122,98 +122,98 @@ def test_any_graph():
     assert g.indegree_of("v6") == 1
 
     # now test the properties
-    g.graph_props["name"] = "property graph"
-    assert g.graph_props == {"name": "property graph"}
+    g.graph_attrs["name"] = "property graph"
+    assert g.graph_attrs == {"name": "property graph"}
 
-    g.vertex_props["v2"]["name"] = "vertex 2"
-    g.vertex_props["v2"]["color"] = "red"
-    assert g.vertex_props["v2"]["name"] == "vertex 2"
-    assert g.vertex_props["v2"]["color"] == "red"
-    assert g.vertex_props["v2"] == {"name": "vertex 2", "color": "red"}
+    g.vertex_attrs["v2"]["name"] = "vertex 2"
+    g.vertex_attrs["v2"]["color"] = "red"
+    assert g.vertex_attrs["v2"]["name"] == "vertex 2"
+    assert g.vertex_attrs["v2"]["color"] == "red"
+    assert g.vertex_attrs["v2"] == {"name": "vertex 2", "color": "red"}
 
-    g.vertex_props["v3"]["name"] = "vertex 3"
+    g.vertex_attrs["v3"]["name"] = "vertex 3"
 
     g.add_vertex("new vertex")
-    g.vertex_props["new vertex"]["color"] = "white"
+    g.vertex_attrs["new vertex"]["color"] = "white"
     g.remove_vertex("new vertex")
-    assert dict(g.vertex_props) == {
+    assert dict(g.vertex_attrs) == {
         "v2": {"color": "red", "name": "vertex 2"},
         "v3": {"name": "vertex 3"},
     }
 
     with pytest.raises(ValueError):
-        g.vertex_props["v20"]
+        g.vertex_attrs["v20"]
 
     with pytest.raises(ValueError):
-        g.vertex_props["v30"]["color"] = "blue"
+        g.vertex_attrs["v30"]["color"] = "blue"
 
     with pytest.raises(ValueError):
-        g.vertex_props["v30"] = {}
+        g.vertex_attrs["v30"] = {}
 
     with pytest.raises(ValueError):
-        del g.vertex_props["v30"]
+        del g.vertex_attrs["v30"]
 
-    del g.vertex_props["v3"]
-    assert len(g.vertex_props) == 1
-    g.vertex_props["v3"]["name"] = "vertex 3"
-    assert len(g.vertex_props) == 2
+    del g.vertex_attrs["v3"]
+    assert len(g.vertex_attrs) == 1
+    g.vertex_attrs["v3"]["name"] = "vertex 3"
+    assert len(g.vertex_attrs) == 2
 
-    repr(g.vertex_props)
+    repr(g.vertex_attrs)
 
-    g.edge_props["e13"]["length"] = 100.0
-    g.edge_props["e13"]["color"] = "white"
-    g.edge_props["e14"]["length"] = 150.0
-    g.edge_props["e14"]["color"] = "blue"
+    g.edge_attrs["e13"]["length"] = 100.0
+    g.edge_attrs["e13"]["color"] = "white"
+    g.edge_attrs["e14"]["length"] = 150.0
+    g.edge_attrs["e14"]["color"] = "blue"
 
-    assert dict(g.edge_props) == {
+    assert dict(g.edge_attrs) == {
         "e13": {"color": "white", "length": 100.0},
         "e14": {"color": "blue", "length": 150.0},
     }
 
     with pytest.raises(ValueError):
-        g.edge_props["e1345"]
+        g.edge_attrs["e1345"]
 
     g.remove_edge("e13")
 
-    assert dict(g.edge_props) == {
+    assert dict(g.edge_attrs) == {
         "e14": {"color": "blue", "length": 150.0},
     }
 
     with pytest.raises(ValueError):
-        g.edge_props["e13"]
+        g.edge_attrs["e13"]
 
-    repr(g.edge_props)
+    repr(g.edge_attrs)
 
     with pytest.raises(ValueError):
-        g.edge_props["e53"] = {}
-    del g.edge_props["e14"]
+        g.edge_attrs["e53"] = {}
+    del g.edge_attrs["e14"]
     with pytest.raises(ValueError):
-        del g.edge_props["e35"]
-    assert len(g.edge_props) == 0
-    g.edge_props["e14"]["color"] = "blue"
-    assert len(g.edge_props) == 1
+        del g.edge_attrs["e35"]
+    assert len(g.edge_attrs) == 0
+    g.edge_attrs["e14"]["color"] = "blue"
+    assert len(g.edge_attrs) == 1
 
     with pytest.raises(TypeError):
-        g.edge_props["e14"]["weight"] = "5.0"
+        g.edge_attrs["e14"]["weight"] = "5.0"
 
-    g.edge_props["e14"]["weight"] = 33.3
-    del g.edge_props["e14"]["weight"]
-    assert g.edge_props["e14"]["weight"] == 1.0
+    g.edge_attrs["e14"]["weight"] = 33.3
+    del g.edge_attrs["e14"]["weight"]
+    assert g.edge_attrs["e14"]["weight"] == 1.0
 
-    g.edge_props["e14"]["color"] = "blue"
-    del g.edge_props["e14"]["color"]
+    g.edge_attrs["e14"]["color"] = "blue"
+    del g.edge_attrs["e14"]["color"]
 
-    g.edge_props["e14"]["color"] = "blue"
-    repr(g.edge_props["e14"])
+    g.edge_attrs["e14"]["color"] = "blue"
+    repr(g.edge_attrs["e14"])
 
-    assert len(g.edge_props["e14"]) == 1
+    assert len(g.edge_attrs["e14"]) == 1
 
-    assert str(g.edge_props["e14"]) == "{'color': 'blue'}"
+    assert str(g.edge_attrs["e14"]) == "{'color': 'blue'}"
 
 
 def test_any_graph_of_graphs():
 
-    g1 = create_graph(
+    g1 = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -223,7 +223,7 @@ def test_any_graph_of_graphs():
     g1.add_vertex(1)
     g1.add_edge(0, 1)
 
-    g2 = create_graph(
+    g2 = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -233,7 +233,7 @@ def test_any_graph_of_graphs():
     g2.add_vertex(3)
     g2.add_edge(2, 3)
 
-    g3 = create_graph(
+    g3 = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -244,7 +244,7 @@ def test_any_graph_of_graphs():
     g3.add_edge(4, 5)
 
     # create the graph of graphs
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -274,7 +274,7 @@ def test_any_graph_of_graphs():
 
 def test_suppliers_graph():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -320,7 +320,7 @@ def test_with_string_suppliers_graph():
 
     supplier = StringSupplier()
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -366,7 +366,7 @@ def test_on_already_initialized_graph():
             self._count += 1
             return ret
 
-    pg = create_property_graph(
+    pg = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -392,7 +392,7 @@ def test_bad_vertex_supplier_property_graph():
     def vertex_supplier():
         return "v0"
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -409,7 +409,7 @@ def test_bad_edge_supplier_property_graph():
     def edge_supplier():
         return "e0"
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -429,7 +429,7 @@ def test_bad_edge_supplier_property_graph():
 
 def test_listenable_property_graph():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,

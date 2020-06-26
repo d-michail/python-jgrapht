@@ -1,11 +1,11 @@
 from .. import backend
 
 from ._clustering import _JGraphTClustering
-from ._pg_wrappers import _PropertyGraphVertexIterator
+from ._attrsg_wrappers import _AttributesGraphVertexIterator
 
 
-class _PropertyGraphClustering(_JGraphTClustering):
-    """A property graph vertex clustering."""
+class _AttributesGraphClustering(_JGraphTClustering):
+    """An attributes graph vertex clustering."""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -13,7 +13,7 @@ class _PropertyGraphClustering(_JGraphTClustering):
 
     def ith_cluster(self, i):
         res = backend.jgrapht_clustering_ith_cluster_vit(self._handle, i)
-        return _PropertyGraphVertexIterator(res, self._graph)
+        return _AttributesGraphVertexIterator(res, self._graph)
 
     def __repr__(self):
-        return "_PropertyGraphClustering(%r)" % self._handle
+        return "_AttributesGraphClustering(%r)" % self._handle

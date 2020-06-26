@@ -2,10 +2,10 @@ from .. import backend as _backend
 
 from .._internals._mapping import _JGraphTGraphMapping, _JGraphTGraphMappingIterator
 
-from .._internals._pg import is_property_graph
-from .._internals._pg_mapping import (
-    _PropertyGraphGraphMapping,
-    _PropertyGraphMappingIterator,
+from .._internals._attrsg import is_attrs_graph
+from .._internals._attrsg_mapping import (
+    _AttributesGraphGraphMapping,
+    _AttributesGraphMappingIterator,
 )
 
 
@@ -27,8 +27,8 @@ def vf2(graph1, graph2):
     if not exists:
         return None
 
-    if is_property_graph(graph1) or is_property_graph(graph2):
-        return _PropertyGraphMappingIterator(
+    if is_attrs_graph(graph1) or is_attrs_graph(graph2):
+        return _AttributesGraphMappingIterator(
             handle=map_it_handle, graph1=graph1, graph2=graph2
         )
     else:
@@ -60,8 +60,8 @@ def vf2_subgraph(graph1, graph2):
     if not exists:
         return None
 
-    if is_property_graph(graph1) or is_property_graph(graph2):
-        return _PropertyGraphMappingIterator(
+    if is_attrs_graph(graph1) or is_attrs_graph(graph2):
+        return _AttributesGraphMappingIterator(
             handle=map_it_handle, graph1=graph1, graph2=graph2
         )
     else:

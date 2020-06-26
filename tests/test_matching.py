@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 
 import jgrapht.algorithms.matching as matching
 import jgrapht.algorithms.partition as partition
@@ -8,7 +8,7 @@ import jgrapht.generators as generators
 
 
 def test_bipartite_max_cardinality():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -35,7 +35,7 @@ def test_bipartite_max_cardinality():
 
 
 def test_bipartite_perfect_min_weight():
-    bg = create_graph(
+    bg = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -49,7 +49,7 @@ def test_bipartite_perfect_min_weight():
 
 
 def test_bipartite_perfect_min_weight_with_custom_partitions():
-    bg = create_graph(
+    bg = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -70,7 +70,7 @@ def test_bipartite_perfect_min_weight_with_custom_partitions():
 
 
 def test_pg_bipartite_perfect_min_weight_with_custom_partitions():
-    bg = create_property_graph(
+    bg = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -91,7 +91,7 @@ def test_pg_bipartite_perfect_min_weight_with_custom_partitions():
 
 
 def test_greedy_max_cardinality():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -105,7 +105,7 @@ def test_greedy_max_cardinality():
 
 
 def test_greedy_max_cardinality_with_sort():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -119,7 +119,7 @@ def test_greedy_max_cardinality_with_sort():
 
 
 def test_edmonds_max_cardinality():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -137,7 +137,7 @@ def test_edmonds_max_cardinality():
 
 
 def test_greedy_max_weight():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -155,7 +155,7 @@ def test_greedy_max_weight():
 
 
 def test_pathgrowing_max_weight():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -169,7 +169,7 @@ def test_pathgrowing_max_weight():
 
 
 def test_blossom5_max_weight():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -187,7 +187,7 @@ def test_blossom5_max_weight():
 
 
 def test_blossom5_min_weight():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -205,7 +205,7 @@ def test_blossom5_min_weight():
 
 
 def test_pg_bipartite_perfect_min_weight():
-    bg = create_property_graph(
+    bg = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,

@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.generators import complete_graph
 from jgrapht.utils import create_vertex_supplier
 
@@ -10,7 +10,7 @@ from random import Random
 
 
 def build_graph():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -27,7 +27,7 @@ def build_graph():
 
 
 def build_pg_graph():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -175,7 +175,7 @@ def test_tsp_two_opt_improve():
 
 
 def test_random_tsp():
-    g = create_property_graph(directed=False, weighted=True)
+    g = create_graph(directed=False, weighted=True)
 
     g.add_vertex("0")
     g.add_vertex("1")

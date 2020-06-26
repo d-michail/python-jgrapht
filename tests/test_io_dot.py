@@ -2,7 +2,7 @@ import pytest
 
 import re
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.io.exporters import write_dot, generate_dot
@@ -10,7 +10,7 @@ from jgrapht.io.importers import read_dot, parse_dot
 
 
 def build_graph():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -51,7 +51,7 @@ def test_output_dot(tmpdir):
             if attribute_name == "label":
                 assert attribute_value == "ακμή 1-2"
 
-    g1 = create_graph(
+    g1 = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -64,7 +64,7 @@ def test_output_dot(tmpdir):
 
 
 def test_output_to_string():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -88,7 +88,7 @@ def test_output_to_string():
 
 
 def test_property_graph_output_to_string():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -99,9 +99,9 @@ def test_property_graph_output_to_string():
     g.add_vertex('v2')
     g.add_edge('v1', 'v2', edge='e12')
 
-    g.vertex_props['v1']['color'] = 'red'
-    g.vertex_props['v2']['color'] = 'blue'
-    g.edge_props['e12']['capacity'] = 5.0
+    g.vertex_attrs['v1']['color'] = 'red'
+    g.vertex_attrs['v2']['color'] = 'blue'
+    g.edge_attrs['e12']['capacity'] = 5.0
 
     out = generate_dot(g)
 
@@ -117,7 +117,7 @@ def test_property_graph_output_to_string():
 
 def test_read_dot_property_graph_from_string():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -140,14 +140,14 @@ def test_read_dot_property_graph_from_string():
 
     assert g.vertices == {'vv1', 'vv2'}
     assert g.edge_tuple('e0') == ('vv1', 'vv2', 1.0)
-    assert g.vertex_props['vv1']['color'] == 'red'
-    assert g.vertex_props['vv2']['color'] == 'blue'
-    assert g.edge_props['e0']['capacity'] == '5.0'
+    assert g.vertex_attrs['vv1']['color'] == 'red'
+    assert g.vertex_attrs['vv2']['color'] == 'blue'
+    assert g.edge_attrs['e0']['capacity'] == '5.0'
 
 
 def test_read_dot_property_graph_from_string1():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -167,9 +167,9 @@ def test_read_dot_property_graph_from_string1():
 
     assert g.vertices == {'v0', 'v1'}
     assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
-    assert g.vertex_props['v0']['color'] == 'red'
-    assert g.vertex_props['v1']['color'] == 'blue'
-    assert g.edge_props['e0']['capacity'] == '5.0'
+    assert g.vertex_attrs['v0']['color'] == 'red'
+    assert g.vertex_attrs['v1']['color'] == 'blue'
+    assert g.edge_attrs['e0']['capacity'] == '5.0'
 
 
 def test_read_dot_property_graph_from_filename(tmpdir):
@@ -187,7 +187,7 @@ def test_read_dot_property_graph_from_filename(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected)
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -200,14 +200,14 @@ def test_read_dot_property_graph_from_filename(tmpdir):
 
     assert g.vertices == {'v0', 'v1'}
     assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
-    assert g.vertex_props['v0']['color'] == 'red'
-    assert g.vertex_props['v1']['color'] == 'blue'
-    assert g.edge_props['e0']['capacity'] == '5.0'
+    assert g.vertex_attrs['v0']['color'] == 'red'
+    assert g.vertex_attrs['v1']['color'] == 'blue'
+    assert g.edge_attrs['e0']['capacity'] == '5.0'
 
 
 def test_read_dot_graph_from_string():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,

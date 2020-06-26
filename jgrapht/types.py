@@ -832,22 +832,22 @@ class DirectedAcyclicGraph(ABC):
         pass
 
 
-class PropertyGraph(ABC):
-    """A graph which contains vertex/edge/graph properties."""
+class AttributesGraph(ABC):
+    """A graph which contains vertex/edge/graph attributes."""
 
     @abstractmethod
-    def vertex_props(self):
-        """Dictionary with vertex properties."""
+    def vertex_attrs(self):
+        """Dictionary with vertex attributes."""
         pass
 
     @abstractmethod
-    def edge_props(self):
-        """Dictionary with edge properties."""
+    def edge_attrs(self):
+        """Dictionary with edge attributes."""
         pass
 
     @abstractmethod
-    def graph_props(self):
-        """Dictionary with graph properties."""
+    def graph_attrs(self):
+        """Dictionary with graph attributes."""
         pass
 
 

@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 import jgrapht.algorithms.drawing as drawing
 
 
 def test_fr_layout():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -47,7 +47,7 @@ def test_fr_layout():
 
 
 def test_fr_layout_indexed():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -81,7 +81,7 @@ def test_fr_layout_indexed():
 
 
 def test_pg_fr_layout():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -118,7 +118,7 @@ def test_pg_fr_layout():
 
 
 def test_pg_fr_layout_indexed():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,

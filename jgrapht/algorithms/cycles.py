@@ -6,14 +6,14 @@ from .._internals._paths import (
 )
 from .._internals._collections import _JGraphTIntegerListIterator
 
-from .._internals._pg import is_property_graph
-from .._internals._pg_collections import (
-    _PropertyGraphVertexList,
-    _PropertyGraphVertexListIterator,
+from .._internals._attrsg import is_attrs_graph
+from .._internals._attrsg_collections import (
+    _AttributesGraphVertexList,
+    _AttributesGraphVertexListIterator,
 )
-from .._internals._pg_paths import (
-    _PropertyGraphGraphPath,
-    _PropertyGraphGraphPathIterator,
+from .._internals._attrsg_paths import (
+    _AttributesGraphGraphPath,
+    _AttributesGraphGraphPathIterator,
 )
 
 
@@ -41,8 +41,8 @@ def eulerian_cycle(graph):
     if not is_eulerian:
         return None
     
-    if is_property_graph(graph):
-        return _PropertyGraphGraphPath(gp, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphGraphPath(gp, graph)
     else:
         return _JGraphTGraphPath(gp, graph)
 
@@ -68,8 +68,8 @@ def chinese_postman(graph):
     """
     gp = _backend.jgrapht_cycles_chinese_postman_exec_edmonds_johnson(graph.handle)
 
-    if is_property_graph(graph):
-        return _PropertyGraphGraphPath(gp, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphGraphPath(gp, graph)
     else:
         return _JGraphTGraphPath(gp, graph)
 
@@ -95,8 +95,8 @@ def fundamental_cycle_basis_paton(graph):
         graph.handle
     )
 
-    if is_property_graph(graph):
-        return weight, _PropertyGraphGraphPathIterator(cycles_it, graph)
+    if is_attrs_graph(graph):
+        return weight, _AttributesGraphGraphPathIterator(cycles_it, graph)
     else:
         return weight, _JGraphTGraphPathIterator(cycles_it, graph)
 
@@ -125,8 +125,8 @@ def fundamental_cycle_basis_bfs_with_stack(graph):
         graph.handle
     )
 
-    if is_property_graph(graph):
-        return weight, _PropertyGraphGraphPathIterator(cycles_it, graph)
+    if is_attrs_graph(graph):
+        return weight, _AttributesGraphGraphPathIterator(cycles_it, graph)
     else:
         return weight, _JGraphTGraphPathIterator(cycles_it, graph)
 
@@ -154,8 +154,8 @@ def fundamental_cycle_basis_bfs_with_queue(graph):
         graph.handle
     )
 
-    if is_property_graph(graph):
-        return weight, _PropertyGraphGraphPathIterator(cycles_it, graph)
+    if is_attrs_graph(graph):
+        return weight, _AttributesGraphGraphPathIterator(cycles_it, graph)
     else:
         return weight, _JGraphTGraphPathIterator(cycles_it, graph)    
 
@@ -180,8 +180,8 @@ def enumerate_simple_cycles_tarjan(graph):
     """
     cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_tarjan(graph.handle)
 
-    if is_property_graph(graph):
-        return _PropertyGraphVertexListIterator(cycles_it, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexListIterator(cycles_it, graph)
     else:
         return _JGraphTIntegerListIterator(cycles_it)
 
@@ -206,8 +206,8 @@ def enumerate_simple_cycles_johnson(graph):
     """
     cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_johnson(graph.handle)
 
-    if is_property_graph(graph):
-        return _PropertyGraphVertexListIterator(cycles_it, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexListIterator(cycles_it, graph)
     else:
         return _JGraphTIntegerListIterator(cycles_it)
 
@@ -232,8 +232,8 @@ def enumerate_simple_cycles_tiernan(graph):
     """
     cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_tiernan(graph.handle)
 
-    if is_property_graph(graph):
-        return _PropertyGraphVertexListIterator(cycles_it, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexListIterator(cycles_it, graph)
     else:
         return _JGraphTIntegerListIterator(cycles_it)
 
@@ -261,8 +261,8 @@ def enumerate_simple_cycles_szwarcfiter_lauer(graph):
         graph.handle
     )
 
-    if is_property_graph(graph):
-        return _PropertyGraphVertexListIterator(cycles_it, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexListIterator(cycles_it, graph)
     else:
         return _JGraphTIntegerListIterator(cycles_it)
 
@@ -290,7 +290,7 @@ def enumerate_simple_cycles_hawick_james(graph):
         graph.handle
     )
 
-    if is_property_graph(graph):
-        return _PropertyGraphVertexListIterator(cycles_it, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexListIterator(cycles_it, graph)
     else:
         return _JGraphTIntegerListIterator(cycles_it)

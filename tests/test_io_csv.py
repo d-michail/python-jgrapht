@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.io.importers import parse_csv, read_csv
@@ -8,7 +8,7 @@ from jgrapht.io.exporters import write_csv, generate_csv
 
 
 def test_input_csv_from_string_create_new_vertices():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -29,7 +29,7 @@ def test_input_csv_from_string_create_new_vertices():
 
 
 def test_input_csv_from_string_preserve_ids():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -53,7 +53,7 @@ def test_input_csv_from_string_preserve_ids():
 
 def test_export_import(tmpdir):
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -92,7 +92,7 @@ def test_export_import(tmpdir):
 
     # read back
 
-    g1 = create_graph(
+    g1 = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -108,7 +108,7 @@ def test_export_import(tmpdir):
 
 
 def test_output_to_string():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -129,7 +129,7 @@ def test_output_to_string():
 
 def test_read_csv_property_graph_from_string():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -153,13 +153,13 @@ def test_read_csv_property_graph_from_string():
 
     assert g.vertices == {'v2', 'v3', 'v4', 'v5'}
     assert g.edge_tuple('e2') == ('v4', 'v5', 1.0)
-    assert g.vertex_props == {}
-    assert g.edge_props == {}
+    assert g.vertex_attrs == {}
+    assert g.edge_attrs == {}
 
 
 def test_read_csv_property_graph_from_string1():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -180,8 +180,8 @@ def test_read_csv_property_graph_from_string1():
 
     assert g.vertices == {'v0', 'v1', 'v2', 'v3'}
     assert g.edge_tuple('e2') == ('v2', 'v3', 1.0)
-    assert g.vertex_props == {}
-    assert g.edge_props == {}
+    assert g.vertex_attrs == {}
+    assert g.edge_attrs == {}
 
 
 def test_read_csv_property_graph_from_file(tmpdir):
@@ -197,7 +197,7 @@ def test_read_csv_property_graph_from_file(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(input_string)
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -215,5 +215,5 @@ def test_read_csv_property_graph_from_file(tmpdir):
 
     assert g.vertices == {'v2', 'v3', 'v4', 'v5'}
     assert g.edge_tuple('e2') == ('v4', 'v5', 1.0)
-    assert g.vertex_props == {}
-    assert g.edge_props == {}
+    assert g.vertex_attrs == {}
+    assert g.edge_attrs == {}

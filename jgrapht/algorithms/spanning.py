@@ -2,14 +2,14 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerSet
 
-from .._internals._pg import is_property_graph
-from .._internals._pg_collections import _PropertyGraphEdgeSet
+from .._internals._attrsg import is_attrs_graph
+from .._internals._attrsg_collections import _AttributesGraphEdgeSet
 
 
 
 def _wrap_result(graph, weight, mst_handle):
-    if is_property_graph(graph):
-        return weight, _PropertyGraphEdgeSet(mst_handle, graph)
+    if is_attrs_graph(graph):
+        return weight, _AttributesGraphEdgeSet(mst_handle, graph)
     else:
         return weight, _JGraphTIntegerSet(mst_handle)
 

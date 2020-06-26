@@ -1,21 +1,20 @@
 from .. import backend as _backend
 
 from .._internals._collections import (
-    _JGraphTIntegerIterator,
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerIntegerMap,
 )
 
-from .._internals._pg import is_property_graph
-from .._internals._pg_collections import (
-    _PropertyGraphVertexDoubleMap,
-    _PropertyGraphVertexIntegerMap,
+from .._internals._attrsg import is_attrs_graph
+from .._internals._attrsg_collections import (
+    _AttributesGraphVertexDoubleMap,
+    _AttributesGraphVertexIntegerMap,
 )
 
 
 def _wrap_result(graph, scores_handle):
-    if is_property_graph(graph):
-        return _PropertyGraphVertexDoubleMap(scores_handle, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexDoubleMap(scores_handle, graph)
     else:
         return _JGraphTIntegerDoubleMap(scores_handle)
 
@@ -219,8 +218,8 @@ def coreness(graph):
     """
     degeneracy, scores_handle = _backend.jgrapht_scoring_exec_coreness(graph.handle)
 
-    if is_property_graph(graph):
-        return degeneracy, _PropertyGraphVertexIntegerMap(scores_handle, graph)
+    if is_attrs_graph(graph):
+        return degeneracy, _AttributesGraphVertexIntegerMap(scores_handle, graph)
     else:
         return degeneracy, _JGraphTIntegerIntegerMap(scores_handle)
 
@@ -255,7 +254,7 @@ def clustering_coefficient(graph):
         cc_map_handle,
     ) = _backend.jgrapht_scoring_exec_clustering_coefficient(graph.handle)
 
-    if is_property_graph(graph):
-        return global_cc, avg_cc, _PropertyGraphVertexDoubleMap(cc_map_handle, graph)
+    if is_attrs_graph(graph):
+        return global_cc, avg_cc, _AttributesGraphVertexDoubleMap(cc_map_handle, graph)
     else:
         return global_cc, avg_cc, _JGraphTIntegerDoubleMap(cc_map_handle)

@@ -12,8 +12,8 @@ from ._collections import (
     _JGraphTIntegerSet,
     _JGraphTIntegerDoubleMap,
 )
-from ._pg import is_property_graph
-from ._pg_collections import _PropertyGraphVertexSet
+from ._attrsg import is_attrs_graph
+from ._attrsg_collections import _AttributesGraphVertexSet
 from ._graphs import _JGraphTGraph
 
 
@@ -24,8 +24,8 @@ class _JGraphTCut(Cut):
         super().__init__(**kwargs)
         self._graph = graph
         self._capacity = capacity
-        if is_property_graph(graph):
-            self._source_partition = _PropertyGraphVertexSet(source_partition_handle, graph)
+        if is_attrs_graph(graph):
+            self._source_partition = _AttributesGraphVertexSet(source_partition_handle, graph)
         else:
             self._source_partition = _JGraphTIntegerSet(source_partition_handle)
         self._target_partition = None

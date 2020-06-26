@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.io.importers import read_gexf, parse_gexf
@@ -90,7 +90,7 @@ expected2 = r"""<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.ge
 </gexf>"""
 
 def test_input_gexf(tmpdir):
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -103,7 +103,7 @@ def test_input_gexf(tmpdir):
 
 
 def test_input_gexf_with_renumbering(tmpdir):
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -124,7 +124,7 @@ def test_input_gexf_with_renumbering(tmpdir):
 
 def test_export_import(tmpdir):
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -175,7 +175,7 @@ def test_export_import(tmpdir):
 
     # read back
 
-    g1 = create_graph(
+    g1 = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -215,7 +215,7 @@ def test_export_import(tmpdir):
 
 
 def test_output_to_string():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -235,7 +235,7 @@ def test_output_to_string():
 
 
 def test_property_graph_output_to_string():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -246,12 +246,12 @@ def test_property_graph_output_to_string():
     g.add_edge('v1', 'v2', edge='e12')
     g.add_edge('v2', 'v3', edge='e23')
 
-    g.vertex_props['v1']['label'] = "0"
-    g.vertex_props['v1']['name'] = "v1"
-    g.vertex_props['v2']['label'] = "1"
-    g.vertex_props['v2']['name'] = "v2"
-    g.vertex_props['v3']['label'] = "2"
-    g.vertex_props['v3']['name'] = "v3"
+    g.vertex_attrs['v1']['label'] = "0"
+    g.vertex_attrs['v1']['name'] = "v1"
+    g.vertex_attrs['v2']['label'] = "1"
+    g.vertex_attrs['v2']['name'] = "v2"
+    g.vertex_attrs['v3']['label'] = "2"
+    g.vertex_attrs['v3']['name'] = "v3"
 
     out = generate_gexf(g, attrs=[('name', 'node', None, None)])
 
@@ -260,7 +260,7 @@ def test_property_graph_output_to_string():
 
 def test_read_gexf_property_graph_from_string():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -276,19 +276,19 @@ def test_read_gexf_property_graph_from_string():
 
     print(g.vertices)
     print(g.edges)
-    print(g.vertex_props)
-    print(g.edge_props)
+    print(g.vertex_attrs)
+    print(g.edge_attrs)
 
     assert g.vertices == {'vv1', 'vv2', 'vv3'}
     assert g.edges == {'e0', 'e1'}
     assert g.edge_tuple('e0') == ('vv1', 'vv2', 1.0)
-    assert g.vertex_props['vv1']['label'] == '0'
-    assert g.edge_props['e0']['id'] == 'e12'
+    assert g.vertex_attrs['vv1']['label'] == '0'
+    assert g.edge_attrs['e0']['id'] == 'e12'
 
 
 def test_read_gexf_property_graph_from_string1():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -301,14 +301,14 @@ def test_read_gexf_property_graph_from_string1():
 
     print(g.vertices)
     print(g.edges)
-    print(g.vertex_props)
-    print(g.edge_props)
+    print(g.vertex_attrs)
+    print(g.edge_attrs)
 
     assert g.vertices == {'v0', 'v1', 'v2'}
     assert g.edges == {'e0', 'e1'}
     assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
-    assert g.vertex_props['v0']['label'] == '0'
-    assert g.edge_props['e0']['id'] == 'e12'
+    assert g.vertex_attrs['v0']['label'] == '0'
+    assert g.edge_attrs['e0']['id'] == 'e12'
 
 
 def test_read_gexf_property_graph_from_file(tmpdir):
@@ -319,7 +319,7 @@ def test_read_gexf_property_graph_from_file(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected2)
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -335,12 +335,12 @@ def test_read_gexf_property_graph_from_file(tmpdir):
 
     print(g.vertices)
     print(g.edges)
-    print(g.vertex_props)
-    print(g.edge_props)
+    print(g.vertex_attrs)
+    print(g.edge_attrs)
 
     assert g.vertices == {'vv1', 'vv2', 'vv3'}
     assert g.edges == {'e0', 'e1'}
     assert g.edge_tuple('e0') == ('vv1', 'vv2', 1.0)
-    assert g.vertex_props['vv1']['label'] == '0'
-    assert g.edge_props['e0']['id'] == 'e12'
+    assert g.vertex_attrs['vv1']['label'] == '0'
+    assert g.edge_attrs['e0']['id'] == 'e12'
     

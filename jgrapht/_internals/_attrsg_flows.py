@@ -9,19 +9,19 @@ from ._collections import (
 )
 
 from ._graphs import _JGraphTGraph
-from ._pg import (
-    _PropertyGraph,
-    create_property_graph,
-    is_property_graph,
-    vertex_pg_to_g as _vertex_pg_to_g,
-    vertex_g_to_pg as _vertex_g_to_pg,
+from ._attrsg import (
+    _AttributesGraph,
+    create_attrs_graph,
+    is_attrs_graph,
+    vertex_attrsg_to_g as _vertex_pg_to_g,
+    vertex_g_to_attrsg as _vertex_g_to_pg,
 )
-from ._pg_collections import _PropertyGraphEdgeDoubleMap
+from ._attrsg_collections import _AttributesGraphEdgeDoubleMap
 
-from ._flows import _JGraphTCut as _PropertyGraphCut
+from ._flows import _JGraphTCut as _AttributesGraphCut
 
 
-class _PropertyGraphFlow(_PropertyGraphEdgeDoubleMap, Flow):
+class _AttributesGraphFlow(_AttributesGraphEdgeDoubleMap, Flow):
     """Flow representation as a map from edges to double values."""
 
     def __init__(self, graph, handle, source, sink, value, **kwargs):
@@ -46,10 +46,10 @@ class _PropertyGraphFlow(_PropertyGraphEdgeDoubleMap, Flow):
         return self._value
 
     def __repr__(self):
-        return "_PropertyGraphFlow(%r)" % self._handle
+        return "_AttributesGraphFlow(%r)" % self._handle
 
 
-class _PropertyGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
+class _AttributesGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
     """Gomory-Hu Tree."""
 
     def __init__(self, handle, graph, **kwargs):
@@ -61,8 +61,8 @@ class _PropertyGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
         tree_as_graph = _JGraphTGraph(tree_handle)
 
         # The resulting tree has the same vertices as the original graph. When using
-        # property graphs, we have to explicitly copy here, to keep the same effect.
-        res = create_property_graph(
+        # attributes graphs, we have to explicitly copy here, to keep the same effect.
+        res = create_attrs_graph(
             directed=tree_as_graph.type.directed,
             allowing_self_loops=tree_as_graph.type.allowing_self_loops,
             allowing_multiple_edges=tree_as_graph.type.allowing_multiple_edges,
@@ -87,7 +87,7 @@ class _PropertyGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
         cut_value, cut_source_partition_handle = _backend.jgrapht_cut_gomoryhu_min_cut(
             self.handle
         )
-        return _PropertyGraphCut(self._graph, cut_value, cut_source_partition_handle)
+        return _AttributesGraphCut(self._graph, cut_value, cut_source_partition_handle)
 
     def min_st_cut(self, s, t):
         s = _vertex_pg_to_g(self._graph, s)
@@ -96,13 +96,13 @@ class _PropertyGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
             cut_value,
             cut_source_partition_handle,
         ) = _backend.jgrapht_cut_gomoryhu_min_st_cut(self.handle, s, t)
-        return _PropertyGraphCut(self._graph, cut_value, cut_source_partition_handle)
+        return _AttributesGraphCut(self._graph, cut_value, cut_source_partition_handle)
 
     def __repr__(self):
-        return "_PropertyGraphGomoryHuTree(%r)" % self._handle
+        return "_AttributesGraphGomoryHuTree(%r)" % self._handle
 
 
-class _PropertyGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
+class _AttributesGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
     """An Equivalent Flow Tree."""
 
     def __init__(self, handle, graph, **kwargs):
@@ -114,8 +114,8 @@ class _PropertyGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         tree_as_graph = _JGraphTGraph(tree_handle)
 
         # The resulting tree has the same vertices as the original graph. When using
-        # property graphs, we have to explicitly copy here, to keep the same effect.
-        res = create_property_graph(
+        # attributes graphs, we have to explicitly copy here, to keep the same effect.
+        res = create_attrs_graph(
             directed=tree_as_graph.type.directed,
             allowing_self_loops=tree_as_graph.type.allowing_self_loops,
             allowing_multiple_edges=tree_as_graph.type.allowing_multiple_edges,
@@ -142,4 +142,4 @@ class _PropertyGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         return _backend.jgrapht_equivalentflowtree_max_st_flow(self.handle, s, t)
 
     def __repr__(self):
-        return "_PropertyGraphEquivalentFlowTree(%r)" % self._handle
+        return "_AttributesGraphEquivalentFlowTree(%r)" % self._handle

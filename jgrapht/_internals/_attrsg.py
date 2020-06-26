@@ -10,7 +10,7 @@ from ..types import (
     Graph,
     GraphType,
     GraphEvent,
-    PropertyGraph,
+    AttributesGraph,
     DirectedAcyclicGraph,
     ListenableGraph,
 )
@@ -26,24 +26,23 @@ from ._views import (
     _MaskedSubgraphView,
 )
 from ._collections import _JGraphTIntegerStringMap
-from ._pg_collections import (
-    _PropertyGraphVertexSet,
-    _PropertyGraphVertexIterator,
-    _PropertyGraphEdgeIterator,
+from ._attrsg_collections import (
+    _AttributesGraphVertexSet,
+    _AttributesGraphVertexIterator,
+    _AttributesGraphEdgeIterator,
 )
 
 
-class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
-    """A property graph allows the use of any hashable as vertex and edges.
+class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
+    """An attributes graph allows the use of any hashable as vertex and edges.
     
     This is a wrapper around the default graph which has integer identifiers, 
     which means that there is a performance penalty involved. The graph also 
-    supports properties (attributes) on graph vertices/edges and the graph 
-    itself.
+    supports attributes on graph vertices/edges and the graph itself.
 
     This graph does not directly wrap a backend graph, but it passes through 
     the handle which means that it is usable in all algorithms. The result 
-    however will refer to the actual graph and not the property graph wrapper which 
+    however will refer to the actual graph and not the attributes graph wrapper which
     means that it needs to be translated back when returning from the call.
     Most algorithms do such a check and perform the translation automatically.
     """
@@ -51,7 +50,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
     def __init__(
         self, graph, vertex_supplier=None, edge_supplier=None, copy_from=None, **kwargs
     ):
-        """Initialize a property graph
+        """Initialize an attributes graph
 
         :param graph: the actual graph which we are wrapping. Must have integer 
           vertices and edges.
@@ -59,14 +58,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
           None then object instances are used.
         :param edge_supplier: function which returns new edge on each call. If
           None then object instances are used.
-
-        :param vertex_id_to_hash: initial mapping from integer vertices to hash values
-          for the vertices already in the graph
-        :param edge_id_to_hash: initial mapping from integer edge to hash values
-          for the edge already in the graph
-        :param graph_props: graph properties
-        :param vertex_props: vertex properties
-        :param edge_props: edge properties
+        :param copy_from: copy from another graph
         """
         self._graph = graph
         self._vertex_set = None
@@ -89,7 +81,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
             self._vertex_hash_to_id = copy_from._vertex_hash_to_id
             self._vertex_id_to_hash = copy_from._vertex_id_to_hash
             self._vertex_hash_to_props = copy_from._vertex_hash_to_props
-            self._vertex_props = self._VertexProperties(
+            self._vertex_props = self._VertexAttributes(
                 self, self._vertex_hash_to_props
             )
 
@@ -97,7 +89,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
             self._edge_hash_to_id = copy_from._edge_hash_to_id
             self._edge_id_to_hash = copy_from._edge_id_to_hash
             self._edge_hash_to_props = copy_from._edge_hash_to_props
-            self._edge_props = self._EdgeProperties(self, self._edge_hash_to_props)
+            self._edge_props = self._EdgeAttributes(self, self._edge_hash_to_props)
 
             # initialize graph maps
             self._graph_props = copy_from._graph_props
@@ -115,7 +107,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
             self._vertex_hash_to_id = {}
             self._vertex_id_to_hash = {}
             self._vertex_hash_to_props = defaultdict(lambda: {})
-            self._vertex_props = self._VertexProperties(
+            self._vertex_props = self._VertexAttributes(
                 self, self._vertex_hash_to_props
             )
 
@@ -123,7 +115,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
             self._edge_hash_to_id = {}
             self._edge_id_to_hash = {}
             self._edge_hash_to_props = defaultdict(lambda: {})
-            self._edge_props = self._EdgeProperties(self, self._edge_hash_to_props)
+            self._edge_props = self._EdgeAttributes(self, self._edge_hash_to_props)
 
             # initialize graph maps
             self._graph_props = {}
@@ -232,7 +224,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
     @property
     def vertices(self):
         if self._vertex_set is None:
-            self._vertex_set = self._PropertyGraphVertexSet(self)
+            self._vertex_set = self._AttributesGraphVertexSet(self)
         return self._vertex_set
 
     @property
@@ -242,7 +234,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
     @property
     def edges(self):
         if self._edge_set is None:
-            self._edge_set = self._PropertyGraphEdgeSet(self)
+            self._edge_set = self._AttributesGraphEdgeSet(self)
         return self._edge_set
 
     def edges_between(self, u, v):
@@ -264,15 +256,15 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
         return self._create_edge_it(it)
 
     @property
-    def graph_props(self):
+    def graph_attrs(self):
         return self._graph_props
 
     @property
-    def vertex_props(self):
+    def vertex_attrs(self):
         return self._vertex_props
 
     @property
-    def edge_props(self):
+    def edge_attrs(self):
         return self._edge_props
 
     def add_listener(self, listener_cb):
@@ -283,7 +275,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
         self._user_listeners.remove(listener_cb)
 
     def __repr__(self):
-        return "_PropertyGraph(%r)" % self._graph.handle
+        return "_AttributesGraph(%r)" % self._graph.handle
 
     def _get_vertex_id(self, v):
         vid = self._vertex_hash_to_id.get(v)
@@ -336,7 +328,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
         """Listener for removal events. This is needed, as removing
         a graph vertex might also remove edges.
         """
-        # perform changes in the property graph
+        # perform changes in the attributes graph
         if event_type == GraphEvent.VERTEX_ADDED:
             self._add_new_vertex(element)
             for listener in self._user_listeners:
@@ -358,14 +350,14 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
             for listener in self._user_listeners:
                 listener(e, event_type)
 
-    class _PropertyGraphVertexSet(Set):
+    class _AttributesGraphVertexSet(Set):
         def __init__(self, graph):
             self._graph = graph
             self._handle = graph.handle
 
         def __iter__(self):
             res = backend.jgrapht_graph_create_all_vit(self._handle)
-            return _PropertyGraphVertexIterator(res, self._graph)
+            return _AttributesGraphVertexIterator(res, self._graph)
 
         def __len__(self):
             return backend.jgrapht_graph_vertices_count(self._handle)
@@ -379,19 +371,19 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
             return backend.jgrapht_graph_contains_vertex(self._handle, v)
 
         def __repr__(self):
-            return "_PropertyGraphVertexSet(%r)" % self._handle
+            return "_AttributesGraphVertexSet(%r)" % self._handle
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
 
-    class _PropertyGraphEdgeSet(Set):
+    class _AttributesGraphEdgeSet(Set):
         def __init__(self, graph):
             self._graph = graph
             self._handle = graph.handle
 
         def __iter__(self):
             res = backend.jgrapht_graph_create_all_eit(self._handle)
-            return _PropertyGraphEdgeIterator(res, self._graph)
+            return _AttributesGraphEdgeIterator(res, self._graph)
 
         def __len__(self):
             return backend.jgrapht_graph_edges_count(self._handle)
@@ -405,12 +397,12 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
             return backend.jgrapht_graph_contains_edge(self._handle, e)
 
         def __repr__(self):
-            return "_PropertyGraphEdgeSet(%r)" % self._handle
+            return "_AttributesGraphEdgeSet(%r)" % self._handle
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
 
-    class _VertexProperties(MutableMapping):
+    class _VertexAttributes(MutableMapping):
         """Wrapper around a dictionary to ensure vertex existence."""
 
         def __init__(self, graph, storage):
@@ -439,7 +431,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
             return iter(self._storage)
 
         def __repr__(self):
-            return "_PropertyGraph-VertexProperties(%r)" % repr(self._storage)
+            return "_AttributesGraph-VertexAttributes(%r)" % repr(self._storage)
 
         def __str__(self):
             items = []
@@ -447,7 +439,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
                 items.append("{}: {}".format(v, self._storage[v]))
             return "{" + ", ".join(items) + "}"
 
-    class _EdgeProperties(MutableMapping):
+    class _EdgeAttributes(MutableMapping):
         """Wrapper around a dictionary to ensure edge existence."""
 
         def __init__(self, graph, storage):
@@ -478,7 +470,7 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
             return iter(self._storage)
 
         def __repr__(self):
-            return "_PropertyGraph-EdgeProperties(%r)" % repr(self._storage)
+            return "_AttributesGraph-EdgeAttributes(%r)" % repr(self._storage)
 
         def __str__(self):
             items = []
@@ -533,11 +525,11 @@ class _PropertyGraph(Graph, PropertyGraph, ListenableGraph):
             return str(self._storage)
 
 
-class _PropertyDirectedAcyclicGraph(_PropertyGraph, DirectedAcyclicGraph):
+class _AttributesDirectedAcyclicGraph(_AttributesGraph, DirectedAcyclicGraph):
     """The directed acyclic graph wrapper."""
 
     def __init__(self, graph, vertex_supplier=None, edge_supplier=None, **kwargs):
-        """Initialize a property graph
+        """Initialize an attributes graph
 
         :param graph: the actual graph which we are wrapping. Must have integer 
           vertices and edges.
@@ -558,22 +550,22 @@ class _PropertyDirectedAcyclicGraph(_PropertyGraph, DirectedAcyclicGraph):
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
         set_handle = backend.jgrapht_graph_dag_vertex_descendants(self.handle, vid)
-        return _PropertyGraphVertexSet(set_handle, self)
+        return _AttributesGraphVertexSet(set_handle, self)
 
     def ancestors(self, v):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
         set_handle = backend.jgrapht_graph_dag_vertex_ancestors(self.handle, vid)
-        return _PropertyGraphVertexSet(set_handle, self)
+        return _AttributesGraphVertexSet(set_handle, self)
 
     def __iter__(self):
         it_handle = backend.jgrapht_graph_dag_topological_it(self.handle)
-        return _PropertyGraphVertexIterator(it_handle, self)
+        return _AttributesGraphVertexIterator(it_handle, self)
 
 
-class _MaskedSubgraphPropertyGraph(_PropertyGraph):
-    """A masked subgraph property graph."""
+class _MaskedSubgraphAttributesGraph(_AttributesGraph):
+    """A masked subgraph attributes graph."""
 
     def __init__(
         self,
@@ -612,7 +604,7 @@ class _MaskedSubgraphPropertyGraph(_PropertyGraph):
         return e in self.edges and not self._edge_mask_cb(e)
 
     def __repr__(self):
-        return "_MaskedSubgraphPropertyGraph(%r)" % self._graph.handle
+        return "_MaskedSubgraphAttributesGraph(%r)" % self._graph.handle
 
     def _get_vertex_id(self, v):
         vid = self._vertex_hash_to_id.get(v)
@@ -627,198 +619,191 @@ class _MaskedSubgraphPropertyGraph(_PropertyGraph):
         return eid
 
 
-def _create_property_graph_subgraph(
-    property_graph, subgraph
+def _create_attrs_graph_subgraph(
+    attrs_graph, subgraph
 ):
-    """Create a property graph subgraph. 
+    """Create an attributes graph subgraph.
 
-    This function create a property graph with the identical structure as the 
+    This function create an attributes graph with the identical structure as the
     subgraph (which is a normal graph with integer vertices/edges). The assumption
-    is that the subgraph is actual subgraph of the backing graph of the property
+    is that the subgraph is actual subgraph of the backing graph of the attributes
     graph. In other words, for each integer vertex or edge in the subgraph, the 
-    property graph contains a corresponding vertex or edge.
+    attributes graph contains a corresponding vertex or edge.
     
-    The new property graph uses the same vertices and edges that the property graph
+    The new attributes graph uses the same vertices and edges that the attributes graph
     is using and has the same structure as the subgraph. However, its backing graph 
     is a copy and therefore might have different integer vertices/edges.
 
-    :param property_graph: the property graph from which to copy vertices and edges
+    :param attrs_graph: the attributes graph from which to copy vertices and edges
     :param subgraph: the subgraph (must be a backend _JGraphTGraph)
     """
-    res = create_property_graph(
+    res = create_attrs_graph(
         directed=subgraph.type.directed,
         allowing_self_loops=subgraph.type.allowing_self_loops,
         allowing_multiple_edges=subgraph.type.allowing_multiple_edges,
         weighted=subgraph.type.weighted,
-        vertex_supplier=property_graph.vertex_supplier,
-        edge_supplier=property_graph.edge_supplier,
+        vertex_supplier=attrs_graph.vertex_supplier,
+        edge_supplier=attrs_graph.edge_supplier,
     )
 
     vertex_map = {}
     for vid in subgraph.vertices:
-        v = vertex_g_to_pg(property_graph, vid)
+        v = vertex_g_to_attrsg(attrs_graph, vid)
         res.add_vertex(vertex=v)
-        res.vertex_props[v] = copy.copy(property_graph.vertex_props[v])
+        res.vertex_attrs[v] = copy.copy(attrs_graph.vertex_attrs[v])
         vertex_map[vid] = v
 
     weighted = subgraph.type.weighted
     for eid in subgraph.edges:
-        e = edge_g_to_pg(property_graph, eid)
+        e = edge_g_to_attrsg(attrs_graph, eid)
         s, t, w = subgraph.edge_tuple(eid)
         if weighted:
             res.add_edge(vertex_map[s], vertex_map[t], weight=w, edge=e)
         else:
             res.add_edge(vertex_map[s], vertex_map[t], edge=e)
-        res.edge_props[e] = copy.copy(property_graph.edge_props[e])
+        res.edge_attrs[e] = copy.copy(attrs_graph.edge_attrs[e])
 
     return res
 
 
-def as_unweighted_property_graph(property_graph):
-    """Create an unweighted view of a property graph."""
-    graph = property_graph._graph
+def as_unweighted_attrs_graph(attrs_graph):
+    """Create an unweighted view of an attributes graph."""
+    graph = attrs_graph._graph
     unweighted_graph = _UnweightedGraphView(graph)
 
-    unweighted_property_graph = _PropertyGraph(
-        unweighted_graph, copy_from=property_graph
+    unweighted_attrs_graph = _AttributesGraph(
+        unweighted_graph, copy_from=attrs_graph
     )
 
-    return unweighted_property_graph
+    return unweighted_attrs_graph
 
 
-def as_undirected_property_graph(property_graph):
-    """Create an undirected view of a property graph."""
-    graph = property_graph._graph
+def as_undirected_attrs_graph(attrs_graph):
+    """Create an undirected view of an attributes graph."""
+    graph = attrs_graph._graph
     undirected_graph = _UndirectedGraphView(graph)
 
-    undirected_property_graph = _PropertyGraph(
-        undirected_graph, copy_from=property_graph
+    undirected_attrs_graph = _AttributesGraph(
+        undirected_graph, copy_from=attrs_graph
     )
 
-    return undirected_property_graph
+    return undirected_attrs_graph
 
 
-def as_unmodifiable_property_graph(property_graph):
-    """Create an unmodifiable view of a property graph."""
-    graph = property_graph._graph
+def as_unmodifiable_attrs_graph(attrs_graph):
+    """Create an unmodifiable view of an attributes graph."""
+    graph = attrs_graph._graph
     unmodifiable_graph = _UnmodifiableGraphView(graph)
 
-    unmodifiable_property_graph = _PropertyGraph(
-        unmodifiable_graph, copy_from=property_graph
+    unmodifiable_attrs_graph = _AttributesGraph(
+        unmodifiable_graph, copy_from=attrs_graph
     )
 
-    return unmodifiable_property_graph
+    return unmodifiable_attrs_graph
 
 
-def as_edgereversed_property_graph(property_graph):
-    """Create an edge reversed view of a property graph."""
-    graph = property_graph._graph
+def as_edgereversed_attrs_graph(attrs_graph):
+    """Create an edge reversed view of an attributes graph."""
+    graph = attrs_graph._graph
     edgereversed_graph = _EdgeReversedGraphView(graph)
 
-    edgereversed_property_graph = _PropertyGraph(
-        edgereversed_graph, copy_from=property_graph
+    edgereversed_attrs_graph = _AttributesGraph(
+        edgereversed_graph, copy_from=attrs_graph
     )
 
-    return edgereversed_property_graph
+    return edgereversed_attrs_graph
 
 
-def as_weighted_property_graph(
-    property_graph, edge_weight_cb, cache_weights, write_weights_through
+def as_weighted_attrs_graph(
+    attrs_graph, edge_weight_cb, cache_weights, write_weights_through
 ):
-    """Create a weighted view of a property graph."""
-
+    """Create a weighted view of an attributes graph."""
     if edge_weight_cb is not None:
-
         def actual_edge_weight_cb(e):
-            e = edge_g_to_pg(property_graph, e)
+            e = edge_g_to_attrsg(attrs_graph, e)
             return edge_weight_cb(e)
-
     else:
         actual_edge_weight_cb = None
 
-    graph = property_graph._graph
+    graph = attrs_graph._graph
     weighted_graph = _WeightedView(
         graph, actual_edge_weight_cb, cache_weights, write_weights_through
     )
 
-    weighted_property_graph = _PropertyGraph(weighted_graph, copy_from=property_graph)
+    weighted_attrs_graph = _AttributesGraph(weighted_graph, copy_from=attrs_graph)
+    return weighted_attrs_graph
 
-    return weighted_property_graph
 
-
-def as_masked_subgraph_property_graph(
-    property_graph, vertex_mask_cb, edge_mask_cb=None
+def as_masked_subgraph_attrs_graph(
+    attrs_graph, vertex_mask_cb, edge_mask_cb=None
 ):
-    """ Create a masked subgraph view of a property graph."""
-
+    """ Create a masked subgraph view of an attributes graph."""
     def actual_vertex_mask_cb(v):
-        v = vertex_g_to_pg(property_graph, v)
+        v = vertex_g_to_attrsg(attrs_graph, v)
         return vertex_mask_cb(v)
 
     if edge_mask_cb is not None:
-
         def actual_edge_mask_cb(e):
-            e = edge_g_to_pg(property_graph, e)
+            e = edge_g_to_attrsg(attrs_graph, e)
             return edge_mask_cb(e)
-
     else:
         actual_edge_mask_cb = None
 
-    graph = property_graph._graph
+    graph = attrs_graph._graph
     masked_subgraph = _MaskedSubgraphView(
         graph, actual_vertex_mask_cb, actual_edge_mask_cb
     )
 
-    masked_subgraph_property_graph = _MaskedSubgraphPropertyGraph(
+    masked_subgraph_attrs_graph = _MaskedSubgraphAttributesGraph(
         masked_subgraph,
         vertex_supplier=None,
         edge_supplier=None,
-        copy_from=property_graph,
+        copy_from=attrs_graph,
         vertex_mask_cb=vertex_mask_cb,
         edge_mask_cb=edge_mask_cb,
     )
 
-    return masked_subgraph_property_graph
+    return masked_subgraph_attrs_graph
 
 
-def is_property_graph(graph):
-    """Check if a graph instance is a property graph.
+def is_attrs_graph(graph):
+    """Check if a graph instance is an attributes graph.
     
     :param graph: the graph
-    :returns: True if the graph is a property graph, False otherwise.
+    :returns: True if the graph is an attributes graph, False otherwise.
     """
-    return isinstance(graph, (_PropertyGraph, PropertyGraph))
+    return isinstance(graph, (_AttributesGraph, AttributesGraph))
 
 
-def vertex_pg_to_g(graph, vertex):
-    """Translate from a property graph vertex to a graph vertex."""
-    if is_property_graph(graph):
+def vertex_attrsg_to_g(graph, vertex):
+    """Translate from an attributes graph vertex to a graph vertex."""
+    if is_attrs_graph(graph):
         return graph._vertex_hash_to_id[vertex] if vertex is not None else None
     return vertex
 
 
-def vertex_g_to_pg(graph, vertex):
-    """Translate from a graph vertex to a property graph vertex."""
-    if is_property_graph(graph):
+def vertex_g_to_attrsg(graph, vertex):
+    """Translate from a graph vertex to an attributes graph vertex."""
+    if is_attrs_graph(graph):
         return graph._vertex_id_to_hash[vertex] if vertex is not None else None
     return vertex
 
 
-def edge_pg_to_g(graph, edge):
-    """Translate from a property graph edge to a graph edge."""
-    if is_property_graph(graph):
+def edge_attrsg_to_g(graph, edge):
+    """Translate from an attributes graph edge to a graph edge."""
+    if is_attrs_graph(graph):
         return graph._edge_hash_to_id[edge] if edge is not None else None
     return edge
 
 
-def edge_g_to_pg(graph, edge):
-    """Translate from a graph edge to a property graph edge."""
-    if is_property_graph(graph):
+def edge_g_to_attrsg(graph, edge):
+    """Translate from a graph edge to an attributes graph edge."""
+    if is_attrs_graph(graph):
         return graph._edge_id_to_hash[edge] if edge is not None else None
     return edge
 
 
-def create_property_graph(
+def create_attrs_graph(
     directed=True,
     allowing_self_loops=False,
     allowing_multiple_edges=False,
@@ -826,7 +811,7 @@ def create_property_graph(
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create a property graph.
+    """Create an attributes graph.
 
     :param directed: if True the graph will be directed, otherwise undirected
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
@@ -837,7 +822,7 @@ def create_property_graph(
     :param edge_supplier: function which returns new edges on each call. If
         None then object instances are used.    
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.PropertyGraph`    
+    :rtype: :class:`~jgrapht.types.AttributesGraph`    
     """
     g = _create_graph(
         directed=directed,
@@ -845,19 +830,19 @@ def create_property_graph(
         allowing_multiple_edges=allowing_multiple_edges,
         weighted=weighted,
     )
-    return _PropertyGraph(
+    return _AttributesGraph(
         g, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
     )
 
 
-def create_directed_property_graph(
+def create_directed_attrs_graph(
     allowing_self_loops=False,
     allowing_multiple_edges=False,
     weighted=True,
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create a directed property graph.
+    """Create a directed attributes graph.
 
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
@@ -867,9 +852,9 @@ def create_directed_property_graph(
     :param edge_supplier: function which returns new edge on each call. If
         None then object instances are used.        
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.PropertyGraph`    
+    :rtype: :class:`~jgrapht.types.AttributesGraph`    
     """
-    return create_property_graph(
+    return create_attrs_graph(
         directed=True,
         allowing_self_loops=allowing_self_loops,
         allowing_multiple_edges=allowing_multiple_edges,
@@ -879,14 +864,14 @@ def create_directed_property_graph(
     )
 
 
-def create_undirected_property_graph(
+def create_undirected_attrs_graph(
     allowing_self_loops=False,
     allowing_multiple_edges=False,
     weighted=True,
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create an undirected property graph.
+    """Create an undirected attributes graph.
 
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
@@ -896,9 +881,9 @@ def create_undirected_property_graph(
     :param edge_supplier: function which returns new edge on each call. If
         None then object instances are used.        
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.PropertyGraph`    
+    :rtype: :class:`~jgrapht.types.AttributesGraph`    
     """
-    return create_property_graph(
+    return create_attrs_graph(
         directed=False,
         allowing_self_loops=allowing_self_loops,
         allowing_multiple_edges=allowing_multiple_edges,
@@ -908,13 +893,13 @@ def create_undirected_property_graph(
     )
 
 
-def create_property_dag(
+def create_attrs_dag(
     allowing_multiple_edges=False,
     weighted=True,
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create a directed acyclic property graph.
+    """Create a directed acyclic attributes graph.
 
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
@@ -923,9 +908,9 @@ def create_property_dag(
     :param edge_supplier: function which returns new edge on each call. If
         None then object instances are used.        
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph` and :class:`~jgrapht.types.PropertyGraph`    
+    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph` and :class:`~jgrapht.types.AttributesGraph`
     """
     g = _create_dag(allowing_multiple_edges=allowing_multiple_edges, weighted=weighted)
-    return _PropertyDirectedAcyclicGraph(
+    return _AttributesDirectedAcyclicGraph(
         g, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
     )

@@ -1,8 +1,3 @@
-import time
-import ctypes
-
-from ..types import PropertyGraph
-
 from .. import backend as _backend
 from .._internals._wrappers import _JGraphTString
 from .._internals._collections import _JGraphTIntegerStringMap
@@ -10,8 +5,7 @@ from .._internals._attributes import (
     _JGraphTAttributeStore,
     _JGraphTAttributesRegistry,
 )
-from .._internals._paths import _JGraphTGraphPath
-from .._internals._pg import is_property_graph
+from .._internals._attrsg import is_attrs_graph
 
 
 def _export_to_file(name, graph, filename, *args):
@@ -38,8 +32,8 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
       an identifier to be written to file.
     """
     vertex_id_store = None
-    if is_property_graph(graph):
-        # special case, read identifiers from property graph
+    if is_attrs_graph(graph):
+        # special case, read identifiers from attributes graph
         vertex_id_store = _JGraphTIntegerStringMap()
 
         if export_vertex_id_cb is not None:
@@ -65,16 +59,16 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
 
 
 def _vertex_attributes_store(graph, attributes_dict):
-    """Combine the attributes from a property graph and a per-vertex attributes
+    """Combine the attributes from an attributes graph and a per-vertex attributes
     dictionary and create an equivalent structure in the capi. This can then be
     used in order to export a graph with attributes.
     """
     attribute_store = None
-    if is_property_graph(graph):
-        # property graph
+    if is_attrs_graph(graph):
+        # attributes graph
         attribute_store = _JGraphTAttributeStore()
         for v in graph.vertices:
-            for key, value in graph.vertex_props[v].items():
+            for key, value in graph.vertex_attrs[v].items():
                 attribute_store.put(graph._vertex_hash_to_id[v], key, str(value))
         if attributes_dict is not None:
             for v, attr_dict in attributes_dict.items():
@@ -101,11 +95,11 @@ def _vertex_attributes_store(graph, attributes_dict):
 
 def _edge_id_store(graph):
     """Create an edge identifier store inside the capi backend. This only 
-    works for property graphs, otherwise it returns None.
+    works for attribute graphs, otherwise it returns None.
     """
     edge_id_store = None
-    if is_property_graph(graph):
-        # special case, read identifiers from property graph
+    if is_attrs_graph(graph):
+        # special case, read identifiers from an attributes graph
         edge_id_store = _JGraphTIntegerStringMap()
         for k, v in graph._edge_id_to_hash.items():
             edge_id_store[k] = str(v)
@@ -113,16 +107,16 @@ def _edge_id_store(graph):
 
 
 def _edge_attributes_store(graph, attributes_dict):
-    """Combine the attributes from a property graph and a per-edge attributes
+    """Combine the attributes from an attributes graph and a per-edge attributes
     dictionary and create an equivalent structure in the capi. This can then be
     used in order to export a graph with attributes.
     """
     attribute_store = None
-    if is_property_graph(graph):
-        # property graph
+    if is_attrs_graph(graph):
+        # attributes graph
         attribute_store = _JGraphTAttributeStore()
         for e in graph.edges:
-            for key, value in graph.edge_props[e].items():
+            for key, value in graph.edge_attrs[e].items():
                 attribute_store.put(graph._edge_hash_to_id[e], key, str(value))
         if attributes_dict is not None:
             for e, attr_dict in attributes_dict.items():
@@ -169,7 +163,7 @@ def write_dimacs(
     formats. By default the maximum-clique is used.
 
     .. note:: In DIMACS formats the vertices are integers numbered from one. In case of default graphs 
-              (with integer vertices) this translation happens automatically. With property graphs the 
+              (with integer vertices) this translation happens automatically. With attributes graphs the
               user must either use positive integers as vertices, or must explicitly provide a function 
               which does the conversion to a positive integer (`export_vertex_id_cb`).
 
@@ -229,7 +223,7 @@ def generate_dimacs(
     formats. By default the maximum-clique is used.
 
     .. note:: In DIMACS formats the vertices are integers numbered from one. In case of default graphs 
-              (with integer vertices) this translation happens automatically. With property graphs the 
+              (with integer vertices) this translation happens automatically. With attributes graphs the
               user must either use positive integers as vertices, or must explicitly provide a function 
               which does the conversion to a positive integer (`export_vertex_id_cb`). 
 

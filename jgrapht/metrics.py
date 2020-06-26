@@ -5,10 +5,10 @@ from ._internals._collections import (
     _JGraphTIntegerSet,
 )
 
-from ._internals._pg import is_property_graph
-from ._internals._pg_collections import (
-    _PropertyGraphVertexSet,
-    _PropertyGraphVertexDoubleMap,
+from ._internals._attrsg import is_attrs_graph
+from ._internals._attrsg_collections import (
+    _AttributesGraphVertexSet,
+    _AttributesGraphVertexDoubleMap,
 )
 
 
@@ -95,11 +95,11 @@ def measure(graph):
         vertex_eccentricity_map_handle,
     ) = _backend.jgrapht_graph_metrics_measure_graph(graph.handle)
 
-    if is_property_graph(graph):
-        centers = _PropertyGraphVertexSet(center_handle, graph)
-        periphery = _PropertyGraphVertexSet(periphery_handle, graph)
-        pseudo_periphery = _PropertyGraphVertexSet(pseudo_periphery_handle, graph)
-        vertex_eccentricity_map = _PropertyGraphVertexDoubleMap(
+    if is_attrs_graph(graph):
+        centers = _AttributesGraphVertexSet(center_handle, graph)
+        periphery = _AttributesGraphVertexSet(periphery_handle, graph)
+        pseudo_periphery = _AttributesGraphVertexSet(pseudo_periphery_handle, graph)
+        vertex_eccentricity_map = _AttributesGraphVertexDoubleMap(
             vertex_eccentricity_map_handle, graph
         )
     else:

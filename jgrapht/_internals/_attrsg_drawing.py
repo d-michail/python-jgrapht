@@ -2,10 +2,10 @@
 from .. import backend
 
 from ._drawing import _JGraphTLayoutModel2D
-from ._pg import is_property_graph, vertex_pg_to_g as _vertex_pg_to_g
+from ._attrsg import is_attrs_graph, vertex_attrsg_to_g as _vertex_pg_to_g
 
 
-class _PropertyGraphLayoutModel2D(_JGraphTLayoutModel2D):
+class _AttributesGraphLayoutModel2D(_JGraphTLayoutModel2D):
     """A 2D layout model."""
 
     def __init__(self, handle, graph, **kwargs):
@@ -29,12 +29,12 @@ class _PropertyGraphLayoutModel2D(_JGraphTLayoutModel2D):
         super().set_fixed(vertex, fixed)
 
     def __repr__(self):
-        return "_PropertyGraphLayoutModel2D(%r)" % self._handle
+        return "_AttributesGraphLayoutModel2D(%r)" % self._handle
 
 
-def _create_property_graph_layout_model_2d(graph, min_x, min_y, width, height):
+def _create_attrs_graph_layout_model_2d(graph, min_x, min_y, width, height):
     """Factory for a 2d layout model."""
-    if not is_property_graph(graph):
-        raise ValueError('Graph must be a property graph')
+    if not is_attrs_graph(graph):
+        raise ValueError('Graph must be an attributes graph')
     handle = backend.jgrapht_drawing_layout_model_2d_create(min_x, min_y, width, height)
-    return _PropertyGraphLayoutModel2D(handle, graph)
+    return _AttributesGraphLayoutModel2D(handle, graph)

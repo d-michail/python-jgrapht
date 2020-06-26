@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 import jgrapht.algorithms.cycles as cycles
 
 
 def test_hierholzer():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -30,7 +30,7 @@ def test_hierholzer():
 
 
 def test_pg_hierholzer():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -50,7 +50,7 @@ def test_pg_hierholzer():
 
 
 def test_chinese_postman():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -71,7 +71,7 @@ def test_chinese_postman():
 
 
 def test_pg_chinese_postman():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -92,7 +92,7 @@ def test_pg_chinese_postman():
 
 
 def test_fundamental_cycle_basis_paton():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -121,7 +121,7 @@ def test_fundamental_cycle_basis_paton():
 
 
 def test_pg_fundamental_cycle_basis_paton():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -150,7 +150,7 @@ def test_pg_fundamental_cycle_basis_paton():
 
 
 def test_fundamental_cycle_basis_queuebfs():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -179,7 +179,7 @@ def test_fundamental_cycle_basis_queuebfs():
 
 
 def test_fundamental_cycle_basis_stackbfs():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -209,7 +209,7 @@ def test_fundamental_cycle_basis_stackbfs():
 
 def test_simple_cycles_tiernan():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -239,7 +239,7 @@ def test_simple_cycles_tiernan():
 
 def test_pg_simple_cycles_tiernan():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -269,7 +269,7 @@ def test_pg_simple_cycles_tiernan():
 
 def test_simple_cycles_johnson():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -299,7 +299,7 @@ def test_simple_cycles_johnson():
 
 def test_simple_cycles_tarjan():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -329,7 +329,7 @@ def test_simple_cycles_tarjan():
 
 def test_simple_cycles_szwarcfiter_lauer():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -359,7 +359,7 @@ def test_simple_cycles_szwarcfiter_lauer():
 
 def test_simple_cycles_hawick_james():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -388,7 +388,7 @@ def test_simple_cycles_hawick_james():
 
 
 def test_pg_fundamental_cycle_basis_queuebfs():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -417,7 +417,7 @@ def test_pg_fundamental_cycle_basis_queuebfs():
 
 
 def test_pg_fundamental_cycle_basis_stackbfs():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -447,7 +447,7 @@ def test_pg_fundamental_cycle_basis_stackbfs():
 
 
 def test_pg_simple_cycles_johnson():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -477,7 +477,7 @@ def test_pg_simple_cycles_johnson():
 
 def test_pg_simple_cycles_tarjan():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -507,7 +507,7 @@ def test_pg_simple_cycles_tarjan():
 
 def test_pg_simple_cycles_szwarcfiter_lauer():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -537,7 +537,7 @@ def test_pg_simple_cycles_szwarcfiter_lauer():
 
 def test_pg_simple_cycles_hawick_james():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,

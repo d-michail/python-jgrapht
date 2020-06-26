@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.types import GraphEvent
@@ -17,7 +17,7 @@ from jgrapht.views import (
 
 
 def test_as_unweighted():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -54,7 +54,7 @@ def test_as_unweighted():
 
 
 def test_as_undirected():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -88,7 +88,7 @@ def test_as_undirected():
 
 def test_as_unmodifiable():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -121,7 +121,7 @@ def test_as_unmodifiable():
 
 
 def test_as_edge_reversed():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -155,7 +155,7 @@ def test_as_edge_reversed():
 
 
 def test_as_masked_subgraph():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -204,7 +204,7 @@ def test_as_masked_subgraph():
 
 
 def test_pg_as_masked_subgraph():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -224,17 +224,17 @@ def test_pg_as_masked_subgraph():
     g.add_edge('v1', 'v3', edge='e5')
     g.add_edge('v2', 'v4', edge='e6')
 
-    g.vertex_props['v0']['label'] = 'label0'
-    g.vertex_props['v1']['label'] = 'label1'
-    g.vertex_props['v2']['label'] = 'label2'
-    g.vertex_props['v3']['label'] = 'label3'
-    g.vertex_props['v4']['label'] = 'label4'
+    g.vertex_attrs['v0']['label'] = 'label0'
+    g.vertex_attrs['v1']['label'] = 'label1'
+    g.vertex_attrs['v2']['label'] = 'label2'
+    g.vertex_attrs['v3']['label'] = 'label3'
+    g.vertex_attrs['v4']['label'] = 'label4'
 
-    assert g.vertex_props['v0']['label'] == 'label0'
-    assert g.vertex_props['v1']['label'] == 'label1'
-    assert g.vertex_props['v2']['label'] == 'label2'
-    assert g.vertex_props['v3']['label'] == 'label3'
-    assert g.vertex_props['v4']['label'] == 'label4'
+    assert g.vertex_attrs['v0']['label'] == 'label0'
+    assert g.vertex_attrs['v1']['label'] == 'label1'
+    assert g.vertex_attrs['v2']['label'] == 'label2'
+    assert g.vertex_attrs['v3']['label'] == 'label3'
+    assert g.vertex_attrs['v4']['label'] == 'label4'
 
     def vertex_mask(v):
         if v == 'v3':
@@ -267,7 +267,7 @@ def test_pg_as_masked_subgraph():
     assert masked_graph.vertices == {'v0', 'v1', 'v2', 'v4', 'v5'}
 
     g.add_edge('v5', 'v4', edge='e7')
-    g.edge_props['e7']['capacity'] = 9.0
+    g.edge_attrs['e7']['capacity'] = 9.0
 
     assert masked_graph.edges == {'e1', 'e2', 'e6', 'e7'}
 
@@ -276,15 +276,15 @@ def test_pg_as_masked_subgraph():
         masked_graph.add_vertex('v6')
 
     # test properties
-    assert masked_graph.vertex_props['v0']['label'] == 'label0'
-    assert masked_graph.vertex_props['v1']['label'] == 'label1'
-    assert masked_graph.vertex_props['v2']['label'] == 'label2'
-    assert masked_graph.vertex_props['v4']['label'] == 'label4'
+    assert masked_graph.vertex_attrs['v0']['label'] == 'label0'
+    assert masked_graph.vertex_attrs['v1']['label'] == 'label1'
+    assert masked_graph.vertex_attrs['v2']['label'] == 'label2'
+    assert masked_graph.vertex_attrs['v4']['label'] == 'label4'
 
     with pytest.raises(ValueError):
-        assert masked_graph.vertex_props['v3']['label'] == 'label3'
+        assert masked_graph.vertex_attrs['v3']['label'] == 'label3'
 
-    assert masked_graph.edge_props['e7']['capacity'] == 9.0
+    assert masked_graph.edge_attrs['e7']['capacity'] == 9.0
 
     with pytest.raises(ValueError):
         masked_graph.add_vertex()
@@ -304,7 +304,7 @@ def test_pg_as_masked_subgraph():
     repr(masked_graph)
 
 def test_as_weighted():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -332,7 +332,7 @@ def test_as_weighted():
 
 
 def test_as_weighted_with_None_function():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -362,7 +362,7 @@ def test_as_weighted_with_None_function():
 
 
 def test_as_weighted_with_caching():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -391,7 +391,7 @@ def test_as_weighted_with_caching():
 
 
 def test_as_weighted_with_caching_and_write_throught_with_unweighted():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -415,7 +415,7 @@ def test_as_weighted_with_caching_and_write_throught_with_unweighted():
 
 
 def test_as_weighted_with_caching_and_write_throught():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -444,7 +444,7 @@ def test_as_weighted_with_caching_and_write_throught():
 
 
 def test_as_weighted_with_no_caching_and_write_through():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -487,7 +487,7 @@ element 0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
 
 def test_listenable():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -529,13 +529,13 @@ def test_listenable():
 
 def test_union():
 
-    g1 = create_graph(
+    g1 = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
     )
-    g2 = create_graph(
+    g2 = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -579,13 +579,13 @@ def test_union():
 
 def test_union_with_combiner():
 
-    g1 = create_graph(
+    g1 = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
     )
-    g2 = create_graph(
+    g2 = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -632,13 +632,13 @@ def test_union_with_combiner():
 
 def test_bad_union():
 
-    g1 = create_graph(
+    g1 = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
     )
-    g2 = create_graph(
+    g2 = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -654,13 +654,13 @@ def test_bad_union():
 
 def test_pg_bad_union():
 
-    g1 = create_property_graph(
+    g1 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
     )
-    g2 = create_graph(
+    g2 = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -673,7 +673,7 @@ def test_pg_bad_union():
 
 
 def test_pg_as_unweighted():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -699,7 +699,7 @@ def test_pg_as_unweighted():
 
 
 def test_pg_as_undirected():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -712,8 +712,8 @@ def test_pg_as_undirected():
     g.add_edge("0", "1", edge="e1")
     g.add_edge("1", "2", edge="e2")
 
-    g.edge_props['e1']['capacity'] = 5.0
-    g.edge_props['e2']['capacity'] = 15.0
+    g.edge_attrs['e1']['capacity'] = 5.0
+    g.edge_attrs['e2']['capacity'] = 15.0
 
     assert not g.contains_edge_between("1", "0")
 
@@ -726,16 +726,16 @@ def test_pg_as_undirected():
 
     assert ug.contains_edge_between("1", "0")
 
-    assert ug.edge_props['e1']['capacity'] == 5.0
-    assert ug.edge_props['e2']['capacity'] == 15.0
+    assert ug.edge_attrs['e1']['capacity'] == 5.0
+    assert ug.edge_attrs['e2']['capacity'] == 15.0
 
     # test that properties are shared
-    ug.edge_props['e1']['capacity'] = 105.0
-    assert g.edge_props['e1']['capacity'] == 105.0
+    ug.edge_attrs['e1']['capacity'] = 105.0
+    assert g.edge_attrs['e1']['capacity'] == 105.0
 
 
 def test_pg_as_unmodifiable():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -758,7 +758,7 @@ def test_pg_as_unmodifiable():
 
     
 def test_pg_two_wrappers():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -785,7 +785,7 @@ def test_pg_two_wrappers():
 
 
 def test_as_unweighted_on_property_graphs():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -806,10 +806,10 @@ def test_as_unweighted_on_property_graphs():
     g.set_edge_weight('e1', 50.0)
     g.set_edge_weight('e2', 25.0)
 
-    g.vertex_props['v0']['before'] = 'v0'
-    g.vertex_props['v1']['before'] = 'v1'
-    g.edge_props['e0']['before'] = 'e0'
-    g.edge_props['e1']['before'] = 'e1'
+    g.vertex_attrs['v0']['before'] = 'v0'
+    g.vertex_attrs['v1']['before'] = 'v1'
+    g.edge_attrs['e0']['before'] = 'e0'
+    g.edge_attrs['e1']['before'] = 'e1'
 
     g1 = as_unweighted(g)
 
@@ -823,39 +823,39 @@ def test_as_unweighted_on_property_graphs():
     assert g1.get_edge_weight('e2') == 1.0
 
     # test that properties still exist
-    assert g.vertex_props['v0']['before'] == 'v0'
-    assert g.vertex_props['v1']['before'] == 'v1'
-    assert g.edge_props['e0']['before'] == 'e0'
-    assert g.edge_props['e1']['before'] == 'e1'
+    assert g.vertex_attrs['v0']['before'] == 'v0'
+    assert g.vertex_attrs['v1']['before'] == 'v1'
+    assert g.edge_attrs['e0']['before'] == 'e0'
+    assert g.edge_attrs['e1']['before'] == 'e1'
 
-    assert g1.vertex_props['v0']['before'] == 'v0'
-    assert g1.vertex_props['v1']['before'] == 'v1'
-    assert g1.edge_props['e0']['before'] == 'e0'
-    assert g1.edge_props['e1']['before'] == 'e1'
+    assert g1.vertex_attrs['v0']['before'] == 'v0'
+    assert g1.vertex_attrs['v1']['before'] == 'v1'
+    assert g1.edge_attrs['e0']['before'] == 'e0'
+    assert g1.edge_attrs['e1']['before'] == 'e1'
 
     # test adding a property in g
-    g.vertex_props['v0']['after'] = 'v0'
-    assert g1.vertex_props['v0']['after'] == 'v0'
+    g.vertex_attrs['v0']['after'] = 'v0'
+    assert g1.vertex_attrs['v0']['after'] == 'v0'
 
     # test adding a property in g1
-    g1.edge_props['e0']['after'] = 'e0'
-    assert g.edge_props['e0']['after'] == 'e0'
+    g1.edge_attrs['e0']['after'] = 'e0'
+    assert g.edge_attrs['e0']['after'] == 'e0'
 
     # test deleting a property from g 
-    del g.vertex_props['v1']['before']
+    del g.vertex_attrs['v1']['before']
     with pytest.raises(KeyError):
-        g1.vertex_props['v1']['before']
+        g1.vertex_attrs['v1']['before']
 
     with pytest.raises(ValueError):
-        g1.edge_props['e0']['weight'] = 200.0
+        g1.edge_attrs['e0']['weight'] = 200.0
 
-    g.edge_props['e0']['weight'] = 200.0
-    assert g.edge_props['e0']['weight'] == 200.0
-    assert g1.edge_props['e0']['weight'] == 1.0
+    g.edge_attrs['e0']['weight'] = 200.0
+    assert g.edge_attrs['e0']['weight'] == 200.0
+    assert g1.edge_attrs['e0']['weight'] == 1.0
 
 
 def test_pg_as_weighted():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -887,7 +887,7 @@ def test_pg_as_weighted():
 
 
 def test_pg_as_weighted_with_None_function():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -917,7 +917,7 @@ def test_pg_as_weighted_with_None_function():
 
 
 def test_pg_as_weighted_with_caching():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -932,7 +932,7 @@ def test_pg_as_weighted_with_caching():
         g.set_edge_weight(0, 5.0)
 
     with pytest.raises(ValueError):
-        g.edge_props[0]['weight'] = 5.0
+        g.edge_attrs[0]['weight'] = 5.0
 
     assert g.get_edge_weight(0) == 1.0
 
@@ -943,16 +943,16 @@ def test_pg_as_weighted_with_caching():
 
     assert wg.get_edge_weight(0) == 100.5
 
-    assert wg.edge_props[0]['weight'] == 100.5
+    assert wg.edge_attrs[0]['weight'] == 100.5
 
     wg.set_edge_weight(0, 5.0)
 
     assert wg.get_edge_weight(0) == 5.0
-    assert wg.edge_props[0]['weight'] == 5.0
+    assert wg.edge_attrs[0]['weight'] == 5.0
 
 
 def test_pg_as_weighted_with_caching_and_write_throught_with_unweighted():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -967,7 +967,7 @@ def test_pg_as_weighted_with_caching_and_write_throught_with_unweighted():
         g.set_edge_weight(0, 5.0)
 
     with pytest.raises(ValueError):
-        g.edge_props[0]['weight'] = 5.0
+        g.edge_attrs[0]['weight'] = 5.0
 
     assert g.get_edge_weight(0) == 1.0
 
@@ -979,7 +979,7 @@ def test_pg_as_weighted_with_caching_and_write_throught_with_unweighted():
 
 
 def test_pg_as_weighted_with_caching_and_write_throught():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -993,7 +993,7 @@ def test_pg_as_weighted_with_caching_and_write_throught():
     g.set_edge_weight(0, 200.0)
     assert g.get_edge_weight(0) == 200.0
 
-    assert g.edge_props[0]['weight'] == 200.0
+    assert g.edge_attrs[0]['weight'] == 200.0
 
     def edge_weight(e):
         return 100.5
@@ -1006,15 +1006,15 @@ def test_pg_as_weighted_with_caching_and_write_throught():
 
     assert wg.get_edge_weight(0) == 5.0
 
-    assert wg.edge_props[0]['weight'] == 5.0
+    assert wg.edge_attrs[0]['weight'] == 5.0
 
     assert g.get_edge_weight(0) == 5.0
 
-    assert g.edge_props[0]['weight'] == 5.0
+    assert g.edge_attrs[0]['weight'] == 5.0
 
 
 def test_pg_as_weighted_with_no_caching_and_write_through():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -1027,7 +1027,7 @@ def test_pg_as_weighted_with_no_caching_and_write_through():
 
     g.set_edge_weight(0, 5.0)
     assert g.get_edge_weight(0) == 5.0
-    assert g.edge_props[0]['weight'] == 5.0
+    assert g.edge_attrs[0]['weight'] == 5.0
 
     def edge_weight(e):
         return 100.5
@@ -1040,11 +1040,11 @@ def test_pg_as_weighted_with_no_caching_and_write_through():
         wg.set_edge_weight(0, 5.0)
 
     with pytest.raises(ValueError):
-        wg.edge_props[0]['weight'] = 5.0
+        wg.edge_attrs[0]['weight'] = 5.0
 
     assert wg.get_edge_weight(0) == 100.5
 
-    assert wg.edge_props[0]['weight'] == 100.5
+    assert wg.edge_attrs[0]['weight'] == 100.5
 
 
 pg_listener1_expected = """element v0, event GraphEvent.VERTEX_ADDED
@@ -1063,7 +1063,7 @@ element e0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
 
 def test_pg_listenable():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -1105,7 +1105,7 @@ def test_pg_listenable():
 
 
 def test_pg_as_edge_reversed():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,

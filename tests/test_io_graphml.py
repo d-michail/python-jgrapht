@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 
 from jgrapht.io.exporters import write_graphml, generate_graphml
@@ -137,7 +137,7 @@ expected4 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://gra
 
 def test_export_import(tmpdir):
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -188,7 +188,7 @@ def test_export_import(tmpdir):
 
     # read back
 
-    g1 = create_graph(
+    g1 = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -235,7 +235,7 @@ def test_export_import(tmpdir):
     assert g1.get_edge_weight(17) == 33.3
 
     # read back with simple
-    g2 = create_graph(
+    g2 = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -259,7 +259,7 @@ def test_export_import(tmpdir):
 
 
 def test_output_to_string():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -279,7 +279,7 @@ def test_output_to_string():
 
 
 def test_output_to_string_with_weights():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -300,7 +300,7 @@ def test_output_to_string_with_weights():
 
 def test_output_to_string_with_attrs():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -350,7 +350,7 @@ def test_output_to_string_with_attrs():
 
 def test_property_graph_output_to_string_with_attrs():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -402,7 +402,7 @@ def test_property_graph_output_to_string_with_attrs():
 
 def test_graph_from_string():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -424,7 +424,7 @@ def test_graph_from_string():
 
 def test_property_graph_from_string():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -443,12 +443,12 @@ def test_property_graph_from_string():
     assert g.vertices == {"vertex-0", "vertex-1", "vertex-2", "vertex-3"}
     assert g.edges == {"e0", "e1", "e2", "e3"}
 
-    assert g.edge_props["e1"]["weight"] == 4.4
+    assert g.edge_attrs["e1"]["weight"] == 4.4
 
 
 def test_property_graph_from_string_without_importid():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -462,7 +462,7 @@ def test_property_graph_from_string_without_importid():
     assert g.vertices == {"v0", "v1", "v2", "v3"}
     assert g.edges == {"e0", "e1", "e2", "e3"}
 
-    assert g.edge_props == {
+    assert g.edge_attrs == {
         "e0": {"source": "0", "target": "1"},
         "e1": {"source": "0", "target": "2"},
         "e2": {"source": "0", "target": "3"},
@@ -471,11 +471,11 @@ def test_property_graph_from_string_without_importid():
 
     # check that we also see the weights, even if they do not appear in
     # the properties
-    assert g.edge_props["e1"]["weight"] == 4.4
+    assert g.edge_attrs["e1"]["weight"] == 4.4
 
     # test weight changes also by set
     g.set_edge_weight("e1", 100.4)
-    assert g.edge_props["e1"]["weight"] == 100.4
+    assert g.edge_attrs["e1"]["weight"] == 100.4
 
 
 def test_property_graph_from_filename_without_importid(tmpdir):
@@ -486,7 +486,7 @@ def test_property_graph_from_filename_without_importid(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected2)
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -500,7 +500,7 @@ def test_property_graph_from_filename_without_importid(tmpdir):
     assert g.vertices == {"v0", "v1", "v2", "v3"}
     assert g.edges == {"e0", "e1", "e2", "e3"}
 
-    assert g.edge_props == {
+    assert g.edge_attrs == {
         "e0": {"source": "0", "target": "1"},
         "e1": {"source": "0", "target": "2"},
         "e2": {"source": "0", "target": "3"},
@@ -509,11 +509,11 @@ def test_property_graph_from_filename_without_importid(tmpdir):
 
     # check that we also see the weights, even if they do not appear in
     # the properties
-    assert g.edge_props["e1"]["weight"] == 4.4
+    assert g.edge_attrs["e1"]["weight"] == 4.4
 
     # test weight changes also by set
     g.set_edge_weight("e1", 100.4)
-    assert g.edge_props["e1"]["weight"] == 100.4
+    assert g.edge_attrs["e1"]["weight"] == 100.4
 
 
 def test_property_graph_from_filename_without_importid_no_simple(tmpdir):
@@ -524,7 +524,7 @@ def test_property_graph_from_filename_without_importid_no_simple(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected2)
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -538,20 +538,20 @@ def test_property_graph_from_filename_without_importid_no_simple(tmpdir):
     assert g.vertices == {"v0", "v1", "v2", "v3"}
     assert g.edges == {"e0", "e1", "e2", "e3"}
 
-    assert dict(g.edge_props) == {}
+    assert dict(g.edge_attrs) == {}
 
     # check that we also see the weights, even if they do not appear in
     # the properties
-    assert g.edge_props["e1"]["weight"] == 4.4
+    assert g.edge_attrs["e1"]["weight"] == 4.4
 
     # test weight changes also by set
     g.set_edge_weight("e1", 100.4)
-    assert g.edge_props["e1"]["weight"] == 100.4
+    assert g.edge_attrs["e1"]["weight"] == 100.4
 
 
 def test_property_graph_non_weighted_from_string_without_importid():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -565,7 +565,7 @@ def test_property_graph_non_weighted_from_string_without_importid():
     assert g.vertices == {"v0", "v1", "v2", "v3"}
     assert g.edges == {"e0", "e1", "e2", "e3"}
 
-    assert g.edge_props == {
+    assert g.edge_attrs == {
         "e0": {"source": "0", "target": "1"},
         "e1": {"source": "0", "target": "2"},
         "e2": {"source": "0", "target": "3"},
@@ -574,7 +574,7 @@ def test_property_graph_non_weighted_from_string_without_importid():
 
     # check that we also see the weights, even if they do not appear in
     # the properties
-    assert g.edge_props["e1"]["weight"] == 1.0
+    assert g.edge_attrs["e1"]["weight"] == 1.0
 
     with pytest.raises(ValueError):
-        g.edge_props["e1"]["weight"] = 2.0
+        g.edge_attrs["e1"]["weight"] = 2.0

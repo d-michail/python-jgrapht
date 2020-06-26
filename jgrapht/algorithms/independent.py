@@ -2,8 +2,8 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerSet
 
-from .._internals._pg import is_property_graph
-from .._internals._pg_collections import _PropertyGraphVertexSet
+from .._internals._attrsg import is_attrs_graph
+from .._internals._attrsg_collections import _AttributesGraphVertexSet
 
 
 def chordal_max_independent_set(graph):
@@ -19,7 +19,7 @@ def chordal_max_independent_set(graph):
         graph.handle
     )
 
-    if is_property_graph(graph):
-        return _PropertyGraphVertexSet(res, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphVertexSet(res, graph)
     else:
         return _JGraphTIntegerSet(res)

@@ -3,7 +3,7 @@ from collections import namedtuple
 from collections.abc import Iterator
 
 from ._wrappers import _JGraphTObjectIterator
-from ._pg_wrappers import _PropertyGraphVertexIterator, _PropertyGraphEdgeIterator
+from ._attrsg_wrappers import _AttributesGraphVertexIterator, _AttributesGraphEdgeIterator
 from ._collections import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
@@ -13,8 +13,8 @@ from ._collections import (
 )
 
 
-class _PropertyGraphVertexSet(_JGraphTIntegerSet):
-    """A vertex set for property graphs."""
+class _AttributesGraphVertexSet(_JGraphTIntegerSet):
+    """A vertex set for attributes graphs."""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -22,21 +22,21 @@ class _PropertyGraphVertexSet(_JGraphTIntegerSet):
 
     def __iter__(self):
         res = backend.jgrapht_set_it_create(self._handle)
-        return _PropertyGraphVertexIterator(res, self._graph)
+        return _AttributesGraphVertexIterator(res, self._graph)
 
     def __contains__(self, x):
         x = self._graph._vertex_hash_to_id[x]
         return backend.jgrapht_set_int_contains(self._handle, x)
 
     def __repr__(self):
-        return "_PropertyGraphVertexSet(%r)" % self._handle
+        return "_AttributesGraphVertexSet(%r)" % self._handle
 
     def __str__(self):
         return "{" + ", ".join(str(x) for x in self) + "}"
 
 
-class _PropertyGraphMutableVertexSet(_JGraphTIntegerMutableSet):
-    """A vertex set for property graphs."""
+class _AttributesGraphMutableVertexSet(_JGraphTIntegerMutableSet):
+    """A vertex set for attributes graphs."""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -44,7 +44,7 @@ class _PropertyGraphMutableVertexSet(_JGraphTIntegerMutableSet):
 
     def __iter__(self):
         res = backend.jgrapht_set_it_create(self._handle)
-        return _PropertyGraphVertexIterator(res, self._graph)
+        return _AttributesGraphVertexIterator(res, self._graph)
 
     def __contains__(self, x):
         x = self._graph._vertex_hash_to_id[x]
@@ -59,14 +59,14 @@ class _PropertyGraphMutableVertexSet(_JGraphTIntegerMutableSet):
         backend.jgrapht_set_int_remove(self._handle, x)
 
     def __repr__(self):
-        return "_PropertyGraphMutableVertexSet(%r)" % self._handle
+        return "_AttributesGraphMutableVertexSet(%r)" % self._handle
 
     def __str__(self):
         return "{" + ", ".join(str(x) for x in self) + "}"
 
 
-class _PropertyGraphEdgeSet(_JGraphTIntegerSet):
-    """An edge set for property graphs."""
+class _AttributesGraphEdgeSet(_JGraphTIntegerSet):
+    """An edge set for attributes graphs."""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -74,21 +74,21 @@ class _PropertyGraphEdgeSet(_JGraphTIntegerSet):
 
     def __iter__(self):
         res = backend.jgrapht_set_it_create(self._handle)
-        return _PropertyGraphEdgeIterator(res, self._graph)
+        return _AttributesGraphEdgeIterator(res, self._graph)
 
     def __contains__(self, x):
         x = self._graph._edge_hash_to_id[x]
         return backend.jgrapht_set_int_contains(self._handle, x)
 
     def __repr__(self):
-        return "_PropertyGraphEdgeSet(%r)" % self._handle
+        return "_AttributesGraphEdgeSet(%r)" % self._handle
 
     def __str__(self):
         return "{" + ", ".join(str(x) for x in self) + "}"
 
 
-class _PropertyGraphVertexDoubleMap(_JGraphTIntegerDoubleMap):
-    """A vertex to double map for property graphs."""
+class _AttributesGraphVertexDoubleMap(_JGraphTIntegerDoubleMap):
+    """A vertex to double map for attributes graphs."""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -96,7 +96,7 @@ class _PropertyGraphVertexDoubleMap(_JGraphTIntegerDoubleMap):
 
     def __iter__(self):
         res = backend.jgrapht_map_keys_it_create(self._handle)
-        return _PropertyGraphVertexIterator(res, self._graph)
+        return _AttributesGraphVertexIterator(res, self._graph)
 
     def get(self, key, value=None):
         key = self._graph._vertex_hash_to_id[key]
@@ -120,11 +120,11 @@ class _PropertyGraphVertexDoubleMap(_JGraphTIntegerDoubleMap):
         return backend.jgrapht_map_int_double_get(self._handle, key)
 
     def __repr__(self):
-        return "_PropertyGraphVertexDoubleMap(%r)" % self._handle
+        return "_AttributesGraphVertexDoubleMap(%r)" % self._handle
 
 
-class _PropertyGraphEdgeDoubleMap(_JGraphTIntegerDoubleMap):
-    """A vertex to double map for property graphs."""
+class _AttributesGraphEdgeDoubleMap(_JGraphTIntegerDoubleMap):
+    """A vertex to double map for attributes graphs."""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -132,7 +132,7 @@ class _PropertyGraphEdgeDoubleMap(_JGraphTIntegerDoubleMap):
 
     def __iter__(self):
         res = backend.jgrapht_map_keys_it_create(self._handle)
-        return _PropertyGraphEdgeIterator(res, self._graph)
+        return _AttributesGraphEdgeIterator(res, self._graph)
 
     def get(self, key, value=None):
         key = self._graph._edge_hash_to_id[key]
@@ -156,10 +156,10 @@ class _PropertyGraphEdgeDoubleMap(_JGraphTIntegerDoubleMap):
         return backend.jgrapht_map_int_double_get(self._handle, key)
 
     def __repr__(self):
-        return "_PropertyGraphEdgeDoubleMap(%r)" % self._handle
+        return "_AttributesGraphEdgeDoubleMap(%r)" % self._handle
 
 
-class _PropertyGraphVertexSetIterator(_JGraphTObjectIterator):
+class _AttributesGraphVertexSetIterator(_JGraphTObjectIterator):
     """An iterator which returns sets with vertices."""
 
     def __init__(self, handle, graph, **kwargs):
@@ -167,14 +167,14 @@ class _PropertyGraphVertexSetIterator(_JGraphTObjectIterator):
         self._graph = graph
 
     def __next__(self):
-        return _PropertyGraphVertexSet(super().__next__(), self._graph)
+        return _AttributesGraphVertexSet(super().__next__(), self._graph)
 
     def __repr__(self):
-        return "_PropertyGraphVertexSetIterator(%r)" % self._handle
+        return "_AttributesGraphVertexSetIterator(%r)" % self._handle
 
 
-class _PropertyGraphVertexIntegerMap(_JGraphTIntegerIntegerMap):
-    """Property graph vertex map to integers"""
+class _AttributesGraphVertexIntegerMap(_JGraphTIntegerIntegerMap):
+    """Attributes graph vertex map to integers"""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -182,7 +182,7 @@ class _PropertyGraphVertexIntegerMap(_JGraphTIntegerIntegerMap):
 
     def __iter__(self):
         res = backend.jgrapht_map_keys_it_create(self._handle)
-        return _PropertyGraphVertexIterator(res, self._graph)
+        return _AttributesGraphVertexIterator(res, self._graph)
 
     def get(self, key, value=None):
         key = self._graph._vertex_hash_to_id[key]
@@ -207,11 +207,11 @@ class _PropertyGraphVertexIntegerMap(_JGraphTIntegerIntegerMap):
         return backend.jgrapht_map_int_int_get(self._handle, key)
 
     def __repr__(self):
-        return "_PropertyGraphVertexIntegerMap(%r)" % self._handle
+        return "_AttributesGraphVertexIntegerMap(%r)" % self._handle
 
 
-class _PropertyGraphVertexList(_JGraphTIntegerList):
-    """A vertex set for property graphs."""
+class _AttributesGraphVertexList(_JGraphTIntegerList):
+    """A vertex set for attributes graphs."""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -219,17 +219,17 @@ class _PropertyGraphVertexList(_JGraphTIntegerList):
 
     def __iter__(self):
         res = backend.jgrapht_list_it_create(self._handle)
-        return _PropertyGraphVertexIterator(res, self._graph)
+        return _AttributesGraphVertexIterator(res, self._graph)
 
     def __contains__(self, x):
         x = self._graph._vertex_hash_to_id[x]
         return backend.jgrapht_list_int_contains(self._handle, x)
 
     def __repr__(self):
-        return '_PropertyGraphVertexList(%r)' % self._handle
+        return '_AttributesGraphVertexList(%r)' % self._handle
 
 
-class _PropertyGraphVertexListIterator(_JGraphTObjectIterator):
+class _AttributesGraphVertexListIterator(_JGraphTObjectIterator):
     """An iterator which returns lists of vertices."""
 
     def __init__(self, handle, graph, **kwargs):
@@ -237,7 +237,7 @@ class _PropertyGraphVertexListIterator(_JGraphTObjectIterator):
         self._graph = graph
 
     def __next__(self):
-        return _PropertyGraphVertexList(super().__next__(), self._graph)
+        return _AttributesGraphVertexList(super().__next__(), self._graph)
 
     def __repr__(self):
-        return '_PropertyGraphVertexListIterator(%r)' % self._handle
+        return '_AttributesGraphVertexListIterator(%r)' % self._handle

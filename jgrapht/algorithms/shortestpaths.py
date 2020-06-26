@@ -9,18 +9,18 @@ from .._internals._paths import (
 from .._internals._collections import _JGraphTIntegerMutableSet
 from .._internals._callbacks import _create_wrapped_callback
 
-from .._internals._pg import (
-    is_property_graph,
-    vertex_pg_to_g as _vertex_pg_to_g,
-    vertex_g_to_pg as _vertex_g_to_pg,
-    edge_g_to_pg as _edge_g_to_pg,
+from .._internals._attrsg import (
+    is_attrs_graph,
+    vertex_attrsg_to_g as _vertex_attrsg_to_g,
+    vertex_g_to_attrsg as _vertex_g_to_attrsg,
+    edge_g_to_attrsg as _edge_g_to_attrsg,
 )
-from .._internals._pg_paths import (
-    _PropertyGraphGraphPath,
-    _PropertyGraphGraphPathIterator,
-    _PropertyGraphSingleSourcePaths,
-    _PropertyGraphMultiObjectiveSingleSourcePaths,
-    _PropertyGraphAllPairsPaths,
+from .._internals._attrsg_paths import (
+    _AttributesGraphGraphPath,
+    _AttributesGraphGraphPathIterator,
+    _AttributesGraphSingleSourcePaths,
+    _AttributesGraphMultiObjectiveSingleSourcePaths,
+    _AttributesGraphAllPairsPaths,
 )
 
 import ctypes
@@ -31,10 +31,10 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method_name = "jgrapht_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
-    handle = alg_method(graph.handle, _vertex_pg_to_g(graph, source_vertex), *args)
+    handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
 
-    if is_property_graph(graph):
-        return _PropertyGraphSingleSourcePaths(handle, graph, source_vertex)
+    if is_attrs_graph(graph):
+        return _AttributesGraphSingleSourcePaths(handle, graph, source_vertex)
     else:
         return _JGraphTSingleSourcePaths(handle, graph, source_vertex)
 
@@ -45,15 +45,15 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
 
     handle = alg_method(
         graph.handle,
-        _vertex_pg_to_g(graph, source_vertex),
-        _vertex_pg_to_g(graph, target_vertex),
+        _vertex_attrsg_to_g(graph, source_vertex),
+        _vertex_attrsg_to_g(graph, target_vertex),
         *args
     )
     if handle is None:
         return None
 
-    if is_property_graph(graph):
-        return _PropertyGraphGraphPath(handle, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphGraphPath(handle, graph)
     else:
         return _JGraphTGraphPath(handle, graph)
 
@@ -64,8 +64,8 @@ def _sp_allpairs_alg(name, graph):
 
     handle = alg_method(graph.handle)
 
-    if is_property_graph(graph):
-        return _PropertyGraphAllPairsPaths(handle, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphAllPairsPaths(handle, graph)
     else:
         return _JGraphTAllPairsPaths(handle, graph)
 
@@ -76,14 +76,14 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
 
     handle = alg_method(
         graph.handle,
-        _vertex_pg_to_g(graph, source_vertex),
-        _vertex_pg_to_g(graph, target_vertex),
+        _vertex_attrsg_to_g(graph, source_vertex),
+        _vertex_attrsg_to_g(graph, target_vertex),
         k,
         *args
     )
 
-    if is_property_graph(graph):
-        return _PropertyGraphGraphPathIterator(handle, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphGraphPathIterator(handle, graph)
     else:
         return _JGraphTGraphPathIterator(handle, graph)
 
@@ -92,10 +92,10 @@ def _multisp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method_name = "jgrapht_multisp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
-    handle = alg_method(graph.handle, _vertex_pg_to_g(graph, source_vertex), *args)
+    handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
 
-    if is_property_graph(graph):
-        return _PropertyGraphMultiObjectiveSingleSourcePaths(
+    if is_attrs_graph(graph):
+        return _AttributesGraphMultiObjectiveSingleSourcePaths(
             handle, graph, source_vertex
         )
     else:
@@ -214,10 +214,10 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
     :returns: a :py:class:`.GraphPath`
     """
 
-    if is_property_graph(graph):
+    if is_attrs_graph(graph):
         # redefine in order to translate from integer to user vertices
         def actual_heuristic_cb(s, t):
-            return heuristic_cb(_vertex_g_to_pg(graph, s), _vertex_g_to_pg(graph, t))
+            return heuristic_cb(_vertex_g_to_attrsg(graph, s), _vertex_g_to_attrsg(graph, t))
 
     else:
         actual_heuristic_cb = heuristic_cb
@@ -289,9 +289,9 @@ def a_star_with_alt_heuristic(
     """
 
     landmarks_set = _JGraphTIntegerMutableSet(linked=True)
-    if is_property_graph(graph):
+    if is_attrs_graph(graph):
         for landmark in landmarks:
-            landmarks_set.add(_vertex_pg_to_g(graph, landmark))
+            landmarks_set.add(_vertex_attrsg_to_g(graph, landmark))
     else:
         for landmark in landmarks:
             landmarks_set.add(landmark)
@@ -423,9 +423,9 @@ def martin_multiobjective(
 
     # we need a function which accepts an edge and returns a pointer to an
     # array with double values
-    if is_property_graph(graph):
+    if is_attrs_graph(graph):
         def inner_edge_weight_cb(edge):
-            edge = _edge_g_to_pg(graph, edge)
+            edge = _edge_g_to_attrsg(graph, edge)
             weights = edge_weight_cb(edge)[:edge_weight_dimension]
             array = (ctypes.c_double * len(weights))(*weights)
             array_ptr = ctypes.cast(array, ctypes.c_void_p)
@@ -453,11 +453,11 @@ def martin_multiobjective(
     else:
         res = _backend.jgrapht_multisp_exec_martin_get_paths_between_vertices(
             graph.handle,
-            _vertex_pg_to_g(graph, source_vertex),
-            _vertex_pg_to_g(graph, target_vertex),
+            _vertex_attrsg_to_g(graph, source_vertex),
+            _vertex_attrsg_to_g(graph, target_vertex),
             *custom
         )
-        if is_property_graph(graph):
-            return _PropertyGraphGraphPathIterator(res, graph)
+        if is_attrs_graph(graph):
+            return _AttributesGraphGraphPathIterator(res, graph)
         else:
             return _JGraphTGraphPathIterator(res, graph)

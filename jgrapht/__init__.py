@@ -36,31 +36,25 @@ import logging
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 #
-# The graph API.
+# The int graph API.
 #
-# Graphs always use integer vertex and edges.
+# Integer graphs always use integer vertex and edges.
 #
 from ._internals._graphs import (
-    create_graph,
-    create_directed_graph,
-    create_undirected_graph,
-    create_dag,
-    create_sparse_graph,
-    as_sparse_graph,
+    create_graph as create_int_graph,
+    create_dag as create_int_dag,
+    create_sparse_graph as create_sparse_int_graph,
+    as_sparse_graph as as_sparse_int_graph,
 )
 
 #
-# The property graph API.
+# The graph API.
 #
-# Property graphs allow the use of any hashable
-# for the vertices and edges.
+# Graphs allow the use of any hashable for the vertices and edges.
 #
-from ._internals._pg import (
-    create_property_graph,
-    create_directed_property_graph,
-    create_undirected_property_graph,
-    create_property_dag,
-    is_property_graph,
+from ._internals._attrsg import (
+    create_attrs_graph as create_graph,
+    create_attrs_dag as create_dag,
 )
 
 from . import (

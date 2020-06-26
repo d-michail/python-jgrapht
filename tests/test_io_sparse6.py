@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.io.exporters import (
@@ -13,7 +13,7 @@ from jgrapht.io.importers import read_graph6sparse6, parse_graph6sparse6
 
 
 def build_graph():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -48,7 +48,7 @@ def test_output_sparse6(tmpdir):
         assert attribute_name == "ID"
         assert str(vertex) == attribute_value
 
-    g1 = create_graph(
+    g1 = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -74,7 +74,7 @@ def test_output_graph6(tmpdir):
         assert attribute_name == "ID"
         assert str(vertex) == attribute_value
 
-    g1 = create_graph(
+    g1 = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -87,7 +87,7 @@ def test_output_graph6(tmpdir):
 
 
 def test_output_to_string():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -110,7 +110,7 @@ def test_output_to_string():
 
 def test_read_sparse6_property_graph_from_string():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -130,7 +130,7 @@ def test_read_sparse6_property_graph_from_string():
 
 def test_read_sparse6_property_graph_from_string1():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -147,7 +147,7 @@ def test_read_sparse6_property_graph_from_string1():
 
 def test_read_sparse6_graph_from_string():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -170,7 +170,7 @@ def test_read_pg_sparse6_graph_from_file(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(":Cca")
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,

@@ -1,11 +1,11 @@
 import pytest
 
 from jgrapht import (
-    create_graph,
+    create_int_graph,
+    create_int_dag,
+    create_sparse_int_graph,
+    as_sparse_int_graph,
     create_dag,
-    create_sparse_graph,
-    as_sparse_graph,
-    create_property_dag,
 )
 
 
@@ -15,7 +15,7 @@ def assert_same_set(set1, set2):
 
 def test_graph_directed_inoutedges():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -112,7 +112,7 @@ def test_graph_directed_inoutedges():
 
 def test_graph_undirected_inoutedges():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -208,7 +208,7 @@ def test_graph_undirected_inoutedges():
 
 def test_graph_no_allow_self_loops():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -229,7 +229,7 @@ def test_graph_no_allow_self_loops():
 
 def test_graph_no_allow_multiple_edges():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -253,7 +253,7 @@ def test_graph_no_allow_multiple_edges():
 
 def test_graph_no_weights():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -280,7 +280,7 @@ def test_graph_no_weights():
 
 def test_graph_add_edge_with_weight():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -298,7 +298,7 @@ def test_graph_add_edge_with_weight():
 
 def test_graph_add_edge():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -325,7 +325,7 @@ def test_graph_add_edge():
 
 def test_graph_add_edges_from():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -348,7 +348,7 @@ def test_graph_add_edges_from():
 
 def test_graph_add_vertex():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -372,7 +372,7 @@ def test_graph_add_vertex():
 def test_graph_sparse():
 
     edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
-    g = create_sparse_graph(7, edgelist, weighted=False)
+    g = create_sparse_int_graph(7, edgelist, weighted=False)
 
     assert g.type.directed
     assert not g.type.weighted
@@ -403,7 +403,7 @@ def test_graph_sparse_weighted():
         (0, 4, 9.999),
         (2, 6, 3.0),
     ]
-    g = create_sparse_graph(7, edgelist, directed=False)
+    g = create_sparse_int_graph(7, edgelist, directed=False)
 
     assert not g.type.directed
     assert g.type.weighted
@@ -422,7 +422,7 @@ def test_graph_sparse_weighted():
 
 def test_graph_copy_to_sparse():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -457,7 +457,7 @@ def test_graph_copy_to_sparse():
 
     assert len(g.edges) == 7
 
-    gs = as_sparse_graph(g)
+    gs = as_sparse_int_graph(g)
 
     assert gs.vertices, set([0, 1, 2, 3, 4])
     assert len(gs.edges) == 7
@@ -465,7 +465,7 @@ def test_graph_copy_to_sparse():
 
 def test_graph_copy_to_sparse():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -487,7 +487,7 @@ def test_graph_copy_to_sparse():
 
     assert len(g.edges) == 3
 
-    gs = as_sparse_graph(g)
+    gs = as_sparse_int_graph(g)
 
     assert gs.vertices, set(range(0, 11))
     assert len(gs.edges) == 3
@@ -496,7 +496,7 @@ def test_graph_copy_to_sparse():
 
 
 def test_dag():
-    g = create_dag(allowing_multiple_edges=True, weighted=True)
+    g = create_int_dag(allowing_multiple_edges=True, weighted=True)
 
     assert g.type.directed
     assert not g.type.undirected
@@ -533,7 +533,7 @@ def test_dag():
     with pytest.raises(ValueError):
         g.descendants(50)
 
-    g1 = create_dag(allowing_multiple_edges=False, weighted=False)
+    g1 = create_int_dag(allowing_multiple_edges=False, weighted=False)
 
     assert g1.type.directed
     assert not g1.type.undirected
@@ -550,7 +550,7 @@ def test_dag():
 
 
 def test_pg_dag():
-    g = create_property_dag(allowing_multiple_edges=True, weighted=True)
+    g = create_dag(allowing_multiple_edges=True, weighted=True)
 
     assert g.type.directed
     assert not g.type.undirected
@@ -592,7 +592,7 @@ def test_pg_dag():
     with pytest.raises(ValueError):
         g.ancestors("unknown")
 
-    g1 = create_property_dag(allowing_multiple_edges=False, weighted=False)
+    g1 = create_dag(allowing_multiple_edges=False, weighted=False)
 
     assert g1.type.directed
     assert not g1.type.undirected
@@ -609,7 +609,7 @@ def test_pg_dag():
 
 def test_graph_type():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,

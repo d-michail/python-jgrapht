@@ -6,11 +6,11 @@ from .._internals._flows import (
 )
 from .._internals._collections import _JGraphTIntegerMutableSet
 
-from .._internals._pg import is_property_graph, vertex_pg_to_g as _vertex_pg_to_g
-from .._internals._pg_flows import (
-    _PropertyGraphCut,
-    _PropertyGraphGomoryHuTree,
-    _PropertyGraphEquivalentFlowTree,
+from .._internals._attrsg import is_attrs_graph, vertex_attrsg_to_g as _vertex_attrsg_to_g
+from .._internals._attrsg_flows import (
+    _AttributesGraphCut,
+    _AttributesGraphGomoryHuTree,
+    _AttributesGraphEquivalentFlowTree,
 )
 
 from .flow import push_relabel
@@ -30,8 +30,8 @@ def mincut_stoer_wagner(graph):
         cut_source_partition_handle,
     ) = _backend.jgrapht_cut_mincut_exec_stoer_wagner(graph.handle)
 
-    if is_property_graph(graph):
-        return _PropertyGraphCut(graph, cut_weight, cut_source_partition_handle)
+    if is_attrs_graph(graph):
+        return _AttributesGraphCut(graph, cut_weight, cut_source_partition_handle)
     else:
         return _JGraphTCut(graph, cut_weight, cut_source_partition_handle)
 
@@ -77,8 +77,8 @@ def gomory_hu_gusfield(graph):
     """
     handle = _backend.jgrapht_cut_gomoryhu_exec_gusfield(graph.handle)
 
-    if is_property_graph(graph):
-        return _PropertyGraphGomoryHuTree(handle, graph)
+    if is_attrs_graph(graph):
+        return _AttributesGraphGomoryHuTree(handle, graph)
     else: 
         return _JGraphTGomoryHuTree(handle, graph)
 
@@ -101,9 +101,9 @@ def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
     :returns: a cut as an instance of :py:class:`.Cut`.
     """
     odd_set = _JGraphTIntegerMutableSet()
-    if is_property_graph(graph):
+    if is_attrs_graph(graph):
         for x in odd_vertices:
-            odd_set.add(_vertex_pg_to_g(graph,x))
+            odd_set.add(_vertex_attrsg_to_g(graph, x))
     else:
         for x in odd_vertices:
             odd_set.add(x)
@@ -115,7 +115,7 @@ def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
         graph.handle, odd_set.handle, use_tree_compression
     )
 
-    if is_property_graph(graph):
-        return _PropertyGraphCut(graph, cut_weight, cut_source_partition_handle)
+    if is_attrs_graph(graph):
+        return _AttributesGraphCut(graph, cut_weight, cut_source_partition_handle)
     else:
         return _JGraphTCut(graph, cut_weight, cut_source_partition_handle)

@@ -25,8 +25,8 @@ class IntegerSupplier:
 
 
 def create_vertex_supplier(type='str', prefix='v', start=0):
-    """Create a vertex supplier. Vertex suppliers are called whenever a
-    property graph wants to create a new vertex.
+    """Create a vertex supplier. Vertex suppliers are called whenever an
+    attributes graph wants to create a new vertex.
 
     :param type: type can be either 'str' or 'int'
     :param prefix: if a string supplier, a prefix to use
@@ -40,8 +40,8 @@ def create_vertex_supplier(type='str', prefix='v', start=0):
 
 
 def create_edge_supplier(type='str', prefix='e', start=0):
-    """Create an edge supplier. Εdge suppliers are called whenever a
-    property graph wants to create a new edge.
+    """Create an edge supplier. Εdge suppliers are called whenever an
+    attributes graph wants to create a new edge.
 
     :param type: type can be either 'str' or 'int'
     :param prefix: if a string supplier, a prefix to use

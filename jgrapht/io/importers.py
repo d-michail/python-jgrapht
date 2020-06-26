@@ -1,34 +1,22 @@
-import time
-from collections import defaultdict
-
-from .. import backend as _backend
-
-from .._internals._paths import _JGraphTGraphPath
-
-from .._internals._ioutils import _create_wrapped_import_integer_id_callback
-from .._internals._ioutils import _create_wrapped_import_string_id_callback
-from .._internals._ioutils import _create_wrapped_attribute_callback
-from .._internals._ioutils import _create_wrapped_notify_id_callback
-
-from .._internals._pg import is_property_graph
+from .._internals._attrsg import is_attrs_graph
 
 from .._internals._importers import (
     _parse_graph_dimacs,
-    _parse_property_graph_dimacs,
+    _parse_attrs_graph_dimacs,
     _parse_graph_gml,
-    _parse_property_graph_gml,
+    _parse_attrs_graph_gml,
     _parse_graph_json,
-    _parse_property_graph_json,
+    _parse_attrs_graph_json,
     _parse_graph_csv,
-    _parse_property_graph_csv,
+    _parse_attrs_graph_csv,
     _parse_graph_gexf,
-    _parse_property_graph_gexf,    
+    _parse_attrs_graph_gexf,
     _parse_graph_dot,
-    _parse_property_graph_dot,    
+    _parse_attrs_graph_dot,
     _parse_graph_graph6sparse6,
-    _parse_property_graph_graph6sparse6,
+    _parse_attrs_graph_graph6sparse6,
     _parse_graph_graphml,
-    _parse_property_graph_graphml,
+    _parse_attrs_graph_graphml,
 )
 
 
@@ -67,17 +55,17 @@ def read_dimacs(graph, filename, import_id_cb=None):
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.              
 
     :param graph: the graph to read into
     :param filename: filename to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :raises IOError: In case of an import error 
     """
-    if is_property_graph(graph):
-        _parse_property_graph_dimacs(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_dimacs(
             graph, filename, import_id_cb=import_id_cb, input_is_filename=True
         )
     else:
@@ -121,17 +109,17 @@ def parse_dimacs(graph, input_string, import_id_cb=None):
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.              
 
     :param graph: the graph to read into
     :param filename: filename to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :raises IOError: In case of an import error 
     """
-    if is_property_graph(graph):
-        _parse_property_graph_dimacs(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_dimacs(
             graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
         )
     else:
@@ -204,26 +192,26 @@ def read_gml(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     :param graph: The graph to read into
     :param filename: Filename to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.      
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
     :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
       edges.
     :raises IOError: In case of an import error 
     """
-    if is_property_graph(graph):
-        _parse_property_graph_gml(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_gml(
             graph, filename, import_id_cb=import_id_cb, input_is_filename=True
         )
     else:
@@ -300,26 +288,26 @@ def parse_gml(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     :param graph: The graph to read into
     :param input_string: Input string to read from 
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.       
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
     :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
       edges.
     :raises IOError: In case of an import error 
     """
-    if is_property_graph(graph):
-        _parse_property_graph_gml(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_gml(
             graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
         )
     else:
@@ -373,26 +361,26 @@ def read_json(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     :param graph: The graph to read into
     :param input_string: The input string to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable.
+      must return an integer, for attributes graph any hashable.
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
     :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
       edges.
     :raises IOError: In case of an import error    
     """
-    if is_property_graph(graph):
-        _parse_property_graph_json(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_json(
             graph, filename, import_id_cb=import_id_cb, input_is_filename=True
         )
     else:
@@ -450,26 +438,26 @@ def parse_json(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     :param graph: The graph to read into
     :param input_string: The input string to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable.
+      must return an integer, for attributes graph any hashable.
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
     :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
       edges.
     :raises IOError: In case of an import error    
     """
-    if is_property_graph(graph):
-        _parse_property_graph_json(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_json(
             graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
         )
     else:
@@ -499,21 +487,21 @@ def read_csv(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     :param graph: the graph to read into
     :param filename: the filename to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param format: format to use. One of "edgelist", "adjacencylist" and "matrix"    
     :param import_edge_weights: whether to import edge weights
     :param matrix_format_node_id: only for the matrix format, whether to import node identifiers
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error    
     """
-    if is_property_graph(graph):
-        _parse_property_graph_csv(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_csv(
             graph,
             filename,
             import_id_cb=import_id_cb,
@@ -552,21 +540,21 @@ def parse_csv(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     :param graph: the graph to read into
     :param input_string: the input string to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param format: format to use. One of "edgelist", "adjacencylist" and "matrix"    
     :param import_edge_weights: whether to import edge weights
     :param matrix_format_node_id: only for the matrix format, whether to import node identifiers
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error    
     """
-    if is_property_graph(graph):
-        _parse_property_graph_csv(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_csv(
             graph,
             input_string,
             import_id_cb=import_id_cb,
@@ -650,18 +638,18 @@ def read_gexf(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     :param graph: the graph to read into
     :param filename: the input file to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
@@ -669,8 +657,8 @@ def read_gexf(
       edges.    
     :raises IOError: in case of an import error    
     """
-    if is_property_graph(graph):
-        _parse_property_graph_gexf(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_gexf(
             graph,
             filename,
             import_id_cb=import_id_cb,
@@ -750,18 +738,18 @@ def parse_gexf(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     :param graph: the graph to read into
     :param input_string: the input string to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
@@ -769,8 +757,8 @@ def parse_gexf(
       edges.    
     :raises IOError: in case of an import error    
     """
-    if is_property_graph(graph):
-        _parse_property_graph_gexf(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_gexf(
             graph,
             input_string,
             import_id_cb=import_id_cb,
@@ -814,26 +802,26 @@ def read_dot(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     :param graph: The graph to read into
     :param filename: Filename to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
     :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
       edges.
     :raises IOError: In case of an import error 
     """
-    if is_property_graph(graph):
-        _parse_property_graph_dot(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_dot(
             graph,
             filename,
             import_id_cb=import_id_cb,
@@ -874,26 +862,26 @@ def parse_dot(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     :param graph: the graph to read into
     :param input_string: the input string to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
     :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
       edges.
     :raises IOError: in case of an import error 
     """
-    if is_property_graph(graph):
-        _parse_property_graph_dot(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_dot(
             graph,
             input_string,
             import_id_cb=import_id_cb,
@@ -936,26 +924,26 @@ def read_graph6sparse6(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     :param graph: the graph to read into
     :param filename: filename to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
     :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
       edges.
     :raises IOError: in case of an import error 
     """
-    if is_property_graph(graph):
-        _parse_property_graph_graph6sparse6(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_graph6sparse6(
             graph,
             filename,
             import_id_cb=import_id_cb,
@@ -999,26 +987,26 @@ def parse_graph6sparse6(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     :param graph: the graph to read into
     :param input_string: the input string
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
     :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
       edges.
     :raises IOError: in case of an import error 
     """
-    if is_property_graph(graph):
-        _parse_property_graph_graph6sparse6(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_graph6sparse6(
             graph,
             input_string,
             import_id_cb=import_id_cb,
@@ -1116,12 +1104,12 @@ def read_graphml(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     .. note:: The parameter simple affect the capabilities of the importer. It trades functionality
@@ -1130,7 +1118,7 @@ def read_graphml(
     :param graph: the graph to read into
     :param filename: the input file to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
@@ -1139,8 +1127,8 @@ def read_graphml(
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error    
     """
-    if is_property_graph(graph):
-        _parse_property_graph_graphml(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_graphml(
             graph,
             filename,
             import_id_cb=import_id_cb,
@@ -1242,12 +1230,12 @@ def parse_graphml(
 
     .. note:: The import identifier callback accepts a single parameter which is the identifier read
               from the input file as a string. For default graphs it should return an integer for the 
-              graph vertex. For property graphs is may return any hashable object which will serve
+              graph vertex. For attributes graph is may return any hashable object which will serve
               as the graph vertex.
 
     .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value. They are only used for default graphs. Property graphs get the
+              attribute value. They are only used for default graphs. attributes graph get the
               attributes/properties automatically loaded.
 
     .. note:: The parameter simple affects the capabilities of the importer. It trades functionality
@@ -1256,7 +1244,7 @@ def parse_graphml(
     :param graph: the graph to read into
     :param input_string: the input string to read from
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
-      must return an integer, for property graphs any hashable. If None the graph assigns automatically.
+      must return an integer, for attributes graph any hashable. If None the graph assigns automatically.
     :param validate_schema: whether to validate the XML schema    
     :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
       vertices.
@@ -1265,8 +1253,8 @@ def parse_graphml(
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error    
     """
-    if is_property_graph(graph):
-        _parse_property_graph_graphml(
+    if is_attrs_graph(graph):
+        _parse_attrs_graph_graphml(
             graph,
             input_string,
             import_id_cb=import_id_cb,

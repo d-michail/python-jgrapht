@@ -1,12 +1,12 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 
 import jgrapht.algorithms.independent as independent
 
 
 def test_chordal():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -32,7 +32,7 @@ def test_chordal():
 
 
 def test_pg_chordal():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,

@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.io.exporters import write_json, generate_json
 from jgrapht.io.importers import read_json, parse_json
 
@@ -17,7 +17,7 @@ expected5 = r'{"creator":"JGraphT JSON Exporter","version":"1","nodes":[{"id":"v
 
 
 def build_graph():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -71,7 +71,7 @@ def test_output_to_file_json(tmpdir):
 
 
 def test_output_to_string():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -92,7 +92,7 @@ def test_output_to_string():
 def test_output_to_string_with_labels():
     g = build_graph()
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -113,7 +113,7 @@ def test_input_json(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected_escaped)
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -150,7 +150,7 @@ def test_input_json_nocallbacks(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected_escaped)
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -162,7 +162,7 @@ def test_input_json_nocallbacks(tmpdir):
 
 def test_input_json_from_string_nocallbacks(tmpdir):
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -175,7 +175,7 @@ def test_input_json_from_string_nocallbacks(tmpdir):
 
 
 def test_input_json_from_string_create_new_vertices():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -187,7 +187,7 @@ def test_input_json_from_string_create_new_vertices():
 
 
 def test_input_json_from_string_preserve_ids():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -203,7 +203,7 @@ def test_input_json_from_string_preserve_ids():
 
 
 def test_input_from_string_with_labels():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -236,7 +236,7 @@ def test_input_from_string_with_labels():
 
 
 def test_property_graph_output_to_string():
-    pg = create_property_graph(
+    pg = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -259,7 +259,7 @@ def test_property_graph_output_to_string():
 
 
 def test_property_graph_with_labels_output_to_string():
-    pg = create_property_graph(
+    pg = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -276,11 +276,11 @@ def test_property_graph_with_labels_output_to_string():
     pg.add_edge("v0", "v3", edge="e03")
     pg.add_edge("v2", "v3", edge="e23")
 
-    pg.vertex_props["v0"]["color"] = "red"
-    pg.vertex_props["v1"]["color"] = "blue"
+    pg.vertex_attrs["v0"]["color"] = "red"
+    pg.vertex_attrs["v1"]["color"] = "blue"
 
-    pg.edge_props["e01"]["capacity"] = 100.0
-    pg.edge_props["e02"]["capacity"] = 20.0
+    pg.edge_attrs["e01"]["capacity"] = 100.0
+    pg.edge_attrs["e02"]["capacity"] = 20.0
 
     extra_e_labels = {"e02": {"type": "directed"}}
 
@@ -290,7 +290,7 @@ def test_property_graph_with_labels_output_to_string():
 
 
 def test_property_graph_output_to_file_json(tmpdir):
-    pg = create_property_graph(
+    pg = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -329,7 +329,7 @@ def test_input_json_from_string_property_graph():
             self._count += 1
             return value
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -365,7 +365,7 @@ def test_input_json_from_file_property_graph(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected_escaped)
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -417,11 +417,11 @@ def test_input_json_from_file_property_graph(tmpdir):
         ]
     )
 
-    print (g.vertex_props)
-    print (g.edge_props)
+    print (g.vertex_attrs)
+    print (g.edge_attrs)
 
-    assert g.vertex_props["myvertex-0"]["label"] == "κόμβος 0"
-    assert g.vertex_props["myvertex-1"]["ID"] == "1"
-    assert g.vertex_props["myvertex-1"]["label"] == "label 1"
-    assert g.vertex_props["myvertex-2"]["label"] == "label 2"
-    assert g.edge_props["e9"]["label"] == "edge 1-2"
+    assert g.vertex_attrs["myvertex-0"]["label"] == "κόμβος 0"
+    assert g.vertex_attrs["myvertex-1"]["ID"] == "1"
+    assert g.vertex_attrs["myvertex-1"]["label"] == "label 1"
+    assert g.vertex_attrs["myvertex-2"]["label"] == "label 2"
+    assert g.edge_attrs["e9"]["label"] == "edge 1-2"

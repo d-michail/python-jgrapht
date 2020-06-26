@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 import jgrapht.algorithms.connectivity as connectivity
 
 
 def test_weakly():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -41,7 +41,7 @@ def test_weakly():
 
 
 def test_weakly_directed():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -77,7 +77,7 @@ def test_weakly_directed():
 
 
 def test_strongly_kosaraju():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -117,7 +117,7 @@ def test_strongly_kosaraju():
 
 
 def test_strongly_gabow():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -158,7 +158,7 @@ def test_strongly_gabow():
 
 def test_is_connected():
     # directed
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -176,7 +176,7 @@ def test_is_connected():
     assert is_connected
 
     # undirected
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -189,7 +189,7 @@ def test_is_connected():
 
 
 def test_pg_strongly_gabow():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -227,7 +227,7 @@ def test_pg_strongly_gabow():
 
 
 def test_pg_strongly_kosaraju():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,

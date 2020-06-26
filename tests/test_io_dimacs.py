@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.io.exporters import write_dimacs, generate_dimacs
@@ -8,7 +8,7 @@ from jgrapht.io.importers import read_dimacs, parse_dimacs
 
 
 def build_graph():
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -42,7 +42,7 @@ def build_graph():
 
 
 def build_property_graph():
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -281,7 +281,7 @@ def test_dimacs_output_to_string():
 
 
 def test_read_dimacs_from_string(tmpdir):
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -307,7 +307,7 @@ def test_read_dimacs_from_file(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(dimacs_sp_expected)
 
-    g = create_graph( 
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -333,7 +333,7 @@ def test_read_dimacs_property_graph_from_file(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(dimacs_sp_expected)
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -346,13 +346,13 @@ def test_read_dimacs_property_graph_from_file(tmpdir):
 
     assert g.vertices == {'v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'}
     assert g.edge_tuple('e6') == ('v0', 'v7', 1.0)
-    assert g.vertex_props == {}
-    assert g.edge_props == {}
+    assert g.vertex_attrs == {}
+    assert g.edge_attrs == {}
 
 
 def test_read_dimacs_property_graph_from_string():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -365,13 +365,13 @@ def test_read_dimacs_property_graph_from_string():
 
     assert g.vertices == {'v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'}
     assert g.edge_tuple('e6') == ('v0', 'v7', 1.0)
-    assert g.vertex_props == {}
-    assert g.edge_props == {}
+    assert g.vertex_attrs == {}
+    assert g.edge_attrs == {}
 
 
 def test_read_dimacs_property_graph_from_string():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -387,8 +387,8 @@ def test_read_dimacs_property_graph_from_string():
 
     assert g.vertices == {'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9', 'v10'}
     assert g.edge_tuple('e6') == ('v1', 'v8', 1.0)
-    assert g.vertex_props == {}
-    assert g.edge_props == {}
+    assert g.vertex_attrs == {}
+    assert g.edge_attrs == {}
 
 
 def test_pg_dimacs(tmpdir):
@@ -405,7 +405,7 @@ def test_pg_dimacs(tmpdir):
 
 
 def test_pg_dimacs_increase_to_positive_id(tmpdir):
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,

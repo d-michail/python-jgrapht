@@ -2,26 +2,26 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerSet, _JGraphTIntegerMutableSet
 
-from .._internals._pg import is_property_graph, vertex_pg_to_g as _vertex_pg_to_g
-from .._internals._pg_collections import (
-    _PropertyGraphVertexSet,
-    _PropertyGraphEdgeSet,
-    _PropertyGraphMutableVertexSet,
+from .._internals._attrsg import is_attrs_graph
+from .._internals._attrsg_collections import (
+    _AttributesGraphVertexSet,
+    _AttributesGraphEdgeSet,
+    _AttributesGraphMutableVertexSet,
 )
 
 
 def _wrap_result(graph, weight, matching_handle):
-    if is_property_graph(graph):
-        return weight, _PropertyGraphEdgeSet(matching_handle, graph)
+    if is_attrs_graph(graph):
+        return weight, _AttributesGraphEdgeSet(matching_handle, graph)
     else:
         return weight, _JGraphTIntegerSet(matching_handle)
 
 
 def _to_wrapped_vertex_set(graph, vertex_set):
-    if is_property_graph(graph):
-        if isinstance(vertex_set, _PropertyGraphVertexSet):
+    if is_attrs_graph(graph):
+        if isinstance(vertex_set, _AttributesGraphVertexSet):
             return vertex_set
-        mutable_set = _PropertyGraphMutableVertexSet(handle=None, graph=graph)
+        mutable_set = _AttributesGraphMutableVertexSet(handle=None, graph=graph)
     else:
         if isinstance(vertex_set, _JGraphTIntegerSet):
             return vertex_set

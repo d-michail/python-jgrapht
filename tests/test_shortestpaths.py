@@ -1,12 +1,12 @@
 import pytest
 
-from jgrapht import create_graph, create_property_graph
+from jgrapht import create_int_graph, create_graph
 import jgrapht.algorithms.shortestpaths as sp
 import math
 
 
 def get_graph():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -29,7 +29,7 @@ def get_graph():
 
 
 def get_pg_graph():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -52,7 +52,7 @@ def get_pg_graph():
 
 
 def get_graph_with_negative_edges():
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -81,7 +81,7 @@ def get_graph_with_negative_edges():
 
 
 def get_pg_graph_with_negative_edges():
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -338,7 +338,7 @@ def test_pg_floyd_warshall():
 
 def test_a_star():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -397,7 +397,7 @@ def test_a_star():
 
 def test_pg_a_star():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -457,7 +457,7 @@ def test_pg_a_star():
 
 def test_a_star_with_alt_heuristic():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -494,7 +494,7 @@ def test_a_star_with_alt_heuristic():
 
 def test_pg_a_star_with_alt_heuristic():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -677,7 +677,7 @@ def test_pg_delta_stepping():
 
 def test_martin():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -735,7 +735,7 @@ def test_martin():
 
 def test_pg_martin():
 
-    g = create_property_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -793,7 +793,7 @@ def test_pg_martin():
 
 def test_martin_bad_cost_function():
 
-    g = create_graph(
+    g = create_int_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
