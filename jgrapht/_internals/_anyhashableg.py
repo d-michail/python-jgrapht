@@ -902,7 +902,7 @@ def _create_sparse_anyhashable_graph(
         for v, u, w in edgelist:
             int_edgelist.append((vertex_hash_to_id[v], vertex_hash_to_id[u], w))
     else:
-        for v, u in edgelist:
+        for v, u, *w in edgelist:
             int_edgelist.append((vertex_hash_to_id[v], vertex_hash_to_id[u]))
 
     # Create graph
@@ -925,3 +925,28 @@ def _create_sparse_anyhashable_graph(
         g._edge_id_to_hash[eid] = ehash
 
     return g
+
+
+def _copy_to_sparse_anyhashable_graph(graph):
+    """Copy an any-hashable graph to a sparse any-hashable graph.
+
+    .. note :: Sparse graphs are unmodifiable. Attempting to alter one will result in
+      an error being raised. Attributes and edge weights can be modified.
+
+    :param graph: the input graph
+    :returns: a sparse graph
+    :rtype: :class:`jgrapht.types.Graph`
+    """
+    if len(graph.vertices) == 0:
+        raise ValueError("Graph with no vertices")
+
+    edgelist = [graph.edge_tuple(e) for e in graph.edges]
+
+    return _create_sparse_anyhashable_graph(
+        edgelist,
+        directed=graph.type.directed,
+        weighted=graph.type.weighted,
+        vertex_supplier=graph._vertex_supplier,
+        edge_supplier=graph._edge_supplier,
+    )
+

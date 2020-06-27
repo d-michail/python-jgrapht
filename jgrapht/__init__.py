@@ -41,12 +41,14 @@ from ._internals._graphs import (
     _create_int_graph,
     _create_int_dag,
     _create_sparse_int_graph,
-    _as_sparse_int_graph as as_sparse_graph,
+    _copy_to_sparse_int_graph,
 )
 from ._internals._anyhashableg import (
+    _is_anyhashable_graph,
     _create_anyhashable_graph,
     _create_anyhashable_dag,
     _create_sparse_anyhashable_graph,
+    _copy_to_sparse_anyhashable_graph,
 )
 
 #
@@ -150,6 +152,9 @@ def create_sparse_graph(
     *edge supplier*. If not provided by the user, the default implementation creates instances
     of :py:class:`object`.
 
+    The structure (topology) of a sparse graph is unmodifiable, but weights and properties can be
+    modified.
+
     :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs. If `any_hashable` is 
       false, the vertices must be integers.
     :param num_of_vertices: number of vertices in the graph. Vertices always start from 0 
@@ -184,6 +189,22 @@ def create_sparse_graph(
             directed=directed,
             weighted=weighted,
         )
+
+
+def copy_to_sparse_graph(graph):
+    """Copy a graph to a sparse graph.
+
+    .. note :: Sparse graphs are unmodifiable. Attempting to alter one will result in
+      an error being raised. Attributes and edge weights can be modified.
+
+    :param graph: the input graph
+    :returns: a sparse graph
+    :rtype: :class:`jgrapht.types.Graph`
+    """
+    if _is_anyhashable_graph(graph):
+        return _copy_to_sparse_anyhashable_graph(graph)
+    else: 
+        return _copy_to_sparse_int_graph(graph)
 
 
 from . import (

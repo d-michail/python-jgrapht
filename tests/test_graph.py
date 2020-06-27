@@ -3,7 +3,7 @@ import pytest
 from jgrapht import (
     create_graph,
     create_sparse_graph,
-    as_sparse_graph,
+    copy_to_sparse_graph,
 )
 
 
@@ -476,13 +476,13 @@ def test_graph_copy_to_sparse():
 
     assert len(g.edges) == 7
 
-    gs = as_sparse_graph(g)
+    gs = copy_to_sparse_graph(g)
 
     assert gs.vertices, set([0, 1, 2, 3, 4])
     assert len(gs.edges) == 7
 
 
-def test_graph_copy_to_sparse():
+def test_graph_copy_to_sparse1():
 
     g = create_graph(
         directed=True,
@@ -506,7 +506,7 @@ def test_graph_copy_to_sparse():
 
     assert len(g.edges) == 3
 
-    gs = as_sparse_graph(g)
+    gs = copy_to_sparse_graph(g)
 
     assert gs.vertices, set(range(0, 11))
     assert len(gs.edges) == 3

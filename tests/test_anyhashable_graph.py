@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, copy_to_sparse_graph
 from jgrapht.types import GraphEvent
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 from jgrapht.generators import complete_graph
@@ -495,3 +495,81 @@ def test_anyhashable_graph_sparse_weighted():
 
     weighted = [g.edge_attrs[e]['weight'] for e in g.edges]
     assert weighted == [6.0, 3.0, 4.0, 2.0, 8.7, 4.3, 14.0, 10.999, 4.0]
+
+
+
+def test_graph_copy_to_sparse():
+
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+        any_hashable=True,
+    )
+
+    assert not g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
+
+    assert g.add_vertex(0) == 0
+    v1 = 0
+    assert g.add_vertex(1) == 1
+    v2 = 1
+    assert g.add_vertex(2) == 2
+    v3 = 2
+    assert g.add_vertex(3) == 3
+    v4 = 3
+    assert g.add_vertex(4) == 4
+    v5 = 4
+
+    assert g.vertices, set([0, 1, 2, 3, 4])
+
+    e12 = g.add_edge(v1, v2)
+    e23 = g.add_edge(v2, v3)
+    e14 = g.add_edge(v1, v4)
+    e11 = g.add_edge(v1, v1)
+    e45 = g.add_edge(v4, v5)
+    e51_1 = g.add_edge(v5, v1)
+    e51_2 = g.add_edge(v5, v1)
+
+    assert len(g.edges) == 7
+
+    gs = copy_to_sparse_graph(g)
+
+    assert gs.vertices, set([0, 1, 2, 3, 4])
+    assert len(gs.edges) == 7
+
+
+def test_graph_copy_to_sparse1():
+
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+        any_hashable=True,
+    )
+
+    assert g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
+
+    assert g.add_vertex(0) == 0
+    assert g.add_vertex(5) == 5
+    assert g.add_vertex(10) == 10
+
+    g.add_edge(0, 10)
+    g.add_edge(0, 5)
+    g.add_edge(10, 5)
+
+    assert len(g.edges) == 3
+
+    gs = copy_to_sparse_graph(g)
+
+    assert gs.vertices, set(range(0, 11))
+    assert len(gs.edges) == 3
+    assert gs.type.weighted
+    assert gs.type.directed

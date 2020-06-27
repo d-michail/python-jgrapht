@@ -262,7 +262,7 @@ def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weig
 
         if track_num_vertices: 
             num_of_vertices = 0
-            for u, v, _ in edgelist:
+            for u, v, *w in edgelist:
                 num_of_vertices = max(u, v, num_of_vertices)
             num_of_vertices += 1
     else:
@@ -278,7 +278,7 @@ def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weig
                 if track_num_vertices:
                      num_of_vertices = max(u, v, num_of_vertices)
         else:
-            for u, v in edgelist:
+            for u, v, *w in edgelist:
                 backend.jgrapht_list_edge_pair_add(e_list, u, v)
                 if track_num_vertices:
                     num_of_vertices = max(u, v, num_of_vertices)
@@ -296,7 +296,7 @@ def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weig
     return _JGraphTGraph(handle)
 
 
-def _as_sparse_int_graph(graph):
+def _copy_to_sparse_int_graph(graph):
     """Copy a graph to a sparse graph.
 
     .. note :: The resulting graph might have more vertices that the source graph. The reason is 
