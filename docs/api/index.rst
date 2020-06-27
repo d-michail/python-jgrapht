@@ -12,7 +12,6 @@ API
 
    introduction
    interfaces
-   int_graph_factories
    graph_factories
    views
    traversals

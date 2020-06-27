@@ -21,7 +21,7 @@ import jgrapht.algorithms.scoring as scoring
 # Creating a graph is done using the factory method. By default graphs are directed
 # and weighted.
 
-g = jgrapht.create_int_graph()
+g = jgrapht.create_graph()
 
 # %%
 # We can add vertices by providing their identifier. The method returns `True` if the 

@@ -39,8 +39,8 @@ Graph Implementations
 
 The |Bindings| contains two main graph implementations: 
 
-integer graph
-"""""""""""""
+integer graphs
+""""""""""""""
 
 The *integer graph* is oriented torwards simplicity and performance. Its main characteristic is that 
 vertices and edges are always integers. When manipulating graphs, beside its structure (topology),
@@ -54,20 +54,21 @@ restriction to the user, except possibly some aesthetic effect.
 
 A special version of the integer graph which is also supported is the *sparse* graph. The sparse graph 
 is a static variant which can only be bulk-loaded from a list of edges. Its benefits is that it is 
-condiderably faster and less memory hungry, at the expense of not beeing modifiable. It is best suited 
+condiderably faster and less memory hungry, at the expense of not being modifiable. It is best suited 
 for less dynamic workloads where the user creates a graph once and executes complex algorithms on it.
 
-graph
-"""""
+any-hashable graphs
+"""""""""""""""""""
    
-The *graph* is a graph implementation which allows the use of any Python hashable as vertices 
+The *any-hashable graph* is a graph implementation which allows the use of any Python hashable as vertices 
 or edges. Additionally, it provides support for maintaining the attributes/properties dictionaries 
-inside the graph. During creation the user can provide a factory function which the graph 
-can use whenever it needs to create new vertices or edges. If not explicitly provided, the implementation 
-uses object instances for all automatically created vertices and edges. 
-Importers and exporters automatically support graphs, by importing/exporting their associated attributes.
+inside the graph. During creation the user can provide a vertex and edge factory function (called vertex
+supplier and edge supplier) which the graph can use whenever it needs to create new vertices or edges.
+If not explicitly provided, the implementation uses object instances for all automatically created vertices
+and edges. Importers and exporters automatically support graphs, by importing/exporting their associated
+attributes.
 
 .. note::
-   Graphs are implemented by wrapping the integer graph which means that they incur a performance 
+   Any-hashable graphs are implemented by wrapping the integer graph which means that they incur a performance 
    penalty compared to the integer graph.
    

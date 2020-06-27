@@ -18,7 +18,7 @@ from jgrapht.io.exporters import generate_json
 # %%
 # Let us create an undirected graph
 
-g = jgrapht.create_int_graph(directed=False)
+g = jgrapht.create_graph(directed=False)
 
 # %% 
 # and use the complete generator to populate the graph,

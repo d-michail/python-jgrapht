@@ -2,23 +2,21 @@
 
 .. currentmodule:: jgrapht
 
-Attributes Graph Tutorial
-=========================
+Any Hashable Graph Tutorial
+===========================
 
-Property graphs are graphs which can have any Python hashable as vertices and edges. They 
-also provide explicit support for associating attributes/properties with vertices and edges 
+The |Bindings| allow the creation of graphs which can have any Python hashable as vertices and edges.
+Such graphs also provide explicit support for associating attributes/properties with vertices and edges 
 in the graph.
 
-Creating a property graph
--------------------------
+
+Creating a graph with any hashable as vertices and edges
+--------------------------------------------------------
 
 .. nbplot::
 
   >>> import jgrapht
-    >>> g = jgrapht.create_anyhashable_graph(directed=True, weighted=True, allowing_self_loops=False, allowing_multiple_edges=False)
-
-  The factory function accepts two additional parameters, called
-  >>> g = jgrapht.create_attrs_graph(directed=True, weighted=True, allowing_self_loops=False, allowing_multiple_edges=False)
+  >>> g = jgrapht.create_graph(directed=True, weighted=True, allowing_self_loops=False, allowing_multiple_edges=False, any_hashable_for_graph_elements=True)
 
 The factory function accepts two additional parameters, called `vertex_supplier` and `edge_supplier`. These are callable instances
 whose job is to return a new object whenever the graph wants to create a vertex or an edge. When not explicitly provided, the 
@@ -159,7 +157,7 @@ Graph properties
 ----------------
 
 Besides the graph structure, users can associate attributes/properties with the graph itself, with 
-the vertices and the edges. All property graphs follow the :py:class:`jgrapht.types.PropertyGraph`
+the vertices and the edges. All such graphs follow the :py:class:`jgrapht.types.AttributesGraph`
 interface. It defines three dictionaries keyed using the correspoding graph elements which perform
 the necessary type checking in order to ensure existence.
 
@@ -168,14 +166,9 @@ Let us associate a label with each vertex of the graph:
 .. nbplot::
 
   >>> g.vertex_attrs['v0']['label'] = 'vertex 0'
-    >>> g.vertex_props['v1']['label'] = 'vertex 1'
-    >>> g.vertex_attrs['v2']['label'] = 'vertex 2'
-    >>> g.vertex_props[obj]['label'] = 'object vertex'
-
-  The same can be done with the edges:
-  >>> g.vertex_props['v1']['label'] = 'vertex 1'
-  >>> g.vertex_props['v2']['label'] = 'vertex 2'
-  >>> g.vertex_props[obj]['label'] = 'object vertex'
+  >>> g.vertex_attrs['v1']['label'] = 'vertex 1'
+  >>> g.vertex_attrs['v2']['label'] = 'vertex 2'
+  >>> g.vertex_attrs[obj]['label'] = 'object vertex'
 
 The same can be done with the edges: 
 
@@ -185,11 +178,11 @@ The same can be done with the edges:
   >>>     g.edge_attrs[e]['label'] = str(e)
 
 The special attribute/property `weight` for the edges is respected. This means that writing this 
-property requires the property graph to be weighted.
+attribute requires the graph to be weighted.
 
 .. nbplot::
 
   >>> print(g.edge_attrs[e2]['weight'])
-  >>> g.edge_props[e2]['weight'] = 16.0
+  >>> g.edge_attrs[e2]['weight'] = 16.0
 
-Properties are respected on all importers and exporters (whose format supports attributes/properties).
+Attributes/properties are respected on all importers and exporters (whose format supports attributes/properties).

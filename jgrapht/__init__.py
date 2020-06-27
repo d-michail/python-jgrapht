@@ -63,14 +63,24 @@ def create_graph(directed=True,
                  ):
     """Create a graph.
 
+    By default this function creates graphs with integer vertices. When parameter
+    `any_hashable_for_graph_elements` is true, the returned graph will be able to (a) have any
+    hashable as vertices and edges, and (b) associate attributes/properties with the vertices
+    and edges. Such a any-hashable graph needs to be able to create new objects for vertices
+    and edges. This is accomplished by providing two functions called *vertex supplier* and
+    *edge supplier*. If not provided by the user, the default implementation creates instances
+    of :py:class:`object`.
+
     :param directed: if True the graph will be directed, otherwise undirected
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
     :param dag: if True the graph will be a DAG (directed acyclic graph). An error will be
-      raised if either directed or allowing_self_loops is True
+      raised if either directed is False or allowing_self_loops is True. The returned graph
+      will be an instance of :class:`~jgrapht.types.DirectedAcyclicGraph`
     :param any_hashable_for_graph_elements: if True then the graph will allow the use of any
-      hashable as vertices and edges instead of just integers
+      hashable as vertices and edges instead of just integers. This also makes the graph
+      an instance of :class:`~jgrapht.types.AttributesGraph`
     :param vertex_supplier: used only in the case that the graph allows any hashable as
       vertices/edges. Called everytime the graph needs to create a new vertex. If not given,
       then object instances are used.

@@ -19,7 +19,7 @@ import jgrapht.algorithms.cliques as cliques
 # %%
 # We first create a graph an undirected graph.
 
-g = jgrapht.create_int_graph(directed=False)
+g = jgrapht.create_graph(directed=False)
 
 for i in range(0, 6):
     g.add_vertex(i)

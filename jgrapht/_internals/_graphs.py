@@ -4,7 +4,9 @@ from ..types import (
     GraphType,
     DirectedAcyclicGraph,
 )
+
 from collections.abc import Set
+
 from ._wrappers import _HandleWrapper
 from ._collections import (
     _JGraphTIntegerIterator,
