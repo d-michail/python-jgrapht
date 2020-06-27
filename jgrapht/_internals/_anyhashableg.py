@@ -907,7 +907,7 @@ def create_sparse_anyhashable_graph(
 
     # Create graph
     sparse_int_graph = _create_sparse_int_graph(
-        len(vertex_hash_to_id), int_edgelist, directed=directed, weighted=weighted
+        int_edgelist, len(vertex_hash_to_id), directed=directed, weighted=weighted
     )
     g = _AnyHashableGraph(
         sparse_int_graph, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier

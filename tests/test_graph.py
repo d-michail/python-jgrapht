@@ -370,7 +370,28 @@ def test_graph_add_vertex():
 def test_graph_sparse():
 
     edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
-    g = create_sparse_graph(7, edgelist, weighted=False)
+    g = create_sparse_graph(edgelist, 7, weighted=False)
+
+    assert g.type.directed
+    assert not g.type.weighted
+
+    assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
+
+    edgelist2 = []
+    for e in g.edges:
+        u, v, w = g.edge_tuple(e)
+        edgelist2.append((u, v))
+    assert edgelist2 == edgelist
+
+    # sparse graphs cannot be modified
+    with pytest.raises(ValueError):
+        g.add_edge(0, 5)
+
+
+def test_graph_sparse_no_vertex_count():
+
+    edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
+    g = create_sparse_graph(edgelist, weighted=False)
 
     assert g.type.directed
     assert not g.type.weighted
@@ -401,7 +422,7 @@ def test_graph_sparse_weighted():
         (0, 4, 9.999),
         (2, 6, 3.0),
     ]
-    g = create_sparse_graph(7, edgelist, directed=False)
+    g = create_sparse_graph(edgelist, 7, directed=False)
 
     assert not g.type.directed
     assert g.type.weighted

@@ -212,7 +212,7 @@ def create_int_graph(
     allowing_multiple_edges=False,
     weighted=True,
 ):
-    """Create a graph.
+    """Create a graph with integer vertices/edges.
 
     :param directed: if True the graph will be directed, otherwise undirected
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
@@ -227,15 +227,13 @@ def create_int_graph(
     return _JGraphTGraph(handle)
 
 
-def create_sparse_int_graph(num_of_vertices, edgelist, directed=True, weighted=True):
-    """Create a sparse graph. 
+def create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weighted=True):
+    """Create a sparse graph with integer vertices/edges. 
 
     A sparse graph uses a CSR (compressed-sparse-rows) representation. The result is 
     lower memory consumption and very efficient and cache-friendly representation on
-    recent machines.
-
-    Their drawback is that they assume a continuous range of vertices and edges and 
-    that they are not modifiable after construction.
+    recent machines. Their drawback is that they assume a continuous range of vertices
+    and edges and that they are not modifiable after construction.
 
     .. note :: Sparse graphs cannot be modified after construction. They are best suited 
        for executing algorithms which do not need to modify the graph after loading.
@@ -245,28 +243,48 @@ def create_sparse_int_graph(num_of_vertices, edgelist, directed=True, weighted=T
     
     Sparse graphs can always support self-loops and multiple-edges.
 
-    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0 
-      and increase continuously
     :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs
+    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0 
+      and increase continuously. If not explicitly given the edgelist will be traversed in
+      order to find out the number of vertices
     :param directed: whether the graph will be directed or undirected
     :param weighted: whether the graph will be weighted or not
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
+    track_num_vertices = num_of_vertices is None
+
     if weighted and isinstance(edgelist, _JGraphTEdgeTripleList):
         # Special case for internal edge list, created using the edgelist
         # importers. This avoids copying.
         e_list_owner = False
         e_list = edgelist.handle
+
+        if track_num_vertices: 
+            num_of_vertices = 0
+            for u, v, _ in edgelist:
+                num_of_vertices = max(u, v, num_of_vertices)
+            num_of_vertices += 1
     else:
         e_list_owner = True
         e_list = backend.jgrapht_list_create()
+
+        if track_num_vertices: 
+            num_of_vertices = 0
+
         if weighted:
             for u, v, w in edgelist:
                 backend.jgrapht_list_edge_triple_add(e_list, u, v, w)
+                if track_num_vertices:
+                     num_of_vertices = max(u, v, num_of_vertices)
         else:
             for u, v in edgelist:
                 backend.jgrapht_list_edge_pair_add(e_list, u, v)
+                if track_num_vertices:
+                    num_of_vertices = max(u, v, num_of_vertices)
+
+        if track_num_vertices: 
+            num_of_vertices += 1
 
     handle = backend.jgrapht_graph_sparse_create(
         directed, weighted, num_of_vertices, e_list
@@ -301,7 +319,7 @@ def as_sparse_int_graph(graph):
     edgelist = [graph.edge_tuple(e) for e in graph.edges]
 
     return create_sparse_int_graph(
-        max_vertex + 1, edgelist, graph.type.directed, graph.type.weighted
+        edgelist, max_vertex + 1, graph.type.directed, graph.type.weighted
     )
 
 
