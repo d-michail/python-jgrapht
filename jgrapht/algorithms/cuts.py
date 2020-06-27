@@ -7,8 +7,8 @@ from .._internals._flows import (
 from .._internals._collections import _JGraphTIntegerMutableSet
 
 from .._internals._anyhashableg import (
-    is_anyhashable_graph,
-    vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
+    _is_anyhashable_graph,
+    _vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
 )
 from .._internals._anyhashableg_flows import (
     _AnyHashableGraphCut,
@@ -33,7 +33,7 @@ def mincut_stoer_wagner(graph):
         cut_source_partition_handle,
     ) = _backend.jgrapht_cut_mincut_exec_stoer_wagner(graph.handle)
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphCut(graph, cut_weight, cut_source_partition_handle)
     else:
         return _JGraphTCut(graph, cut_weight, cut_source_partition_handle)
@@ -80,7 +80,7 @@ def gomory_hu_gusfield(graph):
     """
     handle = _backend.jgrapht_cut_gomoryhu_exec_gusfield(graph.handle)
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphGomoryHuTree(handle, graph)
     else:
         return _JGraphTGomoryHuTree(handle, graph)
@@ -104,7 +104,7 @@ def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
     :returns: a cut as an instance of :py:class:`.Cut`.
     """
     odd_set = _JGraphTIntegerMutableSet()
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         for x in odd_vertices:
             odd_set.add(_vertex_anyhashableg_to_g(graph, x))
     else:
@@ -118,7 +118,7 @@ def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
         graph.handle, odd_set.handle, use_tree_compression
     )
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphCut(graph, cut_weight, cut_source_partition_handle)
     else:
         return _JGraphTCut(graph, cut_weight, cut_source_partition_handle)

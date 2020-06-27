@@ -8,12 +8,12 @@ from ._wrappers import (
 )
 
 from ._anyhashableg import (
-    vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
-    vertex_g_to_anyhashableg as _vertex_g_to_anyhashableg,
+    _vertex_anyhashableg_to_g,
+    _vertex_g_to_anyhashableg,
 )
 from ._anyhashableg import (
-    edge_anyhashableg_to_g as _edge_anyhashableg_to_g,
-    edge_g_to_anyhashableg as _edge_g_to_anyhashableg,
+    _edge_anyhashableg_to_g,
+    _edge_g_to_anyhashableg,
 )
 
 

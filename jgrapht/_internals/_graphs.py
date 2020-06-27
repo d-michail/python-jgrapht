@@ -206,7 +206,7 @@ class _JGraphTDirectedAcyclicGraph(_JGraphTGraph, DirectedAcyclicGraph):
         return _JGraphTIntegerIterator(handle=it_handle)
 
 
-def create_int_graph(
+def _create_int_graph(
     directed=True,
     allowing_self_loops=False,
     allowing_multiple_edges=False,
@@ -227,7 +227,7 @@ def create_int_graph(
     return _JGraphTGraph(handle)
 
 
-def create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weighted=True):
+def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weighted=True):
     """Create a sparse graph with integer vertices/edges. 
 
     A sparse graph uses a CSR (compressed-sparse-rows) representation. The result is 
@@ -296,7 +296,7 @@ def create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weigh
     return _JGraphTGraph(handle)
 
 
-def as_sparse_int_graph(graph):
+def _as_sparse_int_graph(graph):
     """Copy a graph to a sparse graph.
 
     .. note :: The resulting graph might have more vertices that the source graph. The reason is 
@@ -318,12 +318,12 @@ def as_sparse_int_graph(graph):
     max_vertex = max(graph.vertices)
     edgelist = [graph.edge_tuple(e) for e in graph.edges]
 
-    return create_sparse_int_graph(
+    return _create_sparse_int_graph(
         edgelist, max_vertex + 1, graph.type.directed, graph.type.weighted
     )
 
 
-def create_int_dag(
+def _create_int_dag(
     allowing_multiple_edges=False, weighted=True,
 ):
     """Create a directed acyclic graph.

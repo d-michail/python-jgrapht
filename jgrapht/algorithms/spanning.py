@@ -2,12 +2,12 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerSet
 
-from .._internals._anyhashableg import is_anyhashable_graph
+from .._internals._anyhashableg import _is_anyhashable_graph
 from .._internals._anyhashableg_collections import _AnyHashableGraphEdgeSet
 
 
 def _wrap_result(graph, weight, mst_handle):
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return weight, _AnyHashableGraphEdgeSet(mst_handle, graph)
     else:
         return weight, _JGraphTIntegerSet(mst_handle)

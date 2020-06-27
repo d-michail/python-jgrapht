@@ -5,7 +5,7 @@ from .._internals._collections import (
     _JGraphTIntegerSetIterator,
 )
 
-from .._internals._anyhashableg import is_anyhashable_graph
+from .._internals._anyhashableg import _is_anyhashable_graph
 from .._internals._anyhashableg_collections import (
     _AnyHashableGraphVertexSet,
     _AnyHashableGraphVertexSetIterator,
@@ -29,7 +29,7 @@ def bron_kerbosch(graph, timeout=0):
     """
     custom = [timeout]
     res = _backend.jgrapht_clique_exec_bron_kerbosch(graph.handle, *custom)
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSetIterator(res, graph)
     else:
         return _JGraphTIntegerSetIterator(res)
@@ -56,7 +56,7 @@ def bron_kerbosch_with_pivot(graph, timeout=0):
     """
     custom = [timeout]
     res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot(graph.handle, *custom)
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSetIterator(res, graph)
     else:
         return _JGraphTIntegerSetIterator(res)
@@ -89,7 +89,7 @@ def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
     res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(
         graph.handle, *custom
     )
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSetIterator(res, graph)
     else:
         return _JGraphTIntegerSetIterator(res)
@@ -106,7 +106,7 @@ def chordal_max_clique(graph):
     """
     res = _backend.jgrapht_clique_exec_chordal_max_clique(graph.handle)
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSet(res, graph)
     else:
         return _JGraphTIntegerSet(res)

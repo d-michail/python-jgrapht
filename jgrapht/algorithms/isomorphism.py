@@ -2,7 +2,7 @@ from .. import backend as _backend
 
 from .._internals._mapping import _JGraphTGraphMapping, _JGraphTGraphMappingIterator
 
-from .._internals._anyhashableg import is_anyhashable_graph
+from .._internals._anyhashableg import _is_anyhashable_graph
 from .._internals._anyhashableg_mapping import (
     _AnyHashableGraphGraphMapping,
     _AnyHashableGraphMappingIterator,
@@ -29,7 +29,7 @@ def vf2(graph1, graph2):
     if not exists:
         return None
 
-    if is_anyhashable_graph(graph1) or is_anyhashable_graph(graph2):
+    if _is_anyhashable_graph(graph1) or _is_anyhashable_graph(graph2):
         return _AnyHashableGraphMappingIterator(
             handle=map_it_handle, graph1=graph1, graph2=graph2
         )
@@ -64,7 +64,7 @@ def vf2_subgraph(graph1, graph2):
     if not exists:
         return None
 
-    if is_anyhashable_graph(graph1) or is_anyhashable_graph(graph2):
+    if _is_anyhashable_graph(graph1) or _is_anyhashable_graph(graph2):
         return _AnyHashableGraphMappingIterator(
             handle=map_it_handle, graph1=graph1, graph2=graph2
         )

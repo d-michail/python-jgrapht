@@ -6,7 +6,7 @@ from .._internals._attributes import (
     _JGraphTAttributeStore,
     _JGraphTAttributesRegistry,
 )
-from .._internals._anyhashableg import is_anyhashable_graph
+from .._internals._anyhashableg import _is_anyhashable_graph
 
 
 def _export_to_file(name, graph, filename, *args):
@@ -33,7 +33,7 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
       an identifier to be written to file.
     """
     vertex_id_store = None
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         # special case, read identifiers from any-hashable graph
         vertex_id_store = _JGraphTIntegerStringMap()
 
@@ -65,7 +65,7 @@ def _vertex_attributes_store(graph, attributes_dict):
     used in order to export a graph with attributes.
     """
     attribute_store = None
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         # any-hashable graph
         attribute_store = _JGraphTAttributeStore()
         for v in graph.vertices:
@@ -99,7 +99,7 @@ def _edge_id_store(graph):
     works for any-hashable graphs, otherwise it returns None.
     """
     edge_id_store = None
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         # special case, read identifiers from an any-hashable graph
         edge_id_store = _JGraphTIntegerStringMap()
         for k, v in graph._edge_id_to_hash.items():
@@ -113,7 +113,7 @@ def _edge_attributes_store(graph, attributes_dict):
     used in order to export a graph with attributes.
     """
     attribute_store = None
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         # any-hashable graph
         attribute_store = _JGraphTAttributeStore()
         for e in graph.edges:

@@ -1,6 +1,4 @@
 from .. import backend
-from collections import namedtuple
-from collections.abc import Iterator
 
 from ._wrappers import _JGraphTObjectIterator
 from ._anyhashableg_wrappers import (

@@ -6,11 +6,9 @@ from ._wrappers import _HandleWrapper
 
 from ._graphs import _JGraphTGraph
 from ._anyhashableg import (
-    _AnyHashableGraph,
-    create_anyhashable_graph,
-    is_anyhashable_graph,
-    vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
-    vertex_g_to_anyhashableg as _vertex_g_to_anyhashableg,
+    _create_anyhashable_graph,
+    _vertex_anyhashableg_to_g,
+    _vertex_g_to_anyhashableg,
 )
 from ._anyhashableg_collections import _AnyHashableGraphEdgeDoubleMap
 
@@ -58,7 +56,7 @@ class _AnyHashableGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
 
         # The resulting tree has the same vertices as the original graph. When using
         # any-hashable graphs, we have to explicitly copy here, to keep the same effect.
-        res = create_anyhashable_graph(
+        res = _create_anyhashable_graph(
             directed=tree_as_graph.type.directed,
             allowing_self_loops=tree_as_graph.type.allowing_self_loops,
             allowing_multiple_edges=tree_as_graph.type.allowing_multiple_edges,
@@ -111,7 +109,7 @@ class _AnyHashableGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
 
         # The resulting tree has the same vertices as the original graph. When using
         # any-hashable graphs, we have to explicitly copy here, to keep the same effect.
-        res = create_anyhashable_graph(
+        res = _create_anyhashable_graph(
             directed=tree_as_graph.type.directed,
             allowing_self_loops=tree_as_graph.type.allowing_self_loops,
             allowing_multiple_edges=tree_as_graph.type.allowing_multiple_edges,

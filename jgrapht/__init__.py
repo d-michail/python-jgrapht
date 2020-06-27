@@ -37,20 +37,21 @@ import logging
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
-#
-# The graph API
-#
 from ._internals._graphs import (
-    create_int_graph as _create_int_graph,
-    create_int_dag as _create_int_dag,
-    create_sparse_int_graph as create_sparse_graph,
-    as_sparse_int_graph as as_sparse_graph,
+    _create_int_graph,
+    _create_int_dag,
+    _create_sparse_int_graph,
+    _as_sparse_int_graph as as_sparse_graph,
 )
 from ._internals._anyhashableg import (
-    create_anyhashable_graph as _create_anyhashable_graph,
-    create_anyhashable_dag as _create_anyhashable_dag,
+    _create_anyhashable_graph,
+    _create_anyhashable_dag,
+    _create_sparse_anyhashable_graph,
 )
 
+#
+# The graph creation API
+#
 
 def create_graph(
     directed=True,
@@ -65,7 +66,7 @@ def create_graph(
     """Create a graph.
 
     By default this function creates graphs with integer vertices. When parameter
-    `any_hashable_for_graph_elements` is true, the returned graph will be able to (a) have any
+    `any_hashable` is true, the returned graph will be able to (a) have any
     hashable as vertices and edges, and (b) associate attributes/properties with the vertices
     and edges. Such a any-hashable graph needs to be able to create new objects for vertices
     and edges. This is accomplished by providing two functions called *vertex supplier* and
@@ -128,6 +129,61 @@ def create_graph(
                 allowing_multiple_edges=allowing_multiple_edges,
                 weighted=weighted,
             )
+
+
+def create_sparse_graph(
+    edgelist,
+    num_of_vertices=None,
+    directed=True,
+    weighted=True,
+    any_hashable=False,
+    vertex_supplier=None,
+    edge_supplier=None,
+):
+    """Create a sparse graph.
+
+    By default this function creates graphs with integer vertices. When parameter
+    `any_hashable` is true, the returned graph will be able to (a) have any
+    hashable as vertices and edges, and (b) associate attributes/properties with the vertices
+    and edges. Such a any-hashable graph needs to be able to create new objects for vertices
+    and edges. This is accomplished by providing two functions called *vertex supplier* and
+    *edge supplier*. If not provided by the user, the default implementation creates instances
+    of :py:class:`object`.
+
+    :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs. If `any_hashable` is 
+      false, the vertices must be integers.
+    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0 
+      and increase continuously. If not explicitly given and `any_hashable` is false, the edgelist
+      will be traversed in order to find out the number of vertices
+    :param directed: if True the graph will be directed, otherwise undirected
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :param any_hashable: if True then the graph will allow the use of any
+      hashable as vertices and edges instead of just integers. This also makes the graph
+      an instance of :class:`~jgrapht.types.AttributesGraph`
+    :param vertex_supplier: used only in the case that the graph allows any hashable as
+      vertices/edges. Called everytime the graph needs to create a new vertex. If not given,
+      then object instances are used.
+    :param edge_supplier: used only in the case that the graph allows any hashable as
+      vertices/edges. Called everytime the graph needs to create a new edge. If not given,
+      then object instances are used.
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.Graph`
+    """
+    if any_hashable:
+        return _create_sparse_anyhashable_graph(
+            edgelist=edgelist,
+            directed=directed,
+            weighted=weighted,
+            vertex_supplier=vertex_supplier,
+            edge_supplier=edge_supplier,
+        )
+    else:
+        return _create_sparse_int_graph(
+            edgelist=edgelist,
+            num_of_vertices=num_of_vertices,
+            directed=directed,
+            weighted=weighted,
+        )
 
 
 from . import (

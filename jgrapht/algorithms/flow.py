@@ -7,8 +7,8 @@ from .._internals._flows import (
 )
 
 from .._internals._anyhashableg import (
-    is_anyhashable_graph,
-    vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
+    _is_anyhashable_graph,
+    _vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
 )
 from .._internals._anyhashableg_flows import (
     _AnyHashableGraphCut,
@@ -28,7 +28,7 @@ def _maxflow_alg(name, graph, source, sink, *args):
         *args
     )
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         flow = _AnyHashableGraphFlow(graph, flow_handle, source, sink, flow_value)
         cut = _AnyHashableGraphCut(graph, flow_value, cut_source_partition_handle)
     else:
@@ -138,7 +138,7 @@ def equivalent_flow_tree_gusfield(graph):
     """
     handle = _backend.jgrapht_equivalentflowtree_exec_gusfield(graph.handle)
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphEquivalentFlowTree(handle, graph)
     else:
         return _JGraphTEquivalentFlowTree(handle, graph)

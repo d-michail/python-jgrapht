@@ -6,7 +6,7 @@ from .._internals._paths import (
 )
 from .._internals._collections import _JGraphTIntegerListIterator
 
-from .._internals._anyhashableg import is_anyhashable_graph
+from .._internals._anyhashableg import _is_anyhashable_graph
 from .._internals._anyhashableg_collections import (
     _AnyHashableGraphVertexList,
     _AnyHashableGraphVertexListIterator,
@@ -41,7 +41,7 @@ def eulerian_cycle(graph):
     if not is_eulerian:
         return None
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphGraphPath(gp, graph)
     else:
         return _JGraphTGraphPath(gp, graph)
@@ -68,7 +68,7 @@ def chinese_postman(graph):
     """
     gp = _backend.jgrapht_cycles_chinese_postman_exec_edmonds_johnson(graph.handle)
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphGraphPath(gp, graph)
     else:
         return _JGraphTGraphPath(gp, graph)
@@ -95,7 +95,7 @@ def fundamental_cycle_basis_paton(graph):
         graph.handle
     )
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return weight, _AnyHashableGraphGraphPathIterator(cycles_it, graph)
     else:
         return weight, _JGraphTGraphPathIterator(cycles_it, graph)
@@ -125,7 +125,7 @@ def fundamental_cycle_basis_bfs_with_stack(graph):
         graph.handle
     )
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return weight, _AnyHashableGraphGraphPathIterator(cycles_it, graph)
     else:
         return weight, _JGraphTGraphPathIterator(cycles_it, graph)
@@ -154,7 +154,7 @@ def fundamental_cycle_basis_bfs_with_queue(graph):
         graph.handle
     )
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return weight, _AnyHashableGraphGraphPathIterator(cycles_it, graph)
     else:
         return weight, _JGraphTGraphPathIterator(cycles_it, graph)
@@ -180,7 +180,7 @@ def enumerate_simple_cycles_tarjan(graph):
     """
     cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_tarjan(graph.handle)
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexListIterator(cycles_it, graph)
     else:
         return _JGraphTIntegerListIterator(cycles_it)
@@ -206,7 +206,7 @@ def enumerate_simple_cycles_johnson(graph):
     """
     cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_johnson(graph.handle)
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexListIterator(cycles_it, graph)
     else:
         return _JGraphTIntegerListIterator(cycles_it)
@@ -232,7 +232,7 @@ def enumerate_simple_cycles_tiernan(graph):
     """
     cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_tiernan(graph.handle)
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexListIterator(cycles_it, graph)
     else:
         return _JGraphTIntegerListIterator(cycles_it)
@@ -261,7 +261,7 @@ def enumerate_simple_cycles_szwarcfiter_lauer(graph):
         graph.handle
     )
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexListIterator(cycles_it, graph)
     else:
         return _JGraphTIntegerListIterator(cycles_it)
@@ -290,7 +290,7 @@ def enumerate_simple_cycles_hawick_james(graph):
         graph.handle
     )
 
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexListIterator(cycles_it, graph)
     else:
         return _JGraphTIntegerListIterator(cycles_it)

@@ -16,9 +16,9 @@ from ..types import (
 from ..utils import IntegerSupplier
 
 from ._graphs import (
-    create_int_graph as _create_int_graph,
-    create_int_dag as _create_int_dag,
-    create_sparse_int_graph as _create_sparse_int_graph,
+    _create_int_graph as _create_int_graph,
+    _create_int_dag as _create_int_dag,
+    _create_sparse_int_graph as _create_sparse_int_graph,
 )
 from ._views import (
     _ListenableView,
@@ -638,7 +638,7 @@ def _create_anyhashable_graph_subgraph(anyhashable_graph, subgraph):
     :param anyhashable_graph: the any-hashable graph from which to copy vertices and edges
     :param subgraph: the subgraph (must be a backend _JGraphTGraph)
     """
-    res = create_anyhashable_graph(
+    res = _create_anyhashable_graph(
         directed=subgraph.type.directed,
         allowing_self_loops=subgraph.type.allowing_self_loops,
         allowing_multiple_edges=subgraph.type.allowing_multiple_edges,
@@ -649,14 +649,14 @@ def _create_anyhashable_graph_subgraph(anyhashable_graph, subgraph):
 
     vertex_map = {}
     for vid in subgraph.vertices:
-        v = vertex_g_to_anyhashableg(anyhashable_graph, vid)
+        v = _vertex_g_to_anyhashableg(anyhashable_graph, vid)
         res.add_vertex(vertex=v)
         res.vertex_attrs[v] = copy.copy(anyhashable_graph.vertex_attrs[v])
         vertex_map[vid] = v
 
     weighted = subgraph.type.weighted
     for eid in subgraph.edges:
-        e = edge_g_to_anyhashableg(anyhashable_graph, eid)
+        e = _edge_g_to_anyhashableg(anyhashable_graph, eid)
         s, t, w = subgraph.edge_tuple(eid)
         if weighted:
             res.add_edge(vertex_map[s], vertex_map[t], weight=w, edge=e)
@@ -667,62 +667,62 @@ def _create_anyhashable_graph_subgraph(anyhashable_graph, subgraph):
     return res
 
 
-def as_unweighted_anyhashable_graph(attrs_graph):
+def _as_unweighted_anyhashable_graph(anyhashable_graph):
     """Create an unweighted view of an any-hashable graph."""
-    graph = attrs_graph._graph
+    graph = anyhashable_graph._graph
     unweighted_graph = _UnweightedGraphView(graph)
 
     unweighted_anyhashable_graph = _AnyHashableGraph(
-        unweighted_graph, copy_from=attrs_graph
+        unweighted_graph, copy_from=anyhashable_graph
     )
 
     return unweighted_anyhashable_graph
 
 
-def as_undirected_anyhashable_graph(attrs_graph):
+def _as_undirected_anyhashable_graph(anyhashable_graph):
     """Create an undirected view of an any-hashable graph."""
-    graph = attrs_graph._graph
+    graph = anyhashable_graph._graph
     undirected_graph = _UndirectedGraphView(graph)
 
     undirected_anyhashable_graph = _AnyHashableGraph(
-        undirected_graph, copy_from=attrs_graph
+        undirected_graph, copy_from=anyhashable_graph
     )
 
     return undirected_anyhashable_graph
 
 
-def as_unmodifiable_anyhashable_graph(attrs_graph):
+def _as_unmodifiable_anyhashable_graph(anyhashable_graph):
     """Create an unmodifiable view of an any-hashable graph."""
-    graph = attrs_graph._graph
+    graph = anyhashable_graph._graph
     unmodifiable_graph = _UnmodifiableGraphView(graph)
 
     unmodifiable_anyhashable_graph = _AnyHashableGraph(
-        unmodifiable_graph, copy_from=attrs_graph
+        unmodifiable_graph, copy_from=anyhashable_graph
     )
 
     return unmodifiable_anyhashable_graph
 
 
-def as_edgereversed_anyhashable_graph(attrs_graph):
+def _as_edgereversed_anyhashable_graph(anyhashable_graph):
     """Create an edge reversed view of an any-hashable graph."""
-    graph = attrs_graph._graph
+    graph = anyhashable_graph._graph
     edgereversed_graph = _EdgeReversedGraphView(graph)
 
     edgereversed_anyhashable_graph = _AnyHashableGraph(
-        edgereversed_graph, copy_from=attrs_graph
+        edgereversed_graph, copy_from=anyhashable_graph
     )
 
     return edgereversed_anyhashable_graph
 
 
-def as_weighted_anyhashable_graph(
+def _as_weighted_anyhashable_graph(
     anyhashable_graph, edge_weight_cb, cache_weights, write_weights_through
 ):
     """Create a weighted view of an any-hashable graph."""
     if edge_weight_cb is not None:
 
         def actual_edge_weight_cb(e):
-            e = edge_g_to_anyhashableg(anyhashable_graph, e)
+            e = _edge_g_to_anyhashableg(anyhashable_graph, e)
             return edge_weight_cb(e)
 
     else:
@@ -739,19 +739,19 @@ def as_weighted_anyhashable_graph(
     return weighted_anyhashable_graph
 
 
-def as_masked_subgraph_anyhashable_graph(
+def _as_masked_subgraph_anyhashable_graph(
     anyhashable_graph, vertex_mask_cb, edge_mask_cb=None
 ):
     """ Create a masked subgraph view of an any-hashable graph."""
 
     def actual_vertex_mask_cb(v):
-        v = vertex_g_to_anyhashableg(anyhashable_graph, v)
+        v = _vertex_g_to_anyhashableg(anyhashable_graph, v)
         return vertex_mask_cb(v)
 
     if edge_mask_cb is not None:
 
         def actual_edge_mask_cb(e):
-            e = edge_g_to_anyhashableg(anyhashable_graph, e)
+            e = _edge_g_to_anyhashableg(anyhashable_graph, e)
             return edge_mask_cb(e)
 
     else:
@@ -774,7 +774,7 @@ def as_masked_subgraph_anyhashable_graph(
     return masked_subgraph_anyhashable_graph
 
 
-def is_anyhashable_graph(graph):
+def _is_anyhashable_graph(graph):
     """Check if a graph instance is an any-hashable graph.
     
     :param graph: the graph
@@ -783,35 +783,35 @@ def is_anyhashable_graph(graph):
     return isinstance(graph, (_AnyHashableGraph))
 
 
-def vertex_anyhashableg_to_g(graph, vertex):
+def _vertex_anyhashableg_to_g(graph, vertex):
     """Translate from an any-hashable graph vertex to a graph vertex."""
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return graph._vertex_hash_to_id[vertex] if vertex is not None else None
     return vertex
 
 
-def vertex_g_to_anyhashableg(graph, vertex):
+def _vertex_g_to_anyhashableg(graph, vertex):
     """Translate from a graph vertex to an any-hashable graph vertex."""
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return graph._vertex_id_to_hash[vertex] if vertex is not None else None
     return vertex
 
 
-def edge_anyhashableg_to_g(graph, edge):
+def _edge_anyhashableg_to_g(graph, edge):
     """Translate from an any-hashable graph edge to a graph edge."""
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return graph._edge_hash_to_id[edge] if edge is not None else None
     return edge
 
 
-def edge_g_to_anyhashableg(graph, edge):
+def _edge_g_to_anyhashableg(graph, edge):
     """Translate from a graph edge to an any-hashable graph edge."""
-    if is_anyhashable_graph(graph):
+    if _is_anyhashable_graph(graph):
         return graph._edge_id_to_hash[edge] if edge is not None else None
     return edge
 
 
-def create_anyhashable_graph(
+def _create_anyhashable_graph(
     directed=True,
     allowing_self_loops=False,
     allowing_multiple_edges=False,
@@ -843,7 +843,7 @@ def create_anyhashable_graph(
     )
 
 
-def create_anyhashable_dag(
+def _create_anyhashable_dag(
     allowing_multiple_edges=False,
     weighted=True,
     vertex_supplier=None,
@@ -868,7 +868,7 @@ def create_anyhashable_dag(
     )
 
 
-def create_sparse_anyhashable_graph(
+def _create_sparse_anyhashable_graph(
     edgelist, directed=True, weighted=True, vertex_supplier=None, edge_supplier=None,
 ):
     """Create a sparse any-hashable graph.
