@@ -43,7 +43,7 @@ def test_gomory_hu_tree():
     assert edge_tuples == [(1,0,30.0), (2,1,50.0), (3,2,30.0)]
 
 
-def test_pg_gomory_hu_tree():
+def test_anyhashableg_gomory_hu_tree():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

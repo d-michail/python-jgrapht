@@ -55,7 +55,7 @@ def test_random_layout():
     assert len(locations) == 6
 
 
-def build_pg_graph():
+def build_anyhashableg_graph():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -80,8 +80,8 @@ def build_pg_graph():
     return g
 
 
-def test_pg_random_layout():
-    g = build_pg_graph()
+def test_anyhashableg_random_layout():
+    g = build_anyhashableg_graph()
 
     area = (0, 0, 10, 20)
     model = drawing.random_layout_2d(g, area, seed=17)

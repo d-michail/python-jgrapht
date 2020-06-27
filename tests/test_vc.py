@@ -82,7 +82,7 @@ def build_property_graph():
     return g, vertex_weights
 
 
-def test_pg_greedy_with_weights():
+def test_anyhashableg_greedy_with_weights():
     g, vertex_weights = build_property_graph()
     vc_weight, vc_vertices = vc.greedy(g, vertex_weights=vertex_weights)
     assert vc_weight == 9.0

@@ -29,7 +29,7 @@ def test_hierholzer():
 
 
 
-def test_pg_hierholzer():
+def test_anyhashableg_hierholzer():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -71,7 +71,7 @@ def test_chinese_postman():
     assert closed_walk.edges == [4, 3, 0, 1, 2, 4]
 
 
-def test_pg_chinese_postman():
+def test_anyhashableg_chinese_postman():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -122,7 +122,7 @@ def test_fundamental_cycle_basis_paton():
     assert cycle2.edges == [4, 5, 6, 1]
 
 
-def test_pg_fundamental_cycle_basis_paton():
+def test_anyhashableg_fundamental_cycle_basis_paton():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -240,7 +240,7 @@ def test_simple_cycles_tiernan():
         next(it)
 
 
-def test_pg_simple_cycles_tiernan():
+def test_anyhashableg_simple_cycles_tiernan():
 
     g = create_graph(
         directed=True,
@@ -391,7 +391,7 @@ def test_simple_cycles_hawick_james():
         next(it)
 
 
-def test_pg_fundamental_cycle_basis_queuebfs():
+def test_anyhashableg_fundamental_cycle_basis_queuebfs():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -421,7 +421,7 @@ def test_pg_fundamental_cycle_basis_queuebfs():
     assert cycle2.edges == [4, 5, 6, 1]
 
 
-def test_pg_fundamental_cycle_basis_stackbfs():
+def test_anyhashableg_fundamental_cycle_basis_stackbfs():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -452,7 +452,7 @@ def test_pg_fundamental_cycle_basis_stackbfs():
 
 
 
-def test_pg_simple_cycles_johnson():
+def test_anyhashableg_simple_cycles_johnson():
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
@@ -482,7 +482,7 @@ def test_pg_simple_cycles_johnson():
         next(it)
 
 
-def test_pg_simple_cycles_tarjan():
+def test_anyhashableg_simple_cycles_tarjan():
 
     g = create_graph(
         directed=True,
@@ -513,7 +513,7 @@ def test_pg_simple_cycles_tarjan():
         next(it)
 
 
-def test_pg_simple_cycles_szwarcfiter_lauer():
+def test_anyhashableg_simple_cycles_szwarcfiter_lauer():
 
     g = create_graph(
         directed=True,
@@ -544,7 +544,7 @@ def test_pg_simple_cycles_szwarcfiter_lauer():
         next(it)
 
 
-def test_pg_simple_cycles_hawick_james():
+def test_anyhashableg_simple_cycles_hawick_james():
 
     g = create_graph(
         directed=True,

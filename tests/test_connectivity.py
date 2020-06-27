@@ -188,7 +188,7 @@ def test_is_connected():
     assert is_connected
 
 
-def test_pg_strongly_gabow():
+def test_anyhashableg_strongly_gabow():
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
@@ -227,7 +227,7 @@ def test_pg_strongly_gabow():
     assert component1 == set(["0", "1", "2", "3", "4", "5"])
 
 
-def test_pg_strongly_kosaraju():
+def test_anyhashableg_strongly_kosaraju():
     g = create_graph(
         directed=True,
         allowing_self_loops=False,

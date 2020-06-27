@@ -39,7 +39,7 @@ def build_graph():
     return g
 
 
-def build_pg_graph():
+def build_anyhashableg_graph():
 
     g = create_graph(
         directed=False,
@@ -178,8 +178,8 @@ def test_clustering_coefficient():
     assert result == expected
 
 
-def test_pg_pagerank():
-    g = build_pg_graph()
+def test_anyhashableg_pagerank():
+    g = build_anyhashableg_graph()
     scores = scoring.pagerank(g)
     result = [scores[v] for v in g.vertices]
     expected = [
@@ -197,8 +197,8 @@ def test_pg_pagerank():
     assert result == expected
 
 
-def test_pg_clustering_coefficient():
-    g = build_pg_graph()
+def test_anyhashableg_clustering_coefficient():
+    g = build_anyhashableg_graph()
     global_cc, avg_cc, local_cc = scoring.clustering_coefficient(g)
     assert global_cc == 0.42857142857142855
     assert avg_cc == 0.6250000000000001
@@ -219,8 +219,8 @@ def test_pg_clustering_coefficient():
 
 
 
-def test_pg_coreness():
-    g = build_pg_graph()
+def test_anyhashableg_coreness():
+    g = build_anyhashableg_graph()
     degeneracy, scores = scoring.coreness(g)
     assert degeneracy == 3
     result = [scores[v] for v in g.vertices]

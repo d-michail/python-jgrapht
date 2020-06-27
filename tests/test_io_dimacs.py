@@ -395,7 +395,7 @@ def test_read_dimacs_property_graph_from_string():
     assert g.edge_attrs == {}
 
 
-def test_pg_dimacs(tmpdir):
+def test_anyhashableg_dimacs(tmpdir):
     g = build_property_graph()
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
@@ -408,7 +408,7 @@ def test_pg_dimacs(tmpdir):
     assert contents == dimacs_sp_expected2
 
 
-def test_pg_dimacs_increase_to_positive_id(tmpdir):
+def test_anyhashableg_dimacs_increase_to_positive_id(tmpdir):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

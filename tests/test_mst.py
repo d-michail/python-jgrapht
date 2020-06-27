@@ -76,7 +76,7 @@ def test_small_graph_prim():
     assert mst_w == 499.0
 
 
-def test_pg_prim():
+def test_anyhashableg_prim():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

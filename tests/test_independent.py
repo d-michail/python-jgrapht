@@ -31,7 +31,7 @@ def test_chordal():
     assert ind == {2, 4}
 
 
-def test_pg_chordal():
+def test_anyhashableg_chordal():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

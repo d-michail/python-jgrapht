@@ -28,7 +28,7 @@ def build_graph():
     return g
 
 
-def build_pg_graph():
+def build_anyhashableg_graph():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -92,8 +92,8 @@ def test_bron():
         next(clique_it)
 
 
-def test_pg_bron():
-    g = build_pg_graph()
+def test_anyhashableg_bron():
+    g = build_anyhashableg_graph()
 
     clique_it = cliques.bron_kerbosch(g)
 
@@ -105,8 +105,8 @@ def test_pg_bron():
         next(clique_it)
 
 
-def test_pg_bron_with_pivot():
-    g = build_pg_graph()
+def test_anyhashableg_bron_with_pivot():
+    g = build_anyhashableg_graph()
 
     clique_it = cliques.bron_kerbosch_with_pivot(g)
 
@@ -118,8 +118,8 @@ def test_pg_bron_with_pivot():
         next(clique_it)
 
 
-def test_pg_bron_with_degeneracy():
-    g = build_pg_graph()
+def test_anyhashableg_bron_with_degeneracy():
+    g = build_anyhashableg_graph()
 
     clique_it = cliques.bron_kerbosch_with_degeneracy_ordering(g)
 
@@ -158,7 +158,7 @@ def test_chordal():
     assert clique == {0, 1, 3}
 
 
-def test_pg_chordal():
+def test_anyhashableg_chordal():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

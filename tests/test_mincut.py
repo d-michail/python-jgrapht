@@ -38,7 +38,7 @@ def build_graph():
     return g
 
 
-def build_pg_graph():
+def build_anyhashableg_graph():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -81,8 +81,8 @@ def test_mincut_stoer_wagner():
     assert cut.source_partition == set([9])
 
 
-def test_pg_mincut_stoer_wagner():
-    g = build_pg_graph()
+def test_anyhashableg_mincut_stoer_wagner():
+    g = build_anyhashableg_graph()
     cut = cuts.mincut_stoer_wagner(g)
     assert cut.weight == 3.0
     assert cut.edges == set([8, 16, 17])
@@ -108,8 +108,8 @@ def test_oddmincutset_padberg_rao():
         cuts.oddmincutset_padberg_rao(g, {1, 3, 4})
 
 
-def test_pg_oddmincutset_padberg_rao():
-    g = build_pg_graph()
+def test_anyhashableg_oddmincutset_padberg_rao():
+    g = build_anyhashableg_graph()
 
     cut = cuts.oddmincutset_padberg_rao(g, {1, 3, 4, 6})
 
@@ -154,7 +154,7 @@ def test_min_st_cut():
     assert cut.target_partition == set([1, 2, 3])
 
 
-def test_pg_min_st_cut():
+def test_anyhashableg_min_st_cut():
     g = create_graph(
         directed=True,
         allowing_self_loops=False,

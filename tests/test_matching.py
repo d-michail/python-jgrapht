@@ -69,7 +69,7 @@ def test_bipartite_perfect_min_weight_with_custom_partitions():
     assert weight == 4.0
 
 
-def test_pg_bipartite_perfect_min_weight_with_custom_partitions():
+def test_anyhashableg_bipartite_perfect_min_weight_with_custom_partitions():
     bg = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -205,7 +205,7 @@ def test_blossom5_min_weight():
     assert weight == 50.0
 
 
-def test_pg_bipartite_perfect_min_weight():
+def test_anyhashableg_bipartite_perfect_min_weight():
     bg = create_graph(
         directed=False,
         allowing_self_loops=False,

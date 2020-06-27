@@ -40,7 +40,7 @@ def test_eft():
     assert edge_tuples == [(1,0,30.0), (2,1,50.0), (3,2,30.0), (4,3,10.0)]
 
 
-def test_pg_eft():
+def test_anyhashableg_eft():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

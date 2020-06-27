@@ -26,7 +26,7 @@ def build_graph():
     return g
 
 
-def build_pg_graph():
+def build_anyhashableg_graph():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -53,8 +53,8 @@ def test_random_tsp():
     assert path.start_vertex == 2
 
 
-def test_pg_random_tsp():
-    g = build_pg_graph()
+def test_anyhashableg_random_tsp():
+    g = build_anyhashableg_graph()
     path = tour.tsp_random(g, 17)
     assert path.weight == 43.0
     assert path.start_vertex == path.end_vertex
@@ -69,8 +69,8 @@ def test_greedy_heuristic():
     assert path.start_vertex == 0
 
 
-def test_pg_greedy_heuristic():
-    g = build_pg_graph()
+def test_anyhashableg_greedy_heuristic():
+    g = build_anyhashableg_graph()
     path = tour.tsp_greedy_heuristic(g)
     assert path.weight == 27.0
     assert path.start_vertex == path.end_vertex
@@ -85,8 +85,8 @@ def test_tour_tsp_nearest_insertion_heuristic():
     assert path.start_vertex == 1
 
 
-def test_pg_tour_tsp_nearest_insertion_heuristic():
-    g = build_pg_graph()
+def test_anyhashableg_tour_tsp_nearest_insertion_heuristic():
+    g = build_anyhashableg_graph()
     path = tour.tsp_nearest_insertion_heuristic(g)
     assert path.weight == 30.0
     assert path.start_vertex == path.end_vertex
@@ -101,8 +101,8 @@ def test_tour_tsp_nearest_neighbor_heuristic():
     assert path.start_vertex == 5
 
 
-def test_pg_tour_tsp_nearest_neighbor_heuristic():
-    g = build_pg_graph()
+def test_anyhashableg_tour_tsp_nearest_neighbor_heuristic():
+    g = build_anyhashableg_graph()
     path = tour.tsp_nearest_neighbor_heuristic(g, seed=17)
     assert path.weight == 33.0
     assert path.start_vertex == path.end_vertex
@@ -201,8 +201,8 @@ def test_random_tsp():
     assert path is not None
 
 
-def test_pg_hamiltonian_palmer():
-    g = build_pg_graph()
+def test_anyhashableg_hamiltonian_palmer():
+    g = build_anyhashableg_graph()
     path = tour.hamiltonian_palmer(g)
     assert path.weight == 52.0
     assert path.start_vertex == path.end_vertex

@@ -560,7 +560,7 @@ def test_input_gml_from_string(tmpdir):
     assert e_attrs[9]["label"] == "edge 1-2"
 
 
-def test_input_pg_gml_from_file(tmpdir):
+def test_input_anyhashableg_gml_from_file(tmpdir):
     tmpfile = tmpdir.join("gml.out")
     tmpfilename = str(tmpfile)
 

@@ -159,7 +159,7 @@ def test_property_graph_traversals():
     assert closest_first == ["0", "1", "3", "5", "4", "node9", "8", "2", "7", "6"]
 
 
-def test_pg_dag():
+def test_anyhashableg_dag():
     # Create a dag to test top
     g1 = create_graph(
         directed=True,

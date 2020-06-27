@@ -80,7 +80,7 @@ def test_fr_layout_indexed():
     ]
 
 
-def test_pg_fr_layout():
+def test_anyhashableg_fr_layout():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -118,7 +118,7 @@ def test_pg_fr_layout():
     ]
 
 
-def test_pg_fr_layout_indexed():
+def test_anyhashableg_fr_layout_indexed():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

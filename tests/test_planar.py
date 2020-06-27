@@ -29,7 +29,7 @@ def build_graph():
     return g
 
 
-def build_pg_graph():
+def build_anyhashableg_graph():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -63,8 +63,8 @@ def test_planar():
     assert aux.edges_around(0) == list([5, 0, 4])
 
 
-def test_pg_planar():
-    g = build_pg_graph()
+def test_anyhashableg_planar():
+    g = build_anyhashableg_graph()
 
     res, aux = planar.is_planar(g)
 
@@ -87,7 +87,7 @@ def test_non_planar():
     assert aux.vertices == set([0, 1, 2, 3, 4])
 
 
-def test_pg_non_planar():
+def test_anyhashableg_non_planar():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

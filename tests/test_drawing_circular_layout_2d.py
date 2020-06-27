@@ -69,7 +69,7 @@ def test_circular_layout_with_comparator():
     ]
 
 
-def test_pg_circular_layout_with_comparator():
+def test_anyhashableg_circular_layout_with_comparator():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

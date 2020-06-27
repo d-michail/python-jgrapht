@@ -165,7 +165,7 @@ def test_read_sparse6_graph_from_string():
     assert g.edge_tuple(0) == (0, 1, 1.0)
 
 
-def test_read_pg_sparse6_graph_from_file(tmpdir):
+def test_read_anyhashableg_sparse6_graph_from_file(tmpdir):
     tmpfile = tmpdir.join("gml.out")
     tmpfilename = str(tmpfile)
 

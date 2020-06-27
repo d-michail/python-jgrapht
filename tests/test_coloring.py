@@ -181,7 +181,7 @@ def test_chordal():
     assert color_map == {0: 0, 1: 1, 2: 0, 3: 2, 4: 1, 5: 2}
 
 
-def test_pg_chordal():
+def test_anyhashableg_chordal():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

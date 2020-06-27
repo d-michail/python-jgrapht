@@ -185,7 +185,7 @@ def test_iso_not_induced_subgraph():
 
 
 
-def test_pg_iso():
+def test_anyhashableg_iso():
     g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -246,7 +246,7 @@ def test_pg_iso():
     assert gm.edges_correspondence() == {0: "e2", 1: 1, 2: 0, 3: 3}
 
 
-def test_pg_iso_induced_subgraph():
+def test_anyhashableg_iso_induced_subgraph():
     g1 = create_graph(
         directed=False,
         allowing_self_loops=False,

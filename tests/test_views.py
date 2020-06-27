@@ -203,7 +203,7 @@ def test_as_masked_subgraph():
         masked_graph.add_vertex(6)
 
 
-def test_pg_as_masked_subgraph():
+def test_anyhashableg_as_masked_subgraph():
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
@@ -653,7 +653,7 @@ def test_bad_union():
         g = as_graph_union(g2, g1)
 
 
-def test_pg_bad_union():
+def test_anyhashableg_bad_union():
 
     g1 = create_graph(
         directed=False,
@@ -674,7 +674,7 @@ def test_pg_bad_union():
 
 
 
-def test_pg_as_unweighted():
+def test_anyhashableg_as_unweighted():
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
@@ -701,7 +701,7 @@ def test_pg_as_unweighted():
     assert ug.get_edge_weight("e1") == 1.0
 
 
-def test_pg_as_undirected():
+def test_anyhashableg_as_undirected():
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
@@ -738,7 +738,7 @@ def test_pg_as_undirected():
     assert g.edge_attrs['e1']['capacity'] == 105.0
 
 
-def test_pg_as_unmodifiable():
+def test_anyhashableg_as_unmodifiable():
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
@@ -762,7 +762,7 @@ def test_pg_as_unmodifiable():
         ug.add_vertex("2")
 
     
-def test_pg_two_wrappers():
+def test_anyhashableg_two_wrappers():
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
@@ -861,7 +861,7 @@ def test_as_unweighted_on_property_graphs():
     assert g1.edge_attrs['e0']['weight'] == 1.0
 
 
-def test_pg_as_weighted():
+def test_anyhashableg_as_weighted():
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
@@ -894,7 +894,7 @@ def test_pg_as_weighted():
 
 
 
-def test_pg_as_weighted_with_None_function():
+def test_anyhashableg_as_weighted_with_None_function():
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
@@ -925,7 +925,7 @@ def test_pg_as_weighted_with_None_function():
         wg.set_edge_weight(0, 5.0)
 
 
-def test_pg_as_weighted_with_caching():
+def test_anyhashableg_as_weighted_with_caching():
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
@@ -961,7 +961,7 @@ def test_pg_as_weighted_with_caching():
     assert wg.edge_attrs[0]['weight'] == 5.0
 
 
-def test_pg_as_weighted_with_caching_and_write_throught_with_unweighted():
+def test_anyhashableg_as_weighted_with_caching_and_write_throught_with_unweighted():
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
@@ -989,7 +989,7 @@ def test_pg_as_weighted_with_caching_and_write_throught_with_unweighted():
         wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=True)
 
 
-def test_pg_as_weighted_with_caching_and_write_throught():
+def test_anyhashableg_as_weighted_with_caching_and_write_throught():
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
@@ -1025,7 +1025,7 @@ def test_pg_as_weighted_with_caching_and_write_throught():
     assert g.edge_attrs[0]['weight'] == 5.0
 
 
-def test_pg_as_weighted_with_no_caching_and_write_through():
+def test_anyhashableg_as_weighted_with_no_caching_and_write_through():
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
@@ -1074,7 +1074,7 @@ element v2, event GraphEvent.VERTEX_REMOVED
 element e0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
 
 
-def test_pg_listenable():
+def test_anyhashableg_listenable():
 
     g = create_graph(
         directed=False,
@@ -1118,7 +1118,7 @@ def test_pg_listenable():
 
 
 
-def test_pg_as_edge_reversed():
+def test_anyhashableg_as_edge_reversed():
     g = create_graph(
         directed=True,
         allowing_self_loops=True,

@@ -28,7 +28,7 @@ def get_graph():
     return g
 
 
-def get_pg_graph():
+def get_anyhashableg_graph():
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
@@ -81,7 +81,7 @@ def get_graph_with_negative_edges():
     return g
 
 
-def get_pg_graph_with_negative_edges():
+def get_anyhashableg_graph_with_negative_edges():
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
@@ -149,8 +149,8 @@ def test_dijkstra():
     assert nopath is None
 
 
-def test_pg_dijkstra():
-    g = get_pg_graph()
+def test_anyhashableg_dijkstra():
+    g = get_anyhashableg_graph()
 
     single_path = sp.dijkstra(g, 0, 5)
     assert single_path.weight == 62.0
@@ -191,8 +191,8 @@ def test_bfs():
     assert list(single_path.edges) == [7]
 
 
-def test_pg_bfs():
-    g = get_pg_graph()
+def test_anyhashableg_bfs():
+    g = get_anyhashableg_graph()
 
     from_paths = sp.bfs(g, 0)
     assert from_paths.source_vertex == 0
@@ -223,8 +223,8 @@ def test_bellman():
     assert list(path15.edges) == [1, 4]
 
 
-def test_pg_bellman():
-    g = get_pg_graph_with_negative_edges()
+def test_anyhashableg_bellman():
+    g = get_anyhashableg_graph_with_negative_edges()
 
     from_paths = sp.bellman_ford(g, 0)
     assert from_paths.source_vertex == 0
@@ -267,8 +267,8 @@ def test_johnsons():
     assert list(path05.edges) == [2, 3, 5]
 
 
-def test_pg_johnsons():
-    g = get_pg_graph_with_negative_edges()
+def test_anyhashableg_johnsons():
+    g = get_anyhashableg_graph_with_negative_edges()
 
     allpairs = sp.johnson_allpairs(g)
     path05 = allpairs.get_path(0, 5)
@@ -313,8 +313,8 @@ def test_floyd_warshall():
     assert list(path05.edges) == [2, 3, 5]
 
 
-def test_pg_floyd_warshall():
-    g = get_pg_graph_with_negative_edges()
+def test_anyhashableg_floyd_warshall():
+    g = get_anyhashableg_graph_with_negative_edges()
 
     allpairs = sp.floyd_warshall_allpairs(g)
     repr(allpairs)
@@ -397,7 +397,7 @@ def test_a_star():
     assert path1.end_vertex == 8
 
 
-def test_pg_a_star():
+def test_anyhashableg_a_star():
 
     g = create_graph(
         directed=False,
@@ -495,7 +495,7 @@ def test_a_star_with_alt_heuristic():
     assert path1.end_vertex == 8
 
 
-def test_pg_a_star_with_alt_heuristic():
+def test_anyhashableg_a_star_with_alt_heuristic():
 
     g = create_graph(
         directed=False,
@@ -549,9 +549,9 @@ def test_yen_k():
     assert next(it, None) == None
 
 
-def test_pg_yen_k():
+def test_anyhashableg_yen_k():
 
-    g = get_pg_graph()
+    g = get_anyhashableg_graph()
 
     it = sp.yen_k_loopless(g, 0, 5, 2)
 
@@ -580,9 +580,9 @@ def test_eppstein_k():
     assert next(it, None) == None
 
 
-def test_pg_eppstein_k():
+def test_anyhashableg_eppstein_k():
 
-    g = get_pg_graph()
+    g = get_anyhashableg_graph()
 
     it = sp.eppstein_k(g, 0, 5, 2)
 
@@ -637,8 +637,8 @@ def test_delta_stepping():
     assert list(single_path.edges) == [2, 3, 5]
 
 
-def test_pg_delta_stepping():
-    g = get_pg_graph()
+def test_anyhashableg_delta_stepping():
+    g = get_anyhashableg_graph()
 
     single_path = sp.delta_stepping(g, 0, 5)
     assert single_path.weight == 62.0
@@ -737,7 +737,7 @@ def test_martin():
     assert next(it, "Exhausted") == "Exhausted"
 
 
-def test_pg_martin():
+def test_anyhashableg_martin():
 
     g = create_graph(
         directed=True,

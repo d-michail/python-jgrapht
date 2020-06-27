@@ -41,7 +41,7 @@ def _do_run_both(algo):
     assert cut.target_partition == set([1, 2, 3])
 
 
-def _do_run_pg_both(algo):
+def _do_run_anyhashableg_both(algo):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
@@ -109,7 +109,7 @@ def _do_run_flow(algo):
     assert f[e23] == 20.0
 
 
-def _do_run_pg_flow(algo):
+def _do_run_anyhashableg_flow(algo):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
@@ -143,18 +143,18 @@ def _do_run_pg_flow(algo):
 
 def test_dinic():
     _do_run_both(flow.dinic)
-    _do_run_pg_both(flow.dinic)
+    _do_run_anyhashableg_both(flow.dinic)
 
 
 def test_push_relabel():
     _do_run_both(flow.push_relabel)
-    _do_run_pg_both(flow.push_relabel)
+    _do_run_anyhashableg_both(flow.push_relabel)
 
 
 def test_edmonds_karp():
     _do_run_both(flow.edmonds_karp)
-    _do_run_pg_both(flow.edmonds_karp)
+    _do_run_anyhashableg_both(flow.edmonds_karp)
 
 def test_max_st_flow():
     _do_run_flow(flow.max_st_flow)
-    _do_run_pg_flow(flow.max_st_flow)
+    _do_run_anyhashableg_flow(flow.max_st_flow)

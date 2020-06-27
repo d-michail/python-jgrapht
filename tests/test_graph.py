@@ -547,7 +547,7 @@ def test_dag():
         g1.add_edge(0, 1)
 
 
-def test_pg_dag():
+def test_anyhashableg_dag():
     g = create_graph(allowing_multiple_edges=True, weighted=True, dag=True, any_hashable_for_graph_elements=True)
 
     assert g.type.directed

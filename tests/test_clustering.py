@@ -70,7 +70,7 @@ def test_label_propagation():
     assert c.number_of_clusters() > 0
 
 
-def test_pg_k_spanning_tree():
+def test_anyhashableg_k_spanning_tree():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -99,7 +99,7 @@ def test_pg_k_spanning_tree():
     assert set(c.ith_cluster(1)) == set(["3", "4", "5"])
 
 
-def test_pg_label_propagation():
+def test_anyhashableg_label_propagation():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
