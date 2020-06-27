@@ -15,7 +15,6 @@ from ._internals._views import (
 )
 
 from ._internals._anyhashableg import (
-    _AnyHashableGraph,
     is_anyhashable_graph,
     as_unweighted_anyhashable_graph as _as_unweighted_attrs_graph,
     as_undirected_anyhashable_graph as _as_undirected_attrs_graph,
@@ -170,5 +169,5 @@ def as_graph_union(graph1, graph2, edge_weight_combiner_cb=None):
     :returns: a graph which is the union of the two graphs
     """
     if is_anyhashable_graph(graph1) or is_anyhashable_graph(graph2):
-        raise ValueError("View not supported for attributes graphs")
+        raise ValueError("View not supported for any-hashable graphs")
     return _GraphUnion(graph1, graph2, edge_weight_combiner_cb)

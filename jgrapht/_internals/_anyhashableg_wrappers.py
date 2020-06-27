@@ -2,7 +2,7 @@ from ._wrappers import _JGraphTIntegerIterator
 
 
 class _AnyHashableGraphVertexIterator(_JGraphTIntegerIterator):
-    """A vertex iterator for attributes graphs."""
+    """A vertex iterator."""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -17,7 +17,7 @@ class _AnyHashableGraphVertexIterator(_JGraphTIntegerIterator):
 
 
 class _AnyHashableGraphEdgeIterator(_JGraphTIntegerIterator):
-    """An edge iterator for attributes graphs."""
+    """An edge iterator."""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)

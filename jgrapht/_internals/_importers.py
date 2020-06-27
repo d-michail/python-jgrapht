@@ -51,12 +51,12 @@ def _create_graph_callbacks(
     )
 
 
-def _create_attrs_graph_callbacks(
+def _create_anyhashable_graph_callbacks(
     graph,
     vertex_id_to_hash,
-    vertex_id_to_props,
+    vertex_id_to_attrs,
     edge_id_to_hash,
-    edge_id_to_props,
+    edge_id_to_attrs,
     import_id_cb,
     integer_ids=False,
     include_weights=False,
@@ -85,11 +85,11 @@ def _create_attrs_graph_callbacks(
         edge_id_to_hash[eid] = graph.edge_supplier()
 
     def use_vertex_attribute_cb(id, key, value):
-        vertex_id_to_props[id][key] = value
+        vertex_id_to_attrs[id][key] = value
 
     def use_edge_attribute_cb(id, key, value):
         if key != 'weight' or include_weights:
-            edge_id_to_props[id][key] = value
+            edge_id_to_attrs[id][key] = value
 
     if integer_ids:
         import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
@@ -127,13 +127,13 @@ def _create_attrs_graph_callbacks(
     )
 
 
-def _populate_attrs(
-    graph, vertex_id_to_hash, vertex_id_to_props, edge_id_to_hash, edge_id_to_attrs
+def _populate_anyhashable(
+    graph, vertex_id_to_hash, vertex_id_to_attrs, edge_id_to_hash, edge_id_to_attrs
 ):
-    # After creating, populate the attributes graph with the new vertices and edges
+    # After creating, populate the any-hashable graph with the new vertices and edges
     for vid, vhash in vertex_id_to_hash.items():
         graph._add_new_vertex(vid, vhash)
-        for key, value in vertex_id_to_props[vid].items():
+        for key, value in vertex_id_to_attrs[vid].items():
             graph.vertex_attrs[vhash][key] = value
 
     for eid, ehash in edge_id_to_hash.items():
@@ -181,7 +181,7 @@ def _parse_graph_dimacs(
     )
 
 
-def _parse_attrs_graph_dimacs(
+def _parse_anyhashable_graph_dimacs(
     graph, input_string, import_id_cb, input_is_filename=False
 ):
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
@@ -197,7 +197,7 @@ def _parse_attrs_graph_dimacs(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb, integer_ids=True)
+    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb, integer_ids=True)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -214,7 +214,7 @@ def _parse_attrs_graph_dimacs(
         edge_notify_f_ptr,
     )
 
-    _populate_attrs(graph, *idmaps)
+    _populate_anyhashable(graph, *idmaps)
 
 
 def _parse_graph_gml(
@@ -263,7 +263,7 @@ def _parse_graph_gml(
     )
 
 
-def _parse_attrs_graph_gml(
+def _parse_anyhashable_graph_gml(
     graph, input_string, import_id_cb, input_is_filename=False,
 ):
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
@@ -279,7 +279,7 @@ def _parse_attrs_graph_gml(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb, integer_ids=True)
+    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb, integer_ids=True)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -298,7 +298,7 @@ def _parse_attrs_graph_gml(
         edge_notify_f_ptr,
     )
 
-    _populate_attrs(graph, *idmaps)
+    _populate_anyhashable(graph, *idmaps)
 
 
 def _parse_graph_json(
@@ -346,7 +346,7 @@ def _parse_graph_json(
     )
 
 
-def _parse_attrs_graph_json(
+def _parse_anyhashable_graph_json(
     graph, input_string, import_id_cb, input_is_filename=False
 ):
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
@@ -362,7 +362,7 @@ def _parse_attrs_graph_json(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb, )
+    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb, )
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -381,7 +381,7 @@ def _parse_attrs_graph_json(
         edge_notify_f_ptr,
     )
 
-    _populate_attrs(graph, *idmaps)
+    _populate_anyhashable(graph, *idmaps)
 
 
 CSV_FORMATS = dict(
@@ -442,7 +442,7 @@ def _parse_graph_csv(
     )
 
 
-def _parse_attrs_graph_csv(
+def _parse_anyhashable_graph_csv(
     graph,
     input_string,
     import_id_cb,
@@ -465,7 +465,7 @@ def _parse_attrs_graph_csv(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb)
+    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -486,7 +486,7 @@ def _parse_attrs_graph_csv(
         matrix_format_zero_when_noedge,
     )
 
-    _populate_attrs(graph, *idmaps)
+    _populate_anyhashable(graph, *idmaps)
 
 
 def _parse_graph_gexf(
@@ -536,7 +536,7 @@ def _parse_graph_gexf(
     )
 
 
-def _parse_attrs_graph_gexf(
+def _parse_anyhashable_graph_gexf(
     graph,
     input_string,
     import_id_cb,
@@ -556,7 +556,7 @@ def _parse_attrs_graph_gexf(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb)
+    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -576,7 +576,7 @@ def _parse_attrs_graph_gexf(
         edge_notify_f_ptr,
     )
 
-    _populate_attrs(graph, *idmaps)
+    _populate_anyhashable(graph, *idmaps)
 
 
 def _parse_graph_dot(
@@ -624,7 +624,7 @@ def _parse_graph_dot(
     )
 
 
-def _parse_attrs_graph_dot(
+def _parse_anyhashable_graph_dot(
     graph,
     input_string,
     import_id_cb,
@@ -643,7 +643,7 @@ def _parse_attrs_graph_dot(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb)
+    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -662,7 +662,7 @@ def _parse_attrs_graph_dot(
         edge_notify_f_ptr,
     )
 
-    _populate_attrs(graph, *idmaps)
+    _populate_anyhashable(graph, *idmaps)
 
 
 def _parse_graph_graph6sparse6(
@@ -710,7 +710,7 @@ def _parse_graph_graph6sparse6(
     )
 
 
-def _parse_attrs_graph_graph6sparse6(
+def _parse_anyhashable_graph_graph6sparse6(
     graph,
     input_string,
     import_id_cb,
@@ -729,7 +729,7 @@ def _parse_attrs_graph_graph6sparse6(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb)
+    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -748,7 +748,7 @@ def _parse_attrs_graph_graph6sparse6(
         edge_notify_f_ptr,
     )
 
-    _populate_attrs(graph, *idmaps)
+    _populate_anyhashable(graph, *idmaps)
 
 
 def _parse_graph_graphml(
@@ -805,7 +805,7 @@ def _parse_graph_graphml(
     )
 
 
-def _parse_attrs_graph_graphml(
+def _parse_anyhashable_graph_graphml(
     graph,
     input_string,
     import_id_cb,
@@ -826,7 +826,7 @@ def _parse_attrs_graph_graphml(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_attrs_graph_callbacks(graph, *idmaps, import_id_cb)
+    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -852,4 +852,4 @@ def _parse_attrs_graph_graphml(
         edge_notify_f_ptr,
     )
 
-    _populate_attrs(graph, *idmaps)
+    _populate_anyhashable(graph, *idmaps)

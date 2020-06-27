@@ -1,4 +1,5 @@
 from .. import backend as _backend
+
 from .._internals._wrappers import _JGraphTString
 from .._internals._collections import _JGraphTIntegerStringMap
 from .._internals._attributes import (
@@ -33,7 +34,7 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
     """
     vertex_id_store = None
     if is_anyhashable_graph(graph):
-        # special case, read identifiers from attributes graph
+        # special case, read identifiers from any-hashable graph
         vertex_id_store = _JGraphTIntegerStringMap()
 
         if export_vertex_id_cb is not None:
@@ -59,13 +60,13 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
 
 
 def _vertex_attributes_store(graph, attributes_dict):
-    """Combine the attributes from an attributes graph and a per-vertex attributes
+    """Combine the attributes from an any-hashable graph and a per-vertex attributes
     dictionary and create an equivalent structure in the capi. This can then be
     used in order to export a graph with attributes.
     """
     attribute_store = None
     if is_anyhashable_graph(graph):
-        # attributes graph
+        # any-hashable graph
         attribute_store = _JGraphTAttributeStore()
         for v in graph.vertices:
             for key, value in graph.vertex_attrs[v].items():
@@ -95,11 +96,11 @@ def _vertex_attributes_store(graph, attributes_dict):
 
 def _edge_id_store(graph):
     """Create an edge identifier store inside the capi backend. This only 
-    works for attribute graphs, otherwise it returns None.
+    works for any-hashable graphs, otherwise it returns None.
     """
     edge_id_store = None
     if is_anyhashable_graph(graph):
-        # special case, read identifiers from an attributes graph
+        # special case, read identifiers from an any-hashable graph
         edge_id_store = _JGraphTIntegerStringMap()
         for k, v in graph._edge_id_to_hash.items():
             edge_id_store[k] = str(v)
@@ -107,13 +108,13 @@ def _edge_id_store(graph):
 
 
 def _edge_attributes_store(graph, attributes_dict):
-    """Combine the attributes from an attributes graph and a per-edge attributes
+    """Combine the attributes from an any-hashable graph and a per-edge attributes
     dictionary and create an equivalent structure in the capi. This can then be
     used in order to export a graph with attributes.
     """
     attribute_store = None
     if is_anyhashable_graph(graph):
-        # attributes graph
+        # any-hashable graph
         attribute_store = _JGraphTAttributeStore()
         for e in graph.edges:
             for key, value in graph.edge_attrs[e].items():
@@ -163,7 +164,7 @@ def write_dimacs(
     formats. By default the maximum-clique is used.
 
     .. note:: In DIMACS formats the vertices are integers numbered from one. In case of default graphs 
-              (with integer vertices) this translation happens automatically. With attributes graphs the
+              (with integer vertices) this translation happens automatically. With any-hashable graphs the
               user must either use positive integers as vertices, or must explicitly provide a function 
               which does the conversion to a positive integer (`export_vertex_id_cb`).
 
@@ -223,7 +224,7 @@ def generate_dimacs(
     formats. By default the maximum-clique is used.
 
     .. note:: In DIMACS formats the vertices are integers numbered from one. In case of default graphs 
-              (with integer vertices) this translation happens automatically. With attributes graphs the
+              (with integer vertices) this translation happens automatically. With any-hashable graphs the
               user must either use positive integers as vertices, or must explicitly provide a function 
               which does the conversion to a positive integer (`export_vertex_id_cb`). 
 
@@ -363,7 +364,8 @@ def write_gml(
 
     .. note:: The exporter escapes all strings as Java strings.
 
-    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. These
+      custom attributes are merged with the attributes of any-hashable graphs.
 
     :param graph: the graph
     :param filename: the filename
@@ -443,7 +445,8 @@ def generate_gml(
 
     .. note:: The exporter escapes all strings as Java strings.
 
-    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. These
+      custom attributes are merged with the attributes of any-hashable graphs.
 
     :param graph: the graph
     :param export_edge_weights: whether to export edge weights
@@ -502,7 +505,8 @@ def write_json(
     contains the source and target vertices, a possible identifier and possible other
     attributes. 
 
-    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. These
+      custom attributes are merged with the attributes of any-hashable graphs.
 
     :param graph: The graph to export
     :param filename: Filename to write
@@ -543,7 +547,8 @@ def generate_json(
     contains the source and target vertices, a possible identifier and possible other
     attributes. 
 
-    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. These
+      custom attributes are merged with the attributes of any-hashable graphs.
 
     :param graph: The graph to export
     :param per_vertex_attrs_dict: per vertex attribute dicts
@@ -695,7 +700,8 @@ def write_gexf(
             </graph>
         </gexf>
 
-    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. These
+      custom attributes are merged with the attributes of any-hashable graphs.
 
     .. note:: Custom attributes need to be registered in the `attrs` parameter which accepts a list
               of tuple(name, category, type, default_value). Type and default value may None. Category 
@@ -782,7 +788,8 @@ def generate_gexf(
             </graph>
         </gexf>
 
-    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. These
+      custom attributes are merged with the attributes of any-hashable graphs.
 
     .. note:: Custom attributes need to be registered in the `attrs` parameter which accepts a list
               of tuple(name, category, type, default_value). Type and default value may None. Category 
@@ -836,7 +843,8 @@ def write_dot(
 
     For a description of the format see https://en.wikipedia.org/wiki/DOT_language.
 
-    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. These
+      custom attributes are merged with the attributes of any-hashable graphs.
 
     :param graph: The graph to export
     :param filename: Filename to write
@@ -869,7 +877,8 @@ def generate_dot(
 
     For a description of the format see https://en.wikipedia.org/wiki/DOT_language.
 
-    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. These
+      custom attributes are merged with the attributes of any-hashable graphs.
 
     :param graph: The graph to export
     :param per_vertex_attrs_dict: per vertex attribute dicts
@@ -954,7 +963,8 @@ def write_graphml(
 ):
     """Exports a graph to a GraphML file.
 
-    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. These
+      custom attributes are merged with the attributes of any-hashable graphs.
 
     .. note:: Custom attributes need to be registered in the `attrs` parameter which accepts a list
               of tuple(name, category, type, default_value). Type and default value may None. Category 
@@ -1005,7 +1015,8 @@ def generate_graphml(
 ):
     """Exports a graph to string using GraphML.
 
-    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. 
+    .. note:: Custom attributes are supported with per vertex and per edge dictionaries. These
+      custom attributes are merged with the attributes of any-hashable graphs.
 
     .. note:: Custom attributes need to be registered in the `attrs` parameter which accepts a list
               of tuple(name, category, type, default_value). Type and default value may None. Category 

@@ -40,7 +40,7 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
 
     This graph does not directly wrap a backend graph, but it passes through 
     the handle which means that it is usable in all algorithms. The result 
-    however will refer to the actual graph and not the attributes graph wrapper which
+    however will refer to the actual graph and not the any-hashable graph wrapper which
     means that it needs to be translated back when returning from the call.
     Most algorithms do such a check and perform the translation automatically.
     """
@@ -48,7 +48,7 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
     def __init__(
         self, graph, vertex_supplier=None, edge_supplier=None, copy_from=None, **kwargs
     ):
-        """Initialize an attributes graph
+        """Initialize an any-hashable graph
 
         :param graph: the actual graph which we are wrapping. Must have integer 
           vertices and edges.
@@ -78,19 +78,19 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
             # copy vertex maps
             self._vertex_hash_to_id = copy_from._vertex_hash_to_id
             self._vertex_id_to_hash = copy_from._vertex_id_to_hash
-            self._vertex_hash_to_props = copy_from._vertex_hash_to_props
-            self._vertex_props = self._VertexAttributes(
-                self, self._vertex_hash_to_props
+            self._vertex_hash_to_attrs = copy_from._vertex_hash_to_attrs
+            self._vertex_attrs = self._VertexAttributes(
+                self, self._vertex_hash_to_attrs
             )
 
             # copy edge maps
             self._edge_hash_to_id = copy_from._edge_hash_to_id
             self._edge_id_to_hash = copy_from._edge_id_to_hash
-            self._edge_hash_to_props = copy_from._edge_hash_to_props
-            self._edge_props = self._EdgeAttributes(self, self._edge_hash_to_props)
+            self._edge_hash_to_attrs = copy_from._edge_hash_to_attrs
+            self._edge_attrs = self._EdgeAttributes(self, self._edge_hash_to_attrs)
 
             # initialize graph maps
-            self._graph_props = copy_from._graph_props
+            self._graph_attrs = copy_from._graph_attrs
 
         else:
             # initialize suppliers
@@ -104,19 +104,19 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
             # initialize vertex maps
             self._vertex_hash_to_id = {}
             self._vertex_id_to_hash = {}
-            self._vertex_hash_to_props = defaultdict(lambda: {})
-            self._vertex_props = self._VertexAttributes(
-                self, self._vertex_hash_to_props
+            self._vertex_hash_to_attrs = defaultdict(lambda: {})
+            self._vertex_attrs = self._VertexAttributes(
+                self, self._vertex_hash_to_attrs
             )
 
             # initialize edge maps
             self._edge_hash_to_id = {}
             self._edge_id_to_hash = {}
-            self._edge_hash_to_props = defaultdict(lambda: {})
-            self._edge_props = self._EdgeAttributes(self, self._edge_hash_to_props)
+            self._edge_hash_to_attrs = defaultdict(lambda: {})
+            self._edge_attrs = self._EdgeAttributes(self, self._edge_hash_to_attrs)
 
             # initialize graph maps
-            self._graph_props = {}
+            self._graph_attrs = {}
 
     @property
     def handle(self):
@@ -255,15 +255,15 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
 
     @property
     def graph_attrs(self):
-        return self._graph_props
+        return self._graph_attrs
 
     @property
     def vertex_attrs(self):
-        return self._vertex_props
+        return self._vertex_attrs
 
     @property
     def edge_attrs(self):
-        return self._edge_props
+        return self._edge_attrs
 
     def add_listener(self, listener_cb):
         self._user_listeners.append(listener_cb)
@@ -313,20 +313,20 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
     def _remove_vertex(self, vid):
         v = self._vertex_id_to_hash.pop(vid)
         self._vertex_hash_to_id.pop(v)
-        self._vertex_hash_to_props.pop(v, None)
+        self._vertex_hash_to_attrs.pop(v, None)
         return v
 
     def _remove_edge(self, eid):
         e = self._edge_id_to_hash.pop(eid)
         self._edge_hash_to_id.pop(e)
-        self._edge_hash_to_props.pop(e, None)
+        self._edge_hash_to_attrs.pop(e, None)
         return e
 
     def _structural_event_listener(self, element, event_type):
         """Listener for removal events. This is needed, as removing
         a graph vertex might also remove edges.
         """
-        # perform changes in the attributes graph
+        # perform changes in the any-hashable graph
         if event_type == GraphEvent.VERTEX_ADDED:
             self._add_new_vertex(element)
             for listener in self._user_listeners:
@@ -527,7 +527,7 @@ class _AnyHashableDirectedAcyclicGraph(_AnyHashableGraph, DirectedAcyclicGraph):
     """The directed acyclic graph wrapper."""
 
     def __init__(self, graph, vertex_supplier=None, edge_supplier=None, **kwargs):
-        """Initialize an attributes graph
+        """Initialize an any-hashable dag
 
         :param graph: the actual graph which we are wrapping. Must have integer 
           vertices and edges.
@@ -622,17 +622,17 @@ def _create_anyhashable_graph_subgraph(
 ):
     """Create an any hashable graph subgraph.
 
-    This function create an attributes graph with the identical structure as the
-    subgraph (which is a normal graph with integer vertices/edges). The assumption
-    is that the subgraph is actual subgraph of the backing graph of the attributes
+    This function create an any-hashable graph with the identical structure as the
+    subgraph (which is a default graph with integer vertices/edges). The assumption
+    is that the subgraph is an actual subgraph of the backing graph of the any-hashable
     graph. In other words, for each integer vertex or edge in the subgraph, the 
-    attributes graph contains a corresponding vertex or edge.
+    any-hashable graph contains a corresponding vertex or edge.
     
-    The new attributes graph uses the same vertices and edges that the attributes graph
+    The new any-hashable graph uses the same vertices and edges that the any-hashable graph
     is using and has the same structure as the subgraph. However, its backing graph 
     is a copy and therefore might have different integer vertices/edges.
 
-    :param anyhashable_graph: the attributes graph from which to copy vertices and edges
+    :param anyhashable_graph: the any-hashable graph from which to copy vertices and edges
     :param subgraph: the subgraph (must be a backend _JGraphTGraph)
     """
     res = create_anyhashable_graph(
@@ -665,7 +665,7 @@ def _create_anyhashable_graph_subgraph(
 
 
 def as_unweighted_anyhashable_graph(attrs_graph):
-    """Create an unweighted view of an attributes graph."""
+    """Create an unweighted view of an any-hashable graph."""
     graph = attrs_graph._graph
     unweighted_graph = _UnweightedGraphView(graph)
 
@@ -677,7 +677,7 @@ def as_unweighted_anyhashable_graph(attrs_graph):
 
 
 def as_undirected_anyhashable_graph(attrs_graph):
-    """Create an undirected view of an attributes graph."""
+    """Create an undirected view of an any-hashable graph."""
     graph = attrs_graph._graph
     undirected_graph = _UndirectedGraphView(graph)
 
@@ -689,7 +689,7 @@ def as_undirected_anyhashable_graph(attrs_graph):
 
 
 def as_unmodifiable_anyhashable_graph(attrs_graph):
-    """Create an unmodifiable view of an attributes graph."""
+    """Create an unmodifiable view of an any-hashable graph."""
     graph = attrs_graph._graph
     unmodifiable_graph = _UnmodifiableGraphView(graph)
 
@@ -701,7 +701,7 @@ def as_unmodifiable_anyhashable_graph(attrs_graph):
 
 
 def as_edgereversed_anyhashable_graph(attrs_graph):
-    """Create an edge reversed view of an attributes graph."""
+    """Create an edge reversed view of an any-hashable graph."""
     graph = attrs_graph._graph
     edgereversed_graph = _EdgeReversedGraphView(graph)
 
@@ -715,7 +715,7 @@ def as_edgereversed_anyhashable_graph(attrs_graph):
 def as_weighted_anyhashable_graph(
     anyhashable_graph, edge_weight_cb, cache_weights, write_weights_through
 ):
-    """Create a weighted view of an attributes graph."""
+    """Create a weighted view of an any-hashable graph."""
     if edge_weight_cb is not None:
         def actual_edge_weight_cb(e):
             e = edge_g_to_anyhashableg(anyhashable_graph, e)
@@ -735,7 +735,7 @@ def as_weighted_anyhashable_graph(
 def as_masked_subgraph_anyhashable_graph(
     anyhashable_graph, vertex_mask_cb, edge_mask_cb=None
 ):
-    """ Create a masked subgraph view of an attributes graph."""
+    """ Create a masked subgraph view of an any-hashable graph."""
     def actual_vertex_mask_cb(v):
         v = vertex_g_to_anyhashableg(anyhashable_graph, v)
         return vertex_mask_cb(v)

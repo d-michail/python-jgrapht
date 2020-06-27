@@ -35,6 +35,6 @@ class _AnyHashableGraphLayoutModel2D(_JGraphTLayoutModel2D):
 def _create_anyhashable_graph_layout_model_2d(graph, min_x, min_y, width, height):
     """Factory for a 2d layout model."""
     if not is_anyhashable_graph(graph):
-        raise ValueError('Graph must be an attributes graph')
+        raise ValueError('Graph must be an any-hashable graph')
     handle = backend.jgrapht_drawing_layout_model_2d_create(min_x, min_y, width, height)
     return _AnyHashableGraphLayoutModel2D(handle, graph)
