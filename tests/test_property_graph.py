@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 from jgrapht.types import GraphEvent
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 from jgrapht.generators import complete_graph
@@ -13,6 +13,7 @@ def test_any_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     assert repr(g) is not None
@@ -213,7 +214,7 @@ def test_any_graph():
 
 def test_any_graph_of_graphs():
 
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -223,7 +224,7 @@ def test_any_graph_of_graphs():
     g1.add_vertex(1)
     g1.add_edge(0, 1)
 
-    g2 = create_int_graph(
+    g2 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -233,7 +234,7 @@ def test_any_graph_of_graphs():
     g2.add_vertex(3)
     g2.add_edge(2, 3)
 
-    g3 = create_int_graph(
+    g3 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -249,6 +250,7 @@ def test_any_graph_of_graphs():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex(g1)
@@ -279,6 +281,7 @@ def test_suppliers_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     assert g.type.directed
@@ -325,6 +328,7 @@ def test_with_string_suppliers_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=supplier,
         edge_supplier=supplier,
     )
@@ -371,6 +375,7 @@ def test_on_already_initialized_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=StringSupplier("v"),
         edge_supplier=StringSupplier("e"),
     )
@@ -397,6 +402,7 @@ def test_bad_vertex_supplier_property_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=vertex_supplier,
     )
 
@@ -414,6 +420,7 @@ def test_bad_edge_supplier_property_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         edge_supplier=edge_supplier,
     )
 
@@ -434,6 +441,7 @@ def test_listenable_property_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )

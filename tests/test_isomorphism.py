@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 import jgrapht.algorithms.isomorphism as iso
 
 
 def test_iso():
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -19,7 +19,7 @@ def test_iso():
     g1.add_edge(2, 3)
     g1.add_edge(3, 0)
 
-    g2 = create_int_graph(
+    g2 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -68,7 +68,7 @@ def test_iso():
 
 
 def test_iso_no():
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -82,7 +82,7 @@ def test_iso_no():
     g1.add_edge(2, 3)
     g1.add_edge(3, 0)
 
-    g2 = create_int_graph(
+    g2 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -102,7 +102,7 @@ def test_iso_no():
 
 
 def test_iso_induced_subgraph():
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -116,7 +116,7 @@ def test_iso_induced_subgraph():
     g1.add_edge(2, 3)
     g1.add_edge(3, 0)
 
-    g2 = create_int_graph(
+    g2 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -151,7 +151,7 @@ def test_iso_induced_subgraph():
 
 
 def test_iso_not_induced_subgraph():
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -167,7 +167,7 @@ def test_iso_not_induced_subgraph():
     g1.add_edge(0, 2)
     g1.add_edge(1, 3)
 
-    g2 = create_int_graph(
+    g2 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -186,7 +186,7 @@ def test_iso_not_induced_subgraph():
 
 
 def test_pg_iso():
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -205,6 +205,7 @@ def test_pg_iso():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g2.add_vertices_from([5, "6", 7, 8])
@@ -251,6 +252,7 @@ def test_pg_iso_induced_subgraph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g1.add_vertices_from([0, 1, 2, 3])
@@ -265,6 +267,7 @@ def test_pg_iso_induced_subgraph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g2.add_vertices_from([5, 6, 7])

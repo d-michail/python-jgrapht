@@ -1,12 +1,12 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 
 import jgrapht.traversal as traversal
 
 
 def test_traversals():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -74,7 +74,7 @@ def test_traversals():
 
 def test_dag():
     # Create a dag to test top
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -99,6 +99,7 @@ def test_property_graph_traversals():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     for i in range(0, 9):
@@ -165,6 +166,7 @@ def test_pg_dag():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
     g1.add_vertex(0)
     g1.add_vertex(1)

@@ -1,12 +1,12 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 import jgrapht.algorithms.scoring as scoring
 
 
 def build_graph():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -46,6 +46,7 @@ def build_pg_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     for i in range(0, 10):

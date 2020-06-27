@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.io.importers import read_gexf, parse_gexf
@@ -90,7 +90,7 @@ expected2 = r"""<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.ge
 </gexf>"""
 
 def test_input_gexf(tmpdir):
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -103,7 +103,7 @@ def test_input_gexf(tmpdir):
 
 
 def test_input_gexf_with_renumbering(tmpdir):
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -124,7 +124,7 @@ def test_input_gexf_with_renumbering(tmpdir):
 
 def test_export_import(tmpdir):
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -175,7 +175,7 @@ def test_export_import(tmpdir):
 
     # read back
 
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -215,7 +215,7 @@ def test_export_import(tmpdir):
 
 
 def test_output_to_string():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -240,6 +240,7 @@ def test_property_graph_output_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from(['v1', 'v2', 'v3'])
@@ -265,6 +266,7 @@ def test_read_gexf_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -293,6 +295,7 @@ def test_read_gexf_property_graph_from_string1():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -324,6 +327,7 @@ def test_read_gexf_property_graph_from_file(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )

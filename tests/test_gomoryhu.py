@@ -1,12 +1,12 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 import jgrapht.algorithms.cuts as cuts
 
 
 
 def test_gomory_hu_tree():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -49,6 +49,7 @@ def test_pg_gomory_hu_tree():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex(0)

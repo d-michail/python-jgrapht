@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 
 from jgrapht.io.exporters import write_graphml, generate_graphml
@@ -137,7 +137,7 @@ expected4 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://gra
 
 def test_export_import(tmpdir):
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -188,7 +188,7 @@ def test_export_import(tmpdir):
 
     # read back
 
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -235,7 +235,7 @@ def test_export_import(tmpdir):
     assert g1.get_edge_weight(17) == 33.3
 
     # read back with simple
-    g2 = create_int_graph(
+    g2 = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -259,7 +259,7 @@ def test_export_import(tmpdir):
 
 
 def test_output_to_string():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -279,7 +279,7 @@ def test_output_to_string():
 
 
 def test_output_to_string_with_weights():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -300,7 +300,7 @@ def test_output_to_string_with_weights():
 
 def test_output_to_string_with_attrs():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -355,6 +355,7 @@ def test_property_graph_output_to_string_with_attrs():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     for i in range(0, 10):
@@ -402,7 +403,7 @@ def test_property_graph_output_to_string_with_attrs():
 
 def test_graph_from_string():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -429,6 +430,7 @@ def test_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -453,6 +455,7 @@ def test_property_graph_from_string_without_importid():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -491,6 +494,7 @@ def test_property_graph_from_filename_without_importid(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -529,6 +533,7 @@ def test_property_graph_from_filename_without_importid_no_simple(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -556,6 +561,7 @@ def test_property_graph_non_weighted_from_string_without_importid():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )

@@ -1,12 +1,12 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 import jgrapht.algorithms.planar as planar
 import jgrapht.generators as generators
 
 
 def build_graph():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -35,6 +35,7 @@ def build_pg_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex(0)
@@ -72,7 +73,7 @@ def test_pg_planar():
 
 
 def test_non_planar():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -92,6 +93,7 @@ def test_pg_non_planar():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
     generators.complete_graph(g, 5)
 

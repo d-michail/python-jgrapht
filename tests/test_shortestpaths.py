@@ -1,12 +1,12 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 import jgrapht.algorithms.shortestpaths as sp
 import math
 
 
 def get_graph():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -34,6 +34,7 @@ def get_pg_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     for i in range(0, 6):
@@ -52,7 +53,7 @@ def get_pg_graph():
 
 
 def get_graph_with_negative_edges():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -86,6 +87,7 @@ def get_pg_graph_with_negative_edges():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     assert g.type.directed
@@ -338,7 +340,7 @@ def test_pg_floyd_warshall():
 
 def test_a_star():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -402,6 +404,7 @@ def test_pg_a_star():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, "3", 4, "5", 6, 7, "8"])
@@ -457,7 +460,7 @@ def test_pg_a_star():
 
 def test_a_star_with_alt_heuristic():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -499,6 +502,7 @@ def test_pg_a_star_with_alt_heuristic():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from([0, 1, 2, "3", 4, 5, 6, 7, 8])
@@ -677,7 +681,7 @@ def test_pg_delta_stepping():
 
 def test_martin():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -740,6 +744,7 @@ def test_pg_martin():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertices_from(range(1, 6))
@@ -793,7 +798,7 @@ def test_pg_martin():
 
 def test_martin_bad_cost_function():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,

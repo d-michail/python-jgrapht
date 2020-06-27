@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 import jgrapht.generators as generators
 
 
 def test_barabasi_albert():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -16,7 +16,7 @@ def test_barabasi_albert():
 
 
 def test_barabasi_albert_forest():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -27,7 +27,7 @@ def test_barabasi_albert_forest():
 
 
 def test_complete():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -46,6 +46,7 @@ def test_complete_property_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     generators.complete_graph(g, 10)
@@ -53,7 +54,7 @@ def test_complete_property_graph():
 
 
 def test_complete_bipartite():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -64,7 +65,7 @@ def test_complete_bipartite():
 
 
 def test_empty():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -75,7 +76,7 @@ def test_empty():
 
 
 def test_gnm_random():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -86,7 +87,7 @@ def test_gnm_random():
 
 
 def test_gnp_random():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -97,7 +98,7 @@ def test_gnp_random():
 
 
 def test_ring():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -108,7 +109,7 @@ def test_ring():
 
 
 def test_scalefree():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -119,7 +120,7 @@ def test_scalefree():
 
 
 def test_watts_strogatz():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -130,7 +131,7 @@ def test_watts_strogatz():
 
 
 def test_kleinberg_smallworld():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -141,7 +142,7 @@ def test_kleinberg_smallworld():
 
 
 def test_complement():
-    g_source = create_int_graph(
+    g_source = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -153,7 +154,7 @@ def test_complement():
     g_source.add_edge(0, 1)
     g_source.add_edge(0, 2)
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -168,7 +169,7 @@ def test_complement():
 
 
 def test_generalized_petersen():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -179,7 +180,7 @@ def test_generalized_petersen():
 
 
 def test_grid():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -190,7 +191,7 @@ def test_grid():
 
 
 def test_hypercube():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -201,7 +202,7 @@ def test_hypercube():
 
 
 def test_linear():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -212,7 +213,7 @@ def test_linear():
 
 
 def test_random_regular():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -223,7 +224,7 @@ def test_random_regular():
 
 
 def test_random_regular_no_seed():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -234,7 +235,7 @@ def test_random_regular_no_seed():
 
 
 def test_star():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -245,7 +246,7 @@ def test_star():
 
 
 def test_wheel():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -256,7 +257,7 @@ def test_wheel():
 
 
 def test_windmill():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -267,7 +268,7 @@ def test_windmill():
 
 
 def test_linearized_chord_diagram():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
@@ -277,7 +278,7 @@ def test_linearized_chord_diagram():
     assert len(g.vertices) == 100
 
     # test that error is raised if the graph does not support self loops and multiple edges
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -288,7 +289,7 @@ def test_linearized_chord_diagram():
 
 
 def test_linearized_chord_diagram_no_seed():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=True,

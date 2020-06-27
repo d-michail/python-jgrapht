@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 from jgrapht.io.exporters import write_json, generate_json
 from jgrapht.io.importers import read_json, parse_json
 
@@ -17,7 +17,7 @@ expected5 = r'{"creator":"JGraphT JSON Exporter","version":"1","nodes":[{"id":"v
 
 
 def build_graph():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -71,7 +71,7 @@ def test_output_to_file_json(tmpdir):
 
 
 def test_output_to_string():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -92,7 +92,7 @@ def test_output_to_string():
 def test_output_to_string_with_labels():
     g = build_graph()
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -113,7 +113,7 @@ def test_input_json(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected_escaped)
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -150,7 +150,7 @@ def test_input_json_nocallbacks(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected_escaped)
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -162,7 +162,7 @@ def test_input_json_nocallbacks(tmpdir):
 
 def test_input_json_from_string_nocallbacks(tmpdir):
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -175,7 +175,7 @@ def test_input_json_from_string_nocallbacks(tmpdir):
 
 
 def test_input_json_from_string_create_new_vertices():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -187,7 +187,7 @@ def test_input_json_from_string_create_new_vertices():
 
 
 def test_input_json_from_string_preserve_ids():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -203,7 +203,7 @@ def test_input_json_from_string_preserve_ids():
 
 
 def test_input_from_string_with_labels():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -241,6 +241,7 @@ def test_property_graph_output_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     pg.add_vertex("v0")
@@ -264,6 +265,7 @@ def test_property_graph_with_labels_output_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     pg.add_vertex("v0")
@@ -295,6 +297,7 @@ def test_property_graph_output_to_file_json(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     pg.add_vertex("v0")
@@ -334,6 +337,7 @@ def test_input_json_from_string_property_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=StringSupplier("v"),
         edge_supplier=StringSupplier("e"),
     )
@@ -370,6 +374,7 @@ def test_input_json_from_file_property_graph(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=StringSupplier("v"),
         edge_supplier=StringSupplier("e"),
     )

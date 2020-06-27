@@ -1,15 +1,13 @@
 import pytest
 
-import time
-
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 
 import jgrapht.algorithms.spanning as spanning
 import jgrapht.generators as generators
 
 
 def build_graph():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -70,7 +68,7 @@ def test_boruvka():
 
 
 def test_small_graph_prim():
-    g = create_int_graph(directed=False)
+    g = create_graph(directed=False)
 
     generators.gnp_random_graph(g, n=500, p=0.1, seed=17)
 
@@ -84,6 +82,7 @@ def test_pg_prim():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex("0")

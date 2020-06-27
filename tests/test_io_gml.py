@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 
 from jgrapht.io.exporters import write_gml, generate_gml
@@ -418,7 +418,7 @@ graph
 
 
 def build_graph():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -502,7 +502,7 @@ def test_input_gml(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected)
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -532,7 +532,7 @@ def test_input_gml(tmpdir):
 
 def test_input_gml_from_string(tmpdir):
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -572,6 +572,7 @@ def test_input_pg_gml_from_file(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
 		vertex_supplier=create_vertex_supplier(),
 		edge_supplier=create_edge_supplier(),
     )
@@ -589,7 +590,7 @@ def test_input_gml_nocallbacks(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected)
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -601,7 +602,7 @@ def test_input_gml_nocallbacks(tmpdir):
 
 def test_input_gml_from_string_create_new_vertices():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -617,7 +618,7 @@ def test_input_gml_from_string_create_new_vertices():
 
 def test_input_gml_from_string_preserve_ids():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -635,7 +636,7 @@ def test_input_gml_from_string_preserve_ids():
 
 
 def test_output_to_string():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -655,7 +656,7 @@ def test_output_to_string():
 
 def test_input_gml_from_string_rename_ids(tmpdir):
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -676,6 +677,7 @@ def test_output_property_graph_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex(0)
@@ -709,6 +711,7 @@ def test_read_gml_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -732,6 +735,7 @@ def test_read_gml_property_graph_from_string_no_id_map():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -751,6 +755,7 @@ def test_output_bad_property_graph_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex('0')
@@ -780,6 +785,7 @@ def test_output_bad_property_graph_to_string_with_convert():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex('0')

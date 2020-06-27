@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht import create_int_graph
+from jgrapht import create_graph
 from jgrapht.io.exporters import write_lemon, generate_lemon
 
 
 def build_graph():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -130,7 +130,7 @@ def test_lemon(tmpdir):
 
 
 def test_output_to_string():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
@@ -149,7 +149,7 @@ def test_output_to_string():
 
 
 def test_output_to_string_with_custom_ids():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,

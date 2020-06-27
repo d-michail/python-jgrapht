@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.types import GraphEvent
@@ -17,7 +17,7 @@ from jgrapht.views import (
 
 
 def test_as_unweighted():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -54,7 +54,7 @@ def test_as_unweighted():
 
 
 def test_as_undirected():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -88,7 +88,7 @@ def test_as_undirected():
 
 def test_as_unmodifiable():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -121,7 +121,7 @@ def test_as_unmodifiable():
 
 
 def test_as_edge_reversed():
-    g = create_int_graph(
+    g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -155,7 +155,7 @@ def test_as_edge_reversed():
 
 
 def test_as_masked_subgraph():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -209,6 +209,7 @@ def test_pg_as_masked_subgraph():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex('v0')
@@ -304,7 +305,7 @@ def test_pg_as_masked_subgraph():
     repr(masked_graph)
 
 def test_as_weighted():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -332,7 +333,7 @@ def test_as_weighted():
 
 
 def test_as_weighted_with_None_function():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -362,7 +363,7 @@ def test_as_weighted_with_None_function():
 
 
 def test_as_weighted_with_caching():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -391,7 +392,7 @@ def test_as_weighted_with_caching():
 
 
 def test_as_weighted_with_caching_and_write_throught_with_unweighted():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -415,7 +416,7 @@ def test_as_weighted_with_caching_and_write_throught_with_unweighted():
 
 
 def test_as_weighted_with_caching_and_write_throught():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -444,7 +445,7 @@ def test_as_weighted_with_caching_and_write_throught():
 
 
 def test_as_weighted_with_no_caching_and_write_through():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -487,7 +488,7 @@ element 0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
 
 def test_listenable():
 
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -529,13 +530,13 @@ def test_listenable():
 
 def test_union():
 
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
     )
-    g2 = create_int_graph(
+    g2 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -579,13 +580,13 @@ def test_union():
 
 def test_union_with_combiner():
 
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
     )
-    g2 = create_int_graph(
+    g2 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -632,13 +633,13 @@ def test_union_with_combiner():
 
 def test_bad_union():
 
-    g1 = create_int_graph(
+    g1 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
     )
-    g2 = create_int_graph(
+    g2 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -659,8 +660,9 @@ def test_pg_bad_union():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
-    g2 = create_int_graph(
+    g2 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
@@ -678,6 +680,7 @@ def test_pg_as_unweighted():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex("0")
@@ -704,6 +707,7 @@ def test_pg_as_undirected():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex("0")
@@ -740,6 +744,7 @@ def test_pg_as_unmodifiable():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex("0")
@@ -763,6 +768,7 @@ def test_pg_two_wrappers():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex("0")
@@ -790,6 +796,7 @@ def test_as_unweighted_on_property_graphs():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -860,6 +867,7 @@ def test_pg_as_weighted():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex('0')
@@ -892,6 +900,7 @@ def test_pg_as_weighted_with_None_function():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex(0)
@@ -922,6 +931,7 @@ def test_pg_as_weighted_with_caching():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex(0)
@@ -957,6 +967,7 @@ def test_pg_as_weighted_with_caching_and_write_throught_with_unweighted():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex(0)
@@ -984,6 +995,7 @@ def test_pg_as_weighted_with_caching_and_write_throught():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex(0)
@@ -1019,6 +1031,7 @@ def test_pg_as_weighted_with_no_caching_and_write_through():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex(0)
@@ -1068,6 +1081,7 @@ def test_pg_listenable():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     lg = as_listenable(g)
@@ -1110,6 +1124,7 @@ def test_pg_as_edge_reversed():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        any_hashable_for_graph_elements=True,
     )
 
     g.add_vertex(0)

@@ -1,12 +1,12 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 
 import jgrapht.algorithms.independent as independent
 
 
 def test_chordal():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -37,6 +37,7 @@ def test_pg_chordal():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     for i in range(0, 6):

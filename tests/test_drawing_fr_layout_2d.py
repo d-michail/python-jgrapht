@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht import create_int_graph, create_graph
+from jgrapht import create_graph
 import jgrapht.algorithms.drawing as drawing
 
 
 def test_fr_layout():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -47,7 +47,7 @@ def test_fr_layout():
 
 
 def test_fr_layout_indexed():
-    g = create_int_graph(
+    g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
@@ -86,6 +86,7 @@ def test_pg_fr_layout():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
 
     for i in range(0, 5):
@@ -123,6 +124,7 @@ def test_pg_fr_layout_indexed():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        any_hashable_for_graph_elements=True,
     )
     g.add_vertices_from(range(0, 5))
     g.add_edge(0, 1, edge='0')
