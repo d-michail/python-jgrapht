@@ -57,7 +57,7 @@ def create_graph(directed=True,
                  allowing_multiple_edges=False,
                  weighted=True,
                  dag=False,
-                 any_hashable_for_graph_elements=False,
+                 any_hashable=False,
                  vertex_supplier=None,
                  edge_supplier=None,
                  ):
@@ -78,7 +78,7 @@ def create_graph(directed=True,
     :param dag: if True the graph will be a DAG (directed acyclic graph). An error will be
       raised if either directed is False or allowing_self_loops is True. The returned graph
       will be an instance of :class:`~jgrapht.types.DirectedAcyclicGraph`
-    :param any_hashable_for_graph_elements: if True then the graph will allow the use of any
+    :param any_hashable: if True then the graph will allow the use of any
       hashable as vertices and edges instead of just integers. This also makes the graph
       an instance of :class:`~jgrapht.types.AttributesGraph`
     :param vertex_supplier: used only in the case that the graph allows any hashable as
@@ -90,7 +90,7 @@ def create_graph(directed=True,
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
-    if any_hashable_for_graph_elements:
+    if any_hashable:
         if dag:
             if not directed:
                 raise ValueError("A dag is always directed")

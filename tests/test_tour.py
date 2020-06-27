@@ -32,7 +32,7 @@ def build_anyhashableg_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(type='int')
     )
     complete_graph(g, 8)
@@ -176,7 +176,7 @@ def test_tsp_two_opt_improve():
 
 
 def test_random_tsp():
-    g = create_graph(directed=False, weighted=True, any_hashable_for_graph_elements=True)
+    g = create_graph(directed=False, weighted=True, any_hashable=True)
 
     g.add_vertex("0")
     g.add_vertex("1")

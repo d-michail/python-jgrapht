@@ -241,7 +241,7 @@ def test_property_graph_output_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     pg.add_vertex("v0")
@@ -265,7 +265,7 @@ def test_property_graph_with_labels_output_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     pg.add_vertex("v0")
@@ -297,7 +297,7 @@ def test_property_graph_output_to_file_json(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     pg.add_vertex("v0")
@@ -337,7 +337,7 @@ def test_input_json_from_string_property_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=StringSupplier("v"),
         edge_supplier=StringSupplier("e"),
     )
@@ -374,7 +374,7 @@ def test_input_json_from_file_property_graph(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=StringSupplier("v"),
         edge_supplier=StringSupplier("e"),
     )

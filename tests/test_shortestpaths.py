@@ -34,7 +34,7 @@ def get_anyhashableg_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     for i in range(0, 6):
@@ -87,7 +87,7 @@ def get_anyhashableg_graph_with_negative_edges():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     assert g.type.directed
@@ -404,7 +404,7 @@ def test_anyhashableg_a_star():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, "3", 4, "5", 6, 7, "8"])
@@ -502,7 +502,7 @@ def test_anyhashableg_a_star_with_alt_heuristic():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, "3", 4, 5, 6, 7, 8])
@@ -744,7 +744,7 @@ def test_anyhashableg_martin():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from(range(1, 6))

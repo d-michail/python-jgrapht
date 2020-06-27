@@ -35,7 +35,7 @@ def test_anyhashableg_hierholzer():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3])
@@ -77,7 +77,7 @@ def test_anyhashableg_chinese_postman():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4])
@@ -128,7 +128,7 @@ def test_anyhashableg_fundamental_cycle_basis_paton():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -247,7 +247,7 @@ def test_anyhashableg_simple_cycles_tiernan():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -397,7 +397,7 @@ def test_anyhashableg_fundamental_cycle_basis_queuebfs():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -427,7 +427,7 @@ def test_anyhashableg_fundamental_cycle_basis_stackbfs():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -458,7 +458,7 @@ def test_anyhashableg_simple_cycles_johnson():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -489,7 +489,7 @@ def test_anyhashableg_simple_cycles_tarjan():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -520,7 +520,7 @@ def test_anyhashableg_simple_cycles_szwarcfiter_lauer():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -551,7 +551,7 @@ def test_anyhashableg_simple_cycles_hawick_james():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])

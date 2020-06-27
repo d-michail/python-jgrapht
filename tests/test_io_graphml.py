@@ -355,7 +355,7 @@ def test_property_graph_output_to_string_with_attrs():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     for i in range(0, 10):
@@ -430,7 +430,7 @@ def test_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -455,7 +455,7 @@ def test_property_graph_from_string_without_importid():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -494,7 +494,7 @@ def test_property_graph_from_filename_without_importid(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -533,7 +533,7 @@ def test_property_graph_from_filename_without_importid_no_simple(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -561,7 +561,7 @@ def test_property_graph_non_weighted_from_string_without_importid():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )

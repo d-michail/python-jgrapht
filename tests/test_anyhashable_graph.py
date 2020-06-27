@@ -13,7 +13,7 @@ def test_any_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     assert repr(g) is not None
@@ -250,7 +250,7 @@ def test_any_graph_of_graphs():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(g1)
@@ -281,7 +281,7 @@ def test_suppliers_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     assert g.type.directed
@@ -328,7 +328,7 @@ def test_with_string_suppliers_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=supplier,
         edge_supplier=supplier,
     )
@@ -375,7 +375,7 @@ def test_on_already_initialized_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=StringSupplier("v"),
         edge_supplier=StringSupplier("e"),
     )
@@ -402,7 +402,7 @@ def test_bad_vertex_supplier_property_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=vertex_supplier,
     )
 
@@ -420,7 +420,7 @@ def test_bad_edge_supplier_property_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         edge_supplier=edge_supplier,
     )
 
@@ -441,7 +441,7 @@ def test_listenable_property_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )

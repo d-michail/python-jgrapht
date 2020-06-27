@@ -34,10 +34,8 @@ Thus, given an edge, finding its source, target and weight can be performed usin
 information about the vertices, such as its incident edges, can also be performed using corresponding 
 graph methods.
 
-Graph Implementations
-^^^^^^^^^^^^^^^^^^^^^
-
-The |Bindings| contains two main graph implementations: 
+The |Bindings| contains two main graph implementations which we describe next. Creating graphs of 
+either category can be done using the :py:meth:`jgrapht.create_graph` factory method.
 
 integer graphs
 """"""""""""""

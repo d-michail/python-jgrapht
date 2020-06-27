@@ -47,7 +47,7 @@ def _do_run_anyhashableg_both(algo):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(0)
@@ -115,7 +115,7 @@ def _do_run_anyhashableg_flow(algo):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(0)

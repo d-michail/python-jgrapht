@@ -47,7 +47,7 @@ def build_property_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         edge_supplier=create_edge_supplier(type='int')
     )
 
@@ -339,7 +339,7 @@ def test_read_dimacs_property_graph_from_file(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -359,7 +359,7 @@ def test_read_dimacs_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -379,7 +379,7 @@ def test_read_dimacs_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -414,7 +414,7 @@ def test_anyhashableg_dimacs_increase_to_positive_id(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         edge_supplier=create_edge_supplier(type='int')
     )
 

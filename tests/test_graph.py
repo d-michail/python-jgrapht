@@ -548,7 +548,7 @@ def test_dag():
 
 
 def test_anyhashableg_dag():
-    g = create_graph(allowing_multiple_edges=True, weighted=True, dag=True, any_hashable_for_graph_elements=True)
+    g = create_graph(allowing_multiple_edges=True, weighted=True, dag=True, any_hashable=True)
 
     assert g.type.directed
     assert not g.type.undirected
@@ -590,7 +590,7 @@ def test_anyhashableg_dag():
     with pytest.raises(ValueError):
         g.ancestors("unknown")
 
-    g1 = create_graph(allowing_multiple_edges=False, weighted=False, dag=True, any_hashable_for_graph_elements=True)
+    g1 = create_graph(allowing_multiple_edges=False, weighted=False, dag=True, any_hashable=True)
 
     assert g1.type.directed
     assert not g1.type.undirected

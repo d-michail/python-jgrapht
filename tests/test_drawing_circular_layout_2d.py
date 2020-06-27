@@ -75,7 +75,7 @@ def test_anyhashableg_circular_layout_with_comparator():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
     for i in range(0, 4):
         g.add_vertex(str(i))

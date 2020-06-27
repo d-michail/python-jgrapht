@@ -572,7 +572,7 @@ def test_input_anyhashableg_gml_from_file(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
 		vertex_supplier=create_vertex_supplier(),
 		edge_supplier=create_edge_supplier(),
     )
@@ -677,7 +677,7 @@ def test_output_property_graph_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(0)
@@ -711,7 +711,7 @@ def test_read_gml_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -735,7 +735,7 @@ def test_read_gml_property_graph_from_string_no_id_map():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -755,7 +755,7 @@ def test_output_bad_property_graph_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex('0')
@@ -785,7 +785,7 @@ def test_output_bad_property_graph_to_string_with_convert():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex('0')

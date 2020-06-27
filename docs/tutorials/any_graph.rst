@@ -16,11 +16,16 @@ Creating a graph with any hashable as vertices and edges
 .. nbplot::
 
   >>> import jgrapht
-  >>> g = jgrapht.create_graph(directed=True, weighted=True, allowing_self_loops=False, allowing_multiple_edges=False, any_hashable_for_graph_elements=True)
+  >>> g = jgrapht.create_graph(directed=True, 
+  >>>                          weighted=True, 
+  >>>                          allowing_self_loops=False, 
+  >>>                          allowing_multiple_edges=False, 
+  >>>                          any_hashable=True)
 
 The factory function accepts two additional parameters, called `vertex_supplier` and `edge_supplier`. These are callable instances
 whose job is to return a new object whenever the graph wants to create a vertex or an edge. When not explicitly provided, the 
-default implementation creates new :py:class:`object` instances.
+default implementation creates new :py:class:`object` instances. A few basic suppliers are also provided in :py:mod:`jgrapht.utils`, but 
+any callable can do the job.
 
 Adding vertices
 ---------------
@@ -33,7 +38,7 @@ explicitly the vertex as a parameter:
   >>> g.add_vertex('v0')
 
 It is also possible to let the graph create automatically one. This will be done using the vertex supplier 
-associated with the property graph.
+associated with the graph.
 
 .. nbplot::
 
@@ -153,7 +158,7 @@ Finding the number of edges can be performed by executing,
 
   >>> len(g.edges)
 
-Graph properties
+Graph attributes
 ----------------
 
 Besides the graph structure, users can associate attributes/properties with the graph itself, with 

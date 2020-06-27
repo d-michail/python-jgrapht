@@ -35,7 +35,7 @@ def build_anyhashableg_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(0)
@@ -93,7 +93,7 @@ def test_anyhashableg_non_planar():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
     generators.complete_graph(g, 5)
 

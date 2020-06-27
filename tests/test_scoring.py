@@ -46,7 +46,7 @@ def build_anyhashableg_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     for i in range(0, 10):

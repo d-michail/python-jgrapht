@@ -99,7 +99,7 @@ def test_property_graph_traversals():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     for i in range(0, 9):
@@ -166,7 +166,7 @@ def test_anyhashableg_dag():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
     g1.add_vertex(0)
     g1.add_vertex(1)

@@ -75,7 +75,7 @@ def test_anyhashableg_bipartite_perfect_min_weight_with_custom_partitions():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
     bg.add_vertices_from(['0', '1', '2', '3', '4', '5', '6', '7'])
 
@@ -211,7 +211,7 @@ def test_anyhashableg_bipartite_perfect_min_weight():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
     generators.complete_bipartite_graph(bg, 10, 10)
     _, part1, part2 = partition.bipartite_partitions(bg)

@@ -205,7 +205,7 @@ def test_anyhashableg_iso():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g2.add_vertices_from([5, "6", 7, 8])
@@ -252,7 +252,7 @@ def test_anyhashableg_iso_induced_subgraph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g1.add_vertices_from([0, 1, 2, 3])
@@ -267,7 +267,7 @@ def test_anyhashableg_iso_induced_subgraph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g2.add_vertices_from([5, 6, 7])

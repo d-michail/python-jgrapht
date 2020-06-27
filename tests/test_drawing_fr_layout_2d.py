@@ -86,7 +86,7 @@ def test_anyhashableg_fr_layout():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     for i in range(0, 5):
@@ -124,7 +124,7 @@ def test_anyhashableg_fr_layout_indexed():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
     g.add_vertices_from(range(0, 5))
     g.add_edge(0, 1, edge='0')

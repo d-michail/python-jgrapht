@@ -209,7 +209,7 @@ def test_anyhashableg_as_masked_subgraph():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex('v0')
@@ -660,7 +660,7 @@ def test_anyhashableg_bad_union():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
     g2 = create_graph(
         directed=False,
@@ -680,7 +680,7 @@ def test_anyhashableg_as_unweighted():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex("0")
@@ -707,7 +707,7 @@ def test_anyhashableg_as_undirected():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex("0")
@@ -744,7 +744,7 @@ def test_anyhashableg_as_unmodifiable():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex("0")
@@ -768,7 +768,7 @@ def test_anyhashableg_two_wrappers():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex("0")
@@ -796,7 +796,7 @@ def test_as_unweighted_on_property_graphs():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -867,7 +867,7 @@ def test_anyhashableg_as_weighted():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex('0')
@@ -900,7 +900,7 @@ def test_anyhashableg_as_weighted_with_None_function():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(0)
@@ -931,7 +931,7 @@ def test_anyhashableg_as_weighted_with_caching():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(0)
@@ -967,7 +967,7 @@ def test_anyhashableg_as_weighted_with_caching_and_write_throught_with_unweighte
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(0)
@@ -995,7 +995,7 @@ def test_anyhashableg_as_weighted_with_caching_and_write_throught():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(0)
@@ -1031,7 +1031,7 @@ def test_anyhashableg_as_weighted_with_no_caching_and_write_through():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(0)
@@ -1081,7 +1081,7 @@ def test_anyhashableg_listenable():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     lg = as_listenable(g)
@@ -1124,7 +1124,7 @@ def test_anyhashableg_as_edge_reversed():
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable_for_graph_elements=True,
+        any_hashable=True,
     )
 
     g.add_vertex(0)
