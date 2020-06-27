@@ -1,4 +1,4 @@
-.. _tutorials/sparse:
+.. _tutorials/sparse_graph:
 
 .. currentmodule:: jgrapht
 

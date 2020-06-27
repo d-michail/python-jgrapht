@@ -43,8 +43,8 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 from ._internals._graphs import (
     create_int_graph as _create_int_graph,
     create_int_dag as _create_int_dag,
-    create_sparse_int_graph as create_sparse_int_graph,
-    as_sparse_int_graph as as_sparse_int_graph,
+    create_sparse_int_graph as create_sparse_graph,
+    as_sparse_int_graph as as_sparse_graph,
 )
 from ._internals._attrsg import (
     create_attrs_graph as _create_attrs_graph,
@@ -62,6 +62,23 @@ def create_graph(directed=True,
                  edge_supplier=None,
                  ):
     """Create a graph.
+
+    :param directed: if True the graph will be directed, otherwise undirected
+    :param allowing_self_loops: if True the graph will allow the addition of self-loops
+    :param allowing_multiple_edges: if True the graph will allow multiple-edges
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :param dag: if True the graph will be a DAG (directed acyclic graph). An error will be
+      raised if either directed or allowing_self_loops is True
+    :param any_hashable_for_graph_elements: if True then the graph will allow the use of any
+      hashable as vertices and edges instead of just integers
+    :param vertex_supplier: used only in the case that the graph allows any hashable as
+      vertices/edges. Called everytime the graph needs to create a new vertex. If not given,
+      then object instances are used.
+    :param edge_supplier: used only in the case that the graph allows any hashable as
+      vertices/edges. Called everytime the graph needs to create a new edge. If not given,
+      then object instances are used.
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.Graph`
     """
     if any_hashable_for_graph_elements:
         if dag:

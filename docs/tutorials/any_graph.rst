@@ -1,4 +1,4 @@
-.. _tutorials/property:
+.. _tutorials/any_graph:
 
 .. currentmodule:: jgrapht
 

@@ -11,7 +11,8 @@ the |Bindings| provide.
 .. toctree::
    :maxdepth: 2
 
-   graph
-   property
-   sparse
+   default_graph
+   sparse_graph
+   any_graph
+   
 
