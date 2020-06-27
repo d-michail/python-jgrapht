@@ -893,7 +893,6 @@ def _create_sparse_anyhashable_graph(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
-
     # Transform edge list from hashable to ints
     next_int = IntegerSupplier()
     vertex_hash_to_id = defaultdict(lambda: next_int())
@@ -907,7 +906,7 @@ def _create_sparse_anyhashable_graph(
 
     # Create graph
     sparse_int_graph = _create_sparse_int_graph(
-        int_edgelist, len(vertex_hash_to_id), directed=directed, weighted=weighted
+        int_edgelist, num_of_vertices=len(vertex_hash_to_id), directed=directed, weighted=weighted
     )
     g = _AnyHashableGraph(
         sparse_int_graph, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
@@ -940,13 +939,42 @@ def _copy_to_sparse_anyhashable_graph(graph):
     if len(graph.vertices) == 0:
         raise ValueError("Graph with no vertices")
 
+    # transform edge list from hashable to ints
+    next_int = IntegerSupplier()
+    vertex_hash_to_id = defaultdict(lambda: next_int())
+    int_edgelist = list()
     edgelist = [graph.edge_tuple(e) for e in graph.edges]
+    if graph.type.weighted:
+        for v, u, w in edgelist:
+            int_edgelist.append((vertex_hash_to_id[v], vertex_hash_to_id[u], w))
+    else:
+        for v, u, *w in edgelist:
+            int_edgelist.append((vertex_hash_to_id[v], vertex_hash_to_id[u]))
 
-    return _create_sparse_anyhashable_graph(
-        edgelist,
-        directed=graph.type.directed,
-        weighted=graph.type.weighted,
-        vertex_supplier=graph._vertex_supplier,
-        edge_supplier=graph._edge_supplier,
+    # create graph
+    sparse_int_graph = _create_sparse_int_graph(
+        int_edgelist, num_of_vertices=len(vertex_hash_to_id), directed=graph.type.directed, weighted=graph.type.weighted
     )
+    sparse = _AnyHashableGraph(
+        sparse_int_graph, vertex_supplier=graph._vertex_supplier, edge_supplier=graph._edge_supplier
+    )
+
+    # record mapping of existing vertices and copy attributes
+    for vhash, vid in vertex_hash_to_id.items():
+        sparse._vertex_hash_to_id[vhash] = vid
+        sparse._vertex_id_to_hash[vid] = vhash
+        for k, v in graph.vertex_attrs[vhash].items():
+            sparse.vertex_attrs[vhash][k] = v
+
+    # record mapping of existing edges and copy attributes
+    for ehash, eid in zip(graph.edges, range(0, len(graph.edges))):
+        sparse._edge_hash_to_id[ehash] = eid
+        sparse._edge_id_to_hash[eid] = ehash
+        for k, v in graph.edge_attrs[ehash].items():
+            sparse.edge_attrs[ehash][k] = v
+    
+    for k, v in graph.graph_attrs.items():
+        sparse.graph_attrs[k] = v
+
+    return sparse
 

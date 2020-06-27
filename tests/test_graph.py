@@ -478,7 +478,7 @@ def test_graph_copy_to_sparse():
 
     gs = copy_to_sparse_graph(g)
 
-    assert gs.vertices, set([0, 1, 2, 3, 4])
+    assert gs.vertices == set([0, 1, 2, 3, 4])
     assert len(gs.edges) == 7
 
 
@@ -508,7 +508,7 @@ def test_graph_copy_to_sparse1():
 
     gs = copy_to_sparse_graph(g)
 
-    assert gs.vertices, set(range(0, 11))
+    assert gs.vertices == set(range(0, 11))
     assert len(gs.edges) == 3
     assert gs.type.weighted
     assert gs.type.directed

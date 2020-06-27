@@ -538,7 +538,7 @@ def test_graph_copy_to_sparse():
 
     gs = copy_to_sparse_graph(g)
 
-    assert gs.vertices, set([0, 1, 2, 3, 4])
+    assert gs.vertices == set([0, 1, 2, 3, 4])
     assert len(gs.edges) == 7
 
 
@@ -569,7 +569,61 @@ def test_graph_copy_to_sparse1():
 
     gs = copy_to_sparse_graph(g)
 
-    assert gs.vertices, set(range(0, 11))
+    assert gs.vertices == {0, 10, 5}
     assert len(gs.edges) == 3
     assert gs.type.weighted
     assert gs.type.directed
+
+
+def test_graph_copy_to_sparse_with_attrs():
+
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+        any_hashable=True,
+    )
+
+    assert g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
+
+    assert g.add_vertex('0') == '0'
+    assert g.add_vertex('5') == '5'
+    assert g.add_vertex('10') == '10'
+
+    g.add_edge('0', '10', edge='e0')
+    g.add_edge('0', '5', edge='e1')
+    g.add_edge('10', '5', edge='e2')
+
+    g.edge_attrs['e0']['color'] = 'red'
+    g.edge_attrs['e1']['color'] = 'blue'
+    g.edge_attrs['e2']['color'] = 'black'
+
+    g.vertex_attrs['0']['color'] = 'black'
+    g.vertex_attrs['5']['color'] = 'red'
+    g.vertex_attrs['10']['color'] = 'unknown'
+
+    g.graph_attrs['type'] = 'directed'
+
+    assert len(g.edges) == 3
+
+    gs = copy_to_sparse_graph(g)
+
+    assert gs.vertices == { '0', '5', '10' }
+    assert len(gs.edges) == 3
+    assert gs.type.weighted
+    assert gs.type.directed
+
+    assert gs.edge_attrs['e0']['color'] == 'red'
+    assert gs.edge_attrs['e1']['color'] == 'blue'
+    assert gs.edge_attrs['e2']['color'] == 'black'
+
+    assert gs.vertex_attrs['0']['color'] == 'black'
+    assert gs.vertex_attrs['5']['color'] == 'red'
+    assert gs.vertex_attrs['10']['color'] == 'unknown'
+
+    gs.graph_attrs['type'] == 'directed'
+    
