@@ -70,7 +70,7 @@ def is_strongly_connected_kosaraju(graph):
     if is_anyhashable_graph(graph):
         return connected, _AnyHashableGraphVertexSetIterator(sets, graph)
     else:
-        return connected, _JGraphTIntegerSetIterator(sets)    
+        return connected, _JGraphTIntegerSetIterator(sets)
 
 
 def is_connected(graph):

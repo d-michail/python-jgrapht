@@ -86,7 +86,9 @@ def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
     :returns: An iterator over maximal cliques
     """
     custom = [timeout]
-    res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(graph.handle, *custom)
+    res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(
+        graph.handle, *custom
+    )
     if is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSetIterator(res, graph)
     else:

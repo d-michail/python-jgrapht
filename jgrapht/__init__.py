@@ -52,15 +52,16 @@ from ._internals._anyhashableg import (
 )
 
 
-def create_graph(directed=True,
-                 allowing_self_loops=False,
-                 allowing_multiple_edges=False,
-                 weighted=True,
-                 dag=False,
-                 any_hashable=False,
-                 vertex_supplier=None,
-                 edge_supplier=None,
-                 ):
+def create_graph(
+    directed=True,
+    allowing_self_loops=False,
+    allowing_multiple_edges=False,
+    weighted=True,
+    dag=False,
+    any_hashable=False,
+    vertex_supplier=None,
+    edge_supplier=None,
+):
     """Create a graph.
 
     By default this function creates graphs with integer vertices. When parameter
@@ -96,22 +97,37 @@ def create_graph(directed=True,
                 raise ValueError("A dag is always directed")
             if allowing_self_loops:
                 raise ValueError("A dag cannot allow self-loops")
-            return _create_anyhashable_dag(allowing_multiple_edges=allowing_multiple_edges, weighted=weighted,
-                                           vertex_supplier=vertex_supplier, edge_supplier=edge_supplier)
+            return _create_anyhashable_dag(
+                allowing_multiple_edges=allowing_multiple_edges,
+                weighted=weighted,
+                vertex_supplier=vertex_supplier,
+                edge_supplier=edge_supplier,
+            )
         else:
-            return _create_anyhashable_graph(directed=directed, allowing_self_loops=allowing_self_loops,
-                                             allowing_multiple_edges=allowing_multiple_edges, weighted=weighted,
-                                             vertex_supplier=vertex_supplier, edge_supplier=edge_supplier)
+            return _create_anyhashable_graph(
+                directed=directed,
+                allowing_self_loops=allowing_self_loops,
+                allowing_multiple_edges=allowing_multiple_edges,
+                weighted=weighted,
+                vertex_supplier=vertex_supplier,
+                edge_supplier=edge_supplier,
+            )
     else:
         if dag:
             if not directed:
                 raise ValueError("A dag is always directed")
             if allowing_self_loops:
                 raise ValueError("A dag cannot allow self-loops")
-            return _create_int_dag(allowing_multiple_edges=allowing_multiple_edges, weighted=weighted)
+            return _create_int_dag(
+                allowing_multiple_edges=allowing_multiple_edges, weighted=weighted
+            )
         else:
-            return _create_int_graph(directed=directed, allowing_self_loops=allowing_self_loops,
-                                     allowing_multiple_edges=allowing_multiple_edges, weighted=weighted)
+            return _create_int_graph(
+                directed=directed,
+                allowing_self_loops=allowing_self_loops,
+                allowing_multiple_edges=allowing_multiple_edges,
+                weighted=weighted,
+            )
 
 
 from . import (

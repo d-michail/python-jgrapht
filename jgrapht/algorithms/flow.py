@@ -6,7 +6,10 @@ from .._internals._flows import (
     _JGraphTEquivalentFlowTree,
 )
 
-from .._internals._anyhashableg import is_anyhashable_graph, vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g
+from .._internals._anyhashableg import (
+    is_anyhashable_graph,
+    vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
+)
 from .._internals._anyhashableg_flows import (
     _AnyHashableGraphCut,
     _AnyHashableGraphFlow,

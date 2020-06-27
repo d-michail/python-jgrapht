@@ -37,10 +37,10 @@ def eulerian_cycle(graph):
     :returns: An Eulerian cycle as a :py:class:`.GraphPath` or None if the graph is not Eulerian
     """
     is_eulerian, gp = _backend.jgrapht_cycles_eulerian_exec_hierholzer(graph.handle)
-    
+
     if not is_eulerian:
         return None
-    
+
     if is_anyhashable_graph(graph):
         return _AnyHashableGraphGraphPath(gp, graph)
     else:
@@ -157,7 +157,7 @@ def fundamental_cycle_basis_bfs_with_queue(graph):
     if is_anyhashable_graph(graph):
         return weight, _AnyHashableGraphGraphPathIterator(cycles_it, graph)
     else:
-        return weight, _JGraphTGraphPathIterator(cycles_it, graph)    
+        return weight, _JGraphTGraphPathIterator(cycles_it, graph)
 
 
 def enumerate_simple_cycles_tarjan(graph):

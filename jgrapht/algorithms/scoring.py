@@ -50,7 +50,9 @@ def alpha_centrality(
     :returns: a dictionary from vertices to double values
     """
     custom = [damping_factor, exogenous_factor, max_iterations, tolerance]
-    scores_handle = _backend.jgrapht_scoring_exec_custom_alpha_centrality(graph.handle, *custom)
+    scores_handle = _backend.jgrapht_scoring_exec_custom_alpha_centrality(
+        graph.handle, *custom
+    )
     return _wrap_result(graph, scores_handle)
 
 
@@ -75,7 +77,9 @@ def betweenness_centrality(graph, incoming=False, normalize=False):
     :returns: a dictionary from vertices to double values
     """
     custom = [normalize]
-    scores_handle = _backend.jgrapht_scoring_exec_custom_betweenness_centrality(graph.handle, *custom)
+    scores_handle = _backend.jgrapht_scoring_exec_custom_betweenness_centrality(
+        graph.handle, *custom
+    )
     return _wrap_result(graph, scores_handle)
 
 
@@ -112,7 +116,9 @@ def closeness_centrality(graph, incoming=False, normalize=True):
     :returns: a dictionary from vertices to double values
     """
     custom = [incoming, normalize]
-    scores_handle = _backend.jgrapht_scoring_exec_custom_closeness_centrality(graph.handle, *custom)
+    scores_handle = _backend.jgrapht_scoring_exec_custom_closeness_centrality(
+        graph.handle, *custom
+    )
     return _wrap_result(graph, scores_handle)
 
 
@@ -151,7 +157,9 @@ def harmonic_centrality(graph, incoming=False, normalize=True):
     :returns: a dictionary from vertices to double values
     """
     custom = [incoming, normalize]
-    scores_handle = _backend.jgrapht_scoring_exec_custom_harmonic_centrality(graph.handle, *custom)
+    scores_handle = _backend.jgrapht_scoring_exec_custom_harmonic_centrality(
+        graph.handle, *custom
+    )
     return _wrap_result(graph, scores_handle)
 
 
@@ -186,7 +194,7 @@ def pagerank(graph, damping_factor=0.85, max_iterations=100, tolerance=0.0001):
     """
     custom = [damping_factor, max_iterations, tolerance]
     scores_handle = _backend.jgrapht_scoring_exec_custom_pagerank(graph.handle, *custom)
-    return _wrap_result(graph, scores_handle)    
+    return _wrap_result(graph, scores_handle)
 
 
 def coreness(graph):

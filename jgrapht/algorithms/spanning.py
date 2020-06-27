@@ -6,7 +6,6 @@ from .._internals._anyhashableg import is_anyhashable_graph
 from .._internals._anyhashableg_collections import _AnyHashableGraphEdgeSet
 
 
-
 def _wrap_result(graph, weight, mst_handle):
     if is_anyhashable_graph(graph):
         return weight, _AnyHashableGraphEdgeSet(mst_handle, graph)

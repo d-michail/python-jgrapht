@@ -53,5 +53,4 @@ def _create_wrapped_notify_id_callback(callback):
         callback_ctype = ctypes.CFUNCTYPE(None, ctypes.c_int)
         return _create_wrapped_callback(callback, callback_ctype)
     else:
-        return (0, None)     
-   
+        return (0, None)

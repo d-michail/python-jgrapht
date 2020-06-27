@@ -1,7 +1,4 @@
-
-from .types import (
-    ListenableGraph
-)
+from .types import ListenableGraph
 
 from ._internals._views import (
     _UnweightedGraphView,
@@ -16,12 +13,12 @@ from ._internals._views import (
 
 from ._internals._anyhashableg import (
     is_anyhashable_graph,
-    as_unweighted_anyhashable_graph as _as_unweighted_attrs_graph,
-    as_undirected_anyhashable_graph as _as_undirected_attrs_graph,
-    as_unmodifiable_anyhashable_graph as _as_unmodifiable_attrs_graph,
-    as_edgereversed_anyhashable_graph as _as_edgereversed_attrs_graph,
-    as_weighted_anyhashable_graph as _as_weighted_attrs_graph,
-    as_masked_subgraph_anyhashable_graph as _as_masked_subgraph_attrs_graph,
+    as_unweighted_anyhashable_graph as _as_unweighted_anyhashable_graph,
+    as_undirected_anyhashable_graph as _as_undirected_anyhashable_graph,
+    as_unmodifiable_anyhashable_graph as _as_unmodifiable_anyhashable_graph,
+    as_edgereversed_anyhashable_graph as _as_edgereversed_anyhashable_graph,
+    as_weighted_anyhashable_graph as _as_weighted_anyhashable_graph,
+    as_masked_subgraph_anyhashable_graph as _as_masked_subgraph_anyhashable_graph,
 )
 
 
@@ -33,7 +30,7 @@ def as_unweighted(graph):
     :returns: an unweighted graph
     """
     if is_anyhashable_graph(graph):
-        return _as_unweighted_attrs_graph(graph)
+        return _as_unweighted_anyhashable_graph(graph)
     else:
         return _UnweightedGraphView(graph)
 
@@ -46,7 +43,7 @@ def as_undirected(graph):
     :returns: an undirected graph
     """
     if is_anyhashable_graph(graph):
-        return _as_undirected_attrs_graph(graph)
+        return _as_undirected_anyhashable_graph(graph)
     else:
         return _UndirectedGraphView(graph)
 
@@ -59,7 +56,7 @@ def as_unmodifiable(graph):
     :returns: an unmodifiable graph
     """
     if is_anyhashable_graph(graph):
-        return _as_unmodifiable_attrs_graph(graph)
+        return _as_unmodifiable_anyhashable_graph(graph)
     else:
         return _UnmodifiableGraphView(graph)
 
@@ -72,7 +69,7 @@ def as_edge_reversed(graph):
     :returns: a graph with reversed edges
     """
     if is_anyhashable_graph(graph):
-        return _as_edgereversed_attrs_graph(graph)
+        return _as_edgereversed_anyhashable_graph(graph)
     else:
         return _EdgeReversedGraphView(graph)
 
@@ -95,7 +92,9 @@ def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):
     :returns: a masked subgraph 
     """
     if is_anyhashable_graph(graph):
-        return _as_masked_subgraph_attrs_graph(graph, vertex_mask_cb, edge_mask_cb)
+        return _as_masked_subgraph_anyhashable_graph(
+            graph, vertex_mask_cb, edge_mask_cb
+        )
     else:
         return _MaskedSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
 
@@ -128,7 +127,7 @@ def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through
     :returns: a weighted view
     """
     if is_anyhashable_graph(graph):
-        return _as_weighted_attrs_graph(
+        return _as_weighted_anyhashable_graph(
             graph, edge_weight_cb, cache_weights, write_weights_through
         )
     else:

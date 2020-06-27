@@ -17,6 +17,10 @@ def bipartite_partitions(graph):
     res, part1, part2 = _backend.jgrapht_partition_exec_bipartite(graph.handle)
 
     if is_anyhashable_graph(graph):
-        return res, _AnyHashableGraphVertexSet(part1, graph), _AnyHashableGraphVertexSet(part2, graph)
+        return (
+            res,
+            _AnyHashableGraphVertexSet(part1, graph),
+            _AnyHashableGraphVertexSet(part2, graph),
+        )
     else:
         return res, _JGraphTIntegerSet(part1), _JGraphTIntegerSet(part2)

@@ -1,7 +1,4 @@
-
-
 class StringSupplier:
-
     def __init__(self, prefix=None, start=0):
         self._count = start
         self._prefix = prefix
@@ -9,11 +6,10 @@ class StringSupplier:
     def __call__(self):
         value = self._count
         self._count += 1
-        return '{}{}'.format("" if self._prefix is None else self._prefix, value)
+        return "{}{}".format("" if self._prefix is None else self._prefix, value)
 
 
 class IntegerSupplier:
-
     def __init__(self, start=0):
         self._count = start
 
@@ -23,7 +19,7 @@ class IntegerSupplier:
         return value
 
 
-def create_vertex_supplier(type='str', prefix='v', start=0):
+def create_vertex_supplier(type="str", prefix="v", start=0):
     """Create a vertex supplier. Vertex suppliers are called whenever an
     any-hashable graph wants to create a new vertex.
 
@@ -32,13 +28,13 @@ def create_vertex_supplier(type='str', prefix='v', start=0):
     :param start: where to start counting
     :returns: a vertex supplier
     """
-    if type == 'int':
+    if type == "int":
         return IntegerSupplier(start=start)
     else:
         return StringSupplier(prefix=prefix, start=start)
 
 
-def create_edge_supplier(type='str', prefix='e', start=0):
+def create_edge_supplier(type="str", prefix="e", start=0):
     """Create an edge supplier. Εdge suppliers are called whenever an
     any-hashable graph wants to create a new edge.
 
@@ -46,8 +42,8 @@ def create_edge_supplier(type='str', prefix='e', start=0):
     :param prefix: if a string supplier, a prefix to use
     :param start: where to start counting
     :returns: an edge supplier
-    """    
-    if type == 'int':
+    """
+    if type == "int":
         return IntegerSupplier(start=start)
     else:
         return StringSupplier(prefix=prefix, start=start)

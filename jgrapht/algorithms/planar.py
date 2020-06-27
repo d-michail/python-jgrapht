@@ -25,7 +25,10 @@ def _planarity_alg(name, graph, *args):
     else:
         kuratowski_as_graph = _JGraphTGraph(handle=kuratowski_subdivision)
         if is_anyhashable_graph(graph):
-            return is_planar, _create_anyhashable_graph_subgraph(graph, kuratowski_as_graph)
+            return (
+                is_planar,
+                _create_anyhashable_graph_subgraph(graph, kuratowski_as_graph),
+            )
         else:
             return is_planar, kuratowski_as_graph
 

@@ -519,7 +519,7 @@ def read_csv(
             format=format,
             import_edge_weights=import_edge_weights,
             matrix_format_node_id=matrix_format_node_id,
-            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,            
+            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
             input_is_filename=True,
         )
 
@@ -572,7 +572,7 @@ def parse_csv(
             format=format,
             import_edge_weights=import_edge_weights,
             matrix_format_node_id=matrix_format_node_id,
-            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,            
+            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
             input_is_filename=False,
         )
 
@@ -777,7 +777,6 @@ def parse_gexf(
         )
 
 
-
 def read_dot(
     graph,
     filename,
@@ -822,10 +821,7 @@ def read_dot(
     """
     if is_anyhashable_graph(graph):
         _parse_anyhashable_graph_dot(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            input_is_filename=True,
+            graph, filename, import_id_cb=import_id_cb, input_is_filename=True,
         )
     else:
         _parse_graph_dot(
@@ -882,10 +878,7 @@ def parse_dot(
     """
     if is_anyhashable_graph(graph):
         _parse_anyhashable_graph_dot(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            input_is_filename=False,
+            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False,
         )
     else:
         _parse_graph_dot(
@@ -944,10 +937,7 @@ def read_graph6sparse6(
     """
     if is_anyhashable_graph(graph):
         _parse_anyhashable_graph_graph6sparse6(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            input_is_filename=True,
+            graph, filename, import_id_cb=import_id_cb, input_is_filename=True,
         )
     else:
         _parse_graph_graph6sparse6(
@@ -1007,10 +997,7 @@ def parse_graph6sparse6(
     """
     if is_anyhashable_graph(graph):
         _parse_anyhashable_graph_graph6sparse6(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            input_is_filename=False,
+            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False,
         )
     else:
         _parse_graph_graph6sparse6(

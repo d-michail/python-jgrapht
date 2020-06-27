@@ -88,7 +88,7 @@ def _create_anyhashable_graph_callbacks(
         vertex_id_to_attrs[id][key] = value
 
     def use_edge_attribute_cb(id, key, value):
-        if key != 'weight' or include_weights:
+        if key != "weight" or include_weights:
             edge_id_to_attrs[id][key] = value
 
     if integer_ids:
@@ -197,7 +197,9 @@ def _parse_anyhashable_graph_dimacs(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb, integer_ids=True)
+    ) = _create_anyhashable_graph_callbacks(
+        graph, *idmaps, import_id_cb, integer_ids=True
+    )
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -279,7 +281,9 @@ def _parse_anyhashable_graph_gml(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb, integer_ids=True)
+    ) = _create_anyhashable_graph_callbacks(
+        graph, *idmaps, import_id_cb, integer_ids=True
+    )
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -362,7 +366,7 @@ def _parse_anyhashable_graph_json(
         vertex_notify_f,  # pylint: disable=unused-variable
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb, )
+    ) = _create_anyhashable_graph_callbacks(graph, *idmaps, import_id_cb,)
 
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
@@ -537,11 +541,7 @@ def _parse_graph_gexf(
 
 
 def _parse_anyhashable_graph_gexf(
-    graph,
-    input_string,
-    import_id_cb,
-    input_is_filename=False,
-    validate_schema=True,
+    graph, input_string, import_id_cb, input_is_filename=False, validate_schema=True,
 ):
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 
@@ -625,10 +625,7 @@ def _parse_graph_dot(
 
 
 def _parse_anyhashable_graph_dot(
-    graph,
-    input_string,
-    import_id_cb,
-    input_is_filename=False,
+    graph, input_string, import_id_cb, input_is_filename=False,
 ):
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 
@@ -711,10 +708,7 @@ def _parse_graph_graph6sparse6(
 
 
 def _parse_anyhashable_graph_graph6sparse6(
-    graph,
-    input_string,
-    import_id_cb,
-    input_is_filename=False,
+    graph, input_string, import_id_cb, input_is_filename=False,
 ):
     idmaps = ({}, defaultdict(lambda: {}), {}, defaultdict(lambda: {}))
 

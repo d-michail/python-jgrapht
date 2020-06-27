@@ -13,8 +13,13 @@ from ..types import (
     DirectedAcyclicGraph,
     ListenableGraph,
 )
+from ..utils import IntegerSupplier
 
-from ._graphs import create_int_graph as _create_int_graph, create_int_dag as _create_int_dag
+from ._graphs import (
+    create_int_graph as _create_int_graph,
+    create_int_dag as _create_int_dag,
+    create_sparse_int_graph as _create_sparse_int_graph,
+)
 from ._views import (
     _ListenableView,
     _UnweightedGraphView,
@@ -617,9 +622,7 @@ class _MaskedSubgraphAnyHashableGraph(_AnyHashableGraph):
         return eid
 
 
-def _create_anyhashable_graph_subgraph(
-    anyhashable_graph, subgraph
-):
+def _create_anyhashable_graph_subgraph(anyhashable_graph, subgraph):
     """Create an any hashable graph subgraph.
 
     This function create an any-hashable graph with the identical structure as the
@@ -717,9 +720,11 @@ def as_weighted_anyhashable_graph(
 ):
     """Create a weighted view of an any-hashable graph."""
     if edge_weight_cb is not None:
+
         def actual_edge_weight_cb(e):
             e = edge_g_to_anyhashableg(anyhashable_graph, e)
             return edge_weight_cb(e)
+
     else:
         actual_edge_weight_cb = None
 
@@ -728,7 +733,9 @@ def as_weighted_anyhashable_graph(
         graph, actual_edge_weight_cb, cache_weights, write_weights_through
     )
 
-    weighted_anyhashable_graph = _AnyHashableGraph(weighted_graph, copy_from=anyhashable_graph)
+    weighted_anyhashable_graph = _AnyHashableGraph(
+        weighted_graph, copy_from=anyhashable_graph
+    )
     return weighted_anyhashable_graph
 
 
@@ -736,14 +743,17 @@ def as_masked_subgraph_anyhashable_graph(
     anyhashable_graph, vertex_mask_cb, edge_mask_cb=None
 ):
     """ Create a masked subgraph view of an any-hashable graph."""
+
     def actual_vertex_mask_cb(v):
         v = vertex_g_to_anyhashableg(anyhashable_graph, v)
         return vertex_mask_cb(v)
 
     if edge_mask_cb is not None:
+
         def actual_edge_mask_cb(e):
             e = edge_g_to_anyhashableg(anyhashable_graph, e)
             return edge_mask_cb(e)
+
     else:
         actual_edge_mask_cb = None
 
@@ -833,64 +843,6 @@ def create_anyhashable_graph(
     )
 
 
-def create_directed_anyhashable_graph(
-    allowing_self_loops=False,
-    allowing_multiple_edges=False,
-    weighted=True,
-    vertex_supplier=None,
-    edge_supplier=None,
-):
-    """Create a directed any-hashable graph.
-
-    :param allowing_self_loops: if True the graph will allow the addition of self-loops
-    :param allowing_multiple_edges: if True the graph will allow multiple-edges
-    :param weighted: if True the graph will be weighted, otherwise unweighted
-    :param vertex_supplier: function which returns new vertices on each call. If
-        None then object instances are used.
-    :param edge_supplier: function which returns new edge on each call. If
-        None then object instances are used.        
-    :returns: a graph
-    :rtype: :class:`~jgrapht.types.Graph` and :class:`~jgrapht.types.AttributesGraph`
-    """
-    return create_anyhashable_graph(
-        directed=True,
-        allowing_self_loops=allowing_self_loops,
-        allowing_multiple_edges=allowing_multiple_edges,
-        weighted=weighted,
-        vertex_supplier=vertex_supplier,
-        edge_supplier=edge_supplier,
-    )
-
-
-def create_undirected_anyhashable_graph(
-    allowing_self_loops=False,
-    allowing_multiple_edges=False,
-    weighted=True,
-    vertex_supplier=None,
-    edge_supplier=None,
-):
-    """Create an undirected any-hashable graph.
-
-    :param allowing_self_loops: if True the graph will allow the addition of self-loops
-    :param allowing_multiple_edges: if True the graph will allow multiple-edges
-    :param weighted: if True the graph will be weighted, otherwise unweighted
-    :param vertex_supplier: function which returns new vertices on each call. If
-        None then object instances are used.
-    :param edge_supplier: function which returns new edge on each call. If
-        None then object instances are used.        
-    :returns: a graph
-    :rtype: :class:`~jgrapht.types.Graph` and :class:`~jgrapht.types.AttributesGraph`
-    """
-    return create_anyhashable_graph(
-        directed=False,
-        allowing_self_loops=allowing_self_loops,
-        allowing_multiple_edges=allowing_multiple_edges,
-        weighted=weighted,
-        vertex_supplier=vertex_supplier,
-        edge_supplier=edge_supplier,
-    )
-
-
 def create_anyhashable_dag(
     allowing_multiple_edges=False,
     weighted=True,
@@ -908,7 +860,68 @@ def create_anyhashable_dag(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph` and :class:`~jgrapht.types.Graph` and :class:`~jgrapht.types.AttributesGraph`
     """
-    g = _create_int_dag(allowing_multiple_edges=allowing_multiple_edges, weighted=weighted)
+    g = _create_int_dag(
+        allowing_multiple_edges=allowing_multiple_edges, weighted=weighted
+    )
     return _AnyHashableDirectedAcyclicGraph(
         g, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
     )
+
+
+def create_sparse_anyhashable_graph(
+    edgelist, directed=True, weighted=True, vertex_supplier=None, edge_supplier=None,
+):
+    """Create a sparse any-hashable graph.
+
+    A sparse graph uses a CSR (compressed-sparse-rows) representation. The result is
+    lower memory consumption and very efficient and cache-friendly representation on
+    recent machines.
+
+    Their main drawback is that they are not modifiable after construction.
+
+    .. note :: Sparse graphs cannot be modified after construction. They are best suited
+       for executing algorithms which do not need to modify the graph after loading.
+
+    .. note :: While the graph structure is unmodifiable, the edge weights can be
+      adjusted.
+
+    Sparse graphs can always support self-loops and multiple-edges.
+
+    :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs
+    :param directed: whether the graph will be directed or undirected
+    :param weighted: whether the graph will be weighted or not
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.Graph`
+    """
+
+    # Transform edge list from hashable to ints
+    next_int = IntegerSupplier()
+    vertex_hash_to_id = defaultdict(lambda: next_int())
+    int_edgelist = list()
+    if weighted:
+        for v, u, w in edgelist:
+            int_edgelist.append((vertex_hash_to_id[v], vertex_hash_to_id[u], w))
+    else:
+        for v, u in edgelist:
+            int_edgelist.append((vertex_hash_to_id[v], vertex_hash_to_id[u]))
+
+    # Create graph
+    sparse_int_graph = _create_sparse_int_graph(
+        len(vertex_hash_to_id), int_edgelist, directed=directed, weighted=weighted
+    )
+    g = _AnyHashableGraph(
+        sparse_int_graph, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
+    )
+
+    # Record mapping of existing vertices
+    for vhash, vid in vertex_hash_to_id.items():
+        g._vertex_hash_to_id[vhash] = vid
+        g._vertex_id_to_hash[vid] = vhash
+
+    # Record mapping of existing edges
+    for eid in range(0, len(int_edgelist)):
+        ehash = g._edge_supplier()
+        g._edge_hash_to_id[ehash] = eid
+        g._edge_id_to_hash[eid] = ehash
+
+    return g

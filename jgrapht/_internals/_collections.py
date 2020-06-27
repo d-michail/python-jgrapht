@@ -43,10 +43,10 @@ class _JGraphTIntegerSet(_HandleWrapper, Set):
         return res
 
     def __repr__(self):
-        return '_JGraphTIntegerSet(%r)' % self._handle
+        return "_JGraphTIntegerSet(%r)" % self._handle
 
     def __str__(self):
-        return '{' + ', '.join(str(x) for x in self) + '}'
+        return "{" + ", ".join(str(x) for x in self) + "}"
 
 
 class _JGraphTIntegerMutableSet(_JGraphTIntegerSet, MutableSet):
@@ -65,7 +65,7 @@ class _JGraphTIntegerMutableSet(_JGraphTIntegerSet, MutableSet):
         backend.jgrapht_set_clear(self._handle)
 
     def __repr__(self):
-        return '_JGraphTIntegerMutableSet(%r)' % self._handle
+        return "_JGraphTIntegerMutableSet(%r)" % self._handle
 
 
 class _JGraphTIntegerSetIterator(_JGraphTObjectIterator):
@@ -78,7 +78,7 @@ class _JGraphTIntegerSetIterator(_JGraphTObjectIterator):
         return _JGraphTIntegerSet(super().__next__())
 
     def __repr__(self):
-        return '_JGraphTIntegerSetIterator(%r)' % self._handle
+        return "_JGraphTIntegerSetIterator(%r)" % self._handle
 
 
 class _JGraphTIntegerList(_HandleWrapper, Collection):
@@ -102,10 +102,10 @@ class _JGraphTIntegerList(_HandleWrapper, Collection):
         return res
 
     def __repr__(self):
-        return '_JGraphTIntegerList(%r)' % self._handle
+        return "_JGraphTIntegerList(%r)" % self._handle
 
     def __str__(self):
-        return '{' + ', '.join(str(x) for x in self) + '}'
+        return "{" + ", ".join(str(x) for x in self) + "}"
 
 
 class _JGraphTIntegerMutableList(_JGraphTIntegerList):
@@ -124,7 +124,7 @@ class _JGraphTIntegerMutableList(_JGraphTIntegerList):
         backend.jgrapht_list_clear(self._handle)
 
     def __repr__(self):
-        return '_JGraphTIntegerMutableList(%r)' % self._handle
+        return "_JGraphTIntegerMutableList(%r)" % self._handle
 
 
 class _JGraphTIntegerListIterator(_JGraphTObjectIterator):
@@ -137,7 +137,7 @@ class _JGraphTIntegerListIterator(_JGraphTObjectIterator):
         return _JGraphTIntegerList(super().__next__())
 
     def __repr__(self):
-        return '_JGraphTIntegerListIterator(%r)' % self._handle
+        return "_JGraphTIntegerListIterator(%r)" % self._handle
 
 
 class _JGraphTIntegerDoubleMap(_HandleWrapper, Mapping):
@@ -182,11 +182,11 @@ class _JGraphTIntegerDoubleMap(_HandleWrapper, Mapping):
         return res
 
     def __repr__(self):
-        return '_JGraphTIntegerDoubleMap(%r)' % self._handle
+        return "_JGraphTIntegerDoubleMap(%r)" % self._handle
 
     def __str__(self):
-        items = ['{}: {}'.format(k, v) for k, v in self.items()]
-        return '{' + ', '.join(items) + '}'
+        items = ["{}: {}".format(k, v) for k, v in self.items()]
+        return "{" + ", ".join(items) + "}"
 
 
 class _JGraphTIntegerDoubleMutableMap(_JGraphTIntegerDoubleMap, MutableMapping):
@@ -222,7 +222,7 @@ class _JGraphTIntegerDoubleMutableMap(_JGraphTIntegerDoubleMap, MutableMapping):
         backend.jgrapht_map_clear(self._handle)
 
     def __repr__(self):
-        return '_JGraphTIntegerDoubleMutableMap(%r)' % self._handle
+        return "_JGraphTIntegerDoubleMutableMap(%r)" % self._handle
 
 
 class _JGraphTIntegerIntegerMap(_HandleWrapper, Mapping):
@@ -266,11 +266,11 @@ class _JGraphTIntegerIntegerMap(_HandleWrapper, Mapping):
         return res
 
     def __repr__(self):
-        return '_JGraphTIntegerIntegerMap(%r)' % self._handle
+        return "_JGraphTIntegerIntegerMap(%r)" % self._handle
 
     def __str__(self):
-        items = ['{}: {}'.format(k, v) for k, v in self.items()]
-        return '{' + ', '.join(items) + '}'
+        items = ["{}: {}".format(k, v) for k, v in self.items()]
+        return "{" + ", ".join(items) + "}"
 
 
 class _JGraphTIntegerIntegerMutableMap(_JGraphTIntegerIntegerMap, MutableMapping):
@@ -306,7 +306,7 @@ class _JGraphTIntegerIntegerMutableMap(_JGraphTIntegerIntegerMap, MutableMapping
         backend.jgrapht_map_clear(self._handle)
 
     def __repr__(self):
-        return '_JGraphTIntegerIntegerMutableMap(%r)' % self._handle
+        return "_JGraphTIntegerIntegerMutableMap(%r)" % self._handle
 
 
 class _JGraphTIntegerStringMap(_HandleWrapper, MutableMapping):
@@ -380,11 +380,11 @@ class _JGraphTIntegerStringMap(_HandleWrapper, MutableMapping):
         backend.jgrapht_map_clear(self._handle)
 
     def __repr__(self):
-        return '_JGraphTIntegerStringMap(%r)' % self._handle
+        return "_JGraphTIntegerStringMap(%r)" % self._handle
 
     def __str__(self):
-        items = ['{}: {}'.format(k, v) for k, v in self.items()]
-        return '{' + ', '.join(items) + '}'
+        items = ["{}: {}".format(k, v) for k, v in self.items()]
+        return "{" + ", ".join(items) + "}"
 
 
 class _JGraphTEdgeTripleList(_HandleWrapper, Iterable, Sized):
@@ -401,8 +401,7 @@ class _JGraphTEdgeTripleList(_HandleWrapper, Iterable, Sized):
         return backend.jgrapht_list_size(self._handle)
 
     def __repr__(self):
-        return '_JGraphTEdgeTripleList(%r)' % self._handle
+        return "_JGraphTEdgeTripleList(%r)" % self._handle
 
     def __str__(self):
-        return '[' + ', '.join(str(x) for x in self) + ']'
-
+        return "[" + ", ".join(str(x) for x in self) + "]"

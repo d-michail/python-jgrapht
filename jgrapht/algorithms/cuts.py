@@ -6,7 +6,10 @@ from .._internals._flows import (
 )
 from .._internals._collections import _JGraphTIntegerMutableSet
 
-from .._internals._anyhashableg import is_anyhashable_graph, vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g
+from .._internals._anyhashableg import (
+    is_anyhashable_graph,
+    vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
+)
 from .._internals._anyhashableg_flows import (
     _AnyHashableGraphCut,
     _AnyHashableGraphGomoryHuTree,
@@ -79,7 +82,7 @@ def gomory_hu_gusfield(graph):
 
     if is_anyhashable_graph(graph):
         return _AnyHashableGraphGomoryHuTree(handle, graph)
-    else: 
+    else:
         return _JGraphTGomoryHuTree(handle, graph)
 
 

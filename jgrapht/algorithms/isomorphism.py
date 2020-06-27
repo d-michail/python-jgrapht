@@ -23,7 +23,9 @@ def vf2(graph1, graph2):
     :param graph2: the second graph
     :returns: an iterator over graph mappings if the graphs are isomorphic, otherwise None
     """
-    exists, map_it_handle = _backend.jgrapht_isomorphism_exec_vf2(graph1.handle, graph2.handle)
+    exists, map_it_handle = _backend.jgrapht_isomorphism_exec_vf2(
+        graph1.handle, graph2.handle
+    )
     if not exists:
         return None
 
@@ -56,7 +58,9 @@ def vf2_subgraph(graph1, graph2):
     :param graph2: the second graph
     :returns: an iterator over graph mappings if the graphs are isomorphic, otherwise None
     """
-    exists, map_it_handle = _backend.jgrapht_isomorphism_exec_vf2_subgraph(graph1.handle, graph2.handle)
+    exists, map_it_handle = _backend.jgrapht_isomorphism_exec_vf2_subgraph(
+        graph1.handle, graph2.handle
+    )
     if not exists:
         return None
 
@@ -68,4 +72,3 @@ def vf2_subgraph(graph1, graph2):
         return _JGraphTGraphMappingIterator(
             handle=map_it_handle, graph1=graph1, graph2=graph2
         )
-

@@ -2,7 +2,10 @@ from . import backend as _backend
 
 from ._internals._wrappers import _JGraphTIntegerIterator
 from ._internals._anyhashableg_wrappers import _AnyHashableGraphVertexIterator
-from ._internals._anyhashableg import is_anyhashable_graph, vertex_anyhashableg_to_g as _vertex_attrsg_to_g
+from ._internals._anyhashableg import (
+    is_anyhashable_graph,
+    vertex_anyhashableg_to_g as _vertex_attrsg_to_g,
+)
 
 import time
 

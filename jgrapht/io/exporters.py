@@ -959,7 +959,7 @@ def write_graphml(
     export_edge_weights=False,
     export_vertex_labels=False,
     export_edge_labels=False,
-    export_vertex_id_cb=None,    
+    export_vertex_id_cb=None,
 ):
     """Exports a graph to a GraphML file.
 
@@ -1011,7 +1011,7 @@ def generate_graphml(
     export_edge_weights=False,
     export_vertex_labels=False,
     export_edge_labels=False,
-    export_vertex_id_cb=None,    
+    export_vertex_id_cb=None,
 ):
     """Exports a graph to string using GraphML.
 

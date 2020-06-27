@@ -4,7 +4,10 @@ from .. import backend as _backend
 
 from .._internals._callbacks import _create_wrapped_vertex_comparator_callback
 
-from .._internals._anyhashableg import is_anyhashable_graph, vertex_g_to_anyhashableg as _vertex_g_to_attrsg
+from .._internals._anyhashableg import (
+    is_anyhashable_graph,
+    vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
+)
 from .._internals._drawing import _create_layout_model_2d as create_layout_model_2d
 from .._internals._anyhashableg_drawing import (
     _create_anyhashable_graph_layout_model_2d as create_attrs_graph_layout_model_2d,
@@ -57,10 +60,12 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
     """
     if is_anyhashable_graph(graph):
         model = create_attrs_graph_layout_model_2d(graph, *area)
+
         def actual_vertex_comparator_cb(v1, v2):
             v1 = _vertex_g_to_attrsg(graph, v1)
             v2 = _vertex_g_to_attrsg(graph, v2)
             return vertex_comparator_cb(v1, v2)
+
     else:
         model = create_layout_model_2d(*area)
         actual_vertex_comparator_cb = vertex_comparator_cb
@@ -102,7 +107,7 @@ def fruchterman_reingold_layout_2d(
     if is_anyhashable_graph(graph):
         model = create_attrs_graph_layout_model_2d(graph, *area)
     else:
-        model = create_layout_model_2d(*area)    
+        model = create_layout_model_2d(*area)
 
     custom = [iterations, normalization_factor, seed]
     _drawing_alg("fr_layout_2d", graph, model, *custom)

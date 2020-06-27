@@ -217,7 +217,9 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
     if is_anyhashable_graph(graph):
         # redefine in order to translate from integer to user vertices
         def actual_heuristic_cb(s, t):
-            return heuristic_cb(_vertex_g_to_attrsg(graph, s), _vertex_g_to_attrsg(graph, t))
+            return heuristic_cb(
+                _vertex_g_to_attrsg(graph, s), _vertex_g_to_attrsg(graph, t)
+            )
 
     else:
         actual_heuristic_cb = heuristic_cb
@@ -424,13 +426,16 @@ def martin_multiobjective(
     # we need a function which accepts an edge and returns a pointer to an
     # array with double values
     if is_anyhashable_graph(graph):
+
         def inner_edge_weight_cb(edge):
             edge = _edge_g_to_attrsg(graph, edge)
             weights = edge_weight_cb(edge)[:edge_weight_dimension]
             array = (ctypes.c_double * len(weights))(*weights)
             array_ptr = ctypes.cast(array, ctypes.c_void_p)
             return array_ptr.value
+
     else:
+
         def inner_edge_weight_cb(edge):
             weights = edge_weight_cb(edge)[:edge_weight_dimension]
             array = (ctypes.c_double * len(weights))(*weights)

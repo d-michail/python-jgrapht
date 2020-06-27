@@ -79,7 +79,7 @@ class _JGraphTEdgeTripleIterator(_HandleWrapper, Iterator):
 
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
-        self._edge_triple_class = namedtuple('Edge', ['source', 'target', 'weight'])
+        self._edge_triple_class = namedtuple("Edge", ["source", "target", "weight"])
 
     def __next__(self):
         res = backend.jgrapht_it_hasnext(self._handle)
@@ -112,4 +112,3 @@ class _JGraphTObjectIterator(_HandleWrapper, Iterator):
 
     def __repr__(self):
         return "_JGraphTObjectIterator(%r)" % self._handle
-

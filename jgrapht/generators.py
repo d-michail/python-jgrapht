@@ -118,7 +118,9 @@ def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    _backend.jgrapht_generate_gnm_random(graph.handle, n, m, loops, multiple_edges, seed)
+    _backend.jgrapht_generate_gnm_random(
+        graph.handle, n, m, loops, multiple_edges, seed
+    )
 
 
 def gnp_random_graph(graph, n, p, loops=False, seed=None):
@@ -261,7 +263,10 @@ def complement_graph(graph, source_graph, generate_self_loops=False):
     :param source_graph: the source graph whose complement this function computes
     :param generate_self_loops: whether to generate self-loops
     """
-    _backend.jgrapht_generate_complement(graph.handle, source_graph.handle, generate_self_loops)
+    _backend.jgrapht_generate_complement(
+        graph.handle, source_graph.handle, generate_self_loops
+    )
+
 
 def generalized_petersen(graph, n, k):
     """Generate `Generalized Petersen <https://mathworld.wolfram.com/GeneralizedPetersenGraph.html>`_ graphs.
@@ -272,6 +277,7 @@ def generalized_petersen(graph, n, k):
     """
     _backend.jgrapht_generate_generalized_petersen(graph.handle, n, k)
 
+
 def grid(graph, rows, columns):
     """Generate a bidirectional grid graph.
 
@@ -281,6 +287,7 @@ def grid(graph, rows, columns):
     """
     _backend.jgrapht_generate_grid(graph.handle, rows, columns)
 
+
 def hypercube(graph, dimension):
     """Generate a hypercube.
 
@@ -288,6 +295,7 @@ def hypercube(graph, dimension):
     :param dimension: the dimension of the hypercube
     """
     _backend.jgrapht_generate_hypercube(graph.handle, dimension)
+
 
 def linear(graph, n):
     """Generate a linear graph.
@@ -297,6 +305,7 @@ def linear(graph, n):
     """
     _backend.jgrapht_generate_linear(graph.handle, n)
 
+
 def random_regular(graph, n, d, seed=None):
     """Generate a random regular graph.
 
@@ -305,9 +314,10 @@ def random_regular(graph, n, d, seed=None):
     :param d: degree of each vertex
     :param seed: seed for the random number generator. If None then the system time is used
     """
-    if seed is None: 
+    if seed is None:
         seed = int(time.time())
     _backend.jgrapht_generate_random_regular(graph.handle, n, d, seed)
+
 
 def star(graph, n):
     """Generate a star graph.
@@ -316,6 +326,7 @@ def star(graph, n):
     :param n: number of vertices
     """
     _backend.jgrapht_generate_star(graph.handle, n)
+
 
 def wheel(graph, n, inward_spokes=False):
     """Generate a wheel graph.
@@ -326,6 +337,7 @@ def wheel(graph, n, inward_spokes=False):
       inward direction
     """
     _backend.jgrapht_generate_wheel(graph.handle, n, inward_spokes)
+
 
 def windmill(graph, m, n, dutch=False):
     """Generate a `windmill <https://mathworld.wolfram.com/WindmillGraph.html>`_ graph.
@@ -339,6 +351,7 @@ def windmill(graph, m, n, dutch=False):
     :dutch: if true then Dutch windmill are generated
     """
     _backend.jgrapht_generate_windmill(graph.handle, m, n, dutch)
+
 
 def linearized_chord_diagram(graph, n, m, seed=None):
     """The linearized chord diagram graph model generator.
@@ -365,6 +378,6 @@ def linearized_chord_diagram(graph, n, m, seed=None):
     :param m: how many connections to add to each node
     :param seed: seed for the random number generator. If None then the system time is used 
     """
-    if seed is None: 
-        seed = int(time.time())    
+    if seed is None:
+        seed = int(time.time())
     _backend.jgrapht_generate_linearized_chord_diagram(graph.handle, n, m, seed)

@@ -9,7 +9,7 @@ from .._internals._anyhashableg import is_anyhashable_graph
 from .._internals._anyhashableg_collections import _AnyHashableGraphVertexSet
 
 
-def _copy_vertex_weights(graph, vertex_weights): 
+def _copy_vertex_weights(graph, vertex_weights):
     jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
     if is_anyhashable_graph(graph):
         for key, val in vertex_weights.items():

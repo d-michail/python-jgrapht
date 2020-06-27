@@ -1,9 +1,7 @@
 from .. import backend
 from ..types import PlanarEmbedding
 
-from ._wrappers import (
-    _HandleWrapper,
-)
+from ._wrappers import _HandleWrapper
 
 from ._anyhashableg import vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g
 from ._anyhashableg_wrappers import _AnyHashableGraphEdgeIterator

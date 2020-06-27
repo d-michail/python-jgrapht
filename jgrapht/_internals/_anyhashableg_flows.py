@@ -74,7 +74,7 @@ class _AnyHashableGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
             vertex_map[vid] = v
 
         for e in tree_as_graph.edges:
-            s, t, w = tree_as_graph.edge_tuple(e)            
+            s, t, w = tree_as_graph.edge_tuple(e)
             res.add_edge(vertex_map[s], vertex_map[t], weight=w)
 
         return res
@@ -127,7 +127,7 @@ class _AnyHashableGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
             vertex_map[vid] = v
 
         for e in tree_as_graph.edges:
-            s, t, w = tree_as_graph.edge_tuple(e)            
+            s, t, w = tree_as_graph.edge_tuple(e)
             res.add_edge(vertex_map[s], vertex_map[t], weight=w)
 
         return res

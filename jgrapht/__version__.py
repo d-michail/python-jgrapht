@@ -21,4 +21,3 @@ __bibtex__ = """@article{jgrapht,
   articleno = {16},
   numpages = {29},
 }"""
-

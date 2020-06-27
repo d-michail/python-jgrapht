@@ -227,44 +227,6 @@ def create_int_graph(
     return _JGraphTGraph(handle)
 
 
-def create_int_directed_graph(
-    allowing_self_loops=False, allowing_multiple_edges=False, weighted=True,
-):
-    """Create a directed graph.
-
-    :param allowing_self_loops: if True the graph will allow the addition of self-loops
-    :param allowing_multiple_edges: if True the graph will allow multiple-edges
-    :param weighted: if True the graph will be weighted, otherwise unweighted
-    :returns: a graph
-    :rtype: :class:`~jgrapht.types.Graph`    
-    """
-    return create_int_graph(
-        directed=True,
-        allowing_self_loops=allowing_self_loops,
-        allowing_multiple_edges=allowing_multiple_edges,
-        weighted=weighted,
-    )
-
-
-def create_int_undirected_graph(
-    allowing_self_loops=False, allowing_multiple_edges=False, weighted=True,
-):
-    """Create an undirected graph.
-
-    :param allowing_self_loops: if True the graph will allow the addition of self-loops
-    :param allowing_multiple_edges: if True the graph will allow multiple-edges
-    :param weighted: if True the graph will be weighted, otherwise unweighted
-    :returns: a graph
-    :rtype: :class:`~jgrapht.types.Graph`    
-    """
-    return create_int_graph(
-        directed=False,
-        allowing_self_loops=allowing_self_loops,
-        allowing_multiple_edges=allowing_multiple_edges,
-        weighted=weighted,
-    )
-
-
 def create_sparse_int_graph(num_of_vertices, edgelist, directed=True, weighted=True):
     """Create a sparse graph. 
 
@@ -292,7 +254,7 @@ def create_sparse_int_graph(num_of_vertices, edgelist, directed=True, weighted=T
     :rtype: :class:`~jgrapht.types.Graph`
     """
     if weighted and isinstance(edgelist, _JGraphTEdgeTripleList):
-        # Special case for internal edge list, created using the edgelist 
+        # Special case for internal edge list, created using the edgelist
         # importers. This avoids copying.
         e_list_owner = False
         e_list = edgelist.handle

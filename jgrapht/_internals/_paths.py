@@ -141,7 +141,9 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
         return "_JGraphTAllPairsPaths(%r)" % self._handle
 
 
-class _JGraphTMultiObjectiveSingleSourcePaths(_HandleWrapper, MultiObjectiveSingleSourcePaths):
+class _JGraphTMultiObjectiveSingleSourcePaths(
+    _HandleWrapper, MultiObjectiveSingleSourcePaths
+):
     """A set of paths starting from a single source vertex. This is the 
     multi objective case, where for each target vertex we might have a set of paths.
     """

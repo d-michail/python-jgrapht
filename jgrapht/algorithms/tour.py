@@ -56,7 +56,9 @@ def tsp_nearest_insertion_heuristic(graph):
     :returns: a tour
     :rtype: :py:class:`.GraphPath`
     """
-    graph_path_handle = _backend.jgrapht_tour_tsp_nearest_insertion_heuristic(graph.handle)
+    graph_path_handle = _backend.jgrapht_tour_tsp_nearest_insertion_heuristic(
+        graph.handle
+    )
     return _wrap_result(graph, graph_path_handle)
 
 
@@ -72,7 +74,9 @@ def tsp_nearest_neighbor_heuristic(graph, seed=None):
     """
     if seed is None:
         seed = int(time.time())
-    graph_path_handle = _backend.jgrapht_tour_tsp_nearest_neighbor_heuristic(graph.handle, seed)
+    graph_path_handle = _backend.jgrapht_tour_tsp_nearest_neighbor_heuristic(
+        graph.handle, seed
+    )
     return _wrap_result(graph, graph_path_handle)
 
 
@@ -140,7 +144,6 @@ def hamiltonian_palmer(graph):
     return _wrap_result(graph, graph_path_handle)
 
 
-
 def tsp_two_opt_heuristic(graph, k=1, min_cost_improvement=0.0001, seed=None):
     """The 2-opt heuristic algorithm for the TSP problem.
 
@@ -160,7 +163,9 @@ def tsp_two_opt_heuristic(graph, k=1, min_cost_improvement=0.0001, seed=None):
     if seed is None:
         seed = int(time.time())
     custom = [k, min_cost_improvement, seed]
-    graph_path_handle = _backend.jgrapht_tour_tsp_two_opt_heuristic(graph.handle, *custom)
+    graph_path_handle = _backend.jgrapht_tour_tsp_two_opt_heuristic(
+        graph.handle, *custom
+    )
     return _wrap_result(graph, graph_path_handle)
 
 
@@ -182,7 +187,9 @@ def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=
     if seed is None:
         seed = int(time.time())
 
-    new_graph_path_handle = _backend.jgrapht_tour_tsp_two_opt_heuristic_improve(graph_path.handle, min_cost_improvement, seed)
+    new_graph_path_handle = _backend.jgrapht_tour_tsp_two_opt_heuristic_improve(
+        graph_path.handle, min_cost_improvement, seed
+    )
 
     graph = graph_path.graph
     if is_anyhashable_graph(graph):

@@ -141,13 +141,17 @@ class _AnyHashableGraphAllPairsPaths(_HandleWrapper, AllPairsPaths):
         singlesource = backend.jgrapht_sp_allpairs_get_singlesource_from_vertex(
             self._handle, source_vertex
         )
-        return _AnyHashableGraphSingleSourcePaths(singlesource, self._graph, source_vertex)
+        return _AnyHashableGraphSingleSourcePaths(
+            singlesource, self._graph, source_vertex
+        )
 
     def __repr__(self):
         return "_AnyHashableGraphAllPairsPaths(%r)" % self._handle
 
 
-class _AnyHashableGraphMultiObjectiveSingleSourcePaths(_HandleWrapper, MultiObjectiveSingleSourcePaths):
+class _AnyHashableGraphMultiObjectiveSingleSourcePaths(
+    _HandleWrapper, MultiObjectiveSingleSourcePaths
+):
     """A set of paths starting from a single source vertex. This is the 
     multi objective case, where for each target vertex we might have a set of paths.
     """
@@ -171,4 +175,3 @@ class _AnyHashableGraphMultiObjectiveSingleSourcePaths(_HandleWrapper, MultiObje
 
     def __repr__(self):
         return "_AnyHashableGraphMultiObjectiveSingleSourcePaths(%r)" % self._handle
-        

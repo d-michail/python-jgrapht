@@ -1,12 +1,10 @@
 from collections import namedtuple
 from ..types import LayoutModel2D
 from .. import backend
-from ._wrappers import (
-    _HandleWrapper,
-) 
+from ._wrappers import _HandleWrapper
 
-_box2d_class = namedtuple('Box2D', ['min_x', 'min_y', 'width', 'height'])
-_point2d_class = namedtuple('Point2D', ['x', 'y'])
+_box2d_class = namedtuple("Box2D", ["min_x", "min_y", "width", "height"])
+_point2d_class = namedtuple("Point2D", ["x", "y"])
 
 
 class _JGraphTLayoutModel2D(_HandleWrapper, LayoutModel2D):
@@ -25,7 +23,9 @@ class _JGraphTLayoutModel2D(_HandleWrapper, LayoutModel2D):
         return _point2d_class(*res)
 
     def set_vertex_location(self, vertex, point_2d):
-        backend.jgrapht_drawing_layout_model_2d_put_vertex(self.handle, vertex, *point_2d)
+        backend.jgrapht_drawing_layout_model_2d_put_vertex(
+            self.handle, vertex, *point_2d
+        )
 
     def is_fixed(self, vertex):
         return backend.jgrapht_drawing_layout_model_2d_get_fixed(self.handle, vertex)
@@ -38,6 +38,6 @@ class _JGraphTLayoutModel2D(_HandleWrapper, LayoutModel2D):
 
 
 def _create_layout_model_2d(min_x, min_y, width, height):
-    """Factory for a 2d layout model.""" 
+    """Factory for a 2d layout model."""
     handle = backend.jgrapht_drawing_layout_model_2d_create(min_x, min_y, width, height)
     return _JGraphTLayoutModel2D(handle)

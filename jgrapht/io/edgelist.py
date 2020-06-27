@@ -103,10 +103,7 @@ def read_edgelist_dimacs(
 
 
 def parse_edgelist_dimacs(
-    input_string,
-    import_id_cb=None,
-    vertex_attribute_cb=None,
-    edge_attribute_cb=None,
+    input_string, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read graph in DIMACS format from string. 
 

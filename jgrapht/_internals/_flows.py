@@ -25,7 +25,9 @@ class _JGraphTCut(Cut):
         self._graph = graph
         self._capacity = capacity
         if is_anyhashable_graph(graph):
-            self._source_partition = _AnyHashableGraphVertexSet(source_partition_handle, graph)
+            self._source_partition = _AnyHashableGraphVertexSet(
+                source_partition_handle, graph
+            )
         else:
             self._source_partition = _JGraphTIntegerSet(source_partition_handle)
         self._target_partition = None
@@ -130,9 +132,10 @@ class _JGraphTGomoryHuTree(_HandleWrapper, GomoryHuTree):
         return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)
 
     def min_st_cut(self, s, t):
-        cut_value, cut_source_partition_handle = _backend.jgrapht_cut_gomoryhu_min_st_cut(
-            self.handle, s, t
-        )
+        (
+            cut_value,
+            cut_source_partition_handle,
+        ) = _backend.jgrapht_cut_gomoryhu_min_st_cut(self.handle, s, t)
         return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)
 
     def __repr__(self):

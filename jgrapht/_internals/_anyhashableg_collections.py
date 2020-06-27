@@ -3,7 +3,10 @@ from collections import namedtuple
 from collections.abc import Iterator
 
 from ._wrappers import _JGraphTObjectIterator
-from ._anyhashableg_wrappers import _AnyHashableGraphVertexIterator, _AnyHashableGraphEdgeIterator
+from ._anyhashableg_wrappers import (
+    _AnyHashableGraphVertexIterator,
+    _AnyHashableGraphEdgeIterator,
+)
 from ._collections import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
@@ -226,7 +229,7 @@ class _AnyHashableGraphVertexList(_JGraphTIntegerList):
         return backend.jgrapht_list_int_contains(self._handle, x)
 
     def __repr__(self):
-        return '_AnyHashableGraphVertexList(%r)' % self._handle
+        return "_AnyHashableGraphVertexList(%r)" % self._handle
 
 
 class _AnyHashableGraphVertexListIterator(_JGraphTObjectIterator):
@@ -240,4 +243,4 @@ class _AnyHashableGraphVertexListIterator(_JGraphTObjectIterator):
         return _AnyHashableGraphVertexList(super().__next__(), self._graph)
 
     def __repr__(self):
-        return '_AnyHashableGraphVertexListIterator(%r)' % self._handle
+        return "_AnyHashableGraphVertexListIterator(%r)" % self._handle

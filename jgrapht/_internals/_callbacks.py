@@ -1,5 +1,6 @@
 import ctypes
 
+
 def _create_wrapped_callback(callback, cfunctype):
     if callback is not None:
         # wrap the python callback with a ctypes function pointer
@@ -23,4 +24,3 @@ def _create_wrapped_vertex_comparator_callback(callback):
         return _create_wrapped_callback(callback, callback_ctype)
     else:
         return (0, None)
-
