@@ -6,11 +6,11 @@ from .._internals._flows import (
     _JGraphTEquivalentFlowTree,
 )
 
-from .._internals._attrsg import is_attrs_graph, vertex_attrsg_to_g as _vertex_attrsg_to_g
-from .._internals._attrsg_flows import (
-    _AttributesGraphCut,
-    _AttributesGraphFlow,
-    _AttributesGraphEquivalentFlowTree,
+from .._internals._anyhashableg import is_anyhashable_graph, vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g
+from .._internals._anyhashableg_flows import (
+    _AnyHashableGraphCut,
+    _AnyHashableGraphFlow,
+    _AnyHashableGraphEquivalentFlowTree,
 )
 
 
@@ -20,14 +20,14 @@ def _maxflow_alg(name, graph, source, sink, *args):
 
     flow_value, flow_handle, cut_source_partition_handle = alg_method(
         graph.handle,
-        _vertex_attrsg_to_g(graph, source),
-        _vertex_attrsg_to_g(graph, sink),
+        _vertex_anyhashableg_to_g(graph, source),
+        _vertex_anyhashableg_to_g(graph, sink),
         *args
     )
 
-    if is_attrs_graph(graph):
-        flow = _AttributesGraphFlow(graph, flow_handle, source, sink, flow_value)
-        cut = _AttributesGraphCut(graph, flow_value, cut_source_partition_handle)
+    if is_anyhashable_graph(graph):
+        flow = _AnyHashableGraphFlow(graph, flow_handle, source, sink, flow_value)
+        cut = _AnyHashableGraphCut(graph, flow_value, cut_source_partition_handle)
     else:
         flow = _JGraphTFlow(flow_handle, source, sink, flow_value)
         cut = _JGraphTCut(graph, flow_value, cut_source_partition_handle)
@@ -135,7 +135,7 @@ def equivalent_flow_tree_gusfield(graph):
     """
     handle = _backend.jgrapht_equivalentflowtree_exec_gusfield(graph.handle)
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphEquivalentFlowTree(handle, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphEquivalentFlowTree(handle, graph)
     else:
         return _JGraphTEquivalentFlowTree(handle, graph)

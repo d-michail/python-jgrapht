@@ -5,10 +5,10 @@ from ._internals._collections import (
     _JGraphTIntegerSet,
 )
 
-from ._internals._attrsg import is_attrs_graph
-from ._internals._attrsg_collections import (
-    _AttributesGraphVertexSet,
-    _AttributesGraphVertexDoubleMap,
+from ._internals._anyhashableg import is_anyhashable_graph
+from ._internals._anyhashableg_collections import (
+    _AnyHashableGraphVertexSet,
+    _AnyHashableGraphVertexDoubleMap,
 )
 
 
@@ -95,11 +95,11 @@ def measure(graph):
         vertex_eccentricity_map_handle,
     ) = _backend.jgrapht_graph_metrics_measure_graph(graph.handle)
 
-    if is_attrs_graph(graph):
-        centers = _AttributesGraphVertexSet(center_handle, graph)
-        periphery = _AttributesGraphVertexSet(periphery_handle, graph)
-        pseudo_periphery = _AttributesGraphVertexSet(pseudo_periphery_handle, graph)
-        vertex_eccentricity_map = _AttributesGraphVertexDoubleMap(
+    if is_anyhashable_graph(graph):
+        centers = _AnyHashableGraphVertexSet(center_handle, graph)
+        periphery = _AnyHashableGraphVertexSet(periphery_handle, graph)
+        pseudo_periphery = _AnyHashableGraphVertexSet(pseudo_periphery_handle, graph)
+        vertex_eccentricity_map = _AnyHashableGraphVertexDoubleMap(
             vertex_eccentricity_map_handle, graph
         )
     else:

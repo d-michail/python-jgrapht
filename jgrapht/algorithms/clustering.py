@@ -1,9 +1,9 @@
 import time
 from .. import backend as _backend
 
-from .._internals._attrsg import is_attrs_graph
+from .._internals._anyhashableg import is_anyhashable_graph
 from .._internals._clustering import _JGraphTClustering
-from .._internals._attrsg_clustering import _AttributesGraphClustering
+from .._internals._anyhashableg_clustering import _AnyHashableGraphClustering
 
 
 def k_spanning_tree(graph, k):
@@ -23,8 +23,8 @@ def k_spanning_tree(graph, k):
     :returns: a clustering as an instance of :py:class:`.Clustering`
     """
     handle = _backend.jgrapht_clustering_exec_k_spanning_tree(graph.handle, k)
-    if is_attrs_graph(graph):
-        return _AttributesGraphClustering(handle, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphClustering(handle, graph)
     else:
         return _JGraphTClustering(handle)
 
@@ -58,7 +58,7 @@ def label_propagation(graph, max_iterations=None, seed=None):
     args = [max_iterations, seed]
 
     handle = _backend.jgrapht_clustering_exec_label_propagation(graph.handle, *args)
-    if is_attrs_graph(graph):
-        return _AttributesGraphClustering(handle, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphClustering(handle, graph)
     else:
         return _JGraphTClustering(handle)

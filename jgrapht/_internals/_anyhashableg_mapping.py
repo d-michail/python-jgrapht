@@ -7,11 +7,11 @@ from ._wrappers import (
     _JGraphTObjectIterator,
 )
 
-from ._attrsg import vertex_attrsg_to_g as _vertex_pg_to_g, vertex_g_to_attrsg as _vertex_g_to_pg
-from ._attrsg import edge_attrsg_to_g as _edge_pg_to_g, edge_g_to_attrsg as _edge_g_to_pg
+from ._anyhashableg import vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g, vertex_g_to_anyhashableg as _vertex_g_to_anyhashableg
+from ._anyhashableg import edge_anyhashableg_to_g as _edge_anyhashableg_to_g, edge_g_to_anyhashableg as _edge_g_to_anyhashableg
 
 
-class _AttributesGraphGraphMapping(_HandleWrapper, GraphMapping):
+class _AnyHashableGraphGraphMapping(_HandleWrapper, GraphMapping):
     """A mapping between two graphs g1 and g2."""
 
     def __init__(self, handle, graph1, graph2, **kwargs):
@@ -21,9 +21,9 @@ class _AttributesGraphGraphMapping(_HandleWrapper, GraphMapping):
 
     def vertex_correspondence(self, vertex, forward=True):
         if forward:
-            vertex = _vertex_pg_to_g(self._graph1, vertex)
+            vertex = _vertex_anyhashableg_to_g(self._graph1, vertex)
         else:
-            vertex = _vertex_pg_to_g(self._graph2, vertex)
+            vertex = _vertex_anyhashableg_to_g(self._graph2, vertex)
         (
             exists,
             other,
@@ -34,15 +34,15 @@ class _AttributesGraphGraphMapping(_HandleWrapper, GraphMapping):
             return None
 
         if forward:
-            return _vertex_g_to_pg(self._graph2, other)
+            return _vertex_g_to_anyhashableg(self._graph2, other)
         else:
-            return _vertex_g_to_pg(self._graph1, other)
+            return _vertex_g_to_anyhashableg(self._graph1, other)
 
     def edge_correspondence(self, edge, forward=True):
         if forward:
-            edge = _edge_pg_to_g(self._graph1, edge)
+            edge = _edge_anyhashableg_to_g(self._graph1, edge)
         else:
-            edge = _edge_pg_to_g(self._graph2, edge)
+            edge = _edge_anyhashableg_to_g(self._graph2, edge)
         (
             exists,
             other,
@@ -53,9 +53,9 @@ class _AttributesGraphGraphMapping(_HandleWrapper, GraphMapping):
             return None
 
         if forward:
-            return _edge_g_to_pg(self._graph2, other)
+            return _edge_g_to_anyhashableg(self._graph2, other)
         else:
-            return _edge_g_to_pg(self._graph1, other)
+            return _edge_g_to_anyhashableg(self._graph1, other)
 
     def vertices_correspondence(self, forward=True):
         vertices = self._graph1.vertices if forward else self._graph2.vertices
@@ -72,10 +72,10 @@ class _AttributesGraphGraphMapping(_HandleWrapper, GraphMapping):
         return result
 
     def __repr__(self):
-        return "_AttributesGraphGraphMapping(%r)" % self._handle
+        return "_AnyHashableGraphGraphMapping(%r)" % self._handle
 
 
-class _AttributesGraphMappingIterator(_JGraphTObjectIterator):
+class _AnyHashableGraphMappingIterator(_JGraphTObjectIterator):
     """A graph mapping iterator"""
 
     def __init__(self, handle, graph1, graph2, **kwargs):
@@ -85,7 +85,7 @@ class _AttributesGraphMappingIterator(_JGraphTObjectIterator):
 
     def __next__(self):
         item = super().__next__()
-        return _AttributesGraphGraphMapping(item, self._graph1, self._graph2)
+        return _AnyHashableGraphGraphMapping(item, self._graph1, self._graph2)
 
     def __repr__(self):
-        return "_AttributesGraphMappingIterator(%r)" % self._handle
+        return "_AnyHashableGraphMappingIterator(%r)" % self._handle

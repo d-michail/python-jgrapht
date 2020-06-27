@@ -46,9 +46,9 @@ from ._internals._graphs import (
     create_sparse_int_graph as create_sparse_graph,
     as_sparse_int_graph as as_sparse_graph,
 )
-from ._internals._attrsg import (
-    create_attrs_graph as _create_attrs_graph,
-    create_attrs_dag as _create_attrs_dag,
+from ._internals._anyhashableg import (
+    create_anyhashable_graph as _create_anyhashable_graph,
+    create_anyhashable_dag as _create_anyhashable_dag,
 )
 
 
@@ -86,12 +86,12 @@ def create_graph(directed=True,
                 raise ValueError("A dag is always directed")
             if allowing_self_loops:
                 raise ValueError("A dag cannot allow self-loops")
-            return _create_attrs_dag(allowing_multiple_edges=allowing_multiple_edges, weighted=weighted,
-                                     vertex_supplier=vertex_supplier, edge_supplier=edge_supplier)
+            return _create_anyhashable_dag(allowing_multiple_edges=allowing_multiple_edges, weighted=weighted,
+                                           vertex_supplier=vertex_supplier, edge_supplier=edge_supplier)
         else:
-            return _create_attrs_graph(directed=directed, allowing_self_loops=allowing_self_loops,
-                                       allowing_multiple_edges=allowing_multiple_edges, weighted=weighted,
-                                       vertex_supplier=vertex_supplier, edge_supplier=edge_supplier)
+            return _create_anyhashable_graph(directed=directed, allowing_self_loops=allowing_self_loops,
+                                             allowing_multiple_edges=allowing_multiple_edges, weighted=weighted,
+                                             vertex_supplier=vertex_supplier, edge_supplier=edge_supplier)
     else:
         if dag:
             if not directed:

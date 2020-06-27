@@ -2,8 +2,8 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerSetIterator
 
-from .._internals._attrsg import is_attrs_graph
-from .._internals._attrsg_collections import _AttributesGraphVertexSetIterator
+from .._internals._anyhashableg import is_anyhashable_graph
+from .._internals._anyhashableg_collections import _AnyHashableGraphVertexSetIterator
 
 
 def is_weakly_connected(graph):
@@ -21,8 +21,8 @@ def is_weakly_connected(graph):
     """
     connected, sets = _backend.jgrapht_connectivity_weak_exec_bfs(graph.handle)
 
-    if is_attrs_graph(graph):
-        return connected, _AttributesGraphVertexSetIterator(sets, graph)
+    if is_anyhashable_graph(graph):
+        return connected, _AnyHashableGraphVertexSetIterator(sets, graph)
     else:
         return connected, _JGraphTIntegerSetIterator(sets)
 
@@ -44,8 +44,8 @@ def is_strongly_connected_gabow(graph):
     """
     connected, sets = _backend.jgrapht_connectivity_strong_exec_gabow(graph.handle)
 
-    if is_attrs_graph(graph):
-        return connected, _AttributesGraphVertexSetIterator(sets, graph)
+    if is_anyhashable_graph(graph):
+        return connected, _AnyHashableGraphVertexSetIterator(sets, graph)
     else:
         return connected, _JGraphTIntegerSetIterator(sets)
 
@@ -67,8 +67,8 @@ def is_strongly_connected_kosaraju(graph):
     """
     connected, sets = _backend.jgrapht_connectivity_strong_exec_kosaraju(graph.handle)
 
-    if is_attrs_graph(graph):
-        return connected, _AttributesGraphVertexSetIterator(sets, graph)
+    if is_anyhashable_graph(graph):
+        return connected, _AnyHashableGraphVertexSetIterator(sets, graph)
     else:
         return connected, _JGraphTIntegerSetIterator(sets)    
 

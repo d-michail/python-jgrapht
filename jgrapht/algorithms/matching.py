@@ -2,26 +2,26 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerSet, _JGraphTIntegerMutableSet
 
-from .._internals._attrsg import is_attrs_graph
-from .._internals._attrsg_collections import (
-    _AttributesGraphVertexSet,
-    _AttributesGraphEdgeSet,
-    _AttributesGraphMutableVertexSet,
+from .._internals._anyhashableg import is_anyhashable_graph
+from .._internals._anyhashableg_collections import (
+    _AnyHashableGraphVertexSet,
+    _AnyHashableGraphEdgeSet,
+    _AnyHashableGraphMutableVertexSet,
 )
 
 
 def _wrap_result(graph, weight, matching_handle):
-    if is_attrs_graph(graph):
-        return weight, _AttributesGraphEdgeSet(matching_handle, graph)
+    if is_anyhashable_graph(graph):
+        return weight, _AnyHashableGraphEdgeSet(matching_handle, graph)
     else:
         return weight, _JGraphTIntegerSet(matching_handle)
 
 
 def _to_wrapped_vertex_set(graph, vertex_set):
-    if is_attrs_graph(graph):
-        if isinstance(vertex_set, _AttributesGraphVertexSet):
+    if is_anyhashable_graph(graph):
+        if isinstance(vertex_set, _AnyHashableGraphVertexSet):
             return vertex_set
-        mutable_set = _AttributesGraphMutableVertexSet(handle=None, graph=graph)
+        mutable_set = _AnyHashableGraphMutableVertexSet(handle=None, graph=graph)
     else:
         if isinstance(vertex_set, _JGraphTIntegerSet):
             return vertex_set

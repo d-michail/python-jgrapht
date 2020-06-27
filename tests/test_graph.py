@@ -2,8 +2,8 @@ import pytest
 
 from jgrapht import (
     create_graph,
-    create_sparse_int_graph,
-    as_sparse_int_graph,
+    create_sparse_graph,
+    as_sparse_graph,
 )
 
 
@@ -370,7 +370,7 @@ def test_graph_add_vertex():
 def test_graph_sparse():
 
     edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
-    g = create_sparse_int_graph(7, edgelist, weighted=False)
+    g = create_sparse_graph(7, edgelist, weighted=False)
 
     assert g.type.directed
     assert not g.type.weighted
@@ -401,7 +401,7 @@ def test_graph_sparse_weighted():
         (0, 4, 9.999),
         (2, 6, 3.0),
     ]
-    g = create_sparse_int_graph(7, edgelist, directed=False)
+    g = create_sparse_graph(7, edgelist, directed=False)
 
     assert not g.type.directed
     assert g.type.weighted
@@ -455,7 +455,7 @@ def test_graph_copy_to_sparse():
 
     assert len(g.edges) == 7
 
-    gs = as_sparse_int_graph(g)
+    gs = as_sparse_graph(g)
 
     assert gs.vertices, set([0, 1, 2, 3, 4])
     assert len(gs.edges) == 7
@@ -485,7 +485,7 @@ def test_graph_copy_to_sparse():
 
     assert len(g.edges) == 3
 
-    gs = as_sparse_int_graph(g)
+    gs = as_sparse_graph(g)
 
     assert gs.vertices, set(range(0, 11))
     assert len(gs.edges) == 3

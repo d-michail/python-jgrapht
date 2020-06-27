@@ -24,15 +24,15 @@ from ._views import (
     _WeightedView,
     _MaskedSubgraphView,
 )
-from ._attrsg_collections import (
-    _AttributesGraphVertexSet,
-    _AttributesGraphVertexIterator,
-    _AttributesGraphEdgeIterator,
+from ._anyhashableg_collections import (
+    _AnyHashableGraphVertexSet,
+    _AnyHashableGraphVertexIterator,
+    _AnyHashableGraphEdgeIterator,
 )
 
 
-class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
-    """An attributes graph allows the use of any hashable as vertex and edges.
+class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
+    """A graph which allows the use of any hashable as vertex and edges.
     
     This is a wrapper around the default graph which has integer identifiers, 
     which means that there is a performance penalty involved. The graph also 
@@ -222,7 +222,7 @@ class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
     @property
     def vertices(self):
         if self._vertex_set is None:
-            self._vertex_set = self._AttributesGraphVertexSet(self)
+            self._vertex_set = self._AnyHashableGraphVertexSet(self)
         return self._vertex_set
 
     @property
@@ -232,7 +232,7 @@ class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
     @property
     def edges(self):
         if self._edge_set is None:
-            self._edge_set = self._AttributesGraphEdgeSet(self)
+            self._edge_set = self._AnyHashableGraphEdgeSet(self)
         return self._edge_set
 
     def edges_between(self, u, v):
@@ -273,7 +273,7 @@ class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
         self._user_listeners.remove(listener_cb)
 
     def __repr__(self):
-        return "_AttributesGraph(%r)" % self._graph.handle
+        return "_AnyHashableGraph(%r)" % self._graph.handle
 
     def _get_vertex_id(self, v):
         vid = self._vertex_hash_to_id.get(v)
@@ -348,14 +348,14 @@ class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
             for listener in self._user_listeners:
                 listener(e, event_type)
 
-    class _AttributesGraphVertexSet(Set):
+    class _AnyHashableGraphVertexSet(Set):
         def __init__(self, graph):
             self._graph = graph
             self._handle = graph.handle
 
         def __iter__(self):
             res = backend.jgrapht_graph_create_all_vit(self._handle)
-            return _AttributesGraphVertexIterator(res, self._graph)
+            return _AnyHashableGraphVertexIterator(res, self._graph)
 
         def __len__(self):
             return backend.jgrapht_graph_vertices_count(self._handle)
@@ -369,19 +369,19 @@ class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
             return backend.jgrapht_graph_contains_vertex(self._handle, v)
 
         def __repr__(self):
-            return "_AttributesGraphVertexSet(%r)" % self._handle
+            return "_AnyHashableGraphVertexSet(%r)" % self._handle
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
 
-    class _AttributesGraphEdgeSet(Set):
+    class _AnyHashableGraphEdgeSet(Set):
         def __init__(self, graph):
             self._graph = graph
             self._handle = graph.handle
 
         def __iter__(self):
             res = backend.jgrapht_graph_create_all_eit(self._handle)
-            return _AttributesGraphEdgeIterator(res, self._graph)
+            return _AnyHashableGraphEdgeIterator(res, self._graph)
 
         def __len__(self):
             return backend.jgrapht_graph_edges_count(self._handle)
@@ -395,7 +395,7 @@ class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
             return backend.jgrapht_graph_contains_edge(self._handle, e)
 
         def __repr__(self):
-            return "_AttributesGraphEdgeSet(%r)" % self._handle
+            return "_AnyHashableGraphEdgeSet(%r)" % self._handle
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
@@ -429,7 +429,7 @@ class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
             return iter(self._storage)
 
         def __repr__(self):
-            return "_AttributesGraph-VertexAttributes(%r)" % repr(self._storage)
+            return "_AnyHashableGraph-VertexAttributes(%r)" % repr(self._storage)
 
         def __str__(self):
             items = []
@@ -468,7 +468,7 @@ class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
             return iter(self._storage)
 
         def __repr__(self):
-            return "_AttributesGraph-EdgeAttributes(%r)" % repr(self._storage)
+            return "_AnyHashableGraph-EdgeAttributes(%r)" % repr(self._storage)
 
         def __str__(self):
             items = []
@@ -523,7 +523,7 @@ class _AttributesGraph(Graph, AttributesGraph, ListenableGraph):
             return str(self._storage)
 
 
-class _AttributesDirectedAcyclicGraph(_AttributesGraph, DirectedAcyclicGraph):
+class _AnyHashableDirectedAcyclicGraph(_AnyHashableGraph, DirectedAcyclicGraph):
     """The directed acyclic graph wrapper."""
 
     def __init__(self, graph, vertex_supplier=None, edge_supplier=None, **kwargs):
@@ -548,22 +548,22 @@ class _AttributesDirectedAcyclicGraph(_AttributesGraph, DirectedAcyclicGraph):
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
         set_handle = backend.jgrapht_graph_dag_vertex_descendants(self.handle, vid)
-        return _AttributesGraphVertexSet(set_handle, self)
+        return _AnyHashableGraphVertexSet(set_handle, self)
 
     def ancestors(self, v):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
         set_handle = backend.jgrapht_graph_dag_vertex_ancestors(self.handle, vid)
-        return _AttributesGraphVertexSet(set_handle, self)
+        return _AnyHashableGraphVertexSet(set_handle, self)
 
     def __iter__(self):
         it_handle = backend.jgrapht_graph_dag_topological_it(self.handle)
-        return _AttributesGraphVertexIterator(it_handle, self)
+        return _AnyHashableGraphVertexIterator(it_handle, self)
 
 
-class _MaskedSubgraphAttributesGraph(_AttributesGraph):
-    """A masked subgraph attributes graph."""
+class _MaskedSubgraphAnyHashableGraph(_AnyHashableGraph):
+    """A masked subgraph any-hashable graph."""
 
     def __init__(
         self,
@@ -602,7 +602,7 @@ class _MaskedSubgraphAttributesGraph(_AttributesGraph):
         return e in self.edges and not self._edge_mask_cb(e)
 
     def __repr__(self):
-        return "_MaskedSubgraphAttributesGraph(%r)" % self._graph.handle
+        return "_MaskedSubgraphAnyHashableGraph(%r)" % self._graph.handle
 
     def _get_vertex_id(self, v):
         vid = self._vertex_hash_to_id.get(v)
@@ -617,10 +617,10 @@ class _MaskedSubgraphAttributesGraph(_AttributesGraph):
         return eid
 
 
-def _create_attrs_graph_subgraph(
-    attrs_graph, subgraph
+def _create_anyhashable_graph_subgraph(
+    anyhashable_graph, subgraph
 ):
-    """Create an attributes graph subgraph.
+    """Create an any hashable graph subgraph.
 
     This function create an attributes graph with the identical structure as the
     subgraph (which is a normal graph with integer vertices/edges). The assumption
@@ -632,176 +632,176 @@ def _create_attrs_graph_subgraph(
     is using and has the same structure as the subgraph. However, its backing graph 
     is a copy and therefore might have different integer vertices/edges.
 
-    :param attrs_graph: the attributes graph from which to copy vertices and edges
+    :param anyhashable_graph: the attributes graph from which to copy vertices and edges
     :param subgraph: the subgraph (must be a backend _JGraphTGraph)
     """
-    res = create_attrs_graph(
+    res = create_anyhashable_graph(
         directed=subgraph.type.directed,
         allowing_self_loops=subgraph.type.allowing_self_loops,
         allowing_multiple_edges=subgraph.type.allowing_multiple_edges,
         weighted=subgraph.type.weighted,
-        vertex_supplier=attrs_graph.vertex_supplier,
-        edge_supplier=attrs_graph.edge_supplier,
+        vertex_supplier=anyhashable_graph.vertex_supplier,
+        edge_supplier=anyhashable_graph.edge_supplier,
     )
 
     vertex_map = {}
     for vid in subgraph.vertices:
-        v = vertex_g_to_attrsg(attrs_graph, vid)
+        v = vertex_g_to_anyhashableg(anyhashable_graph, vid)
         res.add_vertex(vertex=v)
-        res.vertex_attrs[v] = copy.copy(attrs_graph.vertex_attrs[v])
+        res.vertex_attrs[v] = copy.copy(anyhashable_graph.vertex_attrs[v])
         vertex_map[vid] = v
 
     weighted = subgraph.type.weighted
     for eid in subgraph.edges:
-        e = edge_g_to_attrsg(attrs_graph, eid)
+        e = edge_g_to_anyhashableg(anyhashable_graph, eid)
         s, t, w = subgraph.edge_tuple(eid)
         if weighted:
             res.add_edge(vertex_map[s], vertex_map[t], weight=w, edge=e)
         else:
             res.add_edge(vertex_map[s], vertex_map[t], edge=e)
-        res.edge_attrs[e] = copy.copy(attrs_graph.edge_attrs[e])
+        res.edge_attrs[e] = copy.copy(anyhashable_graph.edge_attrs[e])
 
     return res
 
 
-def as_unweighted_attrs_graph(attrs_graph):
+def as_unweighted_anyhashable_graph(attrs_graph):
     """Create an unweighted view of an attributes graph."""
     graph = attrs_graph._graph
     unweighted_graph = _UnweightedGraphView(graph)
 
-    unweighted_attrs_graph = _AttributesGraph(
+    unweighted_anyhashable_graph = _AnyHashableGraph(
         unweighted_graph, copy_from=attrs_graph
     )
 
-    return unweighted_attrs_graph
+    return unweighted_anyhashable_graph
 
 
-def as_undirected_attrs_graph(attrs_graph):
+def as_undirected_anyhashable_graph(attrs_graph):
     """Create an undirected view of an attributes graph."""
     graph = attrs_graph._graph
     undirected_graph = _UndirectedGraphView(graph)
 
-    undirected_attrs_graph = _AttributesGraph(
+    undirected_anyhashable_graph = _AnyHashableGraph(
         undirected_graph, copy_from=attrs_graph
     )
 
-    return undirected_attrs_graph
+    return undirected_anyhashable_graph
 
 
-def as_unmodifiable_attrs_graph(attrs_graph):
+def as_unmodifiable_anyhashable_graph(attrs_graph):
     """Create an unmodifiable view of an attributes graph."""
     graph = attrs_graph._graph
     unmodifiable_graph = _UnmodifiableGraphView(graph)
 
-    unmodifiable_attrs_graph = _AttributesGraph(
+    unmodifiable_anyhashable_graph = _AnyHashableGraph(
         unmodifiable_graph, copy_from=attrs_graph
     )
 
-    return unmodifiable_attrs_graph
+    return unmodifiable_anyhashable_graph
 
 
-def as_edgereversed_attrs_graph(attrs_graph):
+def as_edgereversed_anyhashable_graph(attrs_graph):
     """Create an edge reversed view of an attributes graph."""
     graph = attrs_graph._graph
     edgereversed_graph = _EdgeReversedGraphView(graph)
 
-    edgereversed_attrs_graph = _AttributesGraph(
+    edgereversed_anyhashable_graph = _AnyHashableGraph(
         edgereversed_graph, copy_from=attrs_graph
     )
 
-    return edgereversed_attrs_graph
+    return edgereversed_anyhashable_graph
 
 
-def as_weighted_attrs_graph(
-    attrs_graph, edge_weight_cb, cache_weights, write_weights_through
+def as_weighted_anyhashable_graph(
+    anyhashable_graph, edge_weight_cb, cache_weights, write_weights_through
 ):
     """Create a weighted view of an attributes graph."""
     if edge_weight_cb is not None:
         def actual_edge_weight_cb(e):
-            e = edge_g_to_attrsg(attrs_graph, e)
+            e = edge_g_to_anyhashableg(anyhashable_graph, e)
             return edge_weight_cb(e)
     else:
         actual_edge_weight_cb = None
 
-    graph = attrs_graph._graph
+    graph = anyhashable_graph._graph
     weighted_graph = _WeightedView(
         graph, actual_edge_weight_cb, cache_weights, write_weights_through
     )
 
-    weighted_attrs_graph = _AttributesGraph(weighted_graph, copy_from=attrs_graph)
-    return weighted_attrs_graph
+    weighted_anyhashable_graph = _AnyHashableGraph(weighted_graph, copy_from=anyhashable_graph)
+    return weighted_anyhashable_graph
 
 
-def as_masked_subgraph_attrs_graph(
-    attrs_graph, vertex_mask_cb, edge_mask_cb=None
+def as_masked_subgraph_anyhashable_graph(
+    anyhashable_graph, vertex_mask_cb, edge_mask_cb=None
 ):
     """ Create a masked subgraph view of an attributes graph."""
     def actual_vertex_mask_cb(v):
-        v = vertex_g_to_attrsg(attrs_graph, v)
+        v = vertex_g_to_anyhashableg(anyhashable_graph, v)
         return vertex_mask_cb(v)
 
     if edge_mask_cb is not None:
         def actual_edge_mask_cb(e):
-            e = edge_g_to_attrsg(attrs_graph, e)
+            e = edge_g_to_anyhashableg(anyhashable_graph, e)
             return edge_mask_cb(e)
     else:
         actual_edge_mask_cb = None
 
-    graph = attrs_graph._graph
+    graph = anyhashable_graph._graph
     masked_subgraph = _MaskedSubgraphView(
         graph, actual_vertex_mask_cb, actual_edge_mask_cb
     )
 
-    masked_subgraph_attrs_graph = _MaskedSubgraphAttributesGraph(
+    masked_subgraph_anyhashable_graph = _MaskedSubgraphAnyHashableGraph(
         masked_subgraph,
         vertex_supplier=None,
         edge_supplier=None,
-        copy_from=attrs_graph,
+        copy_from=anyhashable_graph,
         vertex_mask_cb=vertex_mask_cb,
         edge_mask_cb=edge_mask_cb,
     )
 
-    return masked_subgraph_attrs_graph
+    return masked_subgraph_anyhashable_graph
 
 
-def is_attrs_graph(graph):
-    """Check if a graph instance is an attributes graph.
+def is_anyhashable_graph(graph):
+    """Check if a graph instance is an any-hashable graph.
     
     :param graph: the graph
-    :returns: True if the graph is an attributes graph, False otherwise.
+    :returns: True if the graph is an any-hashable graph, False otherwise.
     """
-    return isinstance(graph, (_AttributesGraph, AttributesGraph))
+    return isinstance(graph, (_AnyHashableGraph))
 
 
-def vertex_attrsg_to_g(graph, vertex):
-    """Translate from an attributes graph vertex to a graph vertex."""
-    if is_attrs_graph(graph):
+def vertex_anyhashableg_to_g(graph, vertex):
+    """Translate from an any-hashable graph vertex to a graph vertex."""
+    if is_anyhashable_graph(graph):
         return graph._vertex_hash_to_id[vertex] if vertex is not None else None
     return vertex
 
 
-def vertex_g_to_attrsg(graph, vertex):
-    """Translate from a graph vertex to an attributes graph vertex."""
-    if is_attrs_graph(graph):
+def vertex_g_to_anyhashableg(graph, vertex):
+    """Translate from a graph vertex to an any-hashable graph vertex."""
+    if is_anyhashable_graph(graph):
         return graph._vertex_id_to_hash[vertex] if vertex is not None else None
     return vertex
 
 
-def edge_attrsg_to_g(graph, edge):
-    """Translate from an attributes graph edge to a graph edge."""
-    if is_attrs_graph(graph):
+def edge_anyhashableg_to_g(graph, edge):
+    """Translate from an any-hashable graph edge to a graph edge."""
+    if is_anyhashable_graph(graph):
         return graph._edge_hash_to_id[edge] if edge is not None else None
     return edge
 
 
-def edge_g_to_attrsg(graph, edge):
-    """Translate from a graph edge to an attributes graph edge."""
-    if is_attrs_graph(graph):
+def edge_g_to_anyhashableg(graph, edge):
+    """Translate from a graph edge to an any-hashable graph edge."""
+    if is_anyhashable_graph(graph):
         return graph._edge_id_to_hash[edge] if edge is not None else None
     return edge
 
 
-def create_attrs_graph(
+def create_anyhashable_graph(
     directed=True,
     allowing_self_loops=False,
     allowing_multiple_edges=False,
@@ -809,7 +809,7 @@ def create_attrs_graph(
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create an attributes graph.
+    """Create a graph with any hashable as a vertex or edge.
 
     :param directed: if True the graph will be directed, otherwise undirected
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
@@ -820,7 +820,7 @@ def create_attrs_graph(
     :param edge_supplier: function which returns new edges on each call. If
         None then object instances are used.    
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.AttributesGraph`    
+    :rtype: :class:`~jgrapht.types.Graph` and :class:`~jgrapht.types.AttributesGraph`
     """
     g = _create_int_graph(
         directed=directed,
@@ -828,19 +828,19 @@ def create_attrs_graph(
         allowing_multiple_edges=allowing_multiple_edges,
         weighted=weighted,
     )
-    return _AttributesGraph(
+    return _AnyHashableGraph(
         g, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
     )
 
 
-def create_directed_attrs_graph(
+def create_directed_anyhashable_graph(
     allowing_self_loops=False,
     allowing_multiple_edges=False,
     weighted=True,
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create a directed attributes graph.
+    """Create a directed any-hashable graph.
 
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
@@ -850,9 +850,9 @@ def create_directed_attrs_graph(
     :param edge_supplier: function which returns new edge on each call. If
         None then object instances are used.        
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.AttributesGraph`    
+    :rtype: :class:`~jgrapht.types.Graph` and :class:`~jgrapht.types.AttributesGraph`
     """
-    return create_attrs_graph(
+    return create_anyhashable_graph(
         directed=True,
         allowing_self_loops=allowing_self_loops,
         allowing_multiple_edges=allowing_multiple_edges,
@@ -862,14 +862,14 @@ def create_directed_attrs_graph(
     )
 
 
-def create_undirected_attrs_graph(
+def create_undirected_anyhashable_graph(
     allowing_self_loops=False,
     allowing_multiple_edges=False,
     weighted=True,
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create an undirected attributes graph.
+    """Create an undirected any-hashable graph.
 
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
@@ -879,9 +879,9 @@ def create_undirected_attrs_graph(
     :param edge_supplier: function which returns new edge on each call. If
         None then object instances are used.        
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.AttributesGraph`    
+    :rtype: :class:`~jgrapht.types.Graph` and :class:`~jgrapht.types.AttributesGraph`
     """
-    return create_attrs_graph(
+    return create_anyhashable_graph(
         directed=False,
         allowing_self_loops=allowing_self_loops,
         allowing_multiple_edges=allowing_multiple_edges,
@@ -891,13 +891,13 @@ def create_undirected_attrs_graph(
     )
 
 
-def create_attrs_dag(
+def create_anyhashable_dag(
     allowing_multiple_edges=False,
     weighted=True,
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create a directed acyclic attributes graph.
+    """Create a directed acyclic any-hashable graph.
 
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
@@ -906,9 +906,9 @@ def create_attrs_dag(
     :param edge_supplier: function which returns new edge on each call. If
         None then object instances are used.        
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph` and :class:`~jgrapht.types.AttributesGraph`
+    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph` and :class:`~jgrapht.types.Graph` and :class:`~jgrapht.types.AttributesGraph`
     """
     g = _create_int_dag(allowing_multiple_edges=allowing_multiple_edges, weighted=weighted)
-    return _AttributesDirectedAcyclicGraph(
+    return _AnyHashableDirectedAcyclicGraph(
         g, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
     )

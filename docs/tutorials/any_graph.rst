@@ -15,6 +15,9 @@ Creating a property graph
 .. nbplot::
 
   >>> import jgrapht
+    >>> g = jgrapht.create_anyhashable_graph(directed=True, weighted=True, allowing_self_loops=False, allowing_multiple_edges=False)
+
+  The factory function accepts two additional parameters, called
   >>> g = jgrapht.create_attrs_graph(directed=True, weighted=True, allowing_self_loops=False, allowing_multiple_edges=False)
 
 The factory function accepts two additional parameters, called `vertex_supplier` and `edge_supplier`. These are callable instances

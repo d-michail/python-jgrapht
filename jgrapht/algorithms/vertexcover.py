@@ -5,13 +5,13 @@ from .._internals._collections import (
     _JGraphTIntegerSet,
 )
 
-from .._internals._attrsg import is_attrs_graph
-from .._internals._attrsg_collections import _AttributesGraphVertexSet
+from .._internals._anyhashableg import is_anyhashable_graph
+from .._internals._anyhashableg_collections import _AnyHashableGraphVertexSet
 
 
 def _copy_vertex_weights(graph, vertex_weights): 
     jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
-    if is_attrs_graph(graph):
+    if is_anyhashable_graph(graph):
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[graph._vertex_hash_to_id[key]] = val
     else:
@@ -32,8 +32,8 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
     else:
         weight, vc_handle = alg_method(graph.handle)
 
-    if is_attrs_graph(graph):
-        return weight, _AttributesGraphVertexSet(vc_handle, graph)
+    if is_anyhashable_graph(graph):
+        return weight, _AnyHashableGraphVertexSet(vc_handle, graph)
     else:
         return weight, _JGraphTIntegerSet(vc_handle)
 

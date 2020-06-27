@@ -4,13 +4,13 @@ from .. import backend as _backend
 
 from .._internals._paths import _JGraphTGraphPath
 
-from .._internals._attrsg import is_attrs_graph
-from .._internals._attrsg_paths import _AttributesGraphGraphPath
+from .._internals._anyhashableg import is_anyhashable_graph
+from .._internals._anyhashableg_paths import _AnyHashableGraphGraphPath
 
 
 def _wrap_result(graph, graph_path_handle):
-    if is_attrs_graph(graph):
-        return _AttributesGraphGraphPath(graph_path_handle, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphGraphPath(graph_path_handle, graph)
     else:
         return _JGraphTGraphPath(graph_path_handle, graph)
 
@@ -185,7 +185,7 @@ def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=
     new_graph_path_handle = _backend.jgrapht_tour_tsp_two_opt_heuristic_improve(graph_path.handle, min_cost_improvement, seed)
 
     graph = graph_path.graph
-    if is_attrs_graph(graph):
-        return _AttributesGraphGraphPath(new_graph_path_handle, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphGraphPath(new_graph_path_handle, graph)
     else:
         return _JGraphTGraphPath(new_graph_path_handle, graph)

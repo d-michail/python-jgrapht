@@ -1,8 +1,8 @@
 from . import backend as _backend
 
 from ._internals._wrappers import _JGraphTIntegerIterator
-from ._internals._attrsg_wrappers import _AttributesGraphVertexIterator
-from ._internals._attrsg import is_attrs_graph, vertex_attrsg_to_g as _vertex_attrsg_to_g
+from ._internals._anyhashableg_wrappers import _AnyHashableGraphVertexIterator
+from ._internals._anyhashableg import is_anyhashable_graph, vertex_anyhashableg_to_g as _vertex_attrsg_to_g
 
 import time
 
@@ -27,8 +27,8 @@ def bfs_traversal(graph, start_vertex=None):
             graph.handle, start_vertex
         )
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphVertexIterator(it, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphVertexIterator(it, graph)
     else:
         return _JGraphTIntegerIterator(it)
 
@@ -47,8 +47,8 @@ def lexicographic_bfs_traversal(graph):
     :returns: A vertex iterator
     """
     it = _backend.jgrapht_traverse_create_lex_bfs_vit(graph.handle)
-    if is_attrs_graph(graph):
-        return _AttributesGraphVertexIterator(it, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphVertexIterator(it, graph)
     else:
         return _JGraphTIntegerIterator(it)
 
@@ -73,8 +73,8 @@ def dfs_traversal(graph, start_vertex=None):
             graph.handle, start_vertex
         )
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphVertexIterator(it, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphVertexIterator(it, graph)
     else:
         return _JGraphTIntegerIterator(it)
 
@@ -95,8 +95,8 @@ def topological_order_traversal(graph):
     """
     it = _backend.jgrapht_traverse_create_topological_order_vit(graph.handle)
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphVertexIterator(it, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphVertexIterator(it, graph)
     else:
         return _JGraphTIntegerIterator(it)
 
@@ -124,8 +124,8 @@ def random_walk_traversal(
         graph.handle, start_vertex, weighted, max_steps, seed
     )
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphVertexIterator(it, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphVertexIterator(it, graph)
     else:
         return _JGraphTIntegerIterator(it)
 
@@ -148,8 +148,8 @@ def max_cardinality_traversal(graph):
     """
     it = _backend.jgrapht_traverse_create_max_cardinality_vit(graph.handle)
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphVertexIterator(it, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphVertexIterator(it, graph)
     else:
         return _JGraphTIntegerIterator(it)
 
@@ -170,8 +170,8 @@ def degeneracy_ordering_traversal(graph):
     """
     it = _backend.jgrapht_traverse_create_degeneracy_ordering_vit(graph.handle)
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphVertexIterator(it, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphVertexIterator(it, graph)
     else:
         return _JGraphTIntegerIterator(it)
 
@@ -196,7 +196,7 @@ def closest_first_traversal(graph, start_vertex, radius=None):
             graph.handle, start_vertex, radius
         )
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphVertexIterator(it, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphVertexIterator(it, graph)
     else:
         return _JGraphTIntegerIterator(it)

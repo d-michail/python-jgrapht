@@ -14,15 +14,15 @@ from ._internals._views import (
     _ListenableView,
 )
 
-from ._internals._attrsg import (
-    _AttributesGraph,
-    is_attrs_graph,
-    as_unweighted_attrs_graph as _as_unweighted_attrs_graph,
-    as_undirected_attrs_graph as _as_undirected_attrs_graph,
-    as_unmodifiable_attrs_graph as _as_unmodifiable_attrs_graph,
-    as_edgereversed_attrs_graph as _as_edgereversed_attrs_graph,
-    as_weighted_attrs_graph as _as_weighted_attrs_graph,
-    as_masked_subgraph_attrs_graph as _as_masked_subgraph_attrs_graph,
+from ._internals._anyhashableg import (
+    _AnyHashableGraph,
+    is_anyhashable_graph,
+    as_unweighted_anyhashable_graph as _as_unweighted_attrs_graph,
+    as_undirected_anyhashable_graph as _as_undirected_attrs_graph,
+    as_unmodifiable_anyhashable_graph as _as_unmodifiable_attrs_graph,
+    as_edgereversed_anyhashable_graph as _as_edgereversed_attrs_graph,
+    as_weighted_anyhashable_graph as _as_weighted_attrs_graph,
+    as_masked_subgraph_anyhashable_graph as _as_masked_subgraph_attrs_graph,
 )
 
 
@@ -33,7 +33,7 @@ def as_unweighted(graph):
     :param graph: the original graph
     :returns: an unweighted graph
     """
-    if is_attrs_graph(graph):
+    if is_anyhashable_graph(graph):
         return _as_unweighted_attrs_graph(graph)
     else:
         return _UnweightedGraphView(graph)
@@ -46,7 +46,7 @@ def as_undirected(graph):
     :param graph: the original graph
     :returns: an undirected graph
     """
-    if is_attrs_graph(graph):
+    if is_anyhashable_graph(graph):
         return _as_undirected_attrs_graph(graph)
     else:
         return _UndirectedGraphView(graph)
@@ -59,7 +59,7 @@ def as_unmodifiable(graph):
     :param graph: the original graph
     :returns: an unmodifiable graph
     """
-    if is_attrs_graph(graph):
+    if is_anyhashable_graph(graph):
         return _as_unmodifiable_attrs_graph(graph)
     else:
         return _UnmodifiableGraphView(graph)
@@ -72,7 +72,7 @@ def as_edge_reversed(graph):
     :param graph: the original graph
     :returns: a graph with reversed edges
     """
-    if is_attrs_graph(graph):
+    if is_anyhashable_graph(graph):
         return _as_edgereversed_attrs_graph(graph)
     else:
         return _EdgeReversedGraphView(graph)
@@ -95,7 +95,7 @@ def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):
     :param edge_mask_cb: an edge mask callback
     :returns: a masked subgraph 
     """
-    if is_attrs_graph(graph):
+    if is_anyhashable_graph(graph):
         return _as_masked_subgraph_attrs_graph(graph, vertex_mask_cb, edge_mask_cb)
     else:
         return _MaskedSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
@@ -128,7 +128,7 @@ def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through
       :py:meth:`~jgrapht.types.Graph.set_edge_weight` will be propagated to the backing graph
     :returns: a weighted view
     """
-    if is_attrs_graph(graph):
+    if is_anyhashable_graph(graph):
         return _as_weighted_attrs_graph(
             graph, edge_weight_cb, cache_weights, write_weights_through
         )
@@ -145,7 +145,7 @@ def as_listenable(graph):
     :param graph: the original graph
     :returns: a listenable graph which is an instance of type :py:class:`~jgrapht.types.ListenableGraph`.
     """
-    if isinstance(graph, ListenableGraph) or is_attrs_graph(graph):
+    if isinstance(graph, ListenableGraph) or is_anyhashable_graph(graph):
         return graph
     return _ListenableView(graph)
 
@@ -169,6 +169,6 @@ def as_graph_union(graph1, graph2, edge_weight_combiner_cb=None):
        double parameters and return one.
     :returns: a graph which is the union of the two graphs
     """
-    if is_attrs_graph(graph1) or is_attrs_graph(graph2):
+    if is_anyhashable_graph(graph1) or is_anyhashable_graph(graph2):
         raise ValueError("View not supported for attributes graphs")
     return _GraphUnion(graph1, graph2, edge_weight_combiner_cb)

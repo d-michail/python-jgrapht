@@ -3,25 +3,21 @@ from .. import backend as _backend
 from ..types import Flow, GomoryHuTree, EquivalentFlowTree
 
 from ._wrappers import _HandleWrapper
-from ._collections import (
-    _JGraphTIntegerSet,
-    _JGraphTIntegerDoubleMap,
-)
 
 from ._graphs import _JGraphTGraph
-from ._attrsg import (
-    _AttributesGraph,
-    create_attrs_graph,
-    is_attrs_graph,
-    vertex_attrsg_to_g as _vertex_pg_to_g,
-    vertex_g_to_attrsg as _vertex_g_to_pg,
+from ._anyhashableg import (
+    _AnyHashableGraph,
+    create_anyhashable_graph,
+    is_anyhashable_graph,
+    vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
+    vertex_g_to_anyhashableg as _vertex_g_to_anyhashableg,
 )
-from ._attrsg_collections import _AttributesGraphEdgeDoubleMap
+from ._anyhashableg_collections import _AnyHashableGraphEdgeDoubleMap
 
-from ._flows import _JGraphTCut as _AttributesGraphCut
+from ._flows import _JGraphTCut as _AnyHashableGraphCut
 
 
-class _AttributesGraphFlow(_AttributesGraphEdgeDoubleMap, Flow):
+class _AnyHashableGraphFlow(_AnyHashableGraphEdgeDoubleMap, Flow):
     """Flow representation as a map from edges to double values."""
 
     def __init__(self, graph, handle, source, sink, value, **kwargs):
@@ -46,10 +42,10 @@ class _AttributesGraphFlow(_AttributesGraphEdgeDoubleMap, Flow):
         return self._value
 
     def __repr__(self):
-        return "_AttributesGraphFlow(%r)" % self._handle
+        return "_AnyHashableGraphFlow(%r)" % self._handle
 
 
-class _AttributesGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
+class _AnyHashableGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
     """Gomory-Hu Tree."""
 
     def __init__(self, handle, graph, **kwargs):
@@ -61,8 +57,8 @@ class _AttributesGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
         tree_as_graph = _JGraphTGraph(tree_handle)
 
         # The resulting tree has the same vertices as the original graph. When using
-        # attributes graphs, we have to explicitly copy here, to keep the same effect.
-        res = create_attrs_graph(
+        # any-hashable graphs, we have to explicitly copy here, to keep the same effect.
+        res = create_anyhashable_graph(
             directed=tree_as_graph.type.directed,
             allowing_self_loops=tree_as_graph.type.allowing_self_loops,
             allowing_multiple_edges=tree_as_graph.type.allowing_multiple_edges,
@@ -73,7 +69,7 @@ class _AttributesGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
 
         vertex_map = {}
         for vid in tree_as_graph.vertices:
-            v = _vertex_g_to_pg(self._graph, vid)
+            v = _vertex_g_to_anyhashableg(self._graph, vid)
             res.add_vertex(vertex=v)
             vertex_map[vid] = v
 
@@ -87,22 +83,22 @@ class _AttributesGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
         cut_value, cut_source_partition_handle = _backend.jgrapht_cut_gomoryhu_min_cut(
             self.handle
         )
-        return _AttributesGraphCut(self._graph, cut_value, cut_source_partition_handle)
+        return _AnyHashableGraphCut(self._graph, cut_value, cut_source_partition_handle)
 
     def min_st_cut(self, s, t):
-        s = _vertex_pg_to_g(self._graph, s)
-        t = _vertex_pg_to_g(self._graph, t)
+        s = _vertex_anyhashableg_to_g(self._graph, s)
+        t = _vertex_anyhashableg_to_g(self._graph, t)
         (
             cut_value,
             cut_source_partition_handle,
         ) = _backend.jgrapht_cut_gomoryhu_min_st_cut(self.handle, s, t)
-        return _AttributesGraphCut(self._graph, cut_value, cut_source_partition_handle)
+        return _AnyHashableGraphCut(self._graph, cut_value, cut_source_partition_handle)
 
     def __repr__(self):
-        return "_AttributesGraphGomoryHuTree(%r)" % self._handle
+        return "_AnyHashableGraphGomoryHuTree(%r)" % self._handle
 
 
-class _AttributesGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
+class _AnyHashableGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
     """An Equivalent Flow Tree."""
 
     def __init__(self, handle, graph, **kwargs):
@@ -114,8 +110,8 @@ class _AttributesGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         tree_as_graph = _JGraphTGraph(tree_handle)
 
         # The resulting tree has the same vertices as the original graph. When using
-        # attributes graphs, we have to explicitly copy here, to keep the same effect.
-        res = create_attrs_graph(
+        # any-hashable graphs, we have to explicitly copy here, to keep the same effect.
+        res = create_anyhashable_graph(
             directed=tree_as_graph.type.directed,
             allowing_self_loops=tree_as_graph.type.allowing_self_loops,
             allowing_multiple_edges=tree_as_graph.type.allowing_multiple_edges,
@@ -126,7 +122,7 @@ class _AttributesGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
 
         vertex_map = {}
         for vid in tree_as_graph.vertices:
-            v = _vertex_g_to_pg(self._graph, vid)
+            v = _vertex_g_to_anyhashableg(self._graph, vid)
             res.add_vertex(vertex=v)
             vertex_map[vid] = v
 
@@ -137,9 +133,9 @@ class _AttributesGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         return res
 
     def max_st_flow_value(self, s, t):
-        s = _vertex_pg_to_g(self._graph, s)
-        t = _vertex_pg_to_g(self._graph, t)
+        s = _vertex_anyhashableg_to_g(self._graph, s)
+        t = _vertex_anyhashableg_to_g(self._graph, t)
         return _backend.jgrapht_equivalentflowtree_max_st_flow(self.handle, s, t)
 
     def __repr__(self):
-        return "_AttributesGraphEquivalentFlowTree(%r)" % self._handle
+        return "_AnyHashableGraphEquivalentFlowTree(%r)" % self._handle

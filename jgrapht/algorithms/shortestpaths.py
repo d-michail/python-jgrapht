@@ -9,18 +9,18 @@ from .._internals._paths import (
 from .._internals._collections import _JGraphTIntegerMutableSet
 from .._internals._callbacks import _create_wrapped_callback
 
-from .._internals._attrsg import (
-    is_attrs_graph,
-    vertex_attrsg_to_g as _vertex_attrsg_to_g,
-    vertex_g_to_attrsg as _vertex_g_to_attrsg,
-    edge_g_to_attrsg as _edge_g_to_attrsg,
+from .._internals._anyhashableg import (
+    is_anyhashable_graph,
+    vertex_anyhashableg_to_g as _vertex_attrsg_to_g,
+    vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
+    edge_g_to_anyhashableg as _edge_g_to_attrsg,
 )
-from .._internals._attrsg_paths import (
-    _AttributesGraphGraphPath,
-    _AttributesGraphGraphPathIterator,
-    _AttributesGraphSingleSourcePaths,
-    _AttributesGraphMultiObjectiveSingleSourcePaths,
-    _AttributesGraphAllPairsPaths,
+from .._internals._anyhashableg_paths import (
+    _AnyHashableGraphGraphPath,
+    _AnyHashableGraphGraphPathIterator,
+    _AnyHashableGraphSingleSourcePaths,
+    _AnyHashableGraphMultiObjectiveSingleSourcePaths,
+    _AnyHashableGraphAllPairsPaths,
 )
 
 import ctypes
@@ -33,8 +33,8 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
 
     handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphSingleSourcePaths(handle, graph, source_vertex)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphSingleSourcePaths(handle, graph, source_vertex)
     else:
         return _JGraphTSingleSourcePaths(handle, graph, source_vertex)
 
@@ -52,8 +52,8 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     if handle is None:
         return None
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphGraphPath(handle, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphGraphPath(handle, graph)
     else:
         return _JGraphTGraphPath(handle, graph)
 
@@ -64,8 +64,8 @@ def _sp_allpairs_alg(name, graph):
 
     handle = alg_method(graph.handle)
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphAllPairsPaths(handle, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphAllPairsPaths(handle, graph)
     else:
         return _JGraphTAllPairsPaths(handle, graph)
 
@@ -82,8 +82,8 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
         *args
     )
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphGraphPathIterator(handle, graph)
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphGraphPathIterator(handle, graph)
     else:
         return _JGraphTGraphPathIterator(handle, graph)
 
@@ -94,8 +94,8 @@ def _multisp_singlesource_alg(name, graph, source_vertex, *args):
 
     handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
 
-    if is_attrs_graph(graph):
-        return _AttributesGraphMultiObjectiveSingleSourcePaths(
+    if is_anyhashable_graph(graph):
+        return _AnyHashableGraphMultiObjectiveSingleSourcePaths(
             handle, graph, source_vertex
         )
     else:
@@ -214,7 +214,7 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
     :returns: a :py:class:`.GraphPath`
     """
 
-    if is_attrs_graph(graph):
+    if is_anyhashable_graph(graph):
         # redefine in order to translate from integer to user vertices
         def actual_heuristic_cb(s, t):
             return heuristic_cb(_vertex_g_to_attrsg(graph, s), _vertex_g_to_attrsg(graph, t))
@@ -289,7 +289,7 @@ def a_star_with_alt_heuristic(
     """
 
     landmarks_set = _JGraphTIntegerMutableSet(linked=True)
-    if is_attrs_graph(graph):
+    if is_anyhashable_graph(graph):
         for landmark in landmarks:
             landmarks_set.add(_vertex_attrsg_to_g(graph, landmark))
     else:
@@ -423,7 +423,7 @@ def martin_multiobjective(
 
     # we need a function which accepts an edge and returns a pointer to an
     # array with double values
-    if is_attrs_graph(graph):
+    if is_anyhashable_graph(graph):
         def inner_edge_weight_cb(edge):
             edge = _edge_g_to_attrsg(graph, edge)
             weights = edge_weight_cb(edge)[:edge_weight_dimension]
@@ -457,7 +457,7 @@ def martin_multiobjective(
             _vertex_attrsg_to_g(graph, target_vertex),
             *custom
         )
-        if is_attrs_graph(graph):
-            return _AttributesGraphGraphPathIterator(res, graph)
+        if is_anyhashable_graph(graph):
+            return _AnyHashableGraphGraphPathIterator(res, graph)
         else:
             return _JGraphTGraphPathIterator(res, graph)

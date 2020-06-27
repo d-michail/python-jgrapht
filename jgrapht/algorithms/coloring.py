@@ -2,13 +2,13 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerIntegerMap
 
-from .._internals._attrsg import is_attrs_graph
-from .._internals._attrsg_collections import _AttributesGraphVertexIntegerMap
+from .._internals._anyhashableg import is_anyhashable_graph
+from .._internals._anyhashableg_collections import _AnyHashableGraphVertexIntegerMap
 
 
 def _wrap_result(graph, num_colors, color_map_handle):
-    if is_attrs_graph(graph):
-        return num_colors, _AttributesGraphVertexIntegerMap(color_map_handle, graph)
+    if is_anyhashable_graph(graph):
+        return num_colors, _AnyHashableGraphVertexIntegerMap(color_map_handle, graph)
     else:
         return num_colors, _JGraphTIntegerIntegerMap(color_map_handle)
 
