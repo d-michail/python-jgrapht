@@ -36,10 +36,10 @@ and all edges before hand.
 
 .. autofunction:: jgrapht.create_sparse_graph
 
-A helper function :py:meth:`jgrapht.as_sparse_graph` can help in order to create a sparse
+A helper function :py:meth:`jgrapht.copy_to_sparse_graph` can help in order to create a sparse
 graph from another graph. 
 
-.. autofunction:: jgrapht.as_sparse_graph
+.. autofunction:: jgrapht.copy_to_sparse_graph
 
 Building sparse graphs can be performed by using edge lists. See the section
 :ref:`edge list importers <io/edgelist>`.

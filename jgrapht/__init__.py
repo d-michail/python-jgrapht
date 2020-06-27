@@ -194,8 +194,9 @@ def create_sparse_graph(
 def copy_to_sparse_graph(graph):
     """Copy a graph to a sparse graph.
 
-    .. note :: Sparse graphs are unmodifiable. Attempting to alter one will result in
-      an error being raised. Attributes and edge weights can be modified.
+    .. note :: Sparse graphs are unmodifiable w.r.t their structure (topology).
+       Attempting to alter one will result in an error being raised. Attributes
+       and edge weights can be modified.
 
     :param graph: the input graph
     :returns: a sparse graph
