@@ -33,41 +33,37 @@ def test_input_json(tmpdir):
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
-    def import_id_cb(id):
-        return int(id)
-
     edgelist = read_edgelist_json(
         tmpfilename,
-        import_id_cb=import_id_cb,
         vertex_attribute_cb=va_cb,
         edge_attribute_cb=ea_cb,
     )
 
-    assert v_attrs[0]["label"] == "κόμβος 0"
-    assert v_attrs[3]["label"] == "label 3"
+    assert v_attrs['0']["label"] == "κόμβος 0"
+    assert v_attrs['3']["label"] == "label 3"
     assert e_attrs[9]["label"] == "edge 1-2"
 
     repr(edgelist)
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]
 
 
@@ -79,90 +75,52 @@ def test_input_json_no_attrs(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(expected_escaped)
 
-    def import_id_cb(id):
-        return int(id)
-
-    edgelist = read_edgelist_json(tmpfilename, import_id_cb=import_id_cb)
-
-    assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
-    ]
-
-
-def test_input_json_no_attrs_no_import_cb(tmpdir):
-    tmpfile = tmpdir.join("json.out")
-    tmpfilename = str(tmpfile)
-
-    # write file json with escaped characters
-    with open(tmpfilename, "w") as f:
-        f.write(expected_escaped)
-
     edgelist = read_edgelist_json(tmpfilename)
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]
 
 
 def test_input_json_no_attrs_from_string():
-    def import_id_cb(id):
-        return int(id)
-
-    edgelist = parse_edgelist_json(expected_escaped, import_id_cb=import_id_cb)
+    edgelist = parse_edgelist_json(expected_escaped)
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]
 
 
@@ -182,37 +140,33 @@ def test_input_json_from_string():
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
-    def import_id_cb(id):
-        return int(id)
-
     edgelist = parse_edgelist_json(
         expected_escaped,
-        import_id_cb=import_id_cb,
         vertex_attribute_cb=va_cb,
         edge_attribute_cb=ea_cb,
     )
 
-    assert v_attrs[0]["label"] == "κόμβος 0"
-    assert v_attrs[3]["label"] == "label 3"
+    assert v_attrs['0']["label"] == "κόμβος 0"
+    assert v_attrs['3']["label"] == "label 3"
     assert e_attrs[9]["label"] == "edge 1-2"
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]

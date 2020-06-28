@@ -822,6 +822,10 @@ int jgrapht_handles_get_edge_triple(void *handle, int* s, int* t, double* w) {
     return jgrapht_capi_handles_get_edge_triple(thread, handle, s, t, w);
 }
 
+int jgrapht_handles_get_str_edge_triple(void *handle, char** s, char** t, double* w) { 
+    return jgrapht_capi_handles_get_str_edge_triple(thread, handle, s, t, w);
+}
+
 int jgrapht_handles_get_graphpath(void *graph_path, double* weight, int* start_vertex, int* end_vertex, void** eit) {
     return jgrapht_capi_handles_get_graphpath(thread, graph_path, weight, start_vertex, end_vertex, eit);
 }
@@ -934,20 +938,20 @@ int jgrapht_import_edgelist_attrs_string_gml(char* input, void *import_vertex_id
     return jgrapht_capi_import_edgelist_attrs_string_gml(thread, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, res);        
 }
 
-int jgrapht_import_edgelist_noattrs_file_json(char* filename, void *import_vertex_id_fptr, void** res) { 
-    return jgrapht_capi_import_edgelist_noattrs_file_json(thread, filename, import_vertex_id_fptr, res);
+int jgrapht_import_edgelist_noattrs_file_json(char* filename, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_file_json(thread, filename, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_json(char* input, void *import_vertex_id_fptr, void** res) { 
-    return jgrapht_capi_import_edgelist_noattrs_string_json(thread, input, import_vertex_id_fptr, res);
+int jgrapht_import_edgelist_noattrs_string_json(char* input, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_string_json(thread, input, res);
 }
 
-int jgrapht_import_edgelist_attrs_file_json(char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
-    return jgrapht_capi_import_edgelist_attrs_file_json(thread, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, res);
+int jgrapht_import_edgelist_attrs_file_json(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
+    return jgrapht_capi_import_edgelist_attrs_file_json(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_attrs_string_json(char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
-    return jgrapht_capi_import_edgelist_attrs_string_json(thread, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, res);
+int jgrapht_import_edgelist_attrs_string_json(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
+    return jgrapht_capi_import_edgelist_attrs_string_json(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
 int jgrapht_import_edgelist_noattrs_file_csv(char* filename, void *import_vertex_id_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
@@ -1082,6 +1086,10 @@ int jgrapht_it_next_double(void *it, double* res) {
 
 int jgrapht_it_next_edge_triple(void *it, int *source, int *target, double* weight) { 
     return jgrapht_capi_it_next_edge_triple(thread, it, source, target, weight);
+}
+
+int jgrapht_it_next_str_edge_triple(void *it, char **source, char **target, double* weight) { 
+    return jgrapht_capi_it_next_str_edge_triple(thread, it, source, target, weight);
 }
 
 int jgrapht_it_next_object(void *it, void** res) { 

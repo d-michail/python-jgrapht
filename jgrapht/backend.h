@@ -422,6 +422,8 @@ int jgrapht_handles_get_edge_pair(void *, int*, int*);
 
 int jgrapht_handles_get_edge_triple(void *, int*, int*, double*);
 
+int jgrapht_handles_get_str_edge_triple(void *, char**, char**, double*);
+
 int jgrapht_handles_get_graphpath(void *, double*, int*, int*, void**);
 
 // importers
@@ -480,13 +482,13 @@ int jgrapht_import_edgelist_attrs_file_gml(char*, void *, void *, void *, void**
 
 int jgrapht_import_edgelist_attrs_string_gml(char*, void *, void *, void *, void**);
 
-int jgrapht_import_edgelist_noattrs_file_json(char*, void *, void**);
+int jgrapht_import_edgelist_noattrs_file_json(char*, void**);
 
-int jgrapht_import_edgelist_noattrs_string_json(char*, void *, void**);
+int jgrapht_import_edgelist_noattrs_string_json(char*, void**);
 
-int jgrapht_import_edgelist_attrs_file_json(char*, void *, void *, void *, void**);
+int jgrapht_import_edgelist_attrs_file_json(char*, void *, void *, void**);
 
-int jgrapht_import_edgelist_attrs_string_json(char*, void *, void *, void *, void**);
+int jgrapht_import_edgelist_attrs_string_json(char*, void *, void *, void**);
 
 int jgrapht_import_edgelist_noattrs_file_csv(char*, void *, csv_format_t, int, int, int, void**);
 
@@ -557,6 +559,8 @@ int jgrapht_it_next_int(void *, int*);
 int jgrapht_it_next_double(void *, double*);
 
 int jgrapht_it_next_edge_triple(void *, int *, int *, double*);
+
+int jgrapht_it_next_str_edge_triple(void *, char**, char**, double*);
 
 int jgrapht_it_next_object(void *, void**);
 

@@ -6,6 +6,7 @@ from ._wrappers import (
     _JGraphTObjectIterator,
     _JGraphTIntegerIterator,
     _JGraphTEdgeTripleIterator,
+    _JGraphTEdgeStrTripleIterator,    
 )
 
 from collections.abc import (
@@ -402,6 +403,26 @@ class _JGraphTEdgeTripleList(_HandleWrapper, Iterable, Sized):
 
     def __repr__(self):
         return "_JGraphTEdgeTripleList(%r)" % self._handle
+
+    def __str__(self):
+        return "[" + ", ".join(str(x) for x in self) + "]"
+
+
+class _JGraphTEdgeStrTripleList(_HandleWrapper, Iterable, Sized):
+    """JGraphT list which contains edge triples"""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def __iter__(self):
+        res = backend.jgrapht_list_it_create(self._handle)
+        return _JGraphTEdgeStrTripleIterator(res)
+
+    def __len__(self):
+        return backend.jgrapht_list_size(self._handle)
+
+    def __repr__(self):
+        return "_JGraphTEdgeStrTripleList(%r)" % self._handle
 
     def __str__(self):
         return "[" + ", ".join(str(x) for x in self) + "]"

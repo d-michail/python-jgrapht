@@ -8,31 +8,30 @@ input1 = r'{"creator":"JGraphT JSON Exporter","version":"1","nodes":[{"id":"0","
 
 
 def test_graph_sparse_weighted():
-    def import_id_cb(id):
-        return int(id)
-
-    edgelist = parse_edgelist_json(input1, import_id_cb=import_id_cb)
+    edgelist = parse_edgelist_json(input1)
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]
+
+    edgelist = [(int(s), int(t), w) for s, t, w in edgelist]
 
     g = create_sparse_graph(edgelist, 10, directed=True)
 
@@ -54,31 +53,30 @@ def test_graph_sparse_weighted():
 
 
 def test_graph_sparse_weighted_no_vertex_count():
-    def import_id_cb(id):
-        return int(id)
-
-    edgelist = parse_edgelist_json(input1, import_id_cb=import_id_cb)
+    edgelist = parse_edgelist_json(input1)
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]
+
+    edgelist = [(int(s), int(t), w) for s, t, w in edgelist]
 
     g = create_sparse_graph(edgelist, directed=True)
 

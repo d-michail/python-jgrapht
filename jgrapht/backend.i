@@ -577,6 +577,8 @@ int jgrapht_handles_get_edge_pair(void *, int* OUTPUT, int* OUTPUT);
 
 int jgrapht_handles_get_edge_triple(void *, int* OUTPUT, int* OUTPUT, double* OUTPUT);
 
+int jgrapht_handles_get_str_edge_triple(void *, char** OUTPUT, char** OUTPUT, double* OUTPUT);
+
 int jgrapht_handles_get_graphpath(void *, double* OUTPUT, int* OUTPUT, int* OUTPUT, void** OUTPUT);
 
 // importers
@@ -635,13 +637,13 @@ int jgrapht_import_edgelist_attrs_file_gml(char* BYTEARRAY, void *LONG_TO_FPTR, 
 
 int jgrapht_import_edgelist_attrs_string_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_json(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_json(char* BYTEARRAY, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_json(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_json(char* BYTEARRAY, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_json(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_json(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_json(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_json(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
 int jgrapht_import_edgelist_noattrs_file_csv(char* BYTEARRAY, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
 
@@ -712,6 +714,8 @@ int jgrapht_it_next_int(void *, int* OUTPUT);
 int jgrapht_it_next_double(void *, double* OUTPUT);
 
 int jgrapht_it_next_edge_triple(void *, int *OUTPUT, int *OUTPUT, double* OUTPUT);
+
+int jgrapht_it_next_str_edge_triple(void *, char **OUTPUT, char **OUTPUT, double* OUTPUT);
 
 int jgrapht_it_next_object(void *, void** OUTPUT);
 
