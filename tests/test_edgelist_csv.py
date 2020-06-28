@@ -12,12 +12,9 @@ def test_input_csv_from_string():
 4,1
 """
 
-    def identity(x):
-        return int(x)
+    edgelist = parse_edgelist_csv(input_string)
 
-    edgelist = parse_edgelist_csv(input_string, identity)
-
-    assert list(edgelist) == [(1, 2, 1.0), (2, 3, 1.0), (3, 4, 1.0), (4, 1, 1.0)]
+    assert list(edgelist) == [('1', '2', 1.0), ('2', '3', 1.0), ('3', '4', 1.0), ('4', '1', 1.0)]
 
 
 def test_input_csv_from_string_with_weights():
@@ -28,12 +25,9 @@ def test_input_csv_from_string_with_weights():
 4,1,1.3
 """
 
-    def identity(x):
-        return int(x)
+    edgelist = parse_edgelist_csv(input_string, import_edge_weights=True)
 
-    edgelist = parse_edgelist_csv(input_string, identity, import_edge_weights=True)
-
-    assert list(edgelist) == [(1, 2, 4.0), (2, 3, 5.5), (3, 4, 2.2), (4, 1, 1.3)]
+    assert list(edgelist) == [('1', '2', 4.0), ('2', '3', 5.5), ('3', '4', 2.2), ('4', '1', 1.3)]
 
 
 def test_input_csv_from_file(tmpdir):
@@ -50,9 +44,6 @@ def test_input_csv_from_file(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(input_string)
 
-    def identity(x):
-        return int(x)
+    edgelist = read_edgelist_csv(tmpfilename)
 
-    edgelist = read_edgelist_csv(tmpfilename, identity)
-
-    assert list(edgelist) == [(1, 2, 1.0), (2, 3, 1.0), (3, 4, 1.0), (4, 1, 1.0)]
+    assert list(edgelist) == [('1', '2', 1.0), ('2', '3', 1.0), ('3', '4', 1.0), ('4', '1', 1.0)]

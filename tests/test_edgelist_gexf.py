@@ -65,18 +65,14 @@ def test_input_gexf(tmpdir):
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
-    def import_id_cb(id):
-        return int(id)
-
     edgelist = read_edgelist_gexf(
         tmpfilename,
-        import_id_cb=import_id_cb,
         vertex_attribute_cb=va_cb,
         edge_attribute_cb=ea_cb,
     )
 
-    assert v_attrs[1]["label"] == "κόμβος 1"
-    assert v_attrs[2]["label"] == "mylabel 2"
+    assert v_attrs['1']["label"] == "κόμβος 1"
+    assert v_attrs['2']["label"] == "mylabel 2"
 
     assert e_attrs == {
         0: {"id": "1", "source": "2", "target": "3"},
@@ -84,7 +80,7 @@ def test_input_gexf(tmpdir):
         2: {"id": "2", "source": "3", "target": "1"},
     }
 
-    assert list(edgelist) == [(2, 3, 1), (1, 2, 1), (3, 1, 1)]
+    assert list(edgelist) == [('2', '3', 1), ('1', '2', 1), ('3', '1', 1)]
 
 
 def test_input_gexf_no_attrs(tmpdir):
@@ -95,21 +91,15 @@ def test_input_gexf_no_attrs(tmpdir):
     with open(tmpfilename, "w", encoding='utf-8') as f:
         f.write(input1)
 
-    def import_id_cb(id):
-        return int(id)
+    edgelist = read_edgelist_gexf(tmpfilename)
 
-    edgelist = read_edgelist_gexf(tmpfilename, import_id_cb=import_id_cb,)
-
-    assert list(edgelist) == [(2, 3, 1), (1, 2, 1), (3, 1, 1)]
+    assert list(edgelist) == [('2', '3', 1), ('1', '2', 1), ('3', '1', 1)]
 
 
 def test_input_gexf_from_string_no_attrs(tmpdir):
-    def import_id_cb(id):
-        return int(id)
+    edgelist = parse_edgelist_gexf(input1)
 
-    edgelist = parse_edgelist_gexf(input1, import_id_cb=import_id_cb,)
-
-    assert list(edgelist) == [(2, 3, 1), (1, 2, 1), (3, 1, 1)]
+    assert list(edgelist) == [('2', '3', 1), ('1', '2', 1), ('3', '1', 1)]
 
 
 def test_input_gexf_from_string(tmpdir):
@@ -127,18 +117,14 @@ def test_input_gexf_from_string(tmpdir):
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
-    def import_id_cb(id):
-        return int(id)
-
     edgelist = parse_edgelist_gexf(
         input1,
-        import_id_cb=import_id_cb,
         vertex_attribute_cb=va_cb,
         edge_attribute_cb=ea_cb,
     )
 
-    assert v_attrs[1]["label"] == "κόμβος 1"
-    assert v_attrs[2]["label"] == "mylabel 2"
+    assert v_attrs['1']["label"] == "κόμβος 1"
+    assert v_attrs['2']["label"] == "mylabel 2"
 
     assert e_attrs == {
         0: {"id": "1", "source": "2", "target": "3"},
@@ -146,4 +132,4 @@ def test_input_gexf_from_string(tmpdir):
         2: {"id": "2", "source": "3", "target": "1"},
     }
 
-    assert list(edgelist) == [(2, 3, 1), (1, 2, 1), (3, 1, 1)]
+    assert list(edgelist) == [('2', '3', 1), ('1', '2', 1), ('3', '1', 1)]

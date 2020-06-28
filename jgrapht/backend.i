@@ -645,37 +645,37 @@ int jgrapht_import_edgelist_attrs_file_json(char* BYTEARRAY, void *LONG_TO_FPTR,
 
 int jgrapht_import_edgelist_attrs_string_json(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_csv(char* BYTEARRAY, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_csv(char* BYTEARRAY, csv_format_t, int, int, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_csv(char* BYTEARRAY, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_csv(char* BYTEARRAY, csv_format_t, int, int, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_csv(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_csv(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_csv(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_csv(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, csv_format_t, int, int, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_gexf(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_gexf(char* BYTEARRAY, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_gexf(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_gexf(char* BYTEARRAY, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_gexf(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_gexf(char* BYTEARRAY, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_gexf(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_gexf(char* BYTEARRAY, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_graphml_simple(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_graphml_simple(char* BYTEARRAY, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_graphml_simple(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_graphml_simple(char* BYTEARRAY, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_graphml_simple(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_graphml_simple(char* BYTEARRAY, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_graphml_simple(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_graphml_simple(char* BYTEARRAY, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_graphml(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_graphml(char* BYTEARRAY, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_graphml(char* BYTEARRAY, void *LONG_TO_FPTR, int, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_graphml(char* BYTEARRAY, int, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_graphml(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_graphml(char* BYTEARRAY, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_graphml(char* BYTEARRAY, void *LONG_TO_FPTR, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_graphml(char* BYTEARRAY, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
 int jgrapht_import_edgelist_noattrs_file_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
 

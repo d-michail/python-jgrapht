@@ -490,37 +490,37 @@ int jgrapht_import_edgelist_attrs_file_json(char*, void *, void *, void**);
 
 int jgrapht_import_edgelist_attrs_string_json(char*, void *, void *, void**);
 
-int jgrapht_import_edgelist_noattrs_file_csv(char*, void *, csv_format_t, int, int, int, void**);
+int jgrapht_import_edgelist_noattrs_file_csv(char*, csv_format_t, int, int, int, void**);
 
-int jgrapht_import_edgelist_noattrs_string_csv(char*, void *, csv_format_t, int, int, int, void**);
+int jgrapht_import_edgelist_noattrs_string_csv(char*, csv_format_t, int, int, int, void**);
 
-int jgrapht_import_edgelist_attrs_file_csv(char*, void *, void *, void *, csv_format_t, int, int, int, void**);
+int jgrapht_import_edgelist_attrs_file_csv(char*, void *, void *, csv_format_t, int, int, int, void**);
 
-int jgrapht_import_edgelist_attrs_string_csv(char*, void *, void *, void *, csv_format_t, int, int, int, void**);
+int jgrapht_import_edgelist_attrs_string_csv(char*, void *, void *, csv_format_t, int, int, int, void**);
 
-int jgrapht_import_edgelist_noattrs_file_gexf(char*, void *, int, void**);
+int jgrapht_import_edgelist_noattrs_file_gexf(char*, int, void**);
 
-int jgrapht_import_edgelist_noattrs_string_gexf(char*, void *, int, void**);
+int jgrapht_import_edgelist_noattrs_string_gexf(char*, int, void**);
 
-int jgrapht_import_edgelist_attrs_file_gexf(char*, void *, int, void *, void *, void**);
+int jgrapht_import_edgelist_attrs_file_gexf(char*, int, void *, void *, void**);
 
-int jgrapht_import_edgelist_attrs_string_gexf(char*, void *, int, void *, void *, void**);
+int jgrapht_import_edgelist_attrs_string_gexf(char*, int, void *, void *, void**);
 
-int jgrapht_import_edgelist_noattrs_file_graphml_simple(char*, void *, int, void**);
+int jgrapht_import_edgelist_noattrs_file_graphml_simple(char*, int, void**);
 
-int jgrapht_import_edgelist_noattrs_string_graphml_simple(char*, void *, int, void**);
+int jgrapht_import_edgelist_noattrs_string_graphml_simple(char*, int, void**);
 
-int jgrapht_import_edgelist_attrs_file_graphml_simple(char*, void *, int, void *, void *, void**);
+int jgrapht_import_edgelist_attrs_file_graphml_simple(char*, int, void *, void *, void**);
 
-int jgrapht_import_edgelist_attrs_string_graphml_simple(char*, void *, int, void *, void *, void**);
+int jgrapht_import_edgelist_attrs_string_graphml_simple(char*, int, void *, void *, void**);
 
-int jgrapht_import_edgelist_noattrs_file_graphml(char*, void *, int, void**);
+int jgrapht_import_edgelist_noattrs_file_graphml(char*, int, void**);
 
-int jgrapht_import_edgelist_noattrs_string_graphml(char*, void *, int, void**);
+int jgrapht_import_edgelist_noattrs_string_graphml(char*,  int, void**);
 
-int jgrapht_import_edgelist_attrs_file_graphml(char*, void *, int, void *, void *, void**);
+int jgrapht_import_edgelist_attrs_file_graphml(char*, int, void *, void *, void**);
 
-int jgrapht_import_edgelist_attrs_string_graphml(char*, void *, int, void *, void *, void**);
+int jgrapht_import_edgelist_attrs_string_graphml(char*, int, void *, void *, void**);
 
 int jgrapht_import_edgelist_noattrs_file_dot(char*, void *, void**);
 

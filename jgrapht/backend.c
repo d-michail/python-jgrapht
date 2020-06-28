@@ -954,68 +954,68 @@ int jgrapht_import_edgelist_attrs_string_json(char* input, void *vertex_attribut
     return jgrapht_capi_import_edgelist_attrs_string_json(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_noattrs_file_csv(char* filename, void *import_vertex_id_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
-    return jgrapht_capi_import_edgelist_noattrs_file_csv(thread, filename, import_vertex_id_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);
+int jgrapht_import_edgelist_noattrs_file_csv(char* filename, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_file_csv(thread, filename, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_csv(char* input, void *import_vertex_id_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
-    return jgrapht_capi_import_edgelist_noattrs_string_csv(thread, input, import_vertex_id_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
+int jgrapht_import_edgelist_noattrs_string_csv(char* input, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_string_csv(thread, input, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
 }
 
-int jgrapht_import_edgelist_attrs_file_csv(char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
-    return jgrapht_capi_import_edgelist_attrs_file_csv(thread, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
+int jgrapht_import_edgelist_attrs_file_csv(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_file_csv(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
 }
 
-int jgrapht_import_edgelist_attrs_string_csv(char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
-    return jgrapht_capi_import_edgelist_attrs_string_csv(thread, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
+int jgrapht_import_edgelist_attrs_string_csv(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_string_csv(thread, input, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
 }
 
-int jgrapht_import_edgelist_noattrs_file_gexf(char* filename, void *import_vertex_id_fptr, int validate_schema, void** res) { 
-    return jgrapht_capi_import_edgelist_noattrs_file_gexf(thread, filename, import_vertex_id_fptr, validate_schema, res);
+int jgrapht_import_edgelist_noattrs_file_gexf(char* filename, int validate_schema, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_file_gexf(thread, filename, validate_schema, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_gexf(char* input, void *import_vertex_id_fptr, int validate_schema, void** res) { 
-    return jgrapht_capi_import_edgelist_noattrs_string_gexf(thread, input, import_vertex_id_fptr, validate_schema, res);
+int jgrapht_import_edgelist_noattrs_string_gexf(char* input, int validate_schema, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_string_gexf(thread, input, validate_schema, res);
 }
 
-int jgrapht_import_edgelist_attrs_file_gexf(char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
-    return jgrapht_capi_import_edgelist_attrs_file_gexf(thread, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+int jgrapht_import_edgelist_attrs_file_gexf(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_file_gexf(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_attrs_string_gexf(char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
-    return jgrapht_capi_import_edgelist_attrs_string_gexf(thread, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+int jgrapht_import_edgelist_attrs_string_gexf(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_string_gexf(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_noattrs_file_graphml_simple(char* filename, void *import_vertex_id_fptr, int validate_schema, void** res) {
-    return jgrapht_capi_import_edgelist_noattrs_file_graphml_simple(thread, filename, import_vertex_id_fptr, validate_schema, res);
+int jgrapht_import_edgelist_noattrs_file_graphml_simple(char* filename, int validate_schema, void** res) {
+    return jgrapht_capi_import_edgelist_noattrs_file_graphml_simple(thread, filename, validate_schema, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_graphml_simple(char* input, void *import_vertex_id_fptr, int validate_schema, void** res) { 
-    return jgrapht_capi_import_edgelist_noattrs_string_graphml_simple(thread, input, import_vertex_id_fptr, validate_schema, res);
+int jgrapht_import_edgelist_noattrs_string_graphml_simple(char* input, int validate_schema, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_string_graphml_simple(thread, input, validate_schema, res);
 }
 
-int jgrapht_import_edgelist_attrs_file_graphml_simple(char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
-    return jgrapht_capi_import_edgelist_attrs_file_graphml_simple(thread, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+int jgrapht_import_edgelist_attrs_file_graphml_simple(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_file_graphml_simple(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_attrs_string_graphml_simple(char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
-    return jgrapht_capi_import_edgelist_attrs_string_graphml_simple(thread, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+int jgrapht_import_edgelist_attrs_string_graphml_simple(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_string_graphml_simple(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_noattrs_file_graphml(char* filename, void *import_vertex_id_fptr, int validate_schema, void** res) { 
-    return jgrapht_capi_import_edgelist_noattrs_file_graphml(thread, filename, import_vertex_id_fptr, validate_schema, res);
+int jgrapht_import_edgelist_noattrs_file_graphml(char* filename, int validate_schema, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_file_graphml(thread, filename, validate_schema, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_graphml(char* input, void *import_vertex_id_fptr, int validate_schema, void** res) { 
-    return jgrapht_capi_import_edgelist_noattrs_string_graphml(thread, input, import_vertex_id_fptr, validate_schema, res);
+int jgrapht_import_edgelist_noattrs_string_graphml(char* input, int validate_schema, void** res) { 
+    return jgrapht_capi_import_edgelist_noattrs_string_graphml(thread, input, validate_schema, res);
 }
 
-int jgrapht_import_edgelist_attrs_file_graphml(char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
-    return jgrapht_capi_import_edgelist_attrs_file_graphml(thread, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+int jgrapht_import_edgelist_attrs_file_graphml(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_file_graphml(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_attrs_string_graphml(char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
-    return jgrapht_capi_import_edgelist_attrs_string_graphml(thread, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+int jgrapht_import_edgelist_attrs_string_graphml(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    return jgrapht_capi_import_edgelist_attrs_string_graphml(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
 int jgrapht_import_edgelist_noattrs_file_dot(char* filename, void *import_vertex_id_fptr, void** res) { 
