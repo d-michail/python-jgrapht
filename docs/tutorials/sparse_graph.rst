@@ -2,7 +2,7 @@
 
 .. currentmodule:: jgrapht
 
-Sparse Graph Tutorial
+Sparse graph tutorial
 =====================
 
 The sparse graph is a special implementation of a graph with integer vertices and edges.

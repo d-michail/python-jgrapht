@@ -2,7 +2,7 @@
 
 .. currentmodule:: jgrapht
 
-Graph Tutorial
+Graph tutorial
 ==============
 
 This guide will help you start using the library.

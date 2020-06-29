@@ -2,7 +2,7 @@
 
 .. currentmodule:: jgrapht
 
-Any Hashable Graph Tutorial
+Any-hashable graph tutorial
 ===========================
 
 The |Bindings| allow the creation of graphs which can have any Python hashable as vertices and edges.

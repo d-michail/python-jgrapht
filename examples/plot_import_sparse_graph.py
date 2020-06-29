@@ -40,9 +40,17 @@ input_graph=r"""<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.ge
 """
 
 # %%
-# We use the edge list importers to get the graph into an edge list. The library requires
-# that edge lists contain integer vertices. We provide a function which does the conversion.
+# We use the edge list importers to get the graph into an edge list. 
 # 
+
+edges = edgelist.parse_edgelist_gexf(input_graph)
+print(edges)
+
+# %%
+# We need to convert to integer vertices in order to bulk-load a sparse graph. We provide
+# a function which does the conversion.
+# 
+
 import re
 
 def convert_id(id):
@@ -50,7 +58,7 @@ def convert_id(id):
     vid = int(m.group(1))
     return vid
 
-edges = edgelist.parse_edgelist_gexf(input_graph, import_id_cb=convert_id)
+edges = [(convert_id(s), convert_id(t), w) for s, t, w in edges]
 
 print(edges)
 
@@ -59,7 +67,7 @@ print(edges)
 # contain all vertices from :math:`[0, n)` where :math:`n` is the number of vertices. 
 # Then we call the :py:meth:`jgrapht.create_sparse_graph()` factory.
 
-sparse = jgrapht.create_sparse_graph(5, edges, directed=True, weighted=True)
+sparse = jgrapht.create_sparse_graph(edges, num_of_vertices=5, directed=True, weighted=True)
 
 print(sparse)
 

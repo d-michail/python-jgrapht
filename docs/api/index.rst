@@ -20,3 +20,4 @@ API
    algorithms/index
    generators
    io/index
+   utils

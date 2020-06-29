@@ -1,4 +1,8 @@
 class StringSupplier:
+    """A string supplier which returns integers starting from zero with 
+       a possible custom prefix.
+    """
+
     def __init__(self, prefix=None, start=0):
         self._count = start
         self._prefix = prefix
@@ -10,6 +14,9 @@ class StringSupplier:
 
 
 class IntegerSupplier:
+    """An integer supplier which returns integers starting from zero.
+    """
+
     def __init__(self, start=0):
         self._count = start
 
