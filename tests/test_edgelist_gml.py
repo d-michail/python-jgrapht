@@ -193,18 +193,14 @@ def test_input_gml(tmpdir):
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
-    def import_id_cb(id):
-        return id
-
     edgelist = read_edgelist_gml(
         tmpfilename,
-        import_id_cb=import_id_cb,
         vertex_attribute_cb=va_cb,
         edge_attribute_cb=ea_cb,
     )
 
-    assert v_attrs[1]["label"] == "label 1"
-    assert v_attrs[2]["label"] == "label 2"
+    assert v_attrs['1']["label"] == "label 1"
+    assert v_attrs['2']["label"] == "label 2"
 
     print(e_attrs)
 
@@ -230,24 +226,24 @@ def test_input_gml(tmpdir):
     }
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]
 
 
@@ -258,58 +254,52 @@ def test_input_gml_no_attrs(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(input1)
 
-    def import_id_cb(id):
-        return id
-
-    edgelist = read_edgelist_gml(tmpfilename, import_id_cb=import_id_cb,)
+    edgelist = read_edgelist_gml(tmpfilename)
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]
 
 
 def test_input_gml_from_string_no_attrs(tmpdir):
-    def import_id_cb(id):
-        return id
-
-    edgelist = parse_edgelist_gml(input1, import_id_cb=import_id_cb,)
+    edgelist = parse_edgelist_gml(input1)
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]
 
 
@@ -328,18 +318,14 @@ def test_input_gml_from_string(tmpdir):
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
-    def import_id_cb(id):
-        return id
-
     edgelist = parse_edgelist_gml(
         input1,
-        import_id_cb=import_id_cb,
         vertex_attribute_cb=va_cb,
         edge_attribute_cb=ea_cb,
     )
 
-    assert v_attrs[1]["label"] == "label 1"
-    assert v_attrs[2]["label"] == "label 2"
+    assert v_attrs['1']["label"] == "label 1"
+    assert v_attrs['2']["label"] == "label 2"
 
     assert e_attrs == {
         0: {"label": "0"},
@@ -363,24 +349,24 @@ def test_input_gml_from_string(tmpdir):
     }
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]
 
 def test_input_gml_from_string_with_identity(tmpdir):
@@ -404,8 +390,8 @@ def test_input_gml_from_string_with_identity(tmpdir):
         edge_attribute_cb=ea_cb,
     )
 
-    assert v_attrs[1]["label"] == "label 1"
-    assert v_attrs[2]["label"] == "label 2"
+    assert v_attrs['1']["label"] == "label 1"
+    assert v_attrs['2']["label"] == "label 2"
 
     assert e_attrs == {
         0: {"label": "0"},
@@ -429,22 +415,22 @@ def test_input_gml_from_string_with_identity(tmpdir):
     }
 
     assert list(edgelist) == [
-        (0, 1, 1.0),
-        (0, 2, 1.0),
-        (0, 3, 1.0),
-        (0, 4, 1.0),
-        (0, 5, 1.0),
-        (0, 6, 1.0),
-        (0, 7, 1.0),
-        (0, 8, 1.0),
-        (0, 9, 1.0),
-        (1, 2, 1.0),
-        (2, 3, 1.0),
-        (3, 4, 1.0),
-        (4, 5, 1.0),
-        (5, 6, 1.0),
-        (6, 7, 1.0),
-        (7, 8, 1.0),
-        (8, 9, 1.0),
-        (9, 1, 1.0),
+        ('0', '1', 1.0),
+        ('0', '2', 1.0),
+        ('0', '3', 1.0),
+        ('0', '4', 1.0),
+        ('0', '5', 1.0),
+        ('0', '6', 1.0),
+        ('0', '7', 1.0),
+        ('0', '8', 1.0),
+        ('0', '9', 1.0),
+        ('1', '2', 1.0),
+        ('2', '3', 1.0),
+        ('3', '4', 1.0),
+        ('4', '5', 1.0),
+        ('5', '6', 1.0),
+        ('6', '7', 1.0),
+        ('7', '8', 1.0),
+        ('8', '9', 1.0),
+        ('9', '1', 1.0),
     ]

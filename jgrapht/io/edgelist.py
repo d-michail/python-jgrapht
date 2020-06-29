@@ -1,27 +1,12 @@
 from .. import backend as _backend
 
-from .._internals._collections import _JGraphTEdgeTripleList, _JGraphTEdgeStrTripleList
+from .._internals._collections import _JGraphTEdgeStrTripleList
 from .._internals._ioutils import (
     _create_wrapped_import_string_id_callback,
     _create_wrapped_import_integer_id_callback,
     _create_wrapped_attribute_callback,
     _create_wrapped_strid_attribute_callback,
 )
-
-
-def _import_edgelist(name, with_attrs, filename_or_string, *args):
-    alg_method_name = "jgrapht_import_edgelist_"
-    if with_attrs:
-        alg_method_name += "attrs_"
-    else:
-        alg_method_name += "noattrs_"
-    alg_method_name += name
-    alg_method = getattr(_backend, alg_method_name)
-
-    filename_or_string_as_bytearray = bytearray(filename_or_string, encoding="utf-8")
-
-    res = alg_method(filename_or_string_as_bytearray, *args)
-    return _JGraphTEdgeTripleList(res)
 
 
 def _import_edgelist_with_string_ids(name, with_attrs, filename_or_string, *args):
@@ -39,17 +24,7 @@ def _import_edgelist_with_string_ids(name, with_attrs, filename_or_string, *args
     return _JGraphTEdgeStrTripleList(res)
 
 
-def _import_integer_id(id):
-    return id
-
-
-def _import_string_id(id):
-    return int(id)
-
-
-def read_edgelist_dimacs(
-    filename, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None
-):
+def read_edgelist_dimacs(filename, vertex_attribute_cb=None, edge_attribute_cb=None):
     """Read a graph as an edgelist from a file in DIMACS format. 
 
     For a description of the formats see http://dimacs.rutgers.edu/Challenges . Note that
@@ -82,46 +57,38 @@ def read_edgelist_dimacs(
     .. note:: This implementation does not fully implement the DIMACS specifications! Special
               fields specified as 'Optional Descriptors' are ignored.
 
-    .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as an integer. It should return a integer with the identifier of the 
-              graph vertex. If you want to preserve the identifiers from the file, the identity
-              function can be used.
-
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. For the vertices the identifier is a string read from the input.
+              For the edges the identifier is an integer denoting the rank of the particular
+              edge in the returned edge list.
 
     :param filename: filename to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None then 
-      the identity function is used.
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes    
     :returns: an edge list. This is an iterable which returns iterators of named
       tuples(source, target, weight)      
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        _import_integer_id if import_id_cb is None else import_id_cb
-    )
-
     if vertex_attribute_cb is None and edge_attribute_cb is None:
         with_attrs = False
-        args = [import_id_f_ptr]
+        args = []
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
-        args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+        args = [vertex_attribute_f_ptr, edge_attribute_f_ptr]
 
-    return _import_edgelist("file_dimacs", with_attrs, filename, *args)
+    return _import_edgelist_with_string_ids("file_dimacs", with_attrs, filename, *args)
 
 
 def parse_edgelist_dimacs(
-    input_string, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
+    input_string, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read graph in DIMACS format from string. 
 
@@ -155,46 +122,40 @@ def parse_edgelist_dimacs(
     .. note:: This implementation does not fully implement the DIMACS specifications! Special
               fields specified as 'Optional Descriptors' are ignored.
 
-    .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as an integer. It should return a integer with the identifier of the 
-              graph vertex. If you want to preserve the identifiers from the file, the identity
-              function can be used.
-
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.              
+              attribute value. For the vertices the identifier is a string read from the input.
+              For the edges the identifier is an integer denoting the rank of the particular
+              edge in the returned edge list.              
 
     :param input_string: Input string to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None then 
-      the identity function is used.
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
       tuples(source, target, weight)            
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        _import_integer_id if import_id_cb is None else import_id_cb
-    )
-
     if vertex_attribute_cb is None and edge_attribute_cb is None:
         with_attrs = False
-        args = [import_id_f_ptr]
+        args = []
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
-        args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+        args = [vertex_attribute_f_ptr, edge_attribute_f_ptr]
 
-    return _import_edgelist("string_dimacs", with_attrs, input_string, *args)
+    return _import_edgelist_with_string_ids(
+        "string_dimacs", with_attrs, input_string, *args
+    )
 
 
 def read_edgelist_gml(
-    filename, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
+    filename, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a file in GML format (Graph Modelling Language).
 
@@ -249,46 +210,38 @@ def read_edgelist_gml(
 
     the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
 
-    .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as an integer. It should return a integer with the identifier of the 
-              graph vertex. If you want to preserve the identifiers from the file, the identity
-              function can be used.
-
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. For the vertices the identifier is a string read from the input.
+              For the edges the identifier is an integer denoting the rank of the particular
+              edge in the returned edge list.
 
     :param filename: Filename to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
-      the identity function is used.
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
       tuples(source, target, weight)    
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        _import_integer_id if import_id_cb is None else import_id_cb
-    )
-
     if vertex_attribute_cb is None and edge_attribute_cb is None:
         with_attrs = False
-        args = [import_id_f_ptr]
+        args = []
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
-        args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+        args = [vertex_attribute_f_ptr, edge_attribute_f_ptr]
 
-    return _import_edgelist("file_gml", with_attrs, filename, *args)
+    return _import_edgelist_with_string_ids("file_gml", with_attrs, filename, *args)
 
 
 def parse_edgelist_gml(
-    input_string, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
+    input_string, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a string in GML format (Graph Modelling Language).
 
@@ -343,43 +296,37 @@ def parse_edgelist_gml(
 
     the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
 
-    .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as an integer. It should return an integer with the identifier of the 
-              graph vertex. If you want to preserve the identifiers from the file, the identity
-              function can be used.
-
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. For the vertices the identifier is a string read from the input.
+              For the edges the identifier is an integer denoting the rank of the particular
+              edge in the returned edge list.
 
     :param graph: The graph to read into
     :param input_string: Input string to read from 
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
-      the identity function is used
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
       tuples(source, target, weight)    
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        _import_integer_id if import_id_cb is None else import_id_cb
-    )
-
     if vertex_attribute_cb is None and edge_attribute_cb is None:
         with_attrs = False
-        args = [import_id_f_ptr]
+        args = []
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
-        args = [import_id_f_ptr, vertex_attribute_f_ptr, edge_attribute_f_ptr]
+        args = [vertex_attribute_f_ptr, edge_attribute_f_ptr]
 
-    return _import_edgelist("string_gml", with_attrs, input_string, *args)
+    return _import_edgelist_with_string_ids(
+        "string_gml", with_attrs, input_string, *args
+    )
 
 
 def read_edgelist_json(filename, vertex_attribute_cb=None, edge_attribute_cb=None):
@@ -502,15 +449,18 @@ def parse_edgelist_json(
         args = []
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_strid_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
         args = [vertex_attribute_f_ptr, edge_attribute_f_ptr]
 
-    return _import_edgelist_with_string_ids("string_json", with_attrs, input_string, *args)
+    return _import_edgelist_with_string_ids(
+        "string_json", with_attrs, input_string, *args
+    )
 
 
 from .._internals._importers import CSV_FORMATS
@@ -583,10 +533,7 @@ def parse_edgelist_csv(
 
 
 def read_edgelist_gexf(
-    filename,
-    validate_schema=True,
-    vertex_attribute_cb=None,
-    edge_attribute_cb=None,
+    filename, validate_schema=True, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Imports a graph as an edgelist from a GEXF file.
 
@@ -650,9 +597,10 @@ def read_edgelist_gexf(
         args = [validate_schema]
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_strid_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
@@ -734,9 +682,10 @@ def parse_edgelist_gexf(
         args = [validate_schema]
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_strid_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
@@ -746,107 +695,94 @@ def parse_edgelist_gexf(
             edge_attribute_f_ptr,
         ]
 
-    return _import_edgelist_with_string_ids("string_gexf", with_attrs, input_string, *args)
+    return _import_edgelist_with_string_ids(
+        "string_gexf", with_attrs, input_string, *args
+    )
 
 
 def read_edgelist_dot(
-    filename, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
+    filename, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a file in DOT format.
 
     For a description of the format see https://en.wikipedia.org/wiki/DOT_language and 
     http://www.graphviz.org/doc/info/lang.html .
 
-    .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a integer with the identifier of the 
-              graph vertex.
-
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. For the vertices the identifier is a string read from the input.
+              For the edges the identifier is an integer denoting the rank of the particular
+              edge in the returned edge list.
 
     :param filename: Filename to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
-      the identity function is used
     :param vertex_attribute_cb: Callback function for vertex attributes
     :param edge_attribute_cb: Callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
       tuples(source, target, weight)    
     :raises IOError: In case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        _import_string_id if import_id_cb is None else import_id_cb
-    )
-
     if vertex_attribute_cb is None and edge_attribute_cb is None:
         with_attrs = False
-        args = [import_id_f_ptr]
+        args = []
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
         args = [
-            import_id_f_ptr,
             vertex_attribute_f_ptr,
             edge_attribute_f_ptr,
         ]
-    return _import_edgelist("file_dot", with_attrs, filename, *args)
+    return _import_edgelist_with_string_ids("file_dot", with_attrs, filename, *args)
 
 
 def parse_edgelist_dot(
-    input_string, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
+    input_string, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a string in DOT format.
 
     For a description of the format see https://en.wikipedia.org/wiki/DOT_language and 
     http://www.graphviz.org/doc/info/lang.html .
 
-    .. note:: The import identifier callback accepts a single parameter which is the identifier read
-              from the input file as a string. It should return a integer with the identifier of the 
-              graph vertex.
-
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. For the vertices the identifier is a string read from the input.
+              For the edges the identifier is an integer denoting the rank of the particular
+              edge in the returned edge list.
 
     :param input_string: the input string to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
-      the identity function is used
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
       tuples(source, target, weight)    
     :raises IOError: in case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-        _import_string_id if import_id_cb is None else import_id_cb
-    )
-
     if vertex_attribute_cb is None and edge_attribute_cb is None:
         with_attrs = False
-        args = [import_id_f_ptr]
+        args = []
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
+        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_strid_attribute_callback(
             vertex_attribute_cb
         )
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
         args = [
-            import_id_f_ptr,
             vertex_attribute_f_ptr,
             edge_attribute_f_ptr,
         ]
-    return _import_edgelist("string_dot", with_attrs, input_string, *args)
+    return _import_edgelist_with_string_ids(
+        "string_dot", with_attrs, input_string, *args
+    )
 
 
 def read_edgelist_graph6sparse6(
-    filename, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
+    filename, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a file in graph6 or sparse6 format.
 
@@ -855,47 +791,42 @@ def read_edgelist_graph6sparse6(
     characters. Graph6 is suitable for small graphs or large dense graphs while sparse6 is better for 
     large sparse graphs. Moreover, sparse6 supports self-loops and multiple-edges while graph6 does not.
 
-    .. note:: The import identifier callback accepts a single parameter which is the integer identifier
-              read from the input file. It should return a integer with the identifier of the graph vertex.
-              Preserving the vertex identifiers can be performed using the identity function.
-
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
-              or edge identifier. The second is the attribute key and the third is the attribute value.
+              or edge identifier. The second is the attribute key and the third is the 
+              attribute value. For the vertices the identifier is a string read from the input.
+              For the edges the identifier is an integer denoting the rank of the particular
+              edge in the returned edge list.
 
     :param filename: filename to read from
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
-      the identity function is used
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
       tuples(source, target, weight)    
     :raises IOError: in case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        _import_integer_id if import_id_cb is None else import_id_cb
-    )
-
     if vertex_attribute_cb is None and edge_attribute_cb is None:
         with_attrs = False
-        args = [import_id_f_ptr]
+        args = []
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
         args = [
-            import_id_f_ptr,
             vertex_attribute_f_ptr,
             edge_attribute_f_ptr,
         ]
-    return _import_edgelist("file_graph6sparse6", with_attrs, filename, *args)
+    return _import_edgelist_with_string_ids(
+        "file_graph6sparse6", with_attrs, filename, *args
+    )
 
 
 def parse_edgelist_graph6sparse6(
-    input_string, import_id_cb=None, vertex_attribute_cb=None, edge_attribute_cb=None,
+    input_string, vertex_attribute_cb=None, edge_attribute_cb=None,
 ):
     """Read a graph as an edgelist from a string in graph6 or sparse6 format.
 
@@ -905,44 +836,38 @@ def parse_edgelist_graph6sparse6(
     better for large sparse graphs. Moreover, sparse6 supports self-loops and multiple-edges while
     graph6 does not.
 
-    .. note:: The import identifier callback accepts a single parameter which is the integer
-              identifier read from the input file. It should return a integer with the identifier
-              of the graph vertex. Preserving the identifiers can be done using the identity function.
-
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the 
-              attribute value.
+              attribute value. For the vertices the identifier is a string read from the input.
+              For the edges the identifier is an integer denoting the rank of the particular
+              edge in the returned edge list.
 
     :param input_string: the input string
-    :param import_id_cb: Callback to transform identifiers from file to integer vertices. If None
-      the identity function is used
     :param vertex_attribute_cb: callback function for vertex attributes
     :param edge_attribute_cb: callback function for edge attributes
     :returns: an edge list. This is an iterable which returns iterators of named
       tuples(source, target, weight)    
     :raises IOError: in case of an import error 
     """
-    import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-        _import_integer_id if import_id_cb is None else import_id_cb
-    )
-
     if vertex_attribute_cb is None and edge_attribute_cb is None:
         with_attrs = False
-        args = [import_id_f_ptr]
+        args = []
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
         args = [
-            import_id_f_ptr,
             vertex_attribute_f_ptr,
             edge_attribute_f_ptr,
         ]
-    return _import_edgelist("string_graph6sparse6", with_attrs, input_string, *args)
+    return _import_edgelist_with_string_ids(
+        "string_graph6sparse6", with_attrs, input_string, *args
+    )
 
 
 def read_edgelist_graphml(
@@ -1014,10 +939,10 @@ def read_edgelist_graphml(
     by adjusting the appropriate parameter.
 
     .. note:: Attribute callback functions accept three parameters. The first is the vertex
-            or edge identifier. The second is the attribute key and the third is the 
-            attribute value. For the vertices the identifier is a string read from the input.
-            For the edges the identifier is an integer denoting the rank of the particular
-            edge in the returned edge list.
+              or edge identifier. The second is the attribute key and the third is the 
+              attribute value. For the vertices the identifier is a string read from the input.
+              For the edges the identifier is an integer denoting the rank of the particular
+              edge in the returned edge list.
 
     .. note:: The parameter simple affect the capabilities of the importer. It trades functionality
               for parsing speed. 
@@ -1036,9 +961,10 @@ def read_edgelist_graphml(
         args = [validate_schema]
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_strid_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
@@ -1049,9 +975,13 @@ def read_edgelist_graphml(
         ]
 
     if simple:
-        return _import_edgelist_with_string_ids("file_graphml_simple", with_attrs, filename, *args)
+        return _import_edgelist_with_string_ids(
+            "file_graphml_simple", with_attrs, filename, *args
+        )
     else:
-        return _import_edgelist_with_string_ids("file_graphml", with_attrs, filename, *args)
+        return _import_edgelist_with_string_ids(
+            "file_graphml", with_attrs, filename, *args
+        )
 
 
 def parse_edgelist_graphml(
@@ -1146,9 +1076,10 @@ def parse_edgelist_graphml(
         args = [validate_schema]
     else:
         with_attrs = True
-        vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_strid_attribute_callback(
-            vertex_attribute_cb
-        )
+        (
+            vertex_attribute_f_ptr,
+            vertex_attribute_f,
+        ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )
@@ -1163,4 +1094,7 @@ def parse_edgelist_graphml(
             "string_graphml_simple", with_attrs, input_string, *args
         )
     else:
-        return _import_edgelist_with_string_ids("string_graphml", with_attrs, input_string, *args)
+        return _import_edgelist_with_string_ids(
+            "string_graphml", with_attrs, input_string, *args
+        )
+

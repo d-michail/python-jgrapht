@@ -621,21 +621,21 @@ int jgrapht_import_string_graph6sparse6(void *, char* BYTEARRAY, void *LONG_TO_F
 
 // edgelist
 
-int jgrapht_import_edgelist_noattrs_file_dimacs(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_dimacs(char* BYTEARRAY, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_dimacs(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_dimacs(char* BYTEARRAY, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_dimacs(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_dimacs(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_dimacs(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_dimacs(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_gml(char* BYTEARRAY, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_gml(char* BYTEARRAY, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_gml(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
 int jgrapht_import_edgelist_noattrs_file_json(char* BYTEARRAY, void** OUTPUT);
 
@@ -677,21 +677,21 @@ int jgrapht_import_edgelist_attrs_file_graphml(char* BYTEARRAY, int, void *LONG_
 
 int jgrapht_import_edgelist_attrs_string_graphml(char* BYTEARRAY, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_dot(char* BYTEARRAY, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_dot(char* BYTEARRAY, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_dot(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_file_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_file_graph6sparse6(char* BYTEARRAY, void** OUTPUT);
 
-int jgrapht_import_edgelist_noattrs_string_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_noattrs_string_graph6sparse6(char* BYTEARRAY, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_file_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_file_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jgrapht_import_edgelist_attrs_string_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_import_edgelist_attrs_string_graph6sparse6(char* BYTEARRAY, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 
 // independent set
 

@@ -27,20 +27,16 @@ def test_input_dot(tmpdir):
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
-    def import_id_cb(id):
-        return int(id)
-
     edgelist = read_edgelist_dot(
         tmpfilename,
-        import_id_cb=import_id_cb,
         vertex_attribute_cb=va_cb,
         edge_attribute_cb=ea_cb,
     )
 
-    assert v_attrs == {0: {'label': 'node 0'}}
+    assert v_attrs == {'0': {'label': 'node 0'}}
     assert e_attrs == {0: {'cost': '33.0'}}
 
-    assert list(edgelist) == [(0,1,1.0), (0,2,1.0), (0,3,1.0), (2,3,1.0)]
+    assert list(edgelist) == [('0','1',1.0), ('0','2',1.0), ('0','3',1.0), ('2','3',1.0)]
 
 
 def test_input_dot_no_attrs(tmpdir):
@@ -50,21 +46,15 @@ def test_input_dot_no_attrs(tmpdir):
     with open(tmpfilename, "w") as f:
         f.write(input1)
 
-    def import_id_cb(id):
-        return int(id)
+    edgelist = read_edgelist_dot(tmpfilename)
 
-    edgelist = read_edgelist_dot(tmpfilename, import_id_cb=import_id_cb,)
-
-    assert list(edgelist) == [(0,1,1.0), (0,2,1.0), (0,3,1.0), (2,3,1.0)]
+    assert list(edgelist) == [('0','1',1.0), ('0','2',1.0), ('0','3',1.0), ('2','3',1.0)]
 
 
 def test_input_dot_from_string_no_attrs(tmpdir):
-    def import_id_cb(id):
-        return int(id)
+    edgelist = parse_edgelist_dot(input1)
 
-    edgelist = parse_edgelist_dot(input1, import_id_cb=import_id_cb,)
-
-    assert list(edgelist) == [(0,1,1.0), (0,2,1.0), (0,3,1.0), (2,3,1.0)]
+    assert list(edgelist) == [('0','1',1.0), ('0','2',1.0), ('0','3',1.0), ('2','3',1.0)]
 
 
 def test_input_dot_from_string(tmpdir):
@@ -82,18 +72,14 @@ def test_input_dot_from_string(tmpdir):
             e_attrs[edge] = {}
         e_attrs[edge][attribute_name] = attribute_value
 
-    def import_id_cb(id):
-        return int(id)
-
     edgelist = parse_edgelist_dot(
         input1,
-        import_id_cb=import_id_cb,
         vertex_attribute_cb=va_cb,
         edge_attribute_cb=ea_cb,
     )
 
-    assert v_attrs == {0: {'label': 'node 0'}}
+    assert v_attrs == {'0': {'label': 'node 0'}}
     assert e_attrs == {0: {'cost': '33.0'}}
 
-    assert list(edgelist) == [(0,1,1.0), (0,2,1.0), (0,3,1.0), (2,3,1.0)]
+    assert list(edgelist) == [('0','1',1.0), ('0','2',1.0), ('0','3',1.0), ('2','3',1.0)]
 
