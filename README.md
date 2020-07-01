@@ -2,7 +2,7 @@
 
 # Python-JGraphT
 
-Python bindings of the  [JGraphT graph library](https://jgrapht.org/).
+Python bindings for the  [JGraphT graph library](https://jgrapht.org/).
 
 The JGraphT is a free Java class library that provides mathematical graph-theory objects and algorithms. It
 contains very efficient and generic graph data-structures along with a sizeable collection of sophisticated
@@ -19,7 +19,9 @@ The result is a *native self-contained library* with *no dependency* on the JVM!
 ## Installing
 
 We automatically build 64-bit wheels for python versions 3.6, 3.7, and 3.8 on Linux,
-Windows and MacOSX. For linux we use [PEP 571](https://www.python.org/dev/peps/pep-0571/)
+Windows and MacOSX. They can be directly downloaded from [PyPI](https://pypi.org/project/jgrapht/)
+or using pip.
+For linux we use [PEP 571](https://www.python.org/dev/peps/pep-0571/)
 which means that pip version must be `>= 19.0`.
 
 Thus, on a recent machine, installation should be as easy as:
@@ -54,7 +56,7 @@ pip install --user jgrapht
 ## Documentation 
 
 Automatically generated documentation with a tutorial and examples can be found at 
-<https://python-jgrapht.readthedocs.io/>.
+<https://python-jgrapht.readthedocs.io/>. This includes full API docs, tutorials and examples.
 
 ## Citing
 
@@ -93,7 +95,7 @@ The following pieces of software are required for the build to succeed:
  * Python 3.6 and above
  * SWIG 3 and above
 
-If all the above are installed properly, building should be as simple as 
+If all the above are installed properly, building can be done using
 
 ```
 python setup.py build
