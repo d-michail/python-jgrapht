@@ -492,13 +492,13 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
             self._storage = storage
 
         def __getitem__(self, key):
-            if key is "weight":
+            if key == "weight":
                 return self._graph.get_edge_weight(self._edge)
             else:
                 return self._storage[key]
 
         def __setitem__(self, key, value):
-            if key is "weight":
+            if key == "weight":
                 if not isinstance(value, (float)):
                     raise TypeError("Weight is not a floating point number")
                 self._graph.set_edge_weight(self._edge, value)
@@ -506,7 +506,7 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
                 self._storage[key] = value
 
         def __delitem__(self, key):
-            if key is "weight":
+            if key == "weight":
                 self._graph.set_edge_weight(self._edge, 1.0)
             else:
                 del self._storage[key]
