@@ -39,7 +39,7 @@ Development
 Development happens in the following places.
 
  * https://github.com/d-michail/python-jgrapht 
- * https://github.com/d-michail/jgrapht-capi
+ * https://github.com/jgrapht/jgrapht-capi
  * https://github.com/jgrapht/jgrapht
 
 
