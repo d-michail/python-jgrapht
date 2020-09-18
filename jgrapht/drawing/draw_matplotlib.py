@@ -32,10 +32,10 @@ def draw_jgrapht(
     if position is None:
         position = layout(g)
 
-    draw_nodes(
+    draw_jgrapht_vertices(
         g, position, node_label=node_label, show=show, **kwargs
     )  # Draw the nodes
-    draw_edges(
+    draw_jgrapht_edges(
         g,
         position,
         arrow=arrow,
@@ -46,15 +46,15 @@ def draw_jgrapht(
     )  # Draw the edges
 
     if node_label is True:
-        draw_labels(g, position=position, **kwargs)  # Draw lables of nodes
+        draw_jgrapht_labels(g, position=position, **kwargs)  # Draw lables of nodes
 
     if edge_label is True:
-        draw_edge_labels(g, position=position, **kwargs)  # Draw lables of edges
+        draw_jgrapht_edge_labels(g, position=position, **kwargs)  # Draw lables of edges
 
     plt.draw_if_interactive()
 
 
-def draw_nodes(
+def draw_jgrapht_vertices(
     g,
     position,
     axis=False,
@@ -208,10 +208,10 @@ def draw_nodes(
 
     show = kwargs.get("show")  # check If the user call only the function of nodes
     if show is None and node_label is True:
-        draw_labels(g, position, axis=axis, **kwargs)
+        draw_jgrapht_labels(g, position, axis=axis, **kwargs)
 
 
-def draw_edges(
+def draw_jgrapht_edges(
     g,
     position,
     edge_color="black",
@@ -299,7 +299,7 @@ def draw_edges(
             plt.rcParams["axes.prop_cycle"] = plt.cycler("color", edge_cmap)
             ax = plt.gca()
             if show is None:  # if  the user calls only this function
-                draw_edges(
+                draw_jgrapht_edges(
                     g,
                     position=position,
                     edge_label=edge_label,
@@ -469,10 +469,10 @@ def draw_edges(
                             )
             k = k + 1
         if show is None and edge_label is True:
-            draw_edge_labels(g, position, axis=axis, **kwargs)
+            draw_jgrapht_edge_labels(g, position, axis=axis, **kwargs)
 
 
-def draw_labels(
+def draw_jgrapht_labels(
     g,
     position,
     node_fontsize=12,
@@ -572,7 +572,7 @@ def draw_labels(
             )  # It helps when the user wants to see only labels and nothing else
 
 
-def draw_edge_labels(
+def draw_jgrapht_edge_labels(
     g,
     position,
     horizontalalignment="center",
@@ -713,13 +713,34 @@ def draw_edge_labels(
                 )  # It helps when the user wants to see only labels and nothing else
 
 
-def layout(g, pos_layout=None, area=None, **kwargs):
+def layout(
+    g,
+    pos_layout=None,
+    area=None,
+    seed=None,
+    radius=5,
+    vertex_comparator_cb=None,
+    iterations=100,
+    normalization_factor=0.5,
+    theta=0.5,
+    tolerance=None,
+    **kwargs
+):
     """
                 Parameters:
                     :param g: the graph to draw
                     :param pos_layout: circular_layout|random_layout|fruchterman_reingold_layout|fruchterman_reingold_indexed_layout
                     :type pos_layout: dictionary, optional
                     :param area: the two dimensional area as a tuple (minx, miny, width, height)
+                    :param seed: seed for the random number generator. If None the system time is used
+                    :param radius: radius of the circle
+                    :param vertex_comparator_cb: a vertex comparator. Should be a function which accepts
+                      two vertices v1, v2 and return -1, 0, 1 depending of whether v1 < v2, v1 == v2, or
+                      v1 > v2 in the ordering
+                    :param iterations: number of iterations
+                    :param normalization_factor: normalization factor when calculating optimal distance
+                    :param theta: parameter for approximation using the Barnes-Hut technique
+                    :parram tolerance: tolerance used when comparing floating point values
                     :param kwargs:See draw_jgrapht
                     :type kwargs:optional keywords
                      """
@@ -727,13 +748,29 @@ def layout(g, pos_layout=None, area=None, **kwargs):
     if area is None:
         area = (0, 0, 10, 10)
     if pos_layout is None or pos_layout == "circular_layout":
-        model = jgrapht.algorithms.drawing.circular_layout_2d(g, area, radius=5)
+        model = jgrapht.algorithms.drawing.circular_layout_2d(
+            g, area, radius=radius, vertex_comparator_cb=vertex_comparator_cb
+        )
     elif pos_layout == "random_layout":
-        model = jgrapht.algorithms.drawing.random_layout_2d(g, area)
+        model = jgrapht.algorithms.drawing.random_layout_2d(g, area, seed=seed)
     elif pos_layout == "fruchterman_reingold_layout":
-        model = jgrapht.algorithms.drawing.fruchterman_reingold_layout_2d(g, area)
+        model = jgrapht.algorithms.drawing.fruchterman_reingold_layout_2d(
+            g,
+            area,
+            iterations=iterations,
+            normalization_factor=normalization_factor,
+            seed=seed,
+        )
     elif pos_layout == "fruchterman_reingold_indexed_layout":
-        model = jgrapht.algorithms.drawing.fruchterman_reingold_layout_2d(g, area)
+        model = jgrapht.algorithms.drawing.fruchterman_reingold_indexed_layout_2d(
+            g,
+            area,
+            iterations=iterations,
+            normalization_factor=normalization_factor,
+            seed=seed,
+            theta=theta,
+            tolerance=tolerance,
+        )
 
     for i, vertex in enumerate(g.vertices):
         x, y = model.get_vertex_location(i)
@@ -742,43 +779,91 @@ def layout(g, pos_layout=None, area=None, **kwargs):
     return position
 
 
-def circular(g, **kwargs):
+def draw_circular(g, area=None, radius=5, vertex_comparator_cb=None, **kwargs):
     """
                Parameters:
                     :param g: graph
-                    :param kwargs:See draw_jgrapht,draw_nodes,draw_edges,draw_Lables,draw_edge_labels
-                    :type kwargs:optional keywords
-          """
-    draw_jgrapht(g, layout(g, pos_layout="circular_layout"), **kwargs)
-
-
-def random(g, **kwargs):
-    """
-               Parameters:
-                     :param g: graph
-                     :param kwargs:See draw_jgrapht,draw_nodes,draw_edges,draw_Lables,draw_edge_labels
-                     :type kwargs:optional keywords
-          """
-    draw_jgrapht(g, layout(g, pos_layout="random_layout"), **kwargs)
-
-
-def fruchterman_reingold(g, **kwargs):
-    """
-               Parameters:
-                      :param g: graph
-                      :param kwargs:See draw_jgrapht,draw_nodes,draw_edges,draw_Lables,draw_edge_labels
-                      :type kwargs:optional keywords
-          """
-    draw_jgrapht(g, layout(g, pos_layout="fruchterman_reingold_layout"), **kwargs)
-
-
-def fruchterman_reingold_indexed(g, **kwargs):
-    """
-               Parameters:
-                    :param g: graph
+                    :param area: the two dimensional area as a tuple (minx, miny, width, height)
+                    :param radius: radius of the circle
+                    :param vertex_comparator_cb: a vertex comparator. Should be a function which accepts
+                      two vertices v1, v2 and return -1, 0, 1 depending of whether v1 < v2, v1 == v2, or
+                      v1 > v2 in the ordering
                     :param kwargs:See draw_jgrapht,draw_nodes,draw_edges,draw_Lables,draw_edge_labels
                     :type kwargs:optional keywords
           """
     draw_jgrapht(
-        g, layout(g, pos_layout="fruchterman_reingold_indexed_layout"), **kwargs
+        g,
+        layout(
+            g,
+            area=area,
+            pos_layout="circular_layout",
+            radius=radius,
+            vertex_comparator_cb=vertex_comparator_cb,
+        ),
+        **kwargs,
     )
+
+
+def draw_random(g, area=None, seed=None, **kwargs):
+    """
+               Parameters:
+                     :param g: graph
+                     :param area: the two dimensional area as a tuple (minx, miny, width, height)
+                     :param seed: seed for the random number generator. If None the system time is used
+                     :param kwargs:See draw_jgrapht,draw_nodes,draw_edges,draw_Lables,draw_edge_labels
+                     :type kwargs:optional keywords
+          """
+    draw_jgrapht(
+        g, layout(g, area=area, pos_layout="random_layout", seed=seed), **kwargs
+    )
+
+
+def draw_fruchterman_reingold(
+    g, area=None, iterations=100, normalization_factor=0.5, seed=None, theta=0.5,
+    tolerance=None,indexed=False, **kwargs
+):
+    """
+               Parameters:
+                      :param g: graph
+                      :param kwargs:See draw_jgrapht,draw_nodes,draw_edges,draw_Lables,draw_edge_labels
+                      :param area: the two dimensional area as a tuple (minx, miny, width, height)
+                      :param iterations: number of iterations
+                      :param normalization_factor: normalization factor when calculating optimal distance
+                      :param seed: seed for the random number generator. If None the system time is used
+                      :param theta: parameter for approximation using the Barnes-Hut technique
+                      :param indexed: if the user wants fruchterman_reingold_layout or fruchterman_reingold_indexed_layout
+                      :type indexed:bool, optional (default=False)
+                      :parram tolerance: tolerance used when comparing floating point values
+                      :type kwargs:optional keywords
+          """
+    if indexed is True:
+        draw_jgrapht(
+            g,
+            layout(
+                g,
+                area=None,
+                pos_layout="fruchterman_reingold_indexed_layout",
+                iterations=iterations,
+                normalization_factor=normalization_factor,
+                seed=seed,
+                theta=theta,
+                tolerance=tolerance,
+            ),
+            **kwargs,
+
+        )
+    else:
+        draw_jgrapht(
+            g,
+            layout(
+                g,
+                area=None,
+                pos_layout="fruchterman_reingold_layout",
+                iterations=iterations,
+                normalization_factor=normalization_factor,
+                seed=seed,
+            ),
+            **kwargs,
+
+        )
+
