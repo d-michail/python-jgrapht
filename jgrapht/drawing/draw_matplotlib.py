@@ -819,8 +819,15 @@ def draw_random(g, area=None, seed=None, **kwargs):
 
 
 def draw_fruchterman_reingold(
-    g, area=None, iterations=100, normalization_factor=0.5, seed=None, theta=0.5,
-    tolerance=None,indexed=False, **kwargs
+    g,
+    area=None,
+    iterations=100,
+    normalization_factor=0.5,
+    seed=None,
+    theta=0.5,
+    tolerance=None,
+    indexed=False,
+    **kwargs
 ):
     """
                Parameters:
@@ -850,7 +857,6 @@ def draw_fruchterman_reingold(
                 tolerance=tolerance,
             ),
             **kwargs,
-
         )
     else:
         draw_jgrapht(
@@ -864,6 +870,4 @@ def draw_fruchterman_reingold(
                 seed=seed,
             ),
             **kwargs,
-
         )
-
