@@ -2,6 +2,50 @@ import jgrapht
 from matplotlib.patches import FancyArrowPatch
 
 
+def draw(g, position=None, ax=None, **kwds):
+    """
+    Draw the graph g with Matplotlib.
+    Draw the graph as a simple representation with no node
+    labels or edge labels and using the full Matplotlib figure area
+    and no axis labels by default.  See draw_jgrapht() for more
+    full-featured drawing that allows title, axis labels etc.
+
+
+       Parameters:
+                   See draw_nodes,draw_edges,Only_Lables
+                   :param g: graph
+                   :param position: circular_layout|random_layout|fruchterman_reingold_layout|fruchterman_reingold_indexed_layout
+                   :type position: dictionary, optional
+                   :param ax: Draw the graph in the specified Matplotlib axes
+                   :type ax:Matplotlib Axes object, optional
+                   :param kwargs:See draw_nodes,draw_edges,draw_Lables,draw_edge_labels
+                   :type kwargs:optional keywords
+       """
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError as e:
+        raise ImportError("Matplotlib required for draw()") from e
+    except RuntimeError:
+        print("Matplotlib unable to open display")
+        raise
+
+    if ax is None:
+        cf = plt.gcf()
+    else:
+        cf = ax.get_figure()
+    cf.set_facecolor("w")
+    if ax is None:
+        if cf._axstack() is None:
+            ax = cf.add_axes((0, 0, 1, 1))
+        else:
+            ax = cf.gca()
+    if position is None:
+        position = layout(g)
+
+    draw_jgrapht(g, position=position, ax=ax, **kwds)
+    ax.set_axis_off()
+    plt.draw_if_interactive()
+
 def draw_jgrapht(
     g, position=None, arrow=False, node_label=False, edge_label=False, **kwargs
 ):
