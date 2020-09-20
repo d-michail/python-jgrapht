@@ -791,22 +791,24 @@ def layout(
                     :type kwargs:optional keywords
                      """
     position = []
-    if pos_layout is None or pos_layout == "circular_layout":
-        model = jgrapht.algorithms.drawing.circular_layout_2d(
+    options = {
+        None: jgrapht.algorithms.drawing.circular_layout_2d(
             g, area, radius=radius, vertex_comparator_cb=vertex_comparator_cb
-        )
-    elif pos_layout == "random_layout":
-        model = jgrapht.algorithms.drawing.random_layout_2d(g, area, seed=seed)
-    elif pos_layout == "fruchterman_reingold_layout":
-        model = jgrapht.algorithms.drawing.fruchterman_reingold_layout_2d(
+        ),
+        "circular_layout": jgrapht.algorithms.drawing.circular_layout_2d(
+            g, area, radius=radius, vertex_comparator_cb=vertex_comparator_cb
+        ),
+        "random_layout": jgrapht.algorithms.drawing.random_layout_2d(
+            g, area, seed=seed
+        ),
+        "fruchterman_reingold_layout": jgrapht.algorithms.drawing.fruchterman_reingold_layout_2d(
             g,
             area,
             iterations=iterations,
             normalization_factor=normalization_factor,
             seed=seed,
-        )
-    elif pos_layout == "fruchterman_reingold_indexed_layout":
-        model = jgrapht.algorithms.drawing.fruchterman_reingold_indexed_layout_2d(
+        ),
+        "fruchterman_reingold_indexed_layout": jgrapht.algorithms.drawing.fruchterman_reingold_indexed_layout_2d(
             g,
             area,
             iterations=iterations,
@@ -814,7 +816,10 @@ def layout(
             seed=seed,
             theta=theta,
             tolerance=tolerance,
-        )
+        ),
+    }
+    for i in range(5):
+        model = options.get(pos_layout, 1)
 
     for i, vertex in enumerate(g.vertices):
         x, y = model.get_vertex_location(i)
@@ -823,7 +828,9 @@ def layout(
     return position
 
 
-def draw_circular(g, area=None, radius=5, vertex_comparator_cb=None, **kwargs):
+def draw_circular(
+    g, area=(0, 0, 10, 10), radius=5, vertex_comparator_cb=None, **kwargs
+):
     """
                Parameters:
                     :param g: graph
@@ -848,7 +855,7 @@ def draw_circular(g, area=None, radius=5, vertex_comparator_cb=None, **kwargs):
     )
 
 
-def draw_random(g, area=None, seed=None, **kwargs):
+def draw_random(g, area=(0, 0, 10, 10), seed=None, **kwargs):
     """
                Parameters:
                      :param g: graph
@@ -864,7 +871,7 @@ def draw_random(g, area=None, seed=None, **kwargs):
 
 def draw_fruchterman_reingold(
     g,
-    area=None,
+    area=(0, 0, 10, 10),
     iterations=100,
     normalization_factor=0.5,
     seed=None,
@@ -893,7 +900,7 @@ def draw_fruchterman_reingold(
             g,
             layout(
                 g,
-                area=None,
+                area=area,
                 pos_layout="fruchterman_reingold_indexed_layout",
                 iterations=iterations,
                 normalization_factor=normalization_factor,
@@ -908,7 +915,7 @@ def draw_fruchterman_reingold(
             g,
             layout(
                 g,
-                area=None,
+                area=area,
                 pos_layout="fruchterman_reingold_layout",
                 iterations=iterations,
                 normalization_factor=normalization_factor,
