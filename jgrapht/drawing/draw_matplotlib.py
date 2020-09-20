@@ -18,7 +18,7 @@ def draw(g, position=None, ax=None, **kwds):
                    :type position: dictionary, optional
                    :param ax: Draw the graph in the specified Matplotlib axes
                    :type ax:Matplotlib Axes object, optional
-                   :param kwargs:See draw_nodes,draw_edges,draw_Lables,draw_edge_labels
+                   :param kwargs:See draw_jgrapht_vertices,draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
                    :type kwargs:optional keywords
        """
     try:
@@ -46,6 +46,7 @@ def draw(g, position=None, ax=None, **kwds):
     ax.set_axis_off()
     plt.draw_if_interactive()
 
+
 def draw_jgrapht(
     g, position=None, arrow=False, node_label=False, edge_label=False, **kwargs
 ):
@@ -61,7 +62,7 @@ def draw_jgrapht(
                 :type node_label: bool, optional (default=False)
                 :param edge_label:draw labels on the edges
                 :type edge_label: bool, optional (default=False)
-                :param kwargs:See draw_nodes,draw_edges,draw_Lables,draw_edge_labels
+                :param kwargs:See draw_jgrapht_vertices,draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
                 :type kwargs:optional keywords
     """
     try:
@@ -595,7 +596,8 @@ def draw_jgrapht_labels(
                 x, y
             )  # It helps when the user wants to see only labels and nothing else
     else:
-        for i, vertex in enumerate(node_names):
+
+        for i in node_names:
             # Draw the labels that user gave
             x, y = position[i]
             ax.text(
@@ -730,7 +732,7 @@ def draw_jgrapht_edge_labels(
                     )  # It helps when the user wants to see only labels and nothing else
 
         else:
-            for e, edges in enumerate(edge_names):
+            for e in edge_names:
                 v1 = g.edge_source(e)
                 v2 = g.edge_target(e)
                 x1, y1 = position[v1]
@@ -760,7 +762,7 @@ def draw_jgrapht_edge_labels(
 def layout(
     g,
     pos_layout=None,
-    area=None,
+    area=(0, 0, 10, 10),
     seed=None,
     radius=5,
     vertex_comparator_cb=None,
@@ -789,8 +791,6 @@ def layout(
                     :type kwargs:optional keywords
                      """
     position = []
-    if area is None:
-        area = (0, 0, 10, 10)
     if pos_layout is None or pos_layout == "circular_layout":
         model = jgrapht.algorithms.drawing.circular_layout_2d(
             g, area, radius=radius, vertex_comparator_cb=vertex_comparator_cb
@@ -832,7 +832,7 @@ def draw_circular(g, area=None, radius=5, vertex_comparator_cb=None, **kwargs):
                     :param vertex_comparator_cb: a vertex comparator. Should be a function which accepts
                       two vertices v1, v2 and return -1, 0, 1 depending of whether v1 < v2, v1 == v2, or
                       v1 > v2 in the ordering
-                    :param kwargs:See draw_jgrapht,draw_nodes,draw_edges,draw_Lables,draw_edge_labels
+                    :param kwargs:See draw_jgrapht,draw_jgrapht_vertices,draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
                     :type kwargs:optional keywords
           """
     draw_jgrapht(
@@ -854,7 +854,7 @@ def draw_random(g, area=None, seed=None, **kwargs):
                      :param g: graph
                      :param area: the two dimensional area as a tuple (minx, miny, width, height)
                      :param seed: seed for the random number generator. If None the system time is used
-                     :param kwargs:See draw_jgrapht,draw_nodes,draw_edges,draw_Lables,draw_edge_labels
+                     :param kwargs:See draw_jgrapht,draw_jgrapht_vertices,draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
                      :type kwargs:optional keywords
           """
     draw_jgrapht(
@@ -885,6 +885,7 @@ def draw_fruchterman_reingold(
                       :param indexed: if the user wants fruchterman_reingold_layout or fruchterman_reingold_indexed_layout
                       :type indexed:bool, optional (default=False)
                       :parram tolerance: tolerance used when comparing floating point values
+                      :param kwargs:See draw_jgrapht,draw_jgrapht_vertices,draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
                       :type kwargs:optional keywords
           """
     if indexed is True:
