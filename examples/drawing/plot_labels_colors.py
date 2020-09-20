@@ -11,7 +11,7 @@ Draw a graph with matplotlib, color by degree. You must have matplotlib  for thi
 # Start by importing the package
 
 import jgrapht
-import draw
+import draw_matplotlib
 import matplotlib.pyplot as plt
 
 
@@ -51,21 +51,21 @@ e9 = g.add_edge(0, 9)
 
 # %%
 # Draw the nodes
-pos = draw.layout(g, pos_layout="fruchterman_reingold_indexed_layout")
-draw.draw_nodes(g, position=pos, node_list=(0, 1, 2, 3, 4), node_title="green nodes")
-draw.draw_nodes(
+pos = draw_matplotlib.layout(g, pos_layout="fruchterman_reingold_layout")
+draw_matplotlib.draw_jgrapht_vertices(g, position=pos, node_list=(0, 1, 2, 3, 4), node_title="green nodes")
+draw_matplotlib.draw_jgrapht_vertices(
     g, position=pos, node_list=(5, 6, 7, 8, 9), node_color="red", node_title="red nodes"
 )
 
 # Draw the edges
-draw.draw_edges(
+draw_matplotlib.draw_jgrapht_edges(
     g,
     position=pos,
     edge_list=(0, 1, 2, 3, 4),
     edge_color="orange",
     edge_title="orange edges",
 )
-draw.draw_edges(
+draw_matplotlib.draw_jgrapht_edges(
     g,
     position=pos,
     edge_list=(5, 6, 7, 8, 9),
@@ -74,11 +74,11 @@ draw.draw_edges(
 )
 
 # Draw the labels
-draw.draw_labels(
-    g, position=pos, node_names=("a", "b", "c", "d", "e", "f", "g", "h", "i", "j")
+draw_matplotlib.draw_jgrapht_labels(
+    g, position=pos, node_names={0:"a", 1:"b", 2:"c",3: "d", 4:"e",5: "f", 6:"g", 7:"h",8: "i", 9:"j"}
 )
-draw.draw_edge_labels(
-    g, position=pos, edge_names=("a", "b", "c", "d", "e", "f", "g", "h", "i")
+draw_matplotlib.draw_jgrapht_edge_labels(
+    g, position=pos, edge_names={0:"a", 1:"b", 2:"c", 3:"d", 4:"e", 5:"f",6: "g", 7:"h", 8:"i"}
 )
 
 plt.show()
