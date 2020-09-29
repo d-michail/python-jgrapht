@@ -10,8 +10,7 @@ An example using Graph as a weighted . You must have matplotlib  for this to wor
 # %%
 # Start by importing the package
 
-import jgrapht
-import draw
+import jgrapht.drawing.draw_matplotlibimport draw
 import matplotlib.pyplot as plt
 
 
