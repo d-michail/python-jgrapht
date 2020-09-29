@@ -10,8 +10,7 @@ Draw a graph with matplotlib, color by degree. You must have matplotlib  for thi
 # %%
 # Start by importing the package
 
-import jgrapht
-import draw_matplotlib
+import jgrapht.drawing.draw_matplotlibimport draw_matplotlib
 import matplotlib.pyplot as plt
 
 
