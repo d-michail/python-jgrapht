@@ -10,7 +10,7 @@ In this example we draw a graph with arrows.You must have matplotlib for this to
 # %%
 # Start by importing the package
 
-import jgrapht
+import jgrapht.drawing.draw_matplotlib
 import draw
 import matplotlib.pyplot as plt
 
