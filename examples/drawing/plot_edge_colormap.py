@@ -9,8 +9,8 @@ Draw a graph with matplotlib, color by degree. You must have matplotlib and nump
 
 # %%
 # Start by importing the package
-
-import jgrapht.drawing.draw_matplotlibimport draw
+import jgrapht
+import jgrapht.drawing.draw_matplotlib as draw_matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -51,8 +51,8 @@ e9 = g.add_edge(0, 9)
 
 # %%
 # Draw the graph
-pos = draw.layout(g, pos_layout="circular_layout")
-draw.draw_jgrapht(
+pos = draw_matplotlib.layout(g, pos_layout="circular_layout")
+draw_matplotlib.draw_jgrapht(
     g,
     position=pos,
     node_label=True,
