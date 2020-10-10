@@ -3,15 +3,13 @@
 """
 Draw A Graph With Arrows
 =============================
-
 In this example we draw a graph with arrows.You must have matplotlib for this to work.
 """
 
 # %%
 # Start by importing the package
-
-import jgrapht.drawing.draw_matplotlib
-import draw
+import jgrapht
+import jgrapht.drawing.draw_matplotlib as draw_matplotlib
 import matplotlib.pyplot as plt
 
 # %%
@@ -50,8 +48,8 @@ e9 = g.add_edge(0, 9)
 
 # %%
 # Draw the graph
-pos = draw.layout(g, pos_layout="circular_layout")
-draw.draw_jgrapht(
+pos = draw_matplotlib.layout(g, pos_layout="circular_layout")
+draw_matplotlib.draw_jgrapht(
     g,
     position=pos,
     node_label=True,
