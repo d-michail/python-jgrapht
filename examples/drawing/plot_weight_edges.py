@@ -9,8 +9,8 @@ An example using Graph as a weighted . You must have matplotlib  for this to wor
 
 # %%
 # Start by importing the package
-
-import jgrapht.drawing.draw_matplotlibimport draw
+import jgrapht
+import jgrapht.drawing.draw_matplotlib as draw_matplotlib
 import matplotlib.pyplot as plt
 
 
@@ -56,11 +56,11 @@ weight_small = [e for e in g.edges if g.get_edge_weight(e) <= 0.5]
 
 # %%
 # Draw the nodes
-pos = draw.layout(g, pos_layout="fruchterman_reingold_indexed_layout")
-draw.draw_nodes(g, position=pos)
+pos = draw_matplotlib.layout(g, pos_layout="fruchterman_reingold_layout")
+draw_matplotlib.draw_jgrapht_vertices(g, position=pos)
 
 # Draw the edges
-draw.draw_edges(
+draw_matplotlib.draw_jgrapht_edges(
     g,
     position=pos,
     edge_list=weight_large,
@@ -68,7 +68,7 @@ draw.draw_edges(
     edge_title="weight>0.5",
     line_style="dashed",
 )
-draw.draw_edges(
+draw_matplotlib.draw_jgrapht_edges(
     g,
     position=pos,
     edge_list=weight_small,
@@ -77,7 +77,7 @@ draw.draw_edges(
 )
 
 # Draw the labels
-draw.draw_labels(g, position=pos)
-draw.draw_edge_labels(g, position=pos, draw_edge_weights=True)
+draw_matplotlib.draw_jgrapht_labels(g, position=pos)
+draw_matplotlib.draw_jgrapht_edge_labels(g, position=pos, draw_edge_weights=True)
 
 plt.show()
