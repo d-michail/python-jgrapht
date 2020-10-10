@@ -10,7 +10,8 @@ In this example we draw a graph.You must have matplotlib for this to work.
 # %%
 # Start by importing the package
 
-import jgrapht.drawing.draw_matplotlibimport draw
+import jgrapht
+import jgrapht.drawing.draw_matplotlib as draw_matplotlib
 import matplotlib.pyplot as plt
 
 # %%
@@ -49,6 +50,6 @@ e10 = g.add_edge(1, 2)
 
 # %%
 # Draw the graph
-pos = draw.layout(g, pos_layout="fruchterman_reingold_layout")
-draw.draw_jgrapht(g, position=pos, node_label=True, edge_label=True)
+pos = draw_matplotlib.layout(g, pos_layout="fruchterman_reingold_layout")
+draw_matplotlib.draw_jgrapht(g, position=pos, node_label=True, edge_label=True)
 plt.show()
