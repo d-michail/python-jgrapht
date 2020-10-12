@@ -166,90 +166,52 @@ def draw_jgrapht_vertices(
         ax = plt.gca()
     if axis is False:
         ax.set_axis_off()
-
     positionlist = list(zip(*position))  # seperate x from  y
-    if node_list is None:  # Draw all nodes
-        # Draw nodes
-        ax.scatter(
-            positionlist[0],
-            positionlist[1],
-            c=node_color,
-            alpha=alpha,
-            linewidth=node_linewidths,
-            s=node_size,
-            cmap=node_cmap,
-            vmin=vmin,
-            vmax=vmax,
-            marker=node_shape,
-            edgecolors=node_edge_color,
-            zorder=2.5,
-            label=node_title,
-        )
-        if node_title is not None:
-            # Draw Legend graph for node
-            handles, labels = ax.get_legend_handles_labels()
-            unique = [
-                (h, l)
-                for i, (h, l) in enumerate(zip(handles, labels))
-                if l not in labels[:i]
-            ]
-            ax.legend(
-                *zip(*unique),
-                loc="upper center",
-                fancybox=True,
-                framealpha=1,
-                shadow=True,
-                borderpad=0.3,
-                markerscale=0.5,
-                markerfirst=True,
-                ncol=3,
-                bbox_to_anchor=(0.5, 1.15),
-            )
 
-    elif node_list is not None:  # Draw specific nodes
+    if node_list is not None:  # Draw specific nodes
         positionlist.clear()
         for i, vertex in enumerate(node_list):
             positionlist.append(list(zip(position[node_list[i]])))
-
         # seperate x from  y
         positionlist = list(zip(*positionlist))
-        # Draw the specific nodes
-        ax.scatter(
-            positionlist[0],
-            positionlist[1],
-            c=node_color,
-            alpha=alpha,
-            linewidth=node_linewidths,
-            s=node_size,
-            cmap=node_cmap,
-            vmin=vmin,
-            vmax=vmax,
-            marker=node_shape,
-            edgecolors=node_edge_color,
-            zorder=2.5,
-            label=node_title,
-        )
 
-        if node_title is not None:
-            # Draw Legend graph for the specific nodes
-            handles, labels = ax.get_legend_handles_labels()
-            unique = [
-                (h, l)
-                for i, (h, l) in enumerate(zip(handles, labels))
-                if l not in labels[:i]
-            ]
-            ax.legend(
-                *zip(*unique),
-                loc="upper center",
-                fancybox=True,
-                framealpha=1,
-                shadow=True,
-                borderpad=0.3,
-                markerscale=0.5,
-                markerfirst=True,
-                ncol=3,
-                bbox_to_anchor=(0.5, 1.15),
-            )
+    # Draw nodes
+    ax.scatter(
+        positionlist[0],
+        positionlist[1],
+        c=node_color,
+        alpha=alpha,
+        linewidth=node_linewidths,
+        s=node_size,
+        cmap=node_cmap,
+        vmin=vmin,
+        vmax=vmax,
+        marker=node_shape,
+        edgecolors=node_edge_color,
+        zorder=2.5,
+        label=node_title,
+    )
+
+    if node_title is not None:
+        # Draw Legend graph for the specific nodes
+        handles, labels = ax.get_legend_handles_labels()
+        unique = [
+            (h, l)
+            for i, (h, l) in enumerate(zip(handles, labels))
+            if l not in labels[:i]
+        ]
+        ax.legend(
+            *zip(*unique),
+            loc="upper center",
+            fancybox=True,
+            framealpha=1,
+            shadow=True,
+            borderpad=0.3,
+            markerscale=0.5,
+            markerfirst=True,
+            ncol=3,
+            bbox_to_anchor=(0.5, 1.15),
+        )
 
     show = kwargs.get("show")  # check If the user call only the function of nodes
     if show is None and node_label is True:
@@ -354,7 +316,7 @@ def draw_jgrapht_edges(
                     line_style=line_style,
                     arrow=arrow,
                     arrow_size=arrow_size,
-                    arrowstyle=arrow_style,
+                    arrows_tyle=arrow_style,
                     arrow_color=arrow_color,
                     edge_list=edge_list,
                     alpha=alpha,
@@ -394,7 +356,7 @@ def draw_jgrapht_edges(
                     **kwargs,
                 )
                 return
-        k = 0  # counter of edges
+
         for e in g.edges:
             v1 = g.edge_source(e)
             v2 = g.edge_target(e)
@@ -410,109 +372,62 @@ def draw_jgrapht_edges(
             point2 = [x2, y2]
             x_values = [point1[0], point2[0]]
             y_values = [point1[1], point2[1]]
-            if edge_list is None:  # Draw all edges
-                if arrow is True:
-                    a = FancyArrowPatch(
-                        (x2, y2),
-                        (x1, y1),
-                        arrowstyle=arrow_style,
-                        shrinkA=9.5,
-                        shrinkB=9.5,
-                        mutation_scale=arrow_head,
-                        alpha=alpha,
-                        ls=arrow_line,
-                        lw=arrow_size,
-                        connectionstyle=connection_style,
-                        color=arrow_color,
-                        label=edge_title,
-                    )
-                    ax.add_patch(a)
-                    ax.autoscale_view()
-                else:
-                    # Draw the edges
-                    ax.plot(
-                        x_values,
-                        y_values,
-                        edge_color,
-                        alpha=alpha,
-                        linewidth=edge_linewidth,
-                        linestyle=line_style,
-                        label=edge_title,
-                    )
 
-                if edge_title is not None:  # legend title for edges
-                    handles, labels = ax.get_legend_handles_labels()
-                    unique = [
-                        (h, l)
-                        for i, (h, l) in enumerate(zip(handles, labels))
-                        if l not in labels[:i]
-                    ]
-                    ax.legend(
-                        *zip(*unique),
-                        loc="upper center",
-                        fancybox=True,
-                        framealpha=1,
-                        shadow=True,
-                        borderpad=0.3,
-                        markerscale=0.5,
-                        markerfirst=True,
-                        ncol=3,
-                        bbox_to_anchor=(0.5, 1.15),
-                    )
-            elif edge_list is not None:
-                for l, edge in enumerate(edge_list):
-                    if edge_list[l] == k:
-                        if arrow is True:  # Draw specific arrows
-                            a = FancyArrowPatch(
-                                (x2, y2),
-                                (x1, y1),
-                                arrowstyle=arrow_style,
-                                shrinkA=9.5,
-                                shrinkB=9.5,
-                                mutation_scale=arrow_head,
-                                alpha=alpha,
-                                ls=arrow_line,
-                                lw=arrow_size,
-                                connectionstyle=connection_style,
-                                color=arrow_color,
-                                label=edge_title,
-                            )
-                            ax.add_patch(a)
-                            ax.autoscale_view()
-                        else:
-                            # Draw specific edges
-                            ax.plot(
-                                x_values,
-                                y_values,
-                                edge_color,
-                                alpha=alpha,
-                                linewidth=edge_linewidth,
-                                linestyle=line_style,
-                                label=edge_title,
-                            )
+            if edge_list is None:
+                edge_list = []
+                for e in g.edges:
+                    edge_list.append(e)
 
-                        if (
-                            edge_title is not None
-                        ):  # legend title for the specific edges
-                            handles, labels = ax.get_legend_handles_labels()
-                            unique = [
-                                (h, l)
-                                for i, (h, l) in enumerate(zip(handles, labels))
-                                if l not in labels[:i]
-                            ]
-                            ax.legend(
-                                *zip(*unique),
-                                loc="upper center",
-                                fancybox=True,
-                                framealpha=1,
-                                shadow=True,
-                                borderpad=0.3,
-                                markerscale=0.5,
-                                markerfirst=True,
-                                ncol=3,
-                                bbox_to_anchor=(0.5, 1.15),
-                            )
-            k = k + 1
+            for l, edge in enumerate(edge_list):
+                if edge_list[l] == e:
+                    if arrow is True:  # Draw  arrows
+                        a = FancyArrowPatch(
+                            (x2, y2),
+                            (x1, y1),
+                            arrowstyle=arrow_style,
+                            shrinkA=9.5,
+                            shrinkB=9.5,
+                            mutation_scale=arrow_head,
+                            alpha=alpha,
+                            ls=arrow_line,
+                            lw=arrow_size,
+                            connectionstyle=connection_style,
+                            color=arrow_color,
+                            label=edge_title,
+                        )
+                        ax.add_patch(a)
+                        ax.autoscale_view()
+                    else:
+                        # Draw  edges
+                        ax.plot(
+                            x_values,
+                            y_values,
+                            edge_color,
+                            alpha=alpha,
+                            linewidth=edge_linewidth,
+                            linestyle=line_style,
+                            label=edge_title,
+                        )
+
+                    if edge_title is not None:  # legend title for the specific edges
+                        handles, labels = ax.get_legend_handles_labels()
+                        unique = [
+                            (h, l)
+                            for i, (h, l) in enumerate(zip(handles, labels))
+                            if l not in labels[:i]
+                        ]
+                        ax.legend(
+                            *zip(*unique),
+                            loc="upper center",
+                            fancybox=True,
+                            framealpha=1,
+                            shadow=True,
+                            borderpad=0.3,
+                            markerscale=0.5,
+                            markerfirst=True,
+                            ncol=3,
+                            bbox_to_anchor=(0.5, 1.15),
+                        )
         if show is None and edge_label is True:
             draw_jgrapht_edge_labels(g, position, axis=axis, **kwargs)
 
@@ -576,46 +491,29 @@ def draw_jgrapht_labels(
         ax.set_axis_off()
 
     if node_names is None:
+        node_names = {}
         for i, vertex in enumerate(g.vertices):
-            # Draw Labels of nodes
-            x, y = position[i]
-            ax.text(
-                x,
-                y,
-                i,
-                fontsize=node_fontsize,
-                horizontalalignment=horizontalalignment,
-                verticalalignment=verticalalignment,
-                alpha=alpha,
-                color=node_font_color,
-                weight=node_font_weight,
-                family=node_font_family,
-                transform=ax.transData,
-            )
-            ax.plot(
-                x, y
-            )  # It helps when the user wants to see only labels and nothing else
-    else:
+            node_names.update({i: i})
 
-        for i in node_names:
-            # Draw the labels that user gave
-            x, y = position[i]
-            ax.text(
-                x,
-                y,
-                node_names[i],
-                fontsize=node_fontsize,
-                horizontalalignment=horizontalalignment,
-                verticalalignment=verticalalignment,
-                alpha=alpha,
-                color=node_font_color,
-                weight=node_font_weight,
-                family=node_font_family,
-                transform=ax.transData,
-            )
-            ax.plot(
-                x, y
-            )  # It helps when the user wants to see only labels and nothing else
+    for i in node_names:
+        # Draw the labels
+        x, y = position[i]
+        ax.text(
+            x,
+            y,
+            node_names[i],
+            fontsize=node_fontsize,
+            horizontalalignment=horizontalalignment,
+            verticalalignment=verticalalignment,
+            alpha=alpha,
+            color=node_font_color,
+            weight=node_font_weight,
+            family=node_font_family,
+            transform=ax.transData,
+        )
+        ax.plot(
+            x, y
+        )  # It helps when the user wants to see only labels and nothing else
 
 
 def draw_jgrapht_edge_labels(
@@ -679,84 +577,41 @@ def draw_jgrapht_edge_labels(
 
         if not axis:
             ax.set_axis_off()
-        if edge_names is None:
-            if draw_edge_weights is True:
-                # Draw Labels of edges
-                for e in g.edges:
-                    v1 = g.edge_source(e)
-                    v2 = g.edge_target(e)
-                    x1, y1 = position[v1]
-                    x2, y2 = position[v2]
-                    ax.text(
-                        (x1 + x2) / 2,
-                        (y1 + y2) / 2,
-                        g.get_edge_weight(e),
-                        fontsize=edge_fontsize,
-                        horizontalalignment=horizontalalignment,
-                        verticalalignment=verticalalignment,
-                        alpha=alpha,
-                        color=edge_font_color,
-                        weight=edge_font_weight,
-                        family=edge_font_family,
-                        bbox=bbox,
-                        zorder=2,
-                        transform=ax.transData,
-                    )
-                    ax.plot(
-                        (x1 + x2) / 2, (y1 + y2) / 2
-                    )  # It helps when the user wants to see only labels and nothing else
-            else:
-                # Draw Labels of edges
-                for e in g.edges:
-                    v1 = g.edge_source(e)
-                    v2 = g.edge_target(e)
-                    x1, y1 = position[v1]
-                    x2, y2 = position[v2]
-                    ax.text(
-                        (x1 + x2) / 2,
-                        (y1 + y2) / 2,
-                        e,
-                        fontsize=edge_fontsize,
-                        horizontalalignment=horizontalalignment,
-                        verticalalignment=verticalalignment,
-                        alpha=alpha,
-                        color=edge_font_color,
-                        weight=edge_font_weight,
-                        family=edge_font_family,
-                        bbox=bbox,
-                        zorder=2,
-                        transform=ax.transData,
-                    )
-                    ax.plot(
-                        (x1 + x2) / 2, (y1 + y2) / 2
-                    )  # It helps when the user wants to see only labels and nothing else
 
+    if edge_names is None:
+        edge_names = {}
+        if draw_edge_weights is True:
+            for e in g.edges:
+                edge_names.update({e: g.get_edge_weight(e)})
         else:
-            for e in edge_names:
-                v1 = g.edge_source(e)
-                v2 = g.edge_target(e)
-                x1, y1 = position[v1]
-                x2, y2 = position[v2]
-                # Draw the labels that user gave
-                x, y = position[e]
-                ax.text(
-                    (x1 + x2) / 2,
-                    (y1 + y2) / 2,
-                    edge_names[e],
-                    fontsize=edge_fontsize,
-                    horizontalalignment=horizontalalignment,
-                    verticalalignment=verticalalignment,
-                    alpha=alpha,
-                    color=edge_font_color,
-                    weight=edge_font_weight,
-                    family=edge_font_family,
-                    transform=ax.transData,
-                    bbox=bbox,
-                    zorder=2,
-                )
-                ax.plot(
-                    (x1 + x2) / 2, (y1 + y2) / 2
-                )  # It helps when the user wants to see only labels and nothing else
+            for e in g.edges:
+                edge_names.update({e: e})
+
+    for e in edge_names:
+        v1 = g.edge_source(e)
+        v2 = g.edge_target(e)
+        x1, y1 = position[v1]
+        x2, y2 = position[v2]
+        # Draw the labels
+        x, y = position[e]
+        ax.text(
+            (x1 + x2) / 2,
+            (y1 + y2) / 2,
+            edge_names[e],
+            fontsize=edge_fontsize,
+            horizontalalignment=horizontalalignment,
+            verticalalignment=verticalalignment,
+            alpha=alpha,
+            color=edge_font_color,
+            weight=edge_font_weight,
+            family=edge_font_family,
+            transform=ax.transData,
+            bbox=bbox,
+            zorder=2,
+        )
+        ax.plot(
+            (x1 + x2) / 2, (y1 + y2) / 2
+        )  # It helps when the user wants to see only labels and nothing else
 
 
 def layout(
