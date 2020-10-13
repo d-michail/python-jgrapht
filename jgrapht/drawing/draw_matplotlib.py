@@ -193,7 +193,7 @@ def draw_jgrapht_vertices(
     )
 
     if node_title is not None:
-        # Draw Legend graph for the specific nodes
+        # Draw Legend graph for the nodes
         handles, labels = ax.get_legend_handles_labels()
         unique = [
             (h, l)
@@ -493,7 +493,7 @@ def draw_jgrapht_labels(
     if node_names is None:
         node_names = {}
         for i, vertex in enumerate(g.vertices):
-            node_names.update({i: i})
+            node_names.update({i:i})
 
     for i in node_names:
         # Draw the labels
@@ -582,10 +582,10 @@ def draw_jgrapht_edge_labels(
         edge_names = {}
         if draw_edge_weights is True:
             for e in g.edges:
-                edge_names.update({e: g.get_edge_weight(e)})
+                edge_names.update({e:g.get_edge_weight(e)})
         else:
             for e in g.edges:
-                edge_names.update({e: e})
+                edge_names.update({e:e})
 
     for e in edge_names:
         v1 = g.edge_source(e)
