@@ -16,7 +16,7 @@ jobs:
       sudo: required
       install:
         - brew cask install graalvm/tap/graalvm-ce-java11
-        - export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-20.1.0/Contents/Home/bin:"$PATH"
+        - export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-20.2.0/Contents/Home/bin:"$PATH"
         - gu install native-image
         - brew install swig
         - pip3 install twine
