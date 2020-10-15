@@ -14,20 +14,18 @@ from .__version__ import __author__, __author_email__, __license__
 from .__version__ import __copyright__
 from .__version__ import __bibtex__
 
-# Create main thread and setup cleanup
+# Initialize with backend and setup module cleanup
 from . import backend
 import atexit
 
-backend.jgrapht_isolate_create()
+backend.jgrapht_init()
 del backend
 
 
 def _module_cleanup_function():
     from . import backend
 
-    if backend.jgrapht_isolate_is_attached():
-        backend.jgrapht_isolate_destroy()
-
+    backend.jgrapht_cleanup()
 
 atexit.register(_module_cleanup_function)
 del atexit

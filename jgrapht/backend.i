@@ -85,11 +85,11 @@ typedef enum {
 
 // library init
 
-void jgrapht_isolate_create();
+void jgrapht_init();
 
-void jgrapht_isolate_destroy();
+void jgrapht_cleanup();
 
-int jgrapht_isolate_is_attached();
+int jgrapht_is_initialized();
 
 // error
 

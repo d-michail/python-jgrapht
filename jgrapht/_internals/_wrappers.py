@@ -17,7 +17,7 @@ class _HandleWrapper:
         return self._handle
 
     def __del__(self):
-        if backend.jgrapht_isolate_is_attached():
+        if backend.jgrapht_is_initialized():
             backend.jgrapht_handles_destroy(self._handle)
 
     def __repr__(self):
