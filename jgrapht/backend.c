@@ -4,11 +4,17 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+#ifdef _WIN32
+#define THREAD_LOCAL __declspec( thread )
+#else
+#define THREAD_LOCAL __thread 
+#endif
+
 // single graalVM isolate
 static graal_isolate_t *isolate = NULL;
 
 // thread local variable
-static _Thread_local graal_isolatethread_t *thread = NULL;
+static THREAD_LOCAL graal_isolatethread_t *thread = NULL;
 
 // library init
 void jgrapht_init() {
