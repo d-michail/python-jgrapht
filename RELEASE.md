@@ -1,7 +1,7 @@
 
 # Release
 
- 1. Open `jgrapht/__version__.py` and change version from `<backendversion>.<minor>dev` to 
+ 1. Open `jgrapht/__version__.py` and change version from `<backendversion>.<minor>.dev` to 
     `<backendversion>.<minor>` or `<backendversion>.<minor>rc1` if you are going for a 
     release candidate.
 
@@ -42,5 +42,5 @@
     git commit -m "Bump release version"
     git push upstream master
 
- 10. Done
+ 12. Done
 
