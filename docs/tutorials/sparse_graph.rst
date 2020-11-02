@@ -10,8 +10,8 @@ It has two main restrictions which are:
 
   * the graph is unmodifiable and thus needs to be bulk-loaded, 
   * the vertices and edges are integers continously numbered in :math:`[0, n)` and 
-    :math:`[0, m)` where :math:`n` nad :math:`m` are the the total number of vertices
-    and edge respectively.
+    :math:`[0, m)` where :math:`n` and :math:`m` are the total number of vertices
+    and edges respectively.
 
 These two restrictions are translated to two main benefits which are:
 
