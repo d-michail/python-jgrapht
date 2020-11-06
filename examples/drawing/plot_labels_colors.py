@@ -4,7 +4,7 @@
 Labels And Colors
 =============================
 
-Draw a graph with matplotlib, color by degree. You must have matplotlib  for this to work.
+In this example we draw a graph with our labels names. You must have matplotlib  for this to work.
 """
 
 # %%
@@ -21,7 +21,7 @@ g = jgrapht.create_graph(directed=False, weighted=True,)
 
 
 # %%
-# add vertex
+# Add some vertices
 
 g.add_vertex()
 g.add_vertex()
@@ -36,7 +36,7 @@ g.add_vertex()
 
 
 # %%
-# add edges
+# and some edges
 
 e1 = g.add_edge(0, 1)
 e2 = g.add_edge(0, 2)
@@ -49,14 +49,20 @@ e8 = g.add_edge(0, 8)
 e9 = g.add_edge(0, 9)
 
 # %%
-# Draw the nodes
-pos = draw_matplotlib.layout(g, pos_layout="fruchterman_reingold_layout")
-draw_matplotlib.draw_jgrapht_vertices(g, position=pos, node_list=(0, 1, 2, 3, 4), node_title="green nodes")
+# Compute the position of the vertices
+pos = draw_matplotlib.layout(g, seed=10,pos_layout="fruchterman_reingold_layout")
+# %%
+# Draw the graph
+
+# Draw nodes with node list and node title
+draw_matplotlib.draw_jgrapht_vertices(
+    g, position=pos, node_list=(0, 1, 2, 3, 4), node_title="green nodes"
+)
 draw_matplotlib.draw_jgrapht_vertices(
     g, position=pos, node_list=(5, 6, 7, 8, 9), node_color="red", node_title="red nodes"
 )
 
-# Draw the edges
+# Draw the edges with edge list,edge color and edge title
 draw_matplotlib.draw_jgrapht_edges(
     g,
     position=pos,
@@ -72,12 +78,28 @@ draw_matplotlib.draw_jgrapht_edges(
     edge_title="blue edges",
 )
 
-# Draw the labels
+# Draw the node labels with our node names
 draw_matplotlib.draw_jgrapht_labels(
-    g, position=pos, node_names={0:"a", 1:"b", 2:"c",3: "d", 4:"e",5: "f", 6:"g", 7:"h",8: "i", 9:"j"}
+    g,
+    position=pos,
+    node_names={
+        0: "a",
+        1: "b",
+        2: "c",
+        3: "d",
+        4: "e",
+        5: "f",
+        6: "g",
+        7: "h",
+        8: "i",
+        9: "j",
+    },
 )
+# Draw the edge labels with our edge names
 draw_matplotlib.draw_jgrapht_edge_labels(
-    g, position=pos, edge_names={0:"a", 1:"b", 2:"c", 3:"d", 4:"e", 5:"f",6: "g", 7:"h", 8:"i"}
+    g,
+    position=pos,
+    edge_names={0: "a", 1: "b", 2: "c", 3: "d", 4: "e", 5: "f", 6: "g", 7: "h", 8: "i"},
 )
 
 plt.show()
