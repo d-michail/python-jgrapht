@@ -4,7 +4,7 @@
 Weighted Graph
 =============================
 
-An example using Graph as a weighted . You must have matplotlib  for this to work.
+In this example we draw a graph as a weighted .You must have matplotlib  for this to work.
 """
 
 # %%
@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 
 # %%
-# Creating a graph
+# Add some vertices
 
 g = jgrapht.create_graph(directed=False, weighted=True,)
 
@@ -36,7 +36,7 @@ g.add_vertex()
 
 
 # %%
-# add edges
+# and some edges
 
 e1 = g.add_edge(0, 1, weight=0.5)
 e2 = g.add_edge(0, 2, weight=0.4)
@@ -55,11 +55,15 @@ weight_small = [e for e in g.edges if g.get_edge_weight(e) <= 0.5]
 
 
 # %%
-# Draw the nodes
-pos = draw_matplotlib.layout(g, pos_layout="fruchterman_reingold_layout")
+# Compute the position of the vertices
+pos = draw_matplotlib.layout(g, seed=10,pos_layout="fruchterman_reingold_layout")
+# %%
+# Draw the graph
+
+# Draw nodes
 draw_matplotlib.draw_jgrapht_vertices(g, position=pos)
 
-# Draw the edges
+# Draw the edges using edge list,edge color,edge title and line style
 draw_matplotlib.draw_jgrapht_edges(
     g,
     position=pos,
@@ -76,8 +80,9 @@ draw_matplotlib.draw_jgrapht_edges(
     edge_title="weight<=0.5",
 )
 
-# Draw the labels
+# Draw node labels
 draw_matplotlib.draw_jgrapht_labels(g, position=pos)
+# Draw edge labels with their weight
 draw_matplotlib.draw_jgrapht_edge_labels(g, position=pos, draw_edge_weights=True)
 
 plt.show()
