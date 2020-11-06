@@ -3,14 +3,13 @@
 """
 Edge Colormap
 =============================
-
-Draw a graph with matplotlib, color by degree. You must have matplotlib and numpy for this to work.
+In this example we draw a graph with matplotlib, color by degree using the Circular layout.You must have matplotlib installed for this to work.
 """
 
 # %%
 # Start by importing the package
 import jgrapht
-import jgrapht.drawing.draw_matplotlib as draw_matplotlib
+import jgrapht.drawing.draw_matplotlib as drawing
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -22,22 +21,14 @@ g = jgrapht.create_graph(directed=False, weighted=True,)
 
 
 # %%
-# add vertex
+# Add some vertices
 
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
+for i in range(0, 10):
+    g.add_vertex()
 
 
 # %%
-# add edges
+# and some edges
 
 e1 = g.add_edge(0, 1)
 e2 = g.add_edge(0, 2)
@@ -50,13 +41,15 @@ e8 = g.add_edge(0, 8)
 e9 = g.add_edge(0, 9)
 
 # %%
-# Draw the graph
-pos = draw_matplotlib.layout(g, pos_layout="circular_layout")
-draw_matplotlib.draw_jgrapht(
+# Compute the position of the vertices
+pos = drawing.layout(g, pos_layout="circular_layout")
+# %%
+# Draw the graph using the node labels and the edge line width and edge colormap
+drawing.draw_jgrapht(
     g,
     position=pos,
-    node_label=True,
     edge_linewidth=6,
     edge_cmap=plt.cm.Blues(np.linspace(0, 1, len(g.edges))),
+    axis=False,
 )
 plt.show()
