@@ -56,6 +56,7 @@ Documentation
    license
    citing
    credits
+   drawing/draw_matplotlib.rst
 
 Indices and tables
 ==================
