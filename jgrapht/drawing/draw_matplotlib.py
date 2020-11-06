@@ -12,8 +12,8 @@ def draw(g, position=None, ax=None, **kwds):
     :param position: vertices positions
     :param kwargs: See draw_jgrapht_vertices,
      draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
-    :type position: dictionary, optional
     :param ax: Draw the graph in the specified Matplotlib axes
+    :type position: dictionary, optional
     :type ax:Matplotlib Axes object, optional
     :type kwargs:optional keywords
 
