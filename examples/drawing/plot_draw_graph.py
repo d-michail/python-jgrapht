@@ -2,40 +2,31 @@
 
 """
 Draw A Simple Graph
-=============================
+===================
 
-In this example we draw a graph.You must have matplotlib for this to work.
+In this example we draw a graph using the Fruchterman-Reingold layout.You must have matplotlib installed for this to work.
 """
 
 # %%
 # Start by importing the package
 
 import jgrapht
-import jgrapht.drawing.draw_matplotlib as draw_matplotlib
+import jgrapht.drawing.draw_matplotlib as drawing
 import matplotlib.pyplot as plt
 
 # %%
 # Creating a graph
 
-g = jgrapht.create_graph(directed=False, weighted=True,)
+g = jgrapht.create_graph(directed=False, weighted=True)
 
 # %%
-# add vertex
+# Add some vertices
 
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-
+for i in range(0,10):
+    g.add_vertex()
 
 # %%
-# add edges
+# and some edges
 
 e1 = g.add_edge(0, 1)
 e2 = g.add_edge(0, 2)
@@ -49,7 +40,10 @@ e9 = g.add_edge(0, 9)
 e10 = g.add_edge(1, 2)
 
 # %%
-# Draw the graph
-pos = draw_matplotlib.layout(g, pos_layout="fruchterman_reingold_layout")
-draw_matplotlib.draw_jgrapht(g, position=pos, node_label=True, edge_label=True)
+# Compute the position of the vertices
+pos = drawing.layout(g, seed=10,pos_layout="fruchterman_reingold_layout")
+
+# %%
+# Draw the graph using the node labels and the edge labels
+drawing.draw_jgrapht(g, position=pos, edge_label=True,axis=False)
 plt.show()
