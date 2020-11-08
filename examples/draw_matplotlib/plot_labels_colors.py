@@ -4,7 +4,7 @@
 Labels And Colors
 =============================
 
-In this example we draw a graph with our labels names. You must have matplotlib  for this to work.
+In this example we draw a graph with vertex labels. You must have matplotlib for this to work.
 """
 
 # %%
@@ -13,11 +13,10 @@ import jgrapht
 import jgrapht.drawing.draw_matplotlib as draw_matplotlib
 import matplotlib.pyplot as plt
 
-
 # %%
 # Creating a graph
 
-g = jgrapht.create_graph(directed=False, weighted=True,)
+g = jgrapht.create_graph(directed=False, weighted=True)
 
 
 # %%
@@ -62,7 +61,7 @@ draw_matplotlib.draw_jgrapht_vertices(
     g, position=pos, node_list=(5, 6, 7, 8, 9), node_color="red", node_title="red nodes"
 )
 
-# Draw the edges with edge list,edge color and edge title
+# Draw the edges with edge list, edge color and edge title
 draw_matplotlib.draw_jgrapht_edges(
     g,
     position=pos,
@@ -78,7 +77,7 @@ draw_matplotlib.draw_jgrapht_edges(
     edge_title="blue edges",
 )
 
-# Draw the node labels with our node names
+# Draw the node labels with custom node names
 draw_matplotlib.draw_jgrapht_labels(
     g,
     position=pos,
@@ -95,7 +94,8 @@ draw_matplotlib.draw_jgrapht_labels(
         9: "j",
     },
 )
-# Draw the edge labels with our edge names
+
+# Draw the edge labels with custom edge names
 draw_matplotlib.draw_jgrapht_edge_labels(
     g,
     position=pos,

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """
-Draw A Simple Graph
-===================
+Draw an Undirected Graph
+========================
 
-In this example we draw a graph using the Fruchterman-Reingold layout.You must have matplotlib installed for this to work.
+In this example we draw an undirected graph using the Fruchterman-Reingold layout. 
+You must have matplotlib installed for this to work.
 """
 
 # %%
@@ -41,9 +42,9 @@ e10 = g.add_edge(1, 2)
 
 # %%
 # Compute the position of the vertices
-pos = drawing.layout(g, seed=10,pos_layout="fruchterman_reingold_layout")
+pos = drawing.layout(g, seed=10, pos_layout="fruchterman_reingold_layout")
 
 # %%
 # Draw the graph using the node labels and the edge labels
-drawing.draw_jgrapht(g, position=pos, edge_label=True,axis=False)
+drawing.draw_jgrapht(g, position=pos, edge_label=True, axis=False)
 plt.show()

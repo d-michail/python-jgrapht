@@ -56,17 +56,17 @@ weight_small = [e for e in g.edges if g.get_edge_weight(e) <= 0.5]
 
 # %%
 # Compute the position of the vertices
-pos = draw_matplotlib.layout(g, seed=10,pos_layout="fruchterman_reingold_layout")
+position = draw_matplotlib.layout(g, seed=10,pos_layout="fruchterman_reingold_layout")
 # %%
 # Draw the graph
 
 # Draw nodes
-draw_matplotlib.draw_jgrapht_vertices(g, position=pos)
+draw_matplotlib.draw_jgrapht_vertices(g, position=position)
 
 # Draw the edges using edge list,edge color,edge title and line style
 draw_matplotlib.draw_jgrapht_edges(
     g,
-    position=pos,
+    position=position,
     edge_list=weight_large,
     edge_color="red",
     edge_title="weight>0.5",
@@ -74,15 +74,15 @@ draw_matplotlib.draw_jgrapht_edges(
 )
 draw_matplotlib.draw_jgrapht_edges(
     g,
-    position=pos,
+    position=position,
     edge_list=weight_small,
     edge_color="orange",
     edge_title="weight<=0.5",
 )
 
 # Draw node labels
-draw_matplotlib.draw_jgrapht_labels(g, position=pos)
+draw_matplotlib.draw_jgrapht_labels(g, position=position)
 # Draw edge labels with their weight
-draw_matplotlib.draw_jgrapht_edge_labels(g, position=pos, draw_edge_weights=True)
+draw_matplotlib.draw_jgrapht_edge_labels(g, position=position, draw_edge_weights=True)
 
 plt.show()

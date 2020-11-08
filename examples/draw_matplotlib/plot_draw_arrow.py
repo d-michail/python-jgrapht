@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """
-Draw A Graph With Arrows
-=============================
-In this example we draw a graph with arrows using the Fruchterman-Reingold layout. You must have matplotlib installed for this to work.
+Draw a Directed Graph
+=====================
+
+In this example we draw a directed graph using the Fruchterman-Reingold layout.
+You must have matplotlib installed for this to work.
 """
 
 # %%
@@ -15,14 +17,13 @@ import matplotlib.pyplot as plt
 # %%
 # Creating a graph
 
-g = jgrapht.create_graph(directed=False, weighted=True,)
+g = jgrapht.create_graph(directed=True, weighted=True)
 
 # %%
 # Add some vertices
 
 for i in range(0, 10):
     g.add_vertex()
-
 
 # %%
 # and some edges

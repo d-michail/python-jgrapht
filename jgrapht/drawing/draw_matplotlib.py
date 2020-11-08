@@ -1,4 +1,10 @@
-import jgrapht
+
+from ..algorithms.drawing import (
+    circular_layout_2d,
+    random_layout_2d,
+    fruchterman_reingold_layout_2d,
+    fruchterman_reingold_indexed_layout_2d
+)
 
 
 def draw(g, position=None, ax=None, **kwds):
@@ -17,7 +23,6 @@ def draw(g, position=None, ax=None, **kwds):
     :type ax: Matplotlib Axes object, optional
     :type kwargs: optional keywords
 
-
     Examples
     --------
     >>> import matplotlib.pyplot as plt
@@ -30,6 +35,7 @@ def draw(g, position=None, ax=None, **kwds):
     >>> drawing.draw(g)
     >>> drawing.draw(g,position=drawing.layout(g,pos_layout="random_layout")) #use random layout
     >>> plt.show()
+
     See Also
     --------
     draw_jgrapht()
@@ -37,7 +43,6 @@ def draw(g, position=None, ax=None, **kwds):
     draw_jgrapht_edges()
     draw_jgrapht_labels()
     draw_jgrapht_edge_labels()
-    -----
     """
     try:
         import matplotlib.pyplot as plt
@@ -59,7 +64,7 @@ def draw(g, position=None, ax=None, **kwds):
     if position is None:
         position = layout(g)
 
-    draw_jgrapht(g, position=position, ax=ax, node_label=node_label, **kwds)
+    draw_jgrapht(g, position=position, ax=ax, **kwds)
     ax.set_axis_off()
     plt.draw_if_interactive()
 
@@ -75,9 +80,8 @@ def draw_jgrapht(
 ):
     """Draw the graph g using Matplotlib.
 
-     Draw the graph with Matplotlib with options for node positions,
-     labeling, titles, and many other drawing features.
-     See draw() for simple drawing without labels or axes.
+    Draw the graph with Matplotlib with options for node positions, labeling, titles, and many
+    other drawing features. See draw() for simple drawing without labels or axes.
 
     :param g: graph
     :param axis: Draw the axes
@@ -106,6 +110,7 @@ def draw_jgrapht(
     >>> drawing.draw_jgrapht(g)
     >>> drawing.draw_jgrapht(g,position=drawing.layout(g,pos_layout="random_layout")) #use random layout
     >>> plt.show()
+
     See Also
     --------
     draw()
@@ -113,7 +118,6 @@ def draw_jgrapht(
     draw_jgrapht_edges()
     draw_jgrapht_labels()
     draw_jgrapht_edge_labels()
-    -----
     """
     try:
         import matplotlib.pyplot as plt
@@ -172,7 +176,7 @@ def draw_jgrapht_vertices(
 ):
     """Draw the nodes of the graph g.
 
-    This draws only the nodes of the graph g.
+    This method draws only the nodes of the graph g.
 
     :param g: graph
     :param position: vertices positions
@@ -208,8 +212,6 @@ def draw_jgrapht_vertices(
     :type ax: Matplotlib Axes object, optional
     :type kwargs: optional keywords
 
-
-
     Examples
     --------
     >>> import matplotlib.pyplot as plt
@@ -229,9 +231,6 @@ def draw_jgrapht_vertices(
     draw_jgrapht_edges()
     draw_jgrapht_labels()
     draw_jgrapht_edge_labels()
-
-    -----
-
     """
     try:
         import matplotlib.pyplot as plt
@@ -370,13 +369,6 @@ def draw_jgrapht_edges(
     :type ax: Matplotlib Axes object, optional
     :type kwargs: optional keywords
 
-
-
-    Notes
-    -----
-    arrows are drawn at the head end.Arrows can be
-    turned off with keyword arrows=False.
-
     Examples
     --------
     >>> import matplotlib.pyplot as plt
@@ -388,6 +380,7 @@ def draw_jgrapht_edges(
     >>> e4 = g.add_edge(0, 4)
     >>> drawing.draw_jgrapht_edges(g, position=drawing.layout(g,pos_layout="random_layout"),arrow=True) #use random layout
     >>> plt.show()
+
     See Also
     --------
     draw()
@@ -395,8 +388,6 @@ def draw_jgrapht_edges(
     draw_jgrapht_vertices()
     draw_jgrapht_labels()
     draw_jgrapht_edge_labels()
-    -----
-
     """
 
     try:
@@ -565,7 +556,7 @@ def draw_jgrapht_labels(
 ):
     """Draw node labels on the graph g.
 
-     This draws only the nodes labels of the graph g.
+    This method draws only the nodes labels of the graph g.
 
     :param g: graph
     :param position: vertices positions
@@ -594,7 +585,6 @@ def draw_jgrapht_labels(
     :type ax: Matplotlib Axes object, optional
     :type kwargs: optional keywords
 
-
     Examples
     --------
     >>> import matplotlib.pyplot as plt
@@ -614,8 +604,6 @@ def draw_jgrapht_labels(
     draw_jgrapht_vertices()
     draw_jgrapht_edges()
     draw_jgrapht_edge_labels()
-    -----
-
     """
     try:
         import matplotlib.pyplot as plt
@@ -678,7 +666,7 @@ def draw_jgrapht_edge_labels(
 ):
     """Draw edge labels on the graph g.
 
-     This draws only the edge labels of the graph g.
+    This method draws only the edge labels of the graph g.
 
     :param g: graph
     :param position: vertices positions
@@ -709,8 +697,6 @@ def draw_jgrapht_edge_labels(
     :type edge_names: list, optional
     :type kwargs: optional keywords
 
-
-
     Examples
     --------
     >>> import matplotlib.pyplot as plt
@@ -729,8 +715,6 @@ def draw_jgrapht_edge_labels(
     draw_jgrapht_vertices()
     draw_jgrapht_edges()
     draw_jgrapht_labels()
-    -----
-
     """
     try:
         import matplotlib.pyplot as plt
@@ -819,7 +803,6 @@ def layout(
     :type pos_layout:  dictionary, optional
     :type kwargs: optional keywords
 
-
     Examples
     --------
     >>> import matplotlib.pyplot as plt
@@ -832,46 +815,48 @@ def layout(
     >>> pos = drawing.layout(g, seed=10,pos_layout="random_layout") #use random layout
     >>> drawing.draw_jgrapht(g, position=pos)
     >>> plt.show()
-     -----
-
     """
-    position = []
+    positions = []
+
     model = {
-        None: jgrapht.algorithms.drawing.circular_layout_2d(
-            g, area, radius=radius, vertex_comparator_cb=vertex_comparator_cb
-        ),
-        "circular_layout": jgrapht.algorithms.drawing.circular_layout_2d(
-            g, area, radius=radius, vertex_comparator_cb=vertex_comparator_cb
-        ),
-        "random_layout": jgrapht.algorithms.drawing.random_layout_2d(
-            g, area, seed=seed
-        ),
+        None: circular_layout_2d,
+        "circular_layout": circular_layout_2d,
+        "random_layout": random_layout_2d,
+        "fruchterman_reingold_layout": fruchterman_reingold_layout_2d,
+        "fruchterman_reingold_indexed_layout": fruchterman_reingold_indexed_layout_2d,
     }
-    if model.get(pos_layout) is None:
-        model = {
-            "fruchterman_reingold_layout": jgrapht.algorithms.drawing.fruchterman_reingold_layout_2d(
-                g,
-                area,
-                iterations=iterations,
-                normalization_factor=normalization_factor,
-                seed=seed,
-            ),
-            "fruchterman_reingold_indexed_layout": jgrapht.algorithms.drawing.fruchterman_reingold_indexed_layout_2d(
-                g,
-                area,
-                iterations=iterations,
-                normalization_factor=normalization_factor,
-                seed=seed,
-                theta=theta,
-                tolerance=tolerance,
-            ),
-        }
+
+    args = {
+        None: {
+            "radius": radius,
+            "vertex_comparator_cb": vertex_comparator_cb,
+        },
+        "circular_layout": {
+            "radius": radius,
+            "vertex_comparator_cb": vertex_comparator_cb,
+        },
+        "random_layout": {"seed": seed},
+        "fruchterman_reingold_layout": {
+            "iterations": iterations,
+            "normalization_factor": normalization_factor,
+            "seed": seed,
+        },
+        "fruchterman_reingold_indexed_layout": {
+            "iterations": iterations,
+            "normalization_factor": normalization_factor,
+            "seed": seed,
+            "theta": theta,
+            "tolerance": tolerance,
+        },
+    }
+
+    alg = model.get(pos_layout)(g, area, **args.get(pos_layout))
 
     for i, vertex in enumerate(g.vertices):
-        x, y = model.get(pos_layout).get_vertex_location(i)
-        position.append((x, y))
+        x, y = alg.get_vertex_location(i)
+        positions.append((x, y))
 
-    return position
+    return positions
 
 
 def draw_circular(
@@ -883,7 +868,8 @@ def draw_circular(
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
     :param axis: Draw the axes
     :param radius: radius of the circle
-    :param vertex_comparator_cb: a vertex comparator. Should be a function whichaccepts two vertices v1, v2 and return -1, 0, 1 depending of whether v1 < v2, v1 == v2, orv1 > v2 in the ordering
+    :param vertex_comparator_cb: a vertex comparator. Should be a function which accepts two vertices
+           v1, v2 and return -1, 0, 1 depending of whether v1 < v2, v1 == v2, or v1 > v2 in the ordering
     :param kwargs: See draw_jgrapht,draw_jgrapht_vertices,
      draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
     :type axis: bool, optional (default=True)
@@ -898,10 +884,8 @@ def draw_circular(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>>drawing.draw_circular(g)
+    >>> drawing.draw_circular(g)
     >>> plt.show()
-     -----
-
     """
     draw_jgrapht(
         g,
@@ -920,7 +904,6 @@ def draw_circular(
 def draw_random(g, area=(0, 0, 10, 10), seed=None, axis=True, **kwargs):
     """Draw the graph g with a random layout.
 
-
     :param g: graph
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
     :param seed: seed for the random number generator. If None the system time is used
@@ -929,10 +912,6 @@ def draw_random(g, area=(0, 0, 10, 10), seed=None, axis=True, **kwargs):
      draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
     :type axis: bool, optional (default=True)
     :type kwargs: optional keywords
-    
-    
-    
-    
 
     Examples
     --------
@@ -943,9 +922,8 @@ def draw_random(g, area=(0, 0, 10, 10), seed=None, axis=True, **kwargs):
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>>drawing.draw_random(g)
+    >>> drawing.draw_random(g)
     >>> plt.show()
-     -----
     """
     draw_jgrapht(
         g,
@@ -967,7 +945,7 @@ def draw_fruchterman_reingold(
     axis=True,
     **kwargs
 ):
-    """Draw the graph g with a fruchterman reingold layout.
+    """Draw the graph g with a Fruchterman-Reingold layout.
 
     :param g: graph
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
@@ -975,7 +953,7 @@ def draw_fruchterman_reingold(
     :param normalization_factor: normalization factor when calculating optimal distance
     :param seed: seed for the random number generator. If None the system time is used
     :param theta: parameter for approximation using the Barnes-Hut technique
-    :param indexed: if the user wants fruchterman_reingold_layout or fruchterman_reingold_indexed_layout
+    :param indexed: whether to use the Barnes-Hut approximation
     :param axis: Draw the axes
     :param tolerance: tolerance used when comparing floating point values
     :param kwargs: See draw_jgrapht,draw_jgrapht_vertices,
@@ -993,9 +971,8 @@ def draw_fruchterman_reingold(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>>drawing.draw_fruchterman_reingold(g)
+    >>> drawing.draw_fruchterman_reingold(g)
     >>> plt.show()
-     -----
     """
     if indexed is True:
         draw_jgrapht(

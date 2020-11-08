@@ -21,4 +21,4 @@ API
    generators
    io/index
    utils  
-   drawing/draw_matplotlib
+   drawing/index

@@ -2,9 +2,10 @@
 
 """
 Draw A House
-=============================
+============
 
-In this example we draw a graph using our positions for the nodes.You must have matplotlib installed for this to work.
+In this example we draw a graph using custom positions for the nodes. You must have matplotlib
+installed for this to work.
 """
 
 # %%
@@ -13,11 +14,10 @@ import jgrapht
 import jgrapht.drawing.draw_matplotlib as drawing
 import matplotlib.pyplot as plt
 
-
 # %%
 # Creating a graph
 
-g = jgrapht.create_graph(directed=False, weighted=True,)
+g = jgrapht.create_graph(directed=False, weighted=True)
 
 
 # %%
@@ -25,7 +25,6 @@ g = jgrapht.create_graph(directed=False, weighted=True,)
 
 for i in range(0, 5):
     g.add_vertex()
-
 
 # %%
 # and some edges

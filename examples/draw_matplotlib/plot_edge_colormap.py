@@ -3,7 +3,9 @@
 """
 Edge Colormap
 =============================
-In this example we draw a graph with matplotlib, color by degree using the Circular layout.You must have matplotlib installed for this to work.
+In this example we draw a graph with matplotlib using the circular layout. We 
+also use vertex degree to color some edges. You must have matplotlib installed for
+this to work.
 """
 
 # %%
@@ -12,8 +14,6 @@ import jgrapht
 import jgrapht.drawing.draw_matplotlib as drawing
 import matplotlib.pyplot as plt
 import numpy as np
-
-
 # %%
 # Creating a graph
 
@@ -42,14 +42,14 @@ e9 = g.add_edge(0, 9)
 
 # %%
 # Compute the position of the vertices
-pos = drawing.layout(g, pos_layout="circular_layout")
+position = drawing.layout(g, pos_layout="circular_layout")
 # %%
 # Draw the graph using the node labels and the edge line width and edge colormap
 drawing.draw_jgrapht(
     g,
-    position=pos,
+    position=position,
     edge_linewidth=6,
-    edge_cmap=plt.cm.Blues(np.linspace(0, 1, len(g.edges))),
+    edge_cmap=plt.cm.Blues(np.linspace(0.1, 1, len(g.edges))),
     axis=False,
 )
 plt.show()

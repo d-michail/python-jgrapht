@@ -4,7 +4,8 @@
 Node Colormap
 =============================
 
-In this example we draw a graph with matplotlib, color by degree. You must have matplotlib for this to work.
+In this example we draw a graph with matplotlib using the circular layout,
+coloring vertices by degree. You must have matplotlib for this to work.
 """
 
 # %%
@@ -22,7 +23,6 @@ g = jgrapht.create_graph(directed=False, weighted=True,)
 
 # %%
 # Add some vertices
-
 g.add_vertex()
 g.add_vertex()
 g.add_vertex()
@@ -37,7 +37,6 @@ g.add_vertex()
 
 # %%
 # and some edges
-
 e1 = g.add_edge(0, 1)
 e2 = g.add_edge(0, 2)
 e3 = g.add_edge(0, 3)
