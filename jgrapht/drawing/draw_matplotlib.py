@@ -388,6 +388,7 @@ def draw_jgrapht_edges(
     draw_jgrapht_vertices()
     draw_jgrapht_labels()
     draw_jgrapht_edge_labels()
+    -----
     """
 
     try:
@@ -715,6 +716,7 @@ def draw_jgrapht_edge_labels(
     draw_jgrapht_vertices()
     draw_jgrapht_edges()
     draw_jgrapht_labels()
+    --------
     """
     try:
         import matplotlib.pyplot as plt
