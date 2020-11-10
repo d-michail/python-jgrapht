@@ -7,7 +7,7 @@ from ..algorithms.drawing import (
 )
 
 
-def draw(g, position=None, ax=None, **kwds):
+def draw(g, positions=None, ax=None, **kwds):
     """Draw a graph using Matplotlib.
 
     Draws the graph as a simple representation with no node labels or edge labels
@@ -15,7 +15,7 @@ def draw(g, position=None, ax=None, **kwds):
     See draw_jgrapht() for more full-featured drawing that allows title, axis labels etc.
 
     :param g: graph
-    :param position: vertices positions
+    :param positions: vertices positions
     :param kwargs: See draw_jgrapht_vertices,
      draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
     :param ax: Draw the graph in the specified Matplotlib axes
@@ -32,8 +32,7 @@ def draw(g, position=None, ax=None, **kwds):
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> drawing.draw(g)
-    >>> drawing.draw(g,position=drawing.layout(g, name="random"))
+    >>> drawing.draw(g, positions=drawing.layout(g, name="random"))
     >>> plt.show()
 
     See Also
@@ -61,17 +60,17 @@ def draw(g, position=None, ax=None, **kwds):
         else:
             ax = cf.gca()
 
-    if position is None:
-        position = layout(g)
+    if positions is None:
+        positions = layout(g)
 
-    draw_jgrapht(g, position=position, ax=ax, **kwds)
+    draw_jgrapht(g, positions=positions, ax=ax, **kwds)
     ax.set_axis_off()
     plt.draw_if_interactive()
 
 
 def draw_jgrapht(
     g,
-    position=None,
+    positions=None,
     arrow=False,
     node_label=True,
     edge_label=False,
@@ -86,12 +85,11 @@ def draw_jgrapht(
     :param g: graph
     :param axis: Draw the axes
     :param node_label: whether to draw node labels
-    :param position: vertices positions
+    :param positions: vertices positions
     :param edge_label: whether to draw edge labels
     :param arrow: whether to draw arrowheads
-    :param kwargs: See draw_jgrapht_vertices,
-     draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
-    :type position: dictionary, optional
+    :param kwargs: additional arguments to pass through
+    :type positions: dictionary, optional
     :type arrow: bool, optional (default=True)
     :type axis: bool, optional (default=True)
     :type node_label: bool, optional (default=False)
@@ -107,8 +105,7 @@ def draw_jgrapht(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> drawing.draw_jgrapht(g)
-    >>> drawing.draw_jgrapht(g,position=drawing.layout(g, name="random"))
+    >>> drawing.draw_jgrapht(g, positions=drawing.layout(g, name="random"))
     >>> plt.show()
 
     See Also
@@ -128,16 +125,16 @@ def draw_jgrapht(
         raise
     show = 0
 
-    if position is None:
-        position = layout(g)
+    if positions is None:
+        positions = layout(g)
 
     draw_jgrapht_vertices(
-        g, position, node_label=node_label, axis=axis, show=show, **kwargs
+        g, positions, node_label=node_label, axis=axis, show=show, **kwargs
     )
 
     draw_jgrapht_edges(
         g,
-        position,
+        positions=positions,
         arrow=arrow,
         edge_label=edge_label,
         node_label=node_label,
@@ -147,17 +144,17 @@ def draw_jgrapht(
     )
 
     if node_label is True:
-        draw_jgrapht_labels(g, position=position, axis=axis, **kwargs)
+        draw_jgrapht_labels(g, positions=positions, axis=axis, **kwargs)
 
     if edge_label is True:
-        draw_jgrapht_edge_labels(g, position=position, axis=axis, **kwargs)
+        draw_jgrapht_edge_labels(g, positions=positions, axis=axis, **kwargs)
 
     plt.draw_if_interactive()
 
 
 def draw_jgrapht_vertices(
     g,
-    position,
+    positions,
     axis=False,
     node_linewidths=1.0,
     node_title=None,
@@ -179,7 +176,7 @@ def draw_jgrapht_vertices(
     This method draws only the nodes of the graph g.
 
     :param g: graph
-    :param position: vertices positions
+    :param positions: vertices positions
     :param axis: Draw the axes
     :param node_linewidths: Line width of symbol border
     :param node_title: Label for graph legend
@@ -190,12 +187,12 @@ def draw_jgrapht_vertices(
     :param vmax: Maximum for node colormap scaling positions
     :param node_shape: The shape of the node
     :param node_edge_color: color the edge of node
-    :param node_list: Draw only specified nodes
+    :param node_list: Draw only the nodes in this list
     :param node_label: whether to draw node labels
     :param alpha: The node transparency
     :param ax: Draw the graph in the specified Matplotlib axes
-    :param kwargs: See draw_jgrapht
-    :type position: dictionary, optional
+    :param kwargs: Additional arguments to pass through
+    :type positions: dictionary, optional
     :type axis: bool, optional (default=False)
     :type node_linewidths: float,(default:1.0)
     :type node_title: list, optional  (default:None)
@@ -221,7 +218,7 @@ def draw_jgrapht_vertices(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> drawing.draw_jgrapht_vertices(g, position=drawing.layout(g, name="random"))
+    >>> drawing.draw_jgrapht_vertices(g, positions=drawing.layout(g, name="random"))
     >>> plt.show()
 
     See Also
@@ -251,17 +248,14 @@ def draw_jgrapht_vertices(
         ax.set_axis_off()
 
     if node_list is not None:
-        positionlist = list()
-        for i, vertex in enumerate(node_list):
-            positionlist.append(list(zip(position[node_list[i]])))
-        positionlist = list(zip(*positionlist))
+        x, y = zip(*[positions[v] for v in node_list])
     else:
-        positionlist = list(zip(*position))
+        x, y = zip(*positions)
 
     # Draw nodes
     ax.scatter(
-        positionlist[0],
-        positionlist[1],
+        x,
+        y,
         c=node_color,
         alpha=alpha,
         linewidth=node_linewidths,
@@ -298,12 +292,12 @@ def draw_jgrapht_vertices(
 
     show = kwargs.get("show")  # check if the user called only the function of nodes
     if show is None and node_label is True:
-        draw_jgrapht_labels(g, position, axis=axis, **kwargs)
+        draw_jgrapht_labels(g, positions, axis=axis, **kwargs)
 
 
 def draw_jgrapht_edges(
     g,
-    position,
+    positions,
     edge_color="black",
     edge_cmap=None,
     edge_linewidth=1.3,
@@ -329,7 +323,7 @@ def draw_jgrapht_edges(
     This draws only the edges of the graph g.
 
     :param g: graph
-    :param position: vertices positions
+    :param positions: vertices positions
     :param edge_color: Edge color
     :param edge_cmap: Colormap for mapping intensities of edges
     :param edge_linewidth: Line width of edges
@@ -349,7 +343,7 @@ def draw_jgrapht_edges(
     :param bbox: Matplotlib bbox,specify text box shape and colors.
     :param ax: Draw the graph in the specified Matplotlib axes
     :param kwargs: See draw_jgrapht
-    :type position: dictionary, optional
+    :type positions: dictionary, optional
     :type edge_color: color or array of colors (default='black')
     :type edge_cmap: list, optional (default:edge_cmap=None | examle: edge_cmap =plt.cm.Greens(np.linspace(edge_vmin,edge_vmax,len(g.edges))))
     :type axis: bool, optional (default=False)
@@ -378,7 +372,7 @@ def draw_jgrapht_edges(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> drawing.draw_jgrapht_edges(g, position=drawing.layout(g, name="random"),arrow=True) #use random layout
+    >>> drawing.draw_jgrapht_edges(g, positions=drawing.layout(g, name="random"), arrow=True)
     >>> plt.show()
 
     See Also
@@ -424,7 +418,7 @@ def draw_jgrapht_edges(
         if show is None:  # if  the user called only this function
             draw_jgrapht_edges(
                 g,
-                position=position,
+                positions=positions,
                 edge_label=edge_label,
                 edge_cmap=None,
                 edge_color="",
@@ -449,7 +443,7 @@ def draw_jgrapht_edges(
             kwargs.pop("show")  # delete from kwargs the parameter show
             draw_jgrapht(
                 g,
-                position=position,
+                positions=positions,
                 edge_cmap=None,
                 edge_color="",
                 edge_linewidth=edge_linewidth,
@@ -476,8 +470,8 @@ def draw_jgrapht_edges(
     for e in g.edges:
         v1 = g.edge_source(e)
         v2 = g.edge_target(e)
-        x1, y1 = position[v1]
-        x2, y2 = position[v2]
+        x1, y1 = positions[v1]
+        x2, y2 = positions[v2]
 
         if edge_list is None:
             edge_list = []
@@ -536,12 +530,12 @@ def draw_jgrapht_edges(
                     )
 
     if show is None and edge_label is True:
-        draw_jgrapht_edge_labels(g, position, axis=axis, **kwargs)
+        draw_jgrapht_edge_labels(g, positions, axis=axis, **kwargs)
 
 
 def draw_jgrapht_labels(
     g,
-    position,
+    positions,
     node_fontsize=12,
     node_font_color="black",
     node_font_weight="normal",
@@ -560,7 +554,7 @@ def draw_jgrapht_labels(
     This method draws only the nodes labels of the graph g.
 
     :param g: graph
-    :param position: vertices positions
+    :param positions: vertices positions
     :param node_fontsize: Font size for text labels
     :param node_font_color: Font color string
     :param node_font_weight: Font weight ( 'normal' | 'bold' | 'heavy' | 'light' | 'ultralight')
@@ -573,7 +567,7 @@ def draw_jgrapht_labels(
     :param bbox: Matplotlib bbox,specify text box shape and colors.
     :param node_names: node names for edges
     :param kwargs: See draw_jgrapht
-    :type position: dictionary, optional
+    :type positions: dictionary, optional
     :type node_fontsize: int, optional (default=12)
     :type node_font_color: string, optional (default='black')
     :type node_font_weight: string, optional (default='normal')
@@ -595,7 +589,7 @@ def draw_jgrapht_labels(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> drawing.draw_jgrapht_labels(g, position=drawing.layout(g, name="random"))
+    >>> drawing.draw_jgrapht_labels(g, positions=drawing.layout(g, name="random"))
     >>> plt.show()
 
     See Also
@@ -626,16 +620,16 @@ def draw_jgrapht_labels(
 
     if node_names is None:
         node_names = {}
-        for i, vertex in enumerate(g.vertices):
-            node_names.update({i: i})
+        for v, vertex in enumerate(g.vertices):
+            node_names.update({v: v})
 
-    for i in node_names:
+    for v in node_names:
         # Draw the labels
-        x, y = position[i]
+        x, y = positions[v]
         ax.text(
             x,
             y,
-            node_names[i],
+            node_names[v],
             fontsize=node_fontsize,
             horizontalalignment=horizontalalignment,
             verticalalignment=verticalalignment,
@@ -650,7 +644,7 @@ def draw_jgrapht_labels(
 
 def draw_jgrapht_edge_labels(
     g,
-    position,
+    positions,
     horizontalalignment="center",
     verticalalignment="center",
     edge_fontsize=12,
@@ -670,7 +664,7 @@ def draw_jgrapht_edge_labels(
     This method draws only the edge labels of the graph g.
 
     :param g: graph
-    :param position: vertices positions
+    :param positions: vertices positions
     :param edge_fontsize: Font size for text labels
     :param edge_font_color: Font color string
     :param edge_font_weight: Font weight ( 'normal' | 'bold' | 'heavy' | 'light' | 'ultralight')
@@ -684,7 +678,7 @@ def draw_jgrapht_edge_labels(
     :param edge_names: label names for edges
     :param draw_edge_weights: weights of edges
     :param kwargs: See draw_jgrapht
-    :type position: dictionary, optional
+    :type positions: dictionary, optional
     :type edge_fontsize: int, optional (default=12)
     :type edge_font_color: string, optional (default='black')
     :type edge_font_weight: string, optional (default='normal')
@@ -751,11 +745,11 @@ def draw_jgrapht_edge_labels(
     for e in edge_names:
         v1 = g.edge_source(e)
         v2 = g.edge_target(e)
-        x1, y1 = position[v1]
-        x2, y2 = position[v2]
+        x1, y1 = positions[v1]
+        x2, y2 = positions[v2]
 
         # Draw the labels
-        x, y = position[e]
+        x, y = positions[e]
         ax.text(
             (x1 + x2) / 2,
             (y1 + y2) / 2,
