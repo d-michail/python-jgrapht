@@ -48,14 +48,21 @@ Documentation
 
 .. toctree::
    :maxdepth: 2
+   :caption: JGraphT
 
    install
    tutorials/index
    api/index
-   auto_examples/index
    license
    citing
    credits
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Example galleries
+
+   auto_examples/index
+
 
 Indices and tables
 ==================

@@ -11,8 +11,6 @@ API
    :maxdepth: 2
 
    introduction
-   interfaces
-   graph_factories
    views
    traversals
    properties
@@ -21,3 +19,6 @@ API
    generators
    io/index
    utils
+   graph_factories
+   interfaces
+   drawing/index
