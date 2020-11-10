@@ -33,7 +33,7 @@ def draw(g, position=None, ax=None, **kwds):
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
     >>> drawing.draw(g)
-    >>> drawing.draw(g,position=drawing.layout(g,pos_layout="random_layout")) #use random layout
+    >>> drawing.draw(g,position=drawing.layout(g, name="random"))
     >>> plt.show()
 
     See Also
@@ -108,7 +108,7 @@ def draw_jgrapht(
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
     >>> drawing.draw_jgrapht(g)
-    >>> drawing.draw_jgrapht(g,position=drawing.layout(g,pos_layout="random_layout")) #use random layout
+    >>> drawing.draw_jgrapht(g,position=drawing.layout(g, name="random"))
     >>> plt.show()
 
     See Also
@@ -221,7 +221,7 @@ def draw_jgrapht_vertices(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> drawing.draw_jgrapht_vertices(g, position=drawing.layout(g,pos_layout="random_layout")) #use random layout
+    >>> drawing.draw_jgrapht_vertices(g, position=drawing.layout(g, name="random"))
     >>> plt.show()
 
     See Also
@@ -378,7 +378,7 @@ def draw_jgrapht_edges(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> drawing.draw_jgrapht_edges(g, position=drawing.layout(g,pos_layout="random_layout"),arrow=True) #use random layout
+    >>> drawing.draw_jgrapht_edges(g, position=drawing.layout(g, name="random"),arrow=True) #use random layout
     >>> plt.show()
 
     See Also
@@ -595,7 +595,7 @@ def draw_jgrapht_labels(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> drawing.draw_jgrapht_labels(g, position=drawing.layout(g,pos_layout="random_layout")) #use random layout
+    >>> drawing.draw_jgrapht_labels(g, position=drawing.layout(g, name="random"))
     >>> plt.show()
 
     See Also
@@ -707,7 +707,7 @@ def draw_jgrapht_edge_labels(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> drawing.draw_jgrapht_edge_labels(g, position=drawing.layout(g,pos_layout="random_layout")) #use random layout
+    >>> drawing.draw_jgrapht_edge_labels(g, position=drawing.layout(g, name="random")) 
     >>> plt.show()
     See Also
     --------
@@ -776,33 +776,17 @@ def draw_jgrapht_edge_labels(
 
 def layout(
     g,
-    pos_layout=None,
+    name=None,
     area=(0, 0, 10, 10),
-    seed=None,
-    radius=5,
-    vertex_comparator_cb=None,
-    iterations=100,
-    normalization_factor=0.5,
-    theta=0.5,
-    tolerance=None,
     **kwargs
 ):
-    """positioning algorithms for graph drawing.
+    """Compute the positions of vertices for a particular layout.
 
     :param g: the graph to draw
-    :param pos_layout: circular_layout|random_layout|fruchterman_reingold_layout|fruchterman_reingold_indexed_layout
+    :param name: circular|random|fruchterman_reingold|fruchterman_reingold_indexed
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
-    :param seed: seed for the random number generator. If None the system time is used
-    :param radius: radius of the circle
-    :param vertex_comparator_cb: a vertex comparator. Should be a function which accepts
-        two vertices v1, v2 and return -1, 0, 1 depending of whether v1 < v2, v1 == v2, or
-        v1 > v2 in the ordering
-    :param iterations: number of iterations
-    :param normalization_factor: normalization factor when calculating optimal distance
-    :param theta: parameter for approximation using the Barnes-Hut technique
-    :param tolerance: tolerance used when comparing floating point values
-    :param kwargs: See draw_jgrapht
-    :type pos_layout:  dictionary, optional
+    :param kwargs: additional arguments passed through
+    :type name: name of the layout
     :type kwargs: optional keywords
 
     Examples
@@ -814,48 +798,43 @@ def layout(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> pos = drawing.layout(g, seed=10,pos_layout="random_layout") #use random layout
-    >>> drawing.draw_jgrapht(g, position=pos)
+    >>> position = drawing.layout(g, seed=10, name="random")
+    >>> drawing.draw_jgrapht(g, position=position)
     >>> plt.show()
     """
     positions = []
+    
+    if name == 'random':
+        alg = random_layout_2d
+        args = {
+            'seed': kwargs.get('seed')
+        }
+    elif name == 'fruchterman_reingold': 
+        alg = fruchterman_reingold_layout_2d
+        args = {
+            'iterations': kwargs.get('iterations', 100),
+            'normalization_factor': kwargs.get('normalization_factor', 0.5),
+            'seed': kwargs.get('seed')
+        }
+    elif name == 'fruchterman_reingold_indexed': 
+        alg = fruchterman_reingold_indexed_layout_2d
+        args = {
+            'iterations': kwargs.get('iterations', 100),
+            'normalization_factor': kwargs.get('normalization_factor', 0.5),
+            'seed': kwargs.get('seed'),
+            'theta': kwargs.get('theta', 0.5),
+            'tolerance': kwargs.get('tolerance'),
+        }
+    else: 
+        alg = circular_layout_2d
+        args = {
+            'radius': kwargs.get('radius', 5),
+            'vertex_comparator_cb': kwargs.get('vertex_comparator_cb', None)
+        }
 
-    model = {
-        None: circular_layout_2d,
-        "circular_layout": circular_layout_2d,
-        "random_layout": random_layout_2d,
-        "fruchterman_reingold_layout": fruchterman_reingold_layout_2d,
-        "fruchterman_reingold_indexed_layout": fruchterman_reingold_indexed_layout_2d,
-    }
-
-    args = {
-        None: {
-            "radius": radius,
-            "vertex_comparator_cb": vertex_comparator_cb,
-        },
-        "circular_layout": {
-            "radius": radius,
-            "vertex_comparator_cb": vertex_comparator_cb,
-        },
-        "random_layout": {"seed": seed},
-        "fruchterman_reingold_layout": {
-            "iterations": iterations,
-            "normalization_factor": normalization_factor,
-            "seed": seed,
-        },
-        "fruchterman_reingold_indexed_layout": {
-            "iterations": iterations,
-            "normalization_factor": normalization_factor,
-            "seed": seed,
-            "theta": theta,
-            "tolerance": tolerance,
-        },
-    }
-
-    alg = model.get(pos_layout)(g, area, **args.get(pos_layout))
-
+    result = alg(g, area, **args)
     for i, vertex in enumerate(g.vertices):
-        x, y = alg.get_vertex_location(i)
+        x, y = result.get_vertex_location(i)
         positions.append((x, y))
 
     return positions
@@ -868,12 +847,11 @@ def draw_circular(
 
     :param g: graph
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
-    :param axis: Draw the axes
+    :param axis: whether to draw the axes
     :param radius: radius of the circle
     :param vertex_comparator_cb: a vertex comparator. Should be a function which accepts two vertices
-           v1, v2 and return -1, 0, 1 depending of whether v1 < v2, v1 == v2, or v1 > v2 in the ordering
-    :param kwargs: See draw_jgrapht,draw_jgrapht_vertices,
-     draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
+           v1, v2 and returns -1, 0, 1 depending of whether v1 < v2, v1 == v2, or v1 > v2 in the ordering
+    :param kwargs: additional arguments passed through
     :type axis: bool, optional (default=True)
     :type kwargs: optional keywords
 
@@ -894,7 +872,7 @@ def draw_circular(
         layout(
             g,
             area=area,
-            pos_layout="circular_layout",
+            name="circular",
             radius=radius,
             vertex_comparator_cb=vertex_comparator_cb,
         ),
@@ -909,9 +887,8 @@ def draw_random(g, area=(0, 0, 10, 10), seed=None, axis=True, **kwargs):
     :param g: graph
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
     :param seed: seed for the random number generator. If None the system time is used
-    :param axis: Draw the axes
-    :param kwargs: See draw_jgrapht,draw_jgrapht_vertices,
-     draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
+    :param axis: whether to draw the axes
+    :param kwargs: additional arguments passed through
     :type axis: bool, optional (default=True)
     :type kwargs: optional keywords
 
@@ -929,7 +906,7 @@ def draw_random(g, area=(0, 0, 10, 10), seed=None, axis=True, **kwargs):
     """
     draw_jgrapht(
         g,
-        layout(g, area=area, pos_layout="random_layout", seed=seed),
+        layout(g, area=area, name="random", seed=seed),
         axis=axis,
         **kwargs,
     )
@@ -956,10 +933,9 @@ def draw_fruchterman_reingold(
     :param seed: seed for the random number generator. If None the system time is used
     :param theta: parameter for approximation using the Barnes-Hut technique
     :param indexed: whether to use the Barnes-Hut approximation
-    :param axis: Draw the axes
+    :param axis: whether to draw the axes
     :param tolerance: tolerance used when comparing floating point values
-    :param kwargs: See draw_jgrapht,draw_jgrapht_vertices,
-     draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
+    :param kwargs: additional arguments passed through
     :type indexed: bool, optional (default=False)
     :type axis: bool, optional (default=True)
     :type kwargs: optional keywords
@@ -982,7 +958,7 @@ def draw_fruchterman_reingold(
             layout(
                 g,
                 area=area,
-                pos_layout="fruchterman_reingold_indexed_layout",
+                name="fruchterman_reingold_indexed",
                 iterations=iterations,
                 normalization_factor=normalization_factor,
                 seed=seed,
@@ -998,7 +974,7 @@ def draw_fruchterman_reingold(
             layout(
                 g,
                 area=area,
-                pos_layout="fruchterman_reingold_layout",
+                name="fruchterman_reingold",
                 iterations=iterations,
                 normalization_factor=normalization_factor,
                 seed=seed,
