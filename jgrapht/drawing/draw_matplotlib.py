@@ -16,10 +16,9 @@ def draw(g, positions=None, ax=None, **kwds):
 
     :param g: graph
     :param positions: vertices positions
-    :param kwargs: See draw_jgrapht_vertices,
-     draw_jgrapht_edges,draw_jgrapht_labels,draw_jgrapht_edge_labels
-    :param ax: Draw the graph in the specified Matplotlib axes
-    :type position: dictionary, optional
+    :param kwargs: additional arguments to pass through
+    :param ax: draw the graph in the specified Matplotlib axes
+    :type positions: dictionary, optional
     :type ax: Matplotlib Axes object, optional
     :type kwargs: optional keywords
 
@@ -40,7 +39,7 @@ def draw(g, positions=None, ax=None, **kwds):
     draw_jgrapht()
     draw_jgrapht_vertices()
     draw_jgrapht_edges()
-    draw_jgrapht_labels()
+    draw_jgrapht_vertex_labels()
     draw_jgrapht_edge_labels()
     """
     try:
@@ -113,7 +112,7 @@ def draw_jgrapht(
     draw()
     draw_jgrapht_vertices()
     draw_jgrapht_edges()
-    draw_jgrapht_labels()
+    draw_jgrapht_vertex_labels()
     draw_jgrapht_edge_labels()
     """
     try:
@@ -144,7 +143,7 @@ def draw_jgrapht(
     )
 
     if node_label is True:
-        draw_jgrapht_labels(g, positions=positions, axis=axis, **kwargs)
+        draw_jgrapht_vertex_labels(g, positions=positions, axis=axis, **kwargs)
 
     if edge_label is True:
         draw_jgrapht_edge_labels(g, positions=positions, axis=axis, **kwargs)
@@ -226,7 +225,7 @@ def draw_jgrapht_vertices(
     draw()
     draw_jgrapht()
     draw_jgrapht_edges()
-    draw_jgrapht_labels()
+    draw_jgrapht_vertex_labels()
     draw_jgrapht_edge_labels()
     """
     try:
@@ -292,7 +291,7 @@ def draw_jgrapht_vertices(
 
     show = kwargs.get("show")  # check if the user called only the function of nodes
     if show is None and node_label is True:
-        draw_jgrapht_labels(g, positions, axis=axis, **kwargs)
+        draw_jgrapht_vertex_labels(g, positions, axis=axis, **kwargs)
 
 
 def draw_jgrapht_edges(
@@ -345,7 +344,7 @@ def draw_jgrapht_edges(
     :param kwargs: See draw_jgrapht
     :type positions: dictionary, optional
     :type edge_color: color or array of colors (default='black')
-    :type edge_cmap: list, optional (default:edge_cmap=None | examle: edge_cmap =plt.cm.Greens(np.linspace(edge_vmin,edge_vmax,len(g.edges))))
+    :type edge_cmap: list, optional (default:edge_cmap=None | example: edge_cmap =plt.cm.Greens(np.linspace(edge_vmin,edge_vmax,len(g.edges))))
     :type axis: bool, optional (default=False)
     :type edge_linewidth: float, optional (default=1.3)
     :type line_style: string, optional (default='solid')
@@ -380,7 +379,7 @@ def draw_jgrapht_edges(
     draw()
     draw_jgrapht()
     draw_jgrapht_vertices()
-    draw_jgrapht_labels()
+    draw_jgrapht_vertex_labels()
     draw_jgrapht_edge_labels()
     -----
     """
@@ -533,9 +532,10 @@ def draw_jgrapht_edges(
         draw_jgrapht_edge_labels(g, positions, axis=axis, **kwargs)
 
 
-def draw_jgrapht_labels(
+def draw_jgrapht_vertex_labels(
     g,
     positions,
+    labels=None,
     node_fontsize=12,
     node_font_color="black",
     node_font_weight="normal",
@@ -546,7 +546,6 @@ def draw_jgrapht_labels(
     axis=False,
     bbox=dict(boxstyle="round,pad=0.03", ec="white", fc="white"),
     ax=None,
-    node_names=None,
     **kwargs
 ):
     """Draw node labels on the graph g.
@@ -555,6 +554,7 @@ def draw_jgrapht_labels(
 
     :param g: graph
     :param positions: vertices positions
+    :param labels: vertices labels
     :param node_fontsize: Font size for text labels
     :param node_font_color: Font color string
     :param node_font_weight: Font weight ( 'normal' | 'bold' | 'heavy' | 'light' | 'ultralight')
@@ -565,16 +565,15 @@ def draw_jgrapht_labels(
     :param axis: Draw the axes
     :param ax: Draw the graph in the specified Matplotlib axes
     :param bbox: Matplotlib bbox,specify text box shape and colors.
-    :param node_names: node names for edges
     :param kwargs: See draw_jgrapht
     :type positions: dictionary, optional
+    :type labels: list, optional
     :type node_fontsize: int, optional (default=12)
     :type node_font_color: string, optional (default='black')
     :type node_font_weight: string, optional (default='normal')
     :type node_font_family: string, optional (default='sans-serif')
     :type verticalalignment: {'center', 'top', 'bottom', 'baseline', 'center_baseline'}
     :type horizontalalignment: {'center', 'right', 'left'}
-    :type node_names: list, optional
     :type alpha: float, optional (default=1.0)
     :type axis: bool, optional (default=False)
     :type ax: Matplotlib Axes object, optional
@@ -589,7 +588,7 @@ def draw_jgrapht_labels(
     >>> e2 = g.add_edge(0, 2)
     >>> e3 = g.add_edge(0, 3)
     >>> e4 = g.add_edge(0, 4)
-    >>> drawing.draw_jgrapht_labels(g, positions=drawing.layout(g, name="random"))
+    >>> drawing.draw_jgrapht_vertex_labels(g, positions=drawing.layout(g, name="random"))
     >>> plt.show()
 
     See Also
@@ -618,18 +617,18 @@ def draw_jgrapht_labels(
     if not axis:
         ax.set_axis_off()
 
-    if node_names is None:
-        node_names = {}
-        for v, vertex in enumerate(g.vertices):
-            node_names.update({v: v})
+    if labels is None:
+        labels = {}
+        for v in g.vertices:
+            labels.update({v: str(v)})
 
-    for v in node_names:
-        # Draw the labels
+    # Draw the labels
+    for v, label in labels.items():
         x, y = positions[v]
         ax.text(
             x,
             y,
-            node_names[v],
+            label,
             fontsize=node_fontsize,
             horizontalalignment=horizontalalignment,
             verticalalignment=verticalalignment,
@@ -645,6 +644,8 @@ def draw_jgrapht_labels(
 def draw_jgrapht_edge_labels(
     g,
     positions,
+    labels=None,
+    draw_edge_weights=False,
     horizontalalignment="center",
     verticalalignment="center",
     edge_fontsize=12,
@@ -655,8 +656,6 @@ def draw_jgrapht_edge_labels(
     axis=False,
     bbox=dict(boxstyle="round,pad=0.03", ec="white", fc="white"),
     ax=None,
-    edge_names=None,
-    draw_edge_weights=False,
     **kwargs
 ):
     """Draw edge labels on the graph g.
@@ -665,6 +664,8 @@ def draw_jgrapht_edge_labels(
 
     :param g: graph
     :param positions: vertices positions
+    :param labels: edge labels
+    :param draw_edge_weights: whether to use edge weights as edge labels
     :param edge_fontsize: Font size for text labels
     :param edge_font_color: Font color string
     :param edge_font_weight: Font weight ( 'normal' | 'bold' | 'heavy' | 'light' | 'ultralight')
@@ -675,10 +676,10 @@ def draw_jgrapht_edge_labels(
     :param bbox: Matplotlib bbox,specify text box shape and colors.
     :param ax: Draw the graph in the specified Matplotlib axes
     :param axis: Draw the axes
-    :param edge_names: label names for edges
-    :param draw_edge_weights: weights of edges
     :param kwargs: See draw_jgrapht
     :type positions: dictionary, optional
+    :type labels: list, optional
+    :type draw_edge_weights: bool, optional (default=False)
     :type edge_fontsize: int, optional (default=12)
     :type edge_font_color: string, optional (default='black')
     :type edge_font_weight: string, optional (default='normal')
@@ -688,8 +689,6 @@ def draw_jgrapht_edge_labels(
     :type edge_font_family: string, optional (default='sans-serif')
     :type verticalalignment: {'center', 'top', 'bottom', 'baseline', 'center_baseline'}
     :type horizontalalignment: {'center', 'right', 'left'}
-    :type draw_edge_weights: bool, optional (default=False)
-    :type edge_names: list, optional
     :type kwargs: optional keywords
 
     Examples
@@ -709,7 +708,7 @@ def draw_jgrapht_edge_labels(
     draw_jgrapht()
     draw_jgrapht_vertices()
     draw_jgrapht_edges()
-    draw_jgrapht_labels()
+    draw_jgrapht_vertex_labels()
     --------
     """
     try:
@@ -733,27 +732,26 @@ def draw_jgrapht_edge_labels(
     if not axis:
         ax.set_axis_off()
 
-    if edge_names is None:
-        edge_names = {}
+    if labels is None:
+        labels = {}
         if draw_edge_weights is True:
             for e in g.edges:
-                edge_names.update({e: g.get_edge_weight(e)})
+                labels.update({e: g.get_edge_weight(e)})
         else:
             for e in g.edges:
-                edge_names.update({e: e})
+                labels.update({e: str(e)})
 
-    for e in edge_names:
-        v1 = g.edge_source(e)
-        v2 = g.edge_target(e)
-        x1, y1 = positions[v1]
-        x2, y2 = positions[v2]
+    # Draw the labels
+    for e, label in labels.items():
+        v = g.edge_source(e)
+        u = g.edge_target(e)
+        x1, y1 = positions[v]
+        x2, y2 = positions[u]
 
-        # Draw the labels
-        x, y = positions[e]
         ax.text(
             (x1 + x2) / 2,
             (y1 + y2) / 2,
-            edge_names[e],
+            label,
             fontsize=edge_fontsize,
             horizontalalignment=horizontalalignment,
             verticalalignment=verticalalignment,
@@ -946,32 +944,25 @@ def draw_fruchterman_reingold(
     >>> drawing.draw_fruchterman_reingold(g)
     >>> plt.show()
     """
-    if indexed is True:
-        draw_jgrapht(
+    extra_args = {
+        'area':area,
+        'name':'fruchterman_reingold',
+        'iterations':iterations,
+        'normalization_factor':normalization_factor,
+        'seed':seed
+    }
+    if indexed: 
+        extra_args.update({
+            'name':'fruchterman_reingold_indexed',
+            'theta':theta,
+            'tolerance':tolerance
+        })
+
+    draw_jgrapht(
             g,
             layout(
                 g,
-                area=area,
-                name="fruchterman_reingold_indexed",
-                iterations=iterations,
-                normalization_factor=normalization_factor,
-                seed=seed,
-                theta=theta,
-                tolerance=tolerance,
-            ),
-            axis=axis,
-            **kwargs,
-        )
-    else:
-        draw_jgrapht(
-            g,
-            layout(
-                g,
-                area=area,
-                name="fruchterman_reingold",
-                iterations=iterations,
-                normalization_factor=normalization_factor,
-                seed=seed,
+                **extra_args
             ),
             axis=axis,
             **kwargs,
