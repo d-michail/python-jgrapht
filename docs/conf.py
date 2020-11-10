@@ -224,6 +224,7 @@ sphinx_gallery_conf = {
     'subsection_order': ExplicitOrder(
         [
             '../examples/algorithms',
+            '../examples/io',
             '../examples/draw_matplotlib',
         ]
     ),

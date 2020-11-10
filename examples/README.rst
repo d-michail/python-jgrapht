@@ -4,7 +4,7 @@
 Examples
 ========
 
-.. _general_examples
+.. _general_examples:
 
 This gallery shows basic usages of the Python-JGraphT library.
 

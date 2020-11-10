@@ -1,8 +1,8 @@
 
-.. _draw_matplotlib_examples:
+.. _general_examples/draw_matplotlib:
 
-Drawing With Matplotlib
-=======================
+Drawing with Matplotlib
+-----------------------
 
 This gallery shows basic usages of the drawing functionality.
 
