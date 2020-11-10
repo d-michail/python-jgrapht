@@ -11,10 +11,12 @@ In this example we create an undirected graph and compute a minimum spanning tre
 # %%
 # Start by importing the package
 
+import random
 import jgrapht
 import jgrapht.generators as gen
 import jgrapht.algorithms.spanning as spanning
-import random
+import jgrapht.drawing.draw_matplotlib as drawing
+import matplotlib.pyplot as plt
 
 # %%
 # Creating a graph is done using the factory method. We create an undirected 
@@ -27,8 +29,7 @@ g = jgrapht.create_graph(directed=False, weighted=True)
 # ring of 30 vertices each connected to its 4 nearest neighbors and rewiring with 
 # probability 0.1.
 
-gen.watts_strogatz_graph(g, 30, 4, 0.1, seed=17)
-
+gen.watts_strogatz_graph(g, 10, 4, 0.2, seed=17)
 
 # %%
 # We also assign some random weights from [0, 1) to the edges. 
@@ -54,3 +55,9 @@ mst_weight, mst_tree = spanning.prim(g)
 print('mst weight: {}'.format(mst_weight))
 print('mst tree: {}'.format(mst_tree))
 
+# %%
+# Ploting the graph 
+#
+position = drawing.layout(g, pos_layout="fruchterman_reingold_layout")
+drawing.draw_jgrapht(g, position=position, axis=False)
+plt.show()
