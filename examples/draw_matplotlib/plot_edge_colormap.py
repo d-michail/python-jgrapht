@@ -42,12 +42,12 @@ e9 = g.add_edge(0, 9)
 
 # %%
 # Compute the position of the vertices
-position = drawing.layout(g, pos_layout="circular_layout")
+positions = drawing.layout(g, name="circular")
 # %%
 # Draw the graph using the node labels and the edge line width and edge colormap
 drawing.draw_jgrapht(
     g,
-    position=position,
+    positions=positions,
     edge_linewidth=6,
     edge_cmap=plt.cm.Blues(np.linspace(0.1, 1, len(g.edges))),
     axis=False,

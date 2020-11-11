@@ -18,70 +18,61 @@ import matplotlib.pyplot as plt
 
 g = jgrapht.create_graph(directed=False, weighted=True)
 
-
 # %%
 # Add some vertices
 
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-
+for v in range(10):
+    g.add_vertex(v)
 
 # %%
 # and some edges
 
-e1 = g.add_edge(0, 1)
-e2 = g.add_edge(0, 2)
-e3 = g.add_edge(0, 3)
-e4 = g.add_edge(0, 4)
-e5 = g.add_edge(0, 5)
-e6 = g.add_edge(0, 6)
-e7 = g.add_edge(0, 7)
-e8 = g.add_edge(0, 8)
-e9 = g.add_edge(0, 9)
+e0 = g.add_edge(0, 1)
+e1 = g.add_edge(0, 2)
+e2 = g.add_edge(0, 3)
+e3 = g.add_edge(0, 4)
+e4 = g.add_edge(0, 5)
+e5 = g.add_edge(0, 6)
+e6 = g.add_edge(0, 7)
+e7 = g.add_edge(0, 8)
+e8 = g.add_edge(0, 9)
+
 
 # %%
 # Compute the position of the vertices
-pos = draw_matplotlib.layout(g, seed=10,pos_layout="fruchterman_reingold_layout")
+positions = draw_matplotlib.layout(g, seed=10, name="fruchterman_reingold")
 # %%
 # Draw the graph
 
-# Draw nodes with node list and node title
+# Draw vertices with title
 draw_matplotlib.draw_jgrapht_vertices(
-    g, position=pos, node_list=(0, 1, 2, 3, 4), node_title="green nodes"
+    g, positions=positions, node_list=(0, 1, 2, 3, 4), node_title="green nodes"
 )
 draw_matplotlib.draw_jgrapht_vertices(
-    g, position=pos, node_list=(5, 6, 7, 8, 9), node_color="red", node_title="red nodes"
+    g, positions=positions, node_list=(5, 6, 7, 8, 9), node_color="red", node_title="red nodes"
 )
 
 # Draw the edges with edge list, edge color and edge title
 draw_matplotlib.draw_jgrapht_edges(
     g,
-    position=pos,
-    edge_list=(0, 1, 2, 3, 4),
+    positions=positions,
+    edge_list=(e0, e1, e2, e3, e4),
     edge_color="orange",
     edge_title="orange edges",
 )
 draw_matplotlib.draw_jgrapht_edges(
     g,
-    position=pos,
-    edge_list=(5, 6, 7, 8, 9),
+    positions=positions,
+    edge_list=(e5, e6, e7, e8),
     edge_color="blue",
     edge_title="blue edges",
 )
 
-# Draw the node labels with custom node names
-draw_matplotlib.draw_jgrapht_labels(
+# Draw the vertex labels with custom vertex names
+draw_matplotlib.draw_jgrapht_vertex_labels(
     g,
-    position=pos,
-    node_names={
+    positions=positions,
+    labels={
         0: "a",
         1: "b",
         2: "c",
@@ -98,7 +89,7 @@ draw_matplotlib.draw_jgrapht_labels(
 # Draw the edge labels with custom edge names
 draw_matplotlib.draw_jgrapht_edge_labels(
     g,
-    position=pos,
+    positions=positions,
     edge_names={0: "a", 1: "b", 2: "c", 3: "d", 4: "e", 5: "f", 6: "g", 7: "h", 8: "i"},
 )
 

@@ -42,9 +42,9 @@ e10 = g.add_edge(1, 2)
 
 # %%
 # Compute the position of the vertices
-pos = drawing.layout(g, seed=10, pos_layout="fruchterman_reingold_layout")
+positions = drawing.layout(g, seed=10, name="fruchterman_reingold")
 
 # %%
 # Draw the graph using the node labels and the edge labels
-drawing.draw_jgrapht(g, position=pos, edge_label=True, axis=False)
+drawing.draw_jgrapht(g, position=positions, edge_labels=True, axis=False)
 plt.show()

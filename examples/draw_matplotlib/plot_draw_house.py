@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """
-Draw A House
+Draw a house
 ============
 
-In this example we draw a graph using custom positions for the nodes. You must have matplotlib
-installed for this to work.
+In this example we draw a graph using custom positions for the nodes.
+You must have matplotlib installed for this to work.
 """
 
 # %%
@@ -38,21 +38,21 @@ e4 = g.add_edge(3, 4)
 
 # %%
 # Compute the position of the vertices
-pos = [(0, 0), (1, 0), (0, 1), (1, 1), (0.5, 2.0)]
+positions = [(0, 0), (1, 0), (0, 1), (1, 1), (0.5, 2.0)]
 # %%
 # Draw the graph
 
 # Draw the nodes using the node list and node color
 drawing.draw_jgrapht_vertices(
-    g, position=pos, node_list=(0, 1, 2, 3), node_color="green"
+    g, positions=positions, node_list=(0, 1, 2, 3), node_color="green"
 )
 
 # Draw the nodes using the node list, node color and node shape
 drawing.draw_jgrapht_vertices(
-    g, position=pos, node_list=[4], node_color="red", node_shape="^"
+    g, positions=positions, node_list=[4], node_color="red", node_shape="^"
 )
 
 # Draw the edges using edge color
-drawing.draw_jgrapht_edges(g, position=pos, edge_color="orange")
+drawing.draw_jgrapht_edges(g, positions=positions, edge_color="orange")
 plt.tight_layout()
 plt.show()

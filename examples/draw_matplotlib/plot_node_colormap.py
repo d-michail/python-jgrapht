@@ -23,16 +23,8 @@ g = jgrapht.create_graph(directed=False, weighted=True,)
 
 # %%
 # Add some vertices
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
-g.add_vertex()
+for v in range(10):
+    g.add_vertex(v)
 
 
 # %%
@@ -49,14 +41,14 @@ e9 = g.add_edge(0, 9)
 
 # %%
 # Compute the position of the vertices
-pos = draw_matplotlib.layout(g, pos_layout="circular_layout")
+positions = draw_matplotlib.layout(g, name="circular")
 
 # %%
 # Draw the graph using the node labels,edge labels and node colormap
 draw_matplotlib.draw_jgrapht(
     g,
-    position=pos,
-    edge_label=True,
+    positions=positions,
+    edge_labels=True,
     node_color=range(len(g.vertices)),
     node_cmap=plt.cm.Oranges,
     axis=False,
