@@ -4,7 +4,7 @@
 Draw a house
 ============
 
-In this example we draw a graph using custom positions for the nodes.
+In this example we draw a graph using custom positions for the vertexs.
 You must have matplotlib installed for this to work.
 """
 
@@ -42,17 +42,18 @@ positions = [(0, 0), (1, 0), (0, 1), (1, 1), (0.5, 2.0)]
 # %%
 # Draw the graph
 
-# Draw the nodes using the node list and node color
+# Draw the vertexs using the vertex list and vertex color
 drawing.draw_jgrapht_vertices(
-    g, positions=positions, node_list=(0, 1, 2, 3), node_color="green"
+    g, positions=positions, vertex_list=(0, 1, 2, 3), vertex_color="green"
 )
 
-# Draw the nodes using the node list, node color and node shape
+# Draw the vertexs using the vertex list, vertex color and vertex shape
 drawing.draw_jgrapht_vertices(
-    g, positions=positions, node_list=[4], node_color="red", node_shape="^"
+    g, positions=positions, vertex_list=[4], vertex_color="red", vertex_shape="^"
 )
 
 # Draw the edges using edge color
 drawing.draw_jgrapht_edges(g, positions=positions, edge_color="orange")
+
 plt.tight_layout()
 plt.show()

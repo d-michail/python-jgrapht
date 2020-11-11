@@ -100,3 +100,24 @@ def test_anyhashableg_prim():
     assert mst_w == 3.0
     assert set(mst_edges) == {e1, e2}
     
+def test_result_with_difference(): 
+    g = build_graph()
+    mst_weight, mst_tree = spanning.prim(g)
+
+    non_mst_edges = g.edges - set(mst_tree)
+
+    # test that our intermediate set results, property implement
+    # method _from_iterable
+
+    assert non_mst_edges == { 9, 10, 11, 12, 13, 14, 15, 16, 17 }
+
+def test_result_with_difference_symmetric(): 
+    g = build_graph()
+    mst_weight, mst_tree = spanning.prim(g)
+
+    non_mst_edges = g.edges - set(mst_tree)
+
+    # test that our intermediate set results, property implement
+    # method _from_iterable
+
+    assert non_mst_edges == { 9, 10, 11, 12, 13, 14, 15, 16, 17 }

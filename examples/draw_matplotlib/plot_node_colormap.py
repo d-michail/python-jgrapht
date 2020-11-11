@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Node Colormap
-=============================
+Vertex Colormap
+===============
 
 In this example we draw a graph with matplotlib using the circular layout,
 coloring vertices by degree. You must have matplotlib for this to work.
@@ -44,13 +44,14 @@ e9 = g.add_edge(0, 9)
 positions = draw_matplotlib.layout(g, name="circular")
 
 # %%
-# Draw the graph using the node labels,edge labels and node colormap
+# Draw the graph using the vertex labels, edge labels and vertex colormap
 draw_matplotlib.draw_jgrapht(
     g,
     positions=positions,
-    edge_labels=True,
-    node_color=range(len(g.vertices)),
-    node_cmap=plt.cm.Oranges,
+    vertex_labels={v: v for v in g.vertices},
+    edge_labels={e: e for e in g.edges},
+    vertex_color=range(len(g.vertices)),
+    vertex_cmap=plt.cm.Oranges,
     axis=False,
 )
 plt.show()

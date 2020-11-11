@@ -45,6 +45,8 @@ e10 = g.add_edge(1, 2)
 positions = drawing.layout(g, seed=10, name="fruchterman_reingold")
 
 # %%
-# Draw the graph using the node labels and the edge labels
-drawing.draw_jgrapht(g, position=positions, edge_labels=True, axis=False)
+# Draw the graph using the vertex labels and the edge labels
+vertex_labels = {v:v for v in g.vertices}
+edge_labels = {e:e for e in g.edges}
+drawing.draw_jgrapht(g, position=positions, vertex_labels=vertex_labels, edge_labels=edge_labels, axis=False)
 plt.show()

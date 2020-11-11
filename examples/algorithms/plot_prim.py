@@ -46,18 +46,27 @@ print(g)
 # %%
 # Then, we execute Prim's algorithm.
 
-mst_weight, mst_tree = spanning.prim(g)
+mst_weight, mst_edges = spanning.prim(g)
 
 # %%
 # The result is a tuple which contains the weight and the minimum spanning tree.
 # 
 
 print('mst weight: {}'.format(mst_weight))
-print('mst tree: {}'.format(mst_tree))
+print('mst tree: {}'.format(mst_edges))
 
 # %%
-# Ploting the graph 
+# Ploting the graph with highlighted the MST edges
 #
-position = drawing.layout(g, pos_layout="fruchterman_reingold_layout")
-drawing.draw_jgrapht(g, position=position, axis=False)
+positions = drawing.layout(g, name="fruchterman_reingold", seed=17)
+drawing.draw_jgrapht_vertices(g, positions=positions)
+
+non_mst_edges = g.edges - mst_edges
+
+drawing.draw_jgrapht_edges(g, positions=positions, edge_list=mst_edges,
+    edge_color='blue', edge_linewidth=3)
+
+drawing.draw_jgrapht_edges(g, positions=positions, edge_list=non_mst_edges,
+    edge_linewidth=1)
+
 plt.show()

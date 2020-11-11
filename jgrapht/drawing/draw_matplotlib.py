@@ -665,7 +665,11 @@ def draw_jgrapht_edge_labels(
         labels = {}
         if draw_edge_weights:
             for e in g.edges:
-                labels.update({e: g.get_edge_weight(e)})
+                weight = '{:.2f}'.format(g.get_edge_weight(e))
+                #weight = 1.0
+                #print(weight)
+                #labels.update({e: weight})
+                labels.update({e: weight})
         else:
             for e in g.edges:
                 labels.update({e: str(e)})

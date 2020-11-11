@@ -161,6 +161,10 @@ class _JGraphTGraph(_HandleWrapper, Graph):
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
 
+        @classmethod
+        def _from_iterable(cls, it):
+            return set(it)    
+
     class _EdgeSet(Set):
         """Wrapper around the edges of a JGraphT graph"""
 
@@ -182,6 +186,10 @@ class _JGraphTGraph(_HandleWrapper, Graph):
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
+
+        @classmethod
+        def _from_iterable(cls, it):
+            return set(it)
 
     def __repr__(self):
         return "_JGraphTGraph(%r)" % self._handle

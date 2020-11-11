@@ -379,6 +379,10 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
 
+        @classmethod
+        def _from_iterable(cls, it):
+            return set(it)    
+
     class _AnyHashableGraphEdgeSet(Set):
         def __init__(self, graph):
             self._graph = graph
@@ -404,6 +408,10 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
+
+        @classmethod
+        def _from_iterable(cls, it):
+            return set(it)    
 
     class _VertexAttributes(MutableMapping):
         """Wrapper around a dictionary to ensure vertex existence."""
