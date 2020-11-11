@@ -9,7 +9,7 @@ from ..algorithms.drawing import (
 def draw(g, positions=None, ax=None, **kwds):
     """Draw a graph using Matplotlib.
 
-    Draws the graph as a simple representation with no node labels or edge labels
+    Draws the graph as a simple representation with no vertex labels or edge labels
     and using the full Matplotlib figure area and no axis labels by default.
     See draw_jgrapht() for more full-featured drawing that allows title, axis labels etc.
 
@@ -68,16 +68,11 @@ def draw(g, positions=None, ax=None, **kwds):
 
 
 def draw_jgrapht(
-    g,
-    positions=None,
-    node_labels=True,
-    edge_labels=False,
-    axis=True,
-    **kwargs
+    g, positions=None, vertex_labels=None, edge_labels=None, axis=True, **kwargs
 ):
     """Draw the graph g using Matplotlib.
 
-    Draw the graph with Matplotlib with options for node positions, labeling, titles, and many
+    Draw the graph with Matplotlib with options for vertex positions, labels, titles, and many
     other drawing features. See draw() for simple drawing without labels or axes.
 
     :param g: graph
@@ -86,8 +81,8 @@ def draw_jgrapht(
     :type positions: dict, optional
     :param axis: Draw the axes
     :type axis: bool, optional (default=True)
-    :param node_labels: whether to draw node labels
-    :type node_labels: bool, optional (default=False)
+    :param vertex_labels: whether to draw vertex labels
+    :type vertex_labels: bool, optional (default=False)
     :param positions: vertices positions
     :param edge_labels: whether to draw edge labels
     :type edge_labels: bool, optional (default=False)
@@ -124,25 +119,26 @@ def draw_jgrapht(
     if positions is None:
         positions = layout(g)
 
-    draw_jgrapht_vertices(
-        g, positions=positions, node_labels=node_labels, axis=axis, show=0, **kwargs
-    )
+    draw_jgrapht_vertices(g, positions=positions, axis=axis, **kwargs)
 
     draw_jgrapht_edges(
         g,
         positions=positions,
         edge_labels=edge_labels,
-        node_labels=node_labels,
+        vertex_labels=vertex_labels,
         axis=axis,
-        show=0,
         **kwargs,
     )
 
-    if node_labels:
-        draw_jgrapht_vertex_labels(g, positions=positions, axis=axis, **kwargs)
+    if vertex_labels is not None:
+        draw_jgrapht_vertex_labels(
+            g, positions=positions, labels=vertex_labels, axis=axis, **kwargs
+        )
 
-    if edge_labels:
-        draw_jgrapht_edge_labels(g, positions=positions, axis=axis, **kwargs)
+    if edge_labels is not None:
+        draw_jgrapht_edge_labels(
+            g, positions=positions, labels=edge_labels, axis=axis, **kwargs
+        )
 
     plt.draw_if_interactive()
 
@@ -150,55 +146,52 @@ def draw_jgrapht(
 def draw_jgrapht_vertices(
     g,
     positions,
+    vertex_list=None,
     axis=False,
-    node_linewidths=1.0,
-    node_title=None,
-    node_size=450,
-    node_color="green",
-    node_cmap=None,
+    vertex_linewidths=1.0,
+    vertex_title=None,
+    vertex_size=450,
+    vertex_color="green",
+    vertex_cmap=None,
     vmin=None,
     vmax=None,
-    node_shape="o",
-    node_edge_color="face",
-    node_list=None,
+    vertex_shape="o",
+    vertex_edge_color="face",
     alpha=1,
-    node_labels=False,
     ax=None,
     **kwargs
 ):
-    """Draw the nodes of the graph g.
+    """Draw the vertices of the graph g.
 
-    This method draws only the nodes of the graph g.
+    This method draws only the vertices of the graph g.
 
     :param g: graph
     :type g: :py:class:`.Graph`
     :param positions: vertices positions
     :type positions: dict, optional
+    :param vertex_list: Draw only the vertices in this list
+    :type vertex_list: list, optional (default: vertex_list=None)
     :param axis: Draw the axes
     :type axis: bool, optional (default=False)
-    :param node_linewidths: Line width of symbol border
-    :type node_linewidths: float,(default:1.0)
-    :param node_title: Label for graph legend
-    :type node_title: list, optional  (default:None)
-    :param node_size: Size of nodes
-    :type node_size: scalar or array, optional (default=500)
-    :param node_color: Node color
-    :type node_color: color or array of colors (default='green')
-    :param node_cmap: Colormap for mapping intensities of nodes
-    :type node_cmap: Matplotlib colormap, optional (default=None | example:node_cmap=plt.cm.Greens)
-    :param vmin: Minimum for node colormap scaling
+    :param vertex_linewidths: Line width of symbol border
+    :type vertex_linewidths: float,(default:1.0)
+    :param vertex_title: Label for graph legend
+    :type vertex_title: list, optional  (default:None)
+    :param vertex_size: Size of vertices
+    :type vertex_size: scalar or array, optional (default=500)
+    :param vertex_color: vertex color
+    :type vertex_color: color or array of colors (default='green')
+    :param vertex_cmap: Colormap for mapping intensities of vertices
+    :type vertex_cmap: Matplotlib colormap, optional (default=None | example:vertex_cmap=plt.cm.Greens)
+    :param vmin: Minimum for vertex colormap scaling
     :type vmin: float, optional (default=None)
-    :param vmax: Maximum for node colormap scaling positions
+    :param vmax: Maximum for vertex colormap scaling positions
     :type vmax: float, optional (default=None)
-    :param node_shape: The shape of the node
-    :type node_shape: string, optional (default='o')
-    :param node_edge_color: color the edge of node
-    :type node_edge_color: string, optional (default='face')
-    :param node_list: Draw only the nodes in this list
-    :type node_list: list, optional (default: node_list=None)
-    :param node_labels: whether to draw node labels
-    :type node_labels: bool, optional (default=False)
-    :param alpha: The node transparency
+    :param vertex_shape: The shape of the vertex
+    :type vertex_shape: string, optional (default='o')
+    :param vertex_edge_color: color the edge of vertex
+    :type vertex_edge_color: string, optional (default='face')
+    :param alpha: The vertex transparency
     :type alpha: float, optional (default=1.0)
     :param ax: Draw the graph in the specified Matplotlib axes
     :type ax: Matplotlib Axes object, optional
@@ -243,30 +236,30 @@ def draw_jgrapht_vertices(
     if axis is False:
         ax.set_axis_off()
 
-    if node_list is not None:
-        x, y = zip(*[positions[v] for v in node_list])
+    if vertex_list is not None:
+        x, y = zip(*[positions[v] for v in vertex_list])
     else:
         x, y = zip(*positions.values())
 
-    # Draw nodes
+    # Draw vertices
     ax.scatter(
         x,
         y,
-        c=node_color,
+        c=vertex_color,
         alpha=alpha,
-        linewidth=node_linewidths,
-        s=node_size,
-        cmap=node_cmap,
+        linewidth=vertex_linewidths,
+        s=vertex_size,
+        cmap=vertex_cmap,
         vmin=vmin,
         vmax=vmax,
-        marker=node_shape,
-        edgecolors=node_edge_color,
+        marker=vertex_shape,
+        edgecolors=vertex_edge_color,
         zorder=2.5,
-        label=node_title,
+        label=vertex_title,
     )
 
-    if node_title is not None:
-        # Draw Legend graph for the nodes
+    if vertex_title is not None:
+        # Draw legend for the vertices
         handles, labels = ax.get_legend_handles_labels()
         unique = [
             (h, l)
@@ -286,15 +279,13 @@ def draw_jgrapht_vertices(
             bbox_to_anchor=(0.5, 1.15),
         )
 
-    show = kwargs.get("show")  # check if the user called only the function of nodes
-    if show is None and node_labels is True:
-        draw_jgrapht_vertex_labels(g, positions, axis=axis, **kwargs)
-
 
 def draw_jgrapht_edges(
     g,
     positions,
     edge_list=None,
+    edge_labels=False,
+    edge_title=None,
     edge_color="black",
     edge_cmap=None,
     edge_linewidth=1.3,
@@ -306,8 +297,6 @@ def draw_jgrapht_edges(
     arrow_head=20,
     alpha=1,
     axis=False,
-    edge_title=None,
-    edge_labels=False,
     connection_style=None,
     bbox=dict(boxstyle="round,pad=0.03", ec="white", fc="white"),
     ax=None,
@@ -403,71 +392,24 @@ def draw_jgrapht_edges(
     if axis is False:
         ax.set_axis_off()
 
-    show = kwargs.get("show")  # check if the user called only the function of edges
-
     if edge_cmap is not None:  # if the user wants color map for the edges
         plt.close()
         plt.rcParams["axes.prop_cycle"] = plt.cycler("color", edge_cmap)
         ax = plt.gca()
-        if show is None:  # if  the user called only this function
-            draw_jgrapht_edges(
-                g,
-                positions=positions,
-                edge_labels=edge_labels,
-                edge_cmap=None,
-                edge_color="",
-                edge_linewidth=edge_linewidth,
-                line_style=line_style,
-                arrow_size=arrow_size,
-                arrows_tyle=arrow_style,
-                arrow_color=arrow_color,
-                edge_list=edge_list,
-                alpha=alpha,
-                axis=axis,
-                edge_title=edge_title,
-                connection_style=connection_style,
-                bbox=bbox,
-                ax=ax,
-                arrow_head=arrow_head,
-                arrow_line=arrow_line,
-                **kwargs,
-            )
-        else:
-            kwargs.pop("show")  # delete from kwargs the parameter show
-            draw_jgrapht(
-                g,
-                positions=positions,
-                edge_cmap=None,
-                edge_color="",
-                edge_linewidth=edge_linewidth,
-                edge_list=edge_list,
-                line_style=line_style,
-                arrow_size=arrow_size,
-                arrow_style=arrow_style,
-                arrow_color=arrow_color,
-                alpha=alpha,
-                axis=axis,
-                ax=ax,
-                edge_title=edge_title,
-                connection_style=connection_style,
-                edge_labels=edge_labels,
-                bbox=bbox,
-                arrow_head=arrow_head,
-                arrow_line=arrow_line,
-                **kwargs,
-            )
-        return
+        edge_color = ""
+        edge_cmap = None
 
-    if edge_list is None: 
+    if edge_list is None:
         edge_list = g.edges
 
+    # draw edges
     for e in edge_list:
         v = g.edge_source(e)
         u = g.edge_target(e)
         x1, y1 = positions[v]
         x2, y2 = positions[u]
 
-        if g.type.directed:  # Draw  arrows
+        if g.type.directed:
             a = FancyArrowPatch(
                 (x1, y1),
                 (x2, y2),
@@ -485,7 +427,6 @@ def draw_jgrapht_edges(
             ax.add_patch(a)
             ax.autoscale_view()
         else:
-            # Draw  edges
             ax.plot(
                 (x1, x2),
                 (y1, y2),
@@ -496,7 +437,7 @@ def draw_jgrapht_edges(
                 label=edge_title,
             )
 
-    if edge_title is not None:  # legend title for the specific edges
+    if edge_title is not None:  # legend title
         handles, labels = ax.get_legend_handles_labels()
         unique = [
             (h, l)
@@ -516,18 +457,15 @@ def draw_jgrapht_edges(
             bbox_to_anchor=(0.5, 1.15),
         )
 
-    if show is None and edge_labels:
-        draw_jgrapht_edge_labels(g, positions, axis=axis, **kwargs)
-
 
 def draw_jgrapht_vertex_labels(
     g,
     positions,
     labels=None,
-    node_fontsize=12,
-    node_font_color="black",
-    node_font_weight="normal",
-    node_font_family="sans-serif",
+    vertex_fontsize=12,
+    vertex_font_color="black",
+    vertex_font_weight="normal",
+    vertex_font_family="sans-serif",
     horizontalalignment="center",
     verticalalignment="center",
     alpha=1,
@@ -536,24 +474,24 @@ def draw_jgrapht_vertex_labels(
     ax=None,
     **kwargs
 ):
-    """Draw node labels on the graph g.
+    """Draw vertex labels on the graph g.
 
-    This method draws only the nodes labels of the graph g.
+    This method draws only the vertices labels of the graph g.
 
     :param g: graph
-    :type g: :py:class:`.Graph`            
+    :type g: :py:class:`.Graph`
     :param positions: vertices positions
     :type positions: dict
     :param labels: vertices labels
     :type labels: dict, optional
-    :param node_fontsize: Font size for text labels
-    :type node_fontsize: int, optional (default=12)
-    :param node_font_color: Font color string
-    :type node_font_color: string, optional (default='black')
-    :param node_font_weight: Font weight ( 'normal' | 'bold' | 'heavy' | 'light' | 'ultralight')
-    :type node_font_weight: string, optional (default='normal')
-    :param node_font_family: Font family ('cursive', 'fantasy', 'monospace', 'sans', 'sans serif', 'sans-serif', 'serif')
-    :type node_font_family: string, optional (default='sans-serif')
+    :param vertex_fontsize: Font size for text labels
+    :type vertex_fontsize: int, optional (default=12)
+    :param vertex_font_color: Font color string
+    :type vertex_font_color: string, optional (default='black')
+    :param vertex_font_weight: Font weight ( 'normal' | 'bold' | 'heavy' | 'light' | 'ultralight')
+    :type vertex_font_weight: string, optional (default='normal')
+    :param vertex_font_family: Font family ('cursive', 'fantasy', 'monospace', 'sans', 'sans serif', 'sans-serif', 'serif')
+    :type vertex_font_family: string, optional (default='sans-serif')
     :param verticalalignment: Vertical alignment (default='center')
     :type verticalalignment: {'center', 'top', 'bottom', 'baseline', 'center_baseline'}
     :param horizontalalignment: Horizontal alignment (default='center')
@@ -618,13 +556,13 @@ def draw_jgrapht_vertex_labels(
             x,
             y,
             label,
-            fontsize=node_fontsize,
+            fontsize=vertex_fontsize,
             horizontalalignment=horizontalalignment,
             verticalalignment=verticalalignment,
             alpha=alpha,
-            color=node_font_color,
-            weight=node_font_weight,
-            family=node_font_family,
+            color=vertex_font_color,
+            weight=vertex_font_weight,
+            family=vertex_font_family,
             transform=ax.transData,
         )
         ax.plot(x, y)
@@ -652,7 +590,7 @@ def draw_jgrapht_edge_labels(
     This method draws only the edge labels of the graph g.
 
     :param g: graph
-    :type g: :py:class:`.Graph`        
+    :type g: :py:class:`.Graph`
     :param positions: vertices positions
     :type positions: dict
     :param labels: edge labels
@@ -825,7 +763,7 @@ def draw_circular(
     """Draw the graph g with a circular layout
 
     :param g: graph
-    :type g: :py:class:`.Graph`    
+    :type g: :py:class:`.Graph`
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
     :type area: tuple
     :param axis: whether to draw the axes
@@ -917,9 +855,9 @@ def draw_fruchterman_reingold(
     """Draw the graph g with a Fruchterman-Reingold layout.
 
     :param g: graph
-    :type g: :py:class:`.Graph`        
+    :type g: :py:class:`.Graph`
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
-    :type area: tuple    
+    :type area: tuple
     :param iterations: number of iterations
     :type iterations: int
     :param normalization_factor: normalization factor when calculating optimal distance
