@@ -59,13 +59,12 @@ print('mst tree: {}'.format(mst_edges))
 # Ploting the graph with highlighted the MST edges
 #
 positions = drawing.layout(g, name="fruchterman_reingold", seed=17)
+
 drawing.draw_jgrapht_vertices(g, positions=positions)
 
 non_mst_edges = g.edges - mst_edges
-
 drawing.draw_jgrapht_edges(g, positions=positions, edge_list=mst_edges,
     edge_color='blue', edge_linewidth=3)
-
 drawing.draw_jgrapht_edges(g, positions=positions, edge_list=non_mst_edges,
     edge_linewidth=1)
 
