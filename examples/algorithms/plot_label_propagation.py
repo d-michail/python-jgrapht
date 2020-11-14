@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Label Propagation
-=================
+Communities Detection using Label Propagation
+=============================================
 
 In this example we discover communities using label propagation.
 """
