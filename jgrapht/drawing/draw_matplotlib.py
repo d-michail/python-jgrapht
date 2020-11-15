@@ -81,18 +81,17 @@ def draw_jgrapht(
     :type positions: dict, optional
     :param axis: Draw the axes
     :type axis: bool, optional (default=True)
-    :param vertex_labels: whether to draw vertex labels
-    :type vertex_labels: bool, optional (default=False)
-    :param positions: vertices positions
-    :param edge_labels: whether to draw edge labels
-    :type edge_labels: bool, optional (default=False)
+    :param vertex_labels: vertex labels
+    :type vertex_labels: dict, optional (default=None)
+    :param edge_labels: edge labels
+    :type edge_labels: dict, optional (default=None)
     :param kwargs: additional arguments to pass through
-    :type kwargs: optional keywords
+    :type kwargs: dict
 
     Examples
     --------
     >>> import matplotlib.pyplot as plt
-    >>> g = jgrapht.create_graph(directed=False, weighted=True)
+    >>> g = jgrapht.create_graph(directed=False)
     >>> for i in range(0,5):g.add_vertex()
     >>> e1 = g.add_edge(0, 1)
     >>> e2 = g.add_edge(0, 2)
@@ -117,7 +116,7 @@ def draw_jgrapht(
         print("Matplotlib unable to open display")
         raise
     if positions is None:
-        positions = layout(g)
+        positions = layout(g, name=kwargs.get('name'))
 
     draw_jgrapht_vertices(g, positions=positions, axis=axis, **kwargs)
 
@@ -125,7 +124,6 @@ def draw_jgrapht(
         g,
         positions=positions,
         edge_labels=edge_labels,
-        vertex_labels=vertex_labels,
         axis=axis,
         **kwargs,
     )
@@ -161,9 +159,7 @@ def draw_jgrapht_vertices(
     ax=None,
     **kwargs
 ):
-    """Draw the vertices of the graph g.
-
-    This method draws only the vertices of the graph g.
+    """Draw only the vertices of the graph g.
 
     :param g: graph
     :type g: :py:class:`.Graph`
@@ -178,7 +174,7 @@ def draw_jgrapht_vertices(
     :param vertex_title: Label for graph legend
     :type vertex_title: list, optional  (default:None)
     :param vertex_size: Size of vertices
-    :type vertex_size: scalar or array, optional (default=500)
+    :type vertex_size: scalar or array, optional (default=450)
     :param vertex_color: vertex color
     :type vertex_color: color or array of colors (default='green')
     :param vertex_cmap: Colormap for mapping intensities of vertices
@@ -196,12 +192,12 @@ def draw_jgrapht_vertices(
     :param ax: Draw the graph in the specified Matplotlib axes
     :type ax: Matplotlib Axes object, optional
     :param kwargs: Additional arguments to pass through
-    :type kwargs: optional keywords
+    :type kwargs: dict
 
     Examples
     --------
     >>> import matplotlib.pyplot as plt
-    >>> g = jgrapht.create_graph(directed=False, weighted=True)
+    >>> g = jgrapht.create_graph(directed=False)
     >>> for i in range(0,5):g.add_vertex()
     >>> e1 = g.add_edge(0, 1)
     >>> e2 = g.add_edge(0, 2)
@@ -350,7 +346,7 @@ def draw_jgrapht_edges(
     Examples
     --------
     >>> import matplotlib.pyplot as plt
-    >>> g = jgrapht.create_graph(directed=False, weighted=True)
+    >>> g = jgrapht.create_graph(directed=False)
     >>> for i in range(0,5):g.add_vertex()
     >>> e1 = g.add_edge(0, 1)
     >>> e2 = g.add_edge(0, 2)
@@ -403,13 +399,14 @@ def draw_jgrapht_edges(
         edge_list = g.edges
 
     # draw edges
+    is_directed = g.type.directed
     for e in edge_list:
         v = g.edge_source(e)
         u = g.edge_target(e)
         x1, y1 = positions[v]
         x2, y2 = positions[u]
 
-        if g.type.directed:
+        if is_directed:
             a = FancyArrowPatch(
                 (x1, y1),
                 (x2, y2),
@@ -474,16 +471,18 @@ def draw_jgrapht_vertex_labels(
     ax=None,
     **kwargs
 ):
-    """Draw vertex labels on the graph g.
+    """Draw only the vertex labels on the graph g.
 
-    This method draws only the vertices labels of the graph g.
+    If no labels are provided then this method uses the string representation of the vertices. 
+    If the parameter labels is a dictionary, then only labels for the contained vertices are drawn.
+    If labels is a list then labels for all vertices must be provided.
 
     :param g: graph
     :type g: :py:class:`.Graph`
     :param positions: vertices positions
     :type positions: dict
     :param labels: vertices labels
-    :type labels: dict, optional
+    :type labels: dict or list, optional
     :param vertex_fontsize: Font size for text labels
     :type vertex_fontsize: int, optional (default=12)
     :param vertex_font_color: Font color string
@@ -549,8 +548,13 @@ def draw_jgrapht_vertex_labels(
         for v in g.vertices:
             labels.update({v: str(v)})
 
+    try:
+        vertices_and_labels = labels.items()
+    except (AttributeError, KeyError):
+        vertices_and_labels = zip(g.vertices, labels)        
+
     # Draw the labels
-    for v, label in labels.items():
+    for v, label in vertices_and_labels:
         x, y = positions[v]
         ax.text(
             x,
@@ -573,6 +577,7 @@ def draw_jgrapht_edge_labels(
     positions,
     labels=None,
     draw_edge_weights=False,
+    edge_weight_format="{:.2f}",
     horizontalalignment="center",
     verticalalignment="center",
     edge_fontsize=12,
@@ -585,9 +590,12 @@ def draw_jgrapht_edge_labels(
     ax=None,
     **kwargs
 ):
-    """Draw edge labels on the graph g.
+    """Draw only the edge labels on the graph g.
 
-    This method draws only the edge labels of the graph g.
+    If no labels are provided then this method uses the string representation of the edges or the 
+    weight if explicitly requested by the parameters. 
+    If the parameter labels is a dictionary, then only labels for the contained edges are drawn.
+    If labels is a list then labels for all edges must be provided.
 
     :param g: graph
     :type g: :py:class:`.Graph`
@@ -597,6 +605,8 @@ def draw_jgrapht_edge_labels(
     :type labels: dict, optional
     :param draw_edge_weights: whether to use edge weights as edge labels
     :type draw_edge_weights: bool, optional (default=False)
+    :param edge_weight_format: format for the edge weights
+    :type edge_weight_format: str, optional (default=2 decimal points)
     :param edge_fontsize: Font size for text labels
     :type edge_fontsize: int, optional (default=12)
     :param edge_font_color: Font color string
@@ -665,17 +675,19 @@ def draw_jgrapht_edge_labels(
         labels = {}
         if draw_edge_weights:
             for e in g.edges:
-                weight = '{:.2f}'.format(g.get_edge_weight(e))
-                #weight = 1.0
-                #print(weight)
-                #labels.update({e: weight})
+                weight = edge_weight_format.format(g.get_edge_weight(e))
                 labels.update({e: weight})
         else:
             for e in g.edges:
                 labels.update({e: str(e)})
 
+    try:
+        edges_and_labels = labels.items()
+    except (AttributeError, KeyError):
+        edges_and_labels = zip(g.edges, labels)
+
     # Draw the labels
-    for e, label in labels.items():
+    for e, label in edges_and_labels:
         v = g.edge_source(e)
         u = g.edge_target(e)
         x1, y1 = positions[v]
