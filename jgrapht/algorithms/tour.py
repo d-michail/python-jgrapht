@@ -81,7 +81,7 @@ def tsp_nearest_neighbor_heuristic(graph, seed=None):
 
 
 def metric_tsp_christofides(graph):
-    r"""The Christofides 3/2 approximation algorithm for the metric TSP.
+    r"""The Christofides 3/2-approximation algorithm for the metric TSP.
 
     For details see:
 
@@ -101,7 +101,7 @@ def metric_tsp_christofides(graph):
 
 
 def metric_tsp_two_approx(graph):
-    r"""A 2 approximation algorithm for the metrix TSP.
+    r"""A 2-approximation algorithm for the metric TSP.
 
     This is an implementation of the folklore algorithm which returns a depth-first ordering
     of the minimum spanning tree. The algorithm is a 2-approximation assuming that the instance

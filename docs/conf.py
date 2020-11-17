@@ -24,6 +24,8 @@
 import os
 import sys
 
+from sphinx_gallery.sorting import ExplicitOrder
+
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 if not on_rtd:
@@ -218,8 +220,15 @@ texinfo_documents = [
 # Sphinx gallery configuration
 #
 sphinx_gallery_conf = {
-     'examples_dirs': '../examples',   # path to your example scripts
-     'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
-     'download_all_examples': False,
+    'examples_dirs': '../examples',   # path to your example scripts
+    'subsection_order': ExplicitOrder(
+        [
+            '../examples/algorithms',
+            '../examples/io',
+            '../examples/draw_matplotlib',
+        ]
+    ),
+    'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
+    'download_all_examples': False,
 }
 

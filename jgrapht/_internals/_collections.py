@@ -49,6 +49,10 @@ class _JGraphTIntegerSet(_HandleWrapper, Set):
     def __str__(self):
         return "{" + ", ".join(str(x) for x in self) + "}"
 
+    @classmethod
+    def _from_iterable(cls, it):
+        return set(it)            
+
 
 class _JGraphTIntegerMutableSet(_JGraphTIntegerSet, MutableSet):
     """JGraphT Integer Mutable Set"""
@@ -68,6 +72,9 @@ class _JGraphTIntegerMutableSet(_JGraphTIntegerSet, MutableSet):
     def __repr__(self):
         return "_JGraphTIntegerMutableSet(%r)" % self._handle
 
+    @classmethod
+    def _from_iterable(cls, it):
+        return MutableSet(it)
 
 class _JGraphTIntegerSetIterator(_JGraphTObjectIterator):
     """An iterator which returns sets with longs."""
