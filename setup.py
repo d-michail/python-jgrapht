@@ -151,7 +151,7 @@ setup(
         'Intended Audience :: Developers',
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS :: MacOS X',
-        'Operating System :: Microsoft :: Window',
+        'Operating System :: Microsoft :: Windows',
         'License :: OSI Approved :: Eclipse Public License 2.0 (EPL-2.0)',
         'License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)',
         'Programming Language :: C',
