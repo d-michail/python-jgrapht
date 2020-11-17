@@ -21,6 +21,13 @@ def _to_vertex_list(pydot_vertex):
             result.append(_strip(u))
     return result
 
+def _parse_weight(attrs): 
+    try:
+        value = attrs.get('weight')
+        return float(value) if value is not None else None
+    except ValueError:
+        return None
+
 
 def from_pydot(graph):
     """Create a graph from a pydot graph.
@@ -93,6 +100,14 @@ def from_pydot(graph):
                     g.add_vertex(dotv)
 
                 e = g.add_edge(dotu, dotv)
+
+                if 'weight' in attrs:
+                    weight_as_float = _parse_weight(attrs)
+                    if weight_as_float is not None: 
+                        attrs['weight'] = weight_as_float
+                    else:
+                        attrs.pop('weight')
+
                 g.edge_attrs[e].update(**attrs)
 
     return g
@@ -137,6 +152,8 @@ def to_pydot(graph):
         vattrs = {}
         if _is_anyhashable_graph(graph):
             vattrs.update({k: str(v) for k, v in graph.vertex_attrs[v].items()})
+            if 'name' in vattrs: 
+                vattrs.pop('name')
         dotv = pydot.Node(str(v), **vattrs)
         dotg.add_node(dotv)
 
