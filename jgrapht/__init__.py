@@ -215,5 +215,7 @@ from . import (
     generators,
     algorithms,
     io,
+    drawing,
+    convert,
     utils,
 )
