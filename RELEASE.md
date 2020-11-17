@@ -23,9 +23,9 @@
 
  6. Push the new meta-data to github::
 
-    git push --tags upstream master
+    git push --tags origin master
 
-    (where ``upstream`` is the name of the
+    (where ``origin`` is the name of the
     ``github.com:d-michail/python-jgrapht`` repository.)
 
  7. PyPi packages will be uploaded by travis
@@ -39,8 +39,9 @@
  11. Commit and push changes::
 
     git add jgrapht/__version__.py
+    git add requirements/docself.txt
     git commit -m "Bump release version"
-    git push upstream master
+    git push origin master
 
  12. Done
 
