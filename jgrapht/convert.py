@@ -192,22 +192,23 @@ def from_nx(graph, any_hashable=True):
 
         try: 
             for u, v, k in graph.edges(keys=True):
-                result.add_edge(u, v, edge=k)
-                result.edge_attrs[k].update(**graph.edges[u,v,k])
+                e = result.add_edge(u, v)
+                result.edge_attrs[e].update(**graph.edges[u,v,k])
         except TypeError:
             for u, v in graph.edges():
                 e = result.add_edge(u, v)
                 result.edge_attrs[e].update(**graph.edges[u,v])
     else: 
         # copy graph topology only
+        vmap = {}
         for v in graph.nodes:
-            result.add_vertex(vertex=v)
+            vmap[v] = result.add_vertex()
 
         for u, v, d in graph.edges(data=True):
             if 'weight' in d: 
-                result.add_edge(u, v, weight=d['weight'])    
+                result.add_edge(vmap[u], vmap[v], weight=d['weight'])    
             else: 
-                result.add_edge(u, v)
+                result.add_edge(vmap[u], vmap[v])
 
     return result
 
@@ -250,14 +251,14 @@ def to_nx(graph):
                     u = graph.edge_source(e)
                     v = graph.edge_target(e)
                     w = graph.get_edge_weight(e)
-                    result.add_edge(u, v, key=e, weight=w)
-                    result.edges[u, v, e].update(**graph.edge_attrs[e])
+                    k = result.add_edge(u, v, weight=w)
+                    result.edges[u, v, k].update(**graph.edge_attrs[e])
             else:
                 for e in graph.edges:
                     u = graph.edge_source(e)
                     v = graph.edge_target(e)
-                    result.add_edge(u, v, key=e)
-                    result.edges[u, v, e].update(**graph.edge_attrs[e])
+                    k = result.add_edge(u, v)
+                    result.edges[u, v, k].update(**graph.edge_attrs[e])
         else:
             if graph.type.weighted:
                 for e in graph.edges:
