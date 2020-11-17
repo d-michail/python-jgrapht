@@ -25,8 +25,10 @@ def _to_vertex_list(pydot_vertex):
 def from_pydot(graph):
     """Create a graph from a pydot graph.
 
-    :param graph: the graph in pydot format
-    :returns: the graph
+    :param graph: a graph
+    :type graph: pydot graph
+    :returns: a new graph
+    :rtype: jgrapht graph
     """
 
     allows_parallel_edges = not graph.get_strict(None)
@@ -99,8 +101,10 @@ def from_pydot(graph):
 def to_pydot(graph):
     """Convert a graph to a pydot graph.
 
-    :param graph: the graph
-    :returns: the graph in pydot format
+    :param graph: a graph
+    :type graph: jgrapht graph
+    :returns: a new graph
+    :rtype: pydot graph
     """
     try:
         import pydot
@@ -152,13 +156,14 @@ def to_pydot(graph):
 def from_nx(graph, any_hashable=True):
     """Create a graph from a NetworkX graph.
 
-    :param graph: the graph in nx format
+    :param graph: a graph
     :type graph: nx graph
     :param any_hashable: if true the returned graph uses the same objects as the nx graph,
         otherwise integers are used. In the later case a renumbering is performed independently from 
         any possible ordering in the original graph.
     :type any_hashable: boolean
-    :returns: the graph
+    :returns: a new graph
+    :type: jgrapht graph
     """
     try:
         import networkx as nx
@@ -210,9 +215,9 @@ def from_nx(graph, any_hashable=True):
 def to_nx(graph):
     """Create a NetworkX graph from a graph.
 
-    :param graph: the graph
-    :type graph: graph
-    :returns: a graph
+    :param graph: a graph
+    :type graph: jgrapht graph
+    :returns: a new graph
     :rtype: NetworkX graph
     """
     try:

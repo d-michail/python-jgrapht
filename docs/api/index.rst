@@ -11,14 +11,15 @@ API
    :maxdepth: 2
 
    introduction
+   interfaces
+   graph_factories
+   generators
    views
    traversals
    properties
    metrics
    algorithms/index
-   generators
    io/index
+   convert
    utils
-   graph_factories
-   interfaces
    drawing/index
