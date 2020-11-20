@@ -26,7 +26,7 @@
 ## [1.5.0.1] - 2020-10-17
 ### Fixed
 - Fixed issue with travis windows build
-- Fixed issue with initialization from different threads (Fixes #9)
+- Fixed issue with initialization from different threads (Fixes https://github.com/d-michail/python-jgrapht/issues/9)
 ### Changed
 - Changed repository name for jgrapht-capi which moved to organization
 
