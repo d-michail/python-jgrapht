@@ -300,6 +300,24 @@ class MultiObjectiveSingleSourcePaths(ABC):
         pass
 
 
+class ManyToManyPaths(ABC):
+    """A set of paths between two sets of vertices.
+    """
+
+    @abstractmethod
+    def get_path(self, source_vertex, target_vertex):
+        """Get a path from a source vertex to a target vertex. 
+
+        :param source_vertex: The source vertex
+        :param target_vertex: The target vertex
+        :returns: A path from the source vertex to the target vertex
+        :rtype: :py:class:`.GraphPath`
+        :raises ValueError: if the vertices pair is not included in the 
+            result set
+        """
+        pass
+
+
 class Graph(ABC):
     """A graph."""
 

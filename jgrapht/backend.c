@@ -1874,6 +1874,28 @@ int jgrapht_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *multiob
     return jgrapht_capi_multisp_multiobjectivesinglesource_get_paths_to_vertex(thread, multiobjectivesinglesource, target, res);
 }
 
+// contraction hierarchy
+
+int jgrapht_sp_manytomany_get_path_between_vertices(void *mm, int source, int target, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_sp_manytomany_get_path_between_vertices(thread, mm, source, target, res);
+}
+
+int jgrapht_sp_exec_contraction_hierarchy(void *g, int parallelism, long long int seed, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_sp_exec_contraction_hierarchy(thread, g, parallelism, seed, res);
+}
+
+int jgrapht_sp_exec_contraction_hierarchy_get_manytomany(void *ch, void *sources, void *targets, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_sp_exec_contraction_hierarchy_get_manytomany(thread, ch, sources, targets, res);
+}
+
+int jgrapht_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *ch, int source, int target, double radius, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(thread, ch, source, target, radius, res);
+}
+
 // spanner
 
 int jgrapht_spanner_exec_greedy_multiplicative(void *g, int k, double* weight, void** res) {

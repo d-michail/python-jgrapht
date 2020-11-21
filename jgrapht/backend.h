@@ -780,6 +780,16 @@ int jgrapht_multisp_exec_martin_get_paths_between_vertices(void *, int, int, voi
 
 int jgrapht_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *, int, void**);
 
+// contraction hierarchy
+
+int jgrapht_sp_manytomany_get_path_between_vertices(void *, int, int, void**);
+
+int jgrapht_sp_exec_contraction_hierarchy(void *, int, long long int, void**);
+
+int jgrapht_sp_exec_contraction_hierarchy_get_manytomany(void *, void *, void *, void**);
+
+int jgrapht_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *, int, int, double, void**);
+
 // spanner
 
 int jgrapht_spanner_exec_greedy_multiplicative(void *, int, double*, void**);

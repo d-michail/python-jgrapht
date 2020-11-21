@@ -5,6 +5,8 @@ from .._internals._paths import (
     _JGraphTSingleSourcePaths,
     _JGraphTMultiObjectiveSingleSourcePaths,
     _JGraphTAllPairsPaths,
+    _JGraphTContractionHierarchies,
+    _JGraphTContractionHierarchiesManyToMany,
 )
 from .._internals._collections import _JGraphTIntegerMutableSet
 from .._internals._callbacks import _create_wrapped_callback
@@ -21,10 +23,23 @@ from .._internals._anyhashableg_paths import (
     _AnyHashableGraphSingleSourcePaths,
     _AnyHashableGraphMultiObjectiveSingleSourcePaths,
     _AnyHashableGraphAllPairsPaths,
+    _AnyHashableGraphContractionHierarchiesManyToMany,
 )
 
 import ctypes
 import multiprocessing
+import time
+
+
+def _vertex_set_to_backend(graph, vertexset):
+    mutable_set = _JGraphTIntegerMutableSet(linked=True)
+    if _is_anyhashable_graph(graph):
+        for v in vertexset:
+            mutable_set.add(_vertex_attrsg_to_g(graph, v))
+    else:
+        for v in vertexset:
+            mutable_set.add(v)
+    return mutable_set
 
 
 def _sp_singlesource_alg(name, graph, source_vertex, *args):
@@ -103,15 +118,15 @@ def _multisp_singlesource_alg(name, graph, source_vertex, *args):
 
 
 def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
-    """Dijkstra's algorithm to compute single-source shortest paths. 
+    """Dijkstra's algorithm to compute single-source shortest paths.
 
     This implementation uses a pairing heap.
 
     :param graph: the graph
     :param source_vertex: the source vertex
-    :param target_vertex: the target vertex. If None then shortest paths to all vertices are computed 
+    :param target_vertex: the target vertex. If None then shortest paths to all vertices are computed
            and returned as an instance of :py:class:`.SingleSourcePaths`
-    :param use_bidirectional: only valid if a target vertex is supplied. In this case the search is 
+    :param use_bidirectional: only valid if a target vertex is supplied. In this case the search is
            bidirectional
     :returns: either a :py:class:`.GraphPath` or :py:class:`.SingleSourcePaths` depending on whether a
               target vertex is provided
@@ -160,7 +175,7 @@ def bellman_ford(graph, source_vertex):
 
 
 def bfs(graph, source_vertex):
-    r"""The BFS as a shortest path algorithm. Even if the graph has weights, 
+    r"""The BFS as a shortest path algorithm. Even if the graph has weights,
     this algorithms treats the graph as unweighted.
 
     Running time :math:`\mathcal{O}(n+m)`.
@@ -266,21 +281,21 @@ def a_star_with_alt_heuristic(
     algorithm execution is performed per landmark.
 
     The method generally abbreviated as ALT (from A*, Landmarks and Triangle inequality) is described
-    in detail in the following 
+    in detail in the following
     `paper <https://www.microsoft.com/en-us/research/publication/computing-the-shortest-path-a-search-meets-graph-theory>`_
     which also contains a discussion on landmark selection strategies.
-    
+
       * Andrew Goldberg and Chris Harrelson. Computing the shortest path: A* Search Meets Graph Theory.
         In Proceedings of the sixteenth annual ACM-SIAM symposium on Discrete algorithms (SODA' 05),
         156--165, 2005.
- 
+
     Note that using this heuristic does not require the edge weights to satisfy the triangle-inequality. The
     method depends on the triangle inequality with respect to the shortest path distances in the graph, not
     an embedding in Euclidean space or some other metric, which need not be present.
 
     In general more landmarks will speed up A* but will need more space. Given an A* query with
     vertices source and target, a good landmark appears "before" source or "after" target where
-    before and after are relative to the "direction" from source to target.    
+    before and after are relative to the "direction" from source to target.
 
     :param graph: the graph
     :param source_vertex: the source vertex
@@ -290,14 +305,7 @@ def a_star_with_alt_heuristic(
     :returns: a :py:class:`.GraphPath`
     """
 
-    landmarks_set = _JGraphTIntegerMutableSet(linked=True)
-    if _is_anyhashable_graph(graph):
-        for landmark in landmarks:
-            landmarks_set.add(_vertex_attrsg_to_g(graph, landmark))
-    else:
-        for landmark in landmarks:
-            landmarks_set.add(landmark)
-
+    landmarks_set = _vertex_set_to_backend(graph, landmarks)
     custom = [landmarks_set.handle]
 
     if use_bidirectional:
@@ -319,12 +327,12 @@ def a_star_with_alt_heuristic(
 
 
 def yen_k_loopless(graph, source_vertex, target_vertex, k):
-    r"""Yen's algorithm for k loopless shortest paths. 
+    r"""Yen's algorithm for k loopless shortest paths.
 
-    Running time :math:`\mathcal{O}(k n (m + n \log n))`. 
+    Running time :math:`\mathcal{O}(k n (m + n \log n))`.
 
-    The implementation follows: 
-    
+    The implementation follows:
+
       * Q. V. Martins, Ernesto and M. B. Pascoal, Marta. (2003). A new implementation
         of Yen’s ranking loopless paths algorithm. Quarterly Journal of the Belgian,
         French and Italian Operations Research Societies. 1. 121-133.
@@ -345,9 +353,9 @@ def yen_k_loopless(graph, source_vertex, target_vertex, k):
 
 
 def eppstein_k(graph, source_vertex, target_vertex, k):
-    r"""Eppstein's algorithm for k shortest paths (may contain loops). 
+    r"""Eppstein's algorithm for k shortest paths (may contain loops).
 
-    Running time :math:`\mathcal{O}(m + n \log n + k \log k)`. Paths are 
+    Running time :math:`\mathcal{O}(m + n \log n + k \log k)`. Paths are
     produced in sorted order by weight.
 
     .. note:: Paths are not guaranteed to be simple, i.e. many contains loops.
@@ -366,11 +374,11 @@ def eppstein_k(graph, source_vertex, target_vertex, k):
 def delta_stepping(
     graph, source_vertex, target_vertex=None, delta=None, parallelism=None
 ):
-    """Delta stepping algorithm to compute single-source shortest paths. 
+    """Delta stepping algorithm to compute single-source shortest paths.
 
     :param graph: the graph
     :param source_vertex: the source vertex
-    :param target_vertex: the target vertex. If None then shortest paths to all vertices are computed 
+    :param target_vertex: the target vertex. If None then shortest paths to all vertices are computed
            and returned as an instance of :py:class:`.SingleSourcePaths`
     :param delta: the delta parameter. If None then it is automatically calculated, by traversing
       the graph at least once.
@@ -411,11 +419,11 @@ def martin_multiobjective(
     .. note :: Note that the multi-objective shortest path problem is a well-known NP-hard problem.
 
     :param graph: the graph
-    :param edge_weight_cb: edge weight callback. It should accept an edge as a parameter and return a list of 
+    :param edge_weight_cb: edge weight callback. It should accept an edge as a parameter and return a list of
       weights.
     :param edge_weight_dimension: dimension of the edge weight function
     :param source_vertex: the source vertex
-    :param target_vertex: the target vertex. If None the paths to all vertices are computed 
+    :param target_vertex: the target vertex. If None the paths to all vertices are computed
            and returned as an instance of :py:class:`.MultiObjectiveSingleSourcePaths`
     :returns: either an iterator of :py:class:`.GraphPath` or :py:class:`.MultiObjectiveSingleSourcePaths`
        depending on whether a target vertex is provided
@@ -466,3 +474,88 @@ def martin_multiobjective(
             return _AnyHashableGraphGraphPathIterator(res, graph)
         else:
             return _JGraphTGraphPathIterator(res, graph)
+
+
+def precompute_contraction_hierarchies(graph, parallelism=None, seed=None):
+    r"""Precompute contraction hierarchies.
+
+    This is a preprocessing technique which speeds up shortest path queries. See
+    :py:meth:`contraction_hierarchies_many_to_many` and 
+    :py:meth:`contraction_hierarchies_dijkstra` on how to use this object.
+
+    :param graph: the graph
+    :param parallelism: how many thread to use
+    :param seed: seed for the random number generator.
+    :returns: the contraction hierarchies
+    """
+    if parallelism is None:
+        parallelism = multiprocessing.cpu_count()
+    if seed is None:
+        seed = int(time.time())
+
+    res = _backend.jgrapht_sp_exec_contraction_hierarchy(
+        graph.handle, parallelism, seed
+    )
+    return _JGraphTContractionHierarchies(res, graph)
+
+
+def contraction_hierarchies_many_to_many(graph, sources, targets, ch=None):
+    r"""Compute shortest paths between two set of vertices using contraction hierarchies.
+
+    :param graph: the graph
+    :param sources: source vertices
+    :param targets: target vertices
+    :param ch: the contraction hierarchy to use. If None it is computed from scratch.
+    :returns: a set of shortest paths
+    :rtype: :py:class:`.ManyToManyPaths`
+    """
+    jgrapht_sources = _vertex_set_to_backend(graph, sources)
+    jgrapht_targets = _vertex_set_to_backend(graph, targets)
+
+    if ch is None:
+        ch = precompute_contraction_hierarchies(graph)
+
+    handle = _backend.jgrapht_sp_exec_contraction_hierarchy_get_manytomany(
+        ch.handle, jgrapht_sources.handle, jgrapht_targets.handle
+    )
+
+    if _is_anyhashable_graph(graph):
+        return _AnyHashableGraphContractionHierarchiesManyToMany(handle, graph)
+    else:
+        return _JGraphTContractionHierarchiesManyToMany(handle, graph)
+
+
+def contraction_hierarchies_dijkstra(
+    graph, source_vertex, target_vertex, ch=None, radius=None
+):
+    r"""Compute a shortest path using bidirectional dijkstra and contraction
+    hierarchies.
+
+    :param graph: the graph
+    :param source_vertex: the source vertex
+    :param target_vertex: the target vertex
+    :param ch: the contraction hierarchy to use. If None it is computed from scratch.
+    :param radius: compute shortest paths of at most this length
+    :returns: a shortest path
+    :rtype: :py:class:`.GraphPath`
+    """
+    if radius is None: 
+        radius = float.fromhex('0x1.fffffffffffffP+1023')
+
+    if ch is None:
+        ch = precompute_contraction_hierarchies(graph)
+
+    handle = _backend.jgrapht_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
+        ch.handle,
+        _vertex_attrsg_to_g(graph, source_vertex),
+        _vertex_attrsg_to_g(graph, target_vertex),
+        radius
+    )
+
+    if handle is None:
+        return None
+
+    if _is_anyhashable_graph(graph):
+        return _AnyHashableGraphGraphPath(handle, graph)
+    else:
+        return _JGraphTGraphPath(handle, graph)

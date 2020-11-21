@@ -175,3 +175,23 @@ class _AnyHashableGraphMultiObjectiveSingleSourcePaths(
 
     def __repr__(self):
         return "_AnyHashableGraphMultiObjectiveSingleSourcePaths(%r)" % self._handle
+
+
+class _AnyHashableGraphContractionHierarchiesManyToMany(_HandleWrapper):
+    """Many to many result with contraction hierarchies"""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def get_path(self, source_vertex, target_vertex):
+        source_vertex = _vertex_anyhashableg_to_g(self._graph, source_vertex)
+        target_vertex = _vertex_anyhashableg_to_g(self._graph, target_vertex)
+
+        gp = backend.jgrapht_sp_manytomany_get_path_between_vertices(
+            self._handle, source_vertex, target_vertex
+        )
+        return _AnyHashableGraphGraphPath(gp, self._graph) if gp is not None else None
+
+    def __repr__(self):
+        return "_AnyHashableGraphContractionHierarchiesManyToMany(%r)" % self._handle

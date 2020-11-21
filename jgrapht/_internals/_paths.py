@@ -4,6 +4,7 @@ from ..types import (
     SingleSourcePaths,
     MultiObjectiveSingleSourcePaths,
     AllPairsPaths,
+    ManyToManyPaths,
 )
 from ._wrappers import (
     _HandleWrapper,
@@ -166,3 +167,33 @@ class _JGraphTMultiObjectiveSingleSourcePaths(
 
     def __repr__(self):
         return "_JGraphTMultiObjectiveSingleSourcePaths(%r)" % self._handle
+
+
+class _JGraphTContractionHierarchies(_HandleWrapper):
+    """Wrapper class around contraction hierarchies"""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def __repr__(self):
+        return "_JGraphTContractionHierarchies(%r)" % self._handle
+
+
+class _JGraphTContractionHierarchiesManyToMany(_HandleWrapper, ManyToManyPaths):
+    """Many to many result with contraction hierarchies"""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def get_path(self, source_vertex, target_vertex):
+        gp = backend.jgrapht_sp_manytomany_get_path_between_vertices(
+            self._handle, source_vertex, target_vertex
+        )
+        return _JGraphTGraphPath(gp, self._graph) if gp is not None else None
+
+    def __repr__(self):
+        return "_JGraphTContractionHierarchiesManyToMany(%r)" % self._handle
+
+    
