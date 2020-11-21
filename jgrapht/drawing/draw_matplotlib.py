@@ -298,10 +298,8 @@ def draw_jgrapht_edges(
     ax=None,
     **kwargs
 ):
-    """Draw the edges of the graph g.
-
-    This draws only the edges of the graph g.
-
+    """Draw only the edges of the graph g.
+    
     :param g: graph
     :type g: :py:class:`.Graph`
     :param positions: vertices positions
@@ -319,7 +317,7 @@ def draw_jgrapht_edges(
     :param arrow_size: size of arrow
     :type arrow_size: int, optional (default=1)
     :param arrow_style: choose the style of the arrowsheads.(Fancy|Simple|Wedge etc)
-    :type arrow_style: str, optional (default='-|>')
+    :type arrow_style: str, optional
     :param arrow_color: arrow color
     :type arrow_color: color or array of colors (default='black')
     :param arrow_line: Edge line style (solid|dashed|dotted|dashdot)
@@ -335,7 +333,7 @@ def draw_jgrapht_edges(
     :param edge_labels: draw labels on the edges.
     :type edge_labels: bool, optional (default=False)
     :param connection_style: Pass the connection_style parameter to create curved arc of rounding radius rad
-    :type connection_style: str, optional (default=None | example: connection_style="arc3,rad=-0.3")
+    :type connection_style: str, optional (default=None | example: connection_style='arc3,rad=-0.3')
     :param bbox: Matplotlib bbox,specify text box shape and colors.
     :type bbox: Matplotlib bbox
     :param ax: Draw the graph in the specified Matplotlib axes
@@ -362,7 +360,6 @@ def draw_jgrapht_edges(
     draw_jgrapht_vertices()
     draw_jgrapht_vertex_labels()
     draw_jgrapht_edge_labels()
-    -----
     """
     try:
         import matplotlib.pyplot as plt
