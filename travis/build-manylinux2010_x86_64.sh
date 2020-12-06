@@ -4,9 +4,11 @@ set -e -x
 # zlib-devel is needed for compiling libjgrapht_capi.so
 # pcre-devel is needed for compiling SWIG
 yum install -y zlib-devel pcre-devel
-# Install CMake from PyPI which provides a pre-compiled binary
-/opt/python/cp38-cp38/bin/pip install cmake
 
+# Install CMake
+curl -LO https://github.com/Kitware/CMake/releases/download/v3.19.1/cmake-3.19.1-Linux-x86_64.sh
+sh cmake-3.19.1-Linux-x86_64.sh --skip-license --prefix=/opt --include-subdir
+export PATH="/opt/cmake-3.19.1-Linux-x86_64/bin:$PATH"
 
 # Install GraalVM and native-image
 curl -LO https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.0.0/graalvm-ce-java11-linux-amd64-20.0.0.tar.gz
