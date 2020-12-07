@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e -x
 
-pyenv global 3.6.12 3.7.9 3.8.6 3.9.0
+pyenv global 3.6.9 3.7.5 3.8.0
 eval "$(pyenv init -)"
 
 # Build wheels for Python 3.6, 3.7, 3.8, 3.9
