@@ -25,9 +25,10 @@ jobs:
         - gu install native-image
         - brew install swig
         - pip3 install twine
-        - pyenv install 3.6.12
-        - pyenv install 3.7.9
-        - pyenv install 3.8.6
+        - pyenv install --list
+        - pyenv install 3.6.9
+        - pyenv install 3.7.5
+        - pyenv install 3.8.0
         - pyenv install 3.9.0
       script:
         - travis/build-macos.sh
