@@ -13,6 +13,10 @@ jobs:
         - ls -l dist/
     - os: osx
       language: shell
+      env: HOMEBREW_NO_AUTO_UPDATE=1
+      cache:
+        directories:
+          - $HOME/Library/Caches/Homebrew      
       sudo: required
       install:
         - brew cask install graalvm/tap/graalvm-ce-java11
@@ -21,9 +25,10 @@ jobs:
         - gu install native-image
         - brew install swig
         - pip3 install twine
-        - pyenv install 3.6.9
-        - pyenv install 3.7.5
-        - pyenv install 3.8.0
+        - pyenv install 3.6.12
+        - pyenv install 3.7.9
+        - pyenv install 3.8.6
+        - pyenv install 3.9.0
       script:
         - travis/build-macos.sh
         - ls -l dist/
