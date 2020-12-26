@@ -968,59 +968,101 @@ int jgrapht_set_clear(void *);
 
 // shortest paths 
 
-int jgrapht_sp_exec_dijkstra_get_path_between_vertices(void *, int, int, void**);
+int jgrapht_ii_sp_exec_dijkstra_get_path_between_vertices(void *, int, int, void**);
 
-int jgrapht_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, int, int, void**);
+int jgrapht_ll_sp_exec_dijkstra_get_path_between_vertices(void *, long long int, long long int, void**);
 
-int jgrapht_sp_exec_dijkstra_get_singlesource_from_vertex(void *, int, void**);
+int jgrapht_ii_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, int, int, void**);
 
-int jgrapht_sp_exec_bellmanford_get_singlesource_from_vertex(void *, int, void**);
+int jgrapht_ll_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, long long int, long long int, void**);
 
-int jgrapht_sp_exec_bfs_get_singlesource_from_vertex(void *, int, void**);
+int jgrapht_ii_sp_exec_dijkstra_get_singlesource_from_vertex(void *, int, void**);
 
-int jgrapht_sp_exec_johnson_get_allpairs(void *, void**);
+int jgrapht_ll_sp_exec_dijkstra_get_singlesource_from_vertex(void *, long long int, void**);
 
-int jgrapht_sp_exec_floydwarshall_get_allpairs(void *, void**);
+int jgrapht_ii_sp_exec_bellmanford_get_singlesource_from_vertex(void *, int, void**);
 
-int jgrapht_sp_singlesource_get_path_to_vertex(void *, int, void**);
+int jgrapht_ll_sp_exec_bellmanford_get_singlesource_from_vertex(void *, long long int, void**);
 
-int jgrapht_sp_allpairs_get_path_between_vertices(void *, int, int, void**);
+int jgrapht_ii_sp_exec_bfs_get_singlesource_from_vertex(void *, int, void**);
 
-int jgrapht_sp_allpairs_get_singlesource_from_vertex(void *, int, void**);
+int jgrapht_ll_sp_exec_bfs_get_singlesource_from_vertex(void *, long long int, void**);
 
-int jgrapht_sp_exec_astar_get_path_between_vertices(void *, int, int, void *, void**);
+int jgrapht_xx_sp_exec_johnson_get_allpairs(void *, void**);
 
-int jgrapht_sp_exec_bidirectional_astar_get_path_between_vertices(void *, int, int, void *, void**);
+int jgrapht_xx_sp_exec_floydwarshall_get_allpairs(void *, void**);
 
-int jgrapht_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void**);
+int jgrapht_ii_sp_singlesource_get_path_to_vertex(void *, int, void**);
 
-int jgrapht_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void**);
+int jgrapht_ll_sp_singlesource_get_path_to_vertex(void *, long long int, void**);
 
-int jgrapht_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, int, int, int, void**);
+int jgrapht_ii_sp_allpairs_get_path_between_vertices(void *, int, int, void**);
 
-int jgrapht_sp_exec_eppstein_get_k_paths_between_vertices(void *, int, int, int, void**);
+int jgrapht_ll_sp_allpairs_get_path_between_vertices(void *, long long int, long long int, void**);
 
-int jgrapht_sp_exec_delta_stepping_get_path_between_vertices(void *, int, int, double, int, void**);
+int jgrapht_ii_sp_allpairs_get_singlesource_from_vertex(void *, int, void**);
 
-int jgrapht_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, int, double, int, void**);
+int jgrapht_ll_sp_allpairs_get_singlesource_from_vertex(void *, long long int, void**);
+
+int jgrapht_ii_sp_exec_astar_get_path_between_vertices(void *, int, int, void *, void**);
+
+int jgrapht_ll_sp_exec_astar_get_path_between_vertices(void *, long long int, long long int, void *, void**);
+
+int jgrapht_ii_sp_exec_bidirectional_astar_get_path_between_vertices(void *, int, int, void *, void**);
+
+int jgrapht_ll_sp_exec_bidirectional_astar_get_path_between_vertices(void *, long long int, long long int, void *, void**);
+
+int jgrapht_ii_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void**);
+
+int jgrapht_ll_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, long long int, long long int, void *, void**);
+
+int jgrapht_ii_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void**);
+
+int jgrapht_ll_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, long long int, long long int, void *, void**);
+
+int jgrapht_ii_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, int, int, int, void**);
+
+int jgrapht_ll_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, long long int, long long int, int, void**);
+
+int jgrapht_ii_sp_exec_eppstein_get_k_paths_between_vertices(void *, int, int, int, void**);
+
+int jgrapht_ll_sp_exec_eppstein_get_k_paths_between_vertices(void *, long long int, long long int, int, void**);
+
+int jgrapht_ii_sp_exec_delta_stepping_get_path_between_vertices(void *, int, int, double, int, void**);
+
+int jgrapht_ll_sp_exec_delta_stepping_get_path_between_vertices(void *, long long int, long long int, double, int, void**);
+
+int jgrapht_ii_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, int, double, int, void**);
+
+int jgrapht_ll_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, long long int, double, int, void**);
 
 // multi objective shortest paths
 
-int jgrapht_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *, int, void *, int, void**);
+int jgrapht_ii_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *, int, void *, int, void**);
 
-int jgrapht_multisp_exec_martin_get_paths_between_vertices(void *, int, int, void *, int, void**);
+int jgrapht_ll_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *, long long int, void *, int, void**);
 
-int jgrapht_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *, int, void**);
+int jgrapht_ii_multisp_exec_martin_get_paths_between_vertices(void *, int, int, void *, int, void**);
+
+int jgrapht_ll_multisp_exec_martin_get_paths_between_vertices(void *, long long int, long long int, void *, int, void**);
+
+int jgrapht_ii_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *, int, void**);
+
+int jgrapht_ll_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *, long long int, void**);
 
 // contraction hierarchy
 
-int jgrapht_sp_manytomany_get_path_between_vertices(void *, int, int, void**);
+int jgrapht_ii_sp_manytomany_get_path_between_vertices(void *, int, int, void**);
 
-int jgrapht_sp_exec_contraction_hierarchy(void *, int, long long int, void**);
+int jgrapht_ll_sp_manytomany_get_path_between_vertices(void *, long long int, long long int, void**);
 
-int jgrapht_sp_exec_contraction_hierarchy_get_manytomany(void *, void *, void *, void**);
+int jgrapht_xx_sp_exec_contraction_hierarchy(void *, int, long long int, void**);
 
-int jgrapht_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *, int, int, double, void**);
+int jgrapht_xx_sp_exec_contraction_hierarchy_get_manytomany(void *, void *, void *, void**);
+
+int jgrapht_ii_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *, int, int, double, void**);
+
+int jgrapht_ll_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *, long long int, long long int, double, void**);
 
 // spanner
 
@@ -1050,29 +1092,41 @@ int jgrapht_xx_tour_tsp_two_opt_heuristic_improve(void *, double, long long int,
 
 // traverse
 
-int jgrapht_traverse_create_bfs_from_all_vertices_vit(void *, void**);
+int jgrapht_xx_traverse_create_bfs_from_all_vertices_vit(void *, void**);
 
-int jgrapht_traverse_create_bfs_from_vertex_vit(void *, int, void**);
+int jgrapht_ii_traverse_create_bfs_from_vertex_vit(void *, int, void**);
 
-int jgrapht_traverse_create_lex_bfs_vit(void *, void**);
+int jgrapht_ll_traverse_create_bfs_from_vertex_vit(void *, long long int, void**);
 
-int jgrapht_traverse_create_dfs_from_all_vertices_vit(void *, void**);
+int jgrapht_xx_traverse_create_lex_bfs_vit(void *, void**);
 
-int jgrapht_traverse_create_dfs_from_vertex_vit(void *, int, void**);
+int jgrapht_xx_traverse_create_dfs_from_all_vertices_vit(void *, void**);
 
-int jgrapht_traverse_create_topological_order_vit(void *, void**);
+int jgrapht_ii_traverse_create_dfs_from_vertex_vit(void *, int, void**);
 
-int jgrapht_traverse_create_random_walk_from_vertex_vit(void *, int, void**);
+int jgrapht_ll_traverse_create_dfs_from_vertex_vit(void *, long long int, void**);
 
-int jgrapht_traverse_create_custom_random_walk_from_vertex_vit(void *, int, int, long long int, long long int, void**);
+int jgrapht_xx_traverse_create_topological_order_vit(void *, void**);
 
-int jgrapht_traverse_create_max_cardinality_vit(void *, void**);
+int jgrapht_ii_traverse_create_random_walk_from_vertex_vit(void *, int, void**);
 
-int jgrapht_traverse_create_degeneracy_ordering_vit(void *, void**);
+int jgrapht_ll_traverse_create_random_walk_from_vertex_vit(void *, long long int, void**);
 
-int jgrapht_traverse_create_closest_first_from_vertex_vit(void *, int, void**);
+int jgrapht_ii_traverse_create_custom_random_walk_from_vertex_vit(void *, int, int, long long int, long long int, void**);
 
-int jgrapht_traverse_create_custom_closest_first_from_vertex_vit(void *, int, double, void**);
+int jgrapht_ll_traverse_create_custom_random_walk_from_vertex_vit(void *, long long int, int, long long int, long long int, void**);
+
+int jgrapht_xx_traverse_create_max_cardinality_vit(void *, void**);
+
+int jgrapht_xx_traverse_create_degeneracy_ordering_vit(void *, void**);
+
+int jgrapht_ii_traverse_create_closest_first_from_vertex_vit(void *, int, void**);
+
+int jgrapht_ll_traverse_create_closest_first_from_vertex_vit(void *, long long int, void**);
+
+int jgrapht_ii_traverse_create_custom_closest_first_from_vertex_vit(void *, int, double, void**);
+
+int jgrapht_ll_traverse_create_custom_closest_first_from_vertex_vit(void *, long long int, double, void**);
 
 // vertex cover
 
