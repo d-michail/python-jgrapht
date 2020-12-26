@@ -15,19 +15,19 @@ from ..types import (
 )
 from ..utils import IntegerSupplier
 
-from ._graphs import (
+from ._int_graphs import (
     _create_int_graph as _create_int_graph,
     _create_int_dag as _create_int_dag,
     _create_sparse_int_graph as _create_sparse_int_graph,
 )
 from ._views import (
-    _ListenableView,
-    _UnweightedGraphView,
-    _UndirectedGraphView,
-    _UnmodifiableGraphView,
-    _EdgeReversedGraphView,
-    _WeightedView,
-    _MaskedSubgraphView,
+    _IntegerListenableView,
+    _UnweightedIntegerGraphView,
+    _UndirectedIntegerGraphView,
+    _UnmodifiableIntegerGraphView,
+    _EdgeReversedIntegerGraphView,
+    _IntegerWeightedView,
+    _MaskedIntegerSubgraphView,
 )
 from ._anyhashableg_collections import (
     _AnyHashableGraphVertexSet,
@@ -71,7 +71,7 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
         def structural_cb(element, event_type):
             self._structural_event_listener(element, event_type)
 
-        self._listenable_graph = _ListenableView(graph)
+        self._listenable_graph = _IntegerListenableView(graph)
         self._listenable_graph.add_listener(structural_cb)
         self._user_listeners = []
 
@@ -589,7 +589,7 @@ class _MaskedSubgraphAnyHashableGraph(_AnyHashableGraph):
         **kwargs
     ):
         assert isinstance(
-            graph, _MaskedSubgraphView
+            graph, _MaskedIntegerSubgraphView
         ), "Can only be used with a masked subgraph backend"
 
         super().__init__(graph, vertex_supplier, edge_supplier, copy_from)
@@ -678,7 +678,7 @@ def _create_anyhashable_graph_subgraph(anyhashable_graph, subgraph):
 def _as_unweighted_anyhashable_graph(anyhashable_graph):
     """Create an unweighted view of an any-hashable graph."""
     graph = anyhashable_graph._graph
-    unweighted_graph = _UnweightedGraphView(graph)
+    unweighted_graph = _UnweightedIntegerGraphView(graph)
 
     unweighted_anyhashable_graph = _AnyHashableGraph(
         unweighted_graph, copy_from=anyhashable_graph
@@ -690,7 +690,7 @@ def _as_unweighted_anyhashable_graph(anyhashable_graph):
 def _as_undirected_anyhashable_graph(anyhashable_graph):
     """Create an undirected view of an any-hashable graph."""
     graph = anyhashable_graph._graph
-    undirected_graph = _UndirectedGraphView(graph)
+    undirected_graph = _UndirectedIntegerGraphView(graph)
 
     undirected_anyhashable_graph = _AnyHashableGraph(
         undirected_graph, copy_from=anyhashable_graph
@@ -702,7 +702,7 @@ def _as_undirected_anyhashable_graph(anyhashable_graph):
 def _as_unmodifiable_anyhashable_graph(anyhashable_graph):
     """Create an unmodifiable view of an any-hashable graph."""
     graph = anyhashable_graph._graph
-    unmodifiable_graph = _UnmodifiableGraphView(graph)
+    unmodifiable_graph = _UnmodifiableIntegerGraphView(graph)
 
     unmodifiable_anyhashable_graph = _AnyHashableGraph(
         unmodifiable_graph, copy_from=anyhashable_graph
@@ -714,7 +714,7 @@ def _as_unmodifiable_anyhashable_graph(anyhashable_graph):
 def _as_edgereversed_anyhashable_graph(anyhashable_graph):
     """Create an edge reversed view of an any-hashable graph."""
     graph = anyhashable_graph._graph
-    edgereversed_graph = _EdgeReversedGraphView(graph)
+    edgereversed_graph = _EdgeReversedIntegerGraphView(graph)
 
     edgereversed_anyhashable_graph = _AnyHashableGraph(
         edgereversed_graph, copy_from=anyhashable_graph
@@ -737,7 +737,7 @@ def _as_weighted_anyhashable_graph(
         actual_edge_weight_cb = None
 
     graph = anyhashable_graph._graph
-    weighted_graph = _WeightedView(
+    weighted_graph = _IntegerWeightedView(
         graph, actual_edge_weight_cb, cache_weights, write_weights_through
     )
 
@@ -766,7 +766,7 @@ def _as_masked_subgraph_anyhashable_graph(
         actual_edge_mask_cb = None
 
     graph = anyhashable_graph._graph
-    masked_subgraph = _MaskedSubgraphView(
+    masked_subgraph = _MaskedIntegerSubgraphView(
         graph, actual_vertex_mask_cb, actual_edge_mask_cb
     )
 

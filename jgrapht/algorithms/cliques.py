@@ -2,9 +2,11 @@ from .. import backend as _backend
 
 from .._internals._collections import (
     _JGraphTIntegerSet,
+    _JGraphTLongSet,
     _JGraphTIntegerSetIterator,
+    _JGraphTLongSetIterator,
 )
-
+from .._internals._long_graphs import _is_long_graph
 from .._internals._anyhashableg import _is_anyhashable_graph
 from .._internals._anyhashableg_collections import (
     _AnyHashableGraphVertexSet,
@@ -28,9 +30,11 @@ def bron_kerbosch(graph, timeout=0):
     :returns: An iterator over maximal cliques
     """
     custom = [timeout]
-    res = _backend.jgrapht_clique_exec_bron_kerbosch(graph.handle, *custom)
+    res = _backend.jgrapht_xx_clique_exec_bron_kerbosch(graph.handle, *custom)
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSetIterator(res, graph)
+    elif _is_long_graph(graph):
+        return _JGraphTLongSetIterator(res)
     else:
         return _JGraphTIntegerSetIterator(res)
 
@@ -55,9 +59,11 @@ def bron_kerbosch_with_pivot(graph, timeout=0):
     :returns: An iterator over maximal cliques
     """
     custom = [timeout]
-    res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot(graph.handle, *custom)
+    res = _backend.jgrapht_xx_clique_exec_bron_kerbosch_pivot(graph.handle, *custom)
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSetIterator(res, graph)
+    elif _is_long_graph(graph):
+        return _JGraphTLongSetIterator(res)
     else:
         return _JGraphTIntegerSetIterator(res)
 
@@ -86,11 +92,13 @@ def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
     :returns: An iterator over maximal cliques
     """
     custom = [timeout]
-    res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(
+    res = _backend.jgrapht_xx_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(
         graph.handle, *custom
     )
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSetIterator(res, graph)
+    elif _is_long_graph(graph):
+        return _JGraphTLongSetIterator(res)
     else:
         return _JGraphTIntegerSetIterator(res)
 
@@ -104,9 +112,11 @@ def chordal_max_clique(graph):
     :param graph: the chordal graph. If the graph is not chordal an error is raised
     :returns: a clique as a vertex set
     """
-    res = _backend.jgrapht_clique_exec_chordal_max_clique(graph.handle)
+    res = _backend.jgrapht_xx_clique_exec_chordal_max_clique(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSet(res, graph)
+    elif _is_long_graph(graph):
+        return _JGraphTLongSet(res)
     else:
         return _JGraphTIntegerSet(res)

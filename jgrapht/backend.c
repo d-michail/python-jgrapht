@@ -868,6 +868,11 @@ int jgrapht_ll_graph_contains_edge_between(void *g, long long int u, long long i
     return jgrapht_capi_ll_graph_contains_edge_between(thread, g, u, v, res);
 }
 
+int jgrapht_ii_graph_degree_of(void *g, int v, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_degree_of(thread, g, v, res);
+}
+
 int jgrapht_ll_graph_degree_of(void *g, long long int v, long long* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ll_graph_degree_of(thread, g, v, res);
@@ -891,6 +896,11 @@ int jgrapht_ii_graph_outdegree_of(void *g, int v, int* res) {
 int jgrapht_ll_graph_outdegree_of(void *g, long long int v, long long* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ll_graph_outdegree_of(thread, g, v, res);
+}
+
+int jgrapht_ii_graph_edge_source(void *g, int v, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_edge_source(thread, g, v, res);
 }
 
 int jgrapht_ll_graph_edge_source(void *g, long long int v, long long* res) { 

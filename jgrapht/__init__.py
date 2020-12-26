@@ -35,11 +35,15 @@ import logging
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
-from ._internals._graphs import (
+from ._internals._int_graphs import (
     _create_int_graph,
     _create_int_dag,
     _create_sparse_int_graph,
     _copy_to_sparse_int_graph,
+)
+from ._internals._long_graphs import (
+    _create_long_graph,
+    _create_long_dag,
 )
 from ._internals._anyhashableg import (
     _is_anyhashable_graph,

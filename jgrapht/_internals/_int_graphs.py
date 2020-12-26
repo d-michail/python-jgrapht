@@ -15,7 +15,7 @@ from ._collections import (
 )
 
 
-class _JGraphTGraph(_HandleWrapper, Graph):
+class _JGraphTIntegerGraph(_HandleWrapper, Graph):
     """The actual graph implementation. This implementation always uses integers
     for the vertices and the edges of the graph. All operations are delegated to
     the backend.
@@ -25,14 +25,14 @@ class _JGraphTGraph(_HandleWrapper, Graph):
         super().__init__(handle=handle, **kwargs)
 
         # read attributes from backend
-        directed = backend.jgrapht_graph_is_directed(self._handle)
-        allowing_self_loops = backend.jgrapht_graph_is_allowing_selfloops(self._handle)
-        allowing_multiple_edges = backend.jgrapht_graph_is_allowing_multipleedges(
+        directed = backend.jgrapht_xx_graph_is_directed(self._handle)
+        allowing_self_loops = backend.jgrapht_xx_graph_is_allowing_selfloops(self._handle)
+        allowing_multiple_edges = backend.jgrapht_xx_graph_is_allowing_multipleedges(
             self._handle
         )
-        allowing_cycles = backend.jgrapht_graph_is_allowing_cycles(self._handle)
-        weighted = backend.jgrapht_graph_is_weighted(self._handle)
-        modifiable = backend.jgrapht_graph_is_modifiable(self._handle)
+        allowing_cycles = backend.jgrapht_xx_graph_is_allowing_cycles(self._handle)
+        weighted = backend.jgrapht_xx_graph_is_weighted(self._handle)
+        modifiable = backend.jgrapht_xx_graph_is_modifiable(self._handle)
 
         self._type = GraphType(
             directed=directed,
@@ -51,57 +51,57 @@ class _JGraphTGraph(_HandleWrapper, Graph):
 
     def add_vertex(self, vertex=None):
         if vertex is not None:
-            backend.jgrapht_graph_add_given_vertex(self._handle, vertex)
+            backend.jgrapht_ii_graph_add_given_vertex(self._handle, vertex)
         else:
-            vertex = backend.jgrapht_graph_add_vertex(self._handle)
+            vertex = backend.jgrapht_ii_graph_add_vertex(self._handle)
         return vertex
 
     def remove_vertex(self, v):
-        backend.jgrapht_graph_remove_vertex(self._handle, v)
+        backend.jgrapht_ii_graph_remove_vertex(self._handle, v)
 
     def contains_vertex(self, v):
-        return backend.jgrapht_graph_contains_vertex(self._handle, v)
+        return backend.jgrapht_ii_graph_contains_vertex(self._handle, v)
 
     def add_edge(self, u, v, weight=None, edge=None):
         added = True
         if edge is not None:
-            added = backend.jgrapht_graph_add_given_edge(self._handle, u, v, edge)
+            added = backend.jgrapht_ii_graph_add_given_edge(self._handle, u, v, edge)
         else:
-            edge = backend.jgrapht_graph_add_edge(self._handle, u, v)
+            edge = backend.jgrapht_ii_graph_add_edge(self._handle, u, v)
 
         if added and weight is not None:
             self.set_edge_weight(edge, weight)
         return edge
 
     def remove_edge(self, e):
-        return backend.jgrapht_graph_remove_edge(self._handle, e)
+        return backend.jgrapht_ii_graph_remove_edge(self._handle, e)
 
     def contains_edge(self, e):
-        return backend.jgrapht_graph_contains_edge(self._handle, e)
+        return backend.jgrapht_ii_graph_contains_edge(self._handle, e)
 
     def contains_edge_between(self, u, v):
-        return backend.jgrapht_graph_contains_edge_between(self._handle, u, v)
+        return backend.jgrapht_ii_graph_contains_edge_between(self._handle, u, v)
 
     def degree_of(self, v):
-        return backend.jgrapht_graph_degree_of(self._handle, v)
+        return backend.jgrapht_ii_graph_degree_of(self._handle, v)
 
     def indegree_of(self, v):
-        return backend.jgrapht_graph_indegree_of(self._handle, v)
+        return backend.jgrapht_ii_graph_indegree_of(self._handle, v)
 
     def outdegree_of(self, v):
-        return backend.jgrapht_graph_outdegree_of(self._handle, v)
+        return backend.jgrapht_ii_graph_outdegree_of(self._handle, v)
 
     def edge_source(self, e):
-        return backend.jgrapht_graph_edge_source(self._handle, e)
+        return backend.jgrapht_ii_graph_edge_source(self._handle, e)
 
     def edge_target(self, e):
-        return backend.jgrapht_graph_edge_target(self._handle, e)
+        return backend.jgrapht_ii_graph_edge_target(self._handle, e)
 
     def get_edge_weight(self, e):
-        return backend.jgrapht_graph_get_edge_weight(self._handle, e)
+        return backend.jgrapht_ii_graph_get_edge_weight(self._handle, e)
 
     def set_edge_weight(self, e, weight):
-        backend.jgrapht_graph_set_edge_weight(self._handle, e, weight)
+        backend.jgrapht_ii_graph_set_edge_weight(self._handle, e, weight)
 
     @property
     def number_of_vertices(self):
@@ -124,19 +124,19 @@ class _JGraphTGraph(_HandleWrapper, Graph):
         return self._edge_set
 
     def edges_between(self, u, v):
-        res = backend.jgrapht_graph_create_between_eit(self._handle, u, v)
+        res = backend.jgrapht_ii_graph_create_between_eit(self._handle, u, v)
         return _JGraphTIntegerIterator(res)
 
     def edges_of(self, v):
-        res = backend.jgrapht_graph_vertex_create_eit(self._handle, v)
+        res = backend.jgrapht_ii_graph_vertex_create_eit(self._handle, v)
         return _JGraphTIntegerIterator(res)
 
     def inedges_of(self, v):
-        res = backend.jgrapht_graph_vertex_create_in_eit(self._handle, v)
+        res = backend.jgrapht_ii_graph_vertex_create_in_eit(self._handle, v)
         return _JGraphTIntegerIterator(res)
 
     def outedges_of(self, v):
-        res = backend.jgrapht_graph_vertex_create_out_eit(self._handle, v)
+        res = backend.jgrapht_ii_graph_vertex_create_out_eit(self._handle, v)
         return _JGraphTIntegerIterator(res)
 
     class _VertexSet(Set):
@@ -146,17 +146,17 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             self._handle = handle
 
         def __iter__(self):
-            res = backend.jgrapht_graph_create_all_vit(self._handle)
+            res = backend.jgrapht_xx_graph_create_all_vit(self._handle)
             return _JGraphTIntegerIterator(res)
 
         def __len__(self):
-            return backend.jgrapht_graph_vertices_count(self._handle)
+            return backend.jgrapht_ii_graph_vertices_count(self._handle)
 
         def __contains__(self, v):
-            return backend.jgrapht_graph_contains_vertex(self._handle, v)
+            return backend.jgrapht_ii_graph_contains_vertex(self._handle, v)
 
         def __repr__(self):
-            return "_JGraphTGraph-VertexSet(%r)" % self._handle
+            return "_JGraphIntegerTGraph-VertexSet(%r)" % self._handle
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
@@ -172,17 +172,17 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             self._handle = handle
 
         def __iter__(self):
-            res = backend.jgrapht_graph_create_all_eit(self._handle)
+            res = backend.jgrapht_xx_graph_create_all_eit(self._handle)
             return _JGraphTIntegerIterator(res)
 
         def __len__(self):
-            return backend.jgrapht_graph_edges_count(self._handle)
+            return backend.jgrapht_ii_graph_edges_count(self._handle)
 
         def __contains__(self, v):
-            return backend.jgrapht_graph_contains_edge(self._handle, v)
+            return backend.jgrapht_ii_graph_contains_edge(self._handle, v)
 
         def __repr__(self):
-            return "_JGraphTGraph-EdgeSet(%r)" % self._handle
+            return "_JGraphTIntegerGraph-EdgeSet(%r)" % self._handle
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
@@ -192,25 +192,25 @@ class _JGraphTGraph(_HandleWrapper, Graph):
             return set(it)
 
     def __repr__(self):
-        return "_JGraphTGraph(%r)" % self._handle
+        return "_JGraphTIntegerGraph(%r)" % self._handle
 
 
-class _JGraphTDirectedAcyclicGraph(_JGraphTGraph, DirectedAcyclicGraph):
+class _JGraphTIntegerDirectedAcyclicGraph(_JGraphTIntegerGraph, DirectedAcyclicGraph):
     """The directed acyclic graph wrapper."""
 
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
     def descendants(self, vertex):
-        set_handle = backend.jgrapht_graph_dag_vertex_descendants(self.handle, vertex)
+        set_handle = backend.jgrapht_ii_graph_dag_vertex_descendants(self.handle, vertex)
         return _JGraphTIntegerSet(handle=set_handle)
 
     def ancestors(self, vertex):
-        set_handle = backend.jgrapht_graph_dag_vertex_ancestors(self.handle, vertex)
+        set_handle = backend.jgrapht_ii_graph_dag_vertex_ancestors(self.handle, vertex)
         return _JGraphTIntegerSet(handle=set_handle)
 
     def __iter__(self):
-        it_handle = backend.jgrapht_graph_dag_topological_it(self.handle)
+        it_handle = backend.jgrapht_xx_graph_dag_topological_it(self.handle)
         return _JGraphTIntegerIterator(handle=it_handle)
 
 
@@ -229,10 +229,10 @@ def _create_int_graph(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`    
     """
-    handle = backend.jgrapht_graph_create(
+    handle = backend.jgrapht_ii_graph_create(
         directed, allowing_self_loops, allowing_multiple_edges, weighted
     )
-    return _JGraphTGraph(handle)
+    return _JGraphTIntegerGraph(handle)
 
 
 def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weighted=True):
@@ -282,26 +282,26 @@ def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weig
 
         if weighted:
             for u, v, w in edgelist:
-                backend.jgrapht_list_edge_triple_add(e_list, u, v, w)
+                backend.jgrapht_ii_list_edge_triple_add(e_list, u, v, w)
                 if track_num_vertices:
                      num_of_vertices = max(u, v, num_of_vertices)
         else:
             for u, v, *w in edgelist:
-                backend.jgrapht_list_edge_pair_add(e_list, u, v)
+                backend.jgrapht_ii_list_edge_pair_add(e_list, u, v)
                 if track_num_vertices:
                     num_of_vertices = max(u, v, num_of_vertices)
 
         if track_num_vertices: 
             num_of_vertices += 1
 
-    handle = backend.jgrapht_graph_sparse_create(
+    handle = backend.jgrapht_ii_graph_sparse_create(
         directed, weighted, num_of_vertices, e_list
     )
 
     if e_list_owner:
         backend.jgrapht_handles_destroy(e_list)
 
-    return _JGraphTGraph(handle)
+    return _JGraphTIntegerGraph(handle)
 
 
 def _copy_to_sparse_int_graph(graph):
@@ -341,5 +341,14 @@ def _create_int_dag(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph`    
     """
-    handle = backend.jgrapht_graph_dag_create(allowing_multiple_edges, weighted,)
-    return _JGraphTDirectedAcyclicGraph(handle)
+    handle = backend.jgrapht_ii_graph_dag_create(allowing_multiple_edges, weighted,)
+    return _JGraphTIntegerDirectedAcyclicGraph(handle)
+
+
+def _is_int_graph(graph):
+    """Check if a graph instance is a graph using integers for vertices and edges.
+    
+    :param graph: the graph
+    :returns: True if the graph is a long graph, False otherwise.
+    """
+    return isinstance(graph, (_JGraphTIntegerGraph))

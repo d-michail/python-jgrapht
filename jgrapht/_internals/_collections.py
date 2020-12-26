@@ -528,6 +528,54 @@ class _JGraphTIntegerStringMap(_HandleWrapper, MutableMapping):
         return "{" + ", ".join(items) + "}"
 
 
+class _JGraphTLongIntegerMap(_HandleWrapper, Mapping):
+    """JGraphT Map with long keys and integer values"""
+
+    def __init__(self, handle=None, linked=True, **kwargs):
+        if handle is None:
+            if linked:
+                handle = backend.jgrapht_map_linked_create()
+            else:
+                handle = backend.jgrapht_map_create()
+        super().__init__(handle=handle, **kwargs)
+
+    def __iter__(self):
+        res = backend.jgrapht_map_keys_it_create(self._handle)
+        return _JGraphTLongIterator(res)
+
+    def __len__(self):
+        res = backend.jgrapht_map_size(self._handle)
+        return res
+
+    def get(self, key, value=None):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        if not res:
+            if value is not None:
+                return value
+            else:
+                raise KeyError()
+        res = backend.jgrapht_map_long_int_get(self._handle, key)
+        return res
+
+    def __contains__(self, key):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        return res
+
+    def __getitem__(self, key):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        if not res:
+            raise KeyError()
+        res = backend.jgrapht_map_long_int_get(self._handle, key)
+        return res
+
+    def __repr__(self):
+        return "_JGraphTLongIntegerMap(%r)" % self._handle
+
+    def __str__(self):
+        items = ["{}: {}".format(k, v) for k, v in self.items()]
+        return "{" + ", ".join(items) + "}"
+
+
 class _JGraphTEdgeIntegerTripleList(_HandleWrapper, Iterable, Sized):
     """JGraphT list which contains edge triples"""
 
