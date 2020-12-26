@@ -11,7 +11,7 @@ from ._wrappers import _HandleWrapper
 from ._collections import (
     _JGraphTIntegerIterator,
     _JGraphTIntegerSet,
-    _JGraphTEdgeTripleList,
+    _JGraphTEdgeIntegerTripleList,
 )
 
 
@@ -262,7 +262,7 @@ def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weig
     """
     track_num_vertices = num_of_vertices is None
 
-    if weighted and isinstance(edgelist, _JGraphTEdgeTripleList):
+    if weighted and isinstance(edgelist, _JGraphTEdgeIntegerTripleList):
         # Special case for internal edge list, created using the edgelist
         # importers. This avoids copying.
         e_list_owner = False

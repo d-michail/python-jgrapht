@@ -58,6 +58,22 @@ class _JGraphTIntegerIterator(_HandleWrapper, Iterator):
         return "_JGraphTIntegerIterator(%r)" % self._handle
 
 
+class _JGraphTLongIterator(_HandleWrapper, Iterator):
+    """Long values iterator"""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def __next__(self):
+        res = backend.jgrapht_it_hasnext(self._handle)
+        if not res:
+            raise StopIteration()
+        return backend.jgrapht_it_next_long(self._handle)
+
+    def __repr__(self):
+        return "_JGraphTLongIterator(%r)" % self._handle
+
+
 class _JGraphTDoubleIterator(_HandleWrapper, Iterator):
     """Double values iterator"""
 
@@ -74,7 +90,7 @@ class _JGraphTDoubleIterator(_HandleWrapper, Iterator):
         return "_JGraphTDoubleIterator(%r)" % self._handle
 
 
-class _JGraphTEdgeTripleIterator(_HandleWrapper, Iterator):
+class _JGraphTEdgeIntegerTripleIterator(_HandleWrapper, Iterator):
     """An edge triple iterator"""
 
     def __init__(self, handle, **kwargs):
@@ -87,13 +103,35 @@ class _JGraphTEdgeTripleIterator(_HandleWrapper, Iterator):
             raise StopIteration()
 
         # read edge triple
-        s, t, w = backend.jgrapht_it_next_edge_triple(self._handle)
+        s, t, w = backend.jgrapht_it_next_int_edge_triple(self._handle)
 
         # return a named tuple
         return self._edge_triple_class(source=s, target=t, weight=w)
 
     def __repr__(self):
-        return "_JGraphTEdgeTripleIterator(%r)" % self._handle
+        return "_JGraphTEdgeIntegerTripleIterator(%r)" % self._handle
+
+
+class _JGraphTEdgeLongTripleIterator(_HandleWrapper, Iterator):
+    """An edge triple iterator"""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._edge_triple_class = namedtuple("Edge", ["source", "target", "weight"])
+
+    def __next__(self):
+        res = backend.jgrapht_it_hasnext(self._handle)
+        if not res:
+            raise StopIteration()
+
+        # read edge triple
+        s, t, w = backend.jgrapht_it_next_long_edge_triple(self._handle)
+
+        # return a named tuple
+        return self._edge_triple_class(source=s, target=t, weight=w)
+
+    def __repr__(self):
+        return "_JGraphTEdgeLongTripleIterator(%r)" % self._handle
 
 
 class _JGraphTEdgeStrTripleIterator(_HandleWrapper, Iterator):
