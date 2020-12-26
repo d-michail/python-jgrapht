@@ -32,19 +32,35 @@ void jgrapht_vmLocatorSymbol();
 
 // attribute store 
 
-int jgrapht_attributes_store_create(void**);
+int jgrapht_xx_attributes_store_create(void**);
 
-int jgrapht_attributes_store_put_boolean_attribute(void *, int, char*, int);
+int jgrapht_ii_attributes_store_put_boolean_attribute(void *, int, char*, int);
 
-int jgrapht_attributes_store_put_int_attribute(void *, int, char*, int);
+int jgrapht_ll_attributes_store_put_boolean_attribute(void *, long long int, char*, int);
 
-int jgrapht_attributes_store_put_long_attribute(void *, int, char*, long long int);
+int jgrapht_ii_attributes_store_put_boolean_attribute(void *, int, char*, int);
 
-int jgrapht_attributes_store_put_double_attribute(void *, int, char*, double);
+int jgrapht_ll_attributes_store_put_boolean_attribute(void *, long long int, char*, int);
 
-int jgrapht_attributes_store_put_string_attribute(void *, int, char*, char*);
+int jgrapht_ii_attributes_store_put_int_attribute(void *, int, char*, int);
 
-int jgrapht_attributes_store_remove_attribute(void *, int, char*);
+int jgrapht_ll_attributes_store_put_int_attribute(void *, long long int, char*, int);
+
+int jgrapht_ii_attributes_store_put_long_attribute(void *, int, char*, long long int);
+
+int jgrapht_ll_attributes_store_put_long_attribute(void *, long long int, char*, long long int);
+
+int jgrapht_ii_attributes_store_put_double_attribute(void *, int, char*, double);
+
+int jgrapht_ll_attributes_store_put_double_attribute(void *, long long int, char*, double);
+
+int jgrapht_ii_attributes_store_put_string_attribute(void *, int, char*, char*);
+
+int jgrapht_ll_attributes_store_put_string_attribute(void *, long long int, char*, char*);
+
+int jgrapht_ii_attributes_store_remove_attribute(void *, int, char*);
+
+int jgrapht_ll_attributes_store_remove_attribute(void *, long long int, char*);
 
 int jgrapht_attributes_registry_create(void**);
 
@@ -54,303 +70,393 @@ int jgrapht_attributes_registry_unregister_attribute(void *, char*, char*, char*
 
 // clique
 
-int jgrapht_clique_exec_bron_kerbosch(void *, long long int, void**);
+int jgrapht_xx_clique_exec_bron_kerbosch(void *, long long int, void**);
 
-int jgrapht_clique_exec_bron_kerbosch_pivot(void *, long long int, void**);
+int jgrapht_xx_clique_exec_bron_kerbosch_pivot(void *, long long int, void**);
 
-int jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(void *, long long int, void**);
+int jgrapht_xx_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(void *, long long int, void**);
 
-int jgrapht_clique_exec_chordal_max_clique(void *, void**);
+int jgrapht_xx_clique_exec_chordal_max_clique(void *, void**);
 
 // clustering
 
-int jgrapht_clustering_exec_k_spanning_tree(void *, int, void**);
+int jgrapht_xx_clustering_exec_k_spanning_tree(void *, int, void**);
 
-int jgrapht_clustering_exec_label_propagation(void *, int, long long int, void**);
+int jgrapht_xx_clustering_exec_label_propagation(void *, int, long long int, void**);
 
-int jgrapht_clustering_get_number_clusters(void *, int*);
+int jgrapht_xx_clustering_get_number_clusters(void *, int*);
 
-int jgrapht_clustering_ith_cluster_vit(void *, int, void**);
+int jgrapht_xx_clustering_ith_cluster_vit(void *, int, void**);
 
 // coloring
 
-int jgrapht_coloring_exec_greedy(void *, int*, void**);
+int jgrapht_xx_coloring_exec_greedy(void *, int*, void**);
 
-int jgrapht_coloring_exec_greedy_smallestdegreelast(void *, int*, void**);
+int jgrapht_xx_coloring_exec_greedy_smallestdegreelast(void *, int*, void**);
 
-int jgrapht_coloring_exec_backtracking_brown(void *, int*, void**);
+int jgrapht_xx_coloring_exec_backtracking_brown(void *, int*, void**);
 
-int jgrapht_coloring_exec_greedy_largestdegreefirst(void *, int*, void**);
+int jgrapht_xx_coloring_exec_greedy_largestdegreefirst(void *, int*, void**);
 
-int jgrapht_coloring_exec_greedy_random(void *, int*, void**);
+int jgrapht_xx_coloring_exec_greedy_random(void *, int*, void**);
 
-int jgrapht_coloring_exec_greedy_random_with_seed(void *, long long int, int*, void**);
+int jgrapht_xx_coloring_exec_greedy_random_with_seed(void *, long long int, int*, void**);
 
-int jgrapht_coloring_exec_greedy_dsatur(void *, int*, void**);
+int jgrapht_xx_coloring_exec_greedy_dsatur(void *, int*, void**);
 
-int jgrapht_coloring_exec_color_refinement(void *, int*, void**);
+int jgrapht_xx_coloring_exec_color_refinement(void *, int*, void**);
 
-int jgrapht_coloring_exec_chordal_minimum_coloring(void *, int*, void**);
+int jgrapht_xx_coloring_exec_chordal_minimum_coloring(void *, int*, void**);
 
 // connectivity
 
-int jgrapht_connectivity_strong_exec_kosaraju(void *, int*, void**);
+int jgrapht_xx_connectivity_strong_exec_kosaraju(void *, int*, void**);
 
-int jgrapht_connectivity_strong_exec_gabow(void *, int*, void**);
+int jgrapht_xx_connectivity_strong_exec_gabow(void *, int*, void**);
 
-int jgrapht_connectivity_weak_exec_bfs(void *, int*, void**);
+int jgrapht_xx_connectivity_weak_exec_bfs(void *, int*, void**);
 
 // cut
 
-int jgrapht_cut_mincut_exec_stoer_wagner(void *, double*, void**);
+int jgrapht_xx_cut_mincut_exec_stoer_wagner(void *, double*, void**);
 
-int jgrapht_cut_gomoryhu_exec_gusfield(void *, void**);
+int jgrapht_xx_cut_gomoryhu_exec_gusfield(void *, void**);
 
-int jgrapht_cut_gomoryhu_min_st_cut(void *, int, int, double*, void**);
+int jgrapht_ii_cut_gomoryhu_min_st_cut(void *, int, int, double*, void**);
 
-int jgrapht_cut_gomoryhu_min_cut(void *, double*, void**);
+int jgrapht_ll_cut_gomoryhu_min_st_cut(void *, long long int, long long int, double*, void**);
 
-int jgrapht_cut_gomoryhu_tree(void *, void**);
+int jgrapht_xx_cut_gomoryhu_min_cut(void *, double*, void**);
 
-int jgrapht_cut_oddmincutset_exec_padberg_rao(void *, void *, int, double*, void**);
+int jgrapht_ii_cut_gomoryhu_tree(void *, void**);
+
+int jgrapht_ll_cut_gomoryhu_tree(void *, void**);
+
+int jgrapht_xx_cut_oddmincutset_exec_padberg_rao(void *, void *, int, double*, void**);
 
 // cycles
 
-int jgrapht_cycles_eulerian_exec_hierholzer(void *, int*, void**);
+int jgrapht_xx_cycles_eulerian_exec_hierholzer(void *, int*, void**);
 
-int jgrapht_cycles_chinese_postman_exec_edmonds_johnson(void *, void**);
+int jgrapht_xx_cycles_chinese_postman_exec_edmonds_johnson(void *, void**);
 
-int jgrapht_cycles_simple_enumeration_exec_tarjan(void *, void**);
+int jgrapht_xx_cycles_simple_enumeration_exec_tarjan(void *, void**);
 
-int jgrapht_cycles_simple_enumeration_exec_tiernan(void *, void**);
+int jgrapht_xx_cycles_simple_enumeration_exec_tiernan(void *, void**);
 
-int jgrapht_cycles_simple_enumeration_exec_szwarcfiter_lauer(void *, void**);
+int jgrapht_xx_cycles_simple_enumeration_exec_szwarcfiter_lauer(void *, void**);
 
-int jgrapht_cycles_simple_enumeration_exec_johnson(void *, void**);
+int jgrapht_xx_cycles_simple_enumeration_exec_johnson(void *, void**);
 
-int jgrapht_cycles_simple_enumeration_exec_hawick_james(void *, void**);
+int jgrapht_xx_cycles_simple_enumeration_exec_hawick_james(void *, void**);
 
-int jgrapht_cycles_fundamental_basis_exec_queue_bfs(void *, double*, void**);
+int jgrapht_xx_cycles_fundamental_basis_exec_queue_bfs(void *, double*, void**);
 
-int jgrapht_cycles_fundamental_basis_exec_stack_bfs(void *, double*, void**);
+int jgrapht_xx_cycles_fundamental_basis_exec_stack_bfs(void *, double*, void**);
 
-int jgrapht_cycles_fundamental_basis_exec_paton(void *, double*, void**);
+int jgrapht_xx_cycles_fundamental_basis_exec_paton(void *, double*, void**);
 
 // drawing
 
-int jgrapht_drawing_layout_model_2d_create(double, double, double, double, void**);
+int jgrapht_xx_drawing_layout_model_2d_create(double, double, double, double, void**);
 
-int jgrapht_drawing_layout_model_2d_get_drawable_area(void *, double*, double*, double*, double*);
+int jgrapht_xx_drawing_layout_model_2d_get_drawable_area(void *, double*, double*, double*, double*);
 
-int jgrapht_drawing_layout_model_2d_get_vertex(void *, int, double*, double*);
+int jgrapht_ii_drawing_layout_model_2d_get_vertex(void *, int, double*, double*);
 
-int jgrapht_drawing_layout_model_2d_put_vertex(void *, int, double, double);
+int jgrapht_ll_drawing_layout_model_2d_get_vertex(void *, long long int, double*, double*);
 
-int jgrapht_drawing_layout_model_2d_get_fixed(void *, int, int*);
+int jgrapht_ii_drawing_layout_model_2d_put_vertex(void *, int, double, double);
 
-int jgrapht_drawing_layout_model_2d_set_fixed(void *, int, int);
+int jgrapht_ll_drawing_layout_model_2d_put_vertex(void *, long long int, double, double);
 
-int jgrapht_drawing_exec_random_layout_2d(void *, void *, long long int);
+int jgrapht_ii_drawing_layout_model_2d_get_fixed(void *, int, int*);
 
-int jgrapht_drawing_exec_circular_layout_2d(void *, void *, double, void *);
+int jgrapht_ll_drawing_layout_model_2d_get_fixed(void *, long long int, int*);
 
-int jgrapht_drawing_exec_fr_layout_2d(void *, void *, int, double, long long int);
+int jgrapht_ii_drawing_layout_model_2d_set_fixed(void *, int, int);
 
-int jgrapht_drawing_exec_indexed_fr_layout_2d(void *, void *, int, double, long long int, double, double);
+int jgrapht_ll_drawing_layout_model_2d_set_fixed(void *, long long int, int);
+
+int jgrapht_xx_drawing_exec_random_layout_2d(void *, void *, long long int);
+
+int jgrapht_ii_drawing_exec_circular_layout_2d(void *, void *, double, void *);
+
+int jgrapht_ll_drawing_exec_circular_layout_2d(void *, void *, double, void *);
+
+int jgrapht_xx_drawing_exec_fr_layout_2d(void *, void *, int, double, long long int);
+
+int jgrapht_xx_drawing_exec_indexed_fr_layout_2d(void *, void *, int, double, long long int, double, double);
 
 // exporter
 
-int jgrapht_export_file_dimacs(void *, char*, dimacs_format_t, int, void *);
+int jgrapht_ii_export_file_dimacs(void *, char*, dimacs_format_t, int, void *);
 
-int jgrapht_export_string_dimacs(void *, dimacs_format_t, int, void *, void**);
+int jgrapht_ll_export_file_dimacs(void *, char*, dimacs_format_t, int, void *);
 
-int jgrapht_export_file_gml(void *, char*, int, int, int, void *, void *, void *);
+int jgrapht_ii_export_string_dimacs(void *, dimacs_format_t, int, void *, void**);
 
-int jgrapht_export_string_gml(void *, int, int, int, void *, void *, void *, void **);
+int jgrapht_ll_export_string_dimacs(void *, dimacs_format_t, int, void *, void**);
 
-int jgrapht_export_file_json(void *, char*, void *, void *, void *);
+int jgrapht_xx_export_file_gml(void *, char*, int, int, int, void *, void *, void *);
 
-int jgrapht_export_string_json(void *, void *, void *, void *, void **);
+int jgrapht_xx_export_string_gml(void *, int, int, int, void *, void *, void *, void **);
 
-int jgrapht_export_file_lemon(void *, char*, int, int, void *);
+int jgrapht_xx_export_file_json(void *, char*, void *, void *, void *);
 
-int jgrapht_export_string_lemon(void *, int, int, void *, void **);
+int jgrapht_xx_export_string_json(void *, void *, void *, void *, void **);
 
-int jgrapht_export_file_csv(void *, char*, csv_format_t, int, int, int, void *);
+int jgrapht_xx_export_file_lemon(void *, char*, int, int, void *);
 
-int jgrapht_export_string_csv(void *, csv_format_t, int, int, int, void *, void **);
+int jgrapht_xx_export_string_lemon(void *, int, int, void *, void **);
 
-int jgrapht_export_file_gexf(void *, char*, void *, void *, void *, void *, void *, int, int, int, int);
+int jgrapht_xx_export_file_csv(void *, char*, csv_format_t, int, int, int, void *);
 
-int jgrapht_export_string_gexf(void *, void *, void *, void *, void *, void *, int, int, int, int, void **);
+int jgrapht_xx_export_string_csv(void *, csv_format_t, int, int, int, void *, void **);
 
-int jgrapht_export_file_dot(void *, char*, void *, void *, void *);
+int jgrapht_xx_export_file_gexf(void *, char*, void *, void *, void *, void *, void *, int, int, int, int);
 
-int jgrapht_export_string_dot(void *, void *, void *, void *, void **);
+int jgrapht_xx_export_string_gexf(void *, void *, void *, void *, void *, void *, int, int, int, int, void **);
 
-int jgrapht_export_file_graph6(void *, char*);
+int jgrapht_xx_export_file_dot(void *, char*, void *, void *, void *);
 
-int jgrapht_export_string_graph6(void *, void **);
+int jgrapht_xx_export_string_dot(void *, void *, void *, void *, void **);
 
-int jgrapht_export_file_sparse6(void *, char*);
+int jgrapht_xx_export_file_graph6(void *, char*);
 
-int jgrapht_export_string_sparse6(void *, void**);
+int jgrapht_xx_export_string_graph6(void *, void **);
 
-int jgrapht_export_file_graphml(void *, char*, void *, void *, void *, void *, int, int, int);
+int jgrapht_xx_export_file_sparse6(void *, char*);
 
-int jgrapht_export_string_graphml(void *, void *, void *, void *, void *, int, int, int, void**);
+int jgrapht_xx_export_string_sparse6(void *, void**);
+
+int jgrapht_xx_export_file_graphml(void *, char*, void *, void *, void *, void *, int, int, int);
+
+int jgrapht_xx_export_string_graphml(void *, void *, void *, void *, void *, int, int, int, void**);
 
 // flow 
 
-int jgrapht_maxflow_exec_push_relabel(void *, int, int, double*, void**, void**);
+int jgrapht_ii_maxflow_exec_push_relabel(void *, int, int, double*, void**, void**);
 
-int jgrapht_maxflow_exec_dinic(void *, int, int, double*, void**, void**);
+int jgrapht_ll_maxflow_exec_push_relabel(void *, long long int, long long int, double*, void**, void**);
 
-int jgrapht_maxflow_exec_edmonds_karp(void *, int, int, double*, void**, void**);
+int jgrapht_ii_maxflow_exec_dinic(void *, int, int, double*, void**, void**);
 
-int jgrapht_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double*, void**, void**);
+int jgrapht_ll_maxflow_exec_dinic(void *, long long int, long long int, double*, void**, void**);
 
-int jgrapht_equivalentflowtree_exec_gusfield(void *, void**);
+int jgrapht_ii_maxflow_exec_edmonds_karp(void *, int, int, double*, void**, void**);
 
-int jgrapht_equivalentflowtree_max_st_flow(void *, int, int, double*);
+int jgrapht_ll_maxflow_exec_edmonds_karp(void *, long long int, long long int, double*, void**, void**);
 
-int jgrapht_equivalentflowtree_tree(void *, void**);
+int jgrapht_ii_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double*, void**, void**);
+
+int jgrapht_ll_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double*, void**, void**);
+
+int jgrapht_xx_equivalentflowtree_exec_gusfield(void *, void**);
+
+int jgrapht_ii_equivalentflowtree_max_st_flow(void *, int, int, double*);
+
+int jgrapht_ll_equivalentflowtree_max_st_flow(void *, long long int, long long int, double*);
+
+int jgrapht_ii_equivalentflowtree_tree(void *, void**);
+
+int jgrapht_ll_equivalentflowtree_tree(void *, void**);
 
 // generate
 
-int jgrapht_generate_barabasi_albert(void *, int, int, int, long long int);
+int jgrapht_xx_generate_barabasi_albert(void *, int, int, int, long long int);
 
-int jgrapht_generate_barabasi_albert_forest(void *, int, int, long long int);
+int jgrapht_xx_generate_barabasi_albert_forest(void *, int, int, long long int);
 
-int jgrapht_generate_complete(void *, int);
+int jgrapht_xx_generate_complete(void *, int);
 
-int jgrapht_generate_bipartite_complete(void *, int, int);
+int jgrapht_xx_generate_bipartite_complete(void *, int, int);
 
-int jgrapht_generate_empty(void *, int);
+int jgrapht_xx_generate_empty(void *, int);
 
-int jgrapht_generate_gnm_random(void *, int, int, int, int, long long int);
+int jgrapht_xx_generate_gnm_random(void *, int, int, int, int, long long int);
 
-int jgrapht_generate_gnp_random(void *, int, double, int, long long int);
+int jgrapht_xx_generate_gnp_random(void *, int, double, int, long long int);
 
-int jgrapht_generate_ring(void *, int);
+int jgrapht_xx_generate_ring(void *, int);
 
-int jgrapht_generate_scalefree(void *, int, long long int);
+int jgrapht_xx_generate_scalefree(void *, int, long long int);
 
-int jgrapht_generate_watts_strogatz(void *, int, int, double, int, long long int);
+int jgrapht_xx_generate_watts_strogatz(void *, int, int, double, int, long long int);
 
-int jgrapht_generate_kleinberg_smallworld(void *, int, int, int, int, long long int);
+int jgrapht_xx_generate_kleinberg_smallworld(void *, int, int, int, int, long long int);
 
-int jgrapht_generate_complement(void *, void *, int);
+int jgrapht_xx_generate_complement(void *, void *, int);
 
-int jgrapht_generate_generalized_petersen(void *, int, int);
+int jgrapht_xx_generate_generalized_petersen(void *, int, int);
 
-int jgrapht_generate_grid(void *, int, int);
+int jgrapht_xx_generate_grid(void *, int, int);
 
-int jgrapht_generate_hypercube(void *, int);
+int jgrapht_xx_generate_hypercube(void *, int);
 
-int jgrapht_generate_linear(void *, int);
+int jgrapht_xx_generate_linear(void *, int);
 
-int jgrapht_generate_random_regular(void *, int, int, long long int);
+int jgrapht_xx_generate_random_regular(void *, int, int, long long int);
 
-int jgrapht_generate_star(void *, int);
+int jgrapht_xx_generate_star(void *, int);
 
-int jgrapht_generate_wheel(void *, int, int);
+int jgrapht_xx_generate_wheel(void *, int, int);
 
-int jgrapht_generate_windmill(void *, int, int, int);
+int jgrapht_xx_generate_windmill(void *, int, int, int);
 
-int jgrapht_generate_linearized_chord_diagram(void *, int, int, long long int);
+int jgrapht_xx_generate_linearized_chord_diagram(void *, int, int, long long int);
 
 // graph
 
-int jgrapht_graph_create(int, int, int, int, void**);
+int jgrapht_ii_graph_create(int, int, int, int, void**);
 
-int jgrapht_graph_sparse_create(int, int, int, void *, void**);
+int jgrapht_ll_graph_create(int, int, int, int, void**);
 
-int jgrapht_graph_vertices_count(void *, int*);
+int jgrapht_ii_graph_sparse_create(int, int, int, void *, void**);
 
-int jgrapht_graph_edges_count(void *, int*);
+int jgrapht_ii_graph_vertices_count(void *, int*);
 
-int jgrapht_graph_add_vertex(void *, int*);
+int jgrapht_ll_graph_vertices_count(void *, long long*);
 
-int jgrapht_graph_add_given_vertex(void *, int, int *);
+int jgrapht_ii_graph_edges_count(void *, int*);
 
-int jgrapht_graph_remove_vertex(void *, int, int*);
+int jgrapht_ll_graph_edges_count(void *, long long*);
 
-int jgrapht_graph_contains_vertex(void *, int, int*);
+int jgrapht_ii_graph_add_vertex(void *, int*);
 
-int jgrapht_graph_add_edge(void *, int, int, int*);
+int jgrapht_ll_graph_add_vertex(void *, long long*);
 
-int jgrapht_graph_add_given_edge(void *, int, int, int, int*);
+int jgrapht_ii_graph_add_given_vertex(void *, int, int *);
 
-int jgrapht_graph_remove_edge(void *, int, int*);
+int jgrapht_ll_graph_add_given_vertex(void *, long long int, int *);
 
-int jgrapht_graph_contains_edge(void *, int, int*);
+int jgrapht_ii_graph_remove_vertex(void *, int, int*);
 
-int jgrapht_graph_contains_edge_between(void *, int, int, int*);
+int jgrapht_ll_graph_remove_vertex(void *, long long int, int*);
 
-int jgrapht_graph_degree_of(void *, int, int*);
+int jgrapht_ii_graph_contains_vertex(void *, int, int*);
 
-int jgrapht_graph_indegree_of(void *, int, int*);
+int jgrapht_ll_graph_contains_vertex(void *, long long int, int*);
 
-int jgrapht_graph_outdegree_of(void *, int, int*);
+int jgrapht_ii_graph_add_edge(void *, int, int, int*);
 
-int jgrapht_graph_edge_source(void *, int, int*);
+int jgrapht_ll_graph_add_edge(void *, long long int, long long int, long long*);
 
-int jgrapht_graph_edge_target(void *, int, int*);
+int jgrapht_ii_graph_add_given_edge(void *, int, int, int, int*);
 
-int jgrapht_graph_is_weighted(void *, int*);
+int jgrapht_ll_graph_add_given_edge(void *, long long int, long long int, long long int, int*);
 
-int jgrapht_graph_is_directed(void *, int*);
+int jgrapht_ii_graph_remove_edge(void *, int, int*);
 
-int jgrapht_graph_is_undirected(void *, int*);
+int jgrapht_ll_graph_remove_edge(void *, long long int, int*);
 
-int jgrapht_graph_is_allowing_selfloops(void *, int*);
+int jgrapht_ii_graph_contains_edge(void *, int, int*);
 
-int jgrapht_graph_is_allowing_multipleedges(void *, int*);
+int jgrapht_ll_graph_contains_edge(void *, long long int, int*);
 
-int jgrapht_graph_is_allowing_cycles(void *, int*);
+int jgrapht_ii_graph_contains_edge_between(void *, int, int, int*);
 
-int jgrapht_graph_is_modifiable(void *, int*);
+int jgrapht_ll_graph_contains_edge_between(void *, long long int, long long int, int*);
 
-int jgrapht_graph_get_edge_weight(void *, int, double*);
+int jgrapht_ii_graph_degree_of(void *, int, int*);
 
-int jgrapht_graph_set_edge_weight(void *, int, double);
+int jgrapht_ll_graph_degree_of(void *, long long int, long long*);
 
-int jgrapht_graph_create_all_vit(void *, void**);
+int jgrapht_ii_graph_indegree_of(void *, int, int*);
 
-int jgrapht_graph_create_all_eit(void *, void**);
+int jgrapht_ll_graph_indegree_of(void *, long long int, long long*);
 
-int jgrapht_graph_create_between_eit(void *, int, int, void**);
+int jgrapht_ii_graph_outdegree_of(void *, int, int*);
 
-int jgrapht_graph_vertex_create_eit(void *, int, void**);
+int jgrapht_ll_graph_outdegree_of(void *, long long int, long long*);
 
-int jgrapht_graph_vertex_create_out_eit(void *, int, void**);
+int jgrapht_ii_graph_edge_source(void *, int, int*);
 
-int jgrapht_graph_vertex_create_in_eit(void *, int, void**);
+int jgrapht_ll_graph_edge_source(void *, long long int, long long*);
 
-int jgrapht_graph_as_undirected(void *, void**);
+int jgrapht_ii_graph_edge_target(void *, int, int*);
 
-int jgrapht_graph_as_unmodifiable(void *, void**);
+int jgrapht_ll_graph_edge_target(void *, long long int, long long*);
 
-int jgrapht_graph_as_unweighted(void *, void**);
+int jgrapht_xx_graph_is_weighted(void *, int*);
 
-int jgrapht_graph_as_edgereversed(void *, void**);
+int jgrapht_xx_graph_is_directed(void *, int*);
 
-int jgrapht_graph_as_weighted(void *, void *, int, int, void**);
+int jgrapht_xx_graph_is_undirected(void *, int*);
 
-int jgrapht_graph_as_masked_subgraph(void *, void *, void *, void**);
+int jgrapht_xx_graph_is_allowing_selfloops(void *, int*);
 
-int jgrapht_graph_as_subgraph(void *, void *, void *, void**);
+int jgrapht_xx_graph_is_allowing_multipleedges(void *, int*);
 
-int jgrapht_graph_as_graph_union(void *, void *, void *, void**);
+int jgrapht_xx_graph_is_allowing_cycles(void *, int*);
 
-int jgrapht_graph_dag_create(int, int, void**);
+int jgrapht_xx_graph_is_modifiable(void *, int*);
 
-int jgrapht_graph_dag_topological_it(void *, void**);
+int jgrapht_ii_graph_get_edge_weight(void *, int, double*);
 
-int jgrapht_graph_dag_vertex_descendants(void *, int, void**);
+int jgrapht_ll_graph_get_edge_weight(void *, long long int, double*);
 
-int jgrapht_graph_dag_vertex_ancestors(void *, int, void**);
+int jgrapht_ii_graph_set_edge_weight(void *, int, double);
+
+int jgrapht_ll_graph_set_edge_weight(void *, long long int, double);
+
+int jgrapht_xx_graph_create_all_vit(void *, void**);
+
+int jgrapht_xx_graph_create_all_eit(void *, void**);
+
+int jgrapht_ii_graph_create_between_eit(void *, int, int, void**);
+
+int jgrapht_ll_graph_create_between_eit(void *, long long int, long long int, void**);
+
+int jgrapht_ii_graph_vertex_create_eit(void *, int, void**);
+
+int jgrapht_ll_graph_vertex_create_eit(void *, long long int, void**);
+
+int jgrapht_ii_graph_vertex_create_out_eit(void *, int, void**);
+
+int jgrapht_ll_graph_vertex_create_out_eit(void *, long long int, void**);
+
+int jgrapht_ii_graph_vertex_create_in_eit(void *, int, void**);
+
+int jgrapht_ll_graph_vertex_create_in_eit(void *, long long int, void**);
+
+int jgrapht_xx_graph_as_undirected(void *, void**);
+
+int jgrapht_xx_graph_as_unmodifiable(void *, void**);
+
+int jgrapht_xx_graph_as_unweighted(void *, void**);
+
+int jgrapht_xx_graph_as_edgereversed(void *, void**);
+
+int jgrapht_ii_graph_as_weighted(void *, void *, int, int, void**);
+
+int jgrapht_ll_graph_as_weighted(void *, void *, int, int, void**);
+
+int jgrapht_ii_graph_as_masked_subgraph(void *, void *, void *, void**);
+
+int jgrapht_ll_graph_as_masked_subgraph(void *, void *, void *, void**);
+
+int jgrapht_ii_graph_as_subgraph(void *, void *, void *, void**);
+
+int jgrapht_ll_graph_as_subgraph(void *, void *, void *, void**);
+
+int jgrapht_ii_graph_as_graph_union(void *, void *, void *, void**);
+
+int jgrapht_ll_graph_as_graph_union(void *, void *, void *, void**);
+
+int jgrapht_ii_graph_dag_create(int, int, void**);
+
+int jgrapht_ll_graph_dag_create(int, int, void**);
+
+int jgrapht_xx_graph_dag_topological_it(void *, void**);
+
+int jgrapht_ii_graph_dag_vertex_descendants(void *, int, void**);
+
+int jgrapht_ll_graph_dag_vertex_descendants(void *, long long int, void**);
+
+int jgrapht_ii_graph_dag_vertex_ancestors(void *, int, void**);
+
+int jgrapht_ll_graph_dag_vertex_ancestors(void *, long long int, void**);
 
 // graph metrics
 
