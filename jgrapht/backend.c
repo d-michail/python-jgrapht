@@ -1110,146 +1110,146 @@ int jgrapht_ll_graph_dag_vertex_ancestors(void *g, long long int vertex, void** 
 
 // graph metrics
 
-int jgrapht_graph_metrics_diameter(void *g, double* diameter) { 
+int jgrapht_xx_graph_metrics_diameter(void *g, double* diameter) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_metrics_diameter(thread, g, diameter);
+    return jgrapht_capi_xx_graph_metrics_diameter(thread, g, diameter);
 }
 
-int jgrapht_graph_metrics_radius(void *g, double* radius) { 
+int jgrapht_xx_graph_metrics_radius(void *g, double* radius) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_metrics_radius(thread, g, radius);
+    return jgrapht_capi_xx_graph_metrics_radius(thread, g, radius);
 }
 
-int jgrapht_graph_metrics_girth(void *g, int* girth) {
+int jgrapht_xx_graph_metrics_girth(void *g, int* girth) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_metrics_girth(thread, g, girth);
+    return jgrapht_capi_xx_graph_metrics_girth(thread, g, girth);
 }
 
-int jgrapht_graph_metrics_triangles(void *g, long long int* triangles) {
+int jgrapht_xx_graph_metrics_triangles(void *g, long long int* triangles) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_metrics_triangles(thread, g, triangles);
+    return jgrapht_capi_xx_graph_metrics_triangles(thread, g, triangles);
 }
 
-int jgrapht_graph_metrics_measure_graph(void *g, double* diameter_res, double* radius_res, void** center_res, void** periphery_res, void** pseudo_periphery_res, void** vertex_eccentricity_map_res) { 
+int jgrapht_xx_graph_metrics_measure_graph(void *g, double* diameter_res, double* radius_res, void** center_res, void** periphery_res, void** pseudo_periphery_res, void** vertex_eccentricity_map_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_metrics_measure_graph(thread, g, diameter_res, radius_res, center_res, periphery_res, pseudo_periphery_res, vertex_eccentricity_map_res);
+    return jgrapht_capi_xx_graph_metrics_measure_graph(thread, g, diameter_res, radius_res, center_res, periphery_res, pseudo_periphery_res, vertex_eccentricity_map_res);
 }
 
 // graph test
 
-int jgrapht_graph_test_is_empty(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_empty(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_empty(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_empty(thread, g, res);
 }
 
-int jgrapht_graph_test_is_simple(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_simple(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_simple(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_simple(thread, g, res);
 }
 
-int jgrapht_graph_test_has_selfloops(void *g, int* res) { 
+int jgrapht_xx_graph_test_has_selfloops(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_has_selfloops(thread, g, res);
+    return jgrapht_capi_xx_graph_test_has_selfloops(thread, g, res);
 }
 
-int jgrapht_graph_test_has_multipleedges(void *g, int* res) { 
+int jgrapht_xx_graph_test_has_multipleedges(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_has_multipleedges(thread, g, res);
+    return jgrapht_capi_xx_graph_test_has_multipleedges(thread, g, res);
 }
 
-int jgrapht_graph_test_is_complete(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_complete(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_complete(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_complete(thread, g, res);
 }
 
-int jgrapht_graph_test_is_weakly_connected(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_weakly_connected(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_weakly_connected(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_weakly_connected(thread, g, res);
 }
 
-int jgrapht_graph_test_is_strongly_connected(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_strongly_connected(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_strongly_connected(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_strongly_connected(thread, g, res);
 }
 
-int jgrapht_graph_test_is_tree(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_tree(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_tree(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_tree(thread, g, res);
 }
 
-int jgrapht_graph_test_is_forest(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_forest(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_forest(thread, g, res); 
+    return jgrapht_capi_xx_graph_test_is_forest(thread, g, res); 
 }
 
-int jgrapht_graph_test_is_overfull(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_overfull(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_overfull(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_overfull(thread, g, res);
 }
 
-int jgrapht_graph_test_is_split(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_split(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_split(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_split(thread, g, res);
 }
 
-int jgrapht_graph_test_is_bipartite(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_bipartite(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_bipartite(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_bipartite(thread, g, res);
 }
 
-int jgrapht_graph_test_is_cubic(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_cubic(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_cubic(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_cubic(thread, g, res);
 }
 
-int jgrapht_graph_test_is_eulerian(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_eulerian(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_eulerian(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_eulerian(thread, g, res);
 }
 
-int jgrapht_graph_test_is_chordal(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_chordal(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_chordal(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_chordal(thread, g, res);
 }
 
-int jgrapht_graph_test_is_weakly_chordal(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_weakly_chordal(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_weakly_chordal(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_weakly_chordal(thread, g, res);
 }
 
-int jgrapht_graph_test_has_ore(void *g, int* res) { 
+int jgrapht_xx_graph_test_has_ore(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_has_ore(thread, g, res);
+    return jgrapht_capi_xx_graph_test_has_ore(thread, g, res);
 }
 
-int jgrapht_graph_test_is_trianglefree(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_trianglefree(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_trianglefree(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_trianglefree(thread, g, res);
 }
 
-int jgrapht_graph_test_is_perfect(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_perfect(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_perfect(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_perfect(thread, g, res);
 }
 
-int jgrapht_graph_test_is_planar(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_planar(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_planar(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_planar(thread, g, res);
 }
 
-int jgrapht_graph_test_is_kuratowski_subdivision(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_kuratowski_subdivision(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_kuratowski_subdivision(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_kuratowski_subdivision(thread, g, res);
 }
 
-int jgrapht_graph_test_is_k33_subdivision(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_k33_subdivision(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_k33_subdivision(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_k33_subdivision(thread, g, res);
 }
 
-int jgrapht_graph_test_is_k5_subdivision(void *g, int* res) { 
+int jgrapht_xx_graph_test_is_k5_subdivision(void *g, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_graph_test_is_k5_subdivision(thread, g, res);
+    return jgrapht_capi_xx_graph_test_is_k5_subdivision(thread, g, res);
 }
 
 // handles
@@ -1269,9 +1269,19 @@ int jgrapht_handles_get_edge_pair(void *handle, int* s, int* t) {
     return jgrapht_capi_handles_get_edge_pair(thread, handle, s, t);
 }
 
+int jgrapht_handles_get_long_edge_pair(void *handle, long long* s, long long* t) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_handles_get_long_edge_pair(thread, handle, s, t);
+}
+
 int jgrapht_handles_get_edge_triple(void *handle, int* s, int* t, double* w) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_handles_get_edge_triple(thread, handle, s, t, w);
+}
+
+int jgrapht_handles_get_long_edge_triple(void *handle, long long* s, long long* t, double* w) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_handles_get_long_edge_triple(thread, handle, s, t, w);
 }
 
 int jgrapht_handles_get_str_edge_triple(void *handle, char** s, char** t, double* w) { 
@@ -1279,312 +1289,507 @@ int jgrapht_handles_get_str_edge_triple(void *handle, char** s, char** t, double
     return jgrapht_capi_handles_get_str_edge_triple(thread, handle, s, t, w);
 }
 
-int jgrapht_handles_get_graphpath(void *graph_path, double* weight, int* start_vertex, int* end_vertex, void** eit) {
+int jgrapht_ii_handles_get_graphpath(void *graph_path, double* weight, int* start_vertex, int* end_vertex, void** eit) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_handles_get_graphpath(thread, graph_path, weight, start_vertex, end_vertex, eit);
+    return jgrapht_capi_ii_handles_get_graphpath(thread, graph_path, weight, start_vertex, end_vertex, eit);
+}
+
+int jgrapht_ll_handles_get_graphpath(void *graph_path, double* weight, long long* start_vertex, long long* end_vertex, void** eit) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_handles_get_graphpath(thread, graph_path, weight, start_vertex, end_vertex, eit);
 }
 
 // importers
 
-int jgrapht_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ii_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_file_dimacs(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ii_import_file_dimacs(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_string_dimacs(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ll_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_string_dimacs(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ll_import_file_dimacs(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_file_gml(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ii_import_string_dimacs(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_file_gml(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ii_import_string_dimacs(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_string_gml(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ll_import_string_dimacs(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_string_gml(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ll_import_string_dimacs(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_file_json(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ii_import_file_gml(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_file_json(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ii_import_file_gml(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_string_json(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ll_import_file_gml(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_string_json(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ll_import_file_gml(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_file_csv(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, csv_format_t format, int import_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge) { 
+int jgrapht_ii_import_string_gml(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_file_csv(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, format, import_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge);
+    return jgrapht_capi_ii_import_string_gml(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_string_csv(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, csv_format_t format, int import_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge) { 
+int jgrapht_ll_import_string_gml(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_string_csv(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, format, import_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge);
+    return jgrapht_capi_ll_import_string_gml(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_file_gexf(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ii_import_file_json(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_file_gexf(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ii_import_file_json(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_string_gexf(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ll_import_file_json(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_string_gexf(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ll_import_file_json(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_file_graphml_simple(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ii_import_string_json(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_file_graphml_simple(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ii_import_string_json(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_string_graphml_simple(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ll_import_string_json(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_string_graphml_simple(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ll_import_string_json(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ii_import_file_csv(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, csv_format_t format, int import_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_file_csv(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, format, import_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge);
+}
+
+int jgrapht_ll_import_file_csv(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, csv_format_t format, int import_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_file_csv(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, format, import_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge);
+}
+
+int jgrapht_ii_import_string_csv(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, csv_format_t format, int import_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_string_csv(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, format, import_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge);
+}
+
+int jgrapht_ll_import_string_csv(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, csv_format_t format, int import_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_string_csv(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, format, import_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge);
+}
+
+int jgrapht_ii_import_file_gexf(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_file_gexf(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ll_import_file_gexf(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_file_gexf(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ii_import_string_gexf(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_string_gexf(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ll_import_string_gexf(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_string_gexf(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ii_import_file_graphml_simple(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_file_graphml_simple(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ll_import_file_graphml_simple(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_file_graphml_simple(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ii_import_string_graphml_simple(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_string_graphml_simple(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }    
 
-int jgrapht_import_file_graphml(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ll_import_string_graphml_simple(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_file_graphml(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ll_import_string_graphml_simple(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_string_graphml(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ii_import_file_graphml(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_string_graphml(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ii_import_file_graphml(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_file_dot(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ll_import_file_graphml(void *g, char* filename, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_file_dot(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ll_import_file_graphml(thread, g, filename, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_string_dot(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ii_import_string_graphml(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_string_dot(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ii_import_string_graphml(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_file_graph6sparse6(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) {
+int jgrapht_ll_import_string_graphml(void *g, char* input, void *import_vertex_id_fptr, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_file_graph6sparse6(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ll_import_string_graphml(thread, g, input, import_vertex_id_fptr, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
-int jgrapht_import_string_graph6sparse6(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) {
+int jgrapht_ii_import_file_dot(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_string_graph6sparse6(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ii_import_file_dot(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ll_import_file_dot(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_file_dot(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ii_import_string_dot(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_string_dot(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ll_import_string_dot(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_string_dot(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ii_import_file_graph6sparse6(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_file_graph6sparse6(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ll_import_file_graph6sparse6(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_file_graph6sparse6(thread, g, filename, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ii_import_string_graph6sparse6(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_string_graph6sparse6(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
+}
+
+int jgrapht_ll_import_string_graph6sparse6(void *g, char* input, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_string_graph6sparse6(thread, g, input, import_vertex_id_fptr, vertex_attribute_fptr, edge_attribute_fptr, v_notify_fptr, e_notify_fptr);
 }
 
 // edgelist
 
-int jgrapht_import_edgelist_noattrs_file_dimacs(char* filename, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_file_dimacs(char* filename, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_file_dimacs(thread, filename, res);
+    return jgrapht_capi_xx_import_edgelist_noattrs_file_dimacs(thread, filename, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_dimacs(char* input, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_string_dimacs(char* input, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_string_dimacs(thread, input, res);
+    return jgrapht_capi_xx_import_edgelist_noattrs_string_dimacs(thread, input, res);
 }
 
-int jgrapht_import_edgelist_attrs_file_dimacs(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_ii_import_edgelist_attrs_file_dimacs(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_file_dimacs(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);    
+    return jgrapht_capi_ii_import_edgelist_attrs_file_dimacs(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);    
 }
 
-int jgrapht_import_edgelist_attrs_string_dimacs(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_file_dimacs(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_string_dimacs(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);        
+    return jgrapht_capi_ll_import_edgelist_attrs_file_dimacs(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);    
 }
 
-int jgrapht_import_edgelist_noattrs_file_gml(char* filename, void** res) { 
+int jgrapht_ii_import_edgelist_attrs_string_dimacs(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_file_gml(thread, filename, res);
+    return jgrapht_capi_ii_import_edgelist_attrs_string_dimacs(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);        
 }
 
-int jgrapht_import_edgelist_noattrs_string_gml(char* input, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_string_dimacs(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_string_gml(thread, input, res);
+    return jgrapht_capi_ll_import_edgelist_attrs_string_dimacs(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);        
 }
 
-int jgrapht_import_edgelist_attrs_file_gml(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_file_gml(char* filename, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_file_gml(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);    
+    return jgrapht_capi_xx_import_edgelist_noattrs_file_gml(thread, filename, res);
 }
 
-int jgrapht_import_edgelist_attrs_string_gml(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_string_gml(char* input, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_string_gml(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);        
+    return jgrapht_capi_xx_import_edgelist_noattrs_string_gml(thread, input, res);
 }
 
-int jgrapht_import_edgelist_noattrs_file_json(char* filename, void** res) { 
+int jgrapht_ii_import_edgelist_attrs_file_gml(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_file_json(thread, filename, res);
+    return jgrapht_capi_ii_import_edgelist_attrs_file_gml(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);    
 }
 
-int jgrapht_import_edgelist_noattrs_string_json(char* input, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_file_gml(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_string_json(thread, input, res);
+    return jgrapht_capi_ll_import_edgelist_attrs_file_gml(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);    
 }
 
-int jgrapht_import_edgelist_attrs_file_json(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
+int jgrapht_ii_import_edgelist_attrs_string_gml(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_file_json(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_ii_import_edgelist_attrs_string_gml(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);        
 }
 
-int jgrapht_import_edgelist_attrs_string_json(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
+int jgrapht_ll_import_edgelist_attrs_string_gml(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_string_json(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_ll_import_edgelist_attrs_string_gml(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);        
 }
 
-int jgrapht_import_edgelist_noattrs_file_csv(char* filename, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_file_json(char* filename, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_file_csv(thread, filename, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);
+    return jgrapht_capi_xx_import_edgelist_noattrs_file_json(thread, filename, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_csv(char* input, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_string_json(char* input, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_string_csv(thread, input, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
+    return jgrapht_capi_xx_import_edgelist_noattrs_string_json(thread, input, res);
 }
 
-int jgrapht_import_edgelist_attrs_file_csv(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+int jgrapht_ii_import_edgelist_attrs_file_json(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_file_csv(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
+    return jgrapht_capi_ii_import_edgelist_attrs_file_json(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_attrs_string_csv(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_file_json(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_string_csv(thread, input, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
+    return jgrapht_capi_ll_import_edgelist_attrs_file_json(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_noattrs_file_gexf(char* filename, int validate_schema, void** res) { 
+int jgrapht_ii_import_edgelist_attrs_string_json(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_file_gexf(thread, filename, validate_schema, res);
+    return jgrapht_capi_ii_import_edgelist_attrs_string_json(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_gexf(char* input, int validate_schema, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_string_json(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_string_gexf(thread, input, validate_schema, res);
+    return jgrapht_capi_ll_import_edgelist_attrs_string_json(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_attrs_file_gexf(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_file_csv(char* filename, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_file_gexf(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_xx_import_edgelist_noattrs_file_csv(thread, filename, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);
 }
 
-int jgrapht_import_edgelist_attrs_string_gexf(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_string_csv(char* input, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_string_gexf(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_xx_import_edgelist_noattrs_string_csv(thread, input, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
 }
 
-int jgrapht_import_edgelist_noattrs_file_graphml_simple(char* filename, int validate_schema, void** res) {
+int jgrapht_ii_import_edgelist_attrs_file_csv(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_file_graphml_simple(thread, filename, validate_schema, res);
+    return jgrapht_capi_ii_import_edgelist_attrs_file_csv(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
 }
 
-int jgrapht_import_edgelist_noattrs_string_graphml_simple(char* input, int validate_schema, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_file_csv(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_string_graphml_simple(thread, input, validate_schema, res);
+    return jgrapht_capi_ll_import_edgelist_attrs_file_csv(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
 }
 
-int jgrapht_import_edgelist_attrs_file_graphml_simple(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_ii_import_edgelist_attrs_string_csv(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_file_graphml_simple(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_ii_import_edgelist_attrs_string_csv(thread, input, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
 }
 
-int jgrapht_import_edgelist_attrs_string_graphml_simple(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_string_csv(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, csv_format_t format, int export_edge_weights, int matrix_format_nodeid, int matrix_format_zero_when_no_edge, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_string_graphml_simple(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_ll_import_edgelist_attrs_string_csv(thread, input, vertex_attribute_fptr, edge_attribute_fptr, format, export_edge_weights, matrix_format_nodeid, matrix_format_zero_when_no_edge, res);    
 }
 
-int jgrapht_import_edgelist_noattrs_file_graphml(char* filename, int validate_schema, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_file_gexf(char* filename, int validate_schema, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_file_graphml(thread, filename, validate_schema, res);
+    return jgrapht_capi_xx_import_edgelist_noattrs_file_gexf(thread, filename, validate_schema, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_graphml(char* input, int validate_schema, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_string_gexf(char* input, int validate_schema, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_string_graphml(thread, input, validate_schema, res);
+    return jgrapht_capi_xx_import_edgelist_noattrs_string_gexf(thread, input, validate_schema, res);
 }
 
-int jgrapht_import_edgelist_attrs_file_graphml(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_ii_import_edgelist_attrs_file_gexf(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_file_graphml(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_ii_import_edgelist_attrs_file_gexf(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_attrs_string_graphml(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_file_gexf(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_string_graphml(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_ll_import_edgelist_attrs_file_gexf(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_noattrs_file_dot(char* filename, void** res) { 
+int jgrapht_ii_import_edgelist_attrs_string_gexf(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_file_dot(thread, filename, res);
+    return jgrapht_capi_ii_import_edgelist_attrs_string_gexf(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_dot(char* input, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_string_gexf(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_string_dot(thread, input, res);
+    return jgrapht_capi_ll_import_edgelist_attrs_string_gexf(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_attrs_file_dot(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_file_graphml_simple(char* filename, int validate_schema, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_file_dot(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_xx_import_edgelist_noattrs_file_graphml_simple(thread, filename, validate_schema, res);
 }
 
-int jgrapht_import_edgelist_attrs_string_dot(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_xx_import_edgelist_noattrs_string_graphml_simple(char* input, int validate_schema, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_string_dot(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_xx_import_edgelist_noattrs_string_graphml_simple(thread, input, validate_schema, res);
 }
 
-int jgrapht_import_edgelist_noattrs_file_graph6sparse6(char* filename, void** res) { 
+int jgrapht_ii_import_edgelist_attrs_file_graphml_simple(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_file_graph6sparse6(thread, filename, res);
+    return jgrapht_capi_ii_import_edgelist_attrs_file_graphml_simple(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_noattrs_string_graph6sparse6(char* input, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_file_graphml_simple(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_noattrs_string_graph6sparse6(thread, input, res);
+    return jgrapht_capi_ll_import_edgelist_attrs_file_graphml_simple(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_attrs_file_graph6sparse6(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_ii_import_edgelist_attrs_string_graphml_simple(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_file_graph6sparse6(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_ii_import_edgelist_attrs_string_graphml_simple(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
-int jgrapht_import_edgelist_attrs_string_graph6sparse6(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+int jgrapht_ll_import_edgelist_attrs_string_graphml_simple(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_import_edgelist_attrs_string_graph6sparse6(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
+    return jgrapht_capi_ll_import_edgelist_attrs_string_graphml_simple(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_xx_import_edgelist_noattrs_file_graphml(char* filename, int validate_schema, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_import_edgelist_noattrs_file_graphml(thread, filename, validate_schema, res);
+}
+
+int jgrapht_xx_import_edgelist_noattrs_string_graphml(char* input, int validate_schema, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_import_edgelist_noattrs_string_graphml(thread, input, validate_schema, res);
+}
+
+int jgrapht_ii_import_edgelist_attrs_file_graphml(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_edgelist_attrs_file_graphml(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_ll_import_edgelist_attrs_file_graphml(char* filename, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_edgelist_attrs_file_graphml(thread, filename, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_ii_import_edgelist_attrs_string_graphml(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_edgelist_attrs_string_graphml(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_ll_import_edgelist_attrs_string_graphml(char* input, int validate_schema, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_edgelist_attrs_string_graphml(thread, input, validate_schema, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_xx_import_edgelist_noattrs_file_dot(char* filename, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_import_edgelist_noattrs_file_dot(thread, filename, res);
+}
+
+int jgrapht_xx_import_edgelist_noattrs_string_dot(char* input, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_import_edgelist_noattrs_string_dot(thread, input, res);
+}
+
+int jgrapht_ii_import_edgelist_attrs_file_dot(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_edgelist_attrs_file_dot(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_ll_import_edgelist_attrs_file_dot(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_edgelist_attrs_file_dot(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_ii_import_edgelist_attrs_string_dot(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_edgelist_attrs_string_dot(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_ll_import_edgelist_attrs_string_dot(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_edgelist_attrs_string_dot(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_xx_import_edgelist_noattrs_file_graph6sparse6(char* filename, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_import_edgelist_noattrs_file_graph6sparse6(thread, filename, res);
+}
+
+int jgrapht_xx_import_edgelist_noattrs_string_graph6sparse6(char* input, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_import_edgelist_noattrs_string_graph6sparse6(thread, input, res);
+}
+
+int jgrapht_ii_import_edgelist_attrs_file_graph6sparse6(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_edgelist_attrs_file_graph6sparse6(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_ll_import_edgelist_attrs_file_graph6sparse6(char* filename, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_edgelist_attrs_file_graph6sparse6(thread, filename, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_ii_import_edgelist_attrs_string_graph6sparse6(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_import_edgelist_attrs_string_graph6sparse6(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
+}
+
+int jgrapht_ll_import_edgelist_attrs_string_graph6sparse6(char* input, void *vertex_attribute_fptr, void *edge_attribute_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_import_edgelist_attrs_string_graph6sparse6(thread, input, vertex_attribute_fptr, edge_attribute_fptr, res);
 }
 
 // independent set
 
-int jgrapht_independent_set_exec_chordal_max_independent_set(void *g, void** res) { 
+int jgrapht_xx_independent_set_exec_chordal_max_independent_set(void *g, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_independent_set_exec_chordal_max_independent_set(thread, g, res);
+    return jgrapht_capi_xx_independent_set_exec_chordal_max_independent_set(thread, g, res);
 }
 
 // isomorphism
 
-int jgrapht_isomorphism_exec_vf2(void *g1, void *g2, int* exist_iso_res, void** graph_mapping_it_res) { 
+int jgrapht_xx_isomorphism_exec_vf2(void *g1, void *g2, int* exist_iso_res, void** graph_mapping_it_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_isomorphism_exec_vf2(thread, g1, g2, exist_iso_res, graph_mapping_it_res);
+    return jgrapht_capi_xx_isomorphism_exec_vf2(thread, g1, g2, exist_iso_res, graph_mapping_it_res);
 }
 
-int jgrapht_isomorphism_exec_vf2_subgraph(void *g1, void *g2, int* exist_iso_res, void** graph_mapping_it_res) { 
+int jgrapht_xx_isomorphism_exec_vf2_subgraph(void *g1, void *g2, int* exist_iso_res, void** graph_mapping_it_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_isomorphism_exec_vf2_subgraph(thread, g1, g2, exist_iso_res, graph_mapping_it_res);
+    return jgrapht_capi_xx_isomorphism_exec_vf2_subgraph(thread, g1, g2, exist_iso_res, graph_mapping_it_res);
 }
 
-int jgrapht_isomorphism_graph_mapping_edge_correspondence(void *graph_mapping, int edge, int forward, int* exists_edge_res, int* edge_res) { 
+int jgrapht_ii_isomorphism_graph_mapping_edge_correspondence(void *graph_mapping, int edge, int forward, int* exists_edge_res, int* edge_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_isomorphism_graph_mapping_edge_correspondence(thread, graph_mapping, edge, forward, exists_edge_res, edge_res);
+    return jgrapht_capi_ii_isomorphism_graph_mapping_edge_correspondence(thread, graph_mapping, edge, forward, exists_edge_res, edge_res);
 }
 
-int jgrapht_isomorphism_graph_mapping_vertex_correspondence(void *graph_mapping, int vertex, int forward, int* exist_vertex_res, int* vertex_res) { 
+int jgrapht_ll_isomorphism_graph_mapping_edge_correspondence(void *graph_mapping, long long int edge, int forward, int* exists_edge_res, long long* edge_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_isomorphism_graph_mapping_vertex_correspondence(thread, graph_mapping, vertex, forward, exist_vertex_res, vertex_res);
+    return jgrapht_capi_ll_isomorphism_graph_mapping_edge_correspondence(thread, graph_mapping, edge, forward, exists_edge_res, edge_res);
+}
+
+int jgrapht_ii_isomorphism_graph_mapping_vertex_correspondence(void *graph_mapping, int vertex, int forward, int* exist_vertex_res, int* vertex_res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, graph_mapping, vertex, forward, exist_vertex_res, vertex_res);
+}
+
+int jgrapht_ll_isomorphism_graph_mapping_vertex_correspondence(void *graph_mapping, long long int vertex, int forward, int* exist_vertex_res, long long* vertex_res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_isomorphism_graph_mapping_vertex_correspondence(thread, graph_mapping, vertex, forward, exist_vertex_res, vertex_res);
 }
 
 // iterators
@@ -1594,14 +1799,24 @@ int jgrapht_it_next_int(void *it, int* res) {
     return jgrapht_capi_it_next_int(thread, it, res);
 }
 
+int jgrapht_it_next_long(void *it, long long* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_it_next_long(thread, it, res);
+}
+
 int jgrapht_it_next_double(void *it, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_it_next_double(thread, it, res);
 }
 
-int jgrapht_it_next_edge_triple(void *it, int *source, int *target, double* weight) { 
+int jgrapht_it_next_int_edge_triple(void *it, int *source, int *target, double* weight) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_it_next_edge_triple(thread, it, source, target, weight);
+    return jgrapht_capi_it_next_int_edge_triple(thread, it, source, target, weight);
+}
+
+int jgrapht_it_next_long_edge_triple(void *it, long long *source, long long *target, double* weight) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_it_next_long_edge_triple(thread, it, source, target, weight);
 }
 
 int jgrapht_it_next_str_edge_triple(void *it, char **source, char **target, double* weight) { 
@@ -1641,24 +1856,44 @@ int jgrapht_list_int_add(void *list, int e, int* res) {
     return jgrapht_capi_list_int_add(thread, list, e, res);
 }
 
+int jgrapht_list_long_add(void *list, long long int e, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_list_long_add(thread, list, e, res);
+}
+
 int jgrapht_list_double_add(void *list, double e, int* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_list_double_add(thread, list, e, res);
 }
 
-int jgrapht_list_edge_pair_add(void *list, int source, int target, int* res) { 
+int jgrapht_ii_list_edge_pair_add(void *list, int source, int target, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_list_edge_pair_add(thread, list, source, target, res);
+    return jgrapht_capi_ii_list_edge_pair_add(thread, list, source, target, res);
 }
 
-int jgrapht_list_edge_triple_add(void *list, int source, int target, double weight, int* res) { 
+int jgrapht_ll_list_edge_pair_add(void *list, long long int source, long long int target, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_list_edge_triple_add(thread, list, source, target, weight, res);
+    return jgrapht_capi_ll_list_edge_pair_add(thread, list, source, target, res);
+}
+
+int jgrapht_ii_list_edge_triple_add(void *list, int source, int target, double weight, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_list_edge_triple_add(thread, list, source, target, weight, res);
+}
+
+int jgrapht_ll_list_edge_triple_add(void *list, long long int source, long long int target, double weight, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_list_edge_triple_add(thread, list, source, target, weight, res);
 }
 
 int jgrapht_list_int_remove(void *list, int e) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_list_int_remove(thread, list, e);
+}
+
+int jgrapht_list_long_remove(void *list, long long int e) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_list_long_remove(thread, list, e);
 }
 
 int jgrapht_list_double_remove(void *list, double e) { 
@@ -1669,6 +1904,11 @@ int jgrapht_list_double_remove(void *list, double e) {
 int jgrapht_list_int_contains(void *list, int e, int* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_list_int_contains(thread, list, e, res);
+}
+
+int jgrapht_list_long_contains(void *list, long long int e, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_list_long_contains(thread, list, e, res);
 }
 
 int jgrapht_list_double_contains(void *list , double e, int* res) { 
@@ -1683,24 +1923,39 @@ int jgrapht_list_clear(void *list) {
 
 // listenable
 
-int jgrapht_listenable_as_listenable(void *g, void** res) { 
+int jgrapht_xx_listenable_as_listenable(void *g, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_listenable_as_listenable(thread, g, res);
+    return jgrapht_capi_xx_listenable_as_listenable(thread, g, res);
 }
 
-int jgrapht_listenable_create_graph_listener(void *event_fptr, void** res) { 
+int jgrapht_ii_listenable_create_graph_listener(void *event_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_listenable_create_graph_listener(thread, event_fptr, res);
+    return jgrapht_capi_ii_listenable_create_graph_listener(thread, event_fptr, res);
 }
 
-int jgrapht_listenable_add_graph_listener(void *g, void *listener) { 
+int jgrapht_ll_listenable_create_graph_listener(void *event_fptr, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_listenable_add_graph_listener(thread, g, listener);
+    return jgrapht_capi_ll_listenable_create_graph_listener(thread, event_fptr, res);
 }
 
-int jgrapht_listenable_remove_graph_listener(void *g, void *listener) { 
+int jgrapht_ii_listenable_add_graph_listener(void *g, void *listener) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_listenable_remove_graph_listener(thread, g, listener);
+    return jgrapht_capi_ii_listenable_add_graph_listener(thread, g, listener);
+}
+
+int jgrapht_ll_listenable_add_graph_listener(void *g, void *listener) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_listenable_add_graph_listener(thread, g, listener);
+}
+
+int jgrapht_ii_listenable_remove_graph_listener(void *g, void *listener) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_listenable_remove_graph_listener(thread, g, listener);
+}
+
+int jgrapht_ll_listenable_remove_graph_listener(void *g, void *listener) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_listenable_remove_graph_listener(thread, g, listener);
 }
 
 // map
@@ -1745,6 +2000,21 @@ int jgrapht_map_int_string_put(void *map, int key, char* value) {
     return jgrapht_capi_map_int_string_put(thread, map, key, value);
 }
 
+int jgrapht_map_long_double_put(void *map, long long int key, double value) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_double_put(thread, map, key, value);
+}
+
+int jgrapht_map_long_int_put(void *map, long long int key, int value) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_int_put(thread, map, key, value);
+}
+
+int jgrapht_map_long_string_put(void *map, long long int key, char* value) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_string_put(thread, map, key, value);
+}
+
 int jgrapht_map_int_double_get(void *map, int key, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_map_int_double_get(thread, map, key, res);
@@ -1760,9 +2030,29 @@ int jgrapht_map_int_string_get(void *map, int key, void** res) {
     return jgrapht_capi_map_int_string_get(thread, map, key, res);
 }
 
+int jgrapht_map_long_double_get(void *map, long long int key, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_double_get(thread, map, key, res);
+}
+
+int jgrapht_map_long_int_get(void *map, long long int key, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_int_get(thread, map, key, res);
+}
+
+int jgrapht_map_long_string_get(void *map, long long int key, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_string_get(thread, map, key, res);
+}
+
 int jgrapht_map_int_contains_key(void *map, int key, int* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_map_int_contains_key(thread, map, key, res);
+}
+
+int jgrapht_map_long_contains_key(void *map, long long int key, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_contains_key(thread, map, key, res);
 }
 
 int jgrapht_map_int_double_remove(void *map, int key, double* res) {
@@ -1780,6 +2070,21 @@ int jgrapht_map_int_string_remove(void *map, int key, void** res) {
     return jgrapht_capi_map_int_string_remove(thread, map, key, res);
 }
 
+int jgrapht_map_long_double_remove(void *map, long long int key, double* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_double_remove(thread, map, key, res);
+}
+
+int jgrapht_map_long_int_remove(void *map, long long int key, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_int_remove(thread, map, key, res);
+}
+
+int jgrapht_map_long_string_remove(void *map, long long int key, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_string_remove(thread, map, key, res);
+}
+
 int jgrapht_map_clear(void *map) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_map_clear(thread, map);
@@ -1787,172 +2092,177 @@ int jgrapht_map_clear(void *map) {
 
 // matching
 
-int jgrapht_matching_exec_greedy_general_max_card(void *g, double* weight_res, void** res) { 
+int jgrapht_xx_matching_exec_greedy_general_max_card(void *g, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_greedy_general_max_card(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_greedy_general_max_card(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_custom_greedy_general_max_card(void *g, int sort, double* weight_res, void** res) {
+int jgrapht_xx_matching_exec_custom_greedy_general_max_card(void *g, int sort, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_custom_greedy_general_max_card(thread, g, sort, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_custom_greedy_general_max_card(thread, g, sort, weight_res, res);
 }
 
-int jgrapht_matching_exec_edmonds_general_max_card_dense(void *g, double* weight_res, void** res) {
+int jgrapht_xx_matching_exec_edmonds_general_max_card_dense(void *g, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_edmonds_general_max_card_dense(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_edmonds_general_max_card_dense(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_edmonds_general_max_card_sparse(void *g, double* weight_res, void** res) {
+int jgrapht_xx_matching_exec_edmonds_general_max_card_sparse(void *g, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_edmonds_general_max_card_sparse(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_edmonds_general_max_card_sparse(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_greedy_general_max_weight(void *g, double* weight_res, void** res) {
+int jgrapht_xx_matching_exec_greedy_general_max_weight(void *g, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_greedy_general_max_weight(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_greedy_general_max_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_custom_greedy_general_max_weight(void *g, int normalize_edge_costs, double epsilon, double* weight_res, void** res) { 
+int jgrapht_xx_matching_exec_custom_greedy_general_max_weight(void *g, int normalize_edge_costs, double epsilon, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_custom_greedy_general_max_weight(thread, g, normalize_edge_costs, epsilon, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_custom_greedy_general_max_weight(thread, g, normalize_edge_costs, epsilon, weight_res, res);
 }
 
-int jgrapht_matching_exec_pathgrowing_max_weight(void *g, double* weight_res, void** res) {
+int jgrapht_xx_matching_exec_pathgrowing_max_weight(void *g, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_pathgrowing_max_weight(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_pathgrowing_max_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_blossom5_general_max_weight(void *g, double* weight_res, void** res) {
+int jgrapht_xx_matching_exec_blossom5_general_max_weight(void *g, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_blossom5_general_max_weight(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_blossom5_general_max_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_blossom5_general_min_weight(void *g, double* weight_res, void** res) {
+int jgrapht_xx_matching_exec_blossom5_general_min_weight(void *g, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_blossom5_general_min_weight(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_blossom5_general_min_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_blossom5_general_perfect_max_weight(void *g, double* weight_res, void** res) {
+int jgrapht_xx_matching_exec_blossom5_general_perfect_max_weight(void *g, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_blossom5_general_perfect_max_weight(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_blossom5_general_perfect_max_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_blossom5_general_perfect_min_weight(void *g, double* weight_res, void** res) {
+int jgrapht_xx_matching_exec_blossom5_general_perfect_min_weight(void *g, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_blossom5_general_perfect_min_weight(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_blossom5_general_perfect_min_weight(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_bipartite_max_card(void *g, double* weight_res, void** res) {
+int jgrapht_xx_matching_exec_bipartite_max_card(void *g, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_bipartite_max_card(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_bipartite_max_card(thread, g, weight_res, res);
 }
 
-int jgrapht_matching_exec_bipartite_perfect_min_weight(void *g, void *vertex_set1, void *vertex_set2, double* weight_res, void** res) { 
+int jgrapht_xx_matching_exec_bipartite_perfect_min_weight(void *g, void *vertex_set1, void *vertex_set2, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_bipartite_perfect_min_weight(thread, g, vertex_set1, vertex_set2, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_bipartite_perfect_min_weight(thread, g, vertex_set1, vertex_set2, weight_res, res);
 }
 
-int jgrapht_matching_exec_bipartite_max_weight(void *g, double* weight_res, void** res) { 
+int jgrapht_xx_matching_exec_bipartite_max_weight(void *g, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_matching_exec_bipartite_max_weight(thread, g, weight_res, res);
+    return jgrapht_capi_xx_matching_exec_bipartite_max_weight(thread, g, weight_res, res);
 }
 
 // mst
 
-int jgrapht_mst_exec_kruskal(void *g, double* weight_res, void** res) { 
+int jgrapht_xx_mst_exec_kruskal(void *g, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_mst_exec_kruskal(thread, g, weight_res, res);
+    return jgrapht_capi_xx_mst_exec_kruskal(thread, g, weight_res, res);
 }
 
-int jgrapht_mst_exec_prim(void *g, double* weight_res, void** res) {
+int jgrapht_xx_mst_exec_prim(void *g, double* weight_res, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_mst_exec_prim(thread, g, weight_res, res);
+    return jgrapht_capi_xx_mst_exec_prim(thread, g, weight_res, res);
 }
 
-int jgrapht_mst_exec_boruvka(void *g, double* weight_res, void** res) { 
+int jgrapht_xx_mst_exec_boruvka(void *g, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_mst_exec_boruvka(thread, g, weight_res, res);
+    return jgrapht_capi_xx_mst_exec_boruvka(thread, g, weight_res, res);
 }
 
 // partition
 
-int jgrapht_partition_exec_bipartite(void *g, int* res, void** vertex_partition1, void** vertex_partition2) { 
+int jgrapht_xx_partition_exec_bipartite(void *g, int* res, void** vertex_partition1, void** vertex_partition2) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_partition_exec_bipartite(thread, g, res, vertex_partition1, vertex_partition2);
+    return jgrapht_capi_xx_partition_exec_bipartite(thread, g, res, vertex_partition1, vertex_partition2);
 }
 
 // planarity
 
-int jgrapht_planarity_exec_boyer_myrvold(void *g, int* is_planar_res, void** embedding_res, void** kuratowski_subdivision_res) { 
+int jgrapht_xx_planarity_exec_boyer_myrvold(void *g, int* is_planar_res, void** embedding_res, void** kuratowski_subdivision_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_planarity_exec_boyer_myrvold(thread, g, is_planar_res, embedding_res, kuratowski_subdivision_res);
+    return jgrapht_capi_xx_planarity_exec_boyer_myrvold(thread, g, is_planar_res, embedding_res, kuratowski_subdivision_res);
 }
 
-int jgrapht_planarity_embedding_edges_around_vertex(void *embedding, int vertex, void** it_res) {
+int jgrapht_ii_planarity_embedding_edges_around_vertex(void *embedding, int vertex, void** it_res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_planarity_embedding_edges_around_vertex(thread, embedding, vertex, it_res);
+    return jgrapht_capi_ii_planarity_embedding_edges_around_vertex(thread, embedding, vertex, it_res);
+}
+
+int jgrapht_ll_planarity_embedding_edges_around_vertex(void *embedding, long long int vertex, void** it_res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_planarity_embedding_edges_around_vertex(thread, embedding, vertex, it_res);
 }
 
 // scoring
 
-int jgrapht_scoring_exec_alpha_centrality(void *g, void** res) { 
+int jgrapht_xx_scoring_exec_alpha_centrality(void *g, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_alpha_centrality(thread, g, res);
+    return jgrapht_capi_xx_scoring_exec_alpha_centrality(thread, g, res);
 }
 
-int jgrapht_scoring_exec_custom_alpha_centrality(void *g, double damping_factor, double exogenous_factor, int max_iterations, double tolerance, void** res) { 
+int jgrapht_xx_scoring_exec_custom_alpha_centrality(void *g, double damping_factor, double exogenous_factor, int max_iterations, double tolerance, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_custom_alpha_centrality(thread, g, damping_factor, exogenous_factor, max_iterations, tolerance, res);
+    return jgrapht_capi_xx_scoring_exec_custom_alpha_centrality(thread, g, damping_factor, exogenous_factor, max_iterations, tolerance, res);
 }
 
-int jgrapht_scoring_exec_betweenness_centrality(void *g, void** res) { 
+int jgrapht_xx_scoring_exec_betweenness_centrality(void *g, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_betweenness_centrality(thread, g, res);
+    return jgrapht_capi_xx_scoring_exec_betweenness_centrality(thread, g, res);
 }
 
-int jgrapht_scoring_exec_custom_betweenness_centrality(void *g, int normalize, void** res) { 
+int jgrapht_xx_scoring_exec_custom_betweenness_centrality(void *g, int normalize, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_custom_betweenness_centrality(thread, g, normalize, res);
+    return jgrapht_capi_xx_scoring_exec_custom_betweenness_centrality(thread, g, normalize, res);
 }
 
-int jgrapht_scoring_exec_closeness_centrality(void *g, void** res) { 
+int jgrapht_xx_scoring_exec_closeness_centrality(void *g, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_closeness_centrality(thread, g, res);
+    return jgrapht_capi_xx_scoring_exec_closeness_centrality(thread, g, res);
 }
 
-int jgrapht_scoring_exec_custom_closeness_centrality(void *g, int incoming, int normalize, void** res) { 
+int jgrapht_xx_scoring_exec_custom_closeness_centrality(void *g, int incoming, int normalize, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_custom_closeness_centrality(thread, g, incoming, normalize, res);
+    return jgrapht_capi_xx_scoring_exec_custom_closeness_centrality(thread, g, incoming, normalize, res);
 }
 
-int jgrapht_scoring_exec_harmonic_centrality(void *g, void** res) { 
+int jgrapht_xx_scoring_exec_harmonic_centrality(void *g, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_harmonic_centrality(thread, g, res);
+    return jgrapht_capi_xx_scoring_exec_harmonic_centrality(thread, g, res);
 }
 
-int jgrapht_scoring_exec_custom_harmonic_centrality(void *g, int incoming, int normalize, void** res) { 
+int jgrapht_xx_scoring_exec_custom_harmonic_centrality(void *g, int incoming, int normalize, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_custom_harmonic_centrality(thread, g, incoming, normalize, res);
+    return jgrapht_capi_xx_scoring_exec_custom_harmonic_centrality(thread, g, incoming, normalize, res);
 }
 
-int jgrapht_scoring_exec_pagerank(void *g, void** res) { 
+int jgrapht_xx_scoring_exec_pagerank(void *g, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_pagerank(thread, g, res);
+    return jgrapht_capi_xx_scoring_exec_pagerank(thread, g, res);
 }
 
-int jgrapht_scoring_exec_custom_pagerank(void *g, double damping_factor, int iterations, double tolerance, void** res) { 
+int jgrapht_xx_scoring_exec_custom_pagerank(void *g, double damping_factor, int iterations, double tolerance, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_custom_pagerank(thread, g, damping_factor, iterations, tolerance, res);
+    return jgrapht_capi_xx_scoring_exec_custom_pagerank(thread, g, damping_factor, iterations, tolerance, res);
 }
 
-int jgrapht_scoring_exec_coreness(void *g, int* degeneracy_res, void** res) { 
+int jgrapht_xx_scoring_exec_coreness(void *g, int* degeneracy_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_coreness(thread, g, degeneracy_res, res);
+    return jgrapht_capi_xx_scoring_exec_coreness(thread, g, degeneracy_res, res);
 }
 
-int jgrapht_scoring_exec_clustering_coefficient(void *g, double* global_res, double* avg_res, void** local_res) { 
+int jgrapht_xx_scoring_exec_clustering_coefficient(void *g, double* global_res, double* avg_res, void** local_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_scoring_exec_clustering_coefficient(thread, g, global_res, avg_res, local_res);
+    return jgrapht_capi_xx_scoring_exec_clustering_coefficient(thread, g, global_res, avg_res, local_res);
 }
 
 // set
@@ -1982,6 +2292,11 @@ int jgrapht_set_int_add(void *set , int elem, int* res) {
     return jgrapht_capi_set_int_add(thread, set, elem, res);
 }
 
+int jgrapht_set_long_add(void *set , long long int elem, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_set_long_add(thread, set, elem, res);
+}
+
 int jgrapht_set_double_add(void *set, double elem, int* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_set_double_add(thread, set, elem, res);
@@ -1992,6 +2307,11 @@ int jgrapht_set_int_remove(void *set, int elem) {
     return jgrapht_capi_set_int_remove(thread, set, elem);
 }
 
+int jgrapht_set_long_remove(void *set, long long int elem) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_set_long_remove(thread, set, elem);
+}
+
 int jgrapht_set_double_remove(void *set, double elem) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_set_double_remove(thread, set, elem);
@@ -2000,6 +2320,11 @@ int jgrapht_set_double_remove(void *set, double elem) {
 int jgrapht_set_int_contains(void *set, int elem, int* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_set_int_contains(thread, set, elem, res);
+}
+
+int jgrapht_set_long_contains(void *set, long long int elem, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_set_long_contains(thread, set, elem, res);
 }
 
 int jgrapht_set_double_contains(void *set, double elem, int* res) { 
@@ -2145,61 +2470,61 @@ int jgrapht_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_betwee
 
 // spanner
 
-int jgrapht_spanner_exec_greedy_multiplicative(void *g, int k, double* weight, void** res) {
+int jgrapht_xx_spanner_exec_greedy_multiplicative(void *g, int k, double* weight, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_spanner_exec_greedy_multiplicative(thread, g, k, weight, res);
+    return jgrapht_capi_xx_spanner_exec_greedy_multiplicative(thread, g, k, weight, res);
 }
 
 // tour 
 
-int jgrapht_tour_tsp_random(void *g, long long int seed, void** res) { 
+int jgrapht_xx_tour_tsp_random(void *g, long long int seed, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_tour_tsp_random(thread, g, seed, res);
+    return jgrapht_capi_xx_tour_tsp_random(thread, g, seed, res);
 }
 
-int jgrapht_tour_tsp_greedy_heuristic(void * g, void** res) {
+int jgrapht_xx_tour_tsp_greedy_heuristic(void * g, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_tour_tsp_greedy_heuristic(thread, g, res);
+    return jgrapht_capi_xx_tour_tsp_greedy_heuristic(thread, g, res);
 }
 
-int jgrapht_tour_tsp_nearest_insertion_heuristic(void * g, void** res) {
+int jgrapht_xx_tour_tsp_nearest_insertion_heuristic(void * g, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_tour_tsp_nearest_insertion_heuristic(thread, g, res);
+    return jgrapht_capi_xx_tour_tsp_nearest_insertion_heuristic(thread, g, res);
 }
 
-int jgrapht_tour_tsp_nearest_neighbor_heuristic(void *g, long long int seed, void** res) {
+int jgrapht_xx_tour_tsp_nearest_neighbor_heuristic(void *g, long long int seed, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_tour_tsp_nearest_neighbor_heuristic(thread, g, seed, res);
+    return jgrapht_capi_xx_tour_tsp_nearest_neighbor_heuristic(thread, g, seed, res);
 }
 
-int jgrapht_tour_metric_tsp_christofides(void *g, void** res) {
+int jgrapht_xx_tour_metric_tsp_christofides(void *g, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_tour_metric_tsp_christofides(thread, g, res);
+    return jgrapht_capi_xx_tour_metric_tsp_christofides(thread, g, res);
 }
 
-int jgrapht_tour_metric_tsp_two_approx(void *g, void** res) {
+int jgrapht_xx_tour_metric_tsp_two_approx(void *g, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_tour_metric_tsp_two_approx(thread, g, res);
+    return jgrapht_capi_xx_tour_metric_tsp_two_approx(thread, g, res);
 }
 
-int jgrapht_tour_tsp_held_karp(void *g, void** res) {
+int jgrapht_xx_tour_tsp_held_karp(void *g, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_tour_tsp_held_karp(thread, g, res);
+    return jgrapht_capi_xx_tour_tsp_held_karp(thread, g, res);
 }
 
-int jgrapht_tour_hamiltonian_palmer(void *g, void** res) {
+int jgrapht_xx_tour_hamiltonian_palmer(void *g, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_tour_hamiltonian_palmer(thread, g, res);
+    return jgrapht_capi_xx_tour_hamiltonian_palmer(thread, g, res);
 }
 
-int jgrapht_tour_tsp_two_opt_heuristic(void *g, int k, double min_cost_improvement, long long int seed, void** res) {
+int jgrapht_xx_tour_tsp_two_opt_heuristic(void *g, int k, double min_cost_improvement, long long int seed, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_tour_tsp_two_opt_heuristic(thread, g, k, min_cost_improvement, seed, res);
+    return jgrapht_capi_xx_tour_tsp_two_opt_heuristic(thread, g, k, min_cost_improvement, seed, res);
 }
 
-int jgrapht_tour_tsp_two_opt_heuristic_improve(void *graph_path, double min_cost_improvement, long long int seed, void** res) {
+int jgrapht_xx_tour_tsp_two_opt_heuristic_improve(void *graph_path, double min_cost_improvement, long long int seed, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_tour_tsp_two_opt_heuristic_improve(thread, graph_path, min_cost_improvement, seed, res);
+    return jgrapht_capi_xx_tour_tsp_two_opt_heuristic_improve(thread, graph_path, min_cost_improvement, seed, res);
 }
 
 // traverse
@@ -2266,49 +2591,49 @@ int jgrapht_traverse_create_custom_closest_first_from_vertex_vit(void *g, int v,
 
 // vertex cover
 
-int jgrapht_vertexcover_exec_greedy(void *g, double* weight_res, void** res) { 
+int jgrapht_xx_vertexcover_exec_greedy(void *g, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_vertexcover_exec_greedy(thread, g, weight_res, res);
+    return jgrapht_capi_xx_vertexcover_exec_greedy(thread, g, weight_res, res);
 }
 
-int jgrapht_vertexcover_exec_greedy_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
+int jgrapht_xx_vertexcover_exec_greedy_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_vertexcover_exec_greedy_weighted(thread, g, weight_vertex_map, weight_res, res);
+    return jgrapht_capi_xx_vertexcover_exec_greedy_weighted(thread, g, weight_vertex_map, weight_res, res);
 }
 
-int jgrapht_vertexcover_exec_clarkson(void *g, double* weight_res, void** res) { 
+int jgrapht_xx_vertexcover_exec_clarkson(void *g, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_vertexcover_exec_clarkson(thread, g, weight_res, res);
+    return jgrapht_capi_xx_vertexcover_exec_clarkson(thread, g, weight_res, res);
 }
 
-int jgrapht_vertexcover_exec_clarkson_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
+int jgrapht_xx_vertexcover_exec_clarkson_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_vertexcover_exec_clarkson_weighted(thread, g, weight_vertex_map, weight_res, res);
+    return jgrapht_capi_xx_vertexcover_exec_clarkson_weighted(thread, g, weight_vertex_map, weight_res, res);
 }
 
-int jgrapht_vertexcover_exec_edgebased(void *g, double* weight_res, void** res) { 
+int jgrapht_xx_vertexcover_exec_edgebased(void *g, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_vertexcover_exec_edgebased(thread, g, weight_res, res);    
+    return jgrapht_capi_xx_vertexcover_exec_edgebased(thread, g, weight_res, res);    
 }
 
-int jgrapht_vertexcover_exec_baryehudaeven(void *g, double* weight_res, void** res) { 
+int jgrapht_xx_vertexcover_exec_baryehudaeven(void *g, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_vertexcover_exec_baryehudaeven(thread, g, weight_res, res);    
+    return jgrapht_capi_xx_vertexcover_exec_baryehudaeven(thread, g, weight_res, res);    
 }
 
-int jgrapht_vertexcover_exec_baryehudaeven_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
+int jgrapht_xx_vertexcover_exec_baryehudaeven_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_vertexcover_exec_baryehudaeven_weighted(thread, g, weight_vertex_map, weight_res, res);    
+    return jgrapht_capi_xx_vertexcover_exec_baryehudaeven_weighted(thread, g, weight_vertex_map, weight_res, res);    
 }
 
-int jgrapht_vertexcover_exec_exact(void *g, double* weight_res, void** res) { 
+int jgrapht_xx_vertexcover_exec_exact(void *g, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_vertexcover_exec_exact(thread, g, weight_res, res);    
+    return jgrapht_capi_xx_vertexcover_exec_exact(thread, g, weight_res, res);    
 }
 
-int jgrapht_vertexcover_exec_exact_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
+int jgrapht_xx_vertexcover_exec_exact_weighted(void *g, void *weight_vertex_map, double* weight_res, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_vertexcover_exec_exact_weighted(thread, g, weight_vertex_map, weight_res, res);    
+    return jgrapht_capi_xx_vertexcover_exec_exact_weighted(thread, g, weight_vertex_map, weight_res, res);    
 }
 
 
