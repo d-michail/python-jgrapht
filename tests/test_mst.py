@@ -1,17 +1,18 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 
 import jgrapht.algorithms.spanning as spanning
 import jgrapht.generators as generators
 
 
-def build_graph():
+def build_graph(backend=GraphBackend.INT_GRAPH):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 10):
@@ -39,9 +40,19 @@ def build_graph():
 
     return g
 
+    
 
 def test_kruskal():
     g = build_graph()
+    mst_w, mst_edges = spanning.kruskal(g)
+    assert mst_w == 9.0
+    expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
+    solution = set(mst_edges)
+    assert expected == solution
+
+
+def test_kruskal_on_long_graph():
+    g = build_graph(backend=GraphBackend.LONG_GRAPH)
     mst_w, mst_edges = spanning.kruskal(g)
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
@@ -58,8 +69,26 @@ def test_prim():
     assert expected == solution
 
 
+def test_prim_on_long_graph():
+    g = build_graph(backend=GraphBackend.LONG_GRAPH)
+    mst_w, mst_edges = spanning.prim(g)
+    assert mst_w == 9.0
+    expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
+    solution = set(mst_edges)
+    assert expected == solution
+
+
 def test_boruvka():
     g = build_graph()
+    mst_w, mst_edges = spanning.boruvka(g)
+    assert mst_w == 9.0
+    expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
+    solution = set(mst_edges)
+    assert expected == solution
+
+
+def test_boruvka_on_long_graph():
+    g = build_graph(backend=GraphBackend.LONG_GRAPH)
     mst_w, mst_edges = spanning.boruvka(g)
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])

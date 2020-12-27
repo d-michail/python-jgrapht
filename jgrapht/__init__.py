@@ -35,6 +35,8 @@ import logging
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
+from enum import Enum
+
 from ._internals._int_graphs import (
     _create_int_graph,
     _create_int_dag,
@@ -57,6 +59,18 @@ from ._internals._anyhashableg import (
 # The graph creation API
 #
 
+class GraphBackend(Enum):
+    """Different backend graph implementations. Each backend exhibits different 
+    characteristics between performance and user-friendliness.
+    """
+    INT_GRAPH = 1
+    LONG_GRAPH = 2
+    ANY_HASHABLE_WRAPPER_INT_GRAPH = 3
+    ANY_HASHABLE_REFCOUNT_LONG_GRAPH = 4
+
+
+
+
 def create_graph(
     directed=True,
     allowing_self_loops=False,
@@ -66,6 +80,7 @@ def create_graph(
     any_hashable=False,
     vertex_supplier=None,
     edge_supplier=None,
+    backend = GraphBackend.INT_GRAPH
 ):
     """Create a graph.
 
@@ -93,9 +108,18 @@ def create_graph(
     :param edge_supplier: used only in the case that the graph allows any hashable as
       vertices/edges. Called everytime the graph needs to create a new edge. If not given,
       then object instances are used.
+    :param backend: which backend implementation to use for the graph. Default is to use the 
+      integer graph.
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
+
+    if backend == GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH: 
+        raise ValueError('Not yet supported')
+
+    if backend == GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH: 
+        any_hashable=True
+
     if any_hashable:
         if dag:
             if not directed:
@@ -123,16 +147,33 @@ def create_graph(
                 raise ValueError("A dag is always directed")
             if allowing_self_loops:
                 raise ValueError("A dag cannot allow self-loops")
-            return _create_int_dag(
-                allowing_multiple_edges=allowing_multiple_edges, weighted=weighted
-            )
+            if backend == GraphBackend.INT_GRAPH:
+                return _create_int_dag(
+                    allowing_multiple_edges=allowing_multiple_edges, weighted=weighted
+                )
+            elif backend == GraphBackend.LONG_GRAPH:
+                return _create_long_dag(
+                    allowing_multiple_edges=allowing_multiple_edges, weighted=weighted
+                )
+            else:
+                raise ValueError("Not supported combination of graph parameters")
         else:
-            return _create_int_graph(
-                directed=directed,
-                allowing_self_loops=allowing_self_loops,
-                allowing_multiple_edges=allowing_multiple_edges,
-                weighted=weighted,
-            )
+            if backend == GraphBackend.INT_GRAPH:
+                return _create_int_graph(
+                    directed=directed,
+                    allowing_self_loops=allowing_self_loops,
+                    allowing_multiple_edges=allowing_multiple_edges,
+                    weighted=weighted,
+                )
+            elif backend == GraphBackend.LONG_GRAPH:
+                return _create_long_graph(
+                    directed=directed,
+                    allowing_self_loops=allowing_self_loops,
+                    allowing_multiple_edges=allowing_multiple_edges,
+                    weighted=weighted,
+                )
+            else:
+                raise ValueError("Not supported combination of graph parameters")
 
 
 def create_sparse_graph(
