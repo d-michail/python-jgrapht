@@ -1,15 +1,16 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.metrics as metrics
 
 
-def create_test_graph():
+def create_test_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 10):
@@ -77,28 +78,33 @@ def create_test_property_graph():
     return g
 
 
-def test_diameter():
-    g = create_test_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_diameter(backend):
+    g = create_test_graph(backend)
     assert metrics.diameter(g) == 2.0
 
 
-def test_radius():
-    g = create_test_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_radius(backend):
+    g = create_test_graph(backend)
     assert metrics.radius(g) == 1.0
 
 
-def test_girth():
-    g = create_test_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_girth(backend):
+    g = create_test_graph(backend)
     assert metrics.girth(g) == 3.0
 
 
-def test_count_triangles():
-    g = create_test_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_count_triangles(backend):
+    g = create_test_graph(backend)
     assert metrics.count_triangles(g) == 9
 
 
-def test_measure():
-    g = create_test_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_measure(backend):
+    g = create_test_graph(backend)
 
     d, r, center, periphery, pseudo_periphery, eccentricity_map = metrics.measure(g)
 

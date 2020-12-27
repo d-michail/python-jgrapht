@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 
 from jgrapht.io.exporters import write_gml, generate_gml

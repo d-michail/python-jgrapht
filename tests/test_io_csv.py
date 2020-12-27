@@ -1,18 +1,20 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.io.importers import parse_csv, read_csv
 from jgrapht.io.exporters import write_csv, generate_csv
 
 
-def test_input_csv_from_string_create_new_vertices():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_input_csv_from_string_create_new_vertices(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     input_string = """1,2
@@ -28,12 +30,14 @@ def test_input_csv_from_string_create_new_vertices():
     assert g.vertices == set([0, 1, 2, 3])
 
 
-def test_input_csv_from_string_preserve_ids():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_input_csv_from_string_preserve_ids(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     input_string = """1,2
@@ -51,13 +55,15 @@ def test_input_csv_from_string_preserve_ids():
     assert g.vertices == set([1, 2, 3, 4])
 
 
-def test_export_import(tmpdir):
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_export_import(backend, tmpdir):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     for i in range(0, 10):
@@ -97,6 +103,7 @@ def test_export_import(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     read_csv(g1, tmpfilename)
@@ -107,12 +114,14 @@ def test_export_import(tmpdir):
     assert len(g1.edges) == 18
 
 
-def test_output_to_string():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_to_string(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertices_from(range(0, 4))

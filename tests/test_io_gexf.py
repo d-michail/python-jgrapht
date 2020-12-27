@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.io.importers import read_gexf, parse_gexf
@@ -89,12 +89,15 @@ expected2 = r"""<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.ge
     </graph>
 </gexf>"""
 
-def test_input_gexf(tmpdir):
+
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_input_gexf(backend, tmpdir):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     parse_gexf(g, input1, validate_schema=True)
 
@@ -102,12 +105,14 @@ def test_input_gexf(tmpdir):
     assert len(g.edges) == 3
 
 
-def test_input_gexf_with_renumbering(tmpdir):
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_input_gexf_with_renumbering(backend, tmpdir):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     def import_id(x):
@@ -122,13 +127,15 @@ def test_input_gexf_with_renumbering(tmpdir):
     assert g.contains_vertex(6)
 
 
-def test_export_import(tmpdir):
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_export_import(backend, tmpdir):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 10):
@@ -180,6 +187,7 @@ def test_export_import(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        backend=backend
     )
 
     v_attrs = dict()
@@ -214,12 +222,14 @@ def test_export_import(tmpdir):
     assert g1.get_edge_weight(17) == 33.3
 
 
-def test_output_to_string():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_to_string(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertices_from(range(0, 4))

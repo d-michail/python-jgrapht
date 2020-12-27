@@ -1,6 +1,5 @@
 import pytest
 
-from jgrapht import create_graph
 from jgrapht.io.edgelist import read_edgelist_gml, parse_edgelist_gml
 
 input1 = """Creator "JGraphT GML Exporter"

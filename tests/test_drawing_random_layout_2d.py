@@ -1,15 +1,16 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.drawing as drawing
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend
     )
 
     for i in range(0, 6):
@@ -28,8 +29,9 @@ def build_graph():
     return g
 
 
-def test_random_layout():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_random_layout(backend):
+    g = build_graph(backend)
 
     area = (0, 0, 10, 20)
     model = drawing.random_layout_2d(g, area, seed=17)

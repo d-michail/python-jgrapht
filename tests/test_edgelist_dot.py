@@ -1,6 +1,5 @@
 import pytest
 
-from jgrapht import create_graph
 from jgrapht.io.edgelist import read_edgelist_dot, parse_edgelist_dot
 
 input1 = """digraph G {\n  0 [label="node 0"];\n  1;\n  2;\n  3;\n  0 -> 1 [cost="33.0"];\n  0 -> 2;\n  0 -> 3;\n  2 -> 3;\n}\n"""

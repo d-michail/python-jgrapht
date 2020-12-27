@@ -5,6 +5,8 @@ import jgrapht._backend as _backend
 from jgrapht._internals._collections import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
+    _JGraphTLongSet,
+    _JGraphTLongMutableSet,
 )
 
 
@@ -31,10 +33,33 @@ def test_IntegerSet():
     print(s)
 
 
+def test_LongSet():
 
-def test_IntegerMutableSet():
+    handle = _backend.jgrapht_set_linked_create()
+    _backend.jgrapht_set_long_add(handle, 5)
+    _backend.jgrapht_set_long_add(handle, 7)
+    _backend.jgrapht_set_long_add(handle, 9)
 
-    s = _JGraphTIntegerMutableSet(linked=False)
+    s = _JGraphTLongSet(handle=handle)
+
+    assert len(s) == 3
+
+    assert 5 in s
+    assert 6 not in s
+    assert 7 in s
+    assert 8 not in s
+    assert 9 in s
+
+    assert set(s) == set([5, 7, 9])
+
+    print(repr(s))
+    print(s)
+
+
+@pytest.mark.parametrize("impl", [_JGraphTIntegerMutableSet, _JGraphTLongMutableSet])
+def test_IntegerMutableSet(impl):
+
+    s = impl(linked=False)
 
     s.add(5)
     s.add(7)
@@ -75,9 +100,10 @@ def test_IntegerMutableSet():
     print(s)
 
 
-def test_IntegerMutableSet_linked():
+@pytest.mark.parametrize("impl", [_JGraphTIntegerMutableSet, _JGraphTLongMutableSet])
+def test_IntegerMutableSet_linked(impl):
 
-    s = _JGraphTIntegerMutableSet(linked=True)
+    s = impl(linked=True)
 
     s.add(5)
     s.add(7)
@@ -118,5 +144,5 @@ def test_IntegerMutableSet_linked():
 
     assert len(s) == 0
 
-    assert repr(s) == '_JGraphTIntegerMutableSet(%r)' % (s.handle)
+    assert repr(s) == '_JGraphTLongMutableSet(%r)' % (s.handle) or repr(s) == '_JGraphTIntegerMutableSet(%r)' % (s.handle)
 

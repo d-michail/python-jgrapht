@@ -576,6 +576,42 @@ class _JGraphTLongIntegerMap(_HandleWrapper, Mapping):
         return "{" + ", ".join(items) + "}"
 
 
+class _JGraphTLongIntegerMutableMap(_JGraphTLongIntegerMap, MutableMapping):
+    """JGraphT Mutable Map with long keys and integer values"""
+
+    def __init__(self, handle=None, linked=True, **kwargs):
+        super().__init__(handle=handle, linked=linked, **kwargs)
+
+    def add(self, key, value):
+        backend.jgrapht_map_long_int_put(self._handle, key, value)
+
+    __marker = object()
+
+    def pop(self, key, defaultvalue=__marker):
+        try:
+            return backend.jgrapht_map_long_int_remove(self._handle, key)
+        except ValueError:
+            if defaultvalue is self.__marker:
+                raise KeyError()
+            else:
+                return defaultvalue
+
+    def __setitem__(self, key, value):
+        backend.jgrapht_map_long_int_put(self._handle, key, value)
+
+    def __delitem__(self, key):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        if not res:
+            raise KeyError()
+        res = backend.jgrapht_map_long_int_remove(self._handle, key)
+
+    def clear(self):
+        backend.jgrapht_map_clear(self._handle)
+
+    def __repr__(self):
+        return "_JGraphTLongIntegerMutableMap(%r)" % self._handle
+
+
 class _JGraphTLongDoubleMap(_HandleWrapper, Mapping):
     """JGraphT Map"""
 
@@ -590,7 +626,7 @@ class _JGraphTLongDoubleMap(_HandleWrapper, Mapping):
 
     def __iter__(self):
         res = backend.jgrapht_map_keys_it_create(self._handle)
-        return _JGraphTIntegerIterator(res)
+        return _JGraphTLongIterator(res)
 
     def __len__(self):
         res = backend.jgrapht_map_size(self._handle)
@@ -674,7 +710,7 @@ class _JGraphTLongStringMap(_HandleWrapper, MutableMapping):
 
     def __iter__(self):
         res = backend.jgrapht_map_keys_it_create(self._handle)
-        return _JGraphTIntegerIterator(res)
+        return _JGraphTLongIterator(res)
 
     def __len__(self):
         res = backend.jgrapht_map_size(self._handle)

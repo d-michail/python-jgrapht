@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 
 from jgrapht.io.exporters import write_graphml, generate_graphml
@@ -135,13 +135,15 @@ expected4 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://gra
 </graphml>"""
 
 
-def test_export_import(tmpdir):
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_export_import(backend, tmpdir):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 10):
@@ -193,6 +195,7 @@ def test_export_import(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        backend=backend
     )
 
     v_attrs = dict()
@@ -240,6 +243,7 @@ def test_export_import(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        backend=backend
     )
 
     read_graphml(
@@ -258,12 +262,14 @@ def test_export_import(tmpdir):
     assert g2.get_edge_weight(17) == 33.3
 
 
-def test_output_to_string():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_to_string(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertices_from(range(0, 4))
@@ -278,12 +284,14 @@ def test_output_to_string():
     assert out.splitlines() == expected1.splitlines()
 
 
-def test_output_to_string_with_weights():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_to_string_with_weights(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from(range(0, 4))
@@ -298,13 +306,15 @@ def test_output_to_string_with_weights():
     assert out.splitlines() == expected2.splitlines()
 
 
-def test_output_to_string_with_attrs():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_to_string_with_attrs(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 10):
@@ -401,13 +411,15 @@ def test_property_graph_output_to_string_with_attrs():
     assert out.splitlines() == expected4.splitlines()
 
 
-def test_graph_from_string():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_graph_from_string(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
+        backend=backend
     )
 
     def import_id_cb(id):

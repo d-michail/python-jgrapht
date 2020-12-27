@@ -1,15 +1,16 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.cuts as cuts
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 10):
@@ -73,8 +74,9 @@ def build_anyhashableg_graph():
     return g
 
 
-def test_mincut_stoer_wagner():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_mincut_stoer_wagner(backend):
+    g = build_graph(backend)
     cut = cuts.mincut_stoer_wagner(g)
     assert cut.weight == 3.0
     assert cut.edges == set([8, 16, 17])
@@ -89,8 +91,9 @@ def test_anyhashableg_mincut_stoer_wagner():
     assert cut.source_partition == set([9])
 
 
-def test_oddmincutset_padberg_rao():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_oddmincutset_padberg_rao(backend):
+    g = build_graph(backend)
 
     cut = cuts.oddmincutset_padberg_rao(g, {1, 3, 4, 6})
 
@@ -127,12 +130,14 @@ def test_anyhashableg_oddmincutset_padberg_rao():
         cuts.oddmincutset_padberg_rao(g, {1, 3, 4})
 
 
-def test_min_st_cut():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_min_st_cut(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertex(0)

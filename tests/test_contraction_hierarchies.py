@@ -1,16 +1,17 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.shortestpaths as sp
 import math
 
 
-def get_graph():
+def get_graph(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 8):
@@ -60,8 +61,9 @@ def get_anyhashableg_graph():
     return g
 
 
-def test_ch_dijkstra(): 
-    g = get_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_ch_dijkstra(backend): 
+    g = get_graph(backend)
 
     ch = sp.precompute_contraction_hierarchies(g, parallelism=1, seed=31)
 
@@ -100,8 +102,9 @@ def test_ch_dijkstra_anyhashable():
     assert 6 == p2.end_vertex
 
 
-def test_ch_many_to_many(): 
-    g = get_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_ch_many_to_many(backend): 
+    g = get_graph(backend)
 
     ch = sp.precompute_contraction_hierarchies(g, parallelism=1, seed=31)
 

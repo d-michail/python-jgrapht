@@ -1,7 +1,5 @@
 import pytest
 
-from jgrapht import create_graph
-
 from jgrapht.io.edgelist import read_edgelist_graphml, parse_edgelist_graphml
 
 input3 = r"""<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

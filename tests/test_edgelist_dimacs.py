@@ -1,6 +1,5 @@
 import pytest
 
-from jgrapht import create_graph
 from jgrapht.io.edgelist import read_edgelist_dimacs, parse_edgelist_dimacs
 
 

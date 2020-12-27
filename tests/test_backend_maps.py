@@ -8,12 +8,18 @@ from jgrapht._internals._collections import (
     _JGraphTIntegerDoubleMutableMap,
     _JGraphTIntegerIntegerMap,
     _JGraphTIntegerIntegerMutableMap,
+    _JGraphTLongStringMap,
+    _JGraphTLongDoubleMap,
+    _JGraphTLongDoubleMutableMap,
+    _JGraphTLongIntegerMap,
+    _JGraphTLongIntegerMutableMap,
 )
 
 
-def test_JGraphTIntegerStringMap():
+@pytest.mark.parametrize("impl", [_JGraphTIntegerStringMap, _JGraphTLongStringMap])
+def test_JGraphTIntegerStringMap(impl):
 
-    s = _JGraphTIntegerStringMap()
+    s = impl()
 
     s[5] = "node 5"
     s[6] = "κόμβος 6"
@@ -66,15 +72,16 @@ def test_JGraphTIntegerStringMap():
     s.clear();    
     assert len(s) == 0
 
-    another = _JGraphTIntegerStringMap(linked=False)
+    another = impl(linked=False)
     assert len(another) == 0
 
     repr(another)
 
 
-def test_JGraphTIntegerDoubleMutableMap():
+@pytest.mark.parametrize("impl", [_JGraphTIntegerDoubleMutableMap, _JGraphTLongDoubleMutableMap])
+def test_JGraphTIntegerDoubleMutableMap(impl):
 
-    s = _JGraphTIntegerDoubleMutableMap()
+    s = impl()
 
     s[0] = 5.0
     s[1] = 15.0
@@ -118,9 +125,10 @@ def test_JGraphTIntegerDoubleMutableMap():
     assert 1 not in s
 
 
-def test_JGraphTIntegerIntegerMutableMap():
+@pytest.mark.parametrize("impl", [_JGraphTIntegerIntegerMutableMap, _JGraphTLongIntegerMutableMap])
+def test_JGraphTIntegerIntegerMutableMap(impl):
 
-    s = _JGraphTIntegerIntegerMutableMap()
+    s = impl()
 
     s[0] = 5
     s[1] = 15
@@ -214,10 +222,58 @@ def test_JGraphTIntegerIntegerMap():
     assert len(another) == 0
 
 
+def test_JGraphTLongIntegerMap():
+
+    handle = _backend.jgrapht_map_create()
+    _backend.jgrapht_map_long_int_put(handle, 1, 5)
+    _backend.jgrapht_map_long_int_put(handle, 2, 10)
+    _backend.jgrapht_map_long_int_put(handle, 3, 20)
+
+    s = _JGraphTLongIntegerMap(handle)
+    assert len(s) == 3
+
+    assert 1 in s
+    assert 2 in s
+    assert 3 in s
+    assert 4 not in s
+
+    assert s[1] == 5
+    assert s[2] == 10
+    assert s[3] == 20
+
+    keys = []
+    for k in s:
+        keys.append(k)
+    assert keys == [1, 2, 3]
+
+    assert s.get(1) == 5
+    assert s.get(2, 200) == 10
+    assert s.get(5, 200) == 200
+
+    with pytest.raises(KeyError):
+        s.get(4)
+
+    with pytest.raises(KeyError):
+        print(s[4])
+
+    assert str(s) == "{1: 5, 2: 10, 3: 20}"
+
+    repr(s)
+
+    another = _JGraphTLongIntegerMap(linked=False)
+    assert len(another) == 0
+
+
 def test_JGraphTIntegerDoubleMap():
 
     s = _JGraphTIntegerDoubleMap(linked=False)
     assert len(s) == 0
     repr(s)
 
+
+def test_JGraphTLongDoubleMap():
+
+    s = _JGraphTLongDoubleMap(linked=False)
+    assert len(s) == 0
+    repr(s)
     

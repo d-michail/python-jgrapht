@@ -2,19 +2,20 @@ import pytest
 
 import re
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.io.exporters import write_dot, generate_dot
 from jgrapht.io.importers import read_dot, parse_dot
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -28,9 +29,10 @@ def build_graph():
     return g
 
 
-def test_output_dot(tmpdir):
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_dot(backend, tmpdir):
 
-    g = build_graph()
+    g = build_graph(backend)
     tmpfile = tmpdir.join("dot.out")
     tmpfilename = str(tmpfile)
 
@@ -56,6 +58,7 @@ def test_output_dot(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     read_dot(g1, tmpfilename, edge_attribute_cb=ea_cb)
 
@@ -63,12 +66,14 @@ def test_output_dot(tmpdir):
     assert len(g1.edges) == 3
 
 
-def test_output_to_string():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_to_string(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertices_from(range(0, 4))
@@ -84,7 +89,6 @@ def test_output_to_string():
         out.splitlines()
         == "digraph G {\n  0;\n  1;\n  2;\n  3;\n  0 -> 1;\n  0 -> 2;\n  0 -> 3;\n  2 -> 3;\n}\n".splitlines()
     )
-
 
 
 def test_property_graph_output_to_string():
@@ -209,13 +213,15 @@ def test_read_dot_property_graph_from_filename(tmpdir):
     assert g.edge_attrs['e0']['capacity'] == '5.0'
 
 
-def test_read_dot_graph_from_string():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_read_dot_graph_from_string(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     expected=r"""digraph G {

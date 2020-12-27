@@ -1,11 +1,11 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.planar as planar
 import jgrapht.generators as generators
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -54,8 +54,9 @@ def build_anyhashableg_graph():
     return g
 
 
-def test_planar():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_planar(backend):
+    g = build_graph(backend)
 
     res, aux = planar.is_planar(g)
 
@@ -72,12 +73,14 @@ def test_anyhashableg_planar():
     assert aux.edges_around(0) == list(["5", 0, 4])
 
 
-def test_non_planar():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_non_planar(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend
     )
     generators.complete_graph(g, 5)
 

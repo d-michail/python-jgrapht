@@ -1,6 +1,5 @@
 import pytest
 
-from jgrapht import create_graph
 from jgrapht.io.edgelist import (
     parse_edgelist_graph6sparse6,
     read_edgelist_graph6sparse6,

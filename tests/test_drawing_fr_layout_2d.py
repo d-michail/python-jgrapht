@@ -1,15 +1,17 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.drawing as drawing
 
 
-def test_fr_layout():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_fr_layout(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend
     )
     g.add_vertices_from(range(0, 5))
     g.add_edge(0, 1)
@@ -46,12 +48,14 @@ def test_fr_layout():
     assert len(locations) == 5
 
 
-def test_fr_layout_indexed():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_fr_layout_indexed(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend
     )
     g.add_vertices_from(range(0, 5))
     g.add_edge(0, 1)
