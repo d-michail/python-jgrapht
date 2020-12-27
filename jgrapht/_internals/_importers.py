@@ -2,13 +2,17 @@ from collections import defaultdict
 
 from .. import backend as _backend
 
+from ._long_graphs import _is_long_graph
 from ._ioutils import _create_wrapped_import_integer_id_callback
 from ._ioutils import _create_wrapped_import_string_id_callback
 from ._ioutils import _create_wrapped_attribute_callback
 from ._ioutils import _create_wrapped_notify_id_callback
 
+import ctypes
+
 
 def _create_graph_callbacks(
+    graph,
     import_id_cb,
     vertex_attribute_cb,
     edge_attribute_cb,
@@ -16,25 +20,26 @@ def _create_graph_callbacks(
     edge_notify_id_cb,
     integer_ids=False,
 ):
+    id_type = ctypes.c_longlong if _is_long_graph(graph) else ctypes.c_int
     if integer_ids:
         import_id_f_ptr, import_id_f = _create_wrapped_import_integer_id_callback(
-            import_id_cb
+            import_id_cb, id_type=id_type
         )
     else:
         import_id_f_ptr, import_id_f = _create_wrapped_import_string_id_callback(
-            import_id_cb
+            import_id_cb, id_type=id_type
         )
     vertex_attribute_f_ptr, vertex_attribute_f = _create_wrapped_attribute_callback(
-        vertex_attribute_cb
+        vertex_attribute_cb, id_type=id_type
     )
     edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
-        edge_attribute_cb
+        edge_attribute_cb, id_type=id_type
     )
     vertex_notify_f_ptr, vertex_notify_f = _create_wrapped_notify_id_callback(
-        vertex_notify_id_cb
+        vertex_notify_id_cb, id_type=id_type
     )
     edge_notify_f_ptr, edge_notify_f = _create_wrapped_notify_id_callback(
-        edge_notify_id_cb
+        edge_notify_id_cb, id_type=id_type
     )
 
     return (
@@ -157,6 +162,7 @@ def _parse_graph_dimacs(
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
     ) = _create_graph_callbacks(
+        graph,
         import_id_cb=import_id_cb,
         vertex_attribute_cb=None,
         edge_attribute_cb=None,
@@ -168,9 +174,15 @@ def _parse_graph_dimacs(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_dimacs
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_file_dimacs
+        else:
+            backend_function = _backend.jgrapht_ii_import_file_dimacs
     else:
-        backend_function = _backend.jgrapht_import_string_dimacs
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_string_dimacs
+        else:
+            backend_function = _backend.jgrapht_ii_import_string_dimacs
 
     backend_function(
         graph.handle,
@@ -204,9 +216,9 @@ def _parse_anyhashable_graph_dimacs(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_dimacs
+        backend_function = _backend.jgrapht_ii_import_file_dimacs
     else:
-        backend_function = _backend.jgrapht_import_string_dimacs
+        backend_function = _backend.jgrapht_ii_import_string_dimacs
 
     backend_function(
         graph._graph.handle,
@@ -239,6 +251,7 @@ def _parse_graph_gml(
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
     ) = _create_graph_callbacks(
+        graph,        
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
@@ -250,9 +263,15 @@ def _parse_graph_gml(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_gml
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_file_gml
+        else:
+            backend_function = _backend.jgrapht_ii_import_file_gml
     else:
-        backend_function = _backend.jgrapht_import_string_gml
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_string_gml
+        else:
+            backend_function = _backend.jgrapht_ii_import_string_gml
 
     backend_function(
         graph.handle,
@@ -288,9 +307,9 @@ def _parse_anyhashable_graph_gml(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_gml
+        backend_function = _backend.jgrapht_ii_import_file_gml
     else:
-        backend_function = _backend.jgrapht_import_string_gml
+        backend_function = _backend.jgrapht_ii_import_string_gml
 
     backend_function(
         graph._graph.handle,
@@ -325,6 +344,7 @@ def _parse_graph_json(
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
     ) = _create_graph_callbacks(
+        graph,        
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
@@ -335,9 +355,15 @@ def _parse_graph_json(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_json
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_file_json
+        else:            
+            backend_function = _backend.jgrapht_ii_import_file_json
     else:
-        backend_function = _backend.jgrapht_import_string_json
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_string_json
+        else:
+            backend_function = _backend.jgrapht_ii_import_string_json            
 
     backend_function(
         graph.handle,
@@ -371,9 +397,9 @@ def _parse_anyhashable_graph_json(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_json
+        backend_function = _backend.jgrapht_ii_import_file_json
     else:
-        backend_function = _backend.jgrapht_import_string_json
+        backend_function = _backend.jgrapht_ii_import_string_json
 
     backend_function(
         graph._graph.handle,
@@ -419,6 +445,7 @@ def _parse_graph_csv(
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
     ) = _create_graph_callbacks(
+        graph,        
         import_id_cb=import_id_cb,
         vertex_attribute_cb=None,
         edge_attribute_cb=None,
@@ -429,9 +456,15 @@ def _parse_graph_csv(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_csv
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_file_csv
+        else:
+            backend_function = _backend.jgrapht_ii_import_file_csv
     else:
-        backend_function = _backend.jgrapht_import_string_csv
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_string_csv
+        else:
+            backend_function = _backend.jgrapht_ii_import_string_csv
 
     backend_function(
         graph.handle,
@@ -474,9 +507,9 @@ def _parse_anyhashable_graph_csv(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_csv
+        backend_function = _backend.jgrapht_ii_import_file_csv
     else:
-        backend_function = _backend.jgrapht_import_string_csv
+        backend_function = _backend.jgrapht_ii_import_string_csv
 
     backend_function(
         graph._graph.handle,
@@ -514,6 +547,7 @@ def _parse_graph_gexf(
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
     ) = _create_graph_callbacks(
+        graph,        
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
@@ -524,9 +558,15 @@ def _parse_graph_gexf(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_gexf
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_file_gexf
+        else:
+            backend_function = _backend.jgrapht_ii_import_file_gexf
     else:
-        backend_function = _backend.jgrapht_import_string_gexf
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_string_gexf
+        else:
+            backend_function = _backend.jgrapht_ii_import_string_gexf
 
     backend_function(
         graph.handle,
@@ -561,9 +601,9 @@ def _parse_anyhashable_graph_gexf(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_gexf
+        backend_function = _backend.jgrapht_ii_import_file_gexf
     else:
-        backend_function = _backend.jgrapht_import_string_gexf
+        backend_function = _backend.jgrapht_ii_import_string_gexf
 
     backend_function(
         graph._graph.handle,
@@ -599,6 +639,7 @@ def _parse_graph_dot(
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
     ) = _create_graph_callbacks(
+        graph,        
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
@@ -609,9 +650,15 @@ def _parse_graph_dot(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_dot
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_file_dot
+        else:
+            backend_function = _backend.jgrapht_ii_import_file_dot
     else:
-        backend_function = _backend.jgrapht_import_string_dot
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_string_dot
+        else:
+            backend_function = _backend.jgrapht_ii_import_string_dot
 
     backend_function(
         graph.handle,
@@ -645,9 +692,9 @@ def _parse_anyhashable_graph_dot(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_dot
+        backend_function = _backend.jgrapht_ii_import_file_dot
     else:
-        backend_function = _backend.jgrapht_import_string_dot
+        backend_function = _backend.jgrapht_ii_import_string_dot
 
     backend_function(
         graph._graph.handle,
@@ -682,6 +729,7 @@ def _parse_graph_graph6sparse6(
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
     ) = _create_graph_callbacks(
+        graph,        
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
@@ -692,9 +740,15 @@ def _parse_graph_graph6sparse6(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_graph6sparse6
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_file_graph6sparse6
+        else:
+            backend_function = _backend.jgrapht_ii_import_file_graph6sparse6            
     else:
-        backend_function = _backend.jgrapht_import_string_graph6sparse6
+        if _is_long_graph(graph):
+            backend_function = _backend.jgrapht_ll_import_string_graph6sparse6
+        else:
+            backend_function = _backend.jgrapht_ii_import_string_graph6sparse6
 
     backend_function(
         graph.handle,
@@ -728,9 +782,9 @@ def _parse_anyhashable_graph_graph6sparse6(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_graph6sparse6
+        backend_function = _backend.jgrapht_ii_import_file_graph6sparse6
     else:
-        backend_function = _backend.jgrapht_import_string_graph6sparse6
+        backend_function = _backend.jgrapht_ii_import_string_graph6sparse6
 
     backend_function(
         graph._graph.handle,
@@ -767,6 +821,7 @@ def _parse_graph_graphml(
         edge_notify_f_ptr,
         edge_notify_f,  # pylint: disable=unused-variable
     ) = _create_graph_callbacks(
+        graph,        
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
@@ -778,14 +833,26 @@ def _parse_graph_graphml(
 
     if input_is_filename:
         if simple:
-            backend_function = _backend.jgrapht_import_file_graphml_simple
+            if _is_long_graph(graph):
+                backend_function = _backend.jgrapht_ll_import_file_graphml_simple
+            else:
+                backend_function = _backend.jgrapht_ii_import_file_graphml_simple    
         else:
-            backend_function = _backend.jgrapht_import_file_graphml
+            if _is_long_graph(graph):
+                backend_function = _backend.jgrapht_ll_import_file_graphml
+            else:
+                backend_function = _backend.jgrapht_ii_import_file_graphml
     else:
         if simple:
-            backend_function = _backend.jgrapht_import_string_graphml_simple
+            if _is_long_graph(graph):
+                backend_function = _backend.jgrapht_ll_import_string_graphml_simple
+            else:
+                backend_function = _backend.jgrapht_ii_import_string_graphml_simple
         else:
-            backend_function = _backend.jgrapht_import_string_graphml
+            if _is_long_graph(graph):                
+                backend_function = _backend.jgrapht_ll_import_string_graphml
+            else:
+                backend_function = _backend.jgrapht_ii_import_string_graphml
 
     backend_function(
         graph.handle,
@@ -826,14 +893,14 @@ def _parse_anyhashable_graph_graphml(
 
     if input_is_filename:
         if simple:
-            backend_function = _backend.jgrapht_import_file_graphml_simple
+            backend_function = _backend.jgrapht_ii_import_file_graphml_simple
         else:
-            backend_function = _backend.jgrapht_import_file_graphml
+            backend_function = _backend.jgrapht_ii_import_file_graphml
     else:
         if simple:
-            backend_function = _backend.jgrapht_import_string_graphml_simple
+            backend_function = _backend.jgrapht_ii_import_string_graphml_simple
         else:
-            backend_function = _backend.jgrapht_import_string_graphml
+            backend_function = _backend.jgrapht_ii_import_string_graphml
 
     backend_function(
         graph._graph.handle,
