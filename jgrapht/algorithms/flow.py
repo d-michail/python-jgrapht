@@ -144,7 +144,7 @@ def equivalent_flow_tree_gusfield(graph):
     :param graph: an undirected network
     :returns: an equivalent flow tree as an instance of :py:class:`jgrapht.types.EquivalentFlowTree`
     """
-    handle = _backend.jgrapht_equivalentflowtree_exec_gusfield(graph.handle)
+    handle = _backend.jgrapht_xx_equivalentflowtree_exec_gusfield(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphEquivalentFlowTree(handle, graph)

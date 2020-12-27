@@ -80,7 +80,7 @@ def gomory_hu_gusfield(graph):
     :param graph: an undirected network
     :returns: a Gomory-Hu tree as an instance of :py:class:`jgrapht.types.GomoryHuTree`
     """
-    handle = _backend.jgrapht_cut_gomoryhu_exec_gusfield(graph.handle)
+    handle = _backend.jgrapht_xx_cut_gomoryhu_exec_gusfield(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphGomoryHuTree(handle, graph)

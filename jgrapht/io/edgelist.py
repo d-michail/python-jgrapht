@@ -10,12 +10,14 @@ from .._internals._ioutils import (
 
 
 def _import_edgelist_with_string_ids(name, with_attrs, filename_or_string, *args):
-    alg_method_name = "jgrapht_import_edgelist_"
     if with_attrs:
-        alg_method_name += "attrs_"
+        alg_method_type = "ii"
+        alg_method_attrs = "attrs"
     else:
-        alg_method_name += "noattrs_"
-    alg_method_name += name
+        alg_method_type = "xx"
+        alg_method_attrs = "noattrs"
+
+    alg_method_name = "jgrapht_{}_import_edgelist_{}_{}".format(alg_method_type, alg_method_attrs, name)
     alg_method = getattr(_backend, alg_method_name)
 
     filename_or_string_as_bytearray = bytearray(filename_or_string, encoding="utf-8")
@@ -50,7 +52,7 @@ def read_edgelist_dimacs(filename, vertex_attribute_cb=None, edge_attribute_cb=N
       }
 
     Although not specified directly in the DIMACS format documentation, this implementation also
-    allows for the a weighted variant::
+    allows for the weighted variant::
  
       e <edge source 1> <edge target 1> <edge_weight>
 
@@ -79,6 +81,7 @@ def read_edgelist_dimacs(filename, vertex_attribute_cb=None, edge_attribute_cb=N
             vertex_attribute_f_ptr,
             vertex_attribute_f,
         ) = _create_wrapped_strid_attribute_callback(vertex_attribute_cb)
+
         edge_attribute_f_ptr, edge_attribute_f = _create_wrapped_attribute_callback(
             edge_attribute_cb
         )

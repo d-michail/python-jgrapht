@@ -560,18 +560,18 @@ class _AnyHashableDirectedAcyclicGraph(_AnyHashableGraph, DirectedAcyclicGraph):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
-        set_handle = backend.jgrapht_graph_dag_vertex_descendants(self.handle, vid)
+        set_handle = backend.jgrapht_ii_graph_dag_vertex_descendants(self.handle, vid)
         return _AnyHashableGraphVertexSet(set_handle, self)
 
     def ancestors(self, v):
         vid = self._vertex_hash_to_id.get(v)
         if vid is None:
             raise ValueError("Vertex {} not in graph".format(v))
-        set_handle = backend.jgrapht_graph_dag_vertex_ancestors(self.handle, vid)
+        set_handle = backend.jgrapht_ii_graph_dag_vertex_ancestors(self.handle, vid)
         return _AnyHashableGraphVertexSet(set_handle, self)
 
     def __iter__(self):
-        it_handle = backend.jgrapht_graph_dag_topological_it(self.handle)
+        it_handle = backend.jgrapht_xx_graph_dag_topological_it(self.handle)
         return _AnyHashableGraphVertexIterator(it_handle, self)
 
 
