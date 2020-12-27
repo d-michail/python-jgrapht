@@ -2,9 +2,11 @@ from . import backend as _backend
 
 from ._internals._collections import (
     _JGraphTIntegerDoubleMap,
+    _JGraphTLongDoubleMap,
     _JGraphTIntegerSet,
+    _JGraphTLongSet,
 )
-
+from ._internals._long_graphs import _is_long_graph
 from ._internals._anyhashableg import _is_anyhashable_graph
 from ._internals._anyhashableg_collections import (
     _AnyHashableGraphVertexSet,
@@ -22,7 +24,7 @@ def diameter(graph):
     :param graph: the input graph
     :returns: the graph diameter
     """
-    return _backend.jgrapht_graph_metrics_diameter(graph.handle)
+    return _backend.jgrapht_xx_graph_metrics_diameter(graph.handle)
 
 
 def radius(graph):
@@ -38,7 +40,7 @@ def radius(graph):
     :param graph: the input graph
     :returns: the graph diameter
     """
-    return _backend.jgrapht_graph_metrics_radius(graph.handle)
+    return _backend.jgrapht_xx_graph_metrics_radius(graph.handle)
 
 
 def girth(graph):
@@ -54,7 +56,7 @@ def girth(graph):
     :param graph: the input graph
     :returns: the graph girth
     """
-    return _backend.jgrapht_graph_metrics_girth(graph.handle)
+    return _backend.jgrapht_xx_graph_metrics_girth(graph.handle)
 
 
 def count_triangles(graph):
@@ -67,7 +69,7 @@ def count_triangles(graph):
     :returns: the number of triangles in the graph 
     :raises ValueError: if the graph is not undirected
     """
-    return _backend.jgrapht_graph_metrics_triangles(graph.handle)
+    return _backend.jgrapht_xx_graph_metrics_triangles(graph.handle)
 
 
 def measure(graph):
@@ -93,7 +95,7 @@ def measure(graph):
         periphery_handle,
         pseudo_periphery_handle,
         vertex_eccentricity_map_handle,
-    ) = _backend.jgrapht_graph_metrics_measure_graph(graph.handle)
+    ) = _backend.jgrapht_xx_graph_metrics_measure_graph(graph.handle)
 
     if _is_anyhashable_graph(graph):
         centers = _AnyHashableGraphVertexSet(center_handle, graph)
@@ -101,6 +103,13 @@ def measure(graph):
         pseudo_periphery = _AnyHashableGraphVertexSet(pseudo_periphery_handle, graph)
         vertex_eccentricity_map = _AnyHashableGraphVertexDoubleMap(
             vertex_eccentricity_map_handle, graph
+        )
+    elif _is_long_graph(graph):
+        centers = _JGraphTLongSet(center_handle)
+        periphery = _JGraphTLongSet(periphery_handle)
+        pseudo_periphery = _JGraphTLongSet(pseudo_periphery_handle)
+        vertex_eccentricity_map = _JGraphTLongDoubleMap(
+            vertex_eccentricity_map_handle
         )
     else:
         centers = _JGraphTIntegerSet(center_handle)

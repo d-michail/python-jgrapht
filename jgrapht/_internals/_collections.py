@@ -576,6 +576,170 @@ class _JGraphTLongIntegerMap(_HandleWrapper, Mapping):
         return "{" + ", ".join(items) + "}"
 
 
+class _JGraphTLongDoubleMap(_HandleWrapper, Mapping):
+    """JGraphT Map"""
+
+    def __init__(self, handle=None, linked=True, **kwargs):
+        if handle is None:
+            if linked:
+                handle = backend.jgrapht_map_linked_create()
+            else:
+                handle = backend.jgrapht_map_create()
+            owner = True
+        super().__init__(handle=handle, **kwargs)
+
+    def __iter__(self):
+        res = backend.jgrapht_map_keys_it_create(self._handle)
+        return _JGraphTIntegerIterator(res)
+
+    def __len__(self):
+        res = backend.jgrapht_map_size(self._handle)
+        return res
+
+    def get(self, key, value=None):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        if not res:
+            if value is not None:
+                return value
+            else:
+                raise KeyError()
+        res = backend.jgrapht_map_long_double_get(self._handle, key)
+        return res
+
+    def __contains__(self, key):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        return res
+
+    def __getitem__(self, key):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        if not res:
+            raise KeyError()
+        res = backend.jgrapht_map_long_double_get(self._handle, key)
+        return res
+
+    def __repr__(self):
+        return "_JGraphTLongDoubleMap(%r)" % self._handle
+
+    def __str__(self):
+        items = ["{}: {}".format(k, v) for k, v in self.items()]
+        return "{" + ", ".join(items) + "}"
+
+
+class _JGraphTLongDoubleMutableMap(_JGraphTLongDoubleMap, MutableMapping):
+    """JGraphT Mutable Map"""
+
+    def __init__(self, handle=None, linked=True, **kwargs):
+        super().__init__(handle=handle, linked=linked, **kwargs)
+
+    def add(self, key, value):
+        backend.jgrapht_map_long_double_put(self._handle, key, value)
+
+    __marker = object()
+
+    def pop(self, key, defaultvalue=__marker):
+        try:
+            return backend.jgrapht_map_long_double_remove(self._handle, key)
+        except ValueError:
+            if defaultvalue is self.__marker:
+                raise KeyError()
+            else:
+                return defaultvalue
+
+    def __setitem__(self, key, value):
+        backend.jgrapht_map_long_double_put(self._handle, key, value)
+
+    def __delitem__(self, key):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        if not res:
+            raise KeyError()
+        backend.jgrapht_map_long_double_remove(self._handle, key)
+
+    def clear(self):
+        backend.jgrapht_map_clear(self._handle)
+
+    def __repr__(self):
+        return "_JGraphTLongDoubleMutableMap(%r)" % self._handle
+
+
+class _JGraphTLongStringMap(_HandleWrapper, MutableMapping):
+    """JGraphT Map with long keys and string values"""
+
+    def __init__(self, handle=None, linked=True, **kwargs):
+        if handle is None:
+            if linked:
+                handle = backend.jgrapht_map_linked_create()
+            else:
+                handle = backend.jgrapht_map_create()
+        super().__init__(handle=handle, **kwargs)
+
+    def __iter__(self):
+        res = backend.jgrapht_map_keys_it_create(self._handle)
+        return _JGraphTIntegerIterator(res)
+
+    def __len__(self):
+        res = backend.jgrapht_map_size(self._handle)
+        return res
+
+    __marker = object()
+
+    def get(self, key, value=__marker):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        if not res:
+            if value is self.__marker:
+                raise KeyError
+            else:
+                return value
+        res = backend.jgrapht_map_long_string_get(self._handle, key)
+        return _JGraphTString(res)
+
+    def add(self, key, value):
+        encoded_value = bytearray(value, encoding="utf-8")
+        backend.jgrapht_map_long_string_put(self._handle, key, encoded_value)
+
+    def pop(self, key, defaultvalue=__marker):
+        try:
+            res = backend.jgrapht_map_long_string_remove(self._handle, key)
+            return _JGraphTString(res)
+        except ValueError:
+            if defaultvalue is self.__marker:
+                raise KeyError()
+            else:
+                return defaultvalue
+
+    def __contains__(self, key):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        return res
+
+    def __getitem__(self, key):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        if not res:
+            raise KeyError()
+        res = backend.jgrapht_map_long_string_get(self._handle, key)
+        return _JGraphTString(res)
+
+    def __setitem__(self, key, value):
+        encoded_value = bytearray(value, encoding="utf-8")
+        backend.jgrapht_map_long_string_put(self._handle, key, encoded_value)
+
+    def __delitem__(self, key):
+        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        if not res:
+            raise KeyError()
+        res = backend.jgrapht_map_long_string_remove(self._handle, key)
+        return _JGraphTString(res)
+
+    def clear(self):
+        backend.jgrapht_map_clear(self._handle)
+
+    def __repr__(self):
+        return "_JGraphTLongStringMap(%r)" % self._handle
+
+    def __str__(self):
+        items = ["{}: {}".format(k, v) for k, v in self.items()]
+        return "{" + ", ".join(items) + "}"
+
+
+
 class _JGraphTEdgeIntegerTripleList(_HandleWrapper, Iterable, Sized):
     """JGraphT list which contains edge triples"""
 

@@ -28,7 +28,7 @@ def barabasi_albert(graph, m0, m, n, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    _backend.jgrapht_generate_barabasi_albert(graph.handle, m0, m, n, seed)
+    _backend.jgrapht_xx_generate_barabasi_albert(graph.handle, m0, m, n, seed)
 
 
 def barabasi_albert_forest(graph, t, n, seed=None):
@@ -53,7 +53,7 @@ def barabasi_albert_forest(graph, t, n, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    _backend.jgrapht_generate_barabasi_albert_forest(graph.handle, t, n, seed)
+    _backend.jgrapht_xx_generate_barabasi_albert_forest(graph.handle, t, n, seed)
 
 
 def complete_graph(graph, n):
@@ -65,7 +65,7 @@ def complete_graph(graph, n):
     :param graph: the graph to alter, which should be empty
     :param n: the number of vertices.
     """
-    _backend.jgrapht_generate_complete(graph.handle, n)
+    _backend.jgrapht_xx_generate_complete(graph.handle, n)
 
 
 def complete_bipartite_graph(graph, a, b):
@@ -75,7 +75,7 @@ def complete_bipartite_graph(graph, a, b):
     :param a: size of the first partition
     :param b: size of the second partition
     """
-    _backend.jgrapht_generate_bipartite_complete(graph.handle, a, b)
+    _backend.jgrapht_xx_generate_bipartite_complete(graph.handle, a, b)
 
 
 def empty_graph(graph, n):
@@ -87,7 +87,7 @@ def empty_graph(graph, n):
     :param g: the graph to alter, which should be empty
     :param n: number of vertices
     """
-    _backend.jgrapht_generate_empty(graph.handle, n)
+    _backend.jgrapht_xx_generate_empty(graph.handle, n)
 
 
 def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
@@ -118,7 +118,7 @@ def gnm_random_graph(graph, n, m, loops=False, multiple_edges=False, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    _backend.jgrapht_generate_gnm_random(
+    _backend.jgrapht_xx_generate_gnm_random(
         graph.handle, n, m, loops, multiple_edges, seed
     )
 
@@ -140,7 +140,7 @@ def gnp_random_graph(graph, n, p, loops=False, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    _backend.jgrapht_generate_gnp_random(graph.handle, n, p, loops, seed)
+    _backend.jgrapht_xx_generate_gnp_random(graph.handle, n, p, loops, seed)
 
 
 def ring_graph(graph, n):
@@ -151,7 +151,7 @@ def ring_graph(graph, n):
     :param graph: the graph to alter
     :param n: the number of vertices
     """
-    _backend.jgrapht_generate_ring(graph.handle, n)
+    _backend.jgrapht_xx_generate_ring(graph.handle, n)
 
 
 def scalefree_graph(graph, n, seed=None):
@@ -167,7 +167,7 @@ def scalefree_graph(graph, n, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    _backend.jgrapht_generate_scalefree(graph.handle, n, seed)
+    _backend.jgrapht_xx_generate_scalefree(graph.handle, n, seed)
 
 
 def watts_strogatz_graph(graph, n, k, p, add_instead_of_rewire=False, seed=None):
@@ -218,7 +218,7 @@ def watts_strogatz_graph(graph, n, k, p, add_instead_of_rewire=False, seed=None)
     if seed is None:
         seed = int(time.time())
 
-    _backend.jgrapht_generate_watts_strogatz(
+    _backend.jgrapht_xx_generate_watts_strogatz(
         graph.handle, n, k, p, add_instead_of_rewire, seed
     )
 
@@ -250,7 +250,7 @@ def kleinberg_smallworld_graph(graph, n, p, q, r, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    _backend.jgrapht_generate_kleinberg_smallworld(graph.handle, n, p, q, r, seed)
+    _backend.jgrapht_xx_generate_kleinberg_smallworld(graph.handle, n, p, q, r, seed)
 
 
 def complement_graph(graph, source_graph, generate_self_loops=False):
@@ -263,7 +263,7 @@ def complement_graph(graph, source_graph, generate_self_loops=False):
     :param source_graph: the source graph whose complement this function computes
     :param generate_self_loops: whether to generate self-loops
     """
-    _backend.jgrapht_generate_complement(
+    _backend.jgrapht_xx_generate_complement(
         graph.handle, source_graph.handle, generate_self_loops
     )
 
@@ -275,7 +275,7 @@ def generalized_petersen(graph, n, k):
     :param n: size of the regular polygon (cycle graph :math:`C_n`)
     :param k: size of the star polygon
     """
-    _backend.jgrapht_generate_generalized_petersen(graph.handle, n, k)
+    _backend.jgrapht_xx_generate_generalized_petersen(graph.handle, n, k)
 
 
 def grid(graph, rows, columns):
@@ -285,7 +285,7 @@ def grid(graph, rows, columns):
     :param rows: number of rows
     :param columns: number of columns
     """
-    _backend.jgrapht_generate_grid(graph.handle, rows, columns)
+    _backend.jgrapht_xx_generate_grid(graph.handle, rows, columns)
 
 
 def hypercube(graph, dimension):
@@ -294,7 +294,7 @@ def hypercube(graph, dimension):
     :param graph: graph to populate
     :param dimension: the dimension of the hypercube
     """
-    _backend.jgrapht_generate_hypercube(graph.handle, dimension)
+    _backend.jgrapht_xx_generate_hypercube(graph.handle, dimension)
 
 
 def linear(graph, n):
@@ -303,7 +303,7 @@ def linear(graph, n):
     :param graph: graph to populate
     :param n: number of vertices
     """
-    _backend.jgrapht_generate_linear(graph.handle, n)
+    _backend.jgrapht_xx_generate_linear(graph.handle, n)
 
 
 def random_regular(graph, n, d, seed=None):
@@ -316,7 +316,7 @@ def random_regular(graph, n, d, seed=None):
     """
     if seed is None:
         seed = int(time.time())
-    _backend.jgrapht_generate_random_regular(graph.handle, n, d, seed)
+    _backend.jgrapht_xx_generate_random_regular(graph.handle, n, d, seed)
 
 
 def star(graph, n):
@@ -325,7 +325,7 @@ def star(graph, n):
     :param graph: graph to populate
     :param n: number of vertices
     """
-    _backend.jgrapht_generate_star(graph.handle, n)
+    _backend.jgrapht_xx_generate_star(graph.handle, n)
 
 
 def wheel(graph, n, inward_spokes=False):
@@ -336,7 +336,7 @@ def wheel(graph, n, inward_spokes=False):
     :param inward_spokes: if the graph is directed, then generate the spokes in an
       inward direction
     """
-    _backend.jgrapht_generate_wheel(graph.handle, n, inward_spokes)
+    _backend.jgrapht_xx_generate_wheel(graph.handle, n, inward_spokes)
 
 
 def windmill(graph, m, n, dutch=False):
@@ -350,7 +350,7 @@ def windmill(graph, m, n, dutch=False):
     :param n: the size of the complete graph
     :dutch: if true then Dutch windmill are generated
     """
-    _backend.jgrapht_generate_windmill(graph.handle, m, n, dutch)
+    _backend.jgrapht_xx_generate_windmill(graph.handle, m, n, dutch)
 
 
 def linearized_chord_diagram(graph, n, m, seed=None):
@@ -380,4 +380,4 @@ def linearized_chord_diagram(graph, n, m, seed=None):
     """
     if seed is None:
         seed = int(time.time())
-    _backend.jgrapht_generate_linearized_chord_diagram(graph.handle, n, m, seed)
+    _backend.jgrapht_xx_generate_linearized_chord_diagram(graph.handle, n, m, seed)

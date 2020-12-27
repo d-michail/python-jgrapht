@@ -359,11 +359,11 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
             self._handle = graph.handle
 
         def __iter__(self):
-            res = backend.jgrapht_graph_create_all_vit(self._handle)
+            res = backend.jgrapht_xx_graph_create_all_vit(self._handle)
             return _AnyHashableGraphVertexIterator(res, self._graph)
 
         def __len__(self):
-            return backend.jgrapht_graph_vertices_count(self._handle)
+            return backend.jgrapht_ii_graph_vertices_count(self._handle)
 
         def __contains__(self, v):
             v = self._graph._vertex_hash_to_id.get(v)
@@ -371,7 +371,7 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
                 return False
             # important to do both checks here, as some views might share
             # the _vertex_hash_to_id dictionary
-            return backend.jgrapht_graph_contains_vertex(self._handle, v)
+            return backend.jgrapht_ii_graph_contains_vertex(self._handle, v)
 
         def __repr__(self):
             return "_AnyHashableGraphVertexSet(%r)" % self._handle
@@ -389,11 +389,11 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
             self._handle = graph.handle
 
         def __iter__(self):
-            res = backend.jgrapht_graph_create_all_eit(self._handle)
+            res = backend.jgrapht_xx_graph_create_all_eit(self._handle)
             return _AnyHashableGraphEdgeIterator(res, self._graph)
 
         def __len__(self):
-            return backend.jgrapht_graph_edges_count(self._handle)
+            return backend.jgrapht_ii_graph_edges_count(self._handle)
 
         def __contains__(self, e):
             e = self._graph._edge_hash_to_id.get(e)
@@ -401,7 +401,7 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
                 return False
             # important to do both checks here, as some views might share
             # the _edge_hash_to_id dictionary
-            return backend.jgrapht_graph_contains_edge(self._handle, e)
+            return backend.jgrapht_ii_graph_contains_edge(self._handle, e)
 
         def __repr__(self):
             return "_AnyHashableGraphEdgeSet(%r)" % self._handle

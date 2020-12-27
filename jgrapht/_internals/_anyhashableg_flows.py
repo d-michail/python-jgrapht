@@ -4,7 +4,7 @@ from ..types import Flow, GomoryHuTree, EquivalentFlowTree
 
 from ._wrappers import _HandleWrapper
 
-from ._graphs import _JGraphTGraph
+from ._int_graphs import _JGraphTIntegerGraph
 from ._anyhashableg import (
     _create_anyhashable_graph,
     _vertex_anyhashableg_to_g,
@@ -52,7 +52,7 @@ class _AnyHashableGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
 
     def as_graph(self):
         tree_handle = _backend.jgrapht_cut_gomoryhu_tree(self.handle)
-        tree_as_graph = _JGraphTGraph(tree_handle)
+        tree_as_graph = _JGraphTIntegerGraph(tree_handle)
 
         # The resulting tree has the same vertices as the original graph. When using
         # any-hashable graphs, we have to explicitly copy here, to keep the same effect.
@@ -105,7 +105,7 @@ class _AnyHashableGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
 
     def as_graph(self):
         tree_handle = _backend.jgrapht_equivalentflowtree_tree(self.handle)
-        tree_as_graph = _JGraphTGraph(tree_handle)
+        tree_as_graph = _JGraphTIntegerGraph(tree_handle)
 
         # The resulting tree has the same vertices as the original graph. When using
         # any-hashable graphs, we have to explicitly copy here, to keep the same effect.

@@ -2,9 +2,11 @@ from .. import backend as _backend
 
 from .._internals._collections import (
     _JGraphTIntegerDoubleMap,
+    _JGraphTLongDoubleMap,
     _JGraphTIntegerIntegerMap,
+    _JGraphTLongIntegerMap,
 )
-
+from .._internals._long_graphs import _is_long_graph
 from .._internals._anyhashableg import _is_anyhashable_graph
 from .._internals._anyhashableg_collections import (
     _AnyHashableGraphVertexDoubleMap,
@@ -15,6 +17,8 @@ from .._internals._anyhashableg_collections import (
 def _wrap_result(graph, scores_handle):
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexDoubleMap(scores_handle, graph)
+    elif _is_long_graph(graph):
+        return _JGraphTLongDoubleMap(scores_handle)
     else:
         return _JGraphTIntegerDoubleMap(scores_handle)
 
@@ -50,7 +54,7 @@ def alpha_centrality(
     :returns: a dictionary from vertices to double values
     """
     custom = [damping_factor, exogenous_factor, max_iterations, tolerance]
-    scores_handle = _backend.jgrapht_scoring_exec_custom_alpha_centrality(
+    scores_handle = _backend.jgrapht_xx_scoring_exec_custom_alpha_centrality(
         graph.handle, *custom
     )
     return _wrap_result(graph, scores_handle)
@@ -77,7 +81,7 @@ def betweenness_centrality(graph, incoming=False, normalize=False):
     :returns: a dictionary from vertices to double values
     """
     custom = [normalize]
-    scores_handle = _backend.jgrapht_scoring_exec_custom_betweenness_centrality(
+    scores_handle = _backend.jgrapht_xx_scoring_exec_custom_betweenness_centrality(
         graph.handle, *custom
     )
     return _wrap_result(graph, scores_handle)
@@ -116,7 +120,7 @@ def closeness_centrality(graph, incoming=False, normalize=True):
     :returns: a dictionary from vertices to double values
     """
     custom = [incoming, normalize]
-    scores_handle = _backend.jgrapht_scoring_exec_custom_closeness_centrality(
+    scores_handle = _backend.jgrapht_xx_scoring_exec_custom_closeness_centrality(
         graph.handle, *custom
     )
     return _wrap_result(graph, scores_handle)
@@ -157,7 +161,7 @@ def harmonic_centrality(graph, incoming=False, normalize=True):
     :returns: a dictionary from vertices to double values
     """
     custom = [incoming, normalize]
-    scores_handle = _backend.jgrapht_scoring_exec_custom_harmonic_centrality(
+    scores_handle = _backend.jgrapht_xx_scoring_exec_custom_harmonic_centrality(
         graph.handle, *custom
     )
     return _wrap_result(graph, scores_handle)
@@ -193,7 +197,7 @@ def pagerank(graph, damping_factor=0.85, max_iterations=100, tolerance=0.0001):
     :returns: a dictionary from vertices to double values
     """
     custom = [damping_factor, max_iterations, tolerance]
-    scores_handle = _backend.jgrapht_scoring_exec_custom_pagerank(graph.handle, *custom)
+    scores_handle = _backend.jgrapht_xx_scoring_exec_custom_pagerank(graph.handle, *custom)
     return _wrap_result(graph, scores_handle)
 
 
@@ -224,7 +228,7 @@ def coreness(graph):
     :returns: a tuple containing the degeneracy and a dictionary from vertices to integer
       values (coreness of each vertex)
     """
-    degeneracy, scores_handle = _backend.jgrapht_scoring_exec_coreness(graph.handle)
+    degeneracy, scores_handle = _backend.jgrapht_xx_scoring_exec_coreness(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return degeneracy, _AnyHashableGraphVertexIntegerMap(scores_handle, graph)
@@ -260,9 +264,11 @@ def clustering_coefficient(graph):
         global_cc,
         avg_cc,
         cc_map_handle,
-    ) = _backend.jgrapht_scoring_exec_clustering_coefficient(graph.handle)
+    ) = _backend.jgrapht_xx_scoring_exec_clustering_coefficient(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return global_cc, avg_cc, _AnyHashableGraphVertexDoubleMap(cc_map_handle, graph)
+    elif _is_long_graph(graph):
+        return global_cc, avg_cc, _JGraphTLongDoubleMap(cc_map_handle)
     else:
         return global_cc, avg_cc, _JGraphTIntegerDoubleMap(cc_map_handle)

@@ -9,8 +9,10 @@ from ..types import (
 from ._wrappers import (
     _HandleWrapper,
     _JGraphTIntegerIterator,
+    _JGraphTLongIterator,
     _JGraphTObjectIterator,
 )
+from ._long_graphs import _is_long_graph
 
 
 class _JGraphTGraphPath(_HandleWrapper, GraphPath):
@@ -60,14 +62,21 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
         if self._edges is not None:
             return
 
-        weight, start_vertex, end_vertex, eit = backend.jgrapht_handles_get_graphpath(
-            self._handle
-        )
+        is_long_graph = _is_long_graph(self._graph)
+
+        if is_long_graph:
+            weight, start_vertex, end_vertex, eit = backend.jgrapht_ll_handles_get_graphpath(
+                self._handle
+            )
+        else:
+            weight, start_vertex, end_vertex, eit = backend.jgrapht_ii_handles_get_graphpath(
+                self._handle
+            )
 
         self._weight = weight
         self._start_vertex = start_vertex
         self._end_vertex = end_vertex
-        self._edges = list(_JGraphTIntegerIterator(eit))
+        self._edges = list(_JGraphTLongIterator(eit)) if is_long_graph else list(_JGraphTIntegerIterator(eit))
 
     def __repr__(self):
         return "_JGraphTGraphPath(%r)" % self._handle

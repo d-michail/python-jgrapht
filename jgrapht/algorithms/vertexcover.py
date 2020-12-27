@@ -2,26 +2,33 @@ from .. import backend as _backend
 
 from .._internals._collections import (
     _JGraphTIntegerDoubleMutableMap,
+    _JGraphTLongDoubleMutableMap,
     _JGraphTIntegerSet,
+    _JGraphTLongSet,
 )
-
+from .._internals._long_graphs import _is_long_graph
 from .._internals._anyhashableg import _is_anyhashable_graph
 from .._internals._anyhashableg_collections import _AnyHashableGraphVertexSet
 
 
 def _copy_vertex_weights(graph, vertex_weights):
-    jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
     if _is_anyhashable_graph(graph):
+        jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[graph._vertex_hash_to_id[key]] = val
+    elif _is_long_graph(graph):
+        jgrapht_vertex_weights = _JGraphTLongDoubleMutableMap()
+        for key, val in vertex_weights.items():
+            jgrapht_vertex_weights[key] = val
     else:
+        jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
     return jgrapht_vertex_weights
 
 
 def _vertexcover_alg(name, graph, vertex_weights=None):
-    alg_method_name = "jgrapht_vertexcover_exec_" + name
+    alg_method_name = "jgrapht_xx_vertexcover_exec_" + name
     if vertex_weights is not None:
         alg_method_name += "_weighted"
     alg_method = getattr(_backend, alg_method_name)
@@ -34,6 +41,8 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
 
     if _is_anyhashable_graph(graph):
         return weight, _AnyHashableGraphVertexSet(vc_handle, graph)
+    elif _is_long_graph(graph):
+        return weight, _JGraphTLongSet(vc_handle)
     else:
         return weight, _JGraphTIntegerSet(vc_handle)
 
@@ -41,8 +50,8 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
 def greedy(graph, vertex_weights=None):
     r"""A greedy algorithm for the vertex cover problem.
 
-    At each iteration the algorithm picks the vertex :math:`v` with 
-    the minimum ration of weight over degree. Afterwards it removes all 
+    At each iteration the algorithm picks the vertex :math:`v` with
+    the minimum ration of weight over degree. Afterwards it removes all
     its incident edges and recurses.
 
     Its running time is :math:`\mathcal{O}(m \log n)`. The implementation
@@ -62,7 +71,7 @@ def clarkson(graph, vertex_weights=None):
 
     The algorithm runs in time :math:`\mathcal{O}(m \log n)` and is a 2-approximation
     which means that the solution is guaranteed to be at most twice the optimum.
-    
+
     For more information see the following paper:
 
     Clarkson, Kenneth L. A modification of the greedy algorithm for vertex cover.
@@ -104,12 +113,12 @@ def baryehuda_even(graph, vertex_weights=None):
 def exact(graph, vertex_weights=None):
     r"""Compute a vertex cover exactly using a recursive algorithm.
 
-    At each recursive step the algorithm picks a vertex and either includes in the 
+    At each recursive step the algorithm picks a vertex and either includes in the
     cover or it includes all of its neighbors. To speed up the algorithm, memoization
     and a bounding procedure is also used.
 
     Can solve instances with around 150-200 vertices to optimality.
-    
+
     :param graph: the input graph. It must be undirected
     :param vertex_weights: an optional dictionary of vertex weights
     :returns: a tuple (weight, vertex set)

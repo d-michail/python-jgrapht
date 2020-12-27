@@ -285,7 +285,7 @@ class _IntegerWeightedView(_JGraphTIntegerGraph):
         self._edge_weight_cb_fptr, self._edge_weight_cb = _create_wrapped_callback(
             edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_int)
         )
-        res = backend.jgrapht_graph_as_weighted(
+        res = backend.jgrapht_ii_graph_as_weighted(
             graph.handle,
             self._edge_weight_cb_fptr,
             cache_weights,
@@ -320,7 +320,7 @@ class _LongWeightedView(_JGraphTLongGraph):
         self._edge_weight_cb_fptr, self._edge_weight_cb = _create_wrapped_callback(
             edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_longlong)
         )
-        res = backend.jgrapht_graph_as_weighted(
+        res = backend.jgrapht_ll_graph_as_weighted(
             graph.handle,
             self._edge_weight_cb_fptr,
             cache_weights,

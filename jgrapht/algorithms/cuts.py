@@ -1,10 +1,12 @@
 from .. import backend as _backend
 
+from .._internals._long_graphs import _is_long_graph
 from .._internals._flows import (
     _JGraphTCut,
-    _JGraphTGomoryHuTree,
+    _JGraphTIntegerGomoryHuTree,
+    _JGraphTLongGomoryHuTree,
 )
-from .._internals._collections import _JGraphTIntegerMutableSet
+from .._internals._collections import _JGraphTIntegerMutableSet, _JGraphTLongMutableSet
 
 from .._internals._anyhashableg import (
     _is_anyhashable_graph,
@@ -21,17 +23,17 @@ from .flow import push_relabel
 
 def mincut_stoer_wagner(graph):
     r"""Compute a min-cut using the Stoer-Wagner algorithm.
-        
+
     This implementation requires :math:`\mathcal{O}(m n \log m)` time where :math:`n` is the
     number of vertices and :math:`m` the number of edges of the graph.
-    
-    :param graph: the input graph. Must be undirected with non-negative edge weights 
+
+    :param graph: the input graph. Must be undirected with non-negative edge weights
     :returns: a min cut as an instance of :py:class:`.Cut`.
     """
     (
         cut_weight,
         cut_source_partition_handle,
-    ) = _backend.jgrapht_cut_mincut_exec_stoer_wagner(graph.handle)
+    ) = _backend.jgrapht_xx_cut_mincut_exec_stoer_wagner(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphCut(graph, cut_weight, cut_source_partition_handle)
@@ -41,8 +43,8 @@ def mincut_stoer_wagner(graph):
 
 def min_st_cut(graph, source, sink):
     r"""Compute a minimum s-t cut using the Push-relabel algorithm.
-    
-    This is a :math:`\mathcal{O}(n^3)` algorithm where :math:`n` is the number of vertices 
+
+    This is a :math:`\mathcal{O}(n^3)` algorithm where :math:`n` is the number of vertices
     of the graph. For more details on the algorithm see:
 
       * Andrew V. Goldberg and Robert Tarjan. A new approach to the maximum flow problem.
@@ -62,12 +64,12 @@ def min_st_cut(graph, source, sink):
 
 def gomory_hu_gusfield(graph):
     r"""Computes a Gomory-Hu Tree using Gusfield's algorithm.
-    
+
     Gomory-Hu Trees can be used to calculate the maximum s-t flow value and the minimum
     s-t cut between all pairs of vertices. It does so by performing :math:`n-1` max flow
-    computations. 
+    computations.
 
-    For more details see: 
+    For more details see:
 
       * Gusfield, D, Very simple methods for all pairs network flow analysis. SIAM Journal
         on Computing, 19(1), p142-155, 1990
@@ -75,15 +77,17 @@ def gomory_hu_gusfield(graph):
     This implementation uses the push-relabel algorithm for the minimum s-t cut which
     is :math:`\mathcal{O}(n^3)`. The total complexity is, therefore, :math:`\mathcal{O}(n^4)`.
 
-    :param graph: an undirected network    
+    :param graph: an undirected network
     :returns: a Gomory-Hu tree as an instance of :py:class:`jgrapht.types.GomoryHuTree`
     """
     handle = _backend.jgrapht_cut_gomoryhu_exec_gusfield(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphGomoryHuTree(handle, graph)
+    elif _is_long_graph(graph):
+        return _JGraphTLongGomoryHuTree(handle, graph)
     else:
-        return _JGraphTGomoryHuTree(handle, graph)
+        return _JGraphTIntegerGomoryHuTree(handle, graph)
 
 
 def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
@@ -97,24 +101,30 @@ def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
         SIAM Journal of Discrete Mathematics, 22(4), p1480-1487, 2008.
 
     Running time :math:`\mathcal{O}(n^4)`.
-    
+
     :param graph: an undirected network. Must be simple and all edge weights must be positive.
     :param odd_vertices: set of vertices labelled "odd". It must have even cardinality.
-    :param use_tree_compression: whether to use the tree compression technique    
+    :param use_tree_compression: whether to use the tree compression technique
     :returns: a cut as an instance of :py:class:`.Cut`.
     """
-    odd_set = _JGraphTIntegerMutableSet()
+    
     if _is_anyhashable_graph(graph):
+        odd_set = _JGraphTIntegerMutableSet()
         for x in odd_vertices:
             odd_set.add(_vertex_anyhashableg_to_g(graph, x))
+    elif _is_long_graph(graph):
+        odd_set = _JGraphTLongMutableSet()
+        for x in odd_vertices:
+            odd_set.add(x)
     else:
+        odd_set = _JGraphTIntegerMutableSet()
         for x in odd_vertices:
             odd_set.add(x)
 
     (
         cut_weight,
         cut_source_partition_handle,
-    ) = _backend.jgrapht_cut_oddmincutset_exec_padberg_rao(
+    ) = _backend.jgrapht_xx_cut_oddmincutset_exec_padberg_rao(
         graph.handle, odd_set.handle, use_tree_compression
     )
 
