@@ -8,9 +8,9 @@ from .._internals._paths import (
     _JGraphTContractionHierarchies,
     _JGraphTContractionHierarchiesManyToMany,
 )
-from .._internals._collections import _JGraphTIntegerMutableSet
+from .._internals._collections import _JGraphTIntegerMutableSet, _JGraphTLongMutableSet
 from .._internals._callbacks import _create_wrapped_callback
-
+from .._internals._long_graphs import _is_long_graph
 from .._internals._anyhashableg import (
     _is_anyhashable_graph,
     _vertex_anyhashableg_to_g as _vertex_attrsg_to_g,
@@ -32,18 +32,26 @@ import time
 
 
 def _vertex_set_to_backend(graph, vertexset):
-    mutable_set = _JGraphTIntegerMutableSet(linked=True)
     if _is_anyhashable_graph(graph):
+        mutable_set = _JGraphTIntegerMutableSet(linked=True)
         for v in vertexset:
             mutable_set.add(_vertex_attrsg_to_g(graph, v))
+    elif _is_long_graph(graph):
+        mutable_set = _JGraphTLongMutableSet(linked=True)
+        for v in vertexset:
+            mutable_set.add(v)
     else:
+        mutable_set = _JGraphTIntegerMutableSet(linked=True)
         for v in vertexset:
             mutable_set.add(v)
     return mutable_set
 
 
 def _sp_singlesource_alg(name, graph, source_vertex, *args):
-    alg_method_name = "jgrapht_sp_exec_" + name
+    if _is_long_graph(graph):
+        alg_method_name = "jgrapht_ll_sp_exec_" + name
+    else:
+        alg_method_name = "jgrapht_ii_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
@@ -55,7 +63,10 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
 
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
-    alg_method_name = "jgrapht_sp_exec_" + name
+    if _is_long_graph(graph):
+        alg_method_name = "jgrapht_ll_sp_exec_" + name
+    else:
+        alg_method_name = "jgrapht_ii_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
@@ -74,7 +85,7 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
 
 
 def _sp_allpairs_alg(name, graph):
-    alg_method_name = "jgrapht_sp_exec_" + name
+    alg_method_name = "jgrapht_xx_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle)
@@ -86,7 +97,10 @@ def _sp_allpairs_alg(name, graph):
 
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
-    alg_method_name = "jgrapht_sp_exec_" + name
+    if _is_long_graph(graph):
+        alg_method_name = "jgrapht_ll_sp_exec_" + name
+    else:
+        alg_method_name = "jgrapht_ii_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
@@ -104,7 +118,10 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
 
 
 def _multisp_singlesource_alg(name, graph, source_vertex, *args):
-    alg_method_name = "jgrapht_multisp_exec_" + name
+    if _is_long_graph(graph):
+        alg_method_name = "jgrapht_ll_multisp_exec_" + name
+    else:
+        alg_method_name = "jgrapht_ii_multisp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
@@ -450,9 +467,14 @@ def martin_multiobjective(
             array_ptr = ctypes.cast(array, ctypes.c_void_p)
             return array_ptr.value
 
-    cb_fptr, cb = _create_wrapped_callback(
-        inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_int)
-    )
+    if _is_long_graph(graph):
+        cb_fptr, cb = _create_wrapped_callback(
+            inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_longlong)
+        )
+    else:
+        cb_fptr, cb = _create_wrapped_callback(
+            inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_int)
+        )
 
     custom = [cb_fptr, edge_weight_dimension]
 
@@ -464,12 +486,18 @@ def martin_multiobjective(
             *custom
         )
     else:
-        res = _backend.jgrapht_multisp_exec_martin_get_paths_between_vertices(
-            graph.handle,
-            _vertex_attrsg_to_g(graph, source_vertex),
-            _vertex_attrsg_to_g(graph, target_vertex),
-            *custom
-        )
+        if _is_long_graph(graph):
+            res = _backend.jgrapht_ll_multisp_exec_martin_get_paths_between_vertices(
+                graph.handle, source_vertex, target_vertex, *custom
+            )
+        else:
+            res = _backend.jgrapht_ii_multisp_exec_martin_get_paths_between_vertices(
+                graph.handle,
+                _vertex_attrsg_to_g(graph, source_vertex),
+                _vertex_attrsg_to_g(graph, target_vertex),
+                *custom
+            )
+
         if _is_anyhashable_graph(graph):
             return _AnyHashableGraphGraphPathIterator(res, graph)
         else:
@@ -480,7 +508,7 @@ def precompute_contraction_hierarchies(graph, parallelism=None, seed=None):
     r"""Precompute contraction hierarchies.
 
     This is a preprocessing technique which speeds up shortest path queries. See
-    :py:meth:`contraction_hierarchies_many_to_many` and 
+    :py:meth:`contraction_hierarchies_many_to_many` and
     :py:meth:`contraction_hierarchies_dijkstra` on how to use this object.
 
     :param graph: the graph
@@ -493,7 +521,7 @@ def precompute_contraction_hierarchies(graph, parallelism=None, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    res = _backend.jgrapht_sp_exec_contraction_hierarchy(
+    res = _backend.jgrapht_xx_sp_exec_contraction_hierarchy(
         graph.handle, parallelism, seed
     )
     return _JGraphTContractionHierarchies(res, graph)
@@ -515,7 +543,7 @@ def contraction_hierarchies_many_to_many(graph, sources, targets, ch=None):
     if ch is None:
         ch = precompute_contraction_hierarchies(graph)
 
-    handle = _backend.jgrapht_sp_exec_contraction_hierarchy_get_manytomany(
+    handle = _backend.jgrapht_xx_sp_exec_contraction_hierarchy_get_manytomany(
         ch.handle, jgrapht_sources.handle, jgrapht_targets.handle
     )
 
@@ -539,18 +567,26 @@ def contraction_hierarchies_dijkstra(
     :returns: a shortest path
     :rtype: :py:class:`.GraphPath`
     """
-    if radius is None: 
-        radius = float.fromhex('0x1.fffffffffffffP+1023')
+    if radius is None:
+        radius = float.fromhex("0x1.fffffffffffffP+1023")
 
     if ch is None:
         ch = precompute_contraction_hierarchies(graph)
 
-    handle = _backend.jgrapht_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
-        ch.handle,
-        _vertex_attrsg_to_g(graph, source_vertex),
-        _vertex_attrsg_to_g(graph, target_vertex),
-        radius
-    )
+    if _is_long_graph(graph):
+        handle = _backend.jgrapht_ll_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
+            ch.handle,
+            source_vertex,
+            target_vertex,
+            radius,
+        )
+    else:
+        handle = _backend.jgrapht_ii_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
+            ch.handle,
+            _vertex_attrsg_to_g(graph, source_vertex),
+            _vertex_attrsg_to_g(graph, target_vertex),
+            radius,
+        )
 
     if handle is None:
         return None

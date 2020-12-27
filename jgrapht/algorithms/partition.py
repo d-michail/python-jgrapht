@@ -1,7 +1,7 @@
 from .. import backend as _backend
 
-from .._internals._collections import _JGraphTIntegerSet
-
+from .._internals._collections import _JGraphTIntegerSet, _JGraphTLongSet
+from .._internals._long_graphs import _is_long_graph
 from .._internals._anyhashableg import _is_anyhashable_graph
 from .._internals._anyhashableg_collections import _AnyHashableGraphVertexSet
 
@@ -14,7 +14,7 @@ def bipartite_partitions(graph):
     :param graph: The input graph
     :returns: A tuple (result, partition1, partition2)
     """
-    res, part1, part2 = _backend.jgrapht_partition_exec_bipartite(graph.handle)
+    res, part1, part2 = _backend.jgrapht_xx_partition_exec_bipartite(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return (
@@ -22,5 +22,7 @@ def bipartite_partitions(graph):
             _AnyHashableGraphVertexSet(part1, graph),
             _AnyHashableGraphVertexSet(part2, graph),
         )
+    elif _is_long_graph(graph):
+        return res, _JGraphTLongSet(part1), _JGraphTLongSet(part2)
     else:
         return res, _JGraphTIntegerSet(part1), _JGraphTIntegerSet(part2)

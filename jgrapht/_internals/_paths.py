@@ -119,9 +119,14 @@ class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
         :param target_vertex: The target vertex.
         :returns: a path from the source to the target vertex.
         """
-        gp = backend.jgrapht_sp_singlesource_get_path_to_vertex(
-            self._handle, target_vertex
-        )
+        if _is_long_graph(self._graph):
+            gp = backend.jgrapht_ll_sp_singlesource_get_path_to_vertex(
+                self._handle, target_vertex
+            )
+        else:
+            gp = backend.jgrapht_ii_sp_singlesource_get_path_to_vertex(
+                self._handle, target_vertex
+            )
         return _JGraphTGraphPath(gp, self._graph) if gp is not None else None
 
     def __repr__(self):
@@ -136,15 +141,25 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
         self._graph = graph
 
     def get_path(self, source_vertex, target_vertex):
-        gp = backend.jgrapht_sp_allpairs_get_path_between_vertices(
-            self._handle, source_vertex, target_vertex
-        )
+        if _is_long_graph(self._graph):
+            gp = backend.jgrapht_ll_sp_allpairs_get_path_between_vertices(
+                self._handle, source_vertex, target_vertex
+            )
+        else:
+            gp = backend.jgrapht_ii_sp_allpairs_get_path_between_vertices(
+                self._handle, source_vertex, target_vertex
+            )
         return _JGraphTGraphPath(gp, self._graph) if gp is not None else None
 
     def get_paths_from(self, source_vertex):
-        singlesource = backend.jgrapht_sp_allpairs_get_singlesource_from_vertex(
-            self._handle, source_vertex
-        )
+        if _is_long_graph(self._graph):
+            singlesource = backend.jgrapht_ll_sp_allpairs_get_singlesource_from_vertex(
+                self._handle, source_vertex
+            )
+        else:
+            singlesource = backend.jgrapht_ii_sp_allpairs_get_singlesource_from_vertex(
+                self._handle, source_vertex
+            )
         return _JGraphTSingleSourcePaths(singlesource, self._graph, source_vertex)
 
     def __repr__(self):
@@ -169,9 +184,14 @@ class _JGraphTMultiObjectiveSingleSourcePaths(
         return self._source_vertex
 
     def get_paths(self, target_vertex):
-        gp_it = backend.jgrapht_multisp_multiobjectivesinglesource_get_paths_to_vertex(
-            self._handle, target_vertex
-        )
+        if _is_long_graph(self._graph):
+            gp_it = backend.jgrapht_ll_multisp_multiobjectivesinglesource_get_paths_to_vertex(
+                self._handle, target_vertex
+            )
+        else:
+            gp_it = backend.jgrapht_ii_multisp_multiobjectivesinglesource_get_paths_to_vertex(
+                self._handle, target_vertex
+            )
         return _JGraphTGraphPathIterator(handle=gp_it, graph=self._graph)
 
     def __repr__(self):
@@ -197,9 +217,14 @@ class _JGraphTContractionHierarchiesManyToMany(_HandleWrapper, ManyToManyPaths):
         self._graph = graph
 
     def get_path(self, source_vertex, target_vertex):
-        gp = backend.jgrapht_sp_manytomany_get_path_between_vertices(
-            self._handle, source_vertex, target_vertex
-        )
+        if _is_long_graph(self._graph):
+            gp = backend.jgrapht_ll_sp_manytomany_get_path_between_vertices(
+                self._handle, source_vertex, target_vertex
+            )
+        else:
+            gp = backend.jgrapht_ii_sp_manytomany_get_path_between_vertices(
+                self._handle, source_vertex, target_vertex
+            )
         return _JGraphTGraphPath(gp, self._graph) if gp is not None else None
 
     def __repr__(self):

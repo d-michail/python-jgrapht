@@ -1,13 +1,13 @@
 from .. import backend
 
-from ._drawing import _JGraphTLayoutModel2D
+from ._drawing import _JGraphTIntegerLayoutModel2D
 from ._anyhashableg import (
     _is_anyhashable_graph,
     _vertex_anyhashableg_to_g,
 )
 
 
-class _AnyHashableGraphLayoutModel2D(_JGraphTLayoutModel2D):
+class _AnyHashableGraphLayoutModel2D(_JGraphTIntegerLayoutModel2D):
     """A 2D layout model."""
 
     def __init__(self, handle, graph, **kwargs):
@@ -38,5 +38,5 @@ def _create_anyhashable_graph_layout_model_2d(graph, min_x, min_y, width, height
     """Factory for a 2d layout model."""
     if not _is_anyhashable_graph(graph):
         raise ValueError("Graph must be an any-hashable graph")
-    handle = backend.jgrapht_drawing_layout_model_2d_create(min_x, min_y, width, height)
+    handle = backend.jgrapht_xx_drawing_layout_model_2d_create(min_x, min_y, width, height)
     return _AnyHashableGraphLayoutModel2D(handle, graph)

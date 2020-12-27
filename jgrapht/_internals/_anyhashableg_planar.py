@@ -16,7 +16,7 @@ class _AnyHashableGraphPlanarEmbedding(_HandleWrapper, PlanarEmbedding):
 
     def edges_around(self, vertex):
         vertex = _vertex_anyhashableg_to_g(self._graph, vertex)
-        res = backend.jgrapht_planarity_embedding_edges_around_vertex(
+        res = backend.jgrapht_ii_planarity_embedding_edges_around_vertex(
             self._handle, vertex
         )
         return list(_AnyHashableGraphEdgeIterator(res, self._graph))
