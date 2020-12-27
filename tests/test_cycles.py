@@ -1,15 +1,17 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.cycles as cycles
 
 
-def test_hierholzer():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_hierholzer(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3])
@@ -50,12 +52,14 @@ def test_anyhashableg_hierholzer():
     assert cycle.edges == [3, 0, 1, 2]
 
 
-def test_chinese_postman():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_chinese_postman(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4])
@@ -93,12 +97,14 @@ def test_anyhashableg_chinese_postman():
     assert closed_walk.edges == ['4', '3', '0', '1', '2', '4']
 
 
-def test_fundamental_cycle_basis_paton():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_fundamental_cycle_basis_paton(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -152,12 +158,14 @@ def test_anyhashableg_fundamental_cycle_basis_paton():
     assert cycle2.edges == [4, 5, 6, 1]
 
 
-def test_fundamental_cycle_basis_queuebfs():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_fundamental_cycle_basis_queuebfs(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -181,12 +189,14 @@ def test_fundamental_cycle_basis_queuebfs():
     assert cycle2.edges == [4, 5, 6, 1]
 
 
-def test_fundamental_cycle_basis_stackbfs():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_fundamental_cycle_basis_stackbfs(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -210,13 +220,15 @@ def test_fundamental_cycle_basis_stackbfs():
     assert cycle2.edges == [0, 4, 5, 6, 2, 3]
 
 
-def test_simple_cycles_tiernan():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_simple_cycles_tiernan(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -240,7 +252,8 @@ def test_simple_cycles_tiernan():
         next(it)
 
 
-def test_anyhashableg_simple_cycles_tiernan():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_anyhashableg_simple_cycles_tiernan(backend):
 
     g = create_graph(
         directed=True,
@@ -248,6 +261,7 @@ def test_anyhashableg_simple_cycles_tiernan():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -271,13 +285,15 @@ def test_anyhashableg_simple_cycles_tiernan():
         next(it)
 
 
-def test_simple_cycles_johnson():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_simple_cycles_johnson(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -301,13 +317,15 @@ def test_simple_cycles_johnson():
         next(it)
 
 
-def test_simple_cycles_tarjan():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_simple_cycles_tarjan(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -331,13 +349,15 @@ def test_simple_cycles_tarjan():
         next(it)
 
 
-def test_simple_cycles_szwarcfiter_lauer():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_simple_cycles_szwarcfiter_lauer(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -361,13 +381,15 @@ def test_simple_cycles_szwarcfiter_lauer():
         next(it)
 
 
-def test_simple_cycles_hawick_james():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_simple_cycles_hawick_james(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])

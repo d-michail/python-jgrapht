@@ -1,15 +1,16 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.connectivity as connectivity
 
-
-def test_weakly():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_weakly(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
     )
 
     g.add_vertices_from([0, 1, 2, 3])
@@ -40,12 +41,14 @@ def test_weakly():
     assert component2 == set([4, 5])
 
 
-def test_weakly_directed():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_weakly_directed(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3])
@@ -76,12 +79,14 @@ def test_weakly_directed():
     assert component2 == set([4, 5])
 
 
-def test_strongly_kosaraju():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_strongly_kosaraju(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -116,12 +121,14 @@ def test_strongly_kosaraju():
     assert component1 == set([0, 1, 2, 3, 4, 5])
 
 
-def test_strongly_gabow():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_strongly_gabow(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -156,13 +163,15 @@ def test_strongly_gabow():
     assert component1 == set([0, 1, 2, 3, 4, 5])
 
 
-def test_is_connected():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_is_connected(backend):
     # directed
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1])

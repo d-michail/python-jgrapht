@@ -1,15 +1,17 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.clustering as clustering
 
 
-def test_k_spanning_tree():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_k_spanning_tree(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 6):
@@ -36,12 +38,14 @@ def test_k_spanning_tree():
     assert set(c.ith_cluster(1)) == set([3, 4, 5])
 
 
-def test_label_propagation():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_label_propagation(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 6):

@@ -1,15 +1,16 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.cliques as cliques
 
 
-def build_graph():
+def build_graph(backend=GraphBackend.INT_GRAPH):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend
     )
 
     for i in range(0, 6):
@@ -52,9 +53,9 @@ def build_anyhashableg_graph():
 
     return g
 
-
-def test_bron_with_degeneracy():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_bron_with_degeneracy(backend):
+    g = build_graph(backend)
 
     clique_it = cliques.bron_kerbosch_with_degeneracy_ordering(g)
 
@@ -65,9 +66,9 @@ def test_bron_with_degeneracy():
     with pytest.raises(StopIteration):
         next(clique_it)
 
-
-def test_bron_with_pivot():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_bron_with_pivot(backend):
+    g = build_graph(backend)
 
     clique_it = cliques.bron_kerbosch_with_pivot(g)
 
@@ -78,9 +79,9 @@ def test_bron_with_pivot():
     with pytest.raises(StopIteration):
         next(clique_it)
 
-
-def test_bron():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_bron(backend):
+    g = build_graph(backend)
 
     clique_it = cliques.bron_kerbosch(g)
 
@@ -138,6 +139,33 @@ def test_chordal():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+    )
+
+    for i in range(0, 6):
+        g.add_vertex(i)
+
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(4, 5)
+    g.add_edge(5, 0)
+    g.add_edge(0, 3)
+    g.add_edge(0, 4)
+    g.add_edge(1, 5)
+    g.add_edge(1, 3)
+
+    clique = cliques.chordal_max_clique(g)
+
+    assert clique == {0, 1, 3}
+
+
+def test_chordal_on_long_graph():
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+        backend=GraphBackend.LONG_GRAPH
     )
 
     for i in range(0, 6):
