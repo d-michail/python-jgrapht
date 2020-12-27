@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.types import GraphEvent
@@ -16,12 +16,14 @@ from jgrapht.views import (
 )
 
 
-def test_as_unweighted():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_unweighted(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -53,12 +55,14 @@ def test_as_unweighted():
     assert g1.get_edge_weight(e45) == 1.0
 
 
-def test_as_undirected():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_undirected(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -86,13 +90,15 @@ def test_as_undirected():
     assert g2.contains_edge_between(2, 1)
 
 
-def test_as_unmodifiable():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_unmodifiable(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -120,12 +126,14 @@ def test_as_unmodifiable():
         g3.add_edge(v2, v2)
 
 
-def test_as_edge_reversed():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_edge_reversed(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -154,12 +162,14 @@ def test_as_edge_reversed():
     assert g4.edge_target(e45) == v4
 
 
-def test_as_masked_subgraph():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_masked_subgraph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -304,12 +314,15 @@ def test_anyhashableg_as_masked_subgraph():
 
     repr(masked_graph)
 
-def test_as_weighted():
+
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_weighted(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -332,12 +345,14 @@ def test_as_weighted():
         wg.set_edge_weight(0, 5.0)
 
 
-def test_as_weighted_with_None_function():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_weighted_with_None_function(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -362,12 +377,14 @@ def test_as_weighted_with_None_function():
         wg.set_edge_weight(0, 5.0)
 
 
-def test_as_weighted_with_caching():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_weighted_with_caching(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -391,12 +408,14 @@ def test_as_weighted_with_caching():
     assert wg.get_edge_weight(0) == 5.0
 
 
-def test_as_weighted_with_caching_and_write_throught_with_unweighted():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_weighted_with_caching_and_write_throught_with_unweighted(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -415,12 +434,14 @@ def test_as_weighted_with_caching_and_write_throught_with_unweighted():
         wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=True)
 
 
-def test_as_weighted_with_caching_and_write_throught():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_weighted_with_caching_and_write_throught(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -444,12 +465,14 @@ def test_as_weighted_with_caching_and_write_throught():
     assert g.get_edge_weight(0) == 5.0
 
 
-def test_as_weighted_with_no_caching_and_write_through():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_as_weighted_with_no_caching_and_write_through(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -486,13 +509,15 @@ element 2, event GraphEvent.VERTEX_REMOVED
 element 0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
 
 
-def test_listenable():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_listenable(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     lg = as_listenable(g)
@@ -528,19 +553,22 @@ def test_listenable():
     assert listener2_results == listener2_expected.splitlines()
 
 
-def test_union():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_union(backend):
 
     g1 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     g2 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g = as_graph_union(g1, g2)
@@ -578,19 +606,22 @@ def test_union():
     assert g.edge_tuple(3) == (5, 6, 10.0)
 
 
-def test_union_with_combiner():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_union_with_combiner(backend):
 
     g1 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     g2 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     def max_weight_combiner(x, y):
@@ -631,19 +662,22 @@ def test_union_with_combiner():
     assert g.edge_tuple(3) == (5, 6, 10.0)
 
 
-def test_bad_union():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_bad_union(backend):
 
     g1 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     g2 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     with pytest.raises(ValueError):

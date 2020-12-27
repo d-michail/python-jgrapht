@@ -168,7 +168,7 @@ def as_listenable(graph):
     if isinstance(graph, ListenableGraph) or _is_anyhashable_graph(graph):
         return graph
     if _is_long_graph(graph):
-        return _LongListenableView
+        return _LongListenableView(graph)
     else:
         return _IntegerListenableView(graph)
 
