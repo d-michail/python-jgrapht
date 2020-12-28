@@ -1,16 +1,18 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 
 import jgrapht.traversal as traversal
 
 
-def test_traversals():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_traversals(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 10):
@@ -72,13 +74,15 @@ def test_traversals():
     assert closest_first == [0, 1, 3, 5, 4, 9, 8, 2, 7, 6]
 
 
-def test_dag():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_dag(backend):
     # Create a dag to test top
     g1 = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     g1.add_vertex(0)
     g1.add_vertex(1)

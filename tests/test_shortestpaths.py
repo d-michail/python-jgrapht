@@ -1,16 +1,17 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.shortestpaths as sp
 import math
 
 
-def get_graph():
+def get_graph(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 6):
@@ -52,12 +53,13 @@ def get_anyhashableg_graph():
     return g
 
 
-def get_graph_with_negative_edges():
+def get_graph_with_negative_edges(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     assert g.type.directed
@@ -111,8 +113,9 @@ def get_anyhashableg_graph_with_negative_edges():
     return g
 
 
-def test_dijkstra():
-    g = get_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_dijkstra(backend):
+    g = get_graph(backend)
 
     single_path = sp.dijkstra(g, 0, 5)
     assert single_path.weight == 62.0
@@ -179,8 +182,9 @@ def test_anyhashableg_dijkstra():
     assert list(single_path.edges) == [0, 1]
 
 
-def test_bfs():
-    g = get_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_bfs(backend):
+    g = get_graph(backend)
 
     from_paths = sp.bfs(g, 0)
     assert from_paths.source_vertex == 0
@@ -203,8 +207,9 @@ def test_anyhashableg_bfs():
     assert list(single_path.edges) == [7]
 
 
-def test_bellman():
-    g = get_graph_with_negative_edges()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_bellman(backend):
+    g = get_graph_with_negative_edges(backend)
 
     from_paths = sp.bellman_ford(g, 0)
     assert from_paths.source_vertex == 0
@@ -243,8 +248,9 @@ def test_anyhashableg_bellman():
     assert list(path15.edges) == [1, 4]
 
 
-def test_johnsons():
-    g = get_graph_with_negative_edges()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_johnsons(backend):
+    g = get_graph_with_negative_edges(backend)
 
     allpairs = sp.johnson_allpairs(g)
     repr(allpairs)
@@ -290,8 +296,9 @@ def test_anyhashableg_johnsons():
     assert list(path05.edges) == ["2", 3, 5]
 
 
-def test_floyd_warshall():
-    g = get_graph_with_negative_edges()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_floyd_warshall(backend):
+    g = get_graph_with_negative_edges(backend)
 
     allpairs = sp.floyd_warshall_allpairs(g)
     path05 = allpairs.get_path(0, 5)
@@ -338,13 +345,15 @@ def test_anyhashableg_floyd_warshall():
     assert list(path05.edges) == ["2", 3, 5]
 
 
-def test_a_star():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_a_star(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
@@ -457,14 +466,15 @@ def test_anyhashableg_a_star():
     assert path1.end_vertex == "8"
 
 
-
-def test_a_star_with_alt_heuristic():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_a_star_with_alt_heuristic(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
@@ -533,9 +543,10 @@ def test_anyhashableg_a_star_with_alt_heuristic():
     assert path1.end_vertex == 8
 
 
-def test_yen_k():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_yen_k(backend):
 
-    g = get_graph()
+    g = get_graph(backend)
 
     it = sp.yen_k_loopless(g, 0, 5, 2)
 
@@ -565,9 +576,10 @@ def test_anyhashableg_yen_k():
     assert next(it, None) == None
 
 
-def test_eppstein_k():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_eppstein_k(backend):
 
-    g = get_graph()
+    g = get_graph(backend)
 
     it = sp.eppstein_k(g, 0, 5, 2)
 
@@ -595,8 +607,9 @@ def test_anyhashableg_eppstein_k():
     assert next(it, None) == None
 
 
-def test_delta_stepping():
-    g = get_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_delta_stepping(backend):
+    g = get_graph(backend)
 
     single_path = sp.delta_stepping(g, 0, 5)
     assert single_path.weight == 62.0
@@ -679,13 +692,15 @@ def test_anyhashableg_delta_stepping():
     assert list(single_path.edges) == ["2", 3, 5]
 
 
-def test_martin():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_martin(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertices_from(range(1, 6))
@@ -796,13 +811,15 @@ def test_anyhashableg_martin():
     assert next(it, "Exhausted") == "Exhausted"
 
 
-def test_martin_bad_cost_function():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_martin_bad_cost_function(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     assert g.type.allowing_cycles

@@ -1,16 +1,17 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.scoring as scoring
 
 
-def build_graph():
+def build_graph(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 10):
@@ -75,8 +76,9 @@ def build_anyhashableg_graph():
     return g
 
 
-def test_pagerank():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_pagerank(backend):
+    g = build_graph(backend)
     scores = scoring.pagerank(g)
     result = [scores[v] for v in g.vertices]
     expected = [
@@ -94,8 +96,9 @@ def test_pagerank():
     assert result == expected
 
 
-def test_harmonic_centrality():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_harmonic_centrality(backend):
+    g = build_graph(backend)
     scores = scoring.harmonic_centrality(g)
     result = [scores[v] for v in g.vertices]
     expected = [
@@ -113,24 +116,27 @@ def test_harmonic_centrality():
     assert result == expected
 
 
-def test_closeness_centrality():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_closeness_centrality(backend):
+    g = build_graph(backend)
     scores = scoring.closeness_centrality(g)
     result = [scores[v] for v in g.vertices]
     expected = [1.0, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6]
     assert result == expected
 
 
-def test_betweenness_centrality():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_betweenness_centrality(backend):
+    g = build_graph(backend)
     scores = scoring.betweenness_centrality(g)
     result = [scores[v] for v in g.vertices]
     expected = [22.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
     assert result == expected
 
 
-def test_alpha_centrality():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_alpha_centrality(backend):
+    g = build_graph(backend)
     scores = scoring.alpha_centrality(g)
     result = [scores[v] for v in g.vertices]
     expected = [
@@ -148,8 +154,9 @@ def test_alpha_centrality():
     assert result == expected
 
 
-def test_coreness():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_coreness(backend):
+    g = build_graph(backend)
     degeneracy, scores = scoring.coreness(g)
     assert degeneracy == 3
     result = [scores[v] for v in g.vertices]
@@ -157,8 +164,9 @@ def test_coreness():
     assert result == expected
 
 
-def test_clustering_coefficient():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_clustering_coefficient(backend):
+    g = build_graph(backend)
     global_cc, avg_cc, local_cc = scoring.clustering_coefficient(g)
     assert global_cc == 0.42857142857142855
     assert avg_cc == 0.6250000000000001

@@ -232,6 +232,8 @@ def coreness(graph):
 
     if _is_anyhashable_graph(graph):
         return degeneracy, _AnyHashableGraphVertexIntegerMap(scores_handle, graph)
+    elif _is_long_graph(graph):
+        return degeneracy, _JGraphTLongIntegerMap(scores_handle)
     else:
         return degeneracy, _JGraphTIntegerIntegerMap(scores_handle)
 

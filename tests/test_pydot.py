@@ -2,16 +2,18 @@ import pytest
 
 pydot = pytest.importorskip("pydot")
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.convert import to_pydot, from_pydot
 
 
-def test_int_graph_to_pydot():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_int_graph_to_pydot(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 6):

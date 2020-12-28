@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.generators import complete_graph
 from jgrapht.utils import create_vertex_supplier
 
@@ -9,12 +9,13 @@ import jgrapht.algorithms.tour as tour
 from random import Random
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     complete_graph(g, 8)
 
@@ -45,8 +46,9 @@ def build_anyhashableg_graph():
     return g
 
 
-def test_random_tsp():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_random_tsp(backend):
+    g = build_graph(backend)
     path = tour.tsp_random(g, 17)
     assert path.weight == 43.0
     assert path.start_vertex == path.end_vertex
@@ -61,8 +63,9 @@ def test_anyhashableg_random_tsp():
     assert path.start_vertex == 2
 
 
-def test_greedy_heuristic():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_greedy_heuristic(backend):
+    g = build_graph(backend)
     path = tour.tsp_greedy_heuristic(g)
     assert path.weight == 27.0
     assert path.start_vertex == path.end_vertex
@@ -77,8 +80,9 @@ def test_anyhashableg_greedy_heuristic():
     assert path.start_vertex == 0
 
 
-def test_tour_tsp_nearest_insertion_heuristic():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_tour_tsp_nearest_insertion_heuristic(backend):
+    g = build_graph(backend)
     path = tour.tsp_nearest_insertion_heuristic(g)
     assert path.weight == 30.0
     assert path.start_vertex == path.end_vertex
@@ -93,8 +97,9 @@ def test_anyhashableg_tour_tsp_nearest_insertion_heuristic():
     assert path.start_vertex == 1
 
 
-def test_tour_tsp_nearest_neighbor_heuristic():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_tour_tsp_nearest_neighbor_heuristic(backend):
+    g = build_graph(backend)
     path = tour.tsp_nearest_neighbor_heuristic(g, seed=17)
     assert path.weight == 33.0
     assert path.start_vertex == path.end_vertex
@@ -112,42 +117,47 @@ def test_anyhashableg_tour_tsp_nearest_neighbor_heuristic():
     assert path is not None
 
 
-def test_metric_tsp_christophides():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_metric_tsp_christophides(backend):
     # We only test the API here, not enforcing metric instance
-    g = build_graph()
+    g = build_graph(backend)
     path = tour.metric_tsp_christofides(g)
     assert path.weight == 28.0
     assert path.start_vertex == path.end_vertex
     assert path.start_vertex == 7
 
 
-def test_metric_tsp_two_approx():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_metric_tsp_two_approx(backend):
     # We only test the API here, not enforcing metric instance
-    g = build_graph()
+    g = build_graph(backend)
     path = tour.metric_tsp_two_approx(g)
     assert path.weight == 34.0
     assert path.start_vertex == path.end_vertex
     assert path.start_vertex == 0
 
 
-def test_tsp_held_karp():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_tsp_held_karp(backend):
+    g = build_graph(backend)
     path = tour.tsp_held_karp(g)
     assert path.weight == 27.0
     assert path.start_vertex == path.end_vertex
     assert path.start_vertex == 0
 
 
-def test_hamiltonian_palmer():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_hamiltonian_palmer(backend):
+    g = build_graph(backend)
     path = tour.hamiltonian_palmer(g)
     assert path.weight == 52.0
     assert path.start_vertex == path.end_vertex
     assert path.start_vertex == 0
 
 
-def test_tsp_two_opt_heuristic():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_tsp_two_opt_heuristic(backend):
+    g = build_graph(backend)
     path = tour.tsp_two_opt_heuristic(g, seed=17)
     assert path.weight == 27.0
     assert path.start_vertex == path.end_vertex
@@ -157,8 +167,9 @@ def test_tsp_two_opt_heuristic():
     assert path is not None
 
 
-def test_tsp_two_opt_improve():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_tsp_two_opt_improve(backend):
+    g = build_graph(backend)
 
     path1 = tour.tsp_nearest_insertion_heuristic(g)
     assert path1.weight == 30.0
@@ -174,9 +185,9 @@ def test_tsp_two_opt_improve():
     assert path3 is not None
 
 
-
-def test_random_tsp():
-    g = create_graph(directed=False, weighted=True, any_hashable=True)
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_random_tsp(backend):
+    g = create_graph(directed=False, weighted=True, any_hashable=True, backend=backend)
 
     g.add_vertex("0")
     g.add_vertex("1")

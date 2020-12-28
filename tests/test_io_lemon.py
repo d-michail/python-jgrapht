@@ -1,15 +1,16 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.io.exporters import write_lemon, generate_lemon
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 10):
@@ -116,8 +117,9 @@ v2	v3
 
 """
 
-def test_lemon(tmpdir):
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_lemon(backend, tmpdir):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("lemon.out")
     tmpfilename = str(tmpfile)
     write_lemon(g, tmpfilename)
@@ -129,12 +131,14 @@ def test_lemon(tmpdir):
     assert contents == lemon_expected
 
 
-def test_output_to_string():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_to_string(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertices_from(range(0, 4))
@@ -148,12 +152,14 @@ def test_output_to_string():
     assert out.splitlines() == expected2.splitlines()
 
 
-def test_output_to_string_with_custom_ids():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_to_string_with_custom_ids(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertices_from(range(0, 4))

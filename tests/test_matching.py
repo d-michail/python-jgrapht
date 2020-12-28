@@ -1,18 +1,20 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 
 import jgrapht.algorithms.matching as matching
 import jgrapht.algorithms.partition as partition
 import jgrapht.generators as generators
 
 
-def test_bipartite_max_cardinality():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_bipartite_max_cardinality(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     for i in range(0, 6):
@@ -34,12 +36,14 @@ def test_bipartite_max_cardinality():
     assert set(m) == set([e13, e25])
 
 
-def test_bipartite_perfect_min_weight():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_bipartite_perfect_min_weight(backend):
     bg = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     generators.complete_bipartite_graph(bg, 10, 10)
     _, part1, part2 = partition.bipartite_partitions(bg)
@@ -48,12 +52,14 @@ def test_bipartite_perfect_min_weight():
     assert weight == 10.0
 
 
-def test_bipartite_perfect_min_weight_with_custom_partitions():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_bipartite_perfect_min_weight_with_custom_partitions(backend):
     bg = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     bg.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7])
 
@@ -91,12 +97,14 @@ def test_anyhashableg_bipartite_perfect_min_weight_with_custom_partitions():
     assert weight == 4.0
 
 
-def test_greedy_max_cardinality():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_greedy_max_cardinality(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -105,12 +113,14 @@ def test_greedy_max_cardinality():
     assert weight == 42.0
 
 
-def test_greedy_max_cardinality_with_sort():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_greedy_max_cardinality_with_sort(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -119,12 +129,14 @@ def test_greedy_max_cardinality_with_sort():
     assert weight == 49.0
 
 
-def test_edmonds_max_cardinality():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_edmonds_max_cardinality(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -137,12 +149,14 @@ def test_edmonds_max_cardinality():
     assert weight == 50.0
 
 
-def test_greedy_max_weight():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_greedy_max_weight(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -155,12 +169,14 @@ def test_greedy_max_weight():
     assert weight == 49.0
 
 
-def test_pathgrowing_max_weight():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_pathgrowing_max_weight(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -169,12 +185,14 @@ def test_pathgrowing_max_weight():
     assert weight == 41.0
 
 
-def test_blossom5_max_weight():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_blossom5_max_weight(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -187,12 +205,14 @@ def test_blossom5_max_weight():
     assert weight == 50.0
 
 
-def test_blossom5_min_weight():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_blossom5_min_weight(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 

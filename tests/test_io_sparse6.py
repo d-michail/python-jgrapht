@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 from jgrapht.io.exporters import (
@@ -12,12 +12,13 @@ from jgrapht.io.exporters import (
 from jgrapht.io.importers import read_graph6sparse6, parse_graph6sparse6
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend
     )
 
     g.add_vertex(0)
@@ -34,9 +35,10 @@ def build_graph():
     return g
 
 
-def test_output_sparse6(tmpdir):
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_sparse6(backend, tmpdir):
 
-    g = build_graph()
+    g = build_graph(backend)
     tmpfile = tmpdir.join("graph.s6")
     tmpfilename = str(tmpfile)
 
@@ -60,9 +62,10 @@ def test_output_sparse6(tmpdir):
     assert len(g1.edges) == 5
 
 
-def test_output_graph6(tmpdir):
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_graph6(backend, tmpdir):
 
-    g = build_graph()
+    g = build_graph(backend)
     tmpfile = tmpdir.join("graph.g6")
     tmpfilename = str(tmpfile)
 
@@ -86,12 +89,14 @@ def test_output_graph6(tmpdir):
     assert len(g1.edges) == 5
 
 
-def test_output_to_string():
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_output_to_string(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend
     )
 
     g.add_vertices_from(range(0, 4))

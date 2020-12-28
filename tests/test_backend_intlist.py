@@ -4,6 +4,8 @@ import jgrapht._backend as _backend
 from jgrapht._internals._collections import (
     _JGraphTIntegerList,
     _JGraphTIntegerMutableList,
+    _JGraphTLongList,
+    _JGraphTLongMutableList,
 )
 
 
@@ -31,9 +33,33 @@ def test_IntegerList():
     print(s)
 
 
-def test_IntegerMutableList():
+def test_LongList():
 
-    s = _JGraphTIntegerMutableList()
+    handle = _backend.jgrapht_list_create()
+    _backend.jgrapht_list_long_add(handle, 5)
+    _backend.jgrapht_list_long_add(handle, 7)
+    _backend.jgrapht_list_long_add(handle, 9)
+
+    s = _JGraphTLongList(handle=handle)
+
+    assert len(s) == 3
+
+    assert 5 in s
+    assert 6 not in s
+    assert 7 in s
+    assert 8 not in s
+    assert 9 in s
+
+    assert list(s) == list([5, 7, 9])
+
+    print(repr(s))
+    print(s)
+
+
+@pytest.mark.parametrize("impl", [_JGraphTIntegerMutableList, _JGraphTLongMutableList])
+def test_MutableList(impl):
+
+    s = impl()
 
     s.add(5)
     s.add(7)

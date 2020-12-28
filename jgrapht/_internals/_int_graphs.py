@@ -349,6 +349,6 @@ def _is_int_graph(graph):
     """Check if a graph instance is a graph using integers for vertices and edges.
     
     :param graph: the graph
-    :returns: True if the graph is a long graph, False otherwise.
+    :returns: True if the graph is an int graph, False otherwise.
     """
     return isinstance(graph, (_JGraphTIntegerGraph))

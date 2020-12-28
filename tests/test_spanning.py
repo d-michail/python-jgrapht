@@ -4,7 +4,7 @@ from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.spanning as spanning
 
 
-def build_graph(backend=GraphBackend.INT_GRAPH):
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -39,19 +39,12 @@ def build_graph(backend=GraphBackend.INT_GRAPH):
     return g
 
 
-def test_greedy_multiplicative():
-    g = build_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+def test_greedy_multiplicative(backend):
+    g = build_graph(backend)
     weight, edges = spanning.multiplicative_greedy(g, 3)
     assert weight == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
     solution = set(edges)
     assert expected == solution
 
-
-def test_greedy_multiplicative_with_long_graph():
-    g = build_graph(backend=GraphBackend.LONG_GRAPH)
-    weight, edges = spanning.multiplicative_greedy(g, 3)
-    assert weight == 9.0
-    expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
-    solution = set(edges)
-    assert expected == solution
