@@ -601,6 +601,8 @@ int jgrapht_ii_graph_dag_create(int, int, void** OUTPUT);
 
 int jgrapht_ll_graph_dag_create(int, int, void** OUTPUT);
 
+int jgrapht_ll_graph_dag_create_with_suppliers(int, int, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void **OUTPUT);
+
 int jgrapht_xx_graph_dag_topological_it(void *, void** OUTPUT);
 
 int jgrapht_ii_graph_dag_vertex_descendants(void *, int, void** OUTPUT);

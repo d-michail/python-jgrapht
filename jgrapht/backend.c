@@ -1098,6 +1098,11 @@ int jgrapht_ll_graph_dag_create(int allowing_multiple_edges, int weighted, void*
     return jgrapht_capi_ll_graph_dag_create(thread, allowing_multiple_edges, weighted, res);
 }
 
+int jgrapht_ll_graph_dag_create_with_suppliers(int allowing_multiple_edges, int weighted, void* vertex_supplier, void* edge_supplier, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_dag_create_with_suppliers(thread, allowing_multiple_edges, weighted, vertex_supplier, edge_supplier, res);
+}
+
 int jgrapht_xx_graph_dag_topological_it(void *g, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_xx_graph_dag_topological_it(thread, g, res);
