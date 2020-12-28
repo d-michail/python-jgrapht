@@ -77,8 +77,8 @@ def test_label_propagation(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
     ],
 )
 def test_anyhashableg_k_spanning_tree(backend):
@@ -117,8 +117,8 @@ def test_anyhashableg_k_spanning_tree(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
     ],
 )
 def test_anyhashableg_label_propagation(backend):

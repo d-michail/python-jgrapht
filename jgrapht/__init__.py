@@ -72,8 +72,8 @@ class GraphBackend(Enum):
     """
     INT_GRAPH = 1
     LONG_GRAPH = 2
-    ANY_HASHABLE_WRAPPER_INT_GRAPH = 3
-    ANY_HASHABLE_REFCOUNT_LONG_GRAPH = 4
+    ANY_HASHABLE_GRAPH = 3
+    REFCOUNT_GRAPH = 4
 
 
 def create_graph(
@@ -121,7 +121,7 @@ def create_graph(
 
     if backend is None: 
         if any_hashable:
-            backend = GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH
+            backend = GraphBackend.ANY_HASHABLE_GRAPH
         else: 
             backend = GraphBackend.INT_GRAPH
 
@@ -156,7 +156,7 @@ def create_graph(
                 allowing_multiple_edges=allowing_multiple_edges,
                 weighted=weighted,
             )
-    elif backend == GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH:
+    elif backend == GraphBackend.ANY_HASHABLE_GRAPH:
         if dag:
             return _create_anyhashable_dag(
                 allowing_multiple_edges=allowing_multiple_edges,
@@ -173,7 +173,7 @@ def create_graph(
                 vertex_supplier=vertex_supplier,
                 edge_supplier=edge_supplier,
             )        
-    elif backend == GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH: 
+    elif backend == GraphBackend.REFCOUNT_GRAPH:
         if dag:
             return _create_refcount_dag(
                 allowing_multiple_edges=allowing_multiple_edges,
@@ -193,7 +193,6 @@ def create_graph(
         pass
     else: 
         raise ValueError('Invalid graph backend')
-
 
 
 def create_sparse_graph(

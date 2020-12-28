@@ -170,7 +170,7 @@ def to_pydot(graph):
     return dotg
 
 
-def from_nx(graph, backend=GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH):
+def from_nx(graph, backend=GraphBackend.ANY_HASHABLE_GRAPH):
     """Create a graph from a NetworkX graph.
 
     :param graph: a graph

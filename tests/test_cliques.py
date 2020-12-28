@@ -29,7 +29,7 @@ def build_graph(backend=GraphBackend.INT_GRAPH):
     return g
 
 
-def build_anyhashableg_graph(backend=GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH):
+def build_anyhashableg_graph(backend=GraphBackend.ANY_HASHABLE_GRAPH):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
@@ -63,7 +63,7 @@ def build_anyhashableg_graph(backend=GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
     ],
 )
 def test_bron_with_degeneracy(backend):
@@ -81,7 +81,7 @@ def test_bron_with_degeneracy(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
     ],
 )
 def test_bron_with_pivot(backend):
@@ -98,7 +98,7 @@ def test_bron_with_pivot(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
     ],
 )
 def test_bron(backend):
@@ -113,8 +113,8 @@ def test_bron(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
     ],
 )
 def test_anyhashableg_bron(backend):
@@ -133,8 +133,8 @@ def test_anyhashableg_bron(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
     ],
 )
 def test_anyhashableg_bron_with_pivot(backend):
@@ -153,8 +153,8 @@ def test_anyhashableg_bron_with_pivot(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
     ],
 )
 def test_anyhashableg_bron_with_degeneracy(backend):
