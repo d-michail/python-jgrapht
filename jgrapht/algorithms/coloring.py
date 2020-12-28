@@ -1,14 +1,17 @@
 from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerIntegerMap, _JGraphTLongIntegerMap
-from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._collections import _AnyHashableGraphVertexIntegerMap
+from .._internals._intgraph._long_graphs import _is_long_graph
+from .._internals._refgraph._graphs import _is_refcount_graph, _id_to_obj
+from .._internals._mapgraph._graphs import _is_anyhashable_graph
+from .._internals._mapgraph._collections import _AnyHashableGraphVertexIntegerMap
 
 
 def _wrap_result(graph, num_colors, color_map_handle):
     if _is_anyhashable_graph(graph):
         return num_colors, _AnyHashableGraphVertexIntegerMap(color_map_handle, graph)
+    elif _is_refcount_graph(graph):
+        return num_colors, {_id_to_obj(k):v for k, v in _JGraphTLongIntegerMap(color_map_handle).items()}
     elif _is_long_graph(graph):
         return num_colors, _JGraphTLongIntegerMap(color_map_handle)
     else:

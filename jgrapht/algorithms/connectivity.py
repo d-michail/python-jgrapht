@@ -4,9 +4,21 @@ from .._internals._collections import (
     _JGraphTIntegerSetIterator,
     _JGraphTLongSetIterator,
 )
-from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._collections import _AnyHashableGraphVertexSetIterator
+from .._internals._intgraph._long_graphs import _is_long_graph
+from .._internals._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs
+from .._internals._mapgraph._graphs import _is_anyhashable_graph
+from .._internals._mapgraph._collections import _AnyHashableGraphVertexSetIterator
+
+
+def _wrap_result(graph, connected, sets_it_handle):
+    if _is_anyhashable_graph(graph):
+        return connected, _AnyHashableGraphVertexSetIterator(sets_it_handle, graph)
+    elif _is_refcount_graph(graph):
+        return connected, iter([set(_map_ids_to_objs(c)) for c in _JGraphTLongSetIterator(sets_it_handle)])
+    elif _is_long_graph(graph):
+        return connected, _JGraphTLongSetIterator(sets_it_handle)
+    else:
+        return connected, _JGraphTIntegerSetIterator(sets_it_handle)
 
 
 def is_weakly_connected(graph):
@@ -23,13 +35,7 @@ def is_weakly_connected(graph):
       as a vertex set
     """
     connected, sets = _backend.jgrapht_xx_connectivity_weak_exec_bfs(graph.handle)
-
-    if _is_anyhashable_graph(graph):
-        return connected, _AnyHashableGraphVertexSetIterator(sets, graph)
-    elif _is_long_graph(graph):
-        return connected, _JGraphTLongSetIterator(sets)
-    else:
-        return connected, _JGraphTIntegerSetIterator(sets)
+    return _wrap_result(graph, connected, sets)
 
 
 def is_strongly_connected_gabow(graph):
@@ -48,13 +54,7 @@ def is_strongly_connected_gabow(graph):
       vertex set
     """
     connected, sets = _backend.jgrapht_xx_connectivity_strong_exec_gabow(graph.handle)
-
-    if _is_anyhashable_graph(graph):
-        return connected, _AnyHashableGraphVertexSetIterator(sets, graph)
-    elif _is_long_graph(graph):
-        return connected, _JGraphTLongSetIterator(sets)        
-    else:
-        return connected, _JGraphTIntegerSetIterator(sets)
+    return _wrap_result(graph, connected, sets)
 
 
 def is_strongly_connected_kosaraju(graph):
@@ -73,13 +73,7 @@ def is_strongly_connected_kosaraju(graph):
       vertex set
     """
     connected, sets = _backend.jgrapht_xx_connectivity_strong_exec_kosaraju(graph.handle)
-
-    if _is_anyhashable_graph(graph):
-        return connected, _AnyHashableGraphVertexSetIterator(sets, graph)
-    elif _is_long_graph(graph):
-        return connected, _JGraphTLongSetIterator(sets)        
-    else:
-        return connected, _JGraphTIntegerSetIterator(sets)
+    return _wrap_result(graph, connected, sets)
 
 
 def is_connected(graph):
