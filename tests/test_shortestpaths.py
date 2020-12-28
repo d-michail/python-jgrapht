@@ -11,31 +11,31 @@ def get_graph(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     for i in range(0, 6):
         g.add_vertex(i)
 
-    g.add_edge(0, 1, weight=3.0)
-    g.add_edge(1, 3, weight=100.0)
-    g.add_edge(0, 2, weight=40.0)
-    g.add_edge(2, 4, weight=20.0)
-    g.add_edge(3, 5, weight=2.0)
-    g.add_edge(4, 5, weight=2.0)
-    g.add_edge(5, 0, weight=13.0)
-    g.add_edge(0, 5, weight=1000.0)
+    g.add_edge(0, 1, edge=0, weight=3.0)
+    g.add_edge(1, 3, edge=1, weight=100.0)
+    g.add_edge(0, 2, edge=2, weight=40.0)
+    g.add_edge(2, 4, edge=3, weight=20.0)
+    g.add_edge(3, 5, edge=4, weight=2.0)
+    g.add_edge(4, 5, edge=5, weight=2.0)
+    g.add_edge(5, 0, edge=6, weight=13.0)
+    g.add_edge(0, 5, edge=7, weight=1000.0)
 
     return g
 
 
-def get_anyhashableg_graph():
+def get_anyhashableg_graph(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend,
     )
 
     for i in range(0, 6):
@@ -59,7 +59,7 @@ def get_graph_with_negative_edges(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     assert g.type.directed
@@ -67,15 +67,15 @@ def get_graph_with_negative_edges(backend):
     for i in range(0, 7):
         assert g.add_vertex(i) == i
 
-    g.add_edge(0, 1, weight=3.0)
-    g.add_edge(1, 3, weight=100.0)
-    g.add_edge(0, 2, weight=40.0)
-    g.add_edge(2, 4, weight=20.0)
-    g.add_edge(3, 5, weight=2.0)
-    g.add_edge(4, 5, weight=2.0)
-    g.add_edge(5, 0, weight=13.0)
-    g.add_edge(0, 6, weight=1000.0)
-    g.add_edge(6, 3, weight=-900.0)
+    g.add_edge(0, 1, edge=0, weight=3.0)
+    g.add_edge(1, 3, edge=1, weight=100.0)
+    g.add_edge(0, 2, edge=2, weight=40.0)
+    g.add_edge(2, 4, edge=3, weight=20.0)
+    g.add_edge(3, 5, edge=4, weight=2.0)
+    g.add_edge(4, 5, edge=5, weight=2.0)
+    g.add_edge(5, 0, edge=6, weight=13.0)
+    g.add_edge(0, 6, edge=7, weight=1000.0)
+    g.add_edge(6, 3, edge=8, weight=-900.0)
 
     assert len(g.vertices) == 7
     assert len(g.edges) == 9
@@ -83,13 +83,13 @@ def get_graph_with_negative_edges(backend):
     return g
 
 
-def get_anyhashableg_graph_with_negative_edges():
+def get_anyhashableg_graph_with_negative_edges(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend,
     )
 
     assert g.type.directed
@@ -113,7 +113,15 @@ def get_anyhashableg_graph_with_negative_edges():
     return g
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_dijkstra(backend):
     g = get_graph(backend)
 
@@ -152,8 +160,15 @@ def test_dijkstra(backend):
     assert nopath is None
 
 
-def test_anyhashableg_dijkstra():
-    g = get_anyhashableg_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_dijkstra(backend):
+    g = get_anyhashableg_graph(backend)
 
     single_path = sp.dijkstra(g, 0, 5)
     assert single_path.weight == 62.0
@@ -182,7 +197,15 @@ def test_anyhashableg_dijkstra():
     assert list(single_path.edges) == [0, 1]
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+    ],
+)
 def test_bfs(backend):
     g = get_graph(backend)
 
@@ -195,8 +218,15 @@ def test_bfs(backend):
     assert list(single_path.edges) == [7]
 
 
-def test_anyhashableg_bfs():
-    g = get_anyhashableg_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+    ],
+)
+def test_anyhashableg_bfs(backend):
+    g = get_anyhashableg_graph(backend)
 
     from_paths = sp.bfs(g, 0)
     assert from_paths.source_vertex == 0
@@ -207,7 +237,15 @@ def test_anyhashableg_bfs():
     assert list(single_path.edges) == [7]
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_bellman(backend):
     g = get_graph_with_negative_edges(backend)
 
@@ -228,8 +266,15 @@ def test_bellman(backend):
     assert list(path15.edges) == [1, 4]
 
 
-def test_anyhashableg_bellman():
-    g = get_anyhashableg_graph_with_negative_edges()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_bellman(backend):
+    g = get_anyhashableg_graph_with_negative_edges(backend)
 
     from_paths = sp.bellman_ford(g, 0)
     assert from_paths.source_vertex == 0
@@ -248,7 +293,15 @@ def test_anyhashableg_bellman():
     assert list(path15.edges) == [1, 4]
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_johnsons(backend):
     g = get_graph_with_negative_edges(backend)
 
@@ -273,8 +326,15 @@ def test_johnsons(backend):
     assert list(path05.edges) == [2, 3, 5]
 
 
-def test_anyhashableg_johnsons():
-    g = get_anyhashableg_graph_with_negative_edges()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_johnsons(backend):
+    g = get_anyhashableg_graph_with_negative_edges(backend)
 
     allpairs = sp.johnson_allpairs(g)
     path05 = allpairs.get_path(0, 5)
@@ -296,7 +356,15 @@ def test_anyhashableg_johnsons():
     assert list(path05.edges) == ["2", 3, 5]
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_floyd_warshall(backend):
     g = get_graph_with_negative_edges(backend)
 
@@ -320,8 +388,15 @@ def test_floyd_warshall(backend):
     assert list(path05.edges) == [2, 3, 5]
 
 
-def test_anyhashableg_floyd_warshall():
-    g = get_anyhashableg_graph_with_negative_edges()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_floyd_warshall(backend):
+    g = get_anyhashableg_graph_with_negative_edges(backend)
 
     allpairs = sp.floyd_warshall_allpairs(g)
     repr(allpairs)
@@ -345,7 +420,15 @@ def test_anyhashableg_floyd_warshall():
     assert list(path05.edges) == ["2", 3, 5]
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_a_star(backend):
 
     g = create_graph(
@@ -353,21 +436,21 @@ def test_a_star(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
-    g.add_edge(0, 1)
-    g.add_edge(0, 3)
-    g.add_edge(1, 2)
-    g.add_edge(1, 4)
-    g.add_edge(2, 5)
-    g.add_edge(3, 4)
-    g.add_edge(3, 6)
-    g.add_edge(4, 5)
-    g.add_edge(4, 7)
-    g.add_edge(5, 8)
+    g.add_edge(0, 1, edge=0)
+    g.add_edge(0, 3, edge=1)
+    g.add_edge(1, 2, edge=2)
+    g.add_edge(1, 4, edge=3)
+    g.add_edge(2, 5, edge=4)
+    g.add_edge(3, 4, edge=5)
+    g.add_edge(3, 6, edge=6)
+    g.add_edge(4, 5, edge=7)
+    g.add_edge(4, 7, edge=8)
+    g.add_edge(5, 8, edge=9)
 
     def heuristic(source, target):
         coordinates = {
@@ -406,14 +489,21 @@ def test_a_star(backend):
     assert path1.end_vertex == 8
 
 
-def test_anyhashableg_a_star():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_a_star(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, "3", 4, "5", 6, 7, "8"])
@@ -466,7 +556,15 @@ def test_anyhashableg_a_star():
     assert path1.end_vertex == "8"
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_a_star_with_alt_heuristic(backend):
 
     g = create_graph(
@@ -474,21 +572,21 @@ def test_a_star_with_alt_heuristic(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
-    g.add_edge(0, 1)
-    g.add_edge(0, 3)
-    g.add_edge(1, 2)
-    g.add_edge(1, 4)
-    g.add_edge(2, 5)
-    g.add_edge(3, 4)
-    g.add_edge(3, 6)
-    g.add_edge(4, 5)
-    g.add_edge(4, 7)
-    g.add_edge(5, 8)
+    g.add_edge(0, 1, edge=0)
+    g.add_edge(0, 3, edge=1)
+    g.add_edge(1, 2, edge=2)
+    g.add_edge(1, 4, edge=3)
+    g.add_edge(2, 5, edge=4)
+    g.add_edge(3, 4, edge=5)
+    g.add_edge(3, 6, edge=6)
+    g.add_edge(4, 5, edge=7)
+    g.add_edge(4, 7, edge=8)
+    g.add_edge(5, 8, edge=9)
 
     path = sp.a_star_with_alt_heuristic(g, 0, 8, landmarks=set([3, 6]))
 
@@ -505,14 +603,21 @@ def test_a_star_with_alt_heuristic(backend):
     assert path1.end_vertex == 8
 
 
-def test_anyhashableg_a_star_with_alt_heuristic():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_a_star_with_alt_heuristic(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, "3", 4, 5, 6, 7, 8])
@@ -543,7 +648,15 @@ def test_anyhashableg_a_star_with_alt_heuristic():
     assert path1.end_vertex == 8
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_yen_k(backend):
 
     g = get_graph(backend)
@@ -560,9 +673,16 @@ def test_yen_k(backend):
     assert next(it, None) == None
 
 
-def test_anyhashableg_yen_k():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_yen_k(backend):
 
-    g = get_anyhashableg_graph()
+    g = get_anyhashableg_graph(backend)
 
     it = sp.yen_k_loopless(g, 0, 5, 2)
 
@@ -576,7 +696,15 @@ def test_anyhashableg_yen_k():
     assert next(it, None) == None
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_eppstein_k(backend):
 
     g = get_graph(backend)
@@ -592,9 +720,16 @@ def test_eppstein_k(backend):
     assert next(it, None) == None
 
 
-def test_anyhashableg_eppstein_k():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_eppstein_k(backend):
 
-    g = get_anyhashableg_graph()
+    g = get_anyhashableg_graph(backend)
 
     it = sp.eppstein_k(g, 0, 5, 2)
 
@@ -607,7 +742,15 @@ def test_anyhashableg_eppstein_k():
     assert next(it, None) == None
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_delta_stepping(backend):
     g = get_graph(backend)
 
@@ -650,8 +793,15 @@ def test_delta_stepping(backend):
     assert list(single_path.edges) == [2, 3, 5]
 
 
-def test_anyhashableg_delta_stepping():
-    g = get_anyhashableg_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_delta_stepping(backend):
+    g = get_anyhashableg_graph(backend)
 
     single_path = sp.delta_stepping(g, 0, 5)
     assert single_path.weight == 62.0
@@ -692,7 +842,15 @@ def test_anyhashableg_delta_stepping():
     assert list(single_path.edges) == ["2", 3, 5]
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_martin(backend):
 
     g = create_graph(
@@ -700,19 +858,19 @@ def test_martin(backend):
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
 
     g.add_vertices_from(range(1, 6))
 
-    g.add_edge(1, 2)
-    g.add_edge(1, 3)
-    g.add_edge(1, 4)
-    g.add_edge(2, 4)
-    g.add_edge(2, 5)
-    g.add_edge(3, 4)
-    g.add_edge(3, 5)
-    g.add_edge(4, 5)
+    g.add_edge(1, 2, edge=0)
+    g.add_edge(1, 3, edge=1)
+    g.add_edge(1, 4, edge=2)
+    g.add_edge(2, 4, edge=3)
+    g.add_edge(2, 5, edge=4)
+    g.add_edge(3, 4, edge=5)
+    g.add_edge(3, 5, edge=6)
+    g.add_edge(4, 5, edge=7)
 
     costs = {
         0: [1.0, 5.0],
@@ -752,14 +910,21 @@ def test_martin(backend):
     assert next(it, "Exhausted") == "Exhausted"
 
 
-def test_anyhashableg_martin():
+@pytest.mark.parametrize(
+    "backend",
+    [
+       GraphBackend.REFCOUNT_GRAPH,
+       GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_martin(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable=True,
+        backend=backend
     )
 
     g.add_vertices_from(range(1, 6))
@@ -789,7 +954,7 @@ def test_anyhashableg_martin():
 
     multi_paths = sp.martin_multiobjective(g, cost_function, 2, 1)
     repr(multi_paths)
-    
+
     assert multi_paths.source_vertex == 1
     it = multi_paths.get_paths(5)
     p1 = next(it)
@@ -811,7 +976,15 @@ def test_anyhashableg_martin():
     assert next(it, "Exhausted") == "Exhausted"
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_martin_bad_cost_function(backend):
 
     g = create_graph(
@@ -819,7 +992,7 @@ def test_martin_bad_cost_function(backend):
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
 
     assert g.type.allowing_cycles
@@ -852,4 +1025,3 @@ def test_martin_bad_cost_function(backend):
     bad_dimension = 0
     with pytest.raises(ValueError):
         multi_paths = sp.martin_multiobjective(g, cost_function, bad_dimension, 1)
-
