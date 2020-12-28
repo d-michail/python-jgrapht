@@ -223,6 +223,7 @@ def read_gml(
             filename,
             import_id_cb=import_id_cb,
             vertex_attribute_cb=vertex_attribute_cb,
+            edge_attribute_cb=edge_attribute_cb,
             input_is_filename=True,
         )
 
