@@ -7,12 +7,22 @@ import jgrapht.generators as generators
 
 
 def build_graph(backend):
+
+    next_edge = 0
+
+    def edge_supplier(): 
+        nonlocal next_edge
+        res = next_edge
+        next_edge += 1
+        return res
+
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend, 
+        edge_supplier=edge_supplier
     )
 
     for i in range(0, 10):
@@ -41,7 +51,7 @@ def build_graph(backend):
     return g
 
     
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_kruskal(backend):
     g = build_graph(backend)
     mst_w, mst_edges = spanning.kruskal(g)
@@ -51,7 +61,7 @@ def test_kruskal(backend):
     assert expected == solution
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_prim(backend):
     g = build_graph(backend)
     mst_w, mst_edges = spanning.prim(g)
@@ -61,7 +71,7 @@ def test_prim(backend):
     assert expected == solution
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_boruvka(backend):
     g = build_graph(backend)
     mst_w, mst_edges = spanning.boruvka(g)
@@ -71,7 +81,7 @@ def test_boruvka(backend):
     assert expected == solution
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_small_graph_prim(backend):
     g = create_graph(directed=False, backend=backend)
 
@@ -81,13 +91,14 @@ def test_small_graph_prim(backend):
     assert mst_w == 499.0
 
 
-def test_anyhashableg_prim():
+@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+def test_anyhashableg_prim(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend
     )
 
     g.add_vertex("0")
@@ -106,7 +117,7 @@ def test_anyhashableg_prim():
     assert set(mst_edges) == {e1, e2}
     
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_result_with_difference(backend): 
     g = build_graph(backend)
     mst_weight, mst_tree = spanning.prim(g)
@@ -118,7 +129,7 @@ def test_result_with_difference(backend):
 
     assert non_mst_edges == { 9, 10, 11, 12, 13, 14, 15, 16, 17 }
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_result_with_difference_symmetric(backend): 
     g = build_graph(backend)
     mst_weight, mst_tree = spanning.prim(g)

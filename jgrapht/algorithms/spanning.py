@@ -4,11 +4,14 @@ from .._internals._collections import _JGraphTIntegerSet, _JGraphTLongSet
 from .._internals._intgraph._long_graphs import _is_long_graph
 from .._internals._mapgraph._graphs import _is_anyhashable_graph
 from .._internals._mapgraph._collections import _AnyHashableGraphEdgeSet
+from .._internals._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs
 
 
 def _wrap_result(graph, weight, mst_handle):
     if _is_anyhashable_graph(graph):
         return weight, _AnyHashableGraphEdgeSet(mst_handle, graph)
+    elif _is_refcount_graph(graph):
+        return weight, set(_map_ids_to_objs(_JGraphTLongSet(mst_handle)))
     elif _is_long_graph(graph):
         return weight, _JGraphTLongSet(mst_handle)
     else:
@@ -90,7 +93,4 @@ def multiplicative_greedy(graph, k):
     weight, spanner = _backend.jgrapht_xx_spanner_exec_greedy_multiplicative(
         graph.handle, k
     )
-    if _is_long_graph(graph):
-        return weight, _JGraphTLongSet(spanner)
-    else:
-        return weight, _JGraphTIntegerSet(spanner)
+    return _wrap_result(graph, weight, spanner)
