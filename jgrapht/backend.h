@@ -312,6 +312,8 @@ int jgrapht_ii_graph_create(int, int, int, int, void**);
 
 int jgrapht_ll_graph_create(int, int, int, int, void**);
 
+int jgrapht_ll_graph_create_with_suppliers(int, int, int, int, void*, void*, void **OUTPUT);
+
 int jgrapht_ii_graph_sparse_create(int, int, int, void *, void**);
 
 int jgrapht_ii_graph_vertices_count(void *, int*);

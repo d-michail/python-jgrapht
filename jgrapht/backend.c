@@ -753,6 +753,11 @@ int jgrapht_ll_graph_create(int directed, int allowing_self_loops, int allowing_
     return jgrapht_capi_ll_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, res);
 }
 
+int jgrapht_ll_graph_create_with_suppliers(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, void *vertex_supplier, void *edge_supplier, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_create_with_suppliers(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, vertex_supplier, edge_supplier, res);
+}
+
 int jgrapht_ii_graph_sparse_create(int directed, int weighted, int num_vertices, void *edges, void**res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ii_graph_sparse_create(thread, directed, weighted, num_vertices, edges, res);
