@@ -63,7 +63,7 @@ class _RefCountGraph(_HandleWrapper, Graph):
 
     @property
     def type(self):
-        return self._graph.type
+        return self._type
 
     @property
     def vertex_supplier(self):
@@ -339,3 +339,4 @@ def _is_refcount_graph(graph):
     :returns: True if the graph is a refcount graph, False otherwise.
     """
     return isinstance(graph, (_RefCountGraph))
+

@@ -12,7 +12,12 @@ from .._collections import (
     _JGraphTLongSet,
     _JGraphTLongDoubleMap,
 )
-from .._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs, _id_to_obj
+from .._refgraph._graphs import (
+    _RefCountGraph,
+    _map_ids_to_objs,
+    _id_to_obj,
+    _inc_ref,
+)
 
 
 class _RefCountGraphCut(Cut):
@@ -111,3 +116,71 @@ class _RefCountGraphFlow(dict, Flow):
         return "_RefCountGraphFlow(%r)" % self._handle
 
 
+class _RefCountGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
+    """Gomory-Hu Tree."""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def as_graph(self):
+        tree_handle = _backend.jgrapht_ll_cut_gomoryhu_tree(self.handle)
+        tree_as_graph = _RefCountGraph(tree_handle,
+                                       vertex_supplier=self._graph.vertex_supplier,
+                                       edge_supplier=self._graph.edge_supplier)
+
+        # The resulting tree has the same vertices as the original graph. Since the
+        # construction happens in the backend, we need to explicitly increment the
+        # reference counts of all vertices and edges.
+        for v in tree_as_graph.vertices:
+            _inc_ref(v)
+        for e in tree_as_graph.edges:
+            _inc_ref(e)
+
+        return tree_as_graph
+
+    def min_cut(self):
+        cut_value, cut_source_partition_handle = _backend.jgrapht_xx_cut_gomoryhu_min_cut(
+            self.handle
+        )
+        return _RefCountGraphCut(self._graph, cut_value, cut_source_partition_handle)
+
+    def min_st_cut(self, s, t):
+        (
+            cut_value,
+            cut_source_partition_handle,
+        ) = _backend.jgrapht_ll_cut_gomoryhu_min_st_cut(self.handle, id(s), id(t))
+        return _RefCountGraphCut(self._graph, cut_value, cut_source_partition_handle)
+
+    def __repr__(self):
+        return "_RefCountGraphGomoryHuTree(%r)" % self._handle
+
+
+class __RefCountGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
+    """An Equivalent Flow Tree."""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def as_graph(self):
+        tree_handle = _backend.jgrapht_ll_equivalentflowtree_tree(self.handle)
+        tree_as_graph = _RefCountGraph(tree_handle,
+                                       vertex_supplier=self._graph.vertex_supplier,
+                                       edge_supplier=self._graph.edge_supplier)
+
+        # The resulting tree has the same vertices as the original graph. Since the
+        # construction happens in the backend, we need to explicitly increment the
+        # reference counts of all vertices and edges.
+        for v in tree_as_graph.vertices:
+            _inc_ref(v)
+        for e in tree_as_graph.edges:
+            _inc_ref(e)
+
+        return tree_as_graph
+
+    def max_st_flow_value(self, s, t):
+        return _backend.jgrapht_ii_equivalentflowtree_max_st_flow(self.handle, id(s), id(t))
+
+    def __repr__(self):
+        return "__RefCountGraphEquivalentFlowTree(%r)" % self._handle

@@ -143,25 +143,25 @@ def _do_run_anyhashableg_flow(algo):
     assert f[e23] == 20.0
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_dinic(backend):
     _do_run_both(backend, flow.dinic)
     _do_run_anyhashableg_both(flow.dinic)
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_push_relabel(backend):
     _do_run_both(backend, flow.push_relabel)
     _do_run_anyhashableg_both(flow.push_relabel)
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_edmonds_karp(backend):
     _do_run_both(backend, flow.edmonds_karp)
     _do_run_anyhashableg_both(flow.edmonds_karp)
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_max_st_flow(backend):
     _do_run_flow(backend, flow.max_st_flow)
     _do_run_anyhashableg_flow(flow.max_st_flow)

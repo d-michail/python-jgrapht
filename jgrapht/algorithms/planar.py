@@ -6,7 +6,8 @@ from .._internals._intgraph._planar import (
 )
 from .._internals._intgraph._int_graphs import _JGraphTIntegerGraph
 from .._internals._intgraph._long_graphs import _JGraphTLongGraph, _is_long_graph
-
+from .._internals._refgraph._graphs import _is_refcount_graph, _RefCountGraph, _inc_ref
+from .._internals._refgraph._planar import _RefCountGraphPlanarEmbedding
 from .._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
     _create_anyhashable_graph_subgraph,
@@ -24,6 +25,8 @@ def _planarity_alg(name, graph, *args):
     if is_planar:
         if _is_anyhashable_graph(graph):
             return is_planar, _AnyHashableGraphPlanarEmbedding(embedding, graph)
+        elif _is_refcount_graph(graph):
+            return is_planar, _RefCountGraphPlanarEmbedding(embedding, graph)
         elif _is_long_graph(graph):
             return is_planar, _JGraphTLongPlanarEmbedding(embedding)
         else:
@@ -35,6 +38,14 @@ def _planarity_alg(name, graph, *args):
                 is_planar,
                 _create_anyhashable_graph_subgraph(graph, kuratowski_as_graph),
             )
+        elif _is_refcount_graph(graph):
+            res = _RefCountGraph(handle=kuratowski_subdivision)
+            # Need to increment refcounts since the graph was created in the backend
+            for v in res.vertices:
+                _inc_ref(v)
+            for e in res.edges:
+                _inc_ref(e)
+            return is_planar, res
         elif _is_long_graph(graph):
             return is_planar, _JGraphTLongGraph(handle=kuratowski_subdivision)
         else:
