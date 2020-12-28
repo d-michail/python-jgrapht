@@ -1,8 +1,8 @@
-from .. import backend
+from jgrapht import backend
 
-from ..types import GraphMapping
+from jgrapht.types import GraphMapping
 
-from ._wrappers import (
+from jgrapht._internals._wrappers import (
     _HandleWrapper,
     _JGraphTObjectIterator,
 )

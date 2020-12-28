@@ -1,5 +1,5 @@
 from . import create_graph as _create_graph, GraphBackend
-from ._internals._anyhashableg import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
 
 
 def _strip(elem):

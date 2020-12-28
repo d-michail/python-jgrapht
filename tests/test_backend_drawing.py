@@ -1,8 +1,6 @@
-import pytest
-
 import jgrapht._backend as _backend
 
-from jgrapht._internals._drawing import (
+from jgrapht._internals._intgraph._drawing import (
     _JGraphTIntegerLayoutModel2D,
     _JGraphTLongLayoutModel2D
 )

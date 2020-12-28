@@ -1,18 +1,18 @@
 from .. import backend as _backend
 
-from .._internals._flows import (
+from jgrapht._internals._intgraph._flows import (
     _JGraphTCut,
     _JGraphTIntegerFlow,
     _JGraphTLongFlow,
     _JGraphTIntegerEquivalentFlowTree,
     _JGraphTLongEquivalentFlowTree,
 )
-from .._internals._long_graphs import _is_long_graph
-from .._internals._anyhashableg import (
+from jgrapht._internals._intgraph._long_graphs import _is_long_graph
+from jgrapht._internals._mapgraph._anyhashableg import (
     _is_anyhashable_graph,
     _vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
 )
-from .._internals._anyhashableg_flows import (
+from jgrapht._internals._mapgraph._anyhashableg_flows import (
     _AnyHashableGraphCut,
     _AnyHashableGraphFlow,
     _AnyHashableGraphEquivalentFlowTree,

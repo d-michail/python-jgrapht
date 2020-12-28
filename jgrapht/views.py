@@ -1,6 +1,6 @@
 from .types import ListenableGraph
 
-from ._internals._views import (
+from jgrapht._internals._intgraph._views import (
     _UnweightedIntegerGraphView,
     _UnmodifiableIntegerGraphView,
     _UndirectedIntegerGraphView,
@@ -18,8 +18,8 @@ from ._internals._views import (
     _LongGraphUnion,
     _LongListenableView,
 )
-from ._internals._long_graphs import _is_long_graph
-from ._internals._anyhashableg import (
+from jgrapht._internals._intgraph._long_graphs import _is_long_graph
+from jgrapht._internals._mapgraph._anyhashableg import (
     _is_anyhashable_graph,
     _as_unweighted_anyhashable_graph as _as_unweighted_anyhashable_graph,
     _as_undirected_anyhashable_graph as _as_undirected_anyhashable_graph,

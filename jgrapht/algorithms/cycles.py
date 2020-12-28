@@ -1,6 +1,6 @@
 from .. import backend as _backend
 
-from .._internals._paths import (
+from jgrapht._internals._intgraph._paths import (
     _JGraphTGraphPath,
     _JGraphTGraphPathIterator,
 )
@@ -8,13 +8,12 @@ from .._internals._collections import (
     _JGraphTIntegerListIterator,
     _JGraphTLongListIterator,
 )
-from .._internals._long_graphs import _is_long_graph
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._anyhashableg_collections import (
-    _AnyHashableGraphVertexList,
+from jgrapht._internals._intgraph._long_graphs import _is_long_graph
+from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._anyhashableg_collections import (
     _AnyHashableGraphVertexListIterator,
 )
-from .._internals._anyhashableg_paths import (
+from jgrapht._internals._mapgraph._anyhashableg_paths import (
     _AnyHashableGraphGraphPath,
     _AnyHashableGraphGraphPathIterator,
 )

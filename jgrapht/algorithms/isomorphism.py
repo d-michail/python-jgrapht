@@ -1,15 +1,12 @@
 from .. import backend as _backend
 
-from .._internals._mapping import (
-    _JGraphTIntegerGraphMapping,
+from jgrapht._internals._intgraph._mapping import (
     _JGraphTIntegerGraphMappingIterator,
-    _JGraphTLongGraphMapping,
     _JGraphTLongGraphMappingIterator,
 )
-from .._internals._long_graphs import _is_long_graph
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._anyhashableg_mapping import (
-    _AnyHashableGraphGraphMapping,
+from jgrapht._internals._intgraph._long_graphs import _is_long_graph
+from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._anyhashableg_mapping import (
     _AnyHashableGraphMappingIterator,
 )
 

@@ -6,9 +6,9 @@ from ._internals._collections import (
     _JGraphTIntegerSet,
     _JGraphTLongSet,
 )
-from ._internals._long_graphs import _is_long_graph
-from ._internals._anyhashableg import _is_anyhashable_graph
-from ._internals._anyhashableg_collections import (
+from jgrapht._internals._intgraph._long_graphs import _is_long_graph
+from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._anyhashableg_collections import (
     _AnyHashableGraphVertexSet,
     _AnyHashableGraphVertexDoubleMap,
 )

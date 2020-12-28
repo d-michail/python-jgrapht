@@ -1,8 +1,6 @@
-
-from .. import backend
-from ..types import Clustering
+from jgrapht.types import Clustering
 from ._refcount import _map_ids_to_objs
-from ._clustering import _JGraphTLongClustering
+from jgrapht._internals._intgraph._clustering import _JGraphTLongClustering
 
 
 class _RefCountAnyHashableGraphClustering(Clustering):

@@ -1,6 +1,4 @@
-import pytest
-
-from jgrapht._internals._attributes import (
+from jgrapht._internals._intgraph._attributes import (
     _JGraphTIntegerAttributeStore,
     _JGraphTLongAttributeStore,
     _JGraphTAttributesRegistry,

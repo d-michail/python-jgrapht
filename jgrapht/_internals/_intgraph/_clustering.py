@@ -1,6 +1,6 @@
-from .. import backend
-from ..types import Clustering
-from ._wrappers import (
+from jgrapht import backend
+from jgrapht.types import Clustering
+from jgrapht._internals._wrappers import (
     _HandleWrapper,
     _JGraphTIntegerIterator,
     _JGraphTLongIterator,

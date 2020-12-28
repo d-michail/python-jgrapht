@@ -1,6 +1,6 @@
-from .. import backend
-from ..types import PlanarEmbedding
-from ._wrappers import (
+from jgrapht import backend
+from jgrapht.types import PlanarEmbedding
+from jgrapht._internals._wrappers import (
     _HandleWrapper,
     _JGraphTIntegerIterator,
     _JGraphTLongIterator,

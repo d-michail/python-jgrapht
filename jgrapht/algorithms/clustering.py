@@ -1,12 +1,12 @@
 import time
 from .. import backend as _backend
 
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._refcount_anyhashableg import _is_refcount_anyhashable_graph, _map_ids_to_objs
-from .._internals._long_graphs import _is_long_graph
-from .._internals._clustering import _JGraphTIntegerClustering, _JGraphTLongClustering
-from .._internals._anyhashableg_clustering import _AnyHashableGraphClustering
-from .._internals._refcount_anyhashableg_clustering import _RefCountAnyHashableGraphClustering
+from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
+from jgrapht._internals._refgraph._graphs import _is_refcount_anyhashable_graph
+from jgrapht._internals._intgraph._long_graphs import _is_long_graph
+from jgrapht._internals._intgraph._clustering import _JGraphTIntegerClustering, _JGraphTLongClustering
+from jgrapht._internals._mapgraph._anyhashableg_clustering import _AnyHashableGraphClustering
+from jgrapht._internals._refgraph._clustering import _RefCountAnyHashableGraphClustering
 
 
 def _wrap_result(graph, handle):

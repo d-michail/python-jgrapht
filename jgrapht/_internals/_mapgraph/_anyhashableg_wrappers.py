@@ -1,4 +1,4 @@
-from ._wrappers import _JGraphTIntegerIterator
+from jgrapht._internals._wrappers import _JGraphTIntegerIterator
 
 
 class _AnyHashableGraphVertexIterator(_JGraphTIntegerIterator):

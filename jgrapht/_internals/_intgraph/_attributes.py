@@ -1,5 +1,5 @@
-from .. import backend
-from ._wrappers import _HandleWrapper
+from jgrapht import backend
+from jgrapht._internals._wrappers import _HandleWrapper
 
 
 class _JGraphTIntegerAttributeStore(_HandleWrapper):

@@ -1,8 +1,8 @@
-from .. import backend
-from ..types import GraphType, GraphEvent, ListenableGraph
-from ._int_graphs import _JGraphTIntegerGraph
-from ._long_graphs import _JGraphTLongGraph
-from ._callbacks import _create_wrapped_callback
+from jgrapht import backend
+from jgrapht.types import GraphEvent, ListenableGraph
+from jgrapht._internals._intgraph._int_graphs import _JGraphTIntegerGraph
+from jgrapht._internals._intgraph._long_graphs import _JGraphTLongGraph
+from jgrapht._internals._callbacks import _create_wrapped_callback
 
 import ctypes
 import copy

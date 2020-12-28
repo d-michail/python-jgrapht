@@ -1,10 +1,10 @@
-from .. import backend as _backend
+from jgrapht import backend as _backend
 
-from ..types import Flow, GomoryHuTree, EquivalentFlowTree
+from jgrapht.types import Flow, GomoryHuTree, EquivalentFlowTree
 
-from ._wrappers import _HandleWrapper
+from jgrapht._internals._wrappers import _HandleWrapper
 
-from ._int_graphs import _JGraphTIntegerGraph
+from jgrapht._internals._intgraph._int_graphs import _JGraphTIntegerGraph
 from ._anyhashableg import (
     _create_anyhashable_graph,
     _vertex_anyhashableg_to_g,
@@ -12,7 +12,7 @@ from ._anyhashableg import (
 )
 from ._anyhashableg_collections import _AnyHashableGraphEdgeDoubleMap
 
-from ._flows import _JGraphTCut as _AnyHashableGraphCut
+from jgrapht._internals._intgraph._flows import _JGraphTCut as _AnyHashableGraphCut
 
 
 class _AnyHashableGraphFlow(_AnyHashableGraphEdgeDoubleMap, Flow):

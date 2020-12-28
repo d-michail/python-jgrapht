@@ -2,13 +2,13 @@ from .. import backend as _backend
 
 from .._internals._wrappers import _JGraphTString
 from .._internals._collections import _JGraphTIntegerStringMap, _JGraphTLongStringMap
-from .._internals._attributes import (
+from jgrapht._internals._intgraph._attributes import (
     _JGraphTIntegerAttributeStore,
     _JGraphTLongAttributeStore,
     _JGraphTAttributesRegistry,
 )
-from .._internals._long_graphs import _is_long_graph
-from .._internals._anyhashableg import _is_anyhashable_graph
+from jgrapht._internals._intgraph._long_graphs import _is_long_graph
+from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
 
 
 def _export_to_file(name, graph, filename, *args):

@@ -5,7 +5,7 @@ from jgrapht.types import GraphEvent
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 from jgrapht.generators import complete_graph
 
-from jgrapht._internals._anyhashableg import _create_sparse_anyhashable_graph
+from jgrapht._internals._mapgraph._anyhashableg import _create_sparse_anyhashable_graph
 
 def test_any_graph():
 

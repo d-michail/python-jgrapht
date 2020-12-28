@@ -1,18 +1,18 @@
-from .. import backend
-from ..types import (
+from jgrapht import backend
+from jgrapht.types import (
     GraphPath,
     SingleSourcePaths,
     MultiObjectiveSingleSourcePaths,
     AllPairsPaths,
     ManyToManyPaths,
 )
-from ._wrappers import (
+from jgrapht._internals._wrappers import (
     _HandleWrapper,
     _JGraphTIntegerIterator,
     _JGraphTLongIterator,
     _JGraphTObjectIterator,
 )
-from ._long_graphs import _is_long_graph
+from jgrapht._internals._intgraph._long_graphs import _is_long_graph
 
 
 class _JGraphTGraphPath(_HandleWrapper, GraphPath):

@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from .. import backend as _backend
 
-from ._long_graphs import _is_long_graph
+from jgrapht._internals._intgraph._long_graphs import _is_long_graph
 from ._ioutils import _create_wrapped_import_integer_id_callback
 from ._ioutils import _create_wrapped_import_string_id_callback
 from ._ioutils import _create_wrapped_attribute_callback

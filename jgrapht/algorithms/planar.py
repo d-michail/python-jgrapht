@@ -1,17 +1,17 @@
 from .. import backend as _backend
 
-from .._internals._planar import (
+from jgrapht._internals._intgraph._planar import (
     _JGraphTIntegerPlanarEmbedding,
     _JGraphTLongPlanarEmbedding,
 )
-from .._internals._int_graphs import _JGraphTIntegerGraph
-from .._internals._long_graphs import _JGraphTLongGraph, _is_long_graph
+from jgrapht._internals._intgraph._int_graphs import _JGraphTIntegerGraph
+from jgrapht._internals._intgraph._long_graphs import _JGraphTLongGraph, _is_long_graph
 
-from .._internals._anyhashableg import (
+from jgrapht._internals._mapgraph._anyhashableg import (
     _is_anyhashable_graph,
     _create_anyhashable_graph_subgraph,
 )
-from .._internals._anyhashableg_planar import _AnyHashableGraphPlanarEmbedding
+from jgrapht._internals._mapgraph._anyhashableg_planar import _AnyHashableGraphPlanarEmbedding
 
 
 def _planarity_alg(name, graph, *args):

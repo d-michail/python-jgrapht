@@ -38,22 +38,22 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 from enum import Enum
 
-from ._internals._int_graphs import (
+from jgrapht._internals._intgraph._int_graphs import (
     _create_int_graph,
     _create_int_dag,
     _create_sparse_int_graph,
     _copy_to_sparse_int_graph,
 )
-from ._internals._long_graphs import (
+from jgrapht._internals._intgraph._long_graphs import (
     _create_long_graph,
     _create_long_dag,
 )
-from ._internals._refcount_anyhashableg import (
+from jgrapht._internals._refgraph._graphs import (
     _is_refcount_anyhashable_graph, 
     _create_refcount_anyhashable_graph,
     _create_refcount_anyhashable_dag, 
 )
-from ._internals._anyhashableg import (
+from jgrapht._internals._mapgraph._anyhashableg import (
     _is_anyhashable_graph,
     _create_anyhashable_graph,
     _create_anyhashable_dag,
