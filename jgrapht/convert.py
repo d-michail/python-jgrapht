@@ -1,4 +1,4 @@
-from . import create_graph as _create_graph
+from . import create_graph as _create_graph, GraphBackend
 from ._internals._anyhashableg import _is_anyhashable_graph
 
 
@@ -170,7 +170,7 @@ def to_pydot(graph):
     return dotg
 
 
-def from_nx(graph, any_hashable=True):
+def from_nx(graph, backend=GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH):
     """Create a graph from a NetworkX graph.
 
     :param graph: a graph
@@ -196,10 +196,10 @@ def from_nx(graph, any_hashable=True):
         weighted=is_weighted,
         allowing_self_loops=True,
         allowing_multiple_edges=allowing_multiple_edges,
-        any_hashable=any_hashable,
+        backend=backend,
     )
 
-    if any_hashable:
+    if _is_anyhashable_graph(result):
         # copy graph topology and attributes
         result.graph_attrs.update(**graph.graph)
 

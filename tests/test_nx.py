@@ -2,7 +2,7 @@ import pytest
 
 nx = pytest.importorskip("networkx")
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 from jgrapht.convert import to_nx, from_nx
 
 
@@ -144,7 +144,7 @@ def test_int_graph_from_nx():
 
     nxg.graph["name"] = "G"
 
-    g = from_nx(nxg, any_hashable=False)
+    g = from_nx(nxg, backend=GraphBackend.INT_GRAPH)
 
     assert g.type.directed
     assert g.type.weighted
@@ -175,7 +175,7 @@ def test_int_graph_no_weights_from_nx():
 
     nxg.graph["name"] = "G"
 
-    g = from_nx(nxg, any_hashable=False)
+    g = from_nx(nxg, backend=GraphBackend.INT_GRAPH)
 
     assert g.type.directed
     assert not g.type.weighted
