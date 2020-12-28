@@ -6,18 +6,18 @@ from .._internals._callbacks import (
     _create_wrapped_int_vertex_comparator_callback,
     _create_wrapped_long_vertex_comparator_callback,
 )
-from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._graphs import (
+from .._internals._intgraph._long_graphs import _is_long_graph
+from .._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
     _vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
 )
-from jgrapht._internals._intgraph._drawing import (
+from .._internals._intgraph._drawing import (
     _create_int_layout_model_2d as create_int_layout_model_2d,
 )
-from jgrapht._internals._intgraph._drawing import (
+from .._internals._intgraph._drawing import (
     _create_long_layout_model_2d as create_long_layout_model_2d,
 )
-from jgrapht._internals._mapgraph._drawing import (
+from .._internals._mapgraph._drawing import (
     _create_anyhashable_graph_layout_model_2d as create_attrs_graph_layout_model_2d,
 )
 

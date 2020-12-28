@@ -2,15 +2,15 @@ from collections.abc import (
     Set,
 )
 
-from jgrapht import backend
-from jgrapht.types import (
+from ... import backend
+from ...types import (
     Graph,
     GraphType,
     DirectedAcyclicGraph,
 )
-from jgrapht._internals._wrappers import _HandleWrapper
+from .._wrappers import _HandleWrapper
 from ._refcount import _inc_ref, _dec_ref, _id_to_obj, _map_ids_to_objs
-from jgrapht._internals._collections import (
+from .._collections import (
     _JGraphTLongIterator,
     _JGraphTLongSet,
 )

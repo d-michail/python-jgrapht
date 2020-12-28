@@ -1,6 +1,6 @@
-from jgrapht import backend
-from jgrapht.types import Clustering
-from jgrapht._internals._wrappers import (
+from ... import backend as _backend
+from ...types import Clustering
+from .._wrappers import (
     _HandleWrapper,
     _JGraphTIntegerIterator,
     _JGraphTLongIterator,
@@ -14,10 +14,10 @@ class _JGraphTIntegerClustering(_HandleWrapper, Clustering):
         super().__init__(handle=handle, **kwargs)
 
     def number_of_clusters(self):
-        return backend.jgrapht_xx_clustering_get_number_clusters(self._handle)
+        return _backend.jgrapht_xx_clustering_get_number_clusters(self._handle)
 
     def ith_cluster(self, i):
-        res = backend.jgrapht_xx_clustering_ith_cluster_vit(self._handle, i)
+        res = _backend.jgrapht_xx_clustering_ith_cluster_vit(self._handle, i)
         return _JGraphTIntegerIterator(res)
 
     def __repr__(self):
@@ -31,10 +31,10 @@ class _JGraphTLongClustering(_HandleWrapper, Clustering):
         super().__init__(handle=handle, **kwargs)
 
     def number_of_clusters(self):
-        return backend.jgrapht_xx_clustering_get_number_clusters(self._handle)
+        return _backend.jgrapht_xx_clustering_get_number_clusters(self._handle)
 
     def ith_cluster(self, i):
-        res = backend.jgrapht_xx_clustering_ith_cluster_vit(self._handle, i)
+        res = _backend.jgrapht_xx_clustering_ith_cluster_vit(self._handle, i)
         return _JGraphTLongIterator(res)
 
     def __repr__(self):

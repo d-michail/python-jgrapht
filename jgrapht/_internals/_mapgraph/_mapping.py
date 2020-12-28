@@ -1,8 +1,7 @@
-from jgrapht import backend
+from ... import backend
+from ...types import GraphMapping
 
-from jgrapht.types import GraphMapping
-
-from jgrapht._internals._wrappers import (
+from .._wrappers import (
     _HandleWrapper,
     _JGraphTObjectIterator,
 )
@@ -10,8 +9,6 @@ from jgrapht._internals._wrappers import (
 from ._graphs import (
     _vertex_anyhashableg_to_g,
     _vertex_g_to_anyhashableg,
-)
-from ._graphs import (
     _edge_anyhashableg_to_g,
     _edge_g_to_anyhashableg,
 )

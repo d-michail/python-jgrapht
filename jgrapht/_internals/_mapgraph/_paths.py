@@ -1,14 +1,13 @@
-from jgrapht import backend
+from ... import backend
 
-from jgrapht.types import (
+from ...types import (
     GraphPath,
     SingleSourcePaths,
     MultiObjectiveSingleSourcePaths,
     AllPairsPaths,
 )
 
-from jgrapht._internals._wrappers import _HandleWrapper, _JGraphTObjectIterator
-
+from .._wrappers import _HandleWrapper, _JGraphTObjectIterator
 from ._graphs import _vertex_anyhashableg_to_g
 from ._wrappers import _AnyHashableGraphEdgeIterator
 

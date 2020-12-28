@@ -2,10 +2,9 @@ import time
 
 from .. import backend as _backend
 
-from jgrapht._internals._intgraph._paths import _JGraphTGraphPath
-
-from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._paths import _AnyHashableGraphGraphPath
+from .._internals._intgraph._paths import _JGraphTGraphPath
+from .._internals._mapgraph._graphs import _is_anyhashable_graph
+from .._internals._mapgraph._paths import _AnyHashableGraphGraphPath
 
 
 def _wrap_result(graph, graph_path_handle):

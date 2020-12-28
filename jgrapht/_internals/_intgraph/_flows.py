@@ -1,23 +1,21 @@
-from jgrapht import backend as _backend
-
-from jgrapht.types import (
+from ... import backend as _backend
+from ...types import (
     Cut,
     Flow,
     GomoryHuTree,
     EquivalentFlowTree,
 )
-
-from jgrapht._internals._wrappers import _HandleWrapper
-from jgrapht._internals._collections import (
+from .._wrappers import _HandleWrapper
+from .._collections import (
     _JGraphTIntegerSet,
     _JGraphTLongSet,
     _JGraphTIntegerDoubleMap,
     _JGraphTLongDoubleMap,
 )
-from jgrapht._internals._intgraph._int_graphs import _JGraphTIntegerGraph
-from jgrapht._internals._intgraph._long_graphs import _JGraphTLongGraph, _is_long_graph
-from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._collections import _AnyHashableGraphVertexSet
+from .._intgraph._int_graphs import _JGraphTIntegerGraph
+from .._intgraph._long_graphs import _JGraphTLongGraph, _is_long_graph
+from .._mapgraph._graphs import _is_anyhashable_graph
+from .._mapgraph._collections import _AnyHashableGraphVertexSet
 
 
 class _JGraphTCut(Cut):

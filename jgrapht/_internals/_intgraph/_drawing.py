@@ -1,7 +1,7 @@
 from collections import namedtuple
-from jgrapht.types import LayoutModel2D
-from jgrapht import backend
-from jgrapht._internals._wrappers import _HandleWrapper
+from ... import backend
+from ...types import LayoutModel2D
+from .._wrappers import _HandleWrapper
 
 _box2d_class = namedtuple("Box2D", ["min_x", "min_y", "width", "height"])
 _point2d_class = namedtuple("Point2D", ["x", "y"])

@@ -1,11 +1,11 @@
-from jgrapht import backend
+from ... import backend
 
-from jgrapht._internals._wrappers import _JGraphTObjectIterator
+from .._wrappers import _JGraphTObjectIterator
 from ._wrappers import (
     _AnyHashableGraphVertexIterator,
     _AnyHashableGraphEdgeIterator,
 )
-from jgrapht._internals._collections import (
+from .._collections import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
     _JGraphTIntegerList,

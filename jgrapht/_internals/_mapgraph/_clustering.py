@@ -1,6 +1,5 @@
-from jgrapht import backend
-
-from jgrapht._internals._intgraph._clustering import _JGraphTIntegerClustering
+from ... import backend
+from .._intgraph._clustering import _JGraphTIntegerClustering
 from ._wrappers import _AnyHashableGraphVertexIterator
 
 

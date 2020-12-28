@@ -1,6 +1,6 @@
-from jgrapht import backend
+from ... import backend
 
-from jgrapht._internals._intgraph._drawing import _JGraphTIntegerLayoutModel2D
+from .._intgraph._drawing import _JGraphTIntegerLayoutModel2D
 from ._graphs import (
     _is_anyhashable_graph,
     _vertex_anyhashableg_to_g,

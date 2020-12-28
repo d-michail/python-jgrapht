@@ -6,10 +6,11 @@ from .._internals._collections import (
     _JGraphTIntegerSetIterator,
     _JGraphTLongSetIterator,
 )
-from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs
-from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._collections import (
+
+from .._internals._intgraph._long_graphs import _is_long_graph
+from .._internals._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs
+from .._internals._mapgraph._graphs import _is_anyhashable_graph
+from .._internals._mapgraph._collections import (
     _AnyHashableGraphVertexSet,
     _AnyHashableGraphVertexSetIterator,
 )

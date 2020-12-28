@@ -1,5 +1,5 @@
-from jgrapht import backend
-from jgrapht.types import (
+from ... import backend
+from ...types import (
     Graph,
     GraphType,
     DirectedAcyclicGraph,
@@ -7,11 +7,10 @@ from jgrapht.types import (
 
 from collections.abc import Set
 
-from jgrapht._internals._wrappers import _HandleWrapper
-from jgrapht._internals._collections import (
+from .._wrappers import _HandleWrapper
+from .._collections import (
     _JGraphTLongIterator,
     _JGraphTLongSet,
-    _JGraphTEdgeLongTripleList,
 )
 
 

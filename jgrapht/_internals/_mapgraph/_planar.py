@@ -1,8 +1,7 @@
-from jgrapht import backend
-from jgrapht.types import PlanarEmbedding
+from ... import backend
+from ...types import PlanarEmbedding
 
-from jgrapht._internals._wrappers import _HandleWrapper
-
+from .._wrappers import _HandleWrapper
 from ._graphs import _vertex_anyhashableg_to_g
 from ._wrappers import _AnyHashableGraphEdgeIterator
 

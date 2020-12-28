@@ -5,22 +5,22 @@ from collections.abc import (
 )
 import copy
 
-from jgrapht import backend
-from jgrapht.types import (
+from ... import backend
+from ...types import (
     Graph,
     GraphEvent,
     AttributesGraph,
     DirectedAcyclicGraph,
     ListenableGraph,
 )
-from jgrapht.utils import IntegerSupplier
+from ...utils import IntegerSupplier
 
-from jgrapht._internals._intgraph._int_graphs import (
+from .._intgraph._int_graphs import (
     _create_int_graph as _create_int_graph,
     _create_int_dag as _create_int_dag,
     _create_sparse_int_graph as _create_sparse_int_graph,
 )
-from jgrapht._internals._intgraph._views import (
+from .._intgraph._views import (
     _IntegerListenableView,
     _UnweightedIntegerGraphView,
     _UndirectedIntegerGraphView,

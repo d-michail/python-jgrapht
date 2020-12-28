@@ -1,5 +1,6 @@
-from jgrapht import backend
-from jgrapht._internals._wrappers import _HandleWrapper
+
+from ... import backend as _backend
+from .._wrappers import _HandleWrapper
 
 
 class _JGraphTIntegerAttributeStore(_HandleWrapper):
@@ -12,19 +13,19 @@ class _JGraphTIntegerAttributeStore(_HandleWrapper):
 
     def __init__(self, handle=None, **kwargs):
         if handle is None:
-            handle = backend.jgrapht_xx_attributes_store_create()
+            handle = _backend.jgrapht_xx_attributes_store_create()
         super().__init__(handle=handle, **kwargs)
 
     def put(self, element, key, value):
         encoded_key = bytearray(key, encoding="utf-8")
         encoded_value = bytearray(value, encoding="utf-8")
-        backend.jgrapht_ii_attributes_store_put_string_attribute(
+        _backend.jgrapht_ii_attributes_store_put_string_attribute(
             self._handle, element, encoded_key, encoded_value
         )
 
     def remove(self, element, key):
         encoded_key = bytearray(key, encoding="utf-8")
-        backend.jgrapht_ii_attributes_store_remove_attribute(
+        _backend.jgrapht_ii_attributes_store_remove_attribute(
             self._handle, element, encoded_key
         )
 
@@ -42,19 +43,19 @@ class _JGraphTLongAttributeStore(_HandleWrapper):
 
     def __init__(self, handle=None, **kwargs):
         if handle is None:
-            handle = backend.jgrapht_xx_attributes_store_create()
+            handle = _backend.jgrapht_xx_attributes_store_create()
         super().__init__(handle=handle, **kwargs)
 
     def put(self, element, key, value):
         encoded_key = bytearray(key, encoding="utf-8")
         encoded_value = bytearray(value, encoding="utf-8")
-        backend.jgrapht_ll_attributes_store_put_string_attribute(
+        _backend.jgrapht_ll_attributes_store_put_string_attribute(
             self._handle, element, encoded_key, encoded_value
         )
 
     def remove(self, element, key):
         encoded_key = bytearray(key, encoding="utf-8")
-        backend.jgrapht_ll_attributes_store_remove_attribute(
+        _backend.jgrapht_ll_attributes_store_remove_attribute(
             self._handle, element, encoded_key
         )
 
@@ -69,7 +70,7 @@ class _JGraphTAttributesRegistry(_HandleWrapper):
 
     def __init__(self, handle=None, **kwargs):
         if handle is None:
-            handle = backend.jgrapht_attributes_registry_create()
+            handle = _backend.jgrapht_attributes_registry_create()
         super().__init__(handle=handle, **kwargs)
 
     def put(self, name, category, attr_type=None, default_value=None):
@@ -83,7 +84,7 @@ class _JGraphTAttributesRegistry(_HandleWrapper):
             if default_value is not None
             else None
         )
-        backend.jgrapht_attributes_registry_register_attribute(
+        _backend.jgrapht_attributes_registry_register_attribute(
             self._handle,
             encoded_name,
             encoded_category,
@@ -94,7 +95,7 @@ class _JGraphTAttributesRegistry(_HandleWrapper):
     def remove(self, name, category):
         encoded_name = bytearray(name, encoding="utf-8")
         encoded_category = bytearray(category, encoding="utf-8")
-        backend.jgrapht_attributes_registry_unregister_attribute(
+        _backend.jgrapht_attributes_registry_unregister_attribute(
             self._handle, encoded_name, encoded_category, None, None
         )
 

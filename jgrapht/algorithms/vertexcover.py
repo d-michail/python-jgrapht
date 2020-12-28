@@ -6,9 +6,9 @@ from .._internals._collections import (
     _JGraphTIntegerSet,
     _JGraphTLongSet,
 )
-from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._collections import _AnyHashableGraphVertexSet
+from .._internals._intgraph._long_graphs import _is_long_graph
+from .._internals._mapgraph._graphs import _is_anyhashable_graph
+from .._internals._mapgraph._collections import _AnyHashableGraphVertexSet
 
 
 def _copy_vertex_weights(graph, vertex_weights):

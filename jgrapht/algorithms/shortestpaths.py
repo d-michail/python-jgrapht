@@ -1,5 +1,5 @@
 from .. import backend as _backend
-from jgrapht._internals._intgraph._paths import (
+from .._internals._intgraph._paths import (
     _JGraphTGraphPath,
     _JGraphTGraphPathIterator,
     _JGraphTSingleSourcePaths,
@@ -10,14 +10,14 @@ from jgrapht._internals._intgraph._paths import (
 )
 from .._internals._collections import _JGraphTIntegerMutableSet, _JGraphTLongMutableSet
 from .._internals._callbacks import _create_wrapped_callback
-from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._graphs import (
+from .._internals._intgraph._long_graphs import _is_long_graph
+from .._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
     _vertex_anyhashableg_to_g as _vertex_attrsg_to_g,
     _vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
     _edge_g_to_anyhashableg as _edge_g_to_attrsg,
 )
-from jgrapht._internals._mapgraph._paths import (
+from .._internals._mapgraph._paths import (
     _AnyHashableGraphGraphPath,
     _AnyHashableGraphGraphPathIterator,
     _AnyHashableGraphSingleSourcePaths,
