@@ -185,9 +185,8 @@ def test_tsp_two_opt_improve(backend):
     assert path3 is not None
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
-def test_random_tsp(backend):
-    g = create_graph(directed=False, weighted=True, any_hashable=True, backend=backend)
+def test_random_tsp_any_hashable():
+    g = create_graph(directed=False, weighted=True, any_hashable=True)
 
     g.add_vertex("0")
     g.add_vertex("1")

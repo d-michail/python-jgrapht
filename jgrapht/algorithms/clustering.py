@@ -2,9 +2,22 @@ import time
 from .. import backend as _backend
 
 from .._internals._anyhashableg import _is_anyhashable_graph
+from .._internals._refcount_anyhashableg import _is_refcount_anyhashable_graph, _map_ids_to_objs
 from .._internals._long_graphs import _is_long_graph
 from .._internals._clustering import _JGraphTIntegerClustering, _JGraphTLongClustering
 from .._internals._anyhashableg_clustering import _AnyHashableGraphClustering
+from .._internals._refcount_anyhashableg_clustering import _RefCountAnyHashableGraphClustering
+
+
+def _wrap_result(graph, handle):
+    if _is_anyhashable_graph(graph):
+        return _AnyHashableGraphClustering(handle, graph)
+    elif _is_refcount_anyhashable_graph(graph):
+        return _RefCountAnyHashableGraphClustering(handle)
+    elif _is_long_graph(graph):
+        return _JGraphTLongClustering(handle)
+    else:
+        return _JGraphTIntegerClustering(handle)
 
 
 def k_spanning_tree(graph, k):
@@ -24,12 +37,7 @@ def k_spanning_tree(graph, k):
     :returns: a clustering as an instance of :py:class:`.Clustering`
     """
     handle = _backend.jgrapht_xx_clustering_exec_k_spanning_tree(graph.handle, k)
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphClustering(handle, graph)
-    elif _is_long_graph(graph):
-        return _JGraphTLongClustering(handle)
-    else:
-        return _JGraphTIntegerClustering(handle)
+    return _wrap_result(graph, handle)
 
 
 def label_propagation(graph, max_iterations=None, seed=None):
@@ -61,9 +69,4 @@ def label_propagation(graph, max_iterations=None, seed=None):
     args = [max_iterations, seed]
 
     handle = _backend.jgrapht_xx_clustering_exec_label_propagation(graph.handle, *args)
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphClustering(handle, graph)
-    elif _is_long_graph(graph):
-        return _JGraphTLongClustering(handle)
-    else:
-        return _JGraphTIntegerClustering(handle)    
+    return _wrap_result(graph, handle)

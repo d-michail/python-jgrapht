@@ -27,6 +27,7 @@ def _module_cleanup_function():
 
     backend.jgrapht_cleanup()
 
+
 atexit.register(_module_cleanup_function)
 del atexit
 
@@ -47,6 +48,11 @@ from ._internals._long_graphs import (
     _create_long_graph,
     _create_long_dag,
 )
+from ._internals._refcount_anyhashableg import (
+    _is_refcount_anyhashable_graph, 
+    _create_refcount_anyhashable_graph,
+    _create_refcount_anyhashable_dag, 
+)
 from ._internals._anyhashableg import (
     _is_anyhashable_graph,
     _create_anyhashable_graph,
@@ -55,20 +61,19 @@ from ._internals._anyhashableg import (
     _copy_to_sparse_anyhashable_graph,
 )
 
+
 #
 # The graph creation API
 #
 
 class GraphBackend(Enum):
-    """Different backend graph implementations. Each backend exhibits different 
+    """Different backend graph implementations. Each backend exhibits different
     characteristics between performance and user-friendliness.
     """
     INT_GRAPH = 1
     LONG_GRAPH = 2
     ANY_HASHABLE_WRAPPER_INT_GRAPH = 3
     ANY_HASHABLE_REFCOUNT_LONG_GRAPH = 4
-
-
 
 
 def create_graph(
@@ -80,7 +85,7 @@ def create_graph(
     any_hashable=False,
     vertex_supplier=None,
     edge_supplier=None,
-    backend = GraphBackend.INT_GRAPH
+    backend=None,
 ):
     """Create a graph.
 
@@ -108,24 +113,51 @@ def create_graph(
     :param edge_supplier: used only in the case that the graph allows any hashable as
       vertices/edges. Called everytime the graph needs to create a new edge. If not given,
       then object instances are used.
-    :param backend: which backend implementation to use for the graph. Default is to use the 
-      integer graph.
+    :param backend: which backend implementation to use for the graph. Default is to choose
+      automatically. If set, the backend takes precidence over parameter any_hashable.
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
 
-    if backend == GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH: 
-        raise ValueError('Not yet supported')
+    if backend is None: 
+        if any_hashable:
+            backend = GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH
+        else: 
+            backend = GraphBackend.INT_GRAPH
 
-    if backend == GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH: 
-        any_hashable=True
+    if dag:
+        if not directed:
+            raise ValueError("A dag is always directed")
+        if allowing_self_loops:
+            raise ValueError("A dag cannot allow self-loops")
 
-    if any_hashable:
+    # now build the graph
+    if backend == GraphBackend.INT_GRAPH: 
         if dag:
-            if not directed:
-                raise ValueError("A dag is always directed")
-            if allowing_self_loops:
-                raise ValueError("A dag cannot allow self-loops")
+            return _create_int_dag(
+                allowing_multiple_edges=allowing_multiple_edges, weighted=weighted
+            )
+        else: 
+            return _create_int_graph(
+                directed=directed,
+                allowing_self_loops=allowing_self_loops,
+                allowing_multiple_edges=allowing_multiple_edges,
+                weighted=weighted,
+            )
+    elif backend == GraphBackend.LONG_GRAPH:
+        if dag:
+            return _create_long_dag(
+                allowing_multiple_edges=allowing_multiple_edges, weighted=weighted
+            )
+        else: 
+            return _create_long_graph(
+                directed=directed,
+                allowing_self_loops=allowing_self_loops,
+                allowing_multiple_edges=allowing_multiple_edges,
+                weighted=weighted,
+            )
+    elif backend == GraphBackend.ANY_HASHABLE_WRAPPER_INT_GRAPH:
+        if dag:
             return _create_anyhashable_dag(
                 allowing_multiple_edges=allowing_multiple_edges,
                 weighted=weighted,
@@ -140,40 +172,28 @@ def create_graph(
                 weighted=weighted,
                 vertex_supplier=vertex_supplier,
                 edge_supplier=edge_supplier,
-            )
-    else:
+            )        
+    elif backend == GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH: 
         if dag:
-            if not directed:
-                raise ValueError("A dag is always directed")
-            if allowing_self_loops:
-                raise ValueError("A dag cannot allow self-loops")
-            if backend == GraphBackend.INT_GRAPH:
-                return _create_int_dag(
-                    allowing_multiple_edges=allowing_multiple_edges, weighted=weighted
-                )
-            elif backend == GraphBackend.LONG_GRAPH:
-                return _create_long_dag(
-                    allowing_multiple_edges=allowing_multiple_edges, weighted=weighted
-                )
-            else:
-                raise ValueError("Not supported combination of graph parameters")
+            return _create_refcount_anyhashable_dag(
+                allowing_multiple_edges=allowing_multiple_edges,
+                weighted=weighted,
+                vertex_supplier=vertex_supplier,
+                edge_supplier=edge_supplier,
+            )
         else:
-            if backend == GraphBackend.INT_GRAPH:
-                return _create_int_graph(
-                    directed=directed,
-                    allowing_self_loops=allowing_self_loops,
-                    allowing_multiple_edges=allowing_multiple_edges,
-                    weighted=weighted,
-                )
-            elif backend == GraphBackend.LONG_GRAPH:
-                return _create_long_graph(
-                    directed=directed,
-                    allowing_self_loops=allowing_self_loops,
-                    allowing_multiple_edges=allowing_multiple_edges,
-                    weighted=weighted,
-                )
-            else:
-                raise ValueError("Not supported combination of graph parameters")
+            return _create_refcount_anyhashable_graph(
+                directed=directed,
+                allowing_self_loops=allowing_self_loops,
+                allowing_multiple_edges=allowing_multiple_edges,
+                weighted=weighted,
+                vertex_supplier=vertex_supplier,
+                edge_supplier=edge_supplier,
+            )
+        pass
+    else: 
+        raise ValueError('Invalid graph backend')
+
 
 
 def create_sparse_graph(
@@ -198,9 +218,9 @@ def create_sparse_graph(
     The structure (topology) of a sparse graph is unmodifiable, but weights and properties can be
     modified.
 
-    :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs. If `any_hashable` is 
+    :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs. If `any_hashable` is
       false, the vertices must be integers.
-    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0 
+    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0
       and increase continuously. If not explicitly given and `any_hashable` is false, the edgelist
       will be traversed in order to find out the number of vertices
     :param directed: if True the graph will be directed, otherwise undirected
@@ -247,7 +267,7 @@ def copy_to_sparse_graph(graph):
     """
     if _is_anyhashable_graph(graph):
         return _copy_to_sparse_anyhashable_graph(graph)
-    else: 
+    else:
         return _copy_to_sparse_int_graph(graph)
 
 
