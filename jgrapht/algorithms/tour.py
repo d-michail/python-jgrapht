@@ -3,13 +3,20 @@ import time
 from .. import backend as _backend
 
 from .._internals._intgraph._paths import _JGraphTGraphPath
+from .._internals._intgraph._long_graphs import _is_long_graph
 from .._internals._mapgraph._graphs import _is_anyhashable_graph
 from .._internals._mapgraph._paths import _AnyHashableGraphGraphPath
+from .._internals._refgraph._graphs import _is_refcount_graph
+from .._internals._refgraph._paths import _RefCountGraphGraphPath
 
 
 def _wrap_result(graph, graph_path_handle):
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphGraphPath(graph_path_handle, graph)
+    elif _is_refcount_graph(graph):
+        return _RefCountGraphGraphPath(graph_path_handle, graph)
+    elif _is_long_graph(graph):
+        return _JGraphTGraphPath(graph_path_handle, graph)
     else:
         return _JGraphTGraphPath(graph_path_handle, graph)
 
@@ -189,9 +196,4 @@ def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=
     new_graph_path_handle = _backend.jgrapht_xx_tour_tsp_two_opt_heuristic_improve(
         graph_path.handle, min_cost_improvement, seed
     )
-
-    graph = graph_path.graph
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPath(new_graph_path_handle, graph)
-    else:
-        return _JGraphTGraphPath(new_graph_path_handle, graph)
+    return _wrap_result(graph_path.graph, new_graph_path_handle)
