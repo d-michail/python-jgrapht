@@ -1,21 +1,24 @@
-from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
+from .._internals._mapgraph._graphs import _is_anyhashable_graph
 
-from .._internals._importers import (
+from .._internals._intgraph._importers import (
     _parse_graph_dimacs,
-    _parse_anyhashable_graph_dimacs,
     _parse_graph_gml,
-    _parse_anyhashable_graph_gml,
     _parse_graph_json,
-    _parse_anyhashable_graph_json,
     _parse_graph_csv,
-    _parse_anyhashable_graph_csv,
     _parse_graph_gexf,
-    _parse_anyhashable_graph_gexf,
     _parse_graph_dot,
-    _parse_anyhashable_graph_dot,
     _parse_graph_graph6sparse6,
-    _parse_anyhashable_graph_graph6sparse6,
     _parse_graph_graphml,
+)
+
+from .._internals._mapgraph._importers import (
+    _parse_anyhashable_graph_dimacs,
+    _parse_anyhashable_graph_gml,
+    _parse_anyhashable_graph_json,
+    _parse_anyhashable_graph_csv,
+    _parse_anyhashable_graph_gexf,
+    _parse_anyhashable_graph_dot,
+    _parse_anyhashable_graph_graph6sparse6,
     _parse_anyhashable_graph_graphml,
 )
 

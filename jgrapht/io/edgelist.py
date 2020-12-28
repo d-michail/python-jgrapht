@@ -2,8 +2,6 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTEdgeStrTripleList
 from .._internals._ioutils import (
-    _create_wrapped_import_string_id_callback,
-    _create_wrapped_import_integer_id_callback,
     _create_wrapped_attribute_callback,
     _create_wrapped_strid_attribute_callback,
 )
@@ -466,7 +464,7 @@ def parse_edgelist_json(
     )
 
 
-from .._internals._importers import CSV_FORMATS
+from .._internals._intgraph._importers import CSV_FORMATS
 
 
 def read_edgelist_csv(
