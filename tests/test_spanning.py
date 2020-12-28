@@ -8,12 +8,11 @@ def build_graph(backend):
 
     next_edge = 0
 
-    def edge_supplier(): 
+    def edge_supplier():
         nonlocal next_edge
         res = next_edge
         next_edge += 1
         return res
-
 
     g = create_graph(
         directed=False,
@@ -21,7 +20,7 @@ def build_graph(backend):
         allowing_multiple_edges=False,
         weighted=True,
         backend=backend,
-        edge_supplier=edge_supplier
+        edge_supplier=edge_supplier,
     )
 
     for i in range(0, 10):
@@ -50,7 +49,15 @@ def build_graph(backend):
     return g
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_greedy_multiplicative(backend):
     g = build_graph(backend)
     weight, edges = spanning.multiplicative_greedy(g, 3)
@@ -58,4 +65,3 @@ def test_greedy_multiplicative(backend):
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
     solution = set(edges)
     assert expected == solution
-

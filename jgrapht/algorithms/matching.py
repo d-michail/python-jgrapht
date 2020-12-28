@@ -13,11 +13,14 @@ from .._internals._mapgraph._collections import (
     _AnyHashableGraphEdgeSet,
     _AnyHashableGraphMutableVertexSet,
 )
+from .._internals._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs, _id_to_obj
 
 
 def _wrap_result(graph, weight, matching_handle):
     if _is_anyhashable_graph(graph):
         return weight, _AnyHashableGraphEdgeSet(matching_handle, graph)
+    elif _is_refcount_graph(graph):
+        return weight, set(_map_ids_to_objs(_JGraphTLongSet(matching_handle)))
     elif _is_long_graph(graph):
         return weight, _JGraphTLongSet(matching_handle)
     else:
@@ -29,17 +32,25 @@ def _to_wrapped_vertex_set(graph, vertex_set):
         if isinstance(vertex_set, _AnyHashableGraphVertexSet):
             return vertex_set
         mutable_set = _AnyHashableGraphMutableVertexSet(handle=None, graph=graph)
+        for v in vertex_set:
+            mutable_set.add(v)
+    elif _is_refcount_graph(graph):
+        mutable_set = _JGraphTLongMutableSet()
+        for v in vertex_set:
+            mutable_set.add(id(v))
     elif _is_long_graph(graph):
         if isinstance(vertex_set, _JGraphTLongSet):
             return vertex_set
         mutable_set = _JGraphTLongMutableSet()
+        for v in vertex_set:
+            mutable_set.add(v)
     else:
         if isinstance(vertex_set, _JGraphTIntegerSet):
             return vertex_set
         mutable_set = _JGraphTIntegerMutableSet()
+        for v in vertex_set:
+            mutable_set.add(v)
 
-    for v in vertex_set:
-        mutable_set.add(v)
     return mutable_set
 
 
@@ -56,18 +67,25 @@ def edmonds_max_cardinality(graph, dense=False):
         (
             weight,
             m_handle,
-        ) = _backend.jgrapht_xx_matching_exec_edmonds_general_max_card_dense(graph.handle)
+        ) = _backend.jgrapht_xx_matching_exec_edmonds_general_max_card_dense(
+            graph.handle
+        )
     else:
         (
             weight,
             m_handle,
-        ) = _backend.jgrapht_xx_matching_exec_edmonds_general_max_card_sparse(graph.handle)
+        ) = _backend.jgrapht_xx_matching_exec_edmonds_general_max_card_sparse(
+            graph.handle
+        )
     return _wrap_result(graph, weight, m_handle)
 
 
 def greedy_max_weight(graph, normalize_edge_costs=False, tolerance=1e-9):
     custom = [normalize_edge_costs, tolerance]
-    weight, m_handle = _backend.jgrapht_xx_matching_exec_custom_greedy_general_max_weight(
+    (
+        weight,
+        m_handle,
+    ) = _backend.jgrapht_xx_matching_exec_custom_greedy_general_max_weight(
         graph.handle, *custom
     )
     return _wrap_result(graph, weight, m_handle)
@@ -89,9 +107,10 @@ def blossom5_max_weight(graph, perfect=False):
             graph.handle
         )
     else:
-        weight, m_handle = _backend.jgrapht_xx_matching_exec_blossom5_general_max_weight(
-            graph.handle
-        )
+        (
+            weight,
+            m_handle,
+        ) = _backend.jgrapht_xx_matching_exec_blossom5_general_max_weight(graph.handle)
     return _wrap_result(graph, weight, m_handle)
 
 
@@ -104,19 +123,24 @@ def blossom5_min_weight(graph, perfect=False):
             graph.handle
         )
     else:
-        weight, m_handle = _backend.jgrapht_xx_matching_exec_blossom5_general_min_weight(
-            graph.handle
-        )
+        (
+            weight,
+            m_handle,
+        ) = _backend.jgrapht_xx_matching_exec_blossom5_general_min_weight(graph.handle)
     return _wrap_result(graph, weight, m_handle)
 
 
 def bipartite_max_cardinality(graph):
-    weight, m_handle = _backend.jgrapht_xx_matching_exec_bipartite_max_card(graph.handle)
+    weight, m_handle = _backend.jgrapht_xx_matching_exec_bipartite_max_card(
+        graph.handle
+    )
     return _wrap_result(graph, weight, m_handle)
 
 
 def bipartite_max_weight(graph):
-    weight, m_handle = _backend.jgrapht_xx_matching_exec_bipartite_max_weight(graph.handle)
+    weight, m_handle = _backend.jgrapht_xx_matching_exec_bipartite_max_weight(
+        graph.handle
+    )
     return _wrap_result(graph, weight, m_handle)
 
 

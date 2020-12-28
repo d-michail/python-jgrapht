@@ -7,7 +7,7 @@ import jgrapht.algorithms.partition as partition
 import jgrapht.generators as generators
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_bipartite_max_cardinality(backend):
     g = create_graph(
         directed=False,
@@ -36,7 +36,7 @@ def test_bipartite_max_cardinality(backend):
     assert set(m) == set([e13, e25])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_bipartite_perfect_min_weight(backend):
     bg = create_graph(
         directed=False,
@@ -52,7 +52,7 @@ def test_bipartite_perfect_min_weight(backend):
     assert weight == 10.0
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_bipartite_perfect_min_weight_with_custom_partitions(backend):
     bg = create_graph(
         directed=False,
@@ -75,13 +75,14 @@ def test_bipartite_perfect_min_weight_with_custom_partitions(backend):
     assert weight == 4.0
 
 
-def test_anyhashableg_bipartite_perfect_min_weight_with_custom_partitions():
+@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+def test_anyhashableg_bipartite_perfect_min_weight_with_custom_partitions(backend):
     bg = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend,
     )
     bg.add_vertices_from(['0', '1', '2', '3', '4', '5', '6', '7'])
 
@@ -97,7 +98,7 @@ def test_anyhashableg_bipartite_perfect_min_weight_with_custom_partitions():
     assert weight == 4.0
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_greedy_max_cardinality(backend):
     g = create_graph(
         directed=False,
@@ -113,7 +114,7 @@ def test_greedy_max_cardinality(backend):
     assert weight == 42.0
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_greedy_max_cardinality_with_sort(backend):
     g = create_graph(
         directed=False,
@@ -129,7 +130,7 @@ def test_greedy_max_cardinality_with_sort(backend):
     assert weight == 49.0
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_edmonds_max_cardinality(backend):
     g = create_graph(
         directed=False,
@@ -149,7 +150,7 @@ def test_edmonds_max_cardinality(backend):
     assert weight == 50.0
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_greedy_max_weight(backend):
     g = create_graph(
         directed=False,
@@ -169,7 +170,7 @@ def test_greedy_max_weight(backend):
     assert weight == 49.0
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_pathgrowing_max_weight(backend):
     g = create_graph(
         directed=False,
@@ -182,10 +183,12 @@ def test_pathgrowing_max_weight(backend):
 
     weight, _ = matching.pathgrowing_max_weight(g)
 
-    assert weight == 41.0
+    weight_max, _ = matching.blossom5_max_weight(g)
+
+    assert weight <= weight_max
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_blossom5_max_weight(backend):
     g = create_graph(
         directed=False,
@@ -205,7 +208,7 @@ def test_blossom5_max_weight(backend):
     assert weight == 50.0
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_blossom5_min_weight(backend):
     g = create_graph(
         directed=False,
@@ -225,13 +228,14 @@ def test_blossom5_min_weight(backend):
     assert weight == 50.0
 
 
-def test_anyhashableg_bipartite_perfect_min_weight():
+@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+def test_anyhashableg_bipartite_perfect_min_weight(backend):
     bg = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend
     )
     generators.complete_bipartite_graph(bg, 10, 10)
     _, part1, part2 = partition.bipartite_partitions(bg)
