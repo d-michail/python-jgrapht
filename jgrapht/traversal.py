@@ -2,8 +2,8 @@ from . import backend as _backend
 
 from ._internals._wrappers import _JGraphTIntegerIterator, _JGraphTLongIterator
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._anyhashableg_wrappers import _AnyHashableGraphVertexIterator
-from jgrapht._internals._mapgraph._anyhashableg import (
+from jgrapht._internals._mapgraph._wrappers import _AnyHashableGraphVertexIterator
+from jgrapht._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
     _vertex_anyhashableg_to_g as _vertex_attrsg_to_g,
 )

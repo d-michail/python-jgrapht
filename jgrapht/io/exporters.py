@@ -8,7 +8,7 @@ from jgrapht._internals._intgraph._attributes import (
     _JGraphTAttributesRegistry,
 )
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
 
 
 def _export_to_file(name, graph, filename, *args):

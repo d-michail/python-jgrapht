@@ -19,7 +19,7 @@ from jgrapht._internals._intgraph._views import (
     _LongListenableView,
 )
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._anyhashableg import (
+from jgrapht._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
     _as_unweighted_anyhashable_graph as _as_unweighted_anyhashable_graph,
     _as_undirected_anyhashable_graph as _as_undirected_anyhashable_graph,

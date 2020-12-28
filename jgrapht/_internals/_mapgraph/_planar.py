@@ -3,8 +3,8 @@ from jgrapht.types import PlanarEmbedding
 
 from jgrapht._internals._wrappers import _HandleWrapper
 
-from ._anyhashableg import _vertex_anyhashableg_to_g
-from ._anyhashableg_wrappers import _AnyHashableGraphEdgeIterator
+from ._graphs import _vertex_anyhashableg_to_g
+from ._wrappers import _AnyHashableGraphEdgeIterator
 
 
 class _AnyHashableGraphPlanarEmbedding(_HandleWrapper, PlanarEmbedding):

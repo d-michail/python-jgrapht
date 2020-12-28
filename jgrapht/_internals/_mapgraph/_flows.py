@@ -5,12 +5,12 @@ from jgrapht.types import Flow, GomoryHuTree, EquivalentFlowTree
 from jgrapht._internals._wrappers import _HandleWrapper
 
 from jgrapht._internals._intgraph._int_graphs import _JGraphTIntegerGraph
-from ._anyhashableg import (
+from ._graphs import (
     _create_anyhashable_graph,
     _vertex_anyhashableg_to_g,
     _vertex_g_to_anyhashableg,
 )
-from ._anyhashableg_collections import _AnyHashableGraphEdgeDoubleMap
+from ._collections import _AnyHashableGraphEdgeDoubleMap
 
 from jgrapht._internals._intgraph._flows import _JGraphTCut as _AnyHashableGraphCut
 

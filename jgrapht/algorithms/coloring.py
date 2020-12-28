@@ -2,8 +2,8 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerIntegerMap, _JGraphTLongIntegerMap
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._anyhashableg_collections import _AnyHashableGraphVertexIntegerMap
+from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._collections import _AnyHashableGraphVertexIntegerMap
 
 
 def _wrap_result(graph, num_colors, color_map_handle):

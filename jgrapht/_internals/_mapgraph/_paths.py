@@ -9,8 +9,8 @@ from jgrapht.types import (
 
 from jgrapht._internals._wrappers import _HandleWrapper, _JGraphTObjectIterator
 
-from ._anyhashableg import _vertex_anyhashableg_to_g
-from ._anyhashableg_wrappers import _AnyHashableGraphEdgeIterator
+from ._graphs import _vertex_anyhashableg_to_g
+from ._wrappers import _AnyHashableGraphEdgeIterator
 
 
 class _AnyHashableGraphGraphPath(_HandleWrapper, GraphPath):

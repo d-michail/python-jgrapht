@@ -29,7 +29,7 @@ from jgrapht._internals._intgraph._views import (
     _IntegerWeightedView,
     _MaskedIntegerSubgraphView,
 )
-from ._anyhashableg_collections import (
+from ._collections import (
     _AnyHashableGraphVertexSet,
     _AnyHashableGraphVertexIterator,
     _AnyHashableGraphEdgeIterator,

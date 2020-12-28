@@ -7,11 +7,11 @@ from jgrapht._internals._intgraph._planar import (
 from jgrapht._internals._intgraph._int_graphs import _JGraphTIntegerGraph
 from jgrapht._internals._intgraph._long_graphs import _JGraphTLongGraph, _is_long_graph
 
-from jgrapht._internals._mapgraph._anyhashableg import (
+from jgrapht._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
     _create_anyhashable_graph_subgraph,
 )
-from jgrapht._internals._mapgraph._anyhashableg_planar import _AnyHashableGraphPlanarEmbedding
+from jgrapht._internals._mapgraph._planar import _AnyHashableGraphPlanarEmbedding
 
 
 def _planarity_alg(name, graph, *args):

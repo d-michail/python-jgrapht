@@ -53,7 +53,7 @@ from jgrapht._internals._refgraph._graphs import (
     _create_refcount_anyhashable_graph,
     _create_refcount_anyhashable_dag, 
 )
-from jgrapht._internals._mapgraph._anyhashableg import (
+from jgrapht._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
     _create_anyhashable_graph,
     _create_anyhashable_dag,

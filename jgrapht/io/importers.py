@@ -1,4 +1,4 @@
-from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
 
 from .._internals._importers import (
     _parse_graph_dimacs,

@@ -1,11 +1,11 @@
 import time
 from .. import backend as _backend
 
-from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
 from jgrapht._internals._refgraph._graphs import _is_refcount_anyhashable_graph
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
 from jgrapht._internals._intgraph._clustering import _JGraphTIntegerClustering, _JGraphTLongClustering
-from jgrapht._internals._mapgraph._anyhashableg_clustering import _AnyHashableGraphClustering
+from jgrapht._internals._mapgraph._clustering import _AnyHashableGraphClustering
 from jgrapht._internals._refgraph._clustering import _RefCountAnyHashableGraphClustering
 
 

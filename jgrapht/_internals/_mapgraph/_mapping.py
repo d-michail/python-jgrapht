@@ -7,11 +7,11 @@ from jgrapht._internals._wrappers import (
     _JGraphTObjectIterator,
 )
 
-from ._anyhashableg import (
+from ._graphs import (
     _vertex_anyhashableg_to_g,
     _vertex_g_to_anyhashableg,
 )
-from ._anyhashableg import (
+from ._graphs import (
     _edge_anyhashableg_to_g,
     _edge_g_to_anyhashableg,
 )

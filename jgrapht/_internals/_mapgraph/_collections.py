@@ -1,7 +1,7 @@
 from jgrapht import backend
 
 from jgrapht._internals._wrappers import _JGraphTObjectIterator
-from ._anyhashableg_wrappers import (
+from ._wrappers import (
     _AnyHashableGraphVertexIterator,
     _AnyHashableGraphEdgeIterator,
 )

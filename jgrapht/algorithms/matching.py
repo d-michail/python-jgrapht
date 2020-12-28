@@ -7,8 +7,8 @@ from .._internals._collections import (
     _JGraphTLongMutableSet,
 )
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._anyhashableg_collections import (
+from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._collections import (
     _AnyHashableGraphVertexSet,
     _AnyHashableGraphEdgeSet,
     _AnyHashableGraphMutableVertexSet,

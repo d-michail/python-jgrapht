@@ -8,11 +8,11 @@ from jgrapht._internals._intgraph._flows import (
     _JGraphTLongEquivalentFlowTree,
 )
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._anyhashableg import (
+from jgrapht._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
     _vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
 )
-from jgrapht._internals._mapgraph._anyhashableg_flows import (
+from jgrapht._internals._mapgraph._flows import (
     _AnyHashableGraphCut,
     _AnyHashableGraphFlow,
     _AnyHashableGraphEquivalentFlowTree,

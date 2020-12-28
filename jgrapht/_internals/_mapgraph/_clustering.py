@@ -1,7 +1,7 @@
 from jgrapht import backend
 
 from jgrapht._internals._intgraph._clustering import _JGraphTIntegerClustering
-from ._anyhashableg_wrappers import _AnyHashableGraphVertexIterator
+from ._wrappers import _AnyHashableGraphVertexIterator
 
 
 class _AnyHashableGraphClustering(_JGraphTIntegerClustering):

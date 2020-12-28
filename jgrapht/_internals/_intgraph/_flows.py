@@ -16,8 +16,8 @@ from jgrapht._internals._collections import (
 )
 from jgrapht._internals._intgraph._int_graphs import _JGraphTIntegerGraph
 from jgrapht._internals._intgraph._long_graphs import _JGraphTLongGraph, _is_long_graph
-from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._anyhashableg_collections import _AnyHashableGraphVertexSet
+from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._collections import _AnyHashableGraphVertexSet
 
 
 class _JGraphTCut(Cut):

@@ -5,8 +5,8 @@ from .._internals._collections import (
     _JGraphTLongSetIterator,
 )
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._anyhashableg import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._anyhashableg_collections import _AnyHashableGraphVertexSetIterator
+from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
+from jgrapht._internals._mapgraph._collections import _AnyHashableGraphVertexSetIterator
 
 
 def is_weakly_connected(graph):
