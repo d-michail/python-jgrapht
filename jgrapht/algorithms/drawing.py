@@ -7,18 +7,23 @@ from .._internals._callbacks import (
     _create_wrapped_long_vertex_comparator_callback,
 )
 from .._internals._intgraph._long_graphs import _is_long_graph
+from .._internals._intgraph._drawing import (
+    _create_int_layout_model_2d,
+    _create_long_layout_model_2d
+)
 from .._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
     _vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
 )
-from .._internals._intgraph._drawing import (
-    _create_int_layout_model_2d as create_int_layout_model_2d,
-)
-from .._internals._intgraph._drawing import (
-    _create_long_layout_model_2d as create_long_layout_model_2d,
-)
 from .._internals._mapgraph._drawing import (
-    _create_anyhashable_graph_layout_model_2d as create_attrs_graph_layout_model_2d,
+    _create_anyhashable_graph_layout_model_2d
+)
+from .._internals._refgraph._graphs import (
+    _is_refcount_graph, 
+    _id_to_obj
+)
+from .._internals._refgraph._drawing import (
+    _create_refcount_graph_layout_model_2d
 )
 
 
@@ -43,11 +48,13 @@ def create_layout_model_2d(graph, min_x, min_y, width, height):
     :param height: height
     """
     if _is_anyhashable_graph(graph):
-        model = create_attrs_graph_layout_model_2d(graph, min_x, min_y, width, height)
+        model = _create_anyhashable_graph_layout_model_2d(graph, min_x, min_y, width, height)
+    elif _is_refcount_graph(graph):
+        model = _create_refcount_graph_layout_model_2d(graph, min_x, min_y, width, height)
     elif _is_long_graph(graph):
-        model = create_long_layout_model_2d(min_x, min_y, width, height)
+        model = _create_long_layout_model_2d(min_x, min_y, width, height)
     else:
-        model = create_int_layout_model_2d(min_x, min_y, width, height)
+        model = _create_int_layout_model_2d(min_x, min_y, width, height)
     return model
 
 
@@ -87,8 +94,8 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
       v1 > v2 in the ordering
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
+    model = create_layout_model_2d(graph, *area)
     if _is_anyhashable_graph(graph):
-        model = create_attrs_graph_layout_model_2d(graph, *area)
 
         def actual_vertex_comparator_cb(v1, v2):
             v1 = _vertex_g_to_attrsg(graph, v1)
@@ -101,8 +108,20 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
             vertex_comparator_f,
         ) = _create_wrapped_int_vertex_comparator_callback(actual_vertex_comparator_cb)            
 
+    elif _is_refcount_graph(graph):
+
+        def actual_vertex_comparator_cb(v1, v2):
+            v1 = _id_to_obj(v1)
+            v2 = _id_to_obj(v2)
+            return vertex_comparator_cb(v1, v2)
+            
+        actual_vertex_comparator_cb = vertex_comparator_cb
+        (
+            vertex_comparator_f_ptr,
+            vertex_comparator_f,
+        ) = _create_wrapped_long_vertex_comparator_callback(actual_vertex_comparator_cb)            
+
     elif _is_long_graph(graph):
-        model = create_long_layout_model_2d(*area)
         actual_vertex_comparator_cb = vertex_comparator_cb
         (
             vertex_comparator_f_ptr,
@@ -110,7 +129,6 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
         ) = _create_wrapped_long_vertex_comparator_callback(actual_vertex_comparator_cb)        
 
     else:
-        model = create_int_layout_model_2d(*area)
         actual_vertex_comparator_cb = vertex_comparator_cb
         (
             vertex_comparator_f_ptr,

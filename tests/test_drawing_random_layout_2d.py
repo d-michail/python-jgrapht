@@ -29,7 +29,7 @@ def build_graph(backend):
     return g
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
 def test_random_layout(backend):
     g = build_graph(backend)
 
@@ -57,17 +57,22 @@ def test_random_layout(backend):
     assert len(locations) == 6
 
 
-def build_anyhashableg_graph():
+def build_anyhashableg_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True,
+        backend=backend
     )
 
-    for i in range(0, 6):
-        g.add_vertex(str(i))
+    # assumes caching of small strings
+    g.add_vertex("0")
+    g.add_vertex("1")
+    g.add_vertex("2")
+    g.add_vertex("3")
+    g.add_vertex("4")
+    g.add_vertex("5")
 
     g.add_edge("0", "1")
     g.add_edge("0", "2")
@@ -82,8 +87,9 @@ def build_anyhashableg_graph():
     return g
 
 
-def test_anyhashableg_random_layout():
-    g = build_anyhashableg_graph()
+@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+def test_anyhashableg_random_layout(backend):
+    g = build_anyhashableg_graph(backend)
 
     area = (0, 0, 10, 20)
     model = drawing.random_layout_2d(g, area, seed=17)

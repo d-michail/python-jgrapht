@@ -84,17 +84,22 @@ def test_fr_layout_indexed(backend):
     ]
 
 
-def test_anyhashableg_fr_layout():
+@pytest.mark.parametrize("backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+def test_anyhashableg_fr_layout(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
         any_hashable=True,
+        backend=backend
     )
 
-    for i in range(0, 5):
-        g.add_vertex(str(i))
+    g.add_vertex("0")
+    g.add_vertex("1")
+    g.add_vertex("2")
+    g.add_vertex("3")
+    g.add_vertex("4")
 
     g.add_edge("0", "1")
     g.add_edge("1", "2")
@@ -122,15 +127,23 @@ def test_anyhashableg_fr_layout():
     ]
 
 
-def test_anyhashableg_fr_layout_indexed():
+@pytest.mark.parametrize("backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+def test_anyhashableg_fr_layout_indexed(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
         any_hashable=True,
+        backend=backend
     )
-    g.add_vertices_from(range(0, 5))
+
+    g.add_vertex(0)
+    g.add_vertex(1)
+    g.add_vertex(2)
+    g.add_vertex(3)
+    g.add_vertex(4)
+
     g.add_edge(0, 1, edge='0')
     g.add_edge(1, 2, edge='1')
     g.add_edge(2, 3, edge='2')
