@@ -49,9 +49,9 @@ from jgrapht._internals._intgraph._long_graphs import (
     _create_long_dag,
 )
 from jgrapht._internals._refgraph._graphs import (
-    _is_refcount_anyhashable_graph, 
-    _create_refcount_anyhashable_graph,
-    _create_refcount_anyhashable_dag, 
+    _is_refcount_graph,
+    _create_refcount_graph,
+    _create_refcount_dag,
 )
 from jgrapht._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
@@ -175,14 +175,14 @@ def create_graph(
             )        
     elif backend == GraphBackend.ANY_HASHABLE_REFCOUNT_LONG_GRAPH: 
         if dag:
-            return _create_refcount_anyhashable_dag(
+            return _create_refcount_dag(
                 allowing_multiple_edges=allowing_multiple_edges,
                 weighted=weighted,
                 vertex_supplier=vertex_supplier,
                 edge_supplier=edge_supplier,
             )
         else:
-            return _create_refcount_anyhashable_graph(
+            return _create_refcount_graph(
                 directed=directed,
                 allowing_self_loops=allowing_self_loops,
                 allowing_multiple_edges=allowing_multiple_edges,

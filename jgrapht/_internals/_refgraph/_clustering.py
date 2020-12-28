@@ -1,10 +1,10 @@
 from jgrapht.types import Clustering
 from ._refcount import _map_ids_to_objs
-from jgrapht._internals._intgraph._clustering import _JGraphTLongClustering
+from .._intgraph._clustering import _JGraphTLongClustering
 
 
-class _RefCountAnyHashableGraphClustering(Clustering):
-    """A refcount any-hashable graph vertex clustering.
+class _RefCountGraphClustering(Clustering):
+    """A refcount graph vertex clustering.
     
     Note: Initialized using a handle to a long clustering and takes ownership.
     """
@@ -23,4 +23,4 @@ class _RefCountAnyHashableGraphClustering(Clustering):
         return self._clusters[i]
 
     def __repr__(self):
-        return "_RefCountAnyHashableGraphClustering(%r)" % self._handle
+        return "_RefCountGraphClustering(%r)" % self._handle

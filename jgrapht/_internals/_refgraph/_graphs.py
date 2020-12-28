@@ -9,21 +9,22 @@ from jgrapht.types import (
     DirectedAcyclicGraph,
 )
 from jgrapht._internals._wrappers import _HandleWrapper
-from ._refcount import _inc_ref, _inc_ref_by_id, _dec_ref, _dec_ref_by_id, _id_to_obj, _map_ids_to_objs
+from ._refcount import _inc_ref, _dec_ref, _id_to_obj, _map_ids_to_objs
 from jgrapht._internals._collections import (
     _JGraphTLongIterator,
     _JGraphTLongSet,
 )
 
 
-class _RefCountAnyHashableGraph(_HandleWrapper, Graph):
+class _RefCountGraph(_HandleWrapper, Graph):
     """A graph which allows the use of any hashable as vertex and edges. 
     
     The actual implementation uses a long graph and maps python hashables using their ids.
     The reference count of each hashable is increased by one when it is inserted in the graph
     and decreased by one when it is removed from the graph. This means that all intermediate 
     results (e.g. such as a vertex set returns from a vertex cover algorithm) need to be 
-    translated into Python collections (to keep a correct reference count).
+    translated into Python collections, to keep a positive reference count even on vertices or
+    edges removed from the graph.
     """
 
     def __init__(self, handle, vertex_supplier=None, edge_supplier=None, **kwargs):
@@ -188,7 +189,7 @@ class _RefCountAnyHashableGraph(_HandleWrapper, Graph):
         return _map_ids_to_objs(_JGraphTLongIterator(it))
 
     def __repr__(self):
-        return "_RefCountAnyHashableGraph(%r)" % self.handle
+        return "_RefCountGraph(%r)" % self.handle
 
     class _VertexSet(Set):
         """Wrapper around the vertices of a JGraphT graph"""
@@ -207,7 +208,7 @@ class _RefCountAnyHashableGraph(_HandleWrapper, Graph):
             return backend.jgrapht_ll_graph_contains_vertex(self._handle, id(v))
 
         def __repr__(self):
-            return "_RefCountAnyHashableGraph-VertexSet(%r)" % self._handle
+            return "_RefCountGraph-VertexSet(%r)" % self._handle
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
@@ -233,7 +234,7 @@ class _RefCountAnyHashableGraph(_HandleWrapper, Graph):
             return backend.jgrapht_ll_graph_contains_edge(self._handle, id(e))
 
         def __repr__(self):
-            return "_RefCountAnyHashableGraph-EdgeSet(%r)" % self._handle
+            return "_RefCountGraph-EdgeSet(%r)" % self._handle
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
@@ -243,11 +244,11 @@ class _RefCountAnyHashableGraph(_HandleWrapper, Graph):
             return set(it)
 
 
-class _RefCountAnyHashableGraphDirectedAcyclicGraph(_RefCountAnyHashableGraph, DirectedAcyclicGraph):
-    """The directed acyclic graph wrapper."""
+class _RefCountDirectedAcyclicGraph(_RefCountGraph, DirectedAcyclicGraph):
+    """The directed acyclic refcount graph wrapper."""
 
     def __init__(self, handle, vertex_supplier=None, edge_supplier=None, **kwargs):
-        """Initialize an any-hashable dag with refcounts.
+        """Initialize a refcount dag.
 
         :param handle: the actual graph which we are wrapping. Must have long 
           vertices and edges.
@@ -276,10 +277,10 @@ class _RefCountAnyHashableGraphDirectedAcyclicGraph(_RefCountAnyHashableGraph, D
         return _map_ids_to_objs(_JGraphTLongIterator(handle=it_handle))
 
     def __repr__(self):
-        return "_RefCountAnyHashableGraphDirectedAcyclicGraph(%r)" % self.handle
+        return "_RefCountDirectedAcyclicGraph(%r)" % self.handle
 
 
-def _create_refcount_anyhashable_graph(
+def _create_refcount_graph(
     directed=True,
     allowing_self_loops=False,
     allowing_multiple_edges=False,
@@ -303,18 +304,18 @@ def _create_refcount_anyhashable_graph(
     handle = backend.jgrapht_ll_graph_create(
         directed, allowing_self_loops, allowing_multiple_edges, weighted
     )
-    return _RefCountAnyHashableGraph(
+    return _RefCountGraph(
         handle, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
     )
 
 
-def _create_refcount_anyhashable_dag(
+def _create_refcount_dag(
     allowing_multiple_edges=False,
     weighted=True,
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create a directed acyclic any-hashable graph and refcounts.
+    """Create a directed acyclic refcount graph.
 
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
@@ -326,16 +327,15 @@ def _create_refcount_anyhashable_dag(
     :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph` and :class:`~jgrapht.types.Graph`
     """
     handle = backend.jgrapht_ll_graph_dag_create(allowing_multiple_edges, weighted,)
-    return _RefCountAnyHashableGraphDirectedAcyclicGraph(
+    return _RefCountDirectedAcyclicGraph(
         handle, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
     )
 
 
-def _is_refcount_anyhashable_graph(graph):
-    """Check if a graph instance is an any-hashable using refcounts and the
-    long graph as a backend.
+def _is_refcount_graph(graph):
+    """Check if a graph instance is a refcount graph.
 
     :param graph: the graph
-    :returns: True if the graph is an any-hashable graph using refcounts, False otherwise.
+    :returns: True if the graph is a refcount graph, False otherwise.
     """
-    return isinstance(graph, (_RefCountAnyHashableGraph))
+    return isinstance(graph, (_RefCountGraph))
