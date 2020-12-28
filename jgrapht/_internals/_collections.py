@@ -611,7 +611,6 @@ class _JGraphTLongIntegerMutableMap(_JGraphTLongIntegerMap, MutableMapping):
     def __repr__(self):
         return "_JGraphTLongIntegerMutableMap(%r)" % self._handle
 
-
 class _JGraphTLongDoubleMap(_HandleWrapper, Mapping):
     """JGraphT Map"""
 

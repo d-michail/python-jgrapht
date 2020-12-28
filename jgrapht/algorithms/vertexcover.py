@@ -9,6 +9,7 @@ from .._internals._collections import (
 from .._internals._intgraph._long_graphs import _is_long_graph
 from .._internals._mapgraph._graphs import _is_anyhashable_graph
 from .._internals._mapgraph._collections import _AnyHashableGraphVertexSet
+from .._internals._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs
 
 
 def _copy_vertex_weights(graph, vertex_weights):
@@ -16,6 +17,10 @@ def _copy_vertex_weights(graph, vertex_weights):
         jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[graph._vertex_hash_to_id[key]] = val
+    elif _is_refcount_graph(graph):
+        jgrapht_vertex_weights = _JGraphTLongDoubleMutableMap()
+        for key, val in vertex_weights.items():
+            jgrapht_vertex_weights[id(key)] = val
     elif _is_long_graph(graph):
         jgrapht_vertex_weights = _JGraphTLongDoubleMutableMap()
         for key, val in vertex_weights.items():
@@ -41,6 +46,8 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
 
     if _is_anyhashable_graph(graph):
         return weight, _AnyHashableGraphVertexSet(vc_handle, graph)
+    elif _is_refcount_graph(graph):
+        return weight, set(_map_ids_to_objs(_JGraphTLongSet(vc_handle)))
     elif _is_long_graph(graph):
         return weight, _JGraphTLongSet(vc_handle)
     else:
