@@ -1,18 +1,17 @@
 from .. import backend as _backend
 
-from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._intgraph._flows import (
+from .._internals._intgraph._long_graphs import _is_long_graph
+from .._internals._intgraph._flows import (
     _JGraphTCut,
     _JGraphTIntegerGomoryHuTree,
     _JGraphTLongGomoryHuTree,
 )
 from .._internals._collections import _JGraphTIntegerMutableSet, _JGraphTLongMutableSet
-
-from jgrapht._internals._mapgraph._graphs import (
+from .._internals._mapgraph._graphs import (
     _is_anyhashable_graph,
     _vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
 )
-from jgrapht._internals._mapgraph._flows import (
+from .._internals._mapgraph._flows import (
     _AnyHashableGraphCut,
     _AnyHashableGraphGomoryHuTree,
 )

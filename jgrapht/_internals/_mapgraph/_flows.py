@@ -1,18 +1,81 @@
-from jgrapht import backend as _backend
+from ... import backend as _backend
+from ...types import Cut, Flow, GomoryHuTree, EquivalentFlowTree
+from ..._internals._wrappers import _HandleWrapper
+from .._intgraph._int_graphs import _JGraphTIntegerGraph
 
-from jgrapht.types import Flow, GomoryHuTree, EquivalentFlowTree
-
-from jgrapht._internals._wrappers import _HandleWrapper
-
-from jgrapht._internals._intgraph._int_graphs import _JGraphTIntegerGraph
 from ._graphs import (
     _create_anyhashable_graph,
     _vertex_anyhashableg_to_g,
     _vertex_g_to_anyhashableg,
 )
-from ._collections import _AnyHashableGraphEdgeDoubleMap
 
-from jgrapht._internals._intgraph._flows import _JGraphTCut as _AnyHashableGraphCut
+from ._collections import _AnyHashableGraphEdgeDoubleMap, _AnyHashableGraphVertexSet
+
+
+class _AnyHashableGraphCut(Cut):
+    """A graph cut."""
+
+    def __init__(self, graph, capacity, source_partition_handle, **kwargs):
+        super().__init__(**kwargs)
+        self._graph = graph
+        self._capacity = capacity
+        self._source_partition = _AnyHashableGraphVertexSet(
+            source_partition_handle, graph
+        )
+        self._target_partition = None
+        self._edges = None
+
+    @property
+    def weight(self):
+        return self._capacity
+
+    @property
+    def capacity(self):
+        return self._capacity
+
+    @property
+    def source_partition(self):
+        """Source partition vertex set."""
+        return self._source_partition
+
+    @property
+    def target_partition(self):
+        """Target partition vertex set."""
+        self._lazy_compute()
+        return self._target_partition
+
+    @property
+    def edges(self):
+        """Target partition vertex set."""
+        self._lazy_compute()
+        return self._edges
+
+    def _lazy_compute(self):
+        if self._edges is not None:
+            return
+
+        self._target_partition = set(self._graph.vertices).difference(
+            self._source_partition
+        )
+
+        self._edges = set()
+        if self._graph.type.directed:
+            for v in self._source_partition:
+                for e in self._graph.outedges_of(v):
+                    if self._graph.edge_target(e) not in self._source_partition:
+                        self._edges.add(e)
+        else:
+            for e in self._graph.edges:
+                s_in_s = self._graph.edge_source(e) in self._source_partition
+                t_in_s = self._graph.edge_target(e) in self._source_partition
+                if s_in_s ^ t_in_s:
+                    self._edges.add(e)
+
+    def __repr__(self):
+        return "_AnyHashableGraphCut(%f, %r)" % (self.capacity, self.source_partition)
+
+    def __str__(self):
+        return str(self.edges)
 
 
 class _AnyHashableGraphFlow(_AnyHashableGraphEdgeDoubleMap, Flow):
