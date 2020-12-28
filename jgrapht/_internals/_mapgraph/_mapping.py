@@ -11,7 +11,12 @@ from ._graphs import (
     _vertex_g_to_anyhashableg,
     _edge_anyhashableg_to_g,
     _edge_g_to_anyhashableg,
+    _is_anyhashable_graph
 )
+
+from .._intgraph._int_graphs import _is_int_graph
+from .._intgraph._long_graphs import _is_long_graph
+from .._refgraph._graphs import _is_refcount_graph, _id_to_obj
 
 
 class _AnyHashableGraphGraphMapping(_HandleWrapper, GraphMapping):
@@ -78,7 +83,7 @@ class _AnyHashableGraphGraphMapping(_HandleWrapper, GraphMapping):
         return "_AnyHashableGraphGraphMapping(%r)" % self._handle
 
 
-class _AnyHashableGraphMappingIterator(_JGraphTObjectIterator):
+class _AnyHashableGraphGraphMappingIterator(_JGraphTObjectIterator):
     """A graph mapping iterator"""
 
     def __init__(self, handle, graph1, graph2, **kwargs):
@@ -92,3 +97,4 @@ class _AnyHashableGraphMappingIterator(_JGraphTObjectIterator):
 
     def __repr__(self):
         return "_AnyHashableGraphMappingIterator(%r)" % self._handle
+

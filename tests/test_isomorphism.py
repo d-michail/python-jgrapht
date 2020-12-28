@@ -4,7 +4,7 @@ from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.isomorphism as iso
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
 def test_iso(backend):
     g1 = create_graph(
         directed=False,
@@ -16,10 +16,10 @@ def test_iso(backend):
 
     g1.add_vertices_from([0, 1, 2, 3])
 
-    g1.add_edge(0, 1)
-    g1.add_edge(1, 2)
-    g1.add_edge(2, 3)
-    g1.add_edge(3, 0)
+    g1.add_edge(0, 1, edge=0)
+    g1.add_edge(1, 2, edge=1)
+    g1.add_edge(2, 3, edge=2)
+    g1.add_edge(3, 0, edge=3)
 
     g2 = create_graph(
         directed=False,
@@ -31,10 +31,10 @@ def test_iso(backend):
 
     g2.add_vertices_from([5, 6, 7, 8])
 
-    g2.add_edge(5, 6)
-    g2.add_edge(6, 7)
-    g2.add_edge(7, 8)
-    g2.add_edge(8, 5)
+    g2.add_edge(5, 6, edge=0)
+    g2.add_edge(6, 7, edge=1)
+    g2.add_edge(7, 8, edge=2)
+    g2.add_edge(8, 5, edge=3)
 
     it = iso.vf2(g1, g2)
 
@@ -70,7 +70,7 @@ def test_iso(backend):
     assert gm.edges_correspondence() == {0: 2, 1: 1, 2: 0, 3: 3}
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
 def test_iso_no(backend):
     g1 = create_graph(
         directed=False,
@@ -82,10 +82,10 @@ def test_iso_no(backend):
 
     g1.add_vertices_from([0, 1, 2, 3])
 
-    g1.add_edge(0, 1)
-    g1.add_edge(1, 2)
-    g1.add_edge(2, 3)
-    g1.add_edge(3, 0)
+    g1.add_edge(0, 1, edge=0)
+    g1.add_edge(1, 2, edge=1)
+    g1.add_edge(2, 3, edge=2)
+    g1.add_edge(3, 0, edge=3)
 
     g2 = create_graph(
         directed=False,
@@ -97,16 +97,16 @@ def test_iso_no(backend):
 
     g2.add_vertices_from([5, 6, 7])
 
-    g2.add_edge(5, 6)
-    g2.add_edge(6, 7)
-    g2.add_edge(7, 5)
+    g2.add_edge(5, 6, edge=0)
+    g2.add_edge(6, 7, edge=1)
+    g2.add_edge(7, 5, edge=2)
 
     it = iso.vf2(g1, g2)
 
     assert it is None
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
 def test_iso_induced_subgraph(backend):
     g1 = create_graph(
         directed=False,
@@ -118,10 +118,10 @@ def test_iso_induced_subgraph(backend):
 
     g1.add_vertices_from([0, 1, 2, 3])
 
-    g1.add_edge(0, 1)
-    g1.add_edge(1, 2)
-    g1.add_edge(2, 3)
-    g1.add_edge(3, 0)
+    g1.add_edge(0, 1, edge=0)
+    g1.add_edge(1, 2, edge=1)
+    g1.add_edge(2, 3, edge=2)
+    g1.add_edge(3, 0, edge=3)
 
     g2 = create_graph(
         directed=False,
@@ -133,8 +133,8 @@ def test_iso_induced_subgraph(backend):
 
     g2.add_vertices_from([5, 6, 7])
 
-    g2.add_edge(5, 6)
-    g2.add_edge(6, 7)
+    g2.add_edge(5, 6, edge=0)
+    g2.add_edge(6, 7, edge=1)
 
     it = iso.vf2_subgraph(g1, g2)
 
@@ -158,7 +158,7 @@ def test_iso_induced_subgraph(backend):
     assert gm.vertices_correspondence() == {0: None, 1: 7, 2: 6, 3: 5}
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
 def test_iso_not_induced_subgraph(backend):
     g1 = create_graph(
         directed=False,
@@ -195,28 +195,29 @@ def test_iso_not_induced_subgraph(backend):
     assert it is None
 
 
-
-def test_anyhashableg_iso():
+@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+def test_anyhashableg_iso(backend):
     g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend
     )
 
     g1.add_vertices_from([0, 1, 2, 3])
 
-    g1.add_edge(0, 1)
-    g1.add_edge(1, 2)
-    g1.add_edge(2, 3)
-    g1.add_edge(3, 0)
+    g1.add_edge(0, 1, edge=0)
+    g1.add_edge(1, 2, edge=1)
+    g1.add_edge(2, 3, edge=2)
+    g1.add_edge(3, 0, edge=3)
 
     g2 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True,
+        backend=backend
     )
 
     g2.add_vertices_from([5, "6", 7, 8])
@@ -257,34 +258,35 @@ def test_anyhashableg_iso():
     assert gm.edges_correspondence() == {0: "e2", 1: 1, 2: 0, 3: 3}
 
 
-def test_anyhashableg_iso_induced_subgraph():
+@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+def test_anyhashableg_iso_induced_subgraph(backend):
     g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True,
+        backend=backend
     )
 
     g1.add_vertices_from([0, 1, 2, 3])
 
-    g1.add_edge(0, 1)
-    g1.add_edge(1, 2)
-    g1.add_edge(2, 3)
-    g1.add_edge(3, 0)
+    g1.add_edge(0, 1, edge=0)
+    g1.add_edge(1, 2, edge=1)
+    g1.add_edge(2, 3, edge=2)
+    g1.add_edge(3, 0, edge=3)
 
     g2 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True,
+        backend=backend
     )
 
     g2.add_vertices_from([5, 6, 7])
 
-    g2.add_edge(5, 6)
-    g2.add_edge(6, 7)
+    g2.add_edge(5, 6, edge=0)
+    g2.add_edge(6, 7, edge=1)
 
     it = iso.vf2_subgraph(g1, g2)
 
@@ -306,3 +308,40 @@ def test_anyhashableg_iso_induced_subgraph():
     assert gm.vertices_correspondence() == {0: 6, 1: 7, 2: None, 3: 5}
     gm = next(it)
     assert gm.vertices_correspondence() == {0: None, 1: 7, 2: 6, 3: 5}
+
+
+@pytest.mark.parametrize("backend1", [GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend2", [GraphBackend.ANY_HASHABLE_GRAPH])
+def test_different_backends_error(backend1, backend2):
+    g1 = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+        backend=backend1
+    )
+
+    g1.add_vertices_from([0, 1, 2, 3])
+
+    g1.add_edge(0, 1, edge=0)
+    g1.add_edge(1, 2, edge=1)
+    g1.add_edge(2, 3, edge=2)
+    g1.add_edge(3, 0, edge=3)
+
+    g2 = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=False,
+        backend=backend2
+    )
+
+    g2.add_vertices_from([5, "6", 7, 8])
+
+    g2.add_edge(5, "6", edge=0)
+    g2.add_edge("6", 7, edge=1)
+    g2.add_edge(7, 8, edge="e2")
+    g2.add_edge(8, 5, edge=3)
+
+    with pytest.raises(TypeError):
+        it = iso.vf2(g1, g2)

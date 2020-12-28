@@ -12,22 +12,25 @@ from .._internals._mapgraph._collections import (
     _AnyHashableGraphVertexDoubleMap,
     _AnyHashableGraphVertexIntegerMap,
 )
-from .._internals._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs
+from .._internals._refgraph._graphs import _is_refcount_graph, _id_to_obj
 
 
-
-def _wrap_map_to_double_result(graph, scores_handle):
+def _wrap_map_to_double_result(graph, map_handle):
     if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphVertexDoubleMap(scores_handle, graph)
+        return _AnyHashableGraphVertexDoubleMap(map_handle, graph)
+    elif _is_refcount_graph(graph):
+        return {_id_to_obj(k):v for k, v in _JGraphTLongDoubleMap(map_handle).items()}
     elif _is_long_graph(graph):
-        return _JGraphTLongDoubleMap(scores_handle)
+        return _JGraphTLongDoubleMap(map_handle)
     else:
-        return _JGraphTIntegerDoubleMap(scores_handle)
+        return _JGraphTIntegerDoubleMap(map_handle)
 
 
 def _wrap_map_to_int_result(graph, map_handle):
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexIntegerMap(map_handle, graph)
+    elif _is_refcount_graph(graph):
+        return {_id_to_obj(k):v for k, v in _JGraphTLongIntegerMap(map_handle).items()}        
     elif _is_long_graph(graph):
         return _JGraphTLongIntegerMap(map_handle)
     else:

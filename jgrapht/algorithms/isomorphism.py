@@ -1,5 +1,6 @@
 from .. import backend as _backend
 
+from .._internals._intgraph._int_graphs import _is_int_graph
 from .._internals._intgraph._mapping import (
     _JGraphTIntegerGraphMappingIterator,
     _JGraphTLongGraphMappingIterator,
@@ -7,8 +8,33 @@ from .._internals._intgraph._mapping import (
 from .._internals._intgraph._long_graphs import _is_long_graph
 from .._internals._mapgraph._graphs import _is_anyhashable_graph
 from .._internals._mapgraph._mapping import (
-    _AnyHashableGraphMappingIterator,
+    _AnyHashableGraphGraphMappingIterator
 )
+from .._internals._refgraph._graphs import _is_refcount_graph
+from .._internals._refgraph._mapping import (
+    _RefCountGraphGraphMappingIterator
+)
+
+
+def _wrap_result(graph1, graph2, map_it_handle): 
+    if _is_anyhashable_graph(graph1) and _is_anyhashable_graph(graph2):
+        return _AnyHashableGraphGraphMappingIterator(
+            handle=map_it_handle, graph1=graph1, graph2=graph2
+        )
+    elif _is_refcount_graph(graph1) and _is_refcount_graph(graph2):
+        return _RefCountGraphGraphMappingIterator(
+            handle=map_it_handle, graph1=graph1, graph2=graph2
+        )
+    elif _is_long_graph(graph1) and _is_long_graph(graph2):
+        return _JGraphTLongGraphMappingIterator(
+            handle=map_it_handle, graph1=graph1, graph2=graph2
+        )
+    elif _is_int_graph(graph1) and _is_int_graph(graph2):
+        return _JGraphTIntegerGraphMappingIterator(
+            handle=map_it_handle, graph1=graph1, graph2=graph2
+        )
+    else:
+        raise TypeError('Isomorphism can only be tested against same backend graphs')
 
 
 def vf2(graph1, graph2):
@@ -30,19 +56,7 @@ def vf2(graph1, graph2):
     )
     if not exists:
         return None
-
-    if _is_anyhashable_graph(graph1) or _is_anyhashable_graph(graph2):
-        return _AnyHashableGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
-    elif _is_long_graph(graph1) or _is_long_graph(graph2):
-        return _JGraphTLongGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
-    else:
-        return _JGraphTIntegerGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
+    return _wrap_result(graph1, graph2, map_it_handle)
 
 
 def vf2_subgraph(graph1, graph2):
@@ -69,16 +83,4 @@ def vf2_subgraph(graph1, graph2):
     )
     if not exists:
         return None
-
-    if _is_anyhashable_graph(graph1) or _is_anyhashable_graph(graph2):
-        return _AnyHashableGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
-    elif _is_long_graph(graph1) or _is_long_graph(graph2):
-        return _JGraphTLongGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
-    else:
-        return _JGraphTIntegerGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
+    return _wrap_result(graph1, graph2, map_it_handle)
