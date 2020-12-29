@@ -132,7 +132,7 @@ int jgrapht_ii_cut_gomoryhu_tree(void *, void**);
 
 int jgrapht_ll_cut_gomoryhu_tree(void *, void**);
 
-int jgrapht_ll_cut_gomoryhu_tree_with_suppliers(void *, void*, void*, void** OUTPUT);
+int jgrapht_ll_cut_gomoryhu_tree_with_suppliers(void *, void*, void*, void**);
 
 int jgrapht_xx_cut_oddmincutset_exec_padberg_rao(void *, void *, int, double*, void**);
 
@@ -546,6 +546,16 @@ int jgrapht_ii_graph_attrs_vertex_contains(void *, int, char*, int*);
 int jgrapht_ll_graph_attrs_vertex_contains(void *, long long int, char*, int*);
 int jgrapht_ii_graph_attrs_edge_contains(void *, int, char*, int*);
 int jgrapht_ll_graph_attrs_edge_contains(void *, long long int, char*, int*);
+int jgrapht_xx_graph_attrs_keys_iterator(void *, void**);
+int jgrapht_ii_graph_attrs_vertex_keys_iterator(void *, int, void**);
+int jgrapht_ll_graph_attrs_vertex_keys_iterator(void *, long long int, void**);
+int jgrapht_ii_graph_attrs_edge_keys_iterator(void *, int, void**);
+int jgrapht_ll_graph_attrs_edge_keys_iterator(void *, long long int, void**);
+int jgrapht_xx_graph_attrs_size(void *, int*);
+int jgrapht_ii_graph_attrs_vertex_size(void *, int, int*);
+int jgrapht_ll_graph_attrs_vertex_size(void *, long long int, int*);
+int jgrapht_ii_graph_attrs_edge_size(void *, int, int*);
+int jgrapht_ll_graph_attrs_edge_size(void *, long long int, int*);
 
 // handles
 

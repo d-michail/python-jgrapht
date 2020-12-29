@@ -1379,6 +1379,56 @@ int jgrapht_ll_graph_attrs_edge_contains(void *g, long long int edge, char* key,
     return jgrapht_capi_ll_graph_attrs_edge_contains(thread, g, edge, key, res);
 }
 
+int jgrapht_xx_graph_attrs_keys_iterator(void *g, void**res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_graph_attrs_keys_iterator(thread, g, res);
+}
+
+int jgrapht_ii_graph_attrs_vertex_keys_iterator(void *g, int vertex, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_vertex_keys_iterator(thread, g, vertex, res);
+}
+
+int jgrapht_ll_graph_attrs_vertex_keys_iterator(void *g, long long int vertex, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_vertex_keys_iterator(thread, g, vertex, res);
+}
+
+int jgrapht_ii_graph_attrs_edge_keys_iterator(void *g, int edge, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_edge_keys_iterator(thread, g, edge, res);
+}
+
+int jgrapht_ll_graph_attrs_edge_keys_iterator(void *g, long long int edge, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_edge_keys_iterator(thread, g, edge, res);
+}
+
+int jgrapht_xx_graph_attrs_size(void *g, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_graph_attrs_size(thread, g, res);
+}
+
+int jgrapht_ii_graph_attrs_vertex_size(void *g, int vertex, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_vertex_size(thread, g, vertex, res);
+}
+ 
+int jgrapht_ll_graph_attrs_vertex_size(void *g, long long int vertex, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_vertex_size(thread, g, vertex, res);
+}
+ 
+int jgrapht_ii_graph_attrs_edge_size(void *g, int edge, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_edge_size(thread, g, edge, res);
+}
+
+int jgrapht_ll_graph_attrs_edge_size(void *g, long long int edge, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_edge_size(thread, g, edge, res);
+}
+
 // handles
 
 int jgrapht_handles_destroy(void *handle) { 

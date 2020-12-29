@@ -711,6 +711,17 @@ int jgrapht_ii_graph_attrs_vertex_contains(void *, int, char*, int* OUTPUT);
 int jgrapht_ll_graph_attrs_vertex_contains(void *, long long int, char*, int* OUTPUT);
 int jgrapht_ii_graph_attrs_edge_contains(void *, int, char*, int* OUTPUT);
 int jgrapht_ll_graph_attrs_edge_contains(void *, long long int, char*, int* OUTPUT);
+int jgrapht_xx_graph_attrs_keys_iterator(void *, void** OUTPUT);
+int jgrapht_ii_graph_attrs_vertex_keys_iterator(void *, int, void** OUTPUT);
+int jgrapht_ll_graph_attrs_vertex_keys_iterator(void *, long long int, void** OUTPUT);
+int jgrapht_ii_graph_attrs_edge_keys_iterator(void *, int, void** OUTPUT);
+int jgrapht_ll_graph_attrs_edge_keys_iterator(void *, long long int, void** OUTPUT);
+int jgrapht_xx_graph_attrs_size(void *, int* OUTPUT);
+int jgrapht_ii_graph_attrs_vertex_size(void *, int, int* OUTPUT);
+int jgrapht_ll_graph_attrs_vertex_size(void *, long long int, int* OUTPUT);
+int jgrapht_ii_graph_attrs_edge_size(void *, int, int* OUTPUT);
+int jgrapht_ll_graph_attrs_edge_size(void *, long long int, int* OUTPUT);
+
 
 // handles
 
