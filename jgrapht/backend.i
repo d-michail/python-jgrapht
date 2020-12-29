@@ -56,6 +56,7 @@ enum status_t {
     STATUS_EXPORT_ERROR,
     STATUS_IMPORT_ERROR,
     STATUS_NEGATIVE_CYCLE_DETECTED,
+    STATUS_NUMBER_FORMAT_EXCEPTION,
 };
 
 enum dimacs_format_t {
@@ -82,6 +83,18 @@ typedef enum {
     GRAPH_EVENT_EDGE_WEIGHT_UPDATED,
 } graph_event_t;
 
+typedef enum { 
+    ATTRIBUTE_TYPE_NULL = 0,
+    ATTRIBUTE_TYPE_BOOLEAN,
+    ATTRIBUTE_TYPE_INT,
+    ATTRIBUTE_TYPE_LONG,
+    ATTRIBUTE_TYPE_FLOAT,
+    ATTRIBUTE_TYPE_DOUBLE,
+    ATTRIBUTE_TYPE_STRING,
+    ATTRIBUTE_TYPE_HTML,
+    ATTRIBUTE_TYPE_UNKNOWN,
+    ATTRIBUTE_TYPE_IDENTIFIER,
+} attribute_type_t;
 
 // library init
 
@@ -136,6 +149,7 @@ int raise_exception_on_error(int result) {
             PyErr_SetString(PyExc_IOError, jgrapht_error_get_errno_msg());
             break;
         case STATUS_NEGATIVE_CYCLE_DETECTED:
+        case STATUS_NUMBER_FORMAT_EXCEPTION:
             PyErr_SetString(PyExc_ValueError, jgrapht_error_get_errno_msg());
             break;
         case STATUS_ERROR:
@@ -463,11 +477,9 @@ int jgrapht_xx_generate_linearized_chord_diagram(void *, int, int, long long int
 
 // graph
 
-int jgrapht_ii_graph_create(int, int, int, int, void **OUTPUT);
+int jgrapht_ii_graph_create(int, int, int, int, int, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void **OUTPUT);
 
-int jgrapht_ll_graph_create(int, int, int, int, void **OUTPUT);
-
-int jgrapht_ll_graph_create_with_suppliers(int, int, int, int, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void **OUTPUT);
+int jgrapht_ll_graph_create(int, int, int, int, int, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void **OUTPUT);
 
 int jgrapht_ii_graph_sparse_create(int, int, int, void *, void** OUTPUT);
 
@@ -676,6 +688,29 @@ int jgrapht_xx_graph_test_is_kuratowski_subdivision(void *, int* OUTPUT);
 int jgrapht_xx_graph_test_is_k33_subdivision(void *, int* OUTPUT);
 
 int jgrapht_xx_graph_test_is_k5_subdivision(void *, int* OUTPUT);
+
+// graph attributes
+
+int jgrapht_xx_graph_attrs_get_long(void *, char*, long long* OUTPUT);
+int jgrapht_ii_graph_attrs_vertex_get_long(void *, int, char*, long long* OUTPUT);
+int jgrapht_ll_graph_attrs_vertex_get_long(void *, long long int, char*, long long* OUTPUT);
+int jgrapht_ii_graph_attrs_edge_get_long(void *, int, char*, long long* OUTPUT);
+int jgrapht_ll_graph_attrs_edge_get_long(void *, long long int, char*, long long* OUTPUT);
+int jgrapht_xx_graph_attrs_put_long(void *, char*, long long int);
+int jgrapht_ii_graph_attrs_vertex_put_long(void *, int, char*, long long int);
+int jgrapht_ll_graph_attrs_vertex_put_long(void *, long long int, char*, long long int);
+int jgrapht_ii_graph_attrs_edge_put_long(void *, int, char*, long long int);
+int jgrapht_ll_graph_attrs_edge_put_long(void *, long long int, char*, long long int);
+int jgrapht_ii_graph_attrs_remove(void *, char*);
+int jgrapht_ii_graph_attrs_vertex_remove(void *, int, char*);
+int jgrapht_ll_graph_attrs_vertex_remove(void *, long long int, char*);
+int jgrapht_ii_graph_attrs_edge_remove(void *, int, char*);
+int jgrapht_ll_graph_attrs_edge_remove(void *, long long int, char*);
+int jgrapht_xx_graph_attrs_contains(void *, char*, int* OUTPUT);
+int jgrapht_ii_graph_attrs_vertex_contains(void *, int, char*, int* OUTPUT);
+int jgrapht_ll_graph_attrs_vertex_contains(void *, long long int, char*, int* OUTPUT);
+int jgrapht_ii_graph_attrs_edge_contains(void *, int, char*, int* OUTPUT);
+int jgrapht_ll_graph_attrs_edge_contains(void *, long long int, char*, int* OUTPUT);
 
 // handles
 

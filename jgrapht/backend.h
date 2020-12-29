@@ -312,11 +312,9 @@ int jgrapht_xx_generate_linearized_chord_diagram(void *, int, int, long long int
 
 // graph
 
-int jgrapht_ii_graph_create(int, int, int, int, void**);
+int jgrapht_ii_graph_create(int, int, int, int, int, void*, void*, void**);
 
-int jgrapht_ll_graph_create(int, int, int, int, void**);
-
-int jgrapht_ll_graph_create_with_suppliers(int, int, int, int, void*, void*, void **OUTPUT);
+int jgrapht_ll_graph_create(int, int, int, int, int, void*, void*, void**);
 
 int jgrapht_ii_graph_sparse_create(int, int, int, void *, void**);
 
@@ -525,6 +523,29 @@ int jgrapht_xx_graph_test_is_kuratowski_subdivision(void *, int*);
 int jgrapht_xx_graph_test_is_k33_subdivision(void *, int*);
 
 int jgrapht_xx_graph_test_is_k5_subdivision(void *, int*);
+
+// graph attributes
+
+int jgrapht_xx_graph_attrs_get_long(void *, char*, long long*);
+int jgrapht_ii_graph_attrs_vertex_get_long(void *, int, char*, long long*);
+int jgrapht_ll_graph_attrs_vertex_get_long(void *, long long int, char*, long long*);
+int jgrapht_ii_graph_attrs_edge_get_long(void *, int, char*, long long*);
+int jgrapht_ll_graph_attrs_edge_get_long(void *, long long int, char*, long long*);
+int jgrapht_xx_graph_attrs_put_long(void *, char*, long long int);
+int jgrapht_ii_graph_attrs_vertex_put_long(void *, int, char*, long long int);
+int jgrapht_ll_graph_attrs_vertex_put_long(void *, long long int, char*, long long int);
+int jgrapht_ii_graph_attrs_edge_put_long(void *, int, char*, long long int);
+int jgrapht_ll_graph_attrs_edge_put_long(void *, long long int, char*, long long int);
+int jgrapht_ii_graph_attrs_remove(void *, char*);
+int jgrapht_ii_graph_attrs_vertex_remove(void *, int, char*);
+int jgrapht_ll_graph_attrs_vertex_remove(void *, long long int, char*);
+int jgrapht_ii_graph_attrs_edge_remove(void *, int, char*);
+int jgrapht_ll_graph_attrs_edge_remove(void *, long long int, char*);
+int jgrapht_xx_graph_attrs_contains(void *, char*, int*);
+int jgrapht_ii_graph_attrs_vertex_contains(void *, int, char*, int*);
+int jgrapht_ll_graph_attrs_vertex_contains(void *, long long int, char*, int*);
+int jgrapht_ii_graph_attrs_edge_contains(void *, int, char*, int*);
+int jgrapht_ll_graph_attrs_edge_contains(void *, long long int, char*, int*);
 
 // handles
 

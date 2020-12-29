@@ -753,19 +753,14 @@ int jgrapht_xx_generate_linearized_chord_diagram(void *g, int n, int m, long lon
 
 // graph
 
-int jgrapht_ii_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, void** res) { 
+int jgrapht_ii_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, int with_attributes, void* vertex_supplier, void* edge_supplier, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, res);
+    return jgrapht_capi_ii_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, with_attributes, vertex_supplier, edge_supplier, res);
 }
 
-int jgrapht_ll_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, void** res) { 
+int jgrapht_ll_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted,  int with_attributes, void* vertex_supplier, void* edge_supplier, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, res);
-}
-
-int jgrapht_ll_graph_create_with_suppliers(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, void *vertex_supplier, void *edge_supplier, void** res) { 
-    LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_graph_create_with_suppliers(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, vertex_supplier, edge_supplier, res);
+    return jgrapht_capi_ll_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, with_attributes, vertex_supplier, edge_supplier, res);
 }
 
 int jgrapht_ii_graph_sparse_create(int directed, int weighted, int num_vertices, void *edges, void**res) { 
@@ -1280,6 +1275,108 @@ int jgrapht_xx_graph_test_is_k33_subdivision(void *g, int* res) {
 int jgrapht_xx_graph_test_is_k5_subdivision(void *g, int* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_xx_graph_test_is_k5_subdivision(thread, g, res);
+}
+
+// graph attributes
+
+int jgrapht_xx_graph_attrs_get_long(void *g, char* key, long long* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_graph_attrs_get_long(thread, g, key, res);
+}
+
+int jgrapht_ii_graph_attrs_vertex_get_long(void *g, int vertex, char* key, long long* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_vertex_get_long(thread, g, vertex, key, res);
+}
+
+int jgrapht_ll_graph_attrs_vertex_get_long(void *g, long long int vertex, char* key, long long* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_vertex_get_long(thread, g, vertex, key, res);
+}
+
+int jgrapht_ii_graph_attrs_edge_get_long(void *g, int edge, char* key, long long* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_edge_get_long(thread, g, edge, key, res);
+}
+
+int jgrapht_ll_graph_attrs_edge_get_long(void *g, long long int edge, char* key, long long* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_edge_get_long(thread, g, edge, key, res);
+}
+
+int jgrapht_xx_graph_attrs_put_long(void *g, char* key, long long int value) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_graph_attrs_put_long(thread, g, key, value);
+}
+
+int jgrapht_ii_graph_attrs_vertex_put_long(void *g, int vertex, char* key, long long int value) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_vertex_put_long(thread, g, vertex, key, value);
+}
+
+int jgrapht_ll_graph_attrs_vertex_put_long(void *g, long long int vertex, char* key, long long int value) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_vertex_put_long(thread, g, vertex, key, value);
+}
+
+int jgrapht_ii_graph_attrs_edge_put_long(void *g, int edge, char* key, long long int value) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_edge_put_long(thread, g, edge, key, value);
+}
+
+int jgrapht_ll_graph_attrs_edge_put_long(void *g, long long int edge, char* key, long long int value) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_edge_put_long(thread, g, edge, key, value);
+}
+
+int jgrapht_ii_graph_attrs_remove(void *g, char* key)  { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_remove(thread, g, key);
+}
+
+int jgrapht_ii_graph_attrs_vertex_remove(void *g, int vertex, char* key) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_vertex_remove(thread, g, vertex, key);
+}
+
+int jgrapht_ll_graph_attrs_vertex_remove(void *g, long long int vertex, char* key) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_vertex_remove(thread, g, vertex, key);
+}
+
+int jgrapht_ii_graph_attrs_edge_remove(void *g, int edge, char* key) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_edge_remove(thread, g, edge, key);
+}
+
+int jgrapht_ll_graph_attrs_edge_remove(void *g, long long int edge, char* key) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_edge_remove(thread, g, edge, key);
+}
+
+int jgrapht_xx_graph_attrs_contains(void *g, char* key, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_graph_attrs_contains(thread, g, key, res);
+}
+
+int jgrapht_ii_graph_attrs_vertex_contains(void *g, int vertex, char* key, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_vertex_contains(thread, g, vertex, key, res);
+}
+
+int jgrapht_ll_graph_attrs_vertex_contains(void *g, long long int vertex, char* key, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_vertex_contains(thread, g, vertex, key, res);
+}
+
+int jgrapht_ii_graph_attrs_edge_contains(void *g, int edge, char* key, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_attrs_edge_contains(thread, g, edge, key, res);
+}
+
+int jgrapht_ll_graph_attrs_edge_contains(void *g, long long int edge, char* key, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_graph_attrs_edge_contains(thread, g, edge, key, res);
 }
 
 // handles
