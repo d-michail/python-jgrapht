@@ -230,7 +230,7 @@ def _create_int_graph(
     :rtype: :class:`~jgrapht.types.Graph`    
     """
     handle = backend.jgrapht_ii_graph_create(
-        directed, allowing_self_loops, allowing_multiple_edges, weighted
+        directed, allowing_self_loops, allowing_multiple_edges, weighted, False, 0, 0
     )
     return _JGraphTIntegerGraph(handle)
 

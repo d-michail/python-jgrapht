@@ -311,8 +311,8 @@ def _create_refcount_graph(
     vf_ptr, vf = _create_wrapped_long_supplier_callback(actual_vertex_supplier)
     ef_ptr, ef = _create_wrapped_long_supplier_callback(actual_edge_supplier)
 
-    handle = backend.jgrapht_ll_graph_create_with_suppliers(
-        directed, allowing_self_loops, allowing_multiple_edges, weighted, vf_ptr, ef_ptr
+    handle = backend.jgrapht_ll_graph_create(
+        directed, allowing_self_loops, allowing_multiple_edges, weighted, False, vf_ptr, ef_ptr
     )
     return _RefCountGraph(
         handle, vertex_supplier_fptr_and_cb=(vf_ptr, vf), edge_supplier_fptr_and_cb=(ef_ptr, ef)

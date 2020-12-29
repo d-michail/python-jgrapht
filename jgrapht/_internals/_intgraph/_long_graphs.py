@@ -229,7 +229,7 @@ def _create_long_graph(
     :rtype: :class:`~jgrapht.types.Graph`    
     """
     handle = backend.jgrapht_ll_graph_create(
-        directed, allowing_self_loops, allowing_multiple_edges, weighted
+        directed, allowing_self_loops, allowing_multiple_edges, weighted, False, 0, 0
     )
     return _JGraphTLongGraph(handle)
 
