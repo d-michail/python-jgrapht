@@ -34,7 +34,7 @@ class _RefCountGraph(_HandleWrapper, Graph):
     right way to initialize this object.
     """
 
-    def __init__(self, handle, vertex_supplier_cb, edge_supplier_cb, **kwargs):
+    def __init__(self, handle, vertex_supplier_fptr_and_cb, edge_supplier_fptr_and_cb, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
         # read attributes from backend
@@ -59,8 +59,8 @@ class _RefCountGraph(_HandleWrapper, Graph):
         )
         self._vertex_set = None
         self._edge_set = None
-        self._vertex_supplier_cb = vertex_supplier_cb
-        self._edge_supplier_cb = edge_supplier_cb
+        self._vertex_supplier_fptr_and_cb = vertex_supplier_fptr_and_cb
+        self._edge_supplier_fptr_and_cb = edge_supplier_fptr_and_cb
 
     @property
     def type(self):
@@ -315,7 +315,7 @@ def _create_refcount_graph(
         directed, allowing_self_loops, allowing_multiple_edges, weighted, vf_ptr, ef_ptr
     )
     return _RefCountGraph(
-        handle, vertex_supplier_cb=vf, edge_supplier_cb=ef
+        handle, vertex_supplier_fptr_and_cb=(vf_ptr, vf), edge_supplier_fptr_and_cb=(ef_ptr, ef)
     )
 
 
@@ -361,7 +361,7 @@ def _create_refcount_dag(
         ef_ptr
     )
     return _RefCountDirectedAcyclicGraph(
-        handle, vertex_supplier_cb=vf, edge_supplier_cb=ef
+        handle, vertex_supplier_fptr_and_cb=(vf_ptr, vf), edge_supplier_fptr_and_cb=(ef_ptr, ef)
     )
 
 

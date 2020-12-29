@@ -132,6 +132,8 @@ int jgrapht_ii_cut_gomoryhu_tree(void *, void**);
 
 int jgrapht_ll_cut_gomoryhu_tree(void *, void**);
 
+int jgrapht_ll_cut_gomoryhu_tree_with_suppliers(void *, void*, void*, void** OUTPUT);
+
 int jgrapht_xx_cut_oddmincutset_exec_padberg_rao(void *, void *, int, double*, void**);
 
 // cycles

@@ -27,7 +27,9 @@ class _RefCountGraphCut(Cut):
         super().__init__(**kwargs)
         self._graph = graph
         self._capacity = capacity
-        self._source_partition = set(_map_ids_to_objs(_JGraphTLongSet(handle=source_partition_handle)))
+        self._source_partition = set(
+            _map_ids_to_objs(_JGraphTLongSet(handle=source_partition_handle))
+        )
         self._target_partition = None
         self._edges = None
 
@@ -124,25 +126,31 @@ class _RefCountGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
         self._graph = graph
 
     def as_graph(self):
-        tree_handle = _backend.jgrapht_ll_cut_gomoryhu_tree(self.handle)
-        tree_as_graph = _RefCountGraph(tree_handle,
-                                       vertex_supplier=self._graph.vertex_supplier,
-                                       edge_supplier=self._graph.edge_supplier)
+        vertex_supplier_fptr_and_cb = self._graph._vertex_supplier_fptr_and_cb
+        edge_supplier_fptr_and_cb = self._graph._edge_supplier_fptr_and_cb
+        tree_handle = _backend.jgrapht_ll_cut_gomoryhu_tree_with_suppliers(
+            self.handle, vertex_supplier_fptr_and_cb[0], vertex_supplier_fptr_and_cb[0]
+        )
+        tree_as_graph = _RefCountGraph(
+            tree_handle,
+            vertex_supplier_fptr_and_cb=vertex_supplier_fptr_and_cb,
+            edge_supplier_fptr_and_cb=edge_supplier_fptr_and_cb,
+        )
 
         # The resulting tree has the same vertices as the original graph. Since the
         # construction happens in the backend, we need to explicitly increment the
-        # reference counts of all vertices and edges.
+        # reference counts of all vertices. Edges are new, so the edge supplier will 
+        # take care of incrementing the reference counts.
         for v in tree_as_graph.vertices:
             _inc_ref(v)
-        for e in tree_as_graph.edges:
-            _inc_ref(e)
 
         return tree_as_graph
 
     def min_cut(self):
-        cut_value, cut_source_partition_handle = _backend.jgrapht_xx_cut_gomoryhu_min_cut(
-            self.handle
-        )
+        (
+            cut_value,
+            cut_source_partition_handle,
+        ) = _backend.jgrapht_xx_cut_gomoryhu_min_cut(self.handle)
         return _RefCountGraphCut(self._graph, cut_value, cut_source_partition_handle)
 
     def min_st_cut(self, s, t):
@@ -165,9 +173,11 @@ class __RefCountGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
 
     def as_graph(self):
         tree_handle = _backend.jgrapht_ll_equivalentflowtree_tree(self.handle)
-        tree_as_graph = _RefCountGraph(tree_handle,
-                                       vertex_supplier=self._graph.vertex_supplier,
-                                       edge_supplier=self._graph.edge_supplier)
+        tree_as_graph = _RefCountGraph(
+            tree_handle,
+            vertex_supplier=self._graph.vertex_supplier,
+            edge_supplier=self._graph.edge_supplier,
+        )
 
         # The resulting tree has the same vertices as the original graph. Since the
         # construction happens in the backend, we need to explicitly increment the
@@ -180,7 +190,9 @@ class __RefCountGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         return tree_as_graph
 
     def max_st_flow_value(self, s, t):
-        return _backend.jgrapht_ii_equivalentflowtree_max_st_flow(self.handle, id(s), id(t))
+        return _backend.jgrapht_ii_equivalentflowtree_max_st_flow(
+            self.handle, id(s), id(t)
+        )
 
     def __repr__(self):
         return "__RefCountGraphEquivalentFlowTree(%r)" % self._handle

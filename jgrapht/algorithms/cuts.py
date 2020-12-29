@@ -15,8 +15,24 @@ from .._internals._mapgraph._flows import (
     _AnyHashableGraphCut,
     _AnyHashableGraphGomoryHuTree,
 )
+from .._internals._refgraph._graphs import _is_refcount_graph
+from .._internals._refgraph._flows import (
+    _RefCountGraphCut,
+    _RefCountGraphGomoryHuTree,
+)
 
 from .flow import push_relabel
+
+
+def _wrap_graph_cut(graph, weight, handle): 
+    if _is_anyhashable_graph(graph):
+        return _AnyHashableGraphCut(graph, weight, handle)
+    elif _is_refcount_graph(graph):
+        return _RefCountGraphCut(graph, weight, handle)
+    elif _is_long_graph(graph):
+        return _JGraphTCut(graph, weight, handle)
+    else:
+        return _JGraphTCut(graph, weight, handle)
 
 
 def mincut_stoer_wagner(graph):
@@ -32,11 +48,7 @@ def mincut_stoer_wagner(graph):
         cut_weight,
         cut_source_partition_handle,
     ) = _backend.jgrapht_xx_cut_mincut_exec_stoer_wagner(graph.handle)
-
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphCut(graph, cut_weight, cut_source_partition_handle)
-    else:
-        return _JGraphTCut(graph, cut_weight, cut_source_partition_handle)
+    return _wrap_graph_cut(graph, cut_weight, cut_source_partition_handle)
 
 
 def min_st_cut(graph, source, sink):
@@ -82,6 +94,8 @@ def gomory_hu_gusfield(graph):
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphGomoryHuTree(handle, graph)
+    elif _is_refcount_graph(graph):
+        return _RefCountGraphGomoryHuTree(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTLongGomoryHuTree(handle, graph)
     else:
@@ -105,11 +119,14 @@ def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
     :param use_tree_compression: whether to use the tree compression technique
     :returns: a cut as an instance of :py:class:`.Cut`.
     """
-    
     if _is_anyhashable_graph(graph):
         odd_set = _JGraphTIntegerMutableSet()
         for x in odd_vertices:
             odd_set.add(_vertex_anyhashableg_to_g(graph, x))
+    elif _is_refcount_graph(graph):
+        odd_set = _JGraphTLongMutableSet()
+        for x in odd_vertices:
+            odd_set.add(id(x))
     elif _is_long_graph(graph):
         odd_set = _JGraphTLongMutableSet()
         for x in odd_vertices:
@@ -126,7 +143,4 @@ def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
         graph.handle, odd_set.handle, use_tree_compression
     )
 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphCut(graph, cut_weight, cut_source_partition_handle)
-    else:
-        return _JGraphTCut(graph, cut_weight, cut_source_partition_handle)
+    return _wrap_graph_cut(graph, cut_weight, cut_source_partition_handle)

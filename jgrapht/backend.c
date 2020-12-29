@@ -307,6 +307,11 @@ int jgrapht_ll_cut_gomoryhu_tree(void *gh, void** tree_res) {
     return jgrapht_capi_ll_cut_gomoryhu_tree(thread, gh, tree_res);
 }
 
+int jgrapht_ll_cut_gomoryhu_tree_with_suppliers(void *gh, void* vertex_supplier, void *edge_supplier, void** tree_res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_cut_gomoryhu_tree_with_suppliers(thread, gh, vertex_supplier, edge_supplier, tree_res);
+}
+
 int jgrapht_xx_cut_oddmincutset_exec_padberg_rao(void *g, void *odd_vertices, int use_tree_compression, double* value_res, void** source_partition_res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_xx_cut_oddmincutset_exec_padberg_rao(thread, g, odd_vertices, use_tree_compression, value_res, source_partition_res);
