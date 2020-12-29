@@ -9,11 +9,12 @@ from jgrapht._internals._intgraph._attributes import (
 )
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
 from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
+from jgrapht._internals._refgraph._graphs import _is_refcount_graph
 
 
 def _export_to_file(name, graph, filename, *args):
     if name == "dimacs":
-        if _is_long_graph(graph):
+        if _is_long_graph(graph) or _is_refcount_graph(graph):
             alg_method_name = "jgrapht_ll_export_file_" + name
         else:
             alg_method_name = "jgrapht_ii_export_file_" + name
@@ -25,7 +26,7 @@ def _export_to_file(name, graph, filename, *args):
 
 def _export_to_string(name, graph, *args):
     if name == "dimacs":
-        if _is_long_graph(graph):
+        if _is_long_graph(graph) or _is_refcount_graph(graph):
             alg_method_name = "jgrapht_ll_export_string_" + name
         else:
             alg_method_name = "jgrapht_ii_export_string_" + name
@@ -38,7 +39,7 @@ def _export_to_string(name, graph, *args):
     return str(_JGraphTString(handle))
 
 
-def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
+def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None, positive_ids=False):
     """Create a vertex identifier store inside the capi backend.
 
     :param graph: a graph
@@ -59,9 +60,27 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
                 vertex_id_store[k] = str(vid)
         else:
             for k, v in graph._vertex_id_to_hash.items():
+                value = v+1 if positive_ids else v
                 if check_valid_id is not None:
-                    check_valid_id(v)
-                vertex_id_store[k] = str(v)
+                    check_valid_id(value)
+                vertex_id_store[k] = str(value)
+    elif _is_refcount_graph(graph):
+        # refcount graphs
+        vertex_id_store = _JGraphTLongStringMap()
+        if export_vertex_id_cb is not None:
+            for v in graph.vertices:
+                vid = export_vertex_id_cb(v)
+                if check_valid_id is not None:
+                    check_valid_id(vid)
+                vertex_id_store[id(v)] = str(vid)
+        else:
+            next_id = 1 if positive_ids is True else 0
+            for v in graph.vertices:
+                vid = next_id
+                next_id += 1
+                if check_valid_id is not None:
+                    check_valid_id(vid)
+                vertex_id_store[id(v)] = str(vid)
     else:
         if export_vertex_id_cb is not None:
             if _is_long_graph(graph):
@@ -98,8 +117,17 @@ def _vertex_attributes_store(graph, attributes_dict):
                     except KeyError:
                         # ignore
                         pass
+    elif _is_refcount_graph(graph):
+        # refcount graph
+        if attributes_dict is not None:
+            if attribute_store is None:
+                attribute_store = _JGraphTLongAttributeStore()
+
+            for v, attr_dict in attributes_dict.items():
+                for key, value in attr_dict.items():
+                    attribute_store.put(id(v), key, str(value))
     else:
-        # default graph
+        # int graphs
         if attributes_dict is not None:
             if attribute_store is None:
                 if _is_long_graph(graph):
@@ -147,6 +175,15 @@ def _edge_attributes_store(graph, attributes_dict):
                     except KeyError:
                         # just ignore
                         pass
+    elif _is_refcount_graph(graph):
+        # refcount graph
+        if attributes_dict is not None:
+            if attribute_store is None:
+                attribute_store = _JGraphTLongAttributeStore()
+
+            for e, attr_dict in attributes_dict.items():
+                for key, value in attr_dict.items():
+                    attribute_store.put(id(e), key, str(value))
     else:
         # default graph
         if attributes_dict is not None:
@@ -227,7 +264,7 @@ def write_dimacs(
         if id <= 0:
             raise ValueError("Identifiers must be positive")
 
-    vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb)
+    vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb, positive_ids=True)
     custom = [
         format,
         export_edge_weights,
@@ -286,7 +323,7 @@ def generate_dimacs(
         if id <= 0:
             raise ValueError("Identifiers must be positive")
 
-    vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb)
+    vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb, positive_ids=True)
     custom = [
         format,
         export_edge_weights,

@@ -90,14 +90,22 @@ expected2 = r"""<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.ge
 </gexf>"""
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+    ],
+)
 def test_input_gexf(backend, tmpdir):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
     parse_gexf(g, input1, validate_schema=True)
 
@@ -105,14 +113,22 @@ def test_input_gexf(backend, tmpdir):
     assert len(g.edges) == 3
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+    ],
+)
 def test_input_gexf_with_renumbering(backend, tmpdir):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     def import_id(x):
@@ -127,7 +143,10 @@ def test_input_gexf_with_renumbering(backend, tmpdir):
     assert g.contains_vertex(6)
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH],
+)
 def test_export_import(backend, tmpdir):
 
     g = create_graph(
@@ -135,7 +154,7 @@ def test_export_import(backend, tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     for i in range(0, 10):
@@ -181,13 +200,14 @@ def test_export_import(backend, tmpdir):
     )
 
     # read back
-
     g1 = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=True,
-        backend=backend
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type='int'), 
+        edge_supplier=create_edge_supplier(type='int'), 
     )
 
     v_attrs = dict()
@@ -202,6 +222,7 @@ def test_export_import(backend, tmpdir):
     def ea_cb(edge, attribute_name, attribute_value):
         if edge not in e_attrs:
             e_attrs[edge] = {}
+        print('Read edge {}, {}, {}'.format(edge, attribute_name, attribute_value))
         e_attrs[edge][attribute_name] = attribute_value
 
     read_gexf(g1, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
@@ -229,7 +250,7 @@ def test_output_to_string(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
 
     g.add_vertices_from(range(0, 4))
@@ -253,18 +274,18 @@ def test_property_graph_output_to_string():
         any_hashable=True,
     )
 
-    g.add_vertices_from(['v1', 'v2', 'v3'])
-    g.add_edge('v1', 'v2', edge='e12')
-    g.add_edge('v2', 'v3', edge='e23')
+    g.add_vertices_from(["v1", "v2", "v3"])
+    g.add_edge("v1", "v2", edge="e12")
+    g.add_edge("v2", "v3", edge="e23")
 
-    g.vertex_attrs['v1']['label'] = "0"
-    g.vertex_attrs['v1']['name'] = "v1"
-    g.vertex_attrs['v2']['label'] = "1"
-    g.vertex_attrs['v2']['name'] = "v2"
-    g.vertex_attrs['v3']['label'] = "2"
-    g.vertex_attrs['v3']['name'] = "v3"
+    g.vertex_attrs["v1"]["label"] = "0"
+    g.vertex_attrs["v1"]["name"] = "v1"
+    g.vertex_attrs["v2"]["label"] = "1"
+    g.vertex_attrs["v2"]["name"] = "v2"
+    g.vertex_attrs["v3"]["label"] = "2"
+    g.vertex_attrs["v3"]["name"] = "v3"
 
-    out = generate_gexf(g, attrs=[('name', 'node', None, None)])
+    out = generate_gexf(g, attrs=[("name", "node", None, None)])
 
     assert out.splitlines() == expected2.splitlines()
 
@@ -277,12 +298,12 @@ def test_read_gexf_property_graph_from_string():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     def import_id_cb(id):
-        return 'v{}'.format(id)
+        return "v{}".format(id)
 
     parse_gexf(g, expected2, import_id_cb=import_id_cb)
 
@@ -291,11 +312,11 @@ def test_read_gexf_property_graph_from_string():
     print(g.vertex_attrs)
     print(g.edge_attrs)
 
-    assert g.vertices == {'vv1', 'vv2', 'vv3'}
-    assert g.edges == {'e0', 'e1'}
-    assert g.edge_tuple('e0') == ('vv1', 'vv2', 1.0)
-    assert g.vertex_attrs['vv1']['label'] == '0'
-    assert g.edge_attrs['e0']['id'] == 'e12'
+    assert g.vertices == {"vv1", "vv2", "vv3"}
+    assert g.edges == {"e0", "e1"}
+    assert g.edge_tuple("e0") == ("vv1", "vv2", 1.0)
+    assert g.vertex_attrs["vv1"]["label"] == "0"
+    assert g.edge_attrs["e0"]["id"] == "e12"
 
 
 def test_read_gexf_property_graph_from_string1():
@@ -306,8 +327,8 @@ def test_read_gexf_property_graph_from_string1():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     parse_gexf(g, expected2)
@@ -317,11 +338,11 @@ def test_read_gexf_property_graph_from_string1():
     print(g.vertex_attrs)
     print(g.edge_attrs)
 
-    assert g.vertices == {'v0', 'v1', 'v2'}
-    assert g.edges == {'e0', 'e1'}
-    assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
-    assert g.vertex_attrs['v0']['label'] == '0'
-    assert g.edge_attrs['e0']['id'] == 'e12'
+    assert g.vertices == {"v0", "v1", "v2"}
+    assert g.edges == {"e0", "e1"}
+    assert g.edge_tuple("e0") == ("v0", "v1", 1.0)
+    assert g.vertex_attrs["v0"]["label"] == "0"
+    assert g.edge_attrs["e0"]["id"] == "e12"
 
 
 def test_read_gexf_property_graph_from_file(tmpdir):
@@ -338,12 +359,12 @@ def test_read_gexf_property_graph_from_file(tmpdir):
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     def import_id_cb(id):
-        return 'v{}'.format(id)
+        return "v{}".format(id)
 
     read_gexf(g, tmpfilename, import_id_cb=import_id_cb)
 
@@ -352,9 +373,8 @@ def test_read_gexf_property_graph_from_file(tmpdir):
     print(g.vertex_attrs)
     print(g.edge_attrs)
 
-    assert g.vertices == {'vv1', 'vv2', 'vv3'}
-    assert g.edges == {'e0', 'e1'}
-    assert g.edge_tuple('e0') == ('vv1', 'vv2', 1.0)
-    assert g.vertex_attrs['vv1']['label'] == '0'
-    assert g.edge_attrs['e0']['id'] == 'e12'
-    
+    assert g.vertices == {"vv1", "vv2", "vv3"}
+    assert g.edges == {"e0", "e1"}
+    assert g.edge_tuple("e0") == ("vv1", "vv2", 1.0)
+    assert g.vertex_attrs["vv1"]["label"] == "0"
+    assert g.edge_attrs["e0"]["id"] == "e12"

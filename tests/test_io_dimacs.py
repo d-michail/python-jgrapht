@@ -13,7 +13,7 @@ def build_graph(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     for i in range(0, 10):
@@ -28,42 +28,6 @@ def build_graph(backend):
     g.add_edge(0, 7)
     g.add_edge(0, 8)
     g.add_edge(0, 9)
-
-    g.add_edge(1, 2)
-    g.add_edge(2, 3)
-    g.add_edge(3, 4)
-    g.add_edge(4, 5)
-    g.add_edge(5, 6)
-    g.add_edge(6, 7)
-    g.add_edge(7, 8)
-    g.add_edge(8, 9)
-    g.add_edge(9, 1)
-
-    return g
-
-
-def build_property_graph():
-    g = create_graph(
-        directed=False,
-        allowing_self_loops=False,
-        allowing_multiple_edges=False,
-        weighted=True,
-        any_hashable=True,
-        edge_supplier=create_edge_supplier(type='int')
-    )
-
-    for i in range(1, 11):
-        g.add_vertex(i)
-
-    g.add_edge(10, 1)
-    g.add_edge(10, 2)
-    g.add_edge(10, 3)
-    g.add_edge(10, 4)
-    g.add_edge(10, 5)
-    g.add_edge(10, 6)
-    g.add_edge(10, 7)
-    g.add_edge(10, 8)
-    g.add_edge(10, 9)
 
     g.add_edge(1, 2)
     g.add_edge(2, 3)
@@ -151,31 +115,6 @@ e 10 2
 """
 
 
-dimacs_sp_expected2 = """c
-c SOURCE: Generated using the JGraphT library
-c
-p sp 10 18
-a 10 1
-a 10 2
-a 10 3
-a 10 4
-a 10 5
-a 10 6
-a 10 7
-a 10 8
-a 10 9
-a 1 2
-a 2 3
-a 3 4
-a 4 5
-a 5 6
-a 6 7
-a 7 8
-a 8 9
-a 9 1
-"""
-
-
 dimacs_sp_expected100 = """c
 c SOURCE: Generated using the JGraphT library
 c
@@ -200,7 +139,16 @@ a 108 109
 a 109 101
 """
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_dimacs(backend, tmpdir):
     g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
@@ -214,14 +162,22 @@ def test_dimacs(backend, tmpdir):
     assert contents == dimacs_sp_expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_dimacs_with_custom_ids(backend, tmpdir):
     g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
 
     def custom_id(id):
-        return id+100
+        return id + 100
 
     write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id)
 
@@ -232,26 +188,46 @@ def test_dimacs_with_custom_ids(backend, tmpdir):
     assert contents == dimacs_sp_expected100
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_dimacs_with_custom_ids_bad_function(backend, tmpdir):
     g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
 
     def custom_id(id):
-        return str(id+100)
+        return str(id + 100)
 
     with pytest.raises(TypeError):
-        write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id)
+        write_dimacs(
+            g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id
+        )
 
     def custom_id2(id):
         return -id
 
     with pytest.raises(ValueError):
-        write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id2)
+        write_dimacs(
+            g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id2
+        )
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_dimacs_coloring(backend, tmpdir):
     g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
@@ -265,7 +241,15 @@ def test_dimacs_coloring(backend, tmpdir):
     assert contents == dimacs_coloring_expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_dimacs_maxclique(backend, tmpdir):
     g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
@@ -279,7 +263,15 @@ def test_dimacs_maxclique(backend, tmpdir):
     assert contents == dimacs_maxclique_expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_dimacs_output_to_string(backend):
     g = build_graph(backend)
 
@@ -295,7 +287,7 @@ def test_read_dimacs_from_string(backend, tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     def identity(x):
@@ -323,7 +315,7 @@ def test_read_dimacs_from_file(backend, tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     def identity(x):
@@ -351,14 +343,14 @@ def test_read_dimacs_property_graph_from_file(tmpdir):
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     read_dimacs(g, tmpfilename)
 
-    assert g.vertices == {'v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'}
-    assert g.edge_tuple('e6') == ('v0', 'v7', 1.0)
+    assert g.vertices == {"v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"}
+    assert g.edge_tuple("e6") == ("v0", "v7", 1.0)
     assert g.vertex_attrs == {}
     assert g.edge_attrs == {}
 
@@ -371,14 +363,14 @@ def test_read_dimacs_property_graph_from_string():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     parse_dimacs(g, dimacs_sp_expected)
 
-    assert g.vertices == {'v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'}
-    assert g.edge_tuple('e6') == ('v0', 'v7', 1.0)
+    assert g.vertices == {"v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"}
+    assert g.edge_tuple("e6") == ("v0", "v7", 1.0)
     assert g.vertex_attrs == {}
     assert g.edge_attrs == {}
 
@@ -391,23 +383,32 @@ def test_read_dimacs_property_graph_from_string():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     def import_id_cb(id):
-        return 'v{}'.format(id+1)
+        return "v{}".format(id + 1)
 
     parse_dimacs(g, dimacs_sp_expected, import_id_cb=import_id_cb)
 
-    assert g.vertices == {'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9', 'v10'}
-    assert g.edge_tuple('e6') == ('v1', 'v8', 1.0)
+    assert g.vertices == {"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"}
+    assert g.edge_tuple("e6") == ("v1", "v8", 1.0)
     assert g.vertex_attrs == {}
     assert g.edge_attrs == {}
 
 
-def test_anyhashableg_dimacs(tmpdir):
-    g = build_property_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_dimacs(backend, tmpdir):
+    g = build_graph(backend=backend)
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
     write_dimacs(g, tmpfilename, format="shortestpath")
@@ -416,17 +417,26 @@ def test_anyhashableg_dimacs(tmpdir):
         contents = f.read()
         print(contents)
 
-    assert contents == dimacs_sp_expected2
+    assert contents == dimacs_sp_expected
 
 
-def test_anyhashableg_dimacs_increase_to_positive_id(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_dimacs_increase_to_positive_id(backend, tmpdir):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
-        edge_supplier=create_edge_supplier(type='int')
+        backend=backend,
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     for i in range(0, 10):
@@ -453,11 +463,13 @@ def test_anyhashableg_dimacs_increase_to_positive_id(tmpdir):
     g.add_edge(9, 1)
 
     def increase_vid(id):
-        return id+1
+        return id + 1
 
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
-    write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=increase_vid)
+    write_dimacs(
+        g, tmpfilename, format="shortestpath", export_vertex_id_cb=increase_vid
+    )
 
     with open(tmpfilename, "r") as f:
         contents = f.read()
@@ -466,19 +478,27 @@ def test_anyhashableg_dimacs_increase_to_positive_id(tmpdir):
     assert contents == dimacs_sp_expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_dimacs_output_to_string(backend):
     g = build_graph(backend)
 
     def custom_id(id):
-        return id+1
+        return id + 1
 
     out = generate_dimacs(g, export_vertex_id_cb=custom_id)
 
     assert out.splitlines() == dimacs_maxclique_expected.splitlines()
 
     def custom_id_bad1(id):
-        return str(id+1)
+        return str(id + 1)
 
     with pytest.raises(TypeError):
         generate_dimacs(g, export_vertex_id_cb=custom_id_bad1)
@@ -488,4 +508,3 @@ def test_dimacs_output_to_string(backend):
 
     with pytest.raises(ValueError):
         generate_dimacs(g, export_vertex_id_cb=custom_id_bad2)
-

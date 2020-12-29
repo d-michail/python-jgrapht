@@ -14,7 +14,7 @@ def test_input_csv_from_string_create_new_vertices(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     input_string = """1,2
@@ -37,7 +37,7 @@ def test_input_csv_from_string_preserve_ids(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     input_string = """1,2
@@ -63,7 +63,7 @@ def test_export_import(backend, tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
 
     for i in range(0, 10):
@@ -103,7 +103,7 @@ def test_export_import(backend, tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
 
     read_csv(g1, tmpfilename)
@@ -114,22 +114,30 @@ def test_export_import(backend, tmpdir):
     assert len(g1.edges) == 18
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_output_to_string(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
 
     g.add_vertices_from(range(0, 4))
 
-    g.add_edge(0, 1)
-    g.add_edge(0, 2)
-    g.add_edge(0, 3)
-    g.add_edge(2, 3)
+    g.add_edge(0, 1, edge=0)
+    g.add_edge(0, 2, edge=1)
+    g.add_edge(0, 3, edge=2)
+    g.add_edge(2, 3, edge=3)
 
     out = generate_csv(g)
 
@@ -144,8 +152,8 @@ def test_read_csv_property_graph_from_string():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     input_string = """1,2
@@ -155,14 +163,14 @@ def test_read_csv_property_graph_from_string():
 """
 
     def import_id_cb(id):
-        return 'v{}'.format(int(id)+1)
+        return "v{}".format(int(id) + 1)
 
     parse_csv(g, input_string, import_id_cb=import_id_cb)
 
-    print (g.vertices)
+    print(g.vertices)
 
-    assert g.vertices == {'v2', 'v3', 'v4', 'v5'}
-    assert g.edge_tuple('e2') == ('v4', 'v5', 1.0)
+    assert g.vertices == {"v2", "v3", "v4", "v5"}
+    assert g.edge_tuple("e2") == ("v4", "v5", 1.0)
     assert g.vertex_attrs == {}
     assert g.edge_attrs == {}
 
@@ -175,8 +183,8 @@ def test_read_csv_property_graph_from_string1():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     input_string = """1,2
@@ -187,10 +195,10 @@ def test_read_csv_property_graph_from_string1():
 
     parse_csv(g, input_string)
 
-    print (g.vertices)
+    print(g.vertices)
 
-    assert g.vertices == {'v0', 'v1', 'v2', 'v3'}
-    assert g.edge_tuple('e2') == ('v2', 'v3', 1.0)
+    assert g.vertices == {"v0", "v1", "v2", "v3"}
+    assert g.edge_tuple("e2") == ("v2", "v3", 1.0)
     assert g.vertex_attrs == {}
     assert g.edge_attrs == {}
 
@@ -214,18 +222,18 @@ def test_read_csv_property_graph_from_file(tmpdir):
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     def import_id_cb(id):
-        return 'v{}'.format(int(id)+1)
+        return "v{}".format(int(id) + 1)
 
     read_csv(g, tmpfilename, import_id_cb=import_id_cb)
 
-    print (g.vertices)
+    print(g.vertices)
 
-    assert g.vertices == {'v2', 'v3', 'v4', 'v5'}
-    assert g.edge_tuple('e2') == ('v4', 'v5', 1.0)
+    assert g.vertices == {"v2", "v3", "v4", "v5"}
+    assert g.edge_tuple("e2") == ("v4", "v5", 1.0)
     assert g.vertex_attrs == {}
     assert g.edge_attrs == {}

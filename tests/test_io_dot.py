@@ -29,7 +29,15 @@ def build_graph(backend):
     return g
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_output_dot(backend, tmpdir):
 
     g = build_graph(backend)
@@ -66,7 +74,14 @@ def test_output_dot(backend, tmpdir):
     assert len(g1.edges) == 3
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+    ],
+)
 def test_output_to_string(backend):
     g = create_graph(
         directed=True,
@@ -78,10 +93,10 @@ def test_output_to_string(backend):
 
     g.add_vertices_from(range(0, 4))
 
-    g.add_edge(0, 1)
-    g.add_edge(0, 2)
-    g.add_edge(0, 3)
-    g.add_edge(2, 3)
+    g.add_edge(0, 1, edge=0)
+    g.add_edge(0, 2, edge=1)
+    g.add_edge(0, 3, edge=2)
+    g.add_edge(2, 3, edge=3)
 
     out = generate_dot(g)
 
@@ -97,7 +112,7 @@ def test_property_graph_output_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.ANY_HASHABLE_GRAPH
     )
 
     g.add_vertex('v1')
@@ -127,7 +142,7 @@ def test_read_dot_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.ANY_HASHABLE_GRAPH,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -158,7 +173,7 @@ def test_read_dot_property_graph_from_string1():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.ANY_HASHABLE_GRAPH,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -199,7 +214,7 @@ def test_read_dot_property_graph_from_filename(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.ANY_HASHABLE_GRAPH,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -213,7 +228,15 @@ def test_read_dot_property_graph_from_filename(tmpdir):
     assert g.edge_attrs['e0']['capacity'] == '5.0'
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
 def test_read_dot_graph_from_string(backend):
 
     g = create_graph(
@@ -221,7 +244,8 @@ def test_read_dot_graph_from_string(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend, 
+        edge_supplier=create_edge_supplier(type='int')
     )
 
     expected=r"""digraph G {
