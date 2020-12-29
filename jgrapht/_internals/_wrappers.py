@@ -7,10 +7,8 @@ class _HandleWrapper:
     """A handle wrapper. Keeps a handle to a backend object and cleans up
        on deletion.
     """
-
     def __init__(self, handle, **kwargs):
         self._handle = handle
-        super().__init__()
 
     @property
     def handle(self):
@@ -155,6 +153,23 @@ class _JGraphTEdgeStrTripleIterator(_HandleWrapper, Iterator):
     def __repr__(self):
         return "_JGraphTEdgeStrTripleIterator(%r)" % self._handle
 
+
+class _JGraphTStringIterator(_HandleWrapper, Iterator):
+    """A JGraphT string iterator.
+    """
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def __next__(self):
+        res = backend.jgrapht_it_hasnext(self._handle)
+        if not res:
+            raise StopIteration()
+        handle = backend.jgrapht_it_next_object(self._handle)
+        return _JGraphTString(handle=handle)
+
+    def __repr__(self):
+        return "_JGraphTStringIterator(%r)" % self._handle
 
 
 class _JGraphTObjectIterator(_HandleWrapper, Iterator):

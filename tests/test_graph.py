@@ -689,3 +689,49 @@ def test_graph_type(backend):
 
     repr(gtype_directed)
     str(gtype_directed)
+
+
+
+
+def test_graph_attrs():
+
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+        backend=GraphBackend.REFCOUNT_GRAPH
+    )
+
+    g.add_vertex('0')
+    g.add_vertex('1')
+    g.add_vertex('2')
+    g.add_vertex('3')
+
+
+    assert len(g.vertex_attrs) == 4
+    assert g.vertex_attrs.__contains__('0')
+    assert g.vertex_attrs.__contains__('1')
+    assert g.vertex_attrs.__contains__('2')
+    assert g.vertex_attrs.__contains__('3')
+    assert not g.vertex_attrs.__contains__('4')
+
+    allkeys = set(iter(g.vertex_attrs))
+    assert allkeys == {'0', '1', '2', '3'}
+
+    g.vertex_attrs['0']['label'] = 'vertex0'
+    g.vertex_attrs['0']['type'] = 'vertex'
+    g.vertex_attrs['1']['label'] = 'vertex1'
+    g.vertex_attrs['2']['label'] = 'vertex1'
+
+    assert len(g.vertex_attrs) == 4
+    assert len(g.vertex_attrs['0']) == 2
+
+    assert g.vertex_attrs['0']['label'] == 'vertex0'
+    assert g.vertex_attrs['0']['type'] == 'vertex'
+    assert g.vertex_attrs['1']['label'] == 'vertex1'
+
+
+    print(g)
+
+

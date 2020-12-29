@@ -1,40 +1,136 @@
-from collections.abc import (
-    Set,
-)
+from collections.abc import Set, MutableMapping, Mapping
 
 from ... import backend
 from ...types import (
     Graph,
     GraphType,
     DirectedAcyclicGraph,
+    AttributesGraph,
 )
-from .._wrappers import _HandleWrapper
+from .._wrappers import _HandleWrapper, _JGraphTStringIterator
 from .._callbacks import _create_wrapped_long_supplier_callback
-from ._refcount import _inc_ref, _dec_ref, _id_to_obj, _map_ids_to_objs
+from ._refcount import _inc_ref, _dec_ref, _dec_ref_by_id, _id_to_obj, _map_ids_to_objs
 from .._collections import (
     _JGraphTLongIterator,
     _JGraphTLongSet,
 )
 
 
-class _RefCountGraph(_HandleWrapper, Graph):
+class _VertexAttributesView(MutableMapping):
+    def __init__(self, handle, vertex):
+        self._handle = handle
+        self._vertex = vertex
+        self._vertex_id = id(vertex)
+
+    def __getitem__(self, key):
+        self._assert_vertex()
+        res = backend.jgrapht_ll_graph_attrs_vertex_get_long(
+            self._handle, self._vertex_id, key
+        )
+        if res is None:
+            raise KeyError("Key {} not found".format(key))
+        return _id_to_obj(res)
+
+    def __setitem__(self, key, value):
+        self._assert_vertex()
+        try:
+            old_value_id = backend.jgrapht_ll_graph_attrs_vertex_get_long(
+                self._handle, self._vertex_id, key
+            )
+            _dec_ref_by_id(old_value_id)
+        except ValueError:
+            # key not found, ignore
+            pass
+        value_id = id(value)
+        _inc_ref(value)
+        backend.jgrapht_ll_graph_attrs_vertex_put_long(
+            self._handle, self._vertex_id, key, value_id
+        )
+
+    def __delitem__(self, key):
+        self._assert_vertex()
+        try:
+            old_value_id = backend.jgrapht_ll_graph_attrs_vertex_get_long(
+                self._handle, self._vertex_id, key
+            )
+            _dec_ref_by_id(old_value_id)
+            backend.jgrapht_ll_graph_attrs_vertex_remove(self._handle, self._vertex_id, key)
+        except ValueError:
+            # key not found, ignore
+            pass
+
+    def __len__(self):
+        return backend.jgrapht_ll_graph_attrs_vertex_size(self._handle, self._vertex_id)
+
+    def __iter__(self):
+        it = backend.jgrapht_ll_graph_attrs_vertex_keys_iterator(
+            self._handle, self._vertex_id
+        )
+        return _JGraphTStringIterator(handle=it)
+
+    def __repr__(self):
+        return "_VertexAttributesView(%r)" % repr(self._handle)
+
+    def _assert_vertex(self):
+        if not backend.jgrapht_ll_graph_contains_vertex(self._handle, self._vertex_id):
+            raise ValueError("Vertex {} not in graph".format(self._vertex))
+
+
+class _PerVertexAttributes(Mapping):
+    def __init__(self, handle):
+        self._handle = handle
+
+    def __getitem__(self, vertex):
+        vertex_id = id(vertex)
+        if not backend.jgrapht_ll_graph_contains_vertex(self._handle, vertex_id):
+            raise KeyError("Vertex {} does not exist".format(vertex))
+        return _VertexAttributesView(self._handle, vertex)
+
+    def __len__(self):
+        return backend.jgrapht_ll_graph_vertices_count(self._handle)
+
+    def __iter__(self):
+        it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
+        return _map_ids_to_objs(_JGraphTLongIterator(handle=it_handle))
+
+    def __del__(self):
+        vertex_it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
+        for vertex_id in _JGraphTLongIterator(handle=vertex_it_handle):
+            for key in _VertexAttributesView(self._handle, _id_to_obj(vertex_id)).keys(): 
+                try:
+                    old_value_id = backend.jgrapht_ll_graph_attrs_vertex_get_long(
+                        self._handle, vertex_id, key
+                    )
+                    _dec_ref_by_id(old_value_id)
+                except ValueError:
+                    # key not found, ignore
+                    pass            
+        super().__del__()
+
+    def __repr__(self):
+        return "_PerVertexAttributes(%r)" % repr(self._handle)
+
+
+class _RefCountGraph(_HandleWrapper, AttributesGraph, Graph):
     """A graph which allows the use of any hashable as vertex and edges.
 
     The actual implementation uses a long graph and maps python hashables using their ids.
     The reference count of each hashable is increased by one when it is inserted in the graph
     and decreased by one when it is removed from the graph. This means that all intermediate
     results (e.g. such as a vertex set returns from a vertex cover algorithm) need to be
-    translated into Python collections, to keep a positive reference count even on vertices or
+    translated into Python collections, to keep a positive reference count even when vertices or
     edges removed from the graph.
 
-    Additionally, user vertex and edge suppliers are called directly from the JVM in order 
+    Additionally, user vertex and edge suppliers are called directly from the JVM in order
     to construct new vertices and edges when needed.
 
-    Do not construct this instance directly, look at the corresponding factory method for the 
+    Do not construct this instance directly, look at the corresponding factory method for the
     right way to initialize this object.
     """
 
-    def __init__(self, handle, vertex_supplier_fptr_and_cb, edge_supplier_fptr_and_cb, **kwargs):
+    def __init__(
+        self, handle, vertex_supplier_fptr_and_cb, edge_supplier_fptr_and_cb, **kwargs
+    ):
         super().__init__(handle=handle, **kwargs)
 
         # read attributes from backend
@@ -62,9 +158,25 @@ class _RefCountGraph(_HandleWrapper, Graph):
         self._vertex_supplier_fptr_and_cb = vertex_supplier_fptr_and_cb
         self._edge_supplier_fptr_and_cb = edge_supplier_fptr_and_cb
 
+        self._graph_attrs = None
+        self._vertex_attrs = _PerVertexAttributes(handle=handle)
+        self._edge_attrs = None
+
     @property
     def type(self):
         return self._type
+
+    @property
+    def graph_attrs(self):
+        return self._graph_attrs
+
+    @property
+    def vertex_attrs(self):
+        return self._vertex_attrs
+
+    @property
+    def edge_attrs(self):
+        return self._edge_attrs
 
     def add_vertex(self, vertex=None):
         if vertex is not None:
@@ -72,7 +184,7 @@ class _RefCountGraph(_HandleWrapper, Graph):
             if backend.jgrapht_ll_graph_add_given_vertex(self._handle, vid):
                 _inc_ref(vertex)
         else:
-            # no refcount increment as the  edge supplier increments the refcount 
+            # no refcount increment as the  edge supplier increments the refcount
             vid = backend.jgrapht_ll_graph_add_vertex(self._handle)
             vertex = _id_to_obj(vid)
         return vertex
@@ -95,8 +207,8 @@ class _RefCountGraph(_HandleWrapper, Graph):
                 if weight is not None:
                     backend.jgrapht_ll_graph_set_edge_weight(self._handle, eid, weight)
         else:
-            # no refcount increment as the  edge supplier increments the refcount 
-            eid = backend.jgrapht_ll_graph_add_edge(self._handle, id(u), id(v))    
+            # no refcount increment as the  edge supplier increments the refcount
+            eid = backend.jgrapht_ll_graph_add_edge(self._handle, id(u), id(v))
             edge = _id_to_obj(eid)
             if weight is not None:
                 backend.jgrapht_ll_graph_set_edge_weight(self._handle, eid, weight)
@@ -181,6 +293,13 @@ class _RefCountGraph(_HandleWrapper, Graph):
 
     def __repr__(self):
         return "_RefCountGraph(%r)" % self.handle
+
+    def __del__(self):
+        # Cleanup reference counts
+        for e in self.edges:
+            _dec_ref(e)
+        for v in self.vertices:
+            _dec_ref(v)
 
     class _VertexSet(Set):
         """Wrapper around the vertices of a JGraphT graph"""
@@ -311,11 +430,20 @@ def _create_refcount_graph(
     vf_ptr, vf = _create_wrapped_long_supplier_callback(actual_vertex_supplier)
     ef_ptr, ef = _create_wrapped_long_supplier_callback(actual_edge_supplier)
 
+    with_attributes = True
     handle = backend.jgrapht_ll_graph_create(
-        directed, allowing_self_loops, allowing_multiple_edges, weighted, False, vf_ptr, ef_ptr
+        directed,
+        allowing_self_loops,
+        allowing_multiple_edges,
+        weighted,
+        with_attributes,
+        vf_ptr,
+        ef_ptr,
     )
     return _RefCountGraph(
-        handle, vertex_supplier_fptr_and_cb=(vf_ptr, vf), edge_supplier_fptr_and_cb=(ef_ptr, ef)
+        handle,
+        vertex_supplier_fptr_and_cb=(vf_ptr, vf),
+        edge_supplier_fptr_and_cb=(ef_ptr, ef),
     )
 
 
@@ -341,7 +469,7 @@ def _create_refcount_dag(
     if edge_supplier is None:
         edge_supplier = _default_supplier
 
-    def actual_vertex_supplier(): 
+    def actual_vertex_supplier():
         v = vertex_supplier()
         _inc_ref(v)
         return id(v)
@@ -355,13 +483,12 @@ def _create_refcount_dag(
     ef_ptr, ef = _create_wrapped_long_supplier_callback(actual_edge_supplier)
 
     handle = backend.jgrapht_ll_graph_dag_create_with_suppliers(
-        allowing_multiple_edges,
-        weighted,
-        vf_ptr,
-        ef_ptr
+        allowing_multiple_edges, weighted, vf_ptr, ef_ptr
     )
     return _RefCountDirectedAcyclicGraph(
-        handle, vertex_supplier_fptr_and_cb=(vf_ptr, vf), edge_supplier_fptr_and_cb=(ef_ptr, ef)
+        handle,
+        vertex_supplier_fptr_and_cb=(vf_ptr, vf),
+        edge_supplier_fptr_and_cb=(ef_ptr, ef),
     )
 
 
