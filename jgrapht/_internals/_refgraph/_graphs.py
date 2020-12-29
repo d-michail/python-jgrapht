@@ -85,7 +85,7 @@ class _RefCountGraph(_HandleWrapper, Graph):
             _dec_ref(v)
 
     def contains_vertex(self, v):
-        return backend.jgrapht_ll_graph_remove_vertex(self._handle, id(v))
+        return backend.jgrapht_ll_graph_contains_vertex(self._handle, id(v))
 
     def add_edge(self, u, v, weight=None, edge=None):
         if edge is not None:

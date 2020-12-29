@@ -415,6 +415,8 @@ int jgrapht_ii_equivalentflowtree_tree(void *, void** OUTPUT);
 
 int jgrapht_ll_equivalentflowtree_tree(void *, void** OUTPUT);
 
+int jgrapht_ll_equivalentflowtree_tree_with_suppliers(void *, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void** OUTPUT);
+
 // generate
 
 int jgrapht_xx_generate_barabasi_albert(void *, int, int, int, long long int);

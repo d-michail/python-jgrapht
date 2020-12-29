@@ -1,20 +1,27 @@
 import pytest
 
-from jgrapht import create_graph, copy_to_sparse_graph
+from jgrapht import create_graph, copy_to_sparse_graph, GraphBackend
 from jgrapht.types import GraphEvent
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 from jgrapht.generators import complete_graph
 
 from jgrapht._internals._mapgraph._graphs import _create_sparse_anyhashable_graph
 
-def test_any_graph():
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_any_graph(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable=True,
+        backend=backend
     )
 
     assert repr(g) is not None
@@ -213,13 +220,32 @@ def test_any_graph():
     assert str(g.edge_attrs["e14"]) == "{'color': 'blue'}"
 
 
-def test_any_graph_of_graphs():
+@pytest.mark.parametrize(
+    "backendout",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH
+    ],
+)
+@pytest.mark.parametrize(
+    "backendin",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH
+    ],
+)
+def test_any_graph_of_graphs(backendout, backendin):
 
     g1 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        vertex_supplier=create_vertex_supplier(type='int'),
+        edge_supplier=create_edge_supplier(type='int'),
+        backend=backendin
     )
     g1.add_vertex(0)
     g1.add_vertex(1)
@@ -230,6 +256,9 @@ def test_any_graph_of_graphs():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        vertex_supplier=create_vertex_supplier(type='int'),
+        edge_supplier=create_edge_supplier(type='int'),
+        backend=backendin
     )
     g2.add_vertex(2)
     g2.add_vertex(3)
@@ -240,6 +269,9 @@ def test_any_graph_of_graphs():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        vertex_supplier=create_vertex_supplier(type='int'),
+        edge_supplier=create_edge_supplier(type='int'),
+        backend=backendin
     )
     g3.add_vertex(4)
     g3.add_vertex(5)
@@ -251,12 +283,11 @@ def test_any_graph_of_graphs():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable=True,
+        backend=backendout
     )
 
     g.add_vertex(g1)
     g.add_vertex(g2)
-
     g.add_edge(g1, g2, edge=g3)
 
     assert (

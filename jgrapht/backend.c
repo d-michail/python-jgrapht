@@ -639,6 +639,11 @@ int jgrapht_ll_equivalentflowtree_tree(void *eft, void** tree_res) {
     return jgrapht_capi_ll_equivalentflowtree_tree(thread, eft, tree_res);
 }
 
+int jgrapht_ll_equivalentflowtree_tree_with_suppliers(void *eft, void *vertex_supplier, void *edge_supplier, void** tree_res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_equivalentflowtree_tree_with_suppliers(thread, eft, vertex_supplier, edge_supplier, tree_res);
+}
+
 // generate
 
 int jgrapht_xx_generate_barabasi_albert(void *g, int m0, int m, int n, long long int seed) { 

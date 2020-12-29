@@ -177,7 +177,7 @@ def equivalent_flow_tree_gusfield(graph):
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphEquivalentFlowTree(handle, graph)
-    if _is_refcount_graph(graph):
+    elif _is_refcount_graph(graph):
         return __RefCountGraphEquivalentFlowTree(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTLongEquivalentFlowTree(handle, graph)
