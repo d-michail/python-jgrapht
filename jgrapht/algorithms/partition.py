@@ -2,8 +2,6 @@ from .. import backend as _backend
 
 from .._internals._collections import _JGraphTIntegerSet, _JGraphTLongSet
 from .._internals._intgraph._long_graphs import _is_long_graph
-from .._internals._mapgraph._graphs import _is_anyhashable_graph
-from .._internals._mapgraph._collections import _AnyHashableGraphVertexSet
 from .._internals._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs
 
 
@@ -17,13 +15,7 @@ def bipartite_partitions(graph):
     """
     res, part1, part2 = _backend.jgrapht_xx_partition_exec_bipartite(graph.handle)
 
-    if _is_anyhashable_graph(graph):
-        return (
-            res,
-            _AnyHashableGraphVertexSet(part1, graph),
-            _AnyHashableGraphVertexSet(part2, graph),
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return (
             res,
             set(_map_ids_to_objs(_JGraphTLongSet(part1))),

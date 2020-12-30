@@ -1,6 +1,12 @@
 from .. import backend
 
-from ._wrappers import _JGraphTStringIterator, _JGraphTLongIterator
+from collections import Mapping, MutableMapping
+
+from ._wrappers import (
+    _JGraphTStringIterator,
+    _JGraphTLongIterator,
+    _JGraphTIntegerIterator,
+)
 from ._refcount import _id_to_obj, _dec_ref_by_id, _inc_ref, _map_ids_to_objs
 
 
@@ -130,6 +136,45 @@ class _LongVertexAttributesView(MutableMapping):
     def _assert_vertex(self):
         if not backend.jgrapht_ll_graph_contains_vertex(self._handle, self._vertex_id):
             raise ValueError("Vertex {} not in graph".format(self._vertex))
+
+
+class _PerIntegerVertexAttributes(Mapping):
+    """A dictionary view with all vertices attributes for int vertices."""
+
+    def __init__(self, handle):
+        self._handle = handle
+
+    def __getitem__(self, vertex):
+        vertex_id = vertex
+        if not backend.jgrapht_ii_graph_contains_vertex(self._handle, vertex_id):
+            raise KeyError("Vertex {} does not exist".format(vertex))
+        return _IntegerVertexAttributesView(self._handle, vertex, vertex_id)
+
+    def __len__(self):
+        return backend.jgrapht_ii_graph_vertices_count(self._handle)
+
+    def __iter__(self):
+        it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
+        return _JGraphTIntegerIterator(handle=it_handle)
+
+    def __del__(self):
+        vertex_it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
+        for vertex_id in _JGraphTIntegerIterator(handle=vertex_it_handle):
+            for key in _IntegerVertexAttributesView(
+                self._handle, vertex_id, vertex_id
+            ).keys():
+                try:
+                    old_value_id = backend.jgrapht_ii_graph_attrs_vertex_get_long(
+                        self._handle, vertex_id, key
+                    )
+                    _dec_ref_by_id(old_value_id)
+                except ValueError:
+                    # key not found, ignore
+                    pass
+        super().__del__()
+
+    def __repr__(self):
+        return "_PerIntegerVertexAttributes(%r)" % repr(self._handle)
 
 
 class _PerLongVertexAttributes(Mapping):
@@ -334,6 +379,45 @@ class _LongEdgeAttributesView(MutableMapping):
             raise ValueError("Edge {} not in graph".format(self._edge))
 
 
+class _PerIntegerEdgeAttributes(Mapping):
+    """A dictionary view with all edge attributes for integer edges."""
+
+    def __init__(self, handle):
+        self._handle = handle
+
+    def __getitem__(self, edge):
+        edge_id = edge
+        if not backend.jgrapht_ii_graph_contains_edge(self._handle, edge_id):
+            raise KeyError("Edge {} does not exist".format(edge))
+        return _IntegerEdgeAttributesView(self._handle, edge, edge_id)
+
+    def __len__(self):
+        return backend.jgrapht_ii_graph_vertices_count(self._handle)
+
+    def __iter__(self):
+        it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
+        return _JGraphTIntegerIterator(handle=it_handle)
+
+    def __del__(self):
+        edge_it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
+        for edge_id in _JGraphTIntegerIterator(handle=edge_it_handle):
+            for key in _IntegerEdgeAttributesView(
+                self._handle, edge_id, edge_id
+            ).keys():
+                try:
+                    old_value_id = backend.jgrapht_ii_graph_attrs_edge_get_long(
+                        self._handle, edge_id, key
+                    )
+                    _dec_ref_by_id(old_value_id)
+                except ValueError:
+                    # key not found, ignore
+                    pass
+        super().__del__()
+
+    def __repr__(self):
+        return "_PerIntegerEdgeAttributes(%r)" % repr(self._handle)
+
+
 class _PerLongEdgeAttributes(Mapping):
     """A dictionary view with all edge attributes for long edges."""
 
@@ -454,5 +538,5 @@ class _GraphAttributesMapping(MutableMapping):
 
     def __del__(self):
         # Manually call delete, to decreate reference counts
-        for key in self: 
+        for key in self:
             self.__delitem__(key)

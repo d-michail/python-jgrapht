@@ -9,8 +9,7 @@ import jgrapht.algorithms.cycles as cycles
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH
     ],
 )
 def test_hierholzer(backend):
@@ -39,7 +38,7 @@ def test_hierholzer(backend):
 
 
 @pytest.mark.parametrize(
-    "backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH]
+    "backend", [GraphBackend.LONG_REF_GRAPH]
 )
 def test_anyhashableg_hierholzer(backend):
     g = create_graph(
@@ -67,8 +66,7 @@ def test_anyhashableg_hierholzer(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH
     ],
 )
 def test_chinese_postman(backend):
@@ -120,8 +118,7 @@ def test_anyhashableg_chinese_postman():
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH
     ],
 )
 def test_fundamental_cycle_basis_paton(backend):
@@ -155,7 +152,7 @@ def test_fundamental_cycle_basis_paton(backend):
 
 
 @pytest.mark.parametrize(
-    "backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH]
+    "backend", [GraphBackend.LONG_REF_GRAPH]
 )
 def test_anyhashableg_fundamental_cycle_basis_paton(backend):
     g = create_graph(
@@ -192,8 +189,7 @@ def test_anyhashableg_fundamental_cycle_basis_paton(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH
     ],
 )
 def test_fundamental_cycle_basis_queuebfs(backend):
@@ -231,8 +227,7 @@ def test_fundamental_cycle_basis_queuebfs(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_fundamental_cycle_basis_stackbfs(backend):
@@ -270,8 +265,7 @@ def test_fundamental_cycle_basis_stackbfs(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_simple_cycles_tiernan(backend):
@@ -343,8 +337,7 @@ def test_anyhashableg_simple_cycles_tiernan(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_simple_cycles_johnson(backend):
@@ -381,8 +374,7 @@ def test_simple_cycles_johnson(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_simple_cycles_tarjan(backend):
@@ -421,8 +413,7 @@ def test_simple_cycles_tarjan(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_simple_cycles_szwarcfiter_lauer(backend):
@@ -461,8 +452,7 @@ def test_simple_cycles_szwarcfiter_lauer(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_simple_cycles_hawick_james(backend):
@@ -497,7 +487,7 @@ def test_simple_cycles_hawick_james(backend):
 
 
 @pytest.mark.parametrize(
-    "backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH]
+    "backend", [GraphBackend.LONG_REF_GRAPH]
 )
 def test_anyhashableg_fundamental_cycle_basis_queuebfs(backend):
     g = create_graph(
@@ -530,7 +520,7 @@ def test_anyhashableg_fundamental_cycle_basis_queuebfs(backend):
 
 
 @pytest.mark.parametrize(
-    "backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH]
+    "backend", [GraphBackend.LONG_REF_GRAPH]
 )
 def test_anyhashableg_fundamental_cycle_basis_stackbfs(backend):
     g = create_graph(
@@ -563,7 +553,7 @@ def test_anyhashableg_fundamental_cycle_basis_stackbfs(backend):
 
 
 @pytest.mark.parametrize(
-    "backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH]
+    "backend", [GraphBackend.LONG_REF_GRAPH]
 )
 def test_anyhashableg_simple_cycles_johnson(backend):
     g = create_graph(
@@ -594,7 +584,7 @@ def test_anyhashableg_simple_cycles_johnson(backend):
 
 
 @pytest.mark.parametrize(
-    "backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH]
+    "backend", [GraphBackend.LONG_REF_GRAPH]
 )
 def test_anyhashableg_simple_cycles_tarjan(backend):
 
@@ -626,7 +616,7 @@ def test_anyhashableg_simple_cycles_tarjan(backend):
 
 
 @pytest.mark.parametrize(
-    "backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH]
+    "backend", [GraphBackend.LONG_REF_GRAPH]
 )
 def test_anyhashableg_simple_cycles_szwarcfiter_lauer(backend):
 
@@ -658,7 +648,7 @@ def test_anyhashableg_simple_cycles_szwarcfiter_lauer(backend):
 
 
 @pytest.mark.parametrize(
-    "backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH]
+    "backend", [GraphBackend.LONG_REF_GRAPH]
 )
 def test_anyhashableg_simple_cycles_hawick_james(backend):
 

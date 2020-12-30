@@ -7,19 +7,12 @@ from .._internals._collections import (
     _JGraphTLongIntegerMap,
 )
 from .._internals._intgraph._long_graphs import _is_long_graph
-from .._internals._mapgraph._graphs import _is_anyhashable_graph
-from .._internals._mapgraph._collections import (
-    _AnyHashableGraphVertexDoubleMap,
-    _AnyHashableGraphVertexIntegerMap,
-)
 from .._internals._refgraph._graphs import _is_refcount_graph, _id_to_obj
 
 
 def _wrap_map_to_double_result(graph, map_handle):
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphVertexDoubleMap(map_handle, graph)
-    elif _is_refcount_graph(graph):
-        return {_id_to_obj(k):v for k, v in _JGraphTLongDoubleMap(map_handle).items()}
+    if _is_refcount_graph(graph):
+        return {_id_to_obj(k): v for k, v in _JGraphTLongDoubleMap(map_handle).items()}
     elif _is_long_graph(graph):
         return _JGraphTLongDoubleMap(map_handle)
     else:
@@ -27,16 +20,12 @@ def _wrap_map_to_double_result(graph, map_handle):
 
 
 def _wrap_map_to_int_result(graph, map_handle):
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphVertexIntegerMap(map_handle, graph)
-    elif _is_refcount_graph(graph):
-        return {_id_to_obj(k):v for k, v in _JGraphTLongIntegerMap(map_handle).items()}        
+    if _is_refcount_graph(graph):
+        return {_id_to_obj(k): v for k, v in _JGraphTLongIntegerMap(map_handle).items()}
     elif _is_long_graph(graph):
         return _JGraphTLongIntegerMap(map_handle)
     else:
         return _JGraphTIntegerIntegerMap(map_handle)
-
-
 
 
 def alpha_centrality(
@@ -55,9 +44,9 @@ def alpha_centrality(
 
     Each iteration of the algorithm runs in linear time :math:`\mathcal{O}(n+m)` when :math:`n` is
     the number of nodes and :math:`m` the number of edges in the graph. The maximum number of
-    iterations can be adjusted by the caller. 
-    
-    By adjusting the exogenous factor, users may compute either eigenvector centrality 
+    iterations can be adjusted by the caller.
+
+    By adjusting the exogenous factor, users may compute either eigenvector centrality
     (https://en.wikipedia.org/wiki/Eigenvector_centrality) or Katz centrality
     (https://en.wikipedia.org/wiki/Katz_centrality).
 
@@ -78,18 +67,18 @@ def alpha_centrality(
 
 def betweenness_centrality(graph, incoming=False, normalize=False):
     r"""Betweenness centrality.
-    
-    For the definition see https://en.wikipedia.org/wiki/Betweenness_centrality. 
+
+    For the definition see https://en.wikipedia.org/wiki/Betweenness_centrality.
 
     The algorithm is based on:
 
      * Brandes, Ulrik (2001). "A faster algorithm for betweenness centrality". Journal of
        Mathematical Sociology. 25 (2): 163–177.
 
-    Running time is :math:`\mathcal{O}(nm +n^2 \log n)` for weighted and :math:`\mathcal{O}(mn)` 
+    Running time is :math:`\mathcal{O}(nm +n^2 \log n)` for weighted and :math:`\mathcal{O}(mn)`
     for unweighted graphs.
 
-    .. note :: if normalization is used, then the result is divided by :math:`(n-1) \cdot (n-2)` 
+    .. note :: if normalization is used, then the result is divided by :math:`(n-1) \cdot (n-2)`
                where :math:`n` is the number of vertices in the graph
 
     :param graph: the graph
@@ -116,15 +105,15 @@ def closeness_centrality(graph, incoming=False, normalize=True):
 
       * Alex Bavelas. Communication patterns in task-oriented groups. J. Acoust. Soc. Am,
         22(6):725–730, 1950.
- 
+
     This implementation computes by default the closeness centrality using outgoing paths and
     normalizes the scores. This behavior can be adjusted by the arguments.
- 
+
     When the graph is disconnected, the closeness centrality score equals :math:`0` for all
     vertices. In the case of weakly connected digraphs, the closeness centrality of several
     vertices might be :math:`0`. See :py:meth:`~jgrapht.algorithms.scoring.harmonic_centrality`
     for a different approach in case of disconnected graphs.
-    
+
     Shortest paths are computed either by using Dijkstra's algorithm or Floyd-Warshall depending
     on whether the graph has edges with negative edge weights. Thus, the running time is either
     :math:`\mathcal{O}(n (m + n \log n))` or :math:`\mathcal{O}(n^3)` respectively, where
@@ -145,15 +134,15 @@ def closeness_centrality(graph, incoming=False, normalize=True):
 def harmonic_centrality(graph, incoming=False, normalize=True):
     r"""Harmonic Centrality. The harmonic centrality of a vertex :math:`x` is defined as
 
-    .. math:: 
-    
+    .. math::
+
       H(x)=\sum_{y \neq x} 1/d(x,y)
 
     where :math:`d(x,y)` is the shortest path
     distance from :math:`x` to :math:`y`. In case a
     distance :math:`d(x,y)` is equal to infinity, then :math:`1/d(x,y)=0`. When normalization is used the
     score is divided by :math:`n-1` where :math:`n` is the total number of vertices in the graph.
- 
+
     For details see the following papers:
 
       * Yannick Rochat. Closeness centrality extended to unconnected graphs: The harmonic centrality
@@ -162,7 +151,7 @@ def harmonic_centrality(graph, incoming=False, normalize=True):
         167–256
 
     and https://en.wikipedia.org/wiki/Closeness_centrality.
- 
+
     This implementation computes by default the centrality using outgoing paths and normalizes the
     scores. This behavior can be adjusted by the arguments.
 
@@ -200,11 +189,11 @@ def pagerank(graph, damping_factor=0.85, max_iterations=100, tolerance=0.0001):
     Each iteration of the algorithm runs in linear time :math:`\mathcal{O}(n+m)` when :math:`n` is
     the number of nodes and :math:`m` the number of edges of the graph. The maximum number of
     iterations can be adjusted by the caller.
- 
+
     If the graph is a weighted graph, a weighted variant is used where the probability of following
     an edge e out of node :math:`v` is equal to the weight of :math:`e` over the sum of weights of
     all outgoing edges of :math:`v`.
-    
+
     :param graph: the graph
     :param damping_factor: damping factor
     :param max_iterations: max iterations
@@ -213,13 +202,15 @@ def pagerank(graph, damping_factor=0.85, max_iterations=100, tolerance=0.0001):
     :returns: a dictionary from vertices to double values
     """
     custom = [damping_factor, max_iterations, tolerance]
-    scores_handle = _backend.jgrapht_xx_scoring_exec_custom_pagerank(graph.handle, *custom)
+    scores_handle = _backend.jgrapht_xx_scoring_exec_custom_pagerank(
+        graph.handle, *custom
+    )
     return _wrap_map_to_double_result(graph, scores_handle)
 
 
 def coreness(graph):
     r"""Computes the coreness of each vertex in an undirected graph.
- 
+
     A :math:`k`-core of a graph :math:`G` is a maximal connected subgraph of :math:`G` in
     which all vertices have degree at least :math:`k`. Equivalently, it is one of the
     connected components of the subgraph of :math:`G` formed by repeatedly deleting all
@@ -230,7 +221,7 @@ def coreness(graph):
     `degeneracy <https://en.wikipedia.org/wiki/Degeneracy_(graph_theory)>`_ at least :math:`k`,
     and the degeneracy of :math:`G` is the largest :math:`k` for which :math:`G` has
     a :math:`k`-core.
- 
+
     As described in the following paper
 
       * D. W. Matula and L. L. Beck. Smallest-last ordering and clustering and graph coloring
@@ -253,20 +244,20 @@ def clustering_coefficient(graph):
 
     For definitions see https://en.wikipedia.org/wiki/Clustering_coefficient.
 
-    Computes the local clustering coefficient for each vertex of a graph. It also computes 
+    Computes the local clustering coefficient for each vertex of a graph. It also computes
     both the global and the average clustering coefficient.
 
-    The global clustering coefficient is discussed in 
+    The global clustering coefficient is discussed in
 
       * R. D. Luce and A. D. Perry (1949). "A method of matrix analysis of group structure".
         Psychometrika. 14 (1): 95–116. doi:10.1007/BF02289146 .
- 
+
     The average local clustering coefficient was introduced in
-    
+
       * D. J. Watts and Steven Strogatz (June 1998). "Collective dynamics of 'small-world'
         networks". Nature. 393 (6684): 440–442. doi:10.1038/30918
 
-    Running time is :math:`\mathcal{O}(n + \Delta(G)^2)` where :math:`n` is the number of 
+    Running time is :math:`\mathcal{O}(n + \Delta(G)^2)` where :math:`n` is the number of
     vertices in the graph and :math:`\Delta(G)` is the maximum degree of any vertex.
 
     :param graph: the graph

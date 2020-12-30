@@ -14,8 +14,6 @@ from .._collections import (
 )
 from .._intgraph._int_graphs import _JGraphTIntegerGraph
 from .._intgraph._long_graphs import _JGraphTLongGraph, _is_long_graph
-from .._mapgraph._graphs import _is_anyhashable_graph
-from .._mapgraph._collections import _AnyHashableGraphVertexSet
 
 
 class _JGraphTCut(Cut):
@@ -25,11 +23,7 @@ class _JGraphTCut(Cut):
         super().__init__(**kwargs)
         self._graph = graph
         self._capacity = capacity
-        if _is_anyhashable_graph(graph):
-            self._source_partition = _AnyHashableGraphVertexSet(
-                source_partition_handle, graph
-            )
-        elif _is_long_graph(graph):
+        if _is_long_graph(graph):
             self._source_partition = _JGraphTLongSet(source_partition_handle)
         else:
             self._source_partition = _JGraphTIntegerSet(source_partition_handle)

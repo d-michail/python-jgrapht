@@ -59,8 +59,7 @@ def build_anyhashableg_graph(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH
+        GraphBackend.LONG_REF_GRAPH
     ],
 )
 def test_bron_with_degeneracy(backend):
@@ -78,8 +77,7 @@ def test_bron_with_degeneracy(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH        
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_bron_with_pivot(backend):
@@ -96,8 +94,7 @@ def test_bron_with_pivot(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH        
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_bron(backend):
@@ -112,8 +109,7 @@ def test_bron(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_bron(backend):
@@ -132,8 +128,7 @@ def test_anyhashableg_bron(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_bron_with_pivot(backend):
@@ -152,8 +147,7 @@ def test_anyhashableg_bron_with_pivot(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_bron_with_degeneracy(backend):
@@ -174,8 +168,7 @@ def test_anyhashableg_bron_with_degeneracy(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH        
+        GraphBackend.LONG_REF_GRAPH,        
     ],
 )
 def test_chordal(backend):
@@ -208,8 +201,7 @@ def test_chordal(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH        
+        GraphBackend.LONG_REF_GRAPH,        
     ],
 )
 def test_anyhashableg_chordal(backend):

@@ -8,18 +8,6 @@ from .._internals._intgraph._importers import (
     _parse_graph_graph6sparse6,
     _parse_graph_graphml,
 )
-
-from .._internals._mapgraph._graphs import _is_anyhashable_graph
-from .._internals._mapgraph._importers import (
-    _parse_anyhashable_graph_dimacs,
-    _parse_anyhashable_graph_gml,
-    _parse_anyhashable_graph_json,
-    _parse_anyhashable_graph_csv,
-    _parse_anyhashable_graph_gexf,
-    _parse_anyhashable_graph_dot,
-    _parse_anyhashable_graph_graph6sparse6,
-    _parse_anyhashable_graph_graphml,
-)
 from .._internals._refgraph._graphs import _is_refcount_graph
 from .._internals._refgraph._importers import (
     _parse_refcount_graph_dimacs,
@@ -77,11 +65,7 @@ def read_dimacs(graph, filename, import_id_cb=None):
       must return an integer, for any-hashable graphs any hashable. If None the graph assigns automatically.
     :raises IOError: In case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_dimacs(
-            graph, filename, import_id_cb=import_id_cb, input_is_filename=True
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_dimacs(
             graph, filename, import_id_cb=import_id_cb, input_is_filename=True
         )
@@ -138,11 +122,7 @@ def parse_dimacs(graph, input_string, import_id_cb=None):
       must return an integer, for any-hashable graphs any hashable. If None the graph assigns automatically.
     :raises IOError: In case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_dimacs(
-            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_dimacs(
             graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
         )
@@ -234,11 +214,7 @@ def read_gml(
       edges.
     :raises IOError: In case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_gml(
-            graph, filename, import_id_cb=import_id_cb, input_is_filename=True
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_gml(
             graph,
             filename,
@@ -340,11 +316,7 @@ def parse_gml(
       edges.
     :raises IOError: In case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_gml(
-            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_gml(
             graph,
             input_string,
@@ -422,11 +394,7 @@ def read_json(
       edges.
     :raises IOError: In case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_json(
-            graph, filename, import_id_cb=import_id_cb, input_is_filename=True
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_json(
             graph,
             filename,
@@ -508,11 +476,7 @@ def parse_json(
       edges.
     :raises IOError: In case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_json(
-            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_json(
             graph,
             input_string,
@@ -561,18 +525,7 @@ def read_csv(
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_csv(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            format=format,
-            import_edge_weights=import_edge_weights,
-            matrix_format_node_id=matrix_format_node_id,
-            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
-            input_is_filename=True,
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_csv(
             graph,
             filename,
@@ -625,18 +578,7 @@ def parse_csv(
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_csv(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            format=format,
-            import_edge_weights=import_edge_weights,
-            matrix_format_node_id=matrix_format_node_id,
-            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
-            input_is_filename=False,
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_csv(
             graph,
             input_string,
@@ -740,15 +682,7 @@ def read_gexf(
       edges.
     :raises IOError: in case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_gexf(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            input_is_filename=True,
-            validate_schema=validate_schema,
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_gexf(
             graph,
             filename,
@@ -850,15 +784,7 @@ def parse_gexf(
       edges.
     :raises IOError: in case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_gexf(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            input_is_filename=False,
-            validate_schema=validate_schema,
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_gexf(
             graph,
             input_string,
@@ -922,14 +848,7 @@ def read_dot(
       edges.
     :raises IOError: In case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_dot(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            input_is_filename=True,
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_dot(
             graph,
             filename,
@@ -991,14 +910,7 @@ def parse_dot(
       edges.
     :raises IOError: in case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_dot(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            input_is_filename=False,
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_dot(
             graph,
             input_string,
@@ -1062,14 +974,7 @@ def read_graph6sparse6(
       edges.
     :raises IOError: in case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_graph6sparse6(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            input_is_filename=True,
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_graph6sparse6(
             graph,
             filename,
@@ -1134,14 +1039,7 @@ def parse_graph6sparse6(
       edges.
     :raises IOError: in case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_graph6sparse6(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            input_is_filename=False,
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_graph6sparse6(
             graph,
             input_string,
@@ -1265,16 +1163,7 @@ def read_graphml(
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_graphml(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            input_is_filename=True,
-            validate_schema=validate_schema,
-            simple=simple,
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_graphml(
             graph,
             filename,
@@ -1402,16 +1291,7 @@ def parse_graphml(
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_graphml(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            input_is_filename=False,
-            validate_schema=validate_schema,
-            simple=simple,
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         _parse_refcount_graph_graphml(
             graph,
             input_string,

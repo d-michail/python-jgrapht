@@ -3,15 +3,14 @@ from .. import backend as _backend
 from .._internals._collections import _JGraphTIntegerIntegerMap, _JGraphTLongIntegerMap
 from .._internals._intgraph._long_graphs import _is_long_graph
 from .._internals._refgraph._graphs import _is_refcount_graph, _id_to_obj
-from .._internals._mapgraph._graphs import _is_anyhashable_graph
-from .._internals._mapgraph._collections import _AnyHashableGraphVertexIntegerMap
 
 
 def _wrap_result(graph, num_colors, color_map_handle):
-    if _is_anyhashable_graph(graph):
-        return num_colors, _AnyHashableGraphVertexIntegerMap(color_map_handle, graph)
-    elif _is_refcount_graph(graph):
-        return num_colors, {_id_to_obj(k):v for k, v in _JGraphTLongIntegerMap(color_map_handle).items()}
+    if _is_refcount_graph(graph):
+        return num_colors, {
+            _id_to_obj(k): v
+            for k, v in _JGraphTLongIntegerMap(color_map_handle).items()
+        }
     elif _is_long_graph(graph):
         return num_colors, _JGraphTLongIntegerMap(color_map_handle)
     else:
@@ -28,7 +27,9 @@ def greedy_smallestnotusedcolor(graph):
     :returns: A vertex coloring as a tuple. First component is the number of colors, second is a
       dictionary from vertices to integers.
     """
-    num_colors, color_map_handle = _backend.jgrapht_xx_coloring_exec_greedy(graph.handle)
+    num_colors, color_map_handle = _backend.jgrapht_xx_coloring_exec_greedy(
+        graph.handle
+    )
     return _wrap_result(graph, num_colors, color_map_handle)
 
 
@@ -91,7 +92,9 @@ def greedy_random(graph, seed=None):
         (
             num_colors,
             color_map_handle,
-        ) = _backend.jgrapht_xx_coloring_exec_greedy_random_with_seed(graph.handle, seed)
+        ) = _backend.jgrapht_xx_coloring_exec_greedy_random_with_seed(
+            graph.handle, seed
+        )
     return _wrap_result(graph, num_colors, color_map_handle)
 
 

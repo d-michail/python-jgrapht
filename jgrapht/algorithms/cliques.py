@@ -9,26 +9,18 @@ from .._internals._collections import (
 
 from .._internals._intgraph._long_graphs import _is_long_graph
 from .._internals._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs
-from .._internals._mapgraph._graphs import _is_anyhashable_graph
-from .._internals._mapgraph._collections import (
-    _AnyHashableGraphVertexSet,
-    _AnyHashableGraphVertexSetIterator,
-)
+
 
 def _wrap_result(graph, res, clique_enumeration):
     if clique_enumeration: 
-        if _is_anyhashable_graph(graph):
-            return _AnyHashableGraphVertexSetIterator(res, graph)
-        elif _is_long_graph(graph):
+        if _is_long_graph(graph):
             return _JGraphTLongSetIterator(res)
         elif _is_refcount_graph(graph):
             return iter([set(_map_ids_to_objs(c)) for c in _JGraphTLongSetIterator(res)])
         else:
             return _JGraphTIntegerSetIterator(res)
     else:
-        if _is_anyhashable_graph(graph):
-            return _AnyHashableGraphVertexSet(res, graph)
-        elif _is_long_graph(graph):
+        if _is_long_graph(graph):
             return _JGraphTLongSet(res)
         elif _is_refcount_graph(graph):
             return set(_map_ids_to_objs(_JGraphTLongSet(res)))

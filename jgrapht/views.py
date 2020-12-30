@@ -19,15 +19,6 @@ from jgrapht._internals._intgraph._views import (
     _LongListenableView,
 )
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._graphs import (
-    _is_anyhashable_graph,
-    _as_unweighted_anyhashable_graph as _as_unweighted_anyhashable_graph,
-    _as_undirected_anyhashable_graph as _as_undirected_anyhashable_graph,
-    _as_unmodifiable_anyhashable_graph as _as_unmodifiable_anyhashable_graph,
-    _as_edgereversed_anyhashable_graph as _as_edgereversed_anyhashable_graph,
-    _as_weighted_anyhashable_graph as _as_weighted_anyhashable_graph,
-    _as_masked_subgraph_anyhashable_graph as _as_masked_subgraph_anyhashable_graph,
-)
 
 
 def as_unweighted(graph):
@@ -37,9 +28,7 @@ def as_unweighted(graph):
     :param graph: the original graph
     :returns: an unweighted graph
     """
-    if _is_anyhashable_graph(graph):
-        return _as_unweighted_anyhashable_graph(graph)
-    elif _is_long_graph(graph):
+    if _is_long_graph(graph):
         return _UnweightedLongGraphView(graph)
     else:
         return _UnweightedIntegerGraphView(graph)
@@ -52,9 +41,7 @@ def as_undirected(graph):
     :param graph: the original graph
     :returns: an undirected graph
     """
-    if _is_anyhashable_graph(graph):
-        return _as_undirected_anyhashable_graph(graph)
-    elif _is_long_graph(graph):
+    if _is_long_graph(graph):
         return _UndirectedLongGraphView(graph)
     else:
         return _UndirectedIntegerGraphView(graph)
@@ -67,9 +54,7 @@ def as_unmodifiable(graph):
     :param graph: the original graph
     :returns: an unmodifiable graph
     """
-    if _is_anyhashable_graph(graph):
-        return _as_unmodifiable_anyhashable_graph(graph)
-    elif _is_long_graph(graph):
+    if _is_long_graph(graph):
         return _UnmodifiableLongGraphView(graph)
     else:
         return _UnmodifiableIntegerGraphView(graph)
@@ -82,9 +67,7 @@ def as_edge_reversed(graph):
     :param graph: the original graph
     :returns: a graph with reversed edges
     """
-    if _is_anyhashable_graph(graph):
-        return _as_edgereversed_anyhashable_graph(graph)
-    elif _is_long_graph(graph):
+    if _is_long_graph(graph):
         return _EdgeReversedLongGraphView(graph)
     else:
         return _EdgeReversedIntegerGraphView(graph)
@@ -107,11 +90,7 @@ def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):
     :param edge_mask_cb: an edge mask callback
     :returns: a masked subgraph
     """
-    if _is_anyhashable_graph(graph):
-        return _as_masked_subgraph_anyhashable_graph(
-            graph, vertex_mask_cb, edge_mask_cb
-        )
-    elif _is_long_graph(graph):
+    if _is_long_graph(graph):
         return _MaskedLongSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
     else:
         return _MaskedIntegerSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
@@ -144,11 +123,7 @@ def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through
       :py:meth:`~jgrapht.types.Graph.set_edge_weight` will be propagated to the backing graph
     :returns: a weighted view
     """
-    if _is_anyhashable_graph(graph):
-        return _as_weighted_anyhashable_graph(
-            graph, edge_weight_cb, cache_weights, write_weights_through
-        )
-    elif _is_long_graph(graph):
+    if _is_long_graph(graph):
         return _LongWeightedView(
             graph, edge_weight_cb, cache_weights, write_weights_through
         )
@@ -165,7 +140,7 @@ def as_listenable(graph):
     :param graph: the original graph
     :returns: a listenable graph which is an instance of type :py:class:`~jgrapht.types.ListenableGraph`.
     """
-    if isinstance(graph, ListenableGraph) or _is_anyhashable_graph(graph):
+    if isinstance(graph, ListenableGraph):
         return graph
     if _is_long_graph(graph):
         return _LongListenableView(graph)
@@ -192,9 +167,6 @@ def as_graph_union(graph1, graph2, edge_weight_combiner_cb=None):
        double parameters and return one.
     :returns: a graph which is the union of the two graphs
     """
-    if _is_anyhashable_graph(graph1) or _is_anyhashable_graph(graph2):
-        raise ValueError("View not supported for any-hashable graphs")
-
     if _is_long_graph(graph1) or _is_long_graph(graph2):
         return _LongGraphUnion(graph1, graph2, edge_weight_combiner_cb)
     else:

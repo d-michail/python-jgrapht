@@ -7,19 +7,15 @@ from .._internals._collections import (
     _JGraphTLongMutableSet,
 )
 from .._internals._intgraph._long_graphs import _is_long_graph
-from .._internals._mapgraph._graphs import _is_anyhashable_graph
-from .._internals._mapgraph._collections import (
-    _AnyHashableGraphVertexSet,
-    _AnyHashableGraphEdgeSet,
-    _AnyHashableGraphMutableVertexSet,
+from .._internals._refgraph._graphs import (
+    _is_refcount_graph,
+    _map_ids_to_objs,
+    _id_to_obj,
 )
-from .._internals._refgraph._graphs import _is_refcount_graph, _map_ids_to_objs, _id_to_obj
 
 
 def _wrap_result(graph, weight, matching_handle):
-    if _is_anyhashable_graph(graph):
-        return weight, _AnyHashableGraphEdgeSet(matching_handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return weight, set(_map_ids_to_objs(_JGraphTLongSet(matching_handle)))
     elif _is_long_graph(graph):
         return weight, _JGraphTLongSet(matching_handle)
@@ -28,13 +24,7 @@ def _wrap_result(graph, weight, matching_handle):
 
 
 def _to_wrapped_vertex_set(graph, vertex_set):
-    if _is_anyhashable_graph(graph):
-        if isinstance(vertex_set, _AnyHashableGraphVertexSet):
-            return vertex_set
-        mutable_set = _AnyHashableGraphMutableVertexSet(handle=None, graph=graph)
-        for v in vertex_set:
-            mutable_set.add(v)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         mutable_set = _JGraphTLongMutableSet()
         for v in vertex_set:
             mutable_set.add(id(v))

@@ -6,12 +6,8 @@ from ._internals._collections import (
     _JGraphTIntegerSet,
     _JGraphTLongSet,
 )
-from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
-from jgrapht._internals._mapgraph._collections import (
-    _AnyHashableGraphVertexSet,
-    _AnyHashableGraphVertexDoubleMap,
-)
+from ._internals._intgraph._long_graphs import _is_long_graph
+from ._internals._refgraph._graphs import _is_refcount_graph
 
 
 def diameter(graph):
@@ -97,13 +93,8 @@ def measure(graph):
         vertex_eccentricity_map_handle,
     ) = _backend.jgrapht_xx_graph_metrics_measure_graph(graph.handle)
 
-    if _is_anyhashable_graph(graph):
-        centers = _AnyHashableGraphVertexSet(center_handle, graph)
-        periphery = _AnyHashableGraphVertexSet(periphery_handle, graph)
-        pseudo_periphery = _AnyHashableGraphVertexSet(pseudo_periphery_handle, graph)
-        vertex_eccentricity_map = _AnyHashableGraphVertexDoubleMap(
-            vertex_eccentricity_map_handle, graph
-        )
+    if _is_refcount_graph(graph):
+        raise ValueError('TODO')
     elif _is_long_graph(graph):
         centers = _JGraphTLongSet(center_handle)
         periphery = _JGraphTLongSet(periphery_handle)

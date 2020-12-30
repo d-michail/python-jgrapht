@@ -2,6 +2,7 @@ from ... import backend
 from ...types import (
     Graph,
     GraphType,
+    AttributesGraph,
     DirectedAcyclicGraph,
 )
 
@@ -13,20 +14,27 @@ from .._collections import (
     _JGraphTIntegerSet,
     _JGraphTEdgeIntegerTripleList,
 )
+from .._attributes import (
+    _PerIntegerVertexAttributes,
+    _PerIntegerEdgeAttributes,
+    _GraphAttributesMapping,
+)
 
 
-class _JGraphTIntegerGraph(_HandleWrapper, Graph):
+class _JGraphTIntegerGraph(_HandleWrapper, AttributesGraph, Graph):
     """The actual graph implementation. This implementation always uses integers
     for the vertices and the edges of the graph. All operations are delegated to
     the backend.
     """
 
-    def __init__(self, handle, **kwargs):
+    def __init__(self, handle, with_attributes=False, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
         # read attributes from backend
         directed = backend.jgrapht_xx_graph_is_directed(self._handle)
-        allowing_self_loops = backend.jgrapht_xx_graph_is_allowing_selfloops(self._handle)
+        allowing_self_loops = backend.jgrapht_xx_graph_is_allowing_selfloops(
+            self._handle
+        )
         allowing_multiple_edges = backend.jgrapht_xx_graph_is_allowing_multipleedges(
             self._handle
         )
@@ -44,10 +52,37 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph):
         )
         self._vertex_set = None
         self._edge_set = None
+        self._graph_attrs = (
+            _GraphAttributesMapping(handle=handle) if with_attributes else None
+        )
+        self._vertex_attrs = (
+            _PerIntegerVertexAttributes(handle=handle) if with_attributes else None
+        )
+        self._edge_attrs = (
+            _PerIntegerEdgeAttributes(handle=handle) if with_attributes else None
+        )
 
     @property
     def type(self):
         return self._type
+
+    @property
+    def graph_attrs(self):
+        if self._edge_attrs is None:
+            raise ValueError("Graph attributes not supported")
+        return self._graph_attrs
+
+    @property
+    def vertex_attrs(self):
+        if self._vertex_attrs is None:
+            raise ValueError("Vertex attributes not supported")
+        return self._vertex_attrs
+
+    @property
+    def edge_attrs(self):
+        if self._edge_attrs is None:
+            raise ValueError("Edge attributes not supported")
+        return self._edge_attrs
 
     def add_vertex(self, vertex=None):
         if vertex is not None:
@@ -163,7 +198,7 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph):
 
         @classmethod
         def _from_iterable(cls, it):
-            return set(it)    
+            return set(it)
 
     class _EdgeSet(Set):
         """Wrapper around the edges of a JGraphT graph"""
@@ -202,7 +237,9 @@ class _JGraphTIntegerDirectedAcyclicGraph(_JGraphTIntegerGraph, DirectedAcyclicG
         super().__init__(handle=handle, **kwargs)
 
     def descendants(self, vertex):
-        set_handle = backend.jgrapht_ii_graph_dag_vertex_descendants(self.handle, vertex)
+        set_handle = backend.jgrapht_ii_graph_dag_vertex_descendants(
+            self.handle, vertex
+        )
         return _JGraphTIntegerSet(handle=set_handle)
 
     def ancestors(self, vertex):
@@ -219,6 +256,7 @@ def _create_int_graph(
     allowing_self_loops=False,
     allowing_multiple_edges=False,
     weighted=True,
+    with_attributes=False,
 ):
     """Create a graph with integer vertices/edges.
 
@@ -226,33 +264,42 @@ def _create_int_graph(
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
+    :param with_attributes: if True the graph will support additional attributes
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.Graph`    
+    :rtype: :class:`~jgrapht.types.Graph`
     """
     handle = backend.jgrapht_ii_graph_create(
-        directed, allowing_self_loops, allowing_multiple_edges, weighted, False, 0, 0
+        directed,
+        allowing_self_loops,
+        allowing_multiple_edges,
+        weighted,
+        with_attributes,
+        0,
+        0,
     )
-    return _JGraphTIntegerGraph(handle)
+    return _JGraphTIntegerGraph(handle, with_attributes=with_attributes)
 
 
-def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weighted=True):
-    """Create a sparse graph with integer vertices/edges. 
+def _create_sparse_int_graph(
+    edgelist, num_of_vertices=None, directed=True, weighted=True
+):
+    """Create a sparse graph with integer vertices/edges.
 
-    A sparse graph uses a CSR (compressed-sparse-rows) representation. The result is 
+    A sparse graph uses a CSR (compressed-sparse-rows) representation. The result is
     lower memory consumption and very efficient and cache-friendly representation on
     recent machines. Their drawback is that they assume a continuous range of vertices
     and edges and that they are not modifiable after construction.
 
-    .. note :: Sparse graphs cannot be modified after construction. They are best suited 
+    .. note :: Sparse graphs cannot be modified after construction. They are best suited
        for executing algorithms which do not need to modify the graph after loading.
-       
+
     .. note :: While the graph structure is unmodifiable, the edge weights can be
       adjusted.
-    
+
     Sparse graphs can always support self-loops and multiple-edges.
 
     :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs
-    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0 
+    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0
       and increase continuously. If not explicitly given the edgelist will be traversed in
       order to find out the number of vertices
     :param directed: whether the graph will be directed or undirected
@@ -268,7 +315,7 @@ def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weig
         e_list_owner = False
         e_list = edgelist.handle
 
-        if track_num_vertices: 
+        if track_num_vertices:
             num_of_vertices = 0
             for u, v, *w in edgelist:
                 num_of_vertices = max(u, v, num_of_vertices)
@@ -277,21 +324,21 @@ def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weig
         e_list_owner = True
         e_list = backend.jgrapht_list_create()
 
-        if track_num_vertices: 
+        if track_num_vertices:
             num_of_vertices = 0
 
         if weighted:
             for u, v, w in edgelist:
                 backend.jgrapht_ii_list_edge_triple_add(e_list, u, v, w)
                 if track_num_vertices:
-                     num_of_vertices = max(u, v, num_of_vertices)
+                    num_of_vertices = max(u, v, num_of_vertices)
         else:
             for u, v, *w in edgelist:
                 backend.jgrapht_ii_list_edge_pair_add(e_list, u, v)
                 if track_num_vertices:
                     num_of_vertices = max(u, v, num_of_vertices)
 
-        if track_num_vertices: 
+        if track_num_vertices:
             num_of_vertices += 1
 
     handle = backend.jgrapht_ii_graph_sparse_create(
@@ -301,23 +348,23 @@ def _create_sparse_int_graph(edgelist, num_of_vertices=None, directed=True, weig
     if e_list_owner:
         backend.jgrapht_handles_destroy(e_list)
 
-    return _JGraphTIntegerGraph(handle)
+    return _JGraphTIntegerGraph(handle, with_attributes=False)
 
 
 def _copy_to_sparse_int_graph(graph):
     """Copy a graph to a sparse graph.
 
-    .. note :: The resulting graph might have more vertices that the source graph. The reason is 
-      that sparse graphs have a continuous range of vertices. Thus, if your input graph contains 
+    .. note :: The resulting graph might have more vertices that the source graph. The reason is
+      that sparse graphs have a continuous range of vertices. Thus, if your input graph contains
       three vertices 0, 5, and 10 the resulting sparse graph will contain all vertices from 0 up to
       10 (inclusive). The extra vertices will be isolated, meaning that they will not have any incident
       edges.
 
-    .. note :: Sparse graphs are unmodifiable. Attempting to alter one will result in an error 
+    .. note :: Sparse graphs are unmodifiable. Attempting to alter one will result in an error
       being raised.
 
     :param graph: the input graph
-    :returns: a sparse graph 
+    :returns: a sparse graph
     :rtype: :class:`jgrapht.types.Graph`
     """
     if len(graph.vertices) == 0:
@@ -332,22 +379,26 @@ def _copy_to_sparse_int_graph(graph):
 
 
 def _create_int_dag(
-    allowing_multiple_edges=False, weighted=True,
+    allowing_multiple_edges=False,
+    weighted=True,
 ):
     """Create a directed acyclic graph.
 
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph`    
+    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph`
     """
-    handle = backend.jgrapht_ii_graph_dag_create(allowing_multiple_edges, weighted,)
+    handle = backend.jgrapht_ii_graph_dag_create(
+        allowing_multiple_edges,
+        weighted,
+    )
     return _JGraphTIntegerDirectedAcyclicGraph(handle)
 
 
 def _is_int_graph(graph):
     """Check if a graph instance is a graph using integers for vertices and edges.
-    
+
     :param graph: the graph
     :returns: True if the graph is an int graph, False otherwise.
     """

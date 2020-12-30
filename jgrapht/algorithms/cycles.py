@@ -9,28 +9,16 @@ from .._internals._collections import (
     _JGraphTLongListIterator,
 )
 from .._internals._intgraph._long_graphs import _is_long_graph
-from .._internals._mapgraph._graphs import _is_anyhashable_graph
-from .._internals._mapgraph._collections import (
-    _AnyHashableGraphVertexListIterator,
-)
-from .._internals._mapgraph._paths import (
-    _AnyHashableGraphGraphPath,
-    _AnyHashableGraphGraphPathIterator,
-)
 from .._internals._refgraph._graphs import _is_refcount_graph
 from .._internals._refgraph._paths import (
-    _RefCountGraphGraphPath, 
+    _RefCountGraphGraphPath,
     _RefCountGraphGraphPathIterator,
 )
-from .._internals._refgraph._collections import (
-    _RefCountLongListIterator
-)
+from .._internals._refgraph._collections import _RefCountLongListIterator
 
 
 def _wrap_graphpath_result(graph, handle):
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPath(handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphGraphPath(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTGraphPath(handle, graph)
@@ -39,9 +27,7 @@ def _wrap_graphpath_result(graph, handle):
 
 
 def _wrap_graphpath_iterator_result(graph, handle):
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPathIterator(handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphGraphPathIterator(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTGraphPathIterator(handle, graph)
@@ -50,9 +36,7 @@ def _wrap_graphpath_iterator_result(graph, handle):
 
 
 def _wrap_vertexlist_iterator_result(graph, handle):
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphVertexListIterator(handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountLongListIterator(handle)
     elif _is_long_graph(graph):
         return _JGraphTLongListIterator(handle)

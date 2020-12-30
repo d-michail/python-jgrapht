@@ -11,20 +11,6 @@ from .._internals._intgraph._paths import (
 from .._internals._collections import _JGraphTIntegerMutableSet, _JGraphTLongMutableSet
 from .._internals._callbacks import _create_wrapped_callback
 from .._internals._intgraph._long_graphs import _is_long_graph
-from .._internals._mapgraph._graphs import (
-    _is_anyhashable_graph,
-    _vertex_anyhashableg_to_g as _vertex_attrsg_to_g,
-    _vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
-    _edge_g_to_anyhashableg as _edge_g_to_attrsg,
-)
-from .._internals._mapgraph._paths import (
-    _AnyHashableGraphGraphPath,
-    _AnyHashableGraphGraphPathIterator,
-    _AnyHashableGraphSingleSourcePaths,
-    _AnyHashableGraphMultiObjectiveSingleSourcePaths,
-    _AnyHashableGraphAllPairsPaths,
-    _AnyHashableGraphContractionHierarchiesManyToMany,
-)
 from .._internals._refgraph._graphs import _is_refcount_graph, _id_to_obj
 from .._internals._refgraph._paths import (
     _RefCountGraphGraphPath,
@@ -42,11 +28,7 @@ import time
 
 
 def _vertex_set_to_backend(graph, vertexset):
-    if _is_anyhashable_graph(graph):
-        mutable_set = _JGraphTIntegerMutableSet(linked=True)
-        for v in vertexset:
-            mutable_set.add(_vertex_attrsg_to_g(graph, v))
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         mutable_set = _JGraphTLongMutableSet(linked=True)
         for v in vertexset:
             mutable_set.add(id(v))
@@ -63,13 +45,7 @@ def _vertex_set_to_backend(graph, vertexset):
 
 def _sp_per_graph_input(name, graph, source_vertex, target_vertex, multi=False):
     spmethod = "multisp" if multi else "sp"
-    if _is_anyhashable_graph(graph):
-        alg_method_name = "jgrapht_ii_" + spmethod + "_exec_" + name
-        if source_vertex is not None:
-            source_vertex = _vertex_attrsg_to_g(graph, source_vertex)
-        if target_vertex is not None:
-            target_vertex = _vertex_attrsg_to_g(graph, target_vertex)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         alg_method_name = "jgrapht_ll_" + spmethod + "_exec_" + name
         if source_vertex is not None:
             source_vertex = id(source_vertex)
@@ -89,9 +65,7 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method = getattr(_backend, alg_method_name)
     handle = alg_method(graph.handle, in_source_vertex, *args)
 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphSingleSourcePaths(handle, graph, source_vertex)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphSingleSourcePaths(handle, graph, source_vertex)
     elif _is_long_graph(graph):
         return _JGraphTSingleSourcePaths(handle, graph, source_vertex)
@@ -109,9 +83,7 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     if handle is None:
         return None
 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPath(handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphGraphPath(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTGraphPath(handle, graph)
@@ -125,9 +97,7 @@ def _sp_allpairs_alg(name, graph):
 
     handle = alg_method(graph.handle)
 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphAllPairsPaths(handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphAllPairsPaths(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTAllPairsPaths(handle, graph)
@@ -143,9 +113,7 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
 
     handle = alg_method(graph.handle, in_source_vertex, in_target_vertex, k, *args)
 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPathIterator(handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphGraphPathIterator(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTGraphPathIterator(handle, graph)
@@ -161,11 +129,7 @@ def _multisp_singlesource_alg(name, graph, source_vertex, *args):
 
     handle = alg_method(graph.handle, in_source_vertex, *args)
 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphMultiObjectiveSingleSourcePaths(
-            handle, graph, source_vertex
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphMultiObjectiveSingleSourcePaths(
             handle, graph, source_vertex
         )
@@ -287,14 +251,7 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
     :returns: a :py:class:`.GraphPath`
     """
 
-    if _is_anyhashable_graph(graph):
-        # redefine in order to translate from integer to user vertices
-        def actual_heuristic_cb(s, t):
-            return heuristic_cb(
-                _vertex_g_to_attrsg(graph, s), _vertex_g_to_attrsg(graph, t)
-            )
-
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         # redefine in order to translate vertices
         def actual_heuristic_cb(s, t):
             return heuristic_cb(_id_to_obj(s), _id_to_obj(t))
@@ -496,16 +453,7 @@ def martin_multiobjective(
 
     # we need a function which accepts an edge and returns a pointer to an
     # array with double values
-    if _is_anyhashable_graph(graph):
-
-        def inner_edge_weight_cb(edge):
-            edge = _edge_g_to_attrsg(graph, edge)
-            weights = edge_weight_cb(edge)[:edge_weight_dimension]
-            array = (ctypes.c_double * len(weights))(*weights)
-            array_ptr = ctypes.cast(array, ctypes.c_void_p)
-            return array_ptr.value
-
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
 
         def inner_edge_weight_cb(edge):
             edge = _id_to_obj(edge)
@@ -522,11 +470,7 @@ def martin_multiobjective(
             array_ptr = ctypes.cast(array, ctypes.c_void_p)
             return array_ptr.value
 
-    if _is_anyhashable_graph(graph):
-        cb_fptr, cb = _create_wrapped_callback(
-            inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_int)
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         cb_fptr, cb = _create_wrapped_callback(
             inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_longlong)
         )
@@ -544,19 +488,27 @@ def martin_multiobjective(
             "martin_get_multiobjectivesinglesource_from_vertex",
             graph,
             source_vertex,
-            cb_fptr, 
-            edge_weight_dimension
+            cb_fptr,
+            edge_weight_dimension,
         )
     else:
         alg_method_name, in_source_vertex, in_target_vertex = _sp_per_graph_input(
-            "martin_get_paths_between_vertices", graph, source_vertex, target_vertex, multi=True
+            "martin_get_paths_between_vertices",
+            graph,
+            source_vertex,
+            target_vertex,
+            multi=True,
         )
         alg_method = getattr(_backend, alg_method_name)
-        res = alg_method(graph.handle, in_source_vertex, in_target_vertex, cb_fptr, edge_weight_dimension)
+        res = alg_method(
+            graph.handle,
+            in_source_vertex,
+            in_target_vertex,
+            cb_fptr,
+            edge_weight_dimension,
+        )
 
-        if _is_anyhashable_graph(graph):
-            return _AnyHashableGraphGraphPathIterator(res, graph)
-        elif _is_refcount_graph(graph):
+        if _is_refcount_graph(graph):
             return _RefCountGraphGraphPathIterator(res, graph)
         elif _is_long_graph(graph):
             return _JGraphTGraphPathIterator(res, graph)
@@ -607,9 +559,7 @@ def contraction_hierarchies_many_to_many(graph, sources, targets, ch=None):
         ch.handle, jgrapht_sources.handle, jgrapht_targets.handle
     )
 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphContractionHierarchiesManyToMany(handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphContractionHierarchiesManyToMany(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTContractionHierarchiesManyToMany(handle, graph)
@@ -650,9 +600,7 @@ def contraction_hierarchies_dijkstra(
     if handle is None:
         return None
 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPath(handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphGraphPath(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTGraphPath(handle, graph)

@@ -4,16 +4,12 @@ from .. import backend as _backend
 
 from .._internals._intgraph._paths import _JGraphTGraphPath
 from .._internals._intgraph._long_graphs import _is_long_graph
-from .._internals._mapgraph._graphs import _is_anyhashable_graph
-from .._internals._mapgraph._paths import _AnyHashableGraphGraphPath
 from .._internals._refgraph._graphs import _is_refcount_graph
 from .._internals._refgraph._paths import _RefCountGraphGraphPath
 
 
 def _wrap_result(graph, graph_path_handle):
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPath(graph_path_handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphGraphPath(graph_path_handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTGraphPath(graph_path_handle, graph)
@@ -22,8 +18,8 @@ def _wrap_result(graph, graph_path_handle):
 
 
 def tsp_random(graph, seed=None):
-    """Compute a random Hamiltonian cycle. This is a simple unoptimized solution to the 
-    Travelling Salesman Problem, suitable for a starting point in optimizing using the 
+    """Compute a random Hamiltonian cycle. This is a simple unoptimized solution to the
+    Travelling Salesman Problem, suitable for a starting point in optimizing using the
     two-opt heuristic.
 
     :param graph: the input graph. Must be undirected and complete
@@ -39,12 +35,12 @@ def tsp_random(graph, seed=None):
 
 
 def tsp_greedy_heuristic(graph):
-    r""" Construct a tour greedily. The algorithm repeatedly selects the shortest edge
+    r"""Construct a tour greedily. The algorithm repeatedly selects the shortest edge
     and adds it to the tour as long as it doesn’t create a cycle with less than :math:`n`
-    edges, or increases the degree of any node to more that two. 
- 
+    edges, or increases the degree of any node to more that two.
+
     The runtime complexity is :math:`\mathcal{O}(n^2 \log n)`.
- 
+
     :param graph: the input graph. Must be undirected and complete
     :returns: a greedy tour
     :rtype: :py:class:`.GraphPath`
@@ -126,7 +122,7 @@ def metric_tsp_two_approx(graph):
 def tsp_held_karp(graph):
     r"""A dynamic programming algorithm for the TSP.
 
-    Finds an optimal, minimum-cost Hamiltonian tour. Running time is 
+    Finds an optimal, minimum-cost Hamiltonian tour. Running time is
     :math:`\mathcal{O}(2^n \times n^2)` and space :math:`\mathcal{O}(2^n \times n)`.
 
     :param graph: the input graph. Must be undirected and complete

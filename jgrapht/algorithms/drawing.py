@@ -9,30 +9,18 @@ from .._internals._callbacks import (
 from .._internals._intgraph._long_graphs import _is_long_graph
 from .._internals._intgraph._drawing import (
     _create_int_layout_model_2d,
-    _create_long_layout_model_2d
+    _create_long_layout_model_2d,
 )
-from .._internals._mapgraph._graphs import (
-    _is_anyhashable_graph,
-    _vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
-)
-from .._internals._mapgraph._drawing import (
-    _create_anyhashable_graph_layout_model_2d
-)
-from .._internals._refgraph._graphs import (
-    _is_refcount_graph, 
-    _id_to_obj
-)
-from .._internals._refgraph._drawing import (
-    _create_refcount_graph_layout_model_2d
-)
+from .._internals._refgraph._graphs import _is_refcount_graph, _id_to_obj
+from .._internals._refgraph._drawing import _create_refcount_graph_layout_model_2d
 
 
 def _drawing_alg(name, graph, model, *args):
     if name == "circular_layout_2d":
         if _is_long_graph(graph):
-            alg_method = getattr(_backend, "jgrapht_ll_drawing_exec_" + name)    
+            alg_method = getattr(_backend, "jgrapht_ll_drawing_exec_" + name)
         else:
-            alg_method = getattr(_backend, "jgrapht_ii_drawing_exec_" + name)    
+            alg_method = getattr(_backend, "jgrapht_ii_drawing_exec_" + name)
     else:
         alg_method = getattr(_backend, "jgrapht_xx_drawing_exec_" + name)
     alg_method(graph.handle, model.handle, *args)
@@ -47,10 +35,10 @@ def create_layout_model_2d(graph, min_x, min_y, width, height):
     :param width: width
     :param height: height
     """
-    if _is_anyhashable_graph(graph):
-        model = _create_anyhashable_graph_layout_model_2d(graph, min_x, min_y, width, height)
-    elif _is_refcount_graph(graph):
-        model = _create_refcount_graph_layout_model_2d(graph, min_x, min_y, width, height)
+    if _is_refcount_graph(graph):
+        model = _create_refcount_graph_layout_model_2d(
+            graph, min_x, min_y, width, height
+        )
     elif _is_long_graph(graph):
         model = _create_long_layout_model_2d(min_x, min_y, width, height)
     else:
@@ -95,38 +83,25 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
     model = create_layout_model_2d(graph, *area)
-    if _is_anyhashable_graph(graph):
-
-        def actual_vertex_comparator_cb(v1, v2):
-            v1 = _vertex_g_to_attrsg(graph, v1)
-            v2 = _vertex_g_to_attrsg(graph, v2)
-            return vertex_comparator_cb(v1, v2)
-            
-        actual_vertex_comparator_cb = vertex_comparator_cb
-        (
-            vertex_comparator_f_ptr,
-            vertex_comparator_f,
-        ) = _create_wrapped_int_vertex_comparator_callback(actual_vertex_comparator_cb)            
-
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
 
         def actual_vertex_comparator_cb(v1, v2):
             v1 = _id_to_obj(v1)
             v2 = _id_to_obj(v2)
             return vertex_comparator_cb(v1, v2)
-            
+
         actual_vertex_comparator_cb = vertex_comparator_cb
         (
             vertex_comparator_f_ptr,
             vertex_comparator_f,
-        ) = _create_wrapped_long_vertex_comparator_callback(actual_vertex_comparator_cb)            
+        ) = _create_wrapped_long_vertex_comparator_callback(actual_vertex_comparator_cb)
 
     elif _is_long_graph(graph):
         actual_vertex_comparator_cb = vertex_comparator_cb
         (
             vertex_comparator_f_ptr,
             vertex_comparator_f,
-        ) = _create_wrapped_long_vertex_comparator_callback(actual_vertex_comparator_cb)        
+        ) = _create_wrapped_long_vertex_comparator_callback(actual_vertex_comparator_cb)
 
     else:
         actual_vertex_comparator_cb = vertex_comparator_cb

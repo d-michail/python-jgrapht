@@ -8,15 +8,6 @@ from .._internals._intgraph._flows import (
     _JGraphTLongEquivalentFlowTree,
 )
 from .._internals._intgraph._long_graphs import _is_long_graph
-from .._internals._mapgraph._graphs import (
-    _is_anyhashable_graph,
-    _vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
-)
-from .._internals._mapgraph._flows import (
-    _AnyHashableGraphCut,
-    _AnyHashableGraphFlow,
-    _AnyHashableGraphEquivalentFlowTree,
-)
 from .._internals._refgraph._graphs import _is_refcount_graph
 from .._internals._refgraph._flows import (
     _RefCountGraphCut,
@@ -26,43 +17,23 @@ from .._internals._refgraph._flows import (
 
 
 def _maxflow_alg(name, graph, source, sink, *args):
-    if _is_anyhashable_graph(graph):
-        alg_method = getattr(_backend, "jgrapht_ii_maxflow_exec_" + name)
-        flow_value, flow_handle, cut_source_partition_handle = alg_method(
-            graph.handle,
-            _vertex_anyhashableg_to_g(graph, source),
-            _vertex_anyhashableg_to_g(graph, sink),
-            *args
-        )
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         alg_method = getattr(_backend, "jgrapht_ll_maxflow_exec_" + name)
         flow_value, flow_handle, cut_source_partition_handle = alg_method(
-            graph.handle,
-            id(source),
-            id(sink),
-            *args
+            graph.handle, id(source), id(sink), *args
         )
     elif _is_long_graph(graph):
         alg_method = getattr(_backend, "jgrapht_ll_maxflow_exec_" + name)
         flow_value, flow_handle, cut_source_partition_handle = alg_method(
-            graph.handle,
-            source,
-            sink,
-            *args
+            graph.handle, source, sink, *args
         )
     else:
         alg_method = getattr(_backend, "jgrapht_ii_maxflow_exec_" + name)
         flow_value, flow_handle, cut_source_partition_handle = alg_method(
-            graph.handle,
-            source,
-            sink,
-            *args
+            graph.handle, source, sink, *args
         )
 
-    if _is_anyhashable_graph(graph):
-        flow = _AnyHashableGraphFlow(graph, flow_handle, source, sink, flow_value)
-        cut = _AnyHashableGraphCut(graph, flow_value, cut_source_partition_handle)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         flow = _RefCountGraphFlow(flow_handle, source, sink, flow_value)
         cut = _RefCountGraphCut(graph, flow_value, cut_source_partition_handle)
     elif _is_long_graph(graph):
@@ -175,9 +146,7 @@ def equivalent_flow_tree_gusfield(graph):
     """
     handle = _backend.jgrapht_xx_equivalentflowtree_exec_gusfield(graph.handle)
 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphEquivalentFlowTree(handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return __RefCountGraphEquivalentFlowTree(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTLongEquivalentFlowTree(handle, graph)

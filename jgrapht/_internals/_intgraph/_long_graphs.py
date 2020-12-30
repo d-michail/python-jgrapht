@@ -2,6 +2,7 @@ from ... import backend
 from ...types import (
     Graph,
     GraphType,
+    AttributesGraph,
     DirectedAcyclicGraph,
 )
 
@@ -12,20 +13,27 @@ from .._collections import (
     _JGraphTLongIterator,
     _JGraphTLongSet,
 )
+from .._attributes import (
+    _PerLongVertexAttributes,
+    _PerLongEdgeAttributes,
+    _GraphAttributesMapping,
+)
 
 
-class _JGraphTLongGraph(_HandleWrapper, Graph):
+class _JGraphTLongGraph(_HandleWrapper, AttributesGraph, Graph):
     """The actual graph implementation. This implementation always uses longs
     for the vertices and the edges of the graph. All operations are delegated to
     the backend.
     """
 
-    def __init__(self, handle, **kwargs):
+    def __init__(self, handle, with_attributes=False, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
         # read attributes from backend
         directed = backend.jgrapht_xx_graph_is_directed(self._handle)
-        allowing_self_loops = backend.jgrapht_xx_graph_is_allowing_selfloops(self._handle)
+        allowing_self_loops = backend.jgrapht_xx_graph_is_allowing_selfloops(
+            self._handle
+        )
         allowing_multiple_edges = backend.jgrapht_xx_graph_is_allowing_multipleedges(
             self._handle
         )
@@ -43,10 +51,37 @@ class _JGraphTLongGraph(_HandleWrapper, Graph):
         )
         self._vertex_set = None
         self._edge_set = None
+        self._graph_attrs = (
+            _GraphAttributesMapping(handle=handle) if with_attributes else None
+        )
+        self._vertex_attrs = (
+            _PerLongVertexAttributes(handle=handle) if with_attributes else None
+        )
+        self._edge_attrs = (
+            _PerLongEdgeAttributes(handle=handle) if with_attributes else None
+        )
 
     @property
     def type(self):
         return self._type
+
+    @property
+    def graph_attrs(self):
+        if self._edge_attrs is None:
+            raise ValueError("Graph attributes not supported")
+        return self._graph_attrs
+
+    @property
+    def vertex_attrs(self):
+        if self._vertex_attrs is None:
+            raise ValueError("Vertex attributes not supported")
+        return self._vertex_attrs
+
+    @property
+    def edge_attrs(self):
+        if self._edge_attrs is None:
+            raise ValueError("Edge attributes not supported")
+        return self._edge_attrs
 
     def add_vertex(self, vertex=None):
         if vertex is not None:
@@ -162,7 +197,7 @@ class _JGraphTLongGraph(_HandleWrapper, Graph):
 
         @classmethod
         def _from_iterable(cls, it):
-            return set(it)    
+            return set(it)
 
     class _EdgeSet(Set):
         """Wrapper around the edges of a JGraphT graph"""
@@ -201,7 +236,9 @@ class _JGraphTLongDirectedAcyclicGraph(_JGraphTLongGraph, DirectedAcyclicGraph):
         super().__init__(handle=handle, **kwargs)
 
     def descendants(self, vertex):
-        set_handle = backend.jgrapht_ll_graph_dag_vertex_descendants(self.handle, vertex)
+        set_handle = backend.jgrapht_ll_graph_dag_vertex_descendants(
+            self.handle, vertex
+        )
         return _JGraphTLongSet(handle=set_handle)
 
     def ancestors(self, vertex):
@@ -218,6 +255,7 @@ def _create_long_graph(
     allowing_self_loops=False,
     allowing_multiple_edges=False,
     weighted=True,
+    with_attributes=False,
 ):
     """Create a graph with long vertices/edges.
 
@@ -226,23 +264,30 @@ def _create_long_graph(
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.Graph`    
+    :rtype: :class:`~jgrapht.types.Graph`
     """
     handle = backend.jgrapht_ll_graph_create(
-        directed, allowing_self_loops, allowing_multiple_edges, weighted, False, 0, 0
+        directed,
+        allowing_self_loops,
+        allowing_multiple_edges,
+        weighted,
+        with_attributes,
+        0,
+        0,
     )
-    return _JGraphTLongGraph(handle)
+    return _JGraphTLongGraph(handle, with_attributes=with_attributes)
 
 
 def _create_long_dag(
-    allowing_multiple_edges=False, weighted=True,
+    allowing_multiple_edges=False,
+    weighted=True,
 ):
     """Create a directed acyclic graph.
 
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph`    
+    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph`
     """
     handle = backend.jgrapht_ll_graph_dag_create(allowing_multiple_edges, weighted)
     return _JGraphTLongDirectedAcyclicGraph(handle)
@@ -250,7 +295,7 @@ def _create_long_dag(
 
 def _is_long_graph(graph):
     """Check if a graph instance is a graph using longs for vertices and edges.
-    
+
     :param graph: the graph
     :returns: True if the graph is a long graph, False otherwise.
     """

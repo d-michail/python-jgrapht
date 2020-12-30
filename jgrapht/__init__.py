@@ -47,18 +47,12 @@ from jgrapht._internals._intgraph._int_graphs import (
 from jgrapht._internals._intgraph._long_graphs import (
     _create_long_graph,
     _create_long_dag,
+    _is_long_graph, 
 )
 from jgrapht._internals._refgraph._graphs import (
     _is_refcount_graph,
     _create_refcount_graph,
     _create_refcount_dag,
-)
-from jgrapht._internals._mapgraph._graphs import (
-    _is_anyhashable_graph,
-    _create_anyhashable_graph,
-    _create_anyhashable_dag,
-    _create_sparse_anyhashable_graph,
-    _copy_to_sparse_anyhashable_graph,
 )
 
 
@@ -72,8 +66,7 @@ class GraphBackend(Enum):
     """
     INT_GRAPH = 1
     LONG_GRAPH = 2
-    ANY_HASHABLE_GRAPH = 3
-    REFCOUNT_GRAPH = 4
+    LONG_REF_GRAPH = 3
 
 
 def create_graph(
@@ -83,6 +76,7 @@ def create_graph(
     weighted=True,
     dag=False,
     any_hashable=False,
+    with_attributes=False,
     vertex_supplier=None,
     edge_supplier=None,
     backend=None,
@@ -105,8 +99,10 @@ def create_graph(
       raised if either directed is False or allowing_self_loops is True. The returned graph
       will be an instance of :class:`~jgrapht.types.DirectedAcyclicGraph`
     :param any_hashable: if True then the graph will allow the use of any
-      hashable as vertices and edges instead of just integers. This also makes the graph
-      an instance of :class:`~jgrapht.types.AttributesGraph`
+      hashable as vertices and edges instead of just integers.
+    :param with_attributes: if True then the graph will allow the use of vertex/edge attributes.
+      The graph will always be an instance of :class:`~jgrapht.types.AttributesGraph` but those
+      methods raise errors if the graph does not support attributes.
     :param vertex_supplier: used only in the case that the graph allows any hashable as
       vertices/edges. Called everytime the graph needs to create a new vertex. If not given,
       then object instances are used.
@@ -116,12 +112,12 @@ def create_graph(
     :param backend: which backend implementation to use for the graph. Default is to choose
       automatically. If set, the backend takes precidence over parameter any_hashable.
     :returns: a graph
-    :rtype: :class:`~jgrapht.types.Graph`
+    :rtype: :class:`~jgrapht.types.Graph` and :class:`~jgrapht.types.AttributesGraph`
     """
 
     if backend is None: 
         if any_hashable:
-            backend = GraphBackend.ANY_HASHABLE_GRAPH
+            backend = GraphBackend.LONG_REF_GRAPH
         else: 
             backend = GraphBackend.INT_GRAPH
 
@@ -143,6 +139,7 @@ def create_graph(
                 allowing_self_loops=allowing_self_loops,
                 allowing_multiple_edges=allowing_multiple_edges,
                 weighted=weighted,
+                with_attributes=with_attributes
             )
     elif backend == GraphBackend.LONG_GRAPH:
         if dag:
@@ -155,25 +152,9 @@ def create_graph(
                 allowing_self_loops=allowing_self_loops,
                 allowing_multiple_edges=allowing_multiple_edges,
                 weighted=weighted,
+                with_attributes=with_attributes
             )
-    elif backend == GraphBackend.ANY_HASHABLE_GRAPH:
-        if dag:
-            return _create_anyhashable_dag(
-                allowing_multiple_edges=allowing_multiple_edges,
-                weighted=weighted,
-                vertex_supplier=vertex_supplier,
-                edge_supplier=edge_supplier,
-            )
-        else:
-            return _create_anyhashable_graph(
-                directed=directed,
-                allowing_self_loops=allowing_self_loops,
-                allowing_multiple_edges=allowing_multiple_edges,
-                weighted=weighted,
-                vertex_supplier=vertex_supplier,
-                edge_supplier=edge_supplier,
-            )        
-    elif backend == GraphBackend.REFCOUNT_GRAPH:
+    elif backend == GraphBackend.LONG_REF_GRAPH:
         if dag:
             return _create_refcount_dag(
                 allowing_multiple_edges=allowing_multiple_edges,
@@ -189,6 +170,7 @@ def create_graph(
                 weighted=weighted,
                 vertex_supplier=vertex_supplier,
                 edge_supplier=edge_supplier,
+                with_attributes=with_attributes
             )
         pass
     else: 
@@ -237,13 +219,7 @@ def create_sparse_graph(
     :rtype: :class:`~jgrapht.types.Graph`
     """
     if any_hashable:
-        return _create_sparse_anyhashable_graph(
-            edgelist=edgelist,
-            directed=directed,
-            weighted=weighted,
-            vertex_supplier=vertex_supplier,
-            edge_supplier=edge_supplier,
-        )
+        raise ValueError('TODO')
     else:
         return _create_sparse_int_graph(
             edgelist=edgelist,
@@ -264,8 +240,8 @@ def copy_to_sparse_graph(graph):
     :returns: a sparse graph
     :rtype: :class:`jgrapht.types.Graph`
     """
-    if _is_anyhashable_graph(graph):
-        return _copy_to_sparse_anyhashable_graph(graph)
+    if _is_refcount_graph(graph) or _is_long_graph(graph):
+        raise ValueError('TODO')
     else:
         return _copy_to_sparse_int_graph(graph)
 

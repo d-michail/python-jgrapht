@@ -403,7 +403,7 @@ class _LongGraphUnion(_JGraphTLongGraph):
 class _IntegerListenableView(_JGraphTIntegerGraph, ListenableGraph):
     def __init__(self, graph):
         res = backend.jgrapht_xx_listenable_as_listenable(graph.handle)
-        super().__init__(res)
+        super().__init__(handle=res)
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged

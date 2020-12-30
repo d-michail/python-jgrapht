@@ -1,5 +1,4 @@
 from . import create_graph as _create_graph, GraphBackend
-from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
 
 
 def _strip(elem):
@@ -21,9 +20,10 @@ def _to_vertex_list(pydot_vertex):
             result.append(_strip(u))
     return result
 
-def _parse_weight(attrs): 
+
+def _parse_weight(attrs):
     try:
-        value = attrs.get('weight')
+        value = attrs.get("weight")
         return float(value) if value is not None else None
     except ValueError:
         return None
@@ -101,12 +101,12 @@ def from_pydot(graph):
 
                 e = g.add_edge(dotu, dotv)
 
-                if 'weight' in attrs:
+                if "weight" in attrs:
                     weight_as_float = _parse_weight(attrs)
-                    if weight_as_float is not None: 
-                        attrs['weight'] = weight_as_float
+                    if weight_as_float is not None:
+                        attrs["weight"] = weight_as_float
                     else:
-                        attrs.pop('weight')
+                        attrs.pop("weight")
 
                 g.edge_attrs[e].update(**attrs)
 
@@ -130,37 +130,39 @@ def to_pydot(graph):
     strict = graph.type.allowing_self_loops and graph.type.allowing_multiple_edges
 
     graph_name = "G"
-    if _is_anyhashable_graph(graph):
-        graph_name = graph.graph_attrs.get("name", graph_name)
+    # if _is_anyhashable_graph(graph):
+    #    graph_name = graph.graph_attrs.get("name", graph_name)
 
     dotg = pydot.Dot(graph_name=graph_name, graph_type=graph_type, strict=strict)
 
-    if _is_anyhashable_graph(graph):
-        try:
-            vertex_attrs = graph.graph_attrs["vertex"]
-            dotg.set_node_defaults(**vertex_attrs)
-        except KeyError:
-            pass
+    with_attributes = True
+    try:
+        vertex_attrs = graph.graph_attrs["vertex"]
+        dotg.set_node_defaults(**vertex_attrs)
+    except (KeyError, ValueError):
+        with_attributes = False
+        pass
 
-        try:
-            edge_attrs = graph.graph_attrs["edge"]
-            dotg.set_edge_defaults(**edge_attrs)
-        except KeyError:
-            pass
+    try:
+        edge_attrs = graph.graph_attrs["edge"]
+        dotg.set_edge_defaults(**edge_attrs)
+    except (KeyError, ValueError):
+        with_attributes = False
+        pass
 
     for v in graph.vertices:
         vattrs = {}
-        if _is_anyhashable_graph(graph):
+        if with_attributes:
             vattrs.update({k: str(v) for k, v in graph.vertex_attrs[v].items()})
-            if 'name' in vattrs: 
-                vattrs.pop('name')
+            if "name" in vattrs:
+                vattrs.pop("name")
         dotv = pydot.Node(str(v), **vattrs)
         dotg.add_node(dotv)
 
     for e in graph.edges:
         u, v, weight = graph.edge_tuple(e)
         eattrs = {}
-        if _is_anyhashable_graph(graph):
+        if with_attributes:
             eattrs.update({k: str(v) for k, v in graph.edge_attrs[e].items()})
         elif graph.type.weighted:
             eattrs["weight"] = str(weight)
@@ -170,13 +172,13 @@ def to_pydot(graph):
     return dotg
 
 
-def from_nx(graph, backend=GraphBackend.ANY_HASHABLE_GRAPH):
+def from_nx(graph, backend=GraphBackend.LONG_REF_GRAPH, with_attributes=True):
     """Create a graph from a NetworkX graph.
 
     :param graph: a graph
     :type graph: nx graph
     :param any_hashable: if true the returned graph uses the same objects as the nx graph,
-        otherwise integers are used. In the later case a renumbering is performed independently from 
+        otherwise integers are used. In the later case a renumbering is performed independently from
         any possible ordering in the original graph.
     :type any_hashable: boolean
     :returns: a new graph
@@ -196,10 +198,11 @@ def from_nx(graph, backend=GraphBackend.ANY_HASHABLE_GRAPH):
         weighted=is_weighted,
         allowing_self_loops=True,
         allowing_multiple_edges=allowing_multiple_edges,
+        with_attributes=with_attributes,
         backend=backend,
     )
 
-    if _is_anyhashable_graph(result):
+    if with_attributes:
         # copy graph topology and attributes
         result.graph_attrs.update(**graph.graph)
 
@@ -207,24 +210,24 @@ def from_nx(graph, backend=GraphBackend.ANY_HASHABLE_GRAPH):
             result.add_vertex(vertex=v)
             result.vertex_attrs[v].update(**graph.nodes[v])
 
-        try: 
+        try:
             for u, v, k in graph.edges(keys=True):
                 e = result.add_edge(u, v)
-                result.edge_attrs[e].update(**graph.edges[u,v,k])
+                result.edge_attrs[e].update(**graph.edges[u, v, k])
         except TypeError:
             for u, v in graph.edges():
                 e = result.add_edge(u, v)
-                result.edge_attrs[e].update(**graph.edges[u,v])
-    else: 
+                result.edge_attrs[e].update(**graph.edges[u, v])
+    else:
         # copy graph topology only
         vmap = {}
         for v in graph.nodes:
             vmap[v] = result.add_vertex()
 
         for u, v, d in graph.edges(data=True):
-            if 'weight' in d: 
-                result.add_edge(vmap[u], vmap[v], weight=d['weight'])    
-            else: 
+            if "weight" in d:
+                result.add_edge(vmap[u], vmap[v], weight=d["weight"])
+            else:
                 result.add_edge(vmap[u], vmap[v])
 
     return result
@@ -243,7 +246,7 @@ def to_nx(graph):
     except ImportError:
         raise ImportError("NetworkX required")
 
-    if graph.type.directed: 
+    if graph.type.directed:
         if graph.type.allowing_multiple_edges:
             result = nx.MultiDiGraph()
         else:
@@ -254,15 +257,21 @@ def to_nx(graph):
         else:
             result = nx.Graph()
 
-    if _is_anyhashable_graph(graph):
+    with_attributes = True
+    try:
+        _ = graph.graph_attrs
+    except ValueError:
+        with_attributes = False
+
+    if with_attributes:
         # copy topology and attributes
         result.graph.update(**graph.graph_attrs)
 
-        for v in graph.vertices: 
+        for v in graph.vertices:
             result.add_node(v)
             result.nodes[v].update(**graph.vertex_attrs[v])
 
-        if graph.type.allowing_multiple_edges: 
+        if graph.type.allowing_multiple_edges:
             if graph.type.weighted:
                 for e in graph.edges:
                     u = graph.edge_source(e)
@@ -292,7 +301,7 @@ def to_nx(graph):
                     result.edges[u, v].update(**graph.edge_attrs[e])
     else:
         # copy topology
-        for v in graph.vertices: 
+        for v in graph.vertices:
             result.add_node(v)
 
         if graph.type.weighted:

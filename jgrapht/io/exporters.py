@@ -8,7 +8,6 @@ from jgrapht._internals._intgraph._attributes import (
     _JGraphTAttributesRegistry,
 )
 from jgrapht._internals._intgraph._long_graphs import _is_long_graph
-from jgrapht._internals._mapgraph._graphs import _is_anyhashable_graph
 from jgrapht._internals._refgraph._graphs import _is_refcount_graph
 
 
@@ -48,23 +47,7 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None, posit
       an identifier to be written to file.
     """
     vertex_id_store = None
-    if _is_anyhashable_graph(graph):
-        # special case, read identifiers from any-hashable graph
-        vertex_id_store = _JGraphTIntegerStringMap()
-
-        if export_vertex_id_cb is not None:
-            for k, v in graph._vertex_id_to_hash.items():
-                vid = export_vertex_id_cb(v)
-                if check_valid_id is not None:
-                    check_valid_id(vid)
-                vertex_id_store[k] = str(vid)
-        else:
-            for k, v in graph._vertex_id_to_hash.items():
-                value = v+1 if positive_ids else v
-                if check_valid_id is not None:
-                    check_valid_id(value)
-                vertex_id_store[k] = str(value)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         # refcount graphs
         vertex_id_store = _JGraphTLongStringMap()
         if export_vertex_id_cb is not None:
@@ -101,23 +84,7 @@ def _vertex_attributes_store(graph, attributes_dict):
     used in order to export a graph with attributes.
     """
     attribute_store = None
-    if _is_anyhashable_graph(graph):
-        # any-hashable graph
-        attribute_store = _JGraphTIntegerAttributeStore()
-        for v in graph.vertices:
-            for key, value in graph.vertex_attrs[v].items():
-                attribute_store.put(graph._vertex_hash_to_id[v], key, str(value))
-        if attributes_dict is not None:
-            for v, attr_dict in attributes_dict.items():
-                for key, value in attr_dict.items():
-                    try:
-                        attribute_store.put(
-                            graph._vertex_hash_to_id[v], key, str(value)
-                        )
-                    except KeyError:
-                        # ignore
-                        pass
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         # refcount graph
         if attributes_dict is not None:
             if attribute_store is None:
@@ -147,11 +114,6 @@ def _edge_id_store(graph):
     works for any-hashable graphs, otherwise it returns None.
     """
     edge_id_store = None
-    if _is_anyhashable_graph(graph):
-        # special case, read identifiers from an any-hashable graph
-        edge_id_store = _JGraphTIntegerStringMap()
-        for k, v in graph._edge_id_to_hash.items():
-            edge_id_store[k] = str(v)
     return edge_id_store
 
 
@@ -161,21 +123,7 @@ def _edge_attributes_store(graph, attributes_dict):
     used in order to export a graph with attributes.
     """
     attribute_store = None
-    if _is_anyhashable_graph(graph):
-        # any-hashable graph
-        attribute_store = _JGraphTIntegerAttributeStore()
-        for e in graph.edges:
-            for key, value in graph.edge_attrs[e].items():
-                attribute_store.put(graph._edge_hash_to_id[e], key, str(value))
-        if attributes_dict is not None:
-            for e, attr_dict in attributes_dict.items():
-                for key, value in attr_dict.items():
-                    try:
-                        attribute_store.put(graph._edge_hash_to_id[e], key, str(value))
-                    except KeyError:
-                        # just ignore
-                        pass
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         # refcount graph
         if attributes_dict is not None:
             if attribute_store is None:

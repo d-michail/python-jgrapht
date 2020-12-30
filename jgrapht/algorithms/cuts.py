@@ -7,14 +7,6 @@ from .._internals._intgraph._flows import (
     _JGraphTLongGomoryHuTree,
 )
 from .._internals._collections import _JGraphTIntegerMutableSet, _JGraphTLongMutableSet
-from .._internals._mapgraph._graphs import (
-    _is_anyhashable_graph,
-    _vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
-)
-from .._internals._mapgraph._flows import (
-    _AnyHashableGraphCut,
-    _AnyHashableGraphGomoryHuTree,
-)
 from .._internals._refgraph._graphs import _is_refcount_graph
 from .._internals._refgraph._flows import (
     _RefCountGraphCut,
@@ -24,10 +16,8 @@ from .._internals._refgraph._flows import (
 from .flow import push_relabel
 
 
-def _wrap_graph_cut(graph, weight, handle): 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphCut(graph, weight, handle)
-    elif _is_refcount_graph(graph):
+def _wrap_graph_cut(graph, weight, handle):
+    if _is_refcount_graph(graph):
         return _RefCountGraphCut(graph, weight, handle)
     elif _is_long_graph(graph):
         return _JGraphTCut(graph, weight, handle)
@@ -92,9 +82,7 @@ def gomory_hu_gusfield(graph):
     """
     handle = _backend.jgrapht_xx_cut_gomoryhu_exec_gusfield(graph.handle)
 
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGomoryHuTree(handle, graph)
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         return _RefCountGraphGomoryHuTree(handle, graph)
     elif _is_long_graph(graph):
         return _JGraphTLongGomoryHuTree(handle, graph)
@@ -119,11 +107,7 @@ def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
     :param use_tree_compression: whether to use the tree compression technique
     :returns: a cut as an instance of :py:class:`.Cut`.
     """
-    if _is_anyhashable_graph(graph):
-        odd_set = _JGraphTIntegerMutableSet()
-        for x in odd_vertices:
-            odd_set.add(_vertex_anyhashableg_to_g(graph, x))
-    elif _is_refcount_graph(graph):
+    if _is_refcount_graph(graph):
         odd_set = _JGraphTLongMutableSet()
         for x in odd_vertices:
             odd_set.add(id(x))

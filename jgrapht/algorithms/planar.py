@@ -8,11 +8,6 @@ from .._internals._intgraph._int_graphs import _JGraphTIntegerGraph
 from .._internals._intgraph._long_graphs import _JGraphTLongGraph, _is_long_graph
 from .._internals._refgraph._graphs import _is_refcount_graph, _RefCountGraph, _inc_ref
 from .._internals._refgraph._planar import _RefCountGraphPlanarEmbedding
-from .._internals._mapgraph._graphs import (
-    _is_anyhashable_graph,
-    _create_anyhashable_graph_subgraph,
-)
-from .._internals._mapgraph._planar import _AnyHashableGraphPlanarEmbedding
 
 
 def _planarity_alg(name, graph, *args):
@@ -23,22 +18,14 @@ def _planarity_alg(name, graph, *args):
     is_planar, embedding, kuratowski_subdivision = alg_method(graph.handle, *args)
 
     if is_planar:
-        if _is_anyhashable_graph(graph):
-            return is_planar, _AnyHashableGraphPlanarEmbedding(embedding, graph)
-        elif _is_refcount_graph(graph):
+        if _is_refcount_graph(graph):
             return is_planar, _RefCountGraphPlanarEmbedding(embedding, graph)
         elif _is_long_graph(graph):
             return is_planar, _JGraphTLongPlanarEmbedding(embedding)
         else:
             return is_planar, _JGraphTIntegerPlanarEmbedding(embedding)
     else:
-        if _is_anyhashable_graph(graph):
-            kuratowski_as_graph = _JGraphTIntegerGraph(handle=kuratowski_subdivision)
-            return (
-                is_planar,
-                _create_anyhashable_graph_subgraph(graph, kuratowski_as_graph),
-            )
-        elif _is_refcount_graph(graph):
+        if _is_refcount_graph(graph):
             res = _RefCountGraph(handle=kuratowski_subdivision)
             # Need to increment refcounts since the graph was created in the backend
             for v in res.vertices:
