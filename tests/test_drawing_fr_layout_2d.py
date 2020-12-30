@@ -4,14 +4,17 @@ from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.drawing as drawing
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_fr_layout(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
     g.add_vertices_from(range(0, 5))
     g.add_edge(0, 1)
@@ -39,7 +42,6 @@ def test_fr_layout(backend):
         (5.651036062420804, 4.13103626560845),
     ]
 
-
     area = (0, 0, 10, 10)
     model = drawing.fruchterman_reingold_layout_2d(g, area)
     assert model.area == area
@@ -48,14 +50,17 @@ def test_fr_layout(backend):
     assert len(locations) == 5
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_fr_layout_indexed(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
     g.add_vertices_from(range(0, 5))
     g.add_edge(0, 1)
@@ -84,7 +89,9 @@ def test_fr_layout_indexed(backend):
     ]
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize(
+    "backend", [GraphBackend.LONG_REF_GRAPH]
+)
 def test_anyhashableg_fr_layout(backend):
     g = create_graph(
         directed=False,
@@ -92,7 +99,7 @@ def test_anyhashableg_fr_layout(backend):
         allowing_multiple_edges=False,
         weighted=False,
         any_hashable=True,
-        backend=backend
+        backend=backend,
     )
 
     g.add_vertex("0")
@@ -127,7 +134,9 @@ def test_anyhashableg_fr_layout(backend):
     ]
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize(
+    "backend", [GraphBackend.LONG_REF_GRAPH]
+)
 def test_anyhashableg_fr_layout_indexed(backend):
     g = create_graph(
         directed=False,
@@ -135,7 +144,7 @@ def test_anyhashableg_fr_layout_indexed(backend):
         allowing_multiple_edges=False,
         weighted=False,
         any_hashable=True,
-        backend=backend
+        backend=backend,
     )
 
     g.add_vertex(0)
@@ -144,14 +153,14 @@ def test_anyhashableg_fr_layout_indexed(backend):
     g.add_vertex(3)
     g.add_vertex(4)
 
-    g.add_edge(0, 1, edge='0')
-    g.add_edge(1, 2, edge='1')
-    g.add_edge(2, 3, edge='2')
-    g.add_edge(3, 0, edge='3')
-    g.add_edge(4, 0, edge='4')
-    g.add_edge(4, 1, edge='5')
-    g.add_edge(4, 2, edge='6')
-    g.add_edge(4, 3, edge='7')
+    g.add_edge(0, 1, edge="0")
+    g.add_edge(1, 2, edge="1")
+    g.add_edge(2, 3, edge="2")
+    g.add_edge(3, 0, edge="3")
+    g.add_edge(4, 0, edge="4")
+    g.add_edge(4, 1, edge="5")
+    g.add_edge(4, 2, edge="6")
+    g.add_edge(4, 3, edge="7")
 
     area = (0, 0, 10, 10)
     model = drawing.fruchterman_reingold_indexed_layout_2d(g, area, seed=17)
@@ -168,7 +177,6 @@ def test_anyhashableg_fr_layout_indexed(backend):
         (4.723099507642359, 3.9730366244091533),
         (4.7277641668738415, 3.974929737653007),
     ]
-
 
     area = (0, 0, 10, 10)
     model = drawing.fruchterman_reingold_indexed_layout_2d(g, area)

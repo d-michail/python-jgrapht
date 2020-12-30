@@ -17,7 +17,9 @@ from .._internals._refgraph._drawing import _create_refcount_graph_layout_model_
 
 def _drawing_alg(name, graph, model, *args):
     if name == "circular_layout_2d":
-        if _is_long_graph(graph):
+        if _is_refcount_graph(graph):
+            alg_method = getattr(_backend, "jgrapht_ll_drawing_exec_" + name)
+        elif _is_long_graph(graph):
             alg_method = getattr(_backend, "jgrapht_ll_drawing_exec_" + name)
         else:
             alg_method = getattr(_backend, "jgrapht_ii_drawing_exec_" + name)

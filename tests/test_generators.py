@@ -10,8 +10,7 @@ from jgrapht.utils import create_vertex_supplier, create_edge_supplier
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_barabasi_albert(backend):
@@ -31,8 +30,7 @@ def test_barabasi_albert(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_barabasi_albert_forest(backend):
@@ -52,8 +50,7 @@ def test_barabasi_albert_forest(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_complete(backend):
@@ -73,8 +70,7 @@ def test_complete(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_complete_bipartite(backend):
@@ -94,8 +90,7 @@ def test_complete_bipartite(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_empty(backend):
@@ -115,8 +110,7 @@ def test_empty(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_gnm_random(backend):
@@ -136,8 +130,7 @@ def test_gnm_random(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_gnp_random(backend):
@@ -157,8 +150,7 @@ def test_gnp_random(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_ring(backend):
@@ -178,8 +170,7 @@ def test_ring(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_scalefree(backend):
@@ -199,8 +190,7 @@ def test_scalefree(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_watts_strogatz(backend):
@@ -220,8 +210,7 @@ def test_watts_strogatz(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_kleinberg_smallworld(backend):
@@ -241,8 +230,7 @@ def test_kleinberg_smallworld(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_complement(backend):
@@ -281,8 +269,7 @@ def test_complement(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_generalized_petersen(backend):
@@ -302,8 +289,7 @@ def test_generalized_petersen(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_grid(backend):
@@ -323,8 +309,7 @@ def test_grid(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_hypercube(backend):
@@ -344,8 +329,7 @@ def test_hypercube(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_linear(backend):
@@ -365,8 +349,7 @@ def test_linear(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_random_regular(backend):
@@ -386,8 +369,7 @@ def test_random_regular(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_random_regular_no_seed(backend):
@@ -407,8 +389,7 @@ def test_random_regular_no_seed(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_star(backend):
@@ -428,8 +409,7 @@ def test_star(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_wheel(backend):
@@ -449,8 +429,7 @@ def test_wheel(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_windmill(backend):
@@ -470,8 +449,7 @@ def test_windmill(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_linearized_chord_diagram(backend):
@@ -502,8 +480,7 @@ def test_linearized_chord_diagram(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_linearized_chord_diagram_no_seed(backend):

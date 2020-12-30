@@ -6,13 +6,17 @@ from jgrapht import (
     copy_to_sparse_graph,
     GraphBackend,
 )
+from jgrapht.utils import create_vertex_supplier, create_edge_supplier
 
 
 def assert_same_set(set1, set2):
     assert set1 <= set2 and set2 <= set1
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH],
+)
 def test_graph_directed_inoutedges(backend):
 
     g = create_graph(
@@ -111,7 +115,10 @@ def test_graph_directed_inoutedges(backend):
     assert_same_set(set(g.edges), set([0, 1, 2, 3, 4, 5, 6]))
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH],
+)
 def test_graph_undirected_inoutedges(backend):
 
     g = create_graph(
@@ -209,7 +216,10 @@ def test_graph_undirected_inoutedges(backend):
     assert_same_set(set(g.edges), set([0, 1, 2, 3, 4, 5, 6]))
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_graph_no_allow_self_loops(backend):
 
     g = create_graph(
@@ -232,7 +242,10 @@ def test_graph_no_allow_self_loops(backend):
         g.add_edge(v1, v1)
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_graph_no_allow_multiple_edges(backend):
 
     g = create_graph(
@@ -258,7 +271,10 @@ def test_graph_no_allow_multiple_edges(backend):
         g.add_edge(v1, v2)
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_graph_no_weights(backend):
 
     g = create_graph(
@@ -287,7 +303,10 @@ def test_graph_no_weights(backend):
         g.set_edge_weight(e12, 10.0)
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_graph_add_edge_with_weight(backend):
 
     g = create_graph(
@@ -307,7 +326,10 @@ def test_graph_add_edge_with_weight(backend):
     assert g.get_edge_weight(e12) == 55.0
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH],
+)
 def test_graph_add_edge(backend):
 
     g = create_graph(
@@ -336,7 +358,10 @@ def test_graph_add_edge(backend):
     assert g.add_edge(1, 2, edge=8) == 8
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_graph_add_edges_from(backend):
 
     g = create_graph(
@@ -345,6 +370,7 @@ def test_graph_add_edges_from(backend):
         allowing_multiple_edges=True,
         weighted=True,
         backend=backend,
+        edge_supplier=create_edge_supplier(type='int')
     )
 
     g.add_vertices_from([1, 2, 3, 4, 5])
@@ -361,7 +387,10 @@ def test_graph_add_edges_from(backend):
     assert g.get_edge_weight(13) == 1.0
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH],
+)
 def test_graph_add_vertex(backend):
 
     g = create_graph(
@@ -369,7 +398,7 @@ def test_graph_add_vertex(backend):
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        backend=backend,
+        backend=backend
     )
 
     assert g.add_vertex() == 0
@@ -465,6 +494,7 @@ def test_graph_copy_to_sparse():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        backend=GraphBackend.INT_GRAPH,
     )
 
     assert not g.type.directed
@@ -508,6 +538,7 @@ def test_graph_copy_to_sparse1():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
+        backend=GraphBackend.INT_GRAPH,
     )
 
     assert g.type.directed
@@ -533,6 +564,7 @@ def test_graph_copy_to_sparse1():
     assert gs.type.directed
 
 
+@pytest.mark.skip(reason="TODO")
 @pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
 def test_dag(backend):
     g = create_graph(
@@ -590,6 +622,7 @@ def test_dag(backend):
         g1.add_edge(0, 1)
 
 
+@pytest.mark.skip(reason="TODO")
 def test_anyhashableg_dag():
     g = create_graph(
         allowing_multiple_edges=True, weighted=True, dag=True, any_hashable=True
@@ -653,7 +686,10 @@ def test_anyhashableg_dag():
         g1.add_edge("0", "1")
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_graph_type(backend):
 
     g = create_graph(
@@ -661,7 +697,7 @@ def test_graph_type(backend):
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     assert g.type.allowing_cycles
@@ -691,8 +727,6 @@ def test_graph_type(backend):
     str(gtype_directed)
 
 
-
-
 def test_graph_attrs():
 
     g = create_graph(
@@ -700,38 +734,35 @@ def test_graph_attrs():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        backend=GraphBackend.REFCOUNT_GRAPH
+        with_attributes=True,
+        backend=GraphBackend.LONG_REF_GRAPH
     )
 
-    g.add_vertex('0')
-    g.add_vertex('1')
-    g.add_vertex('2')
-    g.add_vertex('3')
-
+    g.add_vertex("0")
+    g.add_vertex("1")
+    g.add_vertex("2")
+    g.add_vertex("3")
 
     assert len(g.vertex_attrs) == 4
-    assert g.vertex_attrs.__contains__('0')
-    assert g.vertex_attrs.__contains__('1')
-    assert g.vertex_attrs.__contains__('2')
-    assert g.vertex_attrs.__contains__('3')
-    assert not g.vertex_attrs.__contains__('4')
+    assert g.vertex_attrs.__contains__("0")
+    assert g.vertex_attrs.__contains__("1")
+    assert g.vertex_attrs.__contains__("2")
+    assert g.vertex_attrs.__contains__("3")
+    assert not g.vertex_attrs.__contains__("4")
 
     allkeys = set(iter(g.vertex_attrs))
-    assert allkeys == {'0', '1', '2', '3'}
+    assert allkeys == {"0", "1", "2", "3"}
 
-    g.vertex_attrs['0']['label'] = 'vertex0'
-    g.vertex_attrs['0']['type'] = 'vertex'
-    g.vertex_attrs['1']['label'] = 'vertex1'
-    g.vertex_attrs['2']['label'] = 'vertex1'
+    g.vertex_attrs["0"]["label"] = "vertex0"
+    g.vertex_attrs["0"]["type"] = "vertex"
+    g.vertex_attrs["1"]["label"] = "vertex1"
+    g.vertex_attrs["2"]["label"] = "vertex1"
 
     assert len(g.vertex_attrs) == 4
-    assert len(g.vertex_attrs['0']) == 2
+    assert len(g.vertex_attrs["0"]) == 2
 
-    assert g.vertex_attrs['0']['label'] == 'vertex0'
-    assert g.vertex_attrs['0']['type'] == 'vertex'
-    assert g.vertex_attrs['1']['label'] == 'vertex1'
-
+    assert g.vertex_attrs["0"]["label"] == "vertex0"
+    assert g.vertex_attrs["0"]["type"] == "vertex"
+    assert g.vertex_attrs["1"]["label"] == "vertex1"
 
     print(g)
-
-

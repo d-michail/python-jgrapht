@@ -4,14 +4,17 @@ from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.drawing as drawing
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_circular_layout(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
     g.add_vertices_from(range(0, 4))
     g.add_edge(0, 1)
@@ -34,14 +37,17 @@ def test_circular_layout(backend):
     ]
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_circular_layout_with_comparator(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
     g.add_vertices_from(range(0, 4))
     g.add_edge(0, 1)
@@ -79,10 +85,13 @@ def test_anyhashableg_circular_layout_with_comparator():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.LONG_REF_GRAPH
     )
-    for i in range(0, 4):
-        g.add_vertex(str(i))
+    g.add_vertex("0")
+    g.add_vertex("1")
+    g.add_vertex("2")
+    g.add_vertex("3")
+
     g.add_edge("0", "1")
     g.add_edge("1", "2")
     g.add_edge("2", "3")

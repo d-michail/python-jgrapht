@@ -119,8 +119,7 @@ def test_export_import(backend, tmpdir):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_output_to_string(backend):
@@ -151,7 +150,8 @@ def test_read_csv_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.LONG_REF_GRAPH, 
+        with_attributes=True,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -167,12 +167,19 @@ def test_read_csv_property_graph_from_string():
 
     parse_csv(g, input_string, import_id_cb=import_id_cb)
 
-    print(g.vertices)
+    print(g)
 
     assert g.vertices == {"v2", "v3", "v4", "v5"}
-    assert g.edge_tuple("e2") == ("v4", "v5", 1.0)
-    assert g.vertex_attrs == {}
-    assert g.edge_attrs == {}
+
+    edges = list(g.edges)
+    e0 = edges[0]
+    e1 = edges[1]
+    e2 = edges[2]
+    e3 = edges[3]
+
+    assert g.edges == {"e0", "e1", "e2", "e3"}
+
+    assert g.edge_tuple(e2) == ("v4", "v5", 1.0)
 
 
 def test_read_csv_property_graph_from_string1():
@@ -198,9 +205,14 @@ def test_read_csv_property_graph_from_string1():
     print(g.vertices)
 
     assert g.vertices == {"v0", "v1", "v2", "v3"}
-    assert g.edge_tuple("e2") == ("v2", "v3", 1.0)
-    assert g.vertex_attrs == {}
-    assert g.edge_attrs == {}
+
+    edges = list(g.edges)
+    e0 = edges[0]
+    e1 = edges[1]
+    e2 = edges[2]
+    e3 = edges[3]
+
+    assert g.edge_tuple(e2) == ("v2", "v3", 1.0)
 
 
 def test_read_csv_property_graph_from_file(tmpdir):
@@ -233,7 +245,11 @@ def test_read_csv_property_graph_from_file(tmpdir):
 
     print(g.vertices)
 
+    edges = list(g.edges)
+    e0 = edges[0]
+    e1 = edges[1]
+    e2 = edges[2]
+    e3 = edges[3]
+
     assert g.vertices == {"v2", "v3", "v4", "v5"}
-    assert g.edge_tuple("e2") == ("v4", "v5", 1.0)
-    assert g.vertex_attrs == {}
-    assert g.edge_attrs == {}
+    assert g.edge_tuple(e2) == ("v4", "v5", 1.0)

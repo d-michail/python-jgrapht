@@ -9,8 +9,7 @@ import jgrapht.algorithms.cuts as cuts
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH
     ],
 )
 def test_gomory_hu_tree(backend):
@@ -55,8 +54,7 @@ def test_gomory_hu_tree(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_gomory_hu_tree(backend):

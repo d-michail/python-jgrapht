@@ -34,8 +34,7 @@ def build_graph(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH
     ],
 )
 def test_output_dot(backend, tmpdir):
@@ -79,7 +78,7 @@ def test_output_dot(backend, tmpdir):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH
     ],
 )
 def test_output_to_string(backend):
@@ -112,7 +111,8 @@ def test_property_graph_output_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        backend=GraphBackend.ANY_HASHABLE_GRAPH
+        backend=GraphBackend.LONG_REF_GRAPH,
+        with_attributes=True,
     )
 
     g.add_vertex('v1')
@@ -142,7 +142,8 @@ def test_read_dot_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=GraphBackend.ANY_HASHABLE_GRAPH,
+        with_attributes=True,
+        backend=GraphBackend.LONG_REF_GRAPH,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -173,7 +174,8 @@ def test_read_dot_property_graph_from_string1():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=GraphBackend.ANY_HASHABLE_GRAPH,
+        with_attributes=True,
+        backend=GraphBackend.LONG_REF_GRAPH,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -214,18 +216,26 @@ def test_read_dot_property_graph_from_filename(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=GraphBackend.ANY_HASHABLE_GRAPH,
+        with_attributes=True,
+        backend=GraphBackend.LONG_REF_GRAPH,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
 
     read_dot(g, tmpfilename)
 
+    print(g.edges)
+    assert g.edges == {"e0"}
     assert g.vertices == {'v0', 'v1'}
-    assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
-    assert g.vertex_attrs['v0']['color'] == 'red'
-    assert g.vertex_attrs['v1']['color'] == 'blue'
-    assert g.edge_attrs['e0']['capacity'] == '5.0'
+
+    e0 = list(g.edges)[0]
+    v0 = list(g.vertices)[0]
+    v1 = list(g.vertices)[1]
+
+    assert g.edge_tuple(e0) == ('v0', 'v1', 1.0)
+    assert g.vertex_attrs[v0]['color'] == 'red'
+    assert g.vertex_attrs[v1]['color'] == 'blue'
+    assert g.edge_attrs[e0]['capacity'] == '5.0'
 
 
 @pytest.mark.parametrize(
@@ -233,8 +243,7 @@ def test_read_dot_property_graph_from_filename(tmpdir):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH
     ],
 )
 def test_read_dot_graph_from_string(backend):

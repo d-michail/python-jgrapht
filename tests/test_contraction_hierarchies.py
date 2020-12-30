@@ -63,12 +63,7 @@ def get_anyhashableg_graph(backend):
 
 @pytest.mark.parametrize(
     "backend",
-    [
-        GraphBackend.INT_GRAPH,
-        GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-    ],
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
 )
 def test_ch_dijkstra(backend):
     g = get_graph(backend)
@@ -90,9 +85,7 @@ def test_ch_dijkstra(backend):
     assert 6 == p2.end_vertex
 
 
-@pytest.mark.parametrize(
-    "backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH]
-)
+@pytest.mark.parametrize("backend", [GraphBackend.LONG_REF_GRAPH])
 def test_ch_dijkstra_anyhashable(backend):
     g = get_anyhashableg_graph(backend)
 
@@ -115,12 +108,7 @@ def test_ch_dijkstra_anyhashable(backend):
 
 @pytest.mark.parametrize(
     "backend",
-    [
-        GraphBackend.INT_GRAPH,
-        GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-    ],
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
 )
 def test_ch_many_to_many(backend):
     g = get_graph(backend)
@@ -150,8 +138,7 @@ def test_ch_many_to_many(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashable_ch_many_to_many(backend):

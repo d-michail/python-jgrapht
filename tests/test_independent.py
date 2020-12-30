@@ -5,14 +5,21 @@ from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.independent as independent
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_chordal(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
 
     for i in range(0, 6):

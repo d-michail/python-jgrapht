@@ -145,8 +145,7 @@ a 109 101
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_dimacs(backend, tmpdir):
@@ -167,8 +166,7 @@ def test_dimacs(backend, tmpdir):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_dimacs_with_custom_ids(backend, tmpdir):
@@ -193,8 +191,7 @@ def test_dimacs_with_custom_ids(backend, tmpdir):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_dimacs_with_custom_ids_bad_function(backend, tmpdir):
@@ -224,8 +221,7 @@ def test_dimacs_with_custom_ids_bad_function(backend, tmpdir):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_dimacs_coloring(backend, tmpdir):
@@ -246,8 +242,7 @@ def test_dimacs_coloring(backend, tmpdir):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_dimacs_maxclique(backend, tmpdir):
@@ -268,8 +263,7 @@ def test_dimacs_maxclique(backend, tmpdir):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_dimacs_output_to_string(backend):
@@ -350,9 +344,7 @@ def test_read_dimacs_property_graph_from_file(tmpdir):
     read_dimacs(g, tmpfilename)
 
     assert g.vertices == {"v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"}
-    assert g.edge_tuple("e6") == ("v0", "v7", 1.0)
-    assert g.vertex_attrs == {}
-    assert g.edge_attrs == {}
+    assert g.edge_tuple(list(g.edges)[6]) == ("v0", "v7", 1.0)
 
 
 def test_read_dimacs_property_graph_from_string():
@@ -393,9 +385,7 @@ def test_read_dimacs_property_graph_from_string():
     parse_dimacs(g, dimacs_sp_expected, import_id_cb=import_id_cb)
 
     assert g.vertices == {"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"}
-    assert g.edge_tuple("e6") == ("v1", "v8", 1.0)
-    assert g.vertex_attrs == {}
-    assert g.edge_attrs == {}
+    assert g.edge_tuple(list(g.edges)[6]) == ("v1", "v8", 1.0)
 
 
 @pytest.mark.parametrize(
@@ -403,8 +393,7 @@ def test_read_dimacs_property_graph_from_string():
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_dimacs(backend, tmpdir):
@@ -425,8 +414,7 @@ def test_anyhashableg_dimacs(backend, tmpdir):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_dimacs_increase_to_positive_id(backend, tmpdir):
@@ -483,8 +471,7 @@ def test_anyhashableg_dimacs_increase_to_positive_id(backend, tmpdir):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_dimacs_output_to_string(backend):

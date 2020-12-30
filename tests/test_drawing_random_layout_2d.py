@@ -29,7 +29,7 @@ def build_graph(backend):
     return g
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH])
 def test_random_layout(backend):
     g = build_graph(backend)
 
@@ -87,7 +87,7 @@ def build_anyhashableg_graph(backend):
     return g
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.LONG_REF_GRAPH])
 def test_anyhashableg_random_layout(backend):
     g = build_anyhashableg_graph(backend)
 
