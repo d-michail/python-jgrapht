@@ -9,8 +9,7 @@ import jgrapht.algorithms.flow as flow
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_eft(backend):
@@ -52,8 +51,7 @@ def test_eft(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_eft(backend):

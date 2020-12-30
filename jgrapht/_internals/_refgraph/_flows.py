@@ -135,6 +135,7 @@ class _RefCountGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
             tree_handle,
             vertex_supplier_fptr_and_cb=vertex_supplier_fptr_and_cb,
             edge_supplier_fptr_and_cb=edge_supplier_fptr_and_cb,
+            with_attributes=False,
         )
 
         # The resulting tree has the same vertices as the original graph. Since the
@@ -181,6 +182,7 @@ class __RefCountGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
             tree_handle,
             vertex_supplier_fptr_and_cb=vertex_supplier_fptr_and_cb,
             edge_supplier_fptr_and_cb=edge_supplier_fptr_and_cb,
+            with_attributes=False,
         )
 
         # The resulting tree has the same vertices as the original graph. Since the
