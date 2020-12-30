@@ -12,7 +12,9 @@ from .._callbacks import _create_wrapped_long_supplier_callback
 from .._refcount import _inc_ref, _dec_ref, _dec_ref_by_id, _id_to_obj, _map_ids_to_objs
 from .._attributes import (
     _PerRefLongVertexAttributes,
+    _LongVertexAttributesView,
     _PerRefLongEdgeAttributes,
+    _LongEdgeAttributesView,    
     _GraphAttributesMapping,
 )
 from .._collections import (
@@ -88,7 +90,7 @@ class _RefCountGraph(_HandleWrapper, AttributesGraph, Graph):
 
     @property
     def graph_attrs(self):
-        if self._edge_attrs is None:
+        if self._graph_attrs is None:
             raise ValueError("Graph attributes not supported")
         return self._graph_attrs
 
@@ -278,6 +280,33 @@ class _RefCountGraph(_HandleWrapper, AttributesGraph, Graph):
         @classmethod
         def _from_iterable(cls, it):
             return set(it)
+
+    def __del__(self):
+        # Perform graph attributes deletion. Needs to be performed to keep 
+        # reference counts correct.
+        if self.graph_attrs is not None:
+            keys = list(self.graph_attrs.keys())
+            for k in keys:
+                del self.graph_attrs[k]
+        
+        if self.vertex_attrs is not None:
+            for vertex in self.vertices:
+                attrs = _LongVertexAttributesView(self._handle, vertex, id(vertex))
+                keys = list(attrs)
+                for k in keys:
+                    del attrs[k]
+
+        if self.edge_attrs is not None:
+            for edge in self.edges:
+                attrs = _LongEdgeAttributesView(self._handle, edge, id(edge))
+                keys = list(attrs)
+                for k in keys:
+                    del attrs[k]            
+
+        # Do not forget to call super, otherwise the graph will not be deleted
+        # from the JVM.
+        super().__del__()
+
 
 
 class _RefCountDirectedAcyclicGraph(_RefCountGraph, DirectedAcyclicGraph):

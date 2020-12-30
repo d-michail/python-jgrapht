@@ -166,7 +166,7 @@ class _JGraphTStringIterator(_HandleWrapper, Iterator):
         if not res:
             raise StopIteration()
         handle = backend.jgrapht_it_next_object(self._handle)
-        return _JGraphTString(handle=handle)
+        return str(_JGraphTString(handle=handle))
 
     def __repr__(self):
         return "_JGraphTStringIterator(%r)" % self._handle

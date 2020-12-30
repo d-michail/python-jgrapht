@@ -20,8 +20,9 @@ class _IntegerVertexAttributesView(MutableMapping):
 
     def __getitem__(self, key):
         self._assert_vertex()
+        encoded_key = bytearray(key, encoding="utf-8")
         res = backend.jgrapht_ii_graph_attrs_vertex_get_long(
-            self._handle, self._vertex_id, key
+            self._handle, self._vertex_id, encoded_key
         )
         if res is None:
             raise KeyError("Key {} not found".format(key))
@@ -29,9 +30,10 @@ class _IntegerVertexAttributesView(MutableMapping):
 
     def __setitem__(self, key, value):
         self._assert_vertex()
+        encoded_key = bytearray(key, encoding="utf-8")
         try:
             old_value_id = backend.jgrapht_ii_graph_attrs_vertex_get_long(
-                self._handle, self._vertex_id, key
+                self._handle, self._vertex_id, encoded_key
             )
             _dec_ref_by_id(old_value_id)
         except ValueError:
@@ -40,18 +42,19 @@ class _IntegerVertexAttributesView(MutableMapping):
         value_id = id(value)
         _inc_ref(value)
         backend.jgrapht_ii_graph_attrs_vertex_put_long(
-            self._handle, self._vertex_id, key, value_id
+            self._handle, self._vertex_id, encoded_key, value_id
         )
 
     def __delitem__(self, key):
         self._assert_vertex()
         try:
+            encoded_key = bytearray(key, encoding="utf-8")
             old_value_id = backend.jgrapht_ii_graph_attrs_vertex_get_long(
-                self._handle, self._vertex_id, key
+                self._handle, self._vertex_id, encoded_key
             )
             _dec_ref_by_id(old_value_id)
             backend.jgrapht_ii_graph_attrs_vertex_remove(
-                self._handle, self._vertex_id, key
+                self._handle, self._vertex_id, encoded_key
             )
         except ValueError:
             # key not found, ignore
@@ -84,8 +87,9 @@ class _LongVertexAttributesView(MutableMapping):
 
     def __getitem__(self, key):
         self._assert_vertex()
+        encoded_key = bytearray(key, encoding="utf-8")
         res = backend.jgrapht_ll_graph_attrs_vertex_get_long(
-            self._handle, self._vertex_id, key
+            self._handle, self._vertex_id, encoded_key
         )
         if res is None:
             raise KeyError("Key {} not found".format(key))
@@ -93,9 +97,10 @@ class _LongVertexAttributesView(MutableMapping):
 
     def __setitem__(self, key, value):
         self._assert_vertex()
+        encoded_key = bytearray(key, encoding="utf-8")
         try:
             old_value_id = backend.jgrapht_ll_graph_attrs_vertex_get_long(
-                self._handle, self._vertex_id, key
+                self._handle, self._vertex_id, encoded_key
             )
             _dec_ref_by_id(old_value_id)
         except ValueError:
@@ -104,18 +109,19 @@ class _LongVertexAttributesView(MutableMapping):
         value_id = id(value)
         _inc_ref(value)
         backend.jgrapht_ll_graph_attrs_vertex_put_long(
-            self._handle, self._vertex_id, key, value_id
+            self._handle, self._vertex_id, encoded_key, value_id
         )
 
     def __delitem__(self, key):
         self._assert_vertex()
         try:
+            encoded_key = bytearray(key, encoding="utf-8")
             old_value_id = backend.jgrapht_ll_graph_attrs_vertex_get_long(
-                self._handle, self._vertex_id, key
+                self._handle, self._vertex_id, encoded_key
             )
             _dec_ref_by_id(old_value_id)
             backend.jgrapht_ll_graph_attrs_vertex_remove(
-                self._handle, self._vertex_id, key
+                self._handle, self._vertex_id, encoded_key
             )
         except ValueError:
             # key not found, ignore
@@ -157,22 +163,6 @@ class _PerIntegerVertexAttributes(Mapping):
         it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
         return _JGraphTIntegerIterator(handle=it_handle)
 
-    def __del__(self):
-        vertex_it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
-        for vertex_id in _JGraphTIntegerIterator(handle=vertex_it_handle):
-            for key in _IntegerVertexAttributesView(
-                self._handle, vertex_id, vertex_id
-            ).keys():
-                try:
-                    old_value_id = backend.jgrapht_ii_graph_attrs_vertex_get_long(
-                        self._handle, vertex_id, key
-                    )
-                    _dec_ref_by_id(old_value_id)
-                except ValueError:
-                    # key not found, ignore
-                    pass
-        super().__del__()
-
     def __repr__(self):
         return "_PerIntegerVertexAttributes(%r)" % repr(self._handle)
 
@@ -195,22 +185,6 @@ class _PerLongVertexAttributes(Mapping):
     def __iter__(self):
         it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
         return _JGraphTLongIterator(handle=it_handle)
-
-    def __del__(self):
-        vertex_it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
-        for vertex_id in _JGraphTLongIterator(handle=vertex_it_handle):
-            for key in _LongVertexAttributesView(
-                self._handle, vertex_id, vertex_id
-            ).keys():
-                try:
-                    old_value_id = backend.jgrapht_ll_graph_attrs_vertex_get_long(
-                        self._handle, vertex_id, key
-                    )
-                    _dec_ref_by_id(old_value_id)
-                except ValueError:
-                    # key not found, ignore
-                    pass
-        super().__del__()
 
     def __repr__(self):
         return "_PerLongVertexAttributes(%r)" % repr(self._handle)
@@ -235,22 +209,6 @@ class _PerRefLongVertexAttributes(Mapping):
         it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
         return _map_ids_to_objs(_JGraphTLongIterator(handle=it_handle))
 
-    def __del__(self):
-        vertex_it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
-        for vertex_id in _JGraphTLongIterator(handle=vertex_it_handle):
-            for key in _LongVertexAttributesView(
-                self._handle, _id_to_obj(vertex_id), vertex_id
-            ).keys():
-                try:
-                    old_value_id = backend.jgrapht_ll_graph_attrs_vertex_get_long(
-                        self._handle, vertex_id, key
-                    )
-                    _dec_ref_by_id(old_value_id)
-                except ValueError:
-                    # key not found, ignore
-                    pass
-        super().__del__()
-
     def __repr__(self):
         return "_PerRefLongVertexAttributes(%r)" % repr(self._handle)
 
@@ -265,8 +223,9 @@ class _IntegerEdgeAttributesView(MutableMapping):
 
     def __getitem__(self, key):
         self._assert_edge()
+        encoded_key = bytearray(key, encoding="utf-8")
         res = backend.jgrapht_ii_graph_attrs_edge_get_long(
-            self._handle, self._edge_id, key
+            self._handle, self._edge_id, encoded_key
         )
         if res is None:
             raise KeyError("Key {} not found".format(key))
@@ -274,9 +233,10 @@ class _IntegerEdgeAttributesView(MutableMapping):
 
     def __setitem__(self, key, value):
         self._assert_edge()
+        encoded_key = bytearray(key, encoding="utf-8")
         try:
             old_value_id = backend.jgrapht_ii_graph_attrs_edge_get_long(
-                self._handle, self._edge_id, key
+                self._handle, self._edge_id, encoded_key
             )
             _dec_ref_by_id(old_value_id)
         except ValueError:
@@ -285,17 +245,18 @@ class _IntegerEdgeAttributesView(MutableMapping):
         value_id = id(value)
         _inc_ref(value)
         backend.jgrapht_ii_graph_attrs_edge_put_long(
-            self._handle, self._edge_id, key, value_id
+            self._handle, self._edge_id, encoded_key, value_id
         )
 
     def __delitem__(self, key):
         self._assert_edge()
         try:
+            encoded_key = bytearray(key, encoding="utf-8")
             old_value_id = backend.jgrapht_ii_graph_attrs_edge_get_long(
-                self._handle, self._edge_id, key
+                self._handle, self._edge_id, encoded_key
             )
             _dec_ref_by_id(old_value_id)
-            backend.jgrapht_ii_graph_attrs_edge_remove(self._handle, self._edge_id, key)
+            backend.jgrapht_ii_graph_attrs_edge_remove(self._handle, self._edge_id, encoded_key)
         except ValueError:
             # key not found, ignore
             pass
@@ -327,8 +288,9 @@ class _LongEdgeAttributesView(MutableMapping):
 
     def __getitem__(self, key):
         self._assert_edge()
+        encoded_key = bytearray(key, encoding="utf-8")
         res = backend.jgrapht_ll_graph_attrs_edge_get_long(
-            self._handle, self._edge_id, key
+            self._handle, self._edge_id, encoded_key
         )
         if res is None:
             raise KeyError("Key {} not found".format(key))
@@ -336,9 +298,10 @@ class _LongEdgeAttributesView(MutableMapping):
 
     def __setitem__(self, key, value):
         self._assert_edge()
+        encoded_key = bytearray(key, encoding="utf-8")
         try:
             old_value_id = backend.jgrapht_ll_graph_attrs_edge_get_long(
-                self._handle, self._edge_id, key
+                self._handle, self._edge_id, encoded_key
             )
             _dec_ref_by_id(old_value_id)
         except ValueError:
@@ -347,17 +310,18 @@ class _LongEdgeAttributesView(MutableMapping):
         value_id = id(value)
         _inc_ref(value)
         backend.jgrapht_ll_graph_attrs_edge_put_long(
-            self._handle, self._edge_id, key, value_id
+            self._handle, self._edge_id, encoded_key, value_id
         )
 
     def __delitem__(self, key):
         self._assert_edge()
         try:
+            encoded_key = bytearray(key, encoding="utf-8")
             old_value_id = backend.jgrapht_ll_graph_attrs_edge_get_long(
-                self._handle, self._edge_id, key
+                self._handle, self._edge_id, encoded_key
             )
             _dec_ref_by_id(old_value_id)
-            backend.jgrapht_ll_graph_attrs_edge_remove(self._handle, self._edge_id, key)
+            backend.jgrapht_ll_graph_attrs_edge_remove(self._handle, self._edge_id, encoded_key)
         except ValueError:
             # key not found, ignore
             pass
@@ -392,27 +356,11 @@ class _PerIntegerEdgeAttributes(Mapping):
         return _IntegerEdgeAttributesView(self._handle, edge, edge_id)
 
     def __len__(self):
-        return backend.jgrapht_ii_graph_vertices_count(self._handle)
+        return backend.jgrapht_ii_graph_edges_count(self._handle)
 
     def __iter__(self):
         it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
         return _JGraphTIntegerIterator(handle=it_handle)
-
-    def __del__(self):
-        edge_it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
-        for edge_id in _JGraphTIntegerIterator(handle=edge_it_handle):
-            for key in _IntegerEdgeAttributesView(
-                self._handle, edge_id, edge_id
-            ).keys():
-                try:
-                    old_value_id = backend.jgrapht_ii_graph_attrs_edge_get_long(
-                        self._handle, edge_id, key
-                    )
-                    _dec_ref_by_id(old_value_id)
-                except ValueError:
-                    # key not found, ignore
-                    pass
-        super().__del__()
 
     def __repr__(self):
         return "_PerIntegerEdgeAttributes(%r)" % repr(self._handle)
@@ -431,25 +379,11 @@ class _PerLongEdgeAttributes(Mapping):
         return _LongEdgeAttributesView(self._handle, edge, edge_id)
 
     def __len__(self):
-        return backend.jgrapht_ll_graph_vertices_count(self._handle)
+        return backend.jgrapht_ll_graph_edges_count(self._handle)
 
     def __iter__(self):
         it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
         return _JGraphTLongIterator(handle=it_handle)
-
-    def __del__(self):
-        edge_it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
-        for edge_id in _JGraphTLongIterator(handle=edge_it_handle):
-            for key in _LongEdgeAttributesView(self._handle, edge_id, edge_id).keys():
-                try:
-                    old_value_id = backend.jgrapht_ll_graph_attrs_edge_get_long(
-                        self._handle, edge_id, key
-                    )
-                    _dec_ref_by_id(old_value_id)
-                except ValueError:
-                    # key not found, ignore
-                    pass
-        super().__del__()
 
     def __repr__(self):
         return "_PerLongEdgeAttributes(%r)" % repr(self._handle)
@@ -468,27 +402,11 @@ class _PerRefLongEdgeAttributes(Mapping):
         return _LongEdgeAttributesView(self._handle, edge, edge_id)
 
     def __len__(self):
-        return backend.jgrapht_ll_graph_vertices_count(self._handle)
+        return backend.jgrapht_ll_graph_edges_count(self._handle)
 
     def __iter__(self):
         it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
         return _map_ids_to_objs(_JGraphTLongIterator(handle=it_handle))
-
-    def __del__(self):
-        edge_it_handle = backend.jgrapht_xx_graph_create_all_vit(self._handle)
-        for edge_id in _JGraphTLongIterator(handle=edge_it_handle):
-            for key in _LongEdgeAttributesView(
-                self._handle, _id_to_obj(edge_id), edge_id
-            ).keys():
-                try:
-                    old_value_id = backend.jgrapht_ll_graph_attrs_edge_get_long(
-                        self._handle, edge_id, key
-                    )
-                    _dec_ref_by_id(old_value_id)
-                except ValueError:
-                    # key not found, ignore
-                    pass
-        super().__del__()
 
     def __repr__(self):
         return "_PerRefLongEdgeAttributes(%r)" % repr(self._handle)
@@ -501,27 +419,30 @@ class _GraphAttributesMapping(MutableMapping):
         self._handle = handle
 
     def __getitem__(self, key):
-        res = backend.jgrapht_xx_graph_attrs_get_long(self._handle, key)
+        encoded_key = bytearray(key, encoding="utf-8")
+        res = backend.jgrapht_xx_graph_attrs_get_long(self._handle, encoded_key)
         if res is None:
             raise KeyError("Key {} not found".format(key))
         return _id_to_obj(res)
 
     def __setitem__(self, key, value):
+        encoded_key = bytearray(key, encoding="utf-8")
         try:
-            old_value_id = backend.jgrapht_xx_graph_attrs_get_long(self._handle, key)
+            old_value_id = backend.jgrapht_xx_graph_attrs_get_long(self._handle, encoded_key)
             _dec_ref_by_id(old_value_id)
         except ValueError:
             # key not found, ignore
             pass
         value_id = id(value)
         _inc_ref(value)
-        backend.jgrapht_xx_graph_attrs_put_long(self._handle, key, value_id)
+        backend.jgrapht_xx_graph_attrs_put_long(self._handle, encoded_key, value_id)
 
     def __delitem__(self, key):
         try:
-            old_value_id = backend.jgrapht_xx_graph_attrs_get_long(self._handle, key)
+            encoded_key = bytearray(key, encoding="utf-8")
+            old_value_id = backend.jgrapht_xx_graph_attrs_get_long(self._handle, encoded_key)
             _dec_ref_by_id(old_value_id)
-            backend.jgrapht_xx_graph_attrs_remove(self._handle, key)
+            backend.jgrapht_xx_graph_attrs_remove(self._handle, encoded_key)
         except ValueError:
             # key not found, ignore
             pass
@@ -535,8 +456,3 @@ class _GraphAttributesMapping(MutableMapping):
 
     def __repr__(self):
         return "_GraphAttributesMapping(%r)" % repr(self._handle)
-
-    def __del__(self):
-        # Manually call delete, to decreate reference counts
-        for key in self:
-            self.__delitem__(key)

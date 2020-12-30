@@ -15,7 +15,9 @@ from .._collections import (
 )
 from .._attributes import (
     _PerLongVertexAttributes,
+    _LongVertexAttributesView,    
     _PerLongEdgeAttributes,
+    _LongEdgeAttributesView,        
     _GraphAttributesMapping,
 )
 
@@ -67,7 +69,7 @@ class _JGraphTLongGraph(_HandleWrapper, AttributesGraph, Graph):
 
     @property
     def graph_attrs(self):
-        if self._edge_attrs is None:
+        if self._graph_attrs is None:
             raise ValueError("Graph attributes not supported")
         return self._graph_attrs
 
@@ -91,6 +93,8 @@ class _JGraphTLongGraph(_HandleWrapper, AttributesGraph, Graph):
         return vertex
 
     def remove_vertex(self, v):
+        if v is None: 
+            raise ValueError('Vertex cannot be None')
         backend.jgrapht_ll_graph_remove_vertex(self._handle, v)
 
     def contains_vertex(self, v):
@@ -108,6 +112,8 @@ class _JGraphTLongGraph(_HandleWrapper, AttributesGraph, Graph):
         return edge
 
     def remove_edge(self, e):
+        if e is None:
+            raise ValueError("Edge cannot be None")
         return backend.jgrapht_ll_graph_remove_edge(self._handle, e)
 
     def contains_edge(self, e):
@@ -227,6 +233,32 @@ class _JGraphTLongGraph(_HandleWrapper, AttributesGraph, Graph):
 
     def __repr__(self):
         return "_JGraphTLongGraph(%r)" % self._handle
+
+    def __del__(self):
+        # Perform graph attributes deletion. Needs to be performed to keep 
+        # reference counts correct.
+        if self.graph_attrs is not None:
+            keys = list(self.graph_attrs.keys())
+            for k in keys:
+                del self.graph_attrs[k]
+        
+        if self.vertex_attrs is not None:
+            for vertex in self.vertices:
+                attrs = _LongVertexAttributesView(self._handle, vertex, vertex)
+                keys = list(attrs)
+                for k in keys:
+                    del attrs[k]
+
+        if self.edge_attrs is not None:
+            for edge in self.edges:
+                attrs = _LongEdgeAttributesView(self._handle, edge, edge)
+                keys = list(attrs)
+                for k in keys:
+                    del attrs[k]            
+
+        # Do not forget to call super, otherwise the graph will not be deleted
+        # from the JVM.
+        super().__del__()
 
 
 class _JGraphTLongDirectedAcyclicGraph(_JGraphTLongGraph, DirectedAcyclicGraph):
