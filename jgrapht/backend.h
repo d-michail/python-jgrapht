@@ -536,7 +536,7 @@ int jgrapht_ii_graph_attrs_vertex_put_long(void *, int, char*, long long int);
 int jgrapht_ll_graph_attrs_vertex_put_long(void *, long long int, char*, long long int);
 int jgrapht_ii_graph_attrs_edge_put_long(void *, int, char*, long long int);
 int jgrapht_ll_graph_attrs_edge_put_long(void *, long long int, char*, long long int);
-int jgrapht_ii_graph_attrs_remove(void *, char*);
+int jgrapht_xx_graph_attrs_remove(void *, char*);
 int jgrapht_ii_graph_attrs_vertex_remove(void *, int, char*);
 int jgrapht_ll_graph_attrs_vertex_remove(void *, long long int, char*);
 int jgrapht_ii_graph_attrs_edge_remove(void *, int, char*);

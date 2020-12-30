@@ -1,5 +1,5 @@
 from ...types import Clustering
-from ._refcount import _map_ids_to_objs
+from .._refcount import _map_ids_to_objs
 from .._intgraph._clustering import _JGraphTLongClustering
 
 

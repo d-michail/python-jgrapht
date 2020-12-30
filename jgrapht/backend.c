@@ -1329,9 +1329,9 @@ int jgrapht_ll_graph_attrs_edge_put_long(void *g, long long int edge, char* key,
     return jgrapht_capi_ll_graph_attrs_edge_put_long(thread, g, edge, key, value);
 }
 
-int jgrapht_ii_graph_attrs_remove(void *g, char* key)  { 
+int jgrapht_xx_graph_attrs_remove(void *g, char* key)  { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_graph_attrs_remove(thread, g, key);
+    return jgrapht_capi_xx_graph_attrs_remove(thread, g, key);
 }
 
 int jgrapht_ii_graph_attrs_vertex_remove(void *g, int vertex, char* key) { 

@@ -2,7 +2,7 @@ from ... import backend
 from ...types import PlanarEmbedding
 from .._wrappers import _HandleWrapper
 from .._collections import _JGraphTLongIterator
-from ._refcount import _map_ids_to_objs
+from .._refcount import _map_ids_to_objs
 
 
 class _RefCountGraphPlanarEmbedding(_HandleWrapper, PlanarEmbedding):
