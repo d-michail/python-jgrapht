@@ -26,7 +26,7 @@ def build_graph(backend):
     return g, vertex_weights
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH])
 def test_greedy(backend):
     g, _ = build_graph(backend)
     vc_weight, vc_vertices = vc.greedy(g)
@@ -34,7 +34,7 @@ def test_greedy(backend):
     assert set(vc_vertices) == set([0])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH])
 def test_greedy_with_weights(backend):
     g, vertex_weights = build_graph(backend)
     vc_weight, vc_vertices = vc.greedy(g, vertex_weights=vertex_weights)
@@ -42,7 +42,7 @@ def test_greedy_with_weights(backend):
     assert set(vc_vertices) == set([1, 2, 3, 4, 5, 6, 7, 8, 9])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH])
 def test_clarkson(backend):
     g, _ = build_graph(backend)
     vc_weight, vc_vertices = vc.clarkson(g)
@@ -50,7 +50,7 @@ def test_clarkson(backend):
     assert set(vc_vertices) == set([0])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH])
 def test_clarkson_with_weights(backend):
     g, vertex_weights = build_graph(backend)
     vc_weight, vc_vertices = vc.clarkson(g, vertex_weights=vertex_weights)
@@ -58,7 +58,7 @@ def test_clarkson_with_weights(backend):
     assert set(vc_vertices) == set([1, 2, 3, 4, 5, 6, 7, 8, 9])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH])
 def test_edgebased(backend):
     g, _ = build_graph(backend)
     vc_weight, vc_vertices = vc.edgebased(g)
@@ -112,7 +112,7 @@ def build_property_graph(backend):
     return g, vertex_weights
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.LONG_REF_GRAPH])
 def test_anyhashableg_greedy_with_weights(backend):
     g, vertex_weights = build_property_graph(backend)
     vc_weight, vc_vertices = vc.greedy(g, vertex_weights=vertex_weights)
@@ -120,7 +120,7 @@ def test_anyhashableg_greedy_with_weights(backend):
     assert set(vc_vertices) == set(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH])
 def test_baryehuda_even(backend):
     g, _ = build_graph(backend)
     vc_weight, vc_vertices = vc.baryehuda_even(g)
@@ -128,7 +128,7 @@ def test_baryehuda_even(backend):
     assert set(vc_vertices) == set([0])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH])
 def test_baryehuda_even_with_weights(backend):
     g, vertex_weights = build_graph(backend)
     vc_weight, vc_vertices = vc.baryehuda_even(g, vertex_weights=vertex_weights)
@@ -136,7 +136,7 @@ def test_baryehuda_even_with_weights(backend):
     assert set(vc_vertices) == set([1, 2, 3, 4, 5, 6, 7, 8, 9])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH])
 def test_exact(backend):
     g, _ = build_graph(backend)
     vc_weight, vc_vertices = vc.exact(g)
@@ -144,7 +144,7 @@ def test_exact(backend):
     assert set(vc_vertices) == set([0])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH])
 def test_exact_with_weights(backend):
     g, vertex_weights = build_graph(backend)
     vc_weight, vc_vertices = vc.exact(g, vertex_weights=vertex_weights)

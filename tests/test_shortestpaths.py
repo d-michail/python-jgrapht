@@ -118,8 +118,7 @@ def get_anyhashableg_graph_with_negative_edges(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_dijkstra(backend):
@@ -163,8 +162,7 @@ def test_dijkstra(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_dijkstra(backend):
@@ -202,8 +200,7 @@ def test_anyhashableg_dijkstra(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_bfs(backend):
@@ -221,8 +218,7 @@ def test_bfs(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_bfs(backend):
@@ -242,8 +238,7 @@ def test_anyhashableg_bfs(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_bellman(backend):
@@ -269,8 +264,7 @@ def test_bellman(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_bellman(backend):
@@ -298,8 +292,7 @@ def test_anyhashableg_bellman(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_johnsons(backend):
@@ -329,8 +322,7 @@ def test_johnsons(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_johnsons(backend):
@@ -361,8 +353,7 @@ def test_anyhashableg_johnsons(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_floyd_warshall(backend):
@@ -391,8 +382,7 @@ def test_floyd_warshall(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_floyd_warshall(backend):
@@ -425,8 +415,7 @@ def test_anyhashableg_floyd_warshall(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_a_star(backend):
@@ -492,8 +481,7 @@ def test_a_star(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_a_star(backend):
@@ -561,8 +549,7 @@ def test_anyhashableg_a_star(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_a_star_with_alt_heuristic(backend):
@@ -606,8 +593,7 @@ def test_a_star_with_alt_heuristic(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_a_star_with_alt_heuristic(backend):
@@ -653,8 +639,7 @@ def test_anyhashableg_a_star_with_alt_heuristic(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_yen_k(backend):
@@ -676,8 +661,7 @@ def test_yen_k(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_yen_k(backend):
@@ -701,8 +685,7 @@ def test_anyhashableg_yen_k(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_eppstein_k(backend):
@@ -723,8 +706,7 @@ def test_eppstein_k(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_eppstein_k(backend):
@@ -747,8 +729,7 @@ def test_anyhashableg_eppstein_k(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_delta_stepping(backend):
@@ -796,8 +777,7 @@ def test_delta_stepping(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_delta_stepping(backend):
@@ -847,8 +827,7 @@ def test_anyhashableg_delta_stepping(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_martin(backend):
@@ -913,8 +892,7 @@ def test_martin(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-       GraphBackend.REFCOUNT_GRAPH,
-       GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_martin(backend):
@@ -981,8 +959,7 @@ def test_anyhashableg_martin(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_martin_bad_cost_function(backend):

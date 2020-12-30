@@ -26,7 +26,12 @@ def _planarity_alg(name, graph, *args):
             return is_planar, _JGraphTIntegerPlanarEmbedding(embedding)
     else:
         if _is_refcount_graph(graph):
-            res = _RefCountGraph(handle=kuratowski_subdivision)
+            res = _RefCountGraph(
+                handle=kuratowski_subdivision,
+                vertex_supplier_fptr_and_cb=None,
+                edge_supplier_fptr_and_cb=None,
+                with_attributes=False,
+            )
             # Need to increment refcounts since the graph was created in the backend
             for v in res.vertices:
                 _inc_ref(v)
@@ -34,9 +39,13 @@ def _planarity_alg(name, graph, *args):
                 _inc_ref(e)
             return is_planar, res
         elif _is_long_graph(graph):
-            return is_planar, _JGraphTLongGraph(handle=kuratowski_subdivision)
+            return is_planar, _JGraphTLongGraph(
+                handle=kuratowski_subdivision, with_attributes=False
+            )
         else:
-            return is_planar, _JGraphTIntegerGraph(handle=kuratowski_subdivision)
+            return is_planar, _JGraphTIntegerGraph(
+                handle=kuratowski_subdivision, with_attributes=False
+            )
 
 
 def boyer_myrvold(graph):

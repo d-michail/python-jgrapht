@@ -4,7 +4,10 @@ from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.clustering as clustering
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_k_spanning_tree(backend):
     g = create_graph(
         directed=False,
@@ -38,7 +41,10 @@ def test_k_spanning_tree(backend):
     assert set(c.ith_cluster(1)) == set([3, 4, 5])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_label_propagation(backend):
     g = create_graph(
         directed=False,
@@ -76,10 +82,7 @@ def test_label_propagation(backend):
 
 @pytest.mark.parametrize(
     "backend",
-    [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-    ],
+    [GraphBackend.LONG_REF_GRAPH],
 )
 def test_anyhashableg_k_spanning_tree(backend):
     g = create_graph(
@@ -87,7 +90,7 @@ def test_anyhashableg_k_spanning_tree(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     v0 = g.add_vertex(str(0))
@@ -116,10 +119,7 @@ def test_anyhashableg_k_spanning_tree(backend):
 
 @pytest.mark.parametrize(
     "backend",
-    [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
-    ],
+    [GraphBackend.LONG_REF_GRAPH],
 )
 def test_anyhashableg_label_propagation(backend):
     g = create_graph(
@@ -127,7 +127,7 @@ def test_anyhashableg_label_propagation(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     v0 = g.add_vertex(str(0))

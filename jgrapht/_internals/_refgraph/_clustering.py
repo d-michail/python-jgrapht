@@ -23,4 +23,4 @@ class _RefCountGraphClustering(Clustering):
         return self._clusters[i]
 
     def __repr__(self):
-        return "_RefCountGraphClustering(%r)" % self._handle
+        return "_RefCountGraphClustering(%r)" % self._clusters

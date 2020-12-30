@@ -11,7 +11,7 @@ def build_graph(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     for i in range(0, 10):
@@ -47,7 +47,7 @@ def build_anyhashableg_graph(backend):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     g.add_vertex("0")
@@ -77,7 +77,14 @@ def build_anyhashableg_graph(backend):
     return g
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_pagerank(backend):
     g = build_graph(backend)
     scores = scoring.pagerank(g)
@@ -97,7 +104,14 @@ def test_pagerank(backend):
     assert result == pytest.approx(expected)
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_harmonic_centrality(backend):
     g = build_graph(backend)
     scores = scoring.harmonic_centrality(g)
@@ -117,7 +131,14 @@ def test_harmonic_centrality(backend):
     assert result == expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_closeness_centrality(backend):
     g = build_graph(backend)
     scores = scoring.closeness_centrality(g)
@@ -126,7 +147,14 @@ def test_closeness_centrality(backend):
     assert result == expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_betweenness_centrality(backend):
     g = build_graph(backend)
     scores = scoring.betweenness_centrality(g)
@@ -135,7 +163,14 @@ def test_betweenness_centrality(backend):
     assert result == expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_alpha_centrality(backend):
     g = build_graph(backend)
     scores = scoring.alpha_centrality(g)
@@ -155,7 +190,14 @@ def test_alpha_centrality(backend):
     assert result == expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_coreness(backend):
     g = build_graph(backend)
     degeneracy, scores = scoring.coreness(g)
@@ -165,7 +207,14 @@ def test_coreness(backend):
     assert result == expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_clustering_coefficient(backend):
     g = build_graph(backend)
     global_cc, avg_cc, local_cc = scoring.clustering_coefficient(g)
@@ -187,7 +236,12 @@ def test_clustering_coefficient(backend):
     assert result == expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_anyhashableg_pagerank(backend):
     g = build_anyhashableg_graph(backend)
     scores = scoring.pagerank(g)
@@ -207,7 +261,12 @@ def test_anyhashableg_pagerank(backend):
     assert result == expected
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_anyhashableg_clustering_coefficient(backend):
     g = build_anyhashableg_graph(backend)
     global_cc, avg_cc, local_cc = scoring.clustering_coefficient(g)
@@ -229,8 +288,12 @@ def test_anyhashableg_clustering_coefficient(backend):
     assert result == expected
 
 
-
-@pytest.mark.parametrize("backend", [GraphBackend.REFCOUNT_GRAPH, GraphBackend.ANY_HASHABLE_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.LONG_REF_GRAPH,
+    ],
+)
 def test_anyhashableg_coreness(backend):
     g = build_anyhashableg_graph(backend)
     degeneracy, scores = scoring.coreness(g)

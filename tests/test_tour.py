@@ -54,8 +54,7 @@ def build_anyhashableg_graph(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_random_tsp(backend):
@@ -69,8 +68,7 @@ def test_random_tsp(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_random_tsp(backend):
@@ -86,8 +84,7 @@ def test_anyhashableg_random_tsp(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_greedy_heuristic(backend):
@@ -101,8 +98,7 @@ def test_greedy_heuristic(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_greedy_heuristic(backend):
@@ -118,8 +114,7 @@ def test_anyhashableg_greedy_heuristic(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_tour_tsp_nearest_insertion_heuristic(backend):
@@ -133,8 +128,7 @@ def test_tour_tsp_nearest_insertion_heuristic(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_tour_tsp_nearest_insertion_heuristic(backend):
@@ -150,8 +144,7 @@ def test_anyhashableg_tour_tsp_nearest_insertion_heuristic(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_tour_tsp_nearest_neighbor_heuristic(backend):
@@ -165,8 +158,7 @@ def test_tour_tsp_nearest_neighbor_heuristic(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_tour_tsp_nearest_neighbor_heuristic(backend):
@@ -185,8 +177,7 @@ def test_anyhashableg_tour_tsp_nearest_neighbor_heuristic(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_metric_tsp_christophides(backend):
@@ -203,8 +194,7 @@ def test_metric_tsp_christophides(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_metric_tsp_two_approx(backend):
@@ -221,8 +211,7 @@ def test_metric_tsp_two_approx(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_tsp_held_karp(backend):
@@ -238,8 +227,7 @@ def test_tsp_held_karp(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_hamiltonian_palmer(backend):
@@ -255,8 +243,7 @@ def test_hamiltonian_palmer(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_tsp_two_opt_heuristic(backend):
@@ -275,8 +262,7 @@ def test_tsp_two_opt_heuristic(backend):
     [
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_tsp_two_opt_improve(backend):
@@ -299,8 +285,7 @@ def test_tsp_two_opt_improve(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_random_tsp_any_hashable(backend):
@@ -332,8 +317,7 @@ def test_random_tsp_any_hashable(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.REFCOUNT_GRAPH,
-        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.LONG_REF_GRAPH,
     ],
 )
 def test_anyhashableg_hamiltonian_palmer(backend):

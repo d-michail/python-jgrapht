@@ -4,14 +4,17 @@ from jgrapht import create_graph, GraphBackend
 import jgrapht.algorithms.coloring as coloring
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_coloring(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=backend
+        backend=backend,
     )
 
     for i in range(0, 10):
@@ -132,7 +135,6 @@ def test_coloring(backend):
     color_count, color_map = coloring.color_refinement(g)
     assert color_count == 10
 
-
     color_count, color_map = coloring.greedy_smallestdegreelast(g)
     assert color_count == 4
     assert all(
@@ -156,14 +158,17 @@ def test_coloring(backend):
     )
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize(
+    "backend",
+    [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.LONG_REF_GRAPH],
+)
 def test_chordal(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
 
     for i in range(0, 6):
@@ -185,14 +190,14 @@ def test_chordal(backend):
     assert color_map == {0: 0, 1: 1, 2: 0, 3: 2, 4: 1, 5: 2}
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.ANY_HASHABLE_GRAPH, GraphBackend.REFCOUNT_GRAPH])
+@pytest.mark.parametrize("backend", [GraphBackend.LONG_REF_GRAPH])
 def test_any_chordal(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        backend=backend
+        backend=backend,
     )
 
     v0 = g.add_vertex(str(0))
@@ -217,8 +222,6 @@ def test_any_chordal(backend):
     assert color_count == 3
     assert color_map == {"0": 0, "1": 1, "2": 0, "3": 2, "4": 1, "5": 2}
 
-
     color_count, color_map = coloring.backtracking_brown(g)
     assert color_count == 3
     assert color_map == {"0": 1, "1": 2, "2": 1, "3": 3, "4": 2, "5": 3}
-
