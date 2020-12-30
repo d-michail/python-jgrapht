@@ -8,7 +8,7 @@ def is_empty_graph(graph):
     :param graph: the graph
     :returns: True if the graph is empty, False otherwise.
     """
-    return _backend.jgrapht_graph_test_is_empty(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_empty(graph.handle)
 
 
 def is_simple(graph):
@@ -18,7 +18,7 @@ def is_simple(graph):
     :param graph: the graph
     :returns: True if simple, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_simple(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_simple(graph.handle)
 
 
 def has_selfloops(graph):
@@ -27,7 +27,7 @@ def has_selfloops(graph):
     :param graph: the graph
     :returns: True if it has self-loops, False otherwise
     """
-    return _backend.jgrapht_graph_test_has_selfloops(graph.handle)
+    return _backend.jgrapht_xx_graph_test_has_selfloops(graph.handle)
 
 
 def has_multipleedges(graph):
@@ -36,7 +36,7 @@ def has_multipleedges(graph):
     :param graph: the graph
     :returns: True if it has multiple-edges, False otherwise
     """
-    return _backend.jgrapht_graph_test_has_multipleedges(graph.handle)
+    return _backend.jgrapht_xx_graph_test_has_multipleedges(graph.handle)
 
 
 def is_complete(graph):
@@ -49,7 +49,7 @@ def is_complete(graph):
     :param graph: the graph
     :returns: True if the graph is complete, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_complete(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_complete(graph.handle)
 
 
 def is_weakly_connected(graph):
@@ -58,7 +58,7 @@ def is_weakly_connected(graph):
     :param graph: the graph. Needs to be directed
     :returns: True if weakly connected, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_weakly_connected(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_weakly_connected(graph.handle)
 
 
 def is_strongly_connected(graph):
@@ -67,7 +67,7 @@ def is_strongly_connected(graph):
     :param graph: the graph
     :returns: True if strongly-connected, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_strongly_connected(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_strongly_connected(graph.handle)
 
 
 def is_tree(graph):
@@ -76,7 +76,7 @@ def is_tree(graph):
     :param graph: the graph
     :returns: True if the graph is a tree, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_tree(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_tree(graph.handle)
 
 
 def is_forest(graph):
@@ -85,7 +85,7 @@ def is_forest(graph):
     :param graph: the graph
     :returns: True if the graph is a forest, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_forest(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_forest(graph.handle)
 
 
 def is_overfull(graph):
@@ -97,7 +97,7 @@ def is_overfull(graph):
     :param graph: the graph
     :returns: True if the graph is ovefull, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_overfull(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_overfull(graph.handle)
 
 
 def is_split(graph):
@@ -106,7 +106,7 @@ def is_split(graph):
     :param graph: the graph
     :returns: True if the graph is a split graph, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_split(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_split(graph.handle)
 
 
 def is_bipartite(graph):
@@ -115,7 +115,7 @@ def is_bipartite(graph):
     :param graph: the graph
     :returns: True if the graph is bipartite, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_bipartite(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_bipartite(graph.handle)
 
 
 def is_cubic(graph):
@@ -127,7 +127,7 @@ def is_cubic(graph):
     :param graph: the graph
     :returns: True if the graph is cubic, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_cubic(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_cubic(graph.handle)
 
 
 def is_eulerian(graph):
@@ -139,7 +139,7 @@ def is_eulerian(graph):
     :param graph: the graph
     :returns: True if the graph is Eulerian, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_eulerian(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_eulerian(graph.handle)
 
 
 def is_chordal(graph):
@@ -148,7 +148,7 @@ def is_chordal(graph):
     :param graph: the graph
     :returns: True if the graph is chordal, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_chordal(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_chordal(graph.handle)
 
 
 def is_weakly_chordal(graph):
@@ -157,7 +157,7 @@ def is_weakly_chordal(graph):
     :param graph: the graph
     :returns: True if the graph is weakly chordal, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_weakly_chordal(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_weakly_chordal(graph.handle)
 
 
 def has_ore(graph):
@@ -166,7 +166,7 @@ def has_ore(graph):
     :param graph: The input graph
     :returns: True if the graph meets Ore's condition, False otherwise
     """
-    return _backend.jgrapht_graph_test_has_ore(graph.handle)
+    return _backend.jgrapht_xx_graph_test_has_ore(graph.handle)
 
 
 def is_trianglefree(graph):
@@ -175,7 +175,7 @@ def is_trianglefree(graph):
     :param graph: the graph
     :returns: True if the graph is triangle free, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_trianglefree(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_trianglefree(graph.handle)
 
 
 def is_perfect(graph):
@@ -184,7 +184,7 @@ def is_perfect(graph):
     :param graph: the graph
     :returns: True if the graph is perfect, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_perfect(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_perfect(graph.handle)
 
 
 def is_planar(graph):
@@ -193,7 +193,7 @@ def is_planar(graph):
     :param graph: the graph
     :returns: True if the graph is planar, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_planar(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_planar(graph.handle)
 
 
 def is_kuratowski_subdivision(graph):
@@ -202,7 +202,7 @@ def is_kuratowski_subdivision(graph):
     :param graph: the graph
     :returns: True if the graph is a :math:`K_{3,3}` or a :math:`K_5` subdivision, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_kuratowski_subdivision(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_kuratowski_subdivision(graph.handle)
 
 
 def is_k33_subdivision(graph):
@@ -211,7 +211,7 @@ def is_k33_subdivision(graph):
     :param graph: the graph
     :returns: True if the graph is a :math:`K_{3,3}` subdivision, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_k33_subdivision(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_k33_subdivision(graph.handle)
 
 
 def is_k5_subdivision(graph):
@@ -220,4 +220,4 @@ def is_k5_subdivision(graph):
     :param graph: the graph
     :returns: True if the graph is a :math:`K_{5}` subdivision, False otherwise
     """
-    return _backend.jgrapht_graph_test_is_k5_subdivision(graph.handle)
+    return _backend.jgrapht_xx_graph_test_is_k5_subdivision(graph.handle)

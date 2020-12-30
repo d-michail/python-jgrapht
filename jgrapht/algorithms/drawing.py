@@ -2,25 +2,29 @@ import time
 
 from .. import backend as _backend
 
-from .._internals._callbacks import _create_wrapped_vertex_comparator_callback
+from .._internals._callbacks import _create_wrapped_int_vertex_comparator_callback
 
 from .._internals._anyhashableg import (
     _is_anyhashable_graph,
     _vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
 )
-from .._internals._drawing import _create_layout_model_2d as create_layout_model_2d
+from .._internals._drawing import _create_int_layout_model_2d as create_layout_model_2d
 from .._internals._anyhashableg_drawing import (
     _create_anyhashable_graph_layout_model_2d as create_attrs_graph_layout_model_2d,
 )
 
 
 def _drawing_alg(name, graph, model, *args):
-    alg_method = getattr(_backend, "jgrapht_drawing_exec_" + name)
+    if name == "circular_layout_2d":
+        alg_method = getattr(_backend, "jgrapht_ii_drawing_exec_" + name)
+    else:
+        alg_method = getattr(_backend, "jgrapht_xx_drawing_exec_" + name)
     alg_method(graph.handle, model.handle, *args)
 
 
+
 def random_layout_2d(graph, area, seed=None):
-    r"""Random 2d layout. 
+    r"""Random 2d layout.
 
     The algorithm assigns vertex coordinates uniformly at random.
 
@@ -54,7 +58,7 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
     :param radius: radius of the circle
     :param vertex_comparator_cb: a vertex comparator. Should be a function which accepts
-      two vertices v1, v2 and return -1, 0, 1 depending of whether v1 < v2, v1 == v2, or 
+      two vertices v1, v2 and return -1, 0, 1 depending of whether v1 < v2, v1 == v2, or
       v1 > v2 in the ordering
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
@@ -73,7 +77,7 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
     (
         vertex_comparator_f_ptr,
         vertex_comparator_f,
-    ) = _create_wrapped_vertex_comparator_callback(actual_vertex_comparator_cb)
+    ) = _create_wrapped_int_vertex_comparator_callback(actual_vertex_comparator_cb)
 
     custom = [radius, vertex_comparator_f_ptr]
     _drawing_alg("circular_layout_2d", graph, model, *custom)
@@ -88,7 +92,7 @@ def fruchterman_reingold_layout_2d(
     The algorithm belongs in the broad category of
     `force directed graph drawing <https://en.wikipedia.org/wiki/Force-directed_graph_drawing>`_
     algorithms and is described in the paper:
- 
+
       * Thomas M. J. Fruchterman and Edward M. Reingold. Graph drawing by force-directed placement.
         Software: Practice and experience, 21(11):1129--1164, 1991.
 
@@ -98,7 +102,7 @@ def fruchterman_reingold_layout_2d(
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
     :param iterations: number of iterations
     :param normalization_factor: normalization factor when calculating optimal distance
-    :param seed: seed for the random number generator. If None the system time is used    
+    :param seed: seed for the random number generator. If None the system time is used
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
     if seed is None:
@@ -128,7 +132,7 @@ def fruchterman_reingold_indexed_layout_2d(
     The algorithm belongs in the broad category of
     `force directed graph drawing <https://en.wikipedia.org/wiki/Force-directed_graph_drawing>`_
     algorithms and is described in the paper:
- 
+
       * Thomas M. J. Fruchterman and Edward M. Reingold. Graph drawing by force-directed placement.
         Software: Practice and experience, 21(11):1129--1164, 1991.
 
@@ -146,9 +150,9 @@ def fruchterman_reingold_indexed_layout_2d(
     :param area: the two dimensional area as a tuple (minx, miny, width, height)
     :param iterations: number of iterations
     :param normalization_factor: normalization factor when calculating optimal distance
-    :param seed: seed for the random number generator. If None the system time is used    
+    :param seed: seed for the random number generator. If None the system time is used
     :param theta: parameter for approximation using the Barnes-Hut technique
-    :parram tolerance: tolerance used when comparing floating point values    
+    :parram tolerance: tolerance used when comparing floating point values
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
     if seed is None:

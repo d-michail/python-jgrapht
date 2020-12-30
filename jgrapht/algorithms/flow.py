@@ -19,7 +19,7 @@ from .._internals._anyhashableg_flows import (
 
 def _maxflow_alg(name, graph, source, sink, *args):
 
-    alg_method = getattr(_backend, "jgrapht_maxflow_exec_" + name)
+    alg_method = getattr(_backend, "jgrapht_ii_maxflow_exec_" + name)
 
     flow_value, flow_handle, cut_source_partition_handle = alg_method(
         graph.handle,
@@ -136,7 +136,7 @@ def equivalent_flow_tree_gusfield(graph):
     :param graph: an undirected network    
     :returns: an equivalent flow tree as an instance of :py:class:`jgrapht.types.EquivalentFlowTree`
     """
-    handle = _backend.jgrapht_equivalentflowtree_exec_gusfield(graph.handle)
+    handle = _backend.jgrapht_xx_equivalentflowtree_exec_gusfield(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphEquivalentFlowTree(handle, graph)

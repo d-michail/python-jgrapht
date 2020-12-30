@@ -3,10 +3,10 @@ import ctypes
 from ._callbacks import _create_wrapped_callback
 
 
-def _create_wrapped_attribute_callback(callback):
+def _create_wrapped_attribute_callback(callback, id_type=ctypes.c_int):
     if callback is not None:
         callback_ctype = ctypes.CFUNCTYPE(
-            None, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
+            None, id_type, ctypes.c_char_p, ctypes.c_char_p
         )
 
         # We wrap in order to decode string representation.
@@ -23,7 +23,7 @@ def _create_wrapped_attribute_callback(callback):
         return (0, None)
 
 
-def _create_wrapped_strid_attribute_callback(callback):
+def _create_wrapped_strid_attribute_callback(callback, id_type=ctypes.c_int):
     if callback is not None:
         callback_ctype = ctypes.CFUNCTYPE(
             None, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p
@@ -44,9 +44,9 @@ def _create_wrapped_strid_attribute_callback(callback):
         return (0, None)
 
 
-def _create_wrapped_import_string_id_callback(callback):
+def _create_wrapped_import_string_id_callback(callback, id_type=ctypes.c_int):
     if callback is not None:
-        callback_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_char_p)
+        callback_ctype = ctypes.CFUNCTYPE(id_type, ctypes.c_char_p)
 
         # We wrap in order to decode string representation.
         # There is no SWIG layer here, as the capi calls us directly
@@ -61,17 +61,17 @@ def _create_wrapped_import_string_id_callback(callback):
         return (0, None)
 
 
-def _create_wrapped_import_integer_id_callback(callback):
+def _create_wrapped_import_integer_id_callback(callback, id_type=ctypes.c_int):
     if callback is not None:
-        callback_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_int)
+        callback_ctype = ctypes.CFUNCTYPE(id_type, id_type)
         return _create_wrapped_callback(callback, callback_ctype)
     else:
         return (0, None)
 
 
-def _create_wrapped_notify_id_callback(callback):
+def _create_wrapped_notify_id_callback(callback, id_type=ctypes.c_int):
     if callback is not None:
-        callback_ctype = ctypes.CFUNCTYPE(None, ctypes.c_int)
+        callback_ctype = ctypes.CFUNCTYPE(None, id_type)
         return _create_wrapped_callback(callback, callback_ctype)
     else:
         return (0, None)

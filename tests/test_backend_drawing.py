@@ -3,13 +3,13 @@ import pytest
 import jgrapht._backend as _backend
 
 from jgrapht._internals._drawing import (
-    _JGraphTLayoutModel2D
+    _JGraphTIntegerLayoutModel2D
 )
 
 
 def test_layout_model_2d():
-    handle = _backend.jgrapht_drawing_layout_model_2d_create(1.0, 1.0, 9.0, 9.0)
-    model = _JGraphTLayoutModel2D(handle)
+    handle = _backend.jgrapht_xx_drawing_layout_model_2d_create(1.0, 1.0, 9.0, 9.0)
+    model = _JGraphTIntegerLayoutModel2D(handle)
 
 
     model.set_vertex_location(0, (5.0, 7.5))

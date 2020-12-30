@@ -31,7 +31,7 @@ def mincut_stoer_wagner(graph):
     (
         cut_weight,
         cut_source_partition_handle,
-    ) = _backend.jgrapht_cut_mincut_exec_stoer_wagner(graph.handle)
+    ) = _backend.jgrapht_xx_cut_mincut_exec_stoer_wagner(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphCut(graph, cut_weight, cut_source_partition_handle)
@@ -78,7 +78,7 @@ def gomory_hu_gusfield(graph):
     :param graph: an undirected network    
     :returns: a Gomory-Hu tree as an instance of :py:class:`jgrapht.types.GomoryHuTree`
     """
-    handle = _backend.jgrapht_cut_gomoryhu_exec_gusfield(graph.handle)
+    handle = _backend.jgrapht_xx_cut_gomoryhu_exec_gusfield(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphGomoryHuTree(handle, graph)
@@ -114,7 +114,7 @@ def oddmincutset_padberg_rao(graph, odd_vertices, use_tree_compression=False):
     (
         cut_weight,
         cut_source_partition_handle,
-    ) = _backend.jgrapht_cut_oddmincutset_exec_padberg_rao(
+    ) = _backend.jgrapht_xx_cut_oddmincutset_exec_padberg_rao(
         graph.handle, odd_set.handle, use_tree_compression
     )
 

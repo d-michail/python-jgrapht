@@ -14,7 +14,7 @@ from ._collections import (
 )
 from ._anyhashableg import _is_anyhashable_graph
 from ._anyhashableg_collections import _AnyHashableGraphVertexSet
-from ._graphs import _JGraphTGraph
+from ._graphs import _JGraphTIntegerGraph
 
 
 class _JGraphTCut(Cut):
@@ -122,11 +122,11 @@ class _JGraphTGomoryHuTree(_HandleWrapper, GomoryHuTree):
         self._graph = graph
 
     def as_graph(self):
-        tree_handle = _backend.jgrapht_cut_gomoryhu_tree(self.handle)
-        return _JGraphTGraph(tree_handle)
+        tree_handle = _backend.jgrapht_ii_cut_gomoryhu_tree(self.handle)
+        return _JGraphTIntegerGraph(tree_handle)
 
     def min_cut(self):
-        cut_value, cut_source_partition_handle = _backend.jgrapht_cut_gomoryhu_min_cut(
+        cut_value, cut_source_partition_handle = _backend.jgrapht_xx_cut_gomoryhu_min_cut(
             self.handle
         )
         return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)
@@ -135,7 +135,7 @@ class _JGraphTGomoryHuTree(_HandleWrapper, GomoryHuTree):
         (
             cut_value,
             cut_source_partition_handle,
-        ) = _backend.jgrapht_cut_gomoryhu_min_st_cut(self.handle, s, t)
+        ) = _backend.jgrapht_ii_cut_gomoryhu_min_st_cut(self.handle, s, t)
         return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)
 
     def __repr__(self):
@@ -150,11 +150,11 @@ class _JGraphTEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         self._graph = graph
 
     def as_graph(self):
-        tree_handle = _backend.jgrapht_equivalentflowtree_tree(self.handle)
-        return _JGraphTGraph(tree_handle)
+        tree_handle = _backend.jgrapht_ii_equivalentflowtree_tree(self.handle)
+        return _JGraphTIntegerGraph(tree_handle)
 
     def max_st_flow_value(self, s, t):
-        return _backend.jgrapht_equivalentflowtree_max_st_flow(self.handle, s, t)
+        return _backend.jgrapht_ii_equivalentflowtree_max_st_flow(self.handle, s, t)
 
     def __repr__(self):
         return "_JGraphTEquivalentFlowTree(%r)" % self._handle

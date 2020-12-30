@@ -10,12 +10,14 @@ from .._internals._ioutils import (
 
 
 def _import_edgelist_with_string_ids(name, with_attrs, filename_or_string, *args):
-    alg_method_name = "jgrapht_import_edgelist_"
     if with_attrs:
-        alg_method_name += "attrs_"
+        alg_method_type = "ii"
+        alg_method_attrs = "attrs"
     else:
-        alg_method_name += "noattrs_"
-    alg_method_name += name
+        alg_method_type = "xx"
+        alg_method_attrs = "noattrs"
+
+    alg_method_name = "jgrapht_{}_import_edgelist_{}_{}".format(alg_method_type, alg_method_attrs, name)
     alg_method = getattr(_backend, alg_method_name)
 
     filename_or_string_as_bytearray = bytearray(filename_or_string, encoding="utf-8")

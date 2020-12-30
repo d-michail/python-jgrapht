@@ -43,7 +43,7 @@ def _vertex_set_to_backend(graph, vertexset):
 
 
 def _sp_singlesource_alg(name, graph, source_vertex, *args):
-    alg_method_name = "jgrapht_sp_exec_" + name
+    alg_method_name = "jgrapht_ii_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
@@ -55,7 +55,7 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
 
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
-    alg_method_name = "jgrapht_sp_exec_" + name
+    alg_method_name = "jgrapht_ii_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
@@ -74,7 +74,7 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
 
 
 def _sp_allpairs_alg(name, graph):
-    alg_method_name = "jgrapht_sp_exec_" + name
+    alg_method_name = "jgrapht_xx_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle)
@@ -86,7 +86,7 @@ def _sp_allpairs_alg(name, graph):
 
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
-    alg_method_name = "jgrapht_sp_exec_" + name
+    alg_method_name = "jgrapht_ii_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
@@ -104,7 +104,7 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
 
 
 def _multisp_singlesource_alg(name, graph, source_vertex, *args):
-    alg_method_name = "jgrapht_multisp_exec_" + name
+    alg_method_name = "jgrapht_ii_multisp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
@@ -464,7 +464,7 @@ def martin_multiobjective(
             *custom
         )
     else:
-        res = _backend.jgrapht_multisp_exec_martin_get_paths_between_vertices(
+        res = _backend.jgrapht_ii_multisp_exec_martin_get_paths_between_vertices(
             graph.handle,
             _vertex_attrsg_to_g(graph, source_vertex),
             _vertex_attrsg_to_g(graph, target_vertex),
@@ -493,7 +493,7 @@ def precompute_contraction_hierarchies(graph, parallelism=None, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    res = _backend.jgrapht_sp_exec_contraction_hierarchy(
+    res = _backend.jgrapht_xx_sp_exec_contraction_hierarchy(
         graph.handle, parallelism, seed
     )
     return _JGraphTContractionHierarchies(res, graph)
@@ -515,7 +515,7 @@ def contraction_hierarchies_many_to_many(graph, sources, targets, ch=None):
     if ch is None:
         ch = precompute_contraction_hierarchies(graph)
 
-    handle = _backend.jgrapht_sp_exec_contraction_hierarchy_get_manytomany(
+    handle = _backend.jgrapht_xx_sp_exec_contraction_hierarchy_get_manytomany(
         ch.handle, jgrapht_sources.handle, jgrapht_targets.handle
     )
 
@@ -545,7 +545,7 @@ def contraction_hierarchies_dijkstra(
     if ch is None:
         ch = precompute_contraction_hierarchies(graph)
 
-    handle = _backend.jgrapht_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
+    handle = _backend.jgrapht_ii_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
         ch.handle,
         _vertex_attrsg_to_g(graph, source_vertex),
         _vertex_attrsg_to_g(graph, target_vertex),

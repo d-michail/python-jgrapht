@@ -28,7 +28,7 @@ def bron_kerbosch(graph, timeout=0):
     :returns: An iterator over maximal cliques
     """
     custom = [timeout]
-    res = _backend.jgrapht_clique_exec_bron_kerbosch(graph.handle, *custom)
+    res = _backend.jgrapht_xx_clique_exec_bron_kerbosch(graph.handle, *custom)
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSetIterator(res, graph)
     else:
@@ -55,7 +55,7 @@ def bron_kerbosch_with_pivot(graph, timeout=0):
     :returns: An iterator over maximal cliques
     """
     custom = [timeout]
-    res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot(graph.handle, *custom)
+    res = _backend.jgrapht_xx_clique_exec_bron_kerbosch_pivot(graph.handle, *custom)
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSetIterator(res, graph)
     else:
@@ -86,7 +86,7 @@ def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
     :returns: An iterator over maximal cliques
     """
     custom = [timeout]
-    res = _backend.jgrapht_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(
+    res = _backend.jgrapht_xx_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(
         graph.handle, *custom
     )
     if _is_anyhashable_graph(graph):
@@ -104,7 +104,7 @@ def chordal_max_clique(graph):
     :param graph: the chordal graph. If the graph is not chordal an error is raised
     :returns: a clique as a vertex set
     """
-    res = _backend.jgrapht_clique_exec_chordal_max_clique(graph.handle)
+    res = _backend.jgrapht_xx_clique_exec_chordal_max_clique(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexSet(res, graph)

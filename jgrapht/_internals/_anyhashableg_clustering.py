@@ -1,10 +1,10 @@
 from .. import backend
 
-from ._clustering import _JGraphTClustering
+from ._clustering import _JGraphTIntegerClustering
 from ._anyhashableg_wrappers import _AnyHashableGraphVertexIterator
 
 
-class _AnyHashableGraphClustering(_JGraphTClustering):
+class _AnyHashableGraphClustering(_JGraphTIntegerClustering):
     """An any-hashable graph vertex clustering."""
 
     def __init__(self, handle, graph, **kwargs):
@@ -12,7 +12,7 @@ class _AnyHashableGraphClustering(_JGraphTClustering):
         self._graph = graph
 
     def ith_cluster(self, i):
-        res = backend.jgrapht_clustering_ith_cluster_vit(self._handle, i)
+        res = backend.jgrapht_xx_clustering_ith_cluster_vit(self._handle, i)
         return _AnyHashableGraphVertexIterator(res, self._graph)
 
     def __repr__(self):

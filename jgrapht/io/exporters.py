@@ -10,13 +10,19 @@ from .._internals._anyhashableg import _is_anyhashable_graph
 
 
 def _export_to_file(name, graph, filename, *args):
-    alg_method_name = "jgrapht_export_file_" + name
+    if name == "dimacs":
+        alg_method_name = "jgrapht_ii_export_file_" + name
+    else:
+        alg_method_name = "jgrapht_xx_export_file_" + name
     alg_method = getattr(_backend, alg_method_name)
     alg_method(graph.handle, filename, *args)
 
 
 def _export_to_string(name, graph, *args):
-    alg_method_name = "jgrapht_export_string_" + name
+    if name == "dimacs":
+        alg_method_name = "jgrapht_ii_export_string_" + name
+    else:
+        alg_method_name = "jgrapht_xx_export_string_" + name
     alg_method = getattr(_backend, alg_method_name)
     handle = alg_method(graph.handle, *args)
     # We wrap around a python string which copies the result and

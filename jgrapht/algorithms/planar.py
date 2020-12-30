@@ -1,7 +1,7 @@
 from .. import backend as _backend
 
 from .._internals._planar import _JGraphTPlanarEmbedding
-from .._internals._graphs import _JGraphTGraph
+from .._internals._graphs import _JGraphTIntegerGraph
 
 from .._internals._anyhashableg import (
     _is_anyhashable_graph,
@@ -11,7 +11,7 @@ from .._internals._anyhashableg_planar import _AnyHashableGraphPlanarEmbedding
 
 
 def _planarity_alg(name, graph, *args):
-    alg_method_name = "jgrapht_planarity_exec_"
+    alg_method_name = "jgrapht_xx_planarity_exec_"
     alg_method_name += name
 
     alg_method = getattr(_backend, alg_method_name)
@@ -23,7 +23,7 @@ def _planarity_alg(name, graph, *args):
         else:
             return is_planar, _JGraphTPlanarEmbedding(embedding)
     else:
-        kuratowski_as_graph = _JGraphTGraph(handle=kuratowski_subdivision)
+        kuratowski_as_graph = _JGraphTIntegerGraph(handle=kuratowski_subdivision)
         if _is_anyhashable_graph(graph):
             return (
                 is_planar,

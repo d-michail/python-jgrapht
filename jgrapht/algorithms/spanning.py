@@ -25,7 +25,7 @@ def kruskal(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    weight, mst_handle = _backend.jgrapht_mst_exec_kruskal(graph.handle)
+    weight, mst_handle = _backend.jgrapht_xx_mst_exec_kruskal(graph.handle)
     return _wrap_result(graph, weight, mst_handle)
 
 
@@ -40,7 +40,7 @@ def prim(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    weight, mst_handle = _backend.jgrapht_mst_exec_prim(graph.handle)
+    weight, mst_handle = _backend.jgrapht_xx_mst_exec_prim(graph.handle)
     return _wrap_result(graph, weight, mst_handle)
 
 
@@ -56,7 +56,7 @@ def boruvka(graph):
     :param graph: The input graph
     :returns: A tuple (weight, mst) 
     """
-    weight, mst_handle = _backend.jgrapht_mst_exec_boruvka(graph.handle)
+    weight, mst_handle = _backend.jgrapht_xx_mst_exec_boruvka(graph.handle)
     return _wrap_result(graph, weight, mst_handle)
 
 
@@ -85,7 +85,7 @@ def multiplicative_greedy(graph, k):
     :param k: integer
     :returns: tuple of the form (weight, spanner_edges)
     """
-    weight, spanner = _backend.jgrapht_spanner_exec_greedy_multiplicative(
+    weight, spanner = _backend.jgrapht_xx_spanner_exec_greedy_multiplicative(
         graph.handle, k
     )
     return weight, _JGraphTIntegerSet(spanner)

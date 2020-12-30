@@ -15,7 +15,7 @@ def chordal_max_independent_set(graph):
     :param graph: the chordal graph. If the graph is not chordal an error is raised
     :returns: an independent set as a vertex set
     """
-    res = _backend.jgrapht_independent_set_exec_chordal_max_independent_set(
+    res = _backend.jgrapht_xx_independent_set_exec_chordal_max_independent_set(
         graph.handle
     )
 

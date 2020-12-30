@@ -14,7 +14,7 @@ def bipartite_partitions(graph):
     :param graph: The input graph
     :returns: A tuple (result, partition1, partition2)
     """
-    res, part1, part2 = _backend.jgrapht_partition_exec_bipartite(graph.handle)
+    res, part1, part2 = _backend.jgrapht_xx_partition_exec_bipartite(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return (

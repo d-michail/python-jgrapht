@@ -2,17 +2,17 @@ import time
 from .. import backend as _backend
 
 from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._clustering import _JGraphTClustering
+from .._internals._clustering import _JGraphTIntegerClustering
 from .._internals._anyhashableg_clustering import _AnyHashableGraphClustering
 
 
 def k_spanning_tree(graph, k):
-    r"""The k spanning tree clustering algorithm. 
+    r"""The k spanning tree clustering algorithm.
 
     The algorithm finds a minimum spanning tree T using Prim's algorithm, then executes Kruskal's
     algorithm only on the edges of T until k trees are formed. The resulting trees are the final
     clusters. The total running time is :math:`\mathcal{O}(m + n \log n)`.
-  
+
     The algorithm is strongly related to single linkage cluster analysis, also known as single-link
     clustering. For more information see: J. C. Gower and G. J. S. Ross. Minimum Spanning Trees and
     Single Linkage Cluster Analysis. Journal of the Royal Statistical Society. Series C (Applied
@@ -22,11 +22,11 @@ def k_spanning_tree(graph, k):
     :param k: integer k, denoting the number of clusters
     :returns: a clustering as an instance of :py:class:`.Clustering`
     """
-    handle = _backend.jgrapht_clustering_exec_k_spanning_tree(graph.handle, k)
+    handle = _backend.jgrapht_xx_clustering_exec_k_spanning_tree(graph.handle, k)
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphClustering(handle, graph)
     else:
-        return _JGraphTClustering(handle)
+        return _JGraphTIntegerClustering(handle)
 
 
 def label_propagation(graph, max_iterations=None, seed=None):
@@ -34,7 +34,7 @@ def label_propagation(graph, max_iterations=None, seed=None):
 
     The algorithm is a near linear time algorithm capable of discovering communities in large graphs.
     It is described in detail in the following `paper <https://dx.doi.org/10.1103/PhysRevE.76.036106>`_:
-     
+
       * Raghavan, U. N., Albert, R., and Kumara, S. (2007). Near linear time algorithm to detect
         community structures in large-scale networks. Physical review E, 76(3), 036106.
 
@@ -57,8 +57,8 @@ def label_propagation(graph, max_iterations=None, seed=None):
         max_iterations = 0
     args = [max_iterations, seed]
 
-    handle = _backend.jgrapht_clustering_exec_label_propagation(graph.handle, *args)
+    handle = _backend.jgrapht_xx_clustering_exec_label_propagation(graph.handle, *args)
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphClustering(handle, graph)
     else:
-        return _JGraphTClustering(handle)
+        return _JGraphTIntegerClustering(handle)

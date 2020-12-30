@@ -168,9 +168,9 @@ def _parse_graph_dimacs(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_dimacs
+        backend_function = _backend.jgrapht_ii_import_file_dimacs
     else:
-        backend_function = _backend.jgrapht_import_string_dimacs
+        backend_function = _backend.jgrapht_ii_import_string_dimacs
 
     backend_function(
         graph.handle,
@@ -204,9 +204,9 @@ def _parse_anyhashable_graph_dimacs(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_dimacs
+        backend_function = _backend.jgrapht_ii_import_file_dimacs
     else:
-        backend_function = _backend.jgrapht_import_string_dimacs
+        backend_function = _backend.jgrapht_ii_import_string_dimacs
 
     backend_function(
         graph._graph.handle,
@@ -250,9 +250,9 @@ def _parse_graph_gml(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_gml
+        backend_function = _backend.jgrapht_ii_import_file_gml
     else:
-        backend_function = _backend.jgrapht_import_string_gml
+        backend_function = _backend.jgrapht_ii_import_string_gml
 
     backend_function(
         graph.handle,
@@ -288,9 +288,9 @@ def _parse_anyhashable_graph_gml(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_gml
+        backend_function = _backend.jgrapht_ii_import_file_gml
     else:
-        backend_function = _backend.jgrapht_import_string_gml
+        backend_function = _backend.jgrapht_ii_import_string_gml
 
     backend_function(
         graph._graph.handle,
@@ -335,9 +335,9 @@ def _parse_graph_json(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_json
+        backend_function = _backend.jgrapht_ii_import_file_json
     else:
-        backend_function = _backend.jgrapht_import_string_json
+        backend_function = _backend.jgrapht_ii_import_string_json
 
     backend_function(
         graph.handle,
@@ -371,9 +371,9 @@ def _parse_anyhashable_graph_json(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_json
+        backend_function = _backend.jgrapht_ii_import_file_json
     else:
-        backend_function = _backend.jgrapht_import_string_json
+        backend_function = _backend.jgrapht_ii_import_string_json
 
     backend_function(
         graph._graph.handle,
@@ -429,9 +429,9 @@ def _parse_graph_csv(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_csv
+        backend_function = _backend.jgrapht_ii_import_file_csv
     else:
-        backend_function = _backend.jgrapht_import_string_csv
+        backend_function = _backend.jgrapht_ii_import_string_csv
 
     backend_function(
         graph.handle,
@@ -474,9 +474,9 @@ def _parse_anyhashable_graph_csv(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_csv
+        backend_function = _backend.jgrapht_ii_import_file_csv
     else:
-        backend_function = _backend.jgrapht_import_string_csv
+        backend_function = _backend.jgrapht_ii_import_string_csv
 
     backend_function(
         graph._graph.handle,
@@ -524,9 +524,9 @@ def _parse_graph_gexf(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_gexf
+        backend_function = _backend.jgrapht_ii_import_file_gexf
     else:
-        backend_function = _backend.jgrapht_import_string_gexf
+        backend_function = _backend.jgrapht_ii_import_string_gexf
 
     backend_function(
         graph.handle,
@@ -561,9 +561,9 @@ def _parse_anyhashable_graph_gexf(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_gexf
+        backend_function = _backend.jgrapht_ii_import_file_gexf
     else:
-        backend_function = _backend.jgrapht_import_string_gexf
+        backend_function = _backend.jgrapht_ii_import_string_gexf
 
     backend_function(
         graph._graph.handle,
@@ -609,9 +609,9 @@ def _parse_graph_dot(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_dot
+        backend_function = _backend.jgrapht_ii_import_file_dot
     else:
-        backend_function = _backend.jgrapht_import_string_dot
+        backend_function = _backend.jgrapht_ii_import_string_dot
 
     backend_function(
         graph.handle,
@@ -645,9 +645,9 @@ def _parse_anyhashable_graph_dot(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_dot
+        backend_function = _backend.jgrapht_ii_import_file_dot
     else:
-        backend_function = _backend.jgrapht_import_string_dot
+        backend_function = _backend.jgrapht_ii_import_string_dot
 
     backend_function(
         graph._graph.handle,
@@ -692,9 +692,9 @@ def _parse_graph_graph6sparse6(
     string_as_bytearray = bytearray(input, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_graph6sparse6
+        backend_function = _backend.jgrapht_ii_import_file_graph6sparse6
     else:
-        backend_function = _backend.jgrapht_import_string_graph6sparse6
+        backend_function = _backend.jgrapht_ii_import_string_graph6sparse6
 
     backend_function(
         graph.handle,
@@ -728,9 +728,9 @@ def _parse_anyhashable_graph_graph6sparse6(
     string_as_bytearray = bytearray(input_string, encoding="utf-8")
 
     if input_is_filename:
-        backend_function = _backend.jgrapht_import_file_graph6sparse6
+        backend_function = _backend.jgrapht_ii_import_file_graph6sparse6
     else:
-        backend_function = _backend.jgrapht_import_string_graph6sparse6
+        backend_function = _backend.jgrapht_ii_import_string_graph6sparse6
 
     backend_function(
         graph._graph.handle,
@@ -778,14 +778,14 @@ def _parse_graph_graphml(
 
     if input_is_filename:
         if simple:
-            backend_function = _backend.jgrapht_import_file_graphml_simple
+            backend_function = _backend.jgrapht_ii_import_file_graphml_simple
         else:
-            backend_function = _backend.jgrapht_import_file_graphml
+            backend_function = _backend.jgrapht_ii_import_file_graphml
     else:
         if simple:
-            backend_function = _backend.jgrapht_import_string_graphml_simple
+            backend_function = _backend.jgrapht_ii_import_string_graphml_simple
         else:
-            backend_function = _backend.jgrapht_import_string_graphml
+            backend_function = _backend.jgrapht_ii_import_string_graphml
 
     backend_function(
         graph.handle,
@@ -826,14 +826,14 @@ def _parse_anyhashable_graph_graphml(
 
     if input_is_filename:
         if simple:
-            backend_function = _backend.jgrapht_import_file_graphml_simple
+            backend_function = _backend.jgrapht_ii_import_file_graphml_simple
         else:
-            backend_function = _backend.jgrapht_import_file_graphml
+            backend_function = _backend.jgrapht_ii_import_file_graphml
     else:
         if simple:
-            backend_function = _backend.jgrapht_import_string_graphml_simple
+            backend_function = _backend.jgrapht_ii_import_string_graphml_simple
         else:
-            backend_function = _backend.jgrapht_import_string_graphml
+            backend_function = _backend.jgrapht_ii_import_string_graphml
 
     backend_function(
         graph._graph.handle,

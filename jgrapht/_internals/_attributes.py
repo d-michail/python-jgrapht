@@ -12,19 +12,19 @@ class _JGraphTAttributeStore(_HandleWrapper):
 
     def __init__(self, handle=None, **kwargs):
         if handle is None:
-            handle = backend.jgrapht_attributes_store_create()
+            handle = backend.jgrapht_xx_attributes_store_create()
         super().__init__(handle=handle, **kwargs)
 
     def put(self, element, key, value):
         encoded_key = bytearray(key, encoding="utf-8")
         encoded_value = bytearray(value, encoding="utf-8")
-        backend.jgrapht_attributes_store_put_string_attribute(
+        backend.jgrapht_ii_attributes_store_put_string_attribute(
             self._handle, element, encoded_key, encoded_value
         )
 
     def remove(self, element, key):
         encoded_key = bytearray(key, encoding="utf-8")
-        backend.jgrapht_attributes_store_remove_attribute(
+        backend.jgrapht_ii_attributes_store_remove_attribute(
             self._handle, element, encoded_key
         )
 

@@ -15,12 +15,34 @@ def _create_wrapped_callback(callback, cfunctype):
     return (0, None)
 
 
-def _create_wrapped_vertex_comparator_callback(callback):
+def _create_wrapped_int_vertex_comparator_callback(callback):
     """Create a wrapper callback for a vertex comparator. This means
     that the function should accept two integers and return an integer.
     """
     if callback is not None:
         callback_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_int, ctypes.c_int)
+        return _create_wrapped_callback(callback, callback_ctype)
+    else:
+        return (0, None)
+
+
+def _create_wrapped_long_vertex_comparator_callback(callback):
+    """Create a wrapper callback for a vertex comparator. This means
+    that the function should accept two longs and return an integer.
+    """
+    if callback is not None:
+        callback_ctype = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_longlong, ctypes.c_longlong)
+        return _create_wrapped_callback(callback, callback_ctype)
+    else:
+        return (0, None)
+
+
+def _create_wrapped_long_supplier_callback(callback):
+    """Create a wrapper callback for a vertex/edge supplier callback. This means
+    that the function should take no arguments and return a long.
+    """
+    if callback is not None:
+        callback_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong)
         return _create_wrapped_callback(callback, callback_ctype)
     else:
         return (0, None)

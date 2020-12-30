@@ -21,7 +21,7 @@ def _copy_vertex_weights(graph, vertex_weights):
 
 
 def _vertexcover_alg(name, graph, vertex_weights=None):
-    alg_method_name = "jgrapht_vertexcover_exec_" + name
+    alg_method_name = "jgrapht_xx_vertexcover_exec_" + name
     if vertex_weights is not None:
         alg_method_name += "_weighted"
     alg_method = getattr(_backend, alg_method_name)

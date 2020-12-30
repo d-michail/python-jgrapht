@@ -28,7 +28,7 @@ def tsp_random(graph, seed=None):
     """
     if seed is None:
         seed = int(time.time())
-    graph_path_handle = _backend.jgrapht_tour_tsp_random(graph.handle, seed)
+    graph_path_handle = _backend.jgrapht_xx_tour_tsp_random(graph.handle, seed)
     return _wrap_result(graph, graph_path_handle)
 
 
@@ -43,7 +43,7 @@ def tsp_greedy_heuristic(graph):
     :returns: a greedy tour
     :rtype: :py:class:`.GraphPath`
     """
-    graph_path_handle = _backend.jgrapht_tour_tsp_greedy_heuristic(graph.handle)
+    graph_path_handle = _backend.jgrapht_xx_tour_tsp_greedy_heuristic(graph.handle)
     return _wrap_result(graph, graph_path_handle)
 
 
@@ -56,7 +56,7 @@ def tsp_nearest_insertion_heuristic(graph):
     :returns: a tour
     :rtype: :py:class:`.GraphPath`
     """
-    graph_path_handle = _backend.jgrapht_tour_tsp_nearest_insertion_heuristic(
+    graph_path_handle = _backend.jgrapht_xx_tour_tsp_nearest_insertion_heuristic(
         graph.handle
     )
     return _wrap_result(graph, graph_path_handle)
@@ -74,7 +74,7 @@ def tsp_nearest_neighbor_heuristic(graph, seed=None):
     """
     if seed is None:
         seed = int(time.time())
-    graph_path_handle = _backend.jgrapht_tour_tsp_nearest_neighbor_heuristic(
+    graph_path_handle = _backend.jgrapht_xx_tour_tsp_nearest_neighbor_heuristic(
         graph.handle, seed
     )
     return _wrap_result(graph, graph_path_handle)
@@ -96,7 +96,7 @@ def metric_tsp_christofides(graph):
     :returns: a tour which is a 3/2 approximation
     :rtype: :py:class:`.GraphPath`
     """
-    graph_path_handle = _backend.jgrapht_tour_metric_tsp_christofides(graph.handle)
+    graph_path_handle = _backend.jgrapht_xx_tour_metric_tsp_christofides(graph.handle)
     return _wrap_result(graph, graph_path_handle)
 
 
@@ -113,7 +113,7 @@ def metric_tsp_two_approx(graph):
     :returns: a tour which is a 2-approximation
     :rtype: :py:class:`.GraphPath`
     """
-    graph_path_handle = _backend.jgrapht_tour_metric_tsp_two_approx(graph.handle)
+    graph_path_handle = _backend.jgrapht_xx_tour_metric_tsp_two_approx(graph.handle)
     return _wrap_result(graph, graph_path_handle)
 
 
@@ -127,7 +127,7 @@ def tsp_held_karp(graph):
     :returns: an optimal tour
     :rtype: :py:class:`.GraphPath`
     """
-    graph_path_handle = _backend.jgrapht_tour_tsp_held_karp(graph.handle)
+    graph_path_handle = _backend.jgrapht_xx_tour_tsp_held_karp(graph.handle)
     return _wrap_result(graph, graph_path_handle)
 
 
@@ -140,7 +140,7 @@ def hamiltonian_palmer(graph):
     :returns: a hamiltonian cycle
     :rtype: :py:class:`.GraphPath`
     """
-    graph_path_handle = _backend.jgrapht_tour_hamiltonian_palmer(graph.handle)
+    graph_path_handle = _backend.jgrapht_xx_tour_hamiltonian_palmer(graph.handle)
     return _wrap_result(graph, graph_path_handle)
 
 
@@ -163,7 +163,7 @@ def tsp_two_opt_heuristic(graph, k=1, min_cost_improvement=0.0001, seed=None):
     if seed is None:
         seed = int(time.time())
     custom = [k, min_cost_improvement, seed]
-    graph_path_handle = _backend.jgrapht_tour_tsp_two_opt_heuristic(
+    graph_path_handle = _backend.jgrapht_xx_tour_tsp_two_opt_heuristic(
         graph.handle, *custom
     )
     return _wrap_result(graph, graph_path_handle)
@@ -187,7 +187,7 @@ def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=
     if seed is None:
         seed = int(time.time())
 
-    new_graph_path_handle = _backend.jgrapht_tour_tsp_two_opt_heuristic_improve(
+    new_graph_path_handle = _backend.jgrapht_xx_tour_tsp_two_opt_heuristic_improve(
         graph_path.handle, min_cost_improvement, seed
     )
 

@@ -36,7 +36,7 @@ def eulerian_cycle(graph):
     :param graph: The input graph
     :returns: An Eulerian cycle as a :py:class:`.GraphPath` or None if the graph is not Eulerian
     """
-    is_eulerian, gp = _backend.jgrapht_cycles_eulerian_exec_hierholzer(graph.handle)
+    is_eulerian, gp = _backend.jgrapht_xx_cycles_eulerian_exec_hierholzer(graph.handle)
 
     if not is_eulerian:
         return None
@@ -66,7 +66,7 @@ def chinese_postman(graph):
     :param graph: the input graph. It must be strongly connected
     :returns: a closed-walk of minimum weight which visits every edge at least once
     """
-    gp = _backend.jgrapht_cycles_chinese_postman_exec_edmonds_johnson(graph.handle)
+    gp = _backend.jgrapht_xx_cycles_chinese_postman_exec_edmonds_johnson(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphGraphPath(gp, graph)
@@ -91,7 +91,7 @@ def fundamental_cycle_basis_paton(graph):
     :returns: a tuple (weight, cycle iterator). Each cycle is returned as a 
       :py:class:`.GraphPath` instance
     """
-    weight, cycles_it = _backend.jgrapht_cycles_fundamental_basis_exec_paton(
+    weight, cycles_it = _backend.jgrapht_xx_cycles_fundamental_basis_exec_paton(
         graph.handle
     )
 
@@ -121,7 +121,7 @@ def fundamental_cycle_basis_bfs_with_stack(graph):
     :returns: a tuple (weight, cycle iterator). Each cycle is returned as a 
       :py:class:`.GraphPath` instance
     """
-    weight, cycles_it = _backend.jgrapht_cycles_fundamental_basis_exec_stack_bfs(
+    weight, cycles_it = _backend.jgrapht_xx_cycles_fundamental_basis_exec_stack_bfs(
         graph.handle
     )
 
@@ -150,7 +150,7 @@ def fundamental_cycle_basis_bfs_with_queue(graph):
     :returns: a tuple (weight, cycle iterator). Each cycle is returned as a 
       :py:class:`.GraphPath` instance
     """
-    weight, cycles_it = _backend.jgrapht_cycles_fundamental_basis_exec_queue_bfs(
+    weight, cycles_it = _backend.jgrapht_xx_cycles_fundamental_basis_exec_queue_bfs(
         graph.handle
     )
 
@@ -178,7 +178,7 @@ def enumerate_simple_cycles_tarjan(graph):
     :param graph: the graph. Must be directed and without multiple edges
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
     """
-    cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_tarjan(graph.handle)
+    cycles_it = _backend.jgrapht_xx_cycles_simple_enumeration_exec_tarjan(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexListIterator(cycles_it, graph)
@@ -204,7 +204,7 @@ def enumerate_simple_cycles_johnson(graph):
     :param graph: the graph. Must be directed and without multiple edges
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
     """
-    cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_johnson(graph.handle)
+    cycles_it = _backend.jgrapht_xx_cycles_simple_enumeration_exec_johnson(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexListIterator(cycles_it, graph)
@@ -230,7 +230,7 @@ def enumerate_simple_cycles_tiernan(graph):
     :param graph: the graph. Must be directed and without multiple edges
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
     """
-    cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_tiernan(graph.handle)
+    cycles_it = _backend.jgrapht_xx_cycles_simple_enumeration_exec_tiernan(graph.handle)
 
     if _is_anyhashable_graph(graph):
         return _AnyHashableGraphVertexListIterator(cycles_it, graph)
@@ -257,7 +257,7 @@ def enumerate_simple_cycles_szwarcfiter_lauer(graph):
     :param graph: the graph. Must be directed and without multiple edges
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
     """
-    cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_szwarcfiter_lauer(
+    cycles_it = _backend.jgrapht_xx_cycles_simple_enumeration_exec_szwarcfiter_lauer(
         graph.handle
     )
 
@@ -286,7 +286,7 @@ def enumerate_simple_cycles_hawick_james(graph):
     :param graph: the graph. Must be directed and without multiple edges
     :returns: an iterator over the cycles. Cycles are returned as vertex sets.
     """
-    cycles_it = _backend.jgrapht_cycles_simple_enumeration_exec_hawick_james(
+    cycles_it = _backend.jgrapht_xx_cycles_simple_enumeration_exec_hawick_james(
         graph.handle
     )
 
