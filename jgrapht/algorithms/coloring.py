@@ -1,16 +1,5 @@
 from .. import backend as _backend
-
-from .._internals._collections import _JGraphTIntegerIntegerMap
-
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._anyhashableg_collections import _AnyHashableGraphVertexIntegerMap
-
-
-def _wrap_result(graph, num_colors, color_map_handle):
-    if _is_anyhashable_graph(graph):
-        return num_colors, _AnyHashableGraphVertexIntegerMap(color_map_handle, graph)
-    else:
-        return num_colors, _JGraphTIntegerIntegerMap(color_map_handle)
+from .._internals._results import _wrap_vertex_coloring
 
 
 def greedy_smallestnotusedcolor(graph):
@@ -24,7 +13,7 @@ def greedy_smallestnotusedcolor(graph):
       dictionary from vertices to integers.
     """
     num_colors, color_map_handle = _backend.jgrapht_xx_coloring_exec_greedy(graph.handle)
-    return _wrap_result(graph, num_colors, color_map_handle)
+    return num_colors, _wrap_vertex_coloring(graph, color_map_handle)
 
 
 def greedy_smallestdegreelast(graph):
@@ -46,7 +35,7 @@ def greedy_smallestdegreelast(graph):
         num_colors,
         color_map_handle,
     ) = _backend.jgrapht_xx_coloring_exec_greedy_smallestdegreelast(graph.handle)
-    return _wrap_result(graph, num_colors, color_map_handle)
+    return num_colors, _wrap_vertex_coloring(graph, color_map_handle)
 
 
 def greedy_largestdegreefirst(graph):
@@ -66,7 +55,7 @@ def greedy_largestdegreefirst(graph):
         num_colors,
         color_map_handle,
     ) = _backend.jgrapht_xx_coloring_exec_greedy_largestdegreefirst(graph.handle)
-    return _wrap_result(graph, num_colors, color_map_handle)
+    return num_colors, _wrap_vertex_coloring(graph, color_map_handle)
 
 
 def greedy_random(graph, seed=None):
@@ -87,7 +76,7 @@ def greedy_random(graph, seed=None):
             num_colors,
             color_map_handle,
         ) = _backend.jgrapht_xx_coloring_exec_greedy_random_with_seed(graph.handle, seed)
-    return _wrap_result(graph, num_colors, color_map_handle)
+    return num_colors, _wrap_vertex_coloring(graph, color_map_handle)
 
 
 def greedy_dsatur(graph):
@@ -117,7 +106,7 @@ def greedy_dsatur(graph):
     num_colors, color_map_handle = _backend.jgrapht_xx_coloring_exec_greedy_dsatur(
         graph.handle
     )
-    return _wrap_result(graph, num_colors, color_map_handle)
+    return num_colors, _wrap_vertex_coloring(graph, color_map_handle)
 
 
 def color_refinement(graph):
@@ -137,7 +126,7 @@ def color_refinement(graph):
     num_colors, color_map_handle = _backend.jgrapht_xx_coloring_exec_color_refinement(
         graph.handle
     )
-    return _wrap_result(graph, num_colors, color_map_handle)
+    return num_colors, _wrap_vertex_coloring(graph, color_map_handle)
 
 
 def backtracking_brown(graph):
@@ -150,7 +139,7 @@ def backtracking_brown(graph):
     num_colors, color_map_handle = _backend.jgrapht_xx_coloring_exec_backtracking_brown(
         graph.handle
     )
-    return _wrap_result(graph, num_colors, color_map_handle)
+    return num_colors, _wrap_vertex_coloring(graph, color_map_handle)
 
 
 def chordal_min_coloring(graph):
@@ -167,4 +156,4 @@ def chordal_min_coloring(graph):
         num_colors,
         color_map_handle,
     ) = _backend.jgrapht_xx_coloring_exec_chordal_minimum_coloring(graph.handle)
-    return _wrap_result(graph, num_colors, color_map_handle)
+    return num_colors, _wrap_vertex_coloring(graph, color_map_handle)

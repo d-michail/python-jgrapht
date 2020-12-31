@@ -9,12 +9,17 @@ from ..types import (
 from ._wrappers import (
     _HandleWrapper,
     _JGraphTIntegerIterator,
+    _JGraphTLongIterator,
     _JGraphTObjectIterator,
 )
+from ._int_graphs import _is_int_graph
+from ._long_graphs import _is_long_graph
 
 
 class _JGraphTGraphPath(_HandleWrapper, GraphPath):
-    """A class representing a graph path."""
+    """A class representing a graph path. Works for both
+       int and long graphs.
+    """
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -60,14 +65,22 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
         if self._edges is not None:
             return
 
-        weight, start_vertex, end_vertex, eit = backend.jgrapht_ii_handles_get_graphpath(
-            self._handle
-        )
+        if _is_int_graph(self._graph):
+            weight, start_vertex, end_vertex, eit = backend.jgrapht_ii_handles_get_graphpath(
+                self._handle
+            )
+            self._edges = list(_JGraphTIntegerIterator(eit))
+        elif _is_long_graph(self._graph):
+            weight, start_vertex, end_vertex, eit = backend.jgrapht_ll_handles_get_graphpath(
+                self._handle
+            )
+            self._edges = list(_JGraphTLongIterator(eit))
+        else:
+            raise TypeError('Not supported graph type')
 
         self._weight = weight
         self._start_vertex = start_vertex
         self._end_vertex = end_vertex
-        self._edges = list(_JGraphTIntegerIterator(eit))
 
     def __repr__(self):
         return "_JGraphTGraphPath(%r)" % self._handle
