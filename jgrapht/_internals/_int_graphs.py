@@ -355,3 +355,12 @@ def _create_int_dag(
         weighted,
     )
     return _JGraphTIntegerDirectedAcyclicGraph(handle)
+
+
+def _is_int_graph(graph):
+    """Check if a graph instance is an int graph.
+
+    :param graph: the graph
+    :returns: True if the graph is an int graph, False otherwise.
+    """
+    return isinstance(graph, (_JGraphTIntegerGraph))

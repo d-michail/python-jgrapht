@@ -256,3 +256,12 @@ def _create_long_dag(
         weighted,
     )
     return _JGraphTLongDirectedAcyclicGraph(handle)
+
+
+def _is_long_graph(graph):
+    """Check if a graph instance is a long graph.
+
+    :param graph: the graph
+    :returns: True if the graph is a long graph, False otherwise.
+    """
+    return isinstance(graph, (_JGraphTLongGraph))

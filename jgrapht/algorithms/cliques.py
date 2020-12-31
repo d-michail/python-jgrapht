@@ -1,14 +1,7 @@
 from .. import backend as _backend
-
-from .._internals._collections import (
-    _JGraphTIntegerSet,
-    _JGraphTIntegerSetIterator,
-)
-
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._anyhashableg_collections import (
-    _AnyHashableGraphVertexSet,
-    _AnyHashableGraphVertexSetIterator,
+from .._internals._results import (
+    _wrap_vertex_set,
+    _wrap_vertex_set_iterator,
 )
 
 
@@ -29,10 +22,7 @@ def bron_kerbosch(graph, timeout=0):
     """
     custom = [timeout]
     res = _backend.jgrapht_xx_clique_exec_bron_kerbosch(graph.handle, *custom)
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphVertexSetIterator(res, graph)
-    else:
-        return _JGraphTIntegerSetIterator(res)
+    return _wrap_vertex_set_iterator(graph, res)
 
 
 def bron_kerbosch_with_pivot(graph, timeout=0):
@@ -56,10 +46,7 @@ def bron_kerbosch_with_pivot(graph, timeout=0):
     """
     custom = [timeout]
     res = _backend.jgrapht_xx_clique_exec_bron_kerbosch_pivot(graph.handle, *custom)
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphVertexSetIterator(res, graph)
-    else:
-        return _JGraphTIntegerSetIterator(res)
+    return _wrap_vertex_set_iterator(graph, res)
 
 
 def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
@@ -89,10 +76,7 @@ def bron_kerbosch_with_degeneracy_ordering(graph, timeout=0):
     res = _backend.jgrapht_xx_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(
         graph.handle, *custom
     )
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphVertexSetIterator(res, graph)
-    else:
-        return _JGraphTIntegerSetIterator(res)
+    return _wrap_vertex_set_iterator(graph, res)
 
 
 def chordal_max_clique(graph):
@@ -105,8 +89,4 @@ def chordal_max_clique(graph):
     :returns: a clique as a vertex set
     """
     res = _backend.jgrapht_xx_clique_exec_chordal_max_clique(graph.handle)
-
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphVertexSet(res, graph)
-    else:
-        return _JGraphTIntegerSet(res)
+    return _wrap_vertex_set(graph, res)
