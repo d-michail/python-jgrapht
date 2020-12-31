@@ -15,7 +15,7 @@ from ..types import (
 )
 from ..utils import IntegerSupplier
 
-from ._graphs import (
+from ._int_graphs import (
     _create_int_graph as _create_int_graph,
     _create_int_dag as _create_int_dag,
     _create_sparse_int_graph as _create_sparse_int_graph,

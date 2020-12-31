@@ -4,7 +4,7 @@ from ..types import Flow, GomoryHuTree, EquivalentFlowTree
 
 from ._wrappers import _HandleWrapper
 
-from ._graphs import _JGraphTIntegerGraph
+from ._int_graphs import _JGraphTIntegerGraph
 from ._anyhashableg import (
     _create_anyhashable_graph,
     _vertex_anyhashableg_to_g,

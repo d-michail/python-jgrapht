@@ -1,6 +1,6 @@
 from .. import backend
 from ..types import GraphType, GraphEvent, ListenableGraph
-from ._graphs import _JGraphTIntegerGraph
+from ._int_graphs import _JGraphTIntegerGraph
 from ._callbacks import _create_wrapped_callback
 
 import ctypes

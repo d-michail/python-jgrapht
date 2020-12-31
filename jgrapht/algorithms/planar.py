@@ -1,7 +1,7 @@
 from .. import backend as _backend
 
 from .._internals._planar import _JGraphTPlanarEmbedding
-from .._internals._graphs import _JGraphTIntegerGraph
+from .._internals._int_graphs import _JGraphTIntegerGraph
 
 from .._internals._anyhashableg import (
     _is_anyhashable_graph,

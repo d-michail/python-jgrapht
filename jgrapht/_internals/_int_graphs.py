@@ -16,7 +16,7 @@ from ._collections import (
 
 
 class _JGraphTIntegerGraph(_HandleWrapper, Graph):
-    """The actual graph implementation. This implementation always uses integers
+    """The int graph implementation. This implementation always uses integers
     for the vertices and the edges of the graph. All operations are delegated to
     the backend.
     """
@@ -160,7 +160,7 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph):
             return backend.jgrapht_ii_graph_contains_vertex(self._handle, v)
 
         def __repr__(self):
-            return "_JGraphTGraph-VertexSet(%r)" % self._handle
+            return "_JGraphTIntegerGraph-VertexSet(%r)" % self._handle
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
@@ -186,7 +186,7 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph):
             return backend.jgrapht_ii_graph_contains_edge(self._handle, v)
 
         def __repr__(self):
-            return "_JGraphTGraph-EdgeSet(%r)" % self._handle
+            return "_JGraphTIntegerGraph-EdgeSet(%r)" % self._handle
 
         def __str__(self):
             return "{" + ", ".join(str(x) for x in self) + "}"
@@ -196,7 +196,7 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph):
             return set(it)
 
     def __repr__(self):
-        return "_JGraphTGraph(%r)" % self._handle
+        return "_JGraphTIntegerGraph(%r)" % self._handle
 
 
 class _JGraphTIntegerDirectedAcyclicGraph(_JGraphTIntegerGraph, DirectedAcyclicGraph):

@@ -14,7 +14,7 @@ from ._collections import (
 )
 from ._anyhashableg import _is_anyhashable_graph
 from ._anyhashableg_collections import _AnyHashableGraphVertexSet
-from ._graphs import _JGraphTIntegerGraph
+from ._int_graphs import _JGraphTIntegerGraph
 
 
 class _JGraphTCut(Cut):
