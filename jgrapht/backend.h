@@ -312,9 +312,9 @@ int jgrapht_xx_generate_linearized_chord_diagram(void *, int, int, long long int
 
 // graph
 
-int jgrapht_ii_graph_create(int, int, int, int, int, void*, void*, void**);
+int jgrapht_ii_graph_create(int, int, int, int, void*, void*, void**);
 
-int jgrapht_ll_graph_create(int, int, int, int, int, void*, void*, void**);
+int jgrapht_ll_graph_create(int, int, int, int, void*, void*, void**);
 
 int jgrapht_ii_graph_sparse_create(int, int, int, void *, void**);
 

@@ -753,14 +753,14 @@ int jgrapht_xx_generate_linearized_chord_diagram(void *g, int n, int m, long lon
 
 // graph
 
-int jgrapht_ii_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, int with_attributes, void* vertex_supplier, void* edge_supplier, void** res) { 
+int jgrapht_ii_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, void* vertex_supplier, void* edge_supplier, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, with_attributes, vertex_supplier, edge_supplier, res);
+    return jgrapht_capi_ii_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, vertex_supplier, edge_supplier, res);
 }
 
-int jgrapht_ll_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, int with_attributes, void* vertex_supplier, void* edge_supplier, void** res) { 
+int jgrapht_ll_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, void* vertex_supplier, void* edge_supplier, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, with_attributes, vertex_supplier, edge_supplier, res);
+    return jgrapht_capi_ll_graph_create(thread, directed, allowing_self_loops, allowing_multiple_edges, weighted, vertex_supplier, edge_supplier, res);
 }
 
 int jgrapht_ii_graph_sparse_create(int directed, int weighted, int num_vertices, void *edges, void**res) { 
