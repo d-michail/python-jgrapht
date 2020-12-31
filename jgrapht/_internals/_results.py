@@ -6,18 +6,29 @@ from ._collections import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
     _JGraphTIntegerSetIterator,
+    _JGraphTIntegerListIterator,
     _JGraphTIntegerIntegerMap,
     _JGraphTLongSet,
     _JGraphTLongMutableSet,
     _JGraphTLongSetIterator,
+    _JGraphTLongListIterator,
     _JGraphTLongIntegerMap,
+)
+from ._paths import (
+    _JGraphTGraphPath,
+    _JGraphTGraphPathIterator,
 )
 from ._anyhashableg_collections import (
     _AnyHashableGraphVertexSet,
     _AnyHashableGraphMutableVertexSet,
     _AnyHashableGraphVertexSetIterator,
+    _AnyHashableGraphVertexListIterator,
     _AnyHashableGraphVertexIntegerMap,
     _AnyHashableGraphEdgeSet,
+)
+from ._anyhashableg_paths import (
+    _AnyHashableGraphGraphPath,
+    _AnyHashableGraphGraphPathIterator,
 )
 
 
@@ -60,6 +71,19 @@ def _wrap_vertex_set_iterator(graph, handle):
     return alg[0](*alg[1])
 
 
+def _wrap_vertex_list_iterator(graph, handle):
+    """Given an vertex list iterator in the JVM, build one in Python. The wrapper
+       graph takes ownership and will delete the JVM resource when Python deletes
+       the instance."""
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphVertexListIterator, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTLongListIterator, [handle]),
+        _JGraphTIntegerGraph: (_JGraphTIntegerListIterator, [handle]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
 def _wrap_vertex_coloring(graph, handle):
     """Given a vertex coloring in the JVM, build one in Python. The wrapper
        graph takes ownership and will delete the JVM resource when Python deletes
@@ -68,6 +92,32 @@ def _wrap_vertex_coloring(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphVertexIntegerMap, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongIntegerMap, [handle]),
         _JGraphTIntegerGraph: (_JGraphTIntegerIntegerMap, [handle]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_graphpath(graph, handle):
+    """Given a graph path in the JVM, build one in Python. The wrapper
+       graph takes ownership and will delete the JVM resource when Python deletes
+       the instance."""
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphGraphPath, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTGraphPath, [handle, graph]),
+        _JGraphTIntegerGraph: (_JGraphTGraphPath, [handle, graph]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_graphpath_iterator(graph, handle):
+    """Given a graph path iterator in the JVM, build one in Python. The wrapper
+           graph takes ownership and will delete the JVM resource when Python deletes
+           the instance."""
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphGraphPathIterator, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTGraphPathIterator, [handle, graph]),
+        _JGraphTIntegerGraph: (_JGraphTGraphPathIterator, [handle, graph]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])
