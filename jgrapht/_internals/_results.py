@@ -18,6 +18,15 @@ from ._paths import (
     _JGraphTGraphPath,
     _JGraphTGraphPathIterator,
 )
+from ._clustering import (
+    _JGraphTIntegerClustering,
+    _JGraphTLongClustering,
+)
+from ._flows import (
+    _JGraphTCut,
+    _JGraphTIntegerGomoryHuTree,
+    _JGraphTLongGomoryHuTree,
+)
 from ._anyhashableg_collections import (
     _AnyHashableGraphVertexSet,
     _AnyHashableGraphMutableVertexSet,
@@ -29,6 +38,13 @@ from ._anyhashableg_collections import (
 from ._anyhashableg_paths import (
     _AnyHashableGraphGraphPath,
     _AnyHashableGraphGraphPathIterator,
+)
+from ._anyhashableg_clustering import (
+    _AnyHashableGraphClustering,
+)
+from ._anyhashableg_flows import (
+    _AnyHashableGraphCut,
+    _AnyHashableGraphGomoryHuTree,
 )
 
 
@@ -118,6 +134,45 @@ def _wrap_graphpath_iterator(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphGraphPathIterator, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTGraphPathIterator, [handle, graph]),
         _JGraphTIntegerGraph: (_JGraphTGraphPathIterator, [handle, graph]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_vertex_clustering(graph, handle):
+    """Given a vertex clustering in the JVM, build one in Python. The wrapper
+       takes ownership and will delete the JVM resource when Python deletes
+       the instance."""
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphClustering, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTLongClustering, [handle]),
+        _JGraphTIntegerGraph: (_JGraphTIntegerClustering, [handle]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_cut(graph, handle, weight):
+    """Given a cut in the JVM, build one in Python. The wrapper takes ownership
+       and will delete the JVM resource when Python deletes the instance.
+    """
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphCut, [graph, weight, handle]),
+        _JGraphTLongGraph: (_JGraphTCut, [graph, weight, handle]),
+        _JGraphTIntegerGraph: (_JGraphTCut, [graph, weight, handle]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_gomory_hu_tree(graph, handle):
+    """Given a gomory hu tree in the JVM, build one in Python. The wrapper takes
+       ownership and will delete the JVM resource when Python deletes the instance.
+    """
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphGomoryHuTree, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTLongGomoryHuTree, [handle, graph]),
+        _JGraphTIntegerGraph: (_JGraphTIntegerGomoryHuTree, [handle, graph]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])

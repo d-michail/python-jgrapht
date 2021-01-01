@@ -1,9 +1,6 @@
 import time
 from .. import backend as _backend
-
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._clustering import _JGraphTIntegerClustering
-from .._internals._anyhashableg_clustering import _AnyHashableGraphClustering
+from .._internals._results import _wrap_vertex_clustering
 
 
 def k_spanning_tree(graph, k):
@@ -23,10 +20,7 @@ def k_spanning_tree(graph, k):
     :returns: a clustering as an instance of :py:class:`.Clustering`
     """
     handle = _backend.jgrapht_xx_clustering_exec_k_spanning_tree(graph.handle, k)
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphClustering(handle, graph)
-    else:
-        return _JGraphTIntegerClustering(handle)
+    return _wrap_vertex_clustering(graph, handle)
 
 
 def label_propagation(graph, max_iterations=None, seed=None):
@@ -58,7 +52,4 @@ def label_propagation(graph, max_iterations=None, seed=None):
     args = [max_iterations, seed]
 
     handle = _backend.jgrapht_xx_clustering_exec_label_propagation(graph.handle, *args)
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphClustering(handle, graph)
-    else:
-        return _JGraphTIntegerClustering(handle)
+    return _wrap_vertex_clustering(graph, handle)    
