@@ -1,22 +1,8 @@
 from .. import backend as _backend
-
-from .._internals._collections import (
-    _JGraphTIntegerDoubleMap,
-    _JGraphTIntegerIntegerMap,
+from .._internals._results import (
+    _wrap_vertex_double_map, 
+    _wrap_vertex_integer_map,
 )
-
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._anyhashableg_collections import (
-    _AnyHashableGraphVertexDoubleMap,
-    _AnyHashableGraphVertexIntegerMap,
-)
-
-
-def _wrap_result(graph, scores_handle):
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphVertexDoubleMap(scores_handle, graph)
-    else:
-        return _JGraphTIntegerDoubleMap(scores_handle)
 
 
 def alpha_centrality(
@@ -53,7 +39,7 @@ def alpha_centrality(
     scores_handle = _backend.jgrapht_xx_scoring_exec_custom_alpha_centrality(
         graph.handle, *custom
     )
-    return _wrap_result(graph, scores_handle)
+    return _wrap_vertex_double_map(graph, scores_handle)
 
 
 def betweenness_centrality(graph, incoming=False, normalize=False):
@@ -80,7 +66,7 @@ def betweenness_centrality(graph, incoming=False, normalize=False):
     scores_handle = _backend.jgrapht_xx_scoring_exec_custom_betweenness_centrality(
         graph.handle, *custom
     )
-    return _wrap_result(graph, scores_handle)
+    return _wrap_vertex_double_map(graph, scores_handle)
 
 
 def closeness_centrality(graph, incoming=False, normalize=True):
@@ -119,7 +105,7 @@ def closeness_centrality(graph, incoming=False, normalize=True):
     scores_handle = _backend.jgrapht_xx_scoring_exec_custom_closeness_centrality(
         graph.handle, *custom
     )
-    return _wrap_result(graph, scores_handle)
+    return _wrap_vertex_double_map(graph, scores_handle)
 
 
 def harmonic_centrality(graph, incoming=False, normalize=True):
@@ -160,7 +146,7 @@ def harmonic_centrality(graph, incoming=False, normalize=True):
     scores_handle = _backend.jgrapht_xx_scoring_exec_custom_harmonic_centrality(
         graph.handle, *custom
     )
-    return _wrap_result(graph, scores_handle)
+    return _wrap_vertex_double_map(graph, scores_handle)
 
 
 def pagerank(graph, damping_factor=0.85, max_iterations=100, tolerance=0.0001):
@@ -194,7 +180,7 @@ def pagerank(graph, damping_factor=0.85, max_iterations=100, tolerance=0.0001):
     """
     custom = [damping_factor, max_iterations, tolerance]
     scores_handle = _backend.jgrapht_xx_scoring_exec_custom_pagerank(graph.handle, *custom)
-    return _wrap_result(graph, scores_handle)
+    return _wrap_vertex_double_map(graph, scores_handle)
 
 
 def coreness(graph):
@@ -225,11 +211,7 @@ def coreness(graph):
       values (coreness of each vertex)
     """
     degeneracy, scores_handle = _backend.jgrapht_xx_scoring_exec_coreness(graph.handle)
-
-    if _is_anyhashable_graph(graph):
-        return degeneracy, _AnyHashableGraphVertexIntegerMap(scores_handle, graph)
-    else:
-        return degeneracy, _JGraphTIntegerIntegerMap(scores_handle)
+    return degeneracy, _wrap_vertex_integer_map(graph, scores_handle)
 
 
 def clustering_coefficient(graph):
@@ -261,8 +243,4 @@ def clustering_coefficient(graph):
         avg_cc,
         cc_map_handle,
     ) = _backend.jgrapht_xx_scoring_exec_clustering_coefficient(graph.handle)
-
-    if _is_anyhashable_graph(graph):
-        return global_cc, avg_cc, _AnyHashableGraphVertexDoubleMap(cc_map_handle, graph)
-    else:
-        return global_cc, avg_cc, _JGraphTIntegerDoubleMap(cc_map_handle)
+    return global_cc, avg_cc, _wrap_vertex_double_map(graph, cc_map_handle)

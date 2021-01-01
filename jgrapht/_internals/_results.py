@@ -13,6 +13,8 @@ from ._collections import (
     _JGraphTLongSetIterator,
     _JGraphTLongListIterator,
     _JGraphTLongIntegerMap,
+    _JGraphTIntegerDoubleMap,
+    _JGraphTLongDoubleMap,
 )
 from ._paths import (
     _JGraphTGraphPath,
@@ -26,6 +28,10 @@ from ._flows import (
     _JGraphTCut,
     _JGraphTIntegerGomoryHuTree,
     _JGraphTLongGomoryHuTree,
+    _JGraphTIntegerEquivalentFlowTree,
+    _JGraphTLongEquivalentFlowTree,
+    _JGraphTIntegerFlow,
+    _JGraphTLongFlow,
 )
 from ._anyhashableg_collections import (
     _AnyHashableGraphVertexSet,
@@ -33,6 +39,7 @@ from ._anyhashableg_collections import (
     _AnyHashableGraphVertexSetIterator,
     _AnyHashableGraphVertexListIterator,
     _AnyHashableGraphVertexIntegerMap,
+    _AnyHashableGraphVertexDoubleMap,        
     _AnyHashableGraphEdgeSet,
 )
 from ._anyhashableg_paths import (
@@ -44,7 +51,9 @@ from ._anyhashableg_clustering import (
 )
 from ._anyhashableg_flows import (
     _AnyHashableGraphCut,
+    _AnyHashableGraphFlow,
     _AnyHashableGraphGomoryHuTree,
+    _AnyHashableGraphEquivalentFlowTree,
 )
 
 
@@ -173,6 +182,58 @@ def _wrap_gomory_hu_tree(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphGomoryHuTree, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongGomoryHuTree, [handle, graph]),
         _JGraphTIntegerGraph: (_JGraphTIntegerGomoryHuTree, [handle, graph]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_equivalent_flow_tree(graph, handle):
+    """Given an equivalent flow tree in the JVM, build one in Python. The wrapper takes
+       ownership and will delete the JVM resource when Python deletes the instance.
+    """
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphEquivalentFlowTree, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTLongEquivalentFlowTree, [handle, graph]),
+        _JGraphTIntegerGraph: (_JGraphTIntegerEquivalentFlowTree, [handle, graph]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_flow(graph, handle, source, sink, value):
+    """Given a flow in the JVM, build one in Python. The wrapper takes ownership
+    and will delete the JVM resource when Python deletes the instance.
+    """
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphFlow, [graph, handle, source, sink, value]),
+        _JGraphTLongGraph: (_JGraphTLongFlow, [handle, source, sink, value]),
+        _JGraphTIntegerGraph: (_JGraphTIntegerFlow, [handle, source, sink, value]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_vertex_integer_map(graph, handle):
+    """Given a vertex integer map in the JVM, build one in Python. The wrapper takes ownership
+    and will delete the JVM resource when Python deletes the instance.
+    """
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphVertexIntegerMap, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTLongIntegerMap, [handle]),
+        _JGraphTIntegerGraph: (_JGraphTIntegerIntegerMap, [handle]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_vertex_double_map(graph, handle):
+    """Given a vertex double map in the JVM, build one in Python. The wrapper takes ownership
+    and will delete the JVM resource when Python deletes the instance.
+    """
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphVertexDoubleMap, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTLongDoubleMap, [handle]),
+        _JGraphTIntegerGraph: (_JGraphTIntegerDoubleMap, [handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])

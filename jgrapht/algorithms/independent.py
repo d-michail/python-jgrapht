@@ -1,9 +1,8 @@
 from .. import backend as _backend
 
-from .._internals._collections import _JGraphTIntegerSet
-
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._anyhashableg_collections import _AnyHashableGraphVertexSet
+from .._internals._results import (
+    _wrap_vertex_set,
+)
 
 
 def chordal_max_independent_set(graph):
@@ -18,8 +17,4 @@ def chordal_max_independent_set(graph):
     res = _backend.jgrapht_xx_independent_set_exec_chordal_max_independent_set(
         graph.handle
     )
-
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphVertexSet(res, graph)
-    else:
-        return _JGraphTIntegerSet(res)
+    return _wrap_vertex_set(graph, res)
