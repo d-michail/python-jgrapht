@@ -1,18 +1,6 @@
 import time
-
 from .. import backend as _backend
-
-from .._internals._paths import _JGraphTGraphPath
-
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._anyhashableg_paths import _AnyHashableGraphGraphPath
-
-
-def _wrap_result(graph, graph_path_handle):
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPath(graph_path_handle, graph)
-    else:
-        return _JGraphTGraphPath(graph_path_handle, graph)
+from .._internals._results import _wrap_graphpath
 
 
 def tsp_random(graph, seed=None):
@@ -29,7 +17,7 @@ def tsp_random(graph, seed=None):
     if seed is None:
         seed = int(time.time())
     graph_path_handle = _backend.jgrapht_xx_tour_tsp_random(graph.handle, seed)
-    return _wrap_result(graph, graph_path_handle)
+    return _wrap_graphpath(graph, graph_path_handle)
 
 
 def tsp_greedy_heuristic(graph):
@@ -44,7 +32,7 @@ def tsp_greedy_heuristic(graph):
     :rtype: :py:class:`.GraphPath`
     """
     graph_path_handle = _backend.jgrapht_xx_tour_tsp_greedy_heuristic(graph.handle)
-    return _wrap_result(graph, graph_path_handle)
+    return _wrap_graphpath(graph, graph_path_handle)
 
 
 def tsp_nearest_insertion_heuristic(graph):
@@ -59,7 +47,7 @@ def tsp_nearest_insertion_heuristic(graph):
     graph_path_handle = _backend.jgrapht_xx_tour_tsp_nearest_insertion_heuristic(
         graph.handle
     )
-    return _wrap_result(graph, graph_path_handle)
+    return _wrap_graphpath(graph, graph_path_handle)    
 
 
 def tsp_nearest_neighbor_heuristic(graph, seed=None):
@@ -77,7 +65,7 @@ def tsp_nearest_neighbor_heuristic(graph, seed=None):
     graph_path_handle = _backend.jgrapht_xx_tour_tsp_nearest_neighbor_heuristic(
         graph.handle, seed
     )
-    return _wrap_result(graph, graph_path_handle)
+    return _wrap_graphpath(graph, graph_path_handle)    
 
 
 def metric_tsp_christofides(graph):
@@ -97,7 +85,7 @@ def metric_tsp_christofides(graph):
     :rtype: :py:class:`.GraphPath`
     """
     graph_path_handle = _backend.jgrapht_xx_tour_metric_tsp_christofides(graph.handle)
-    return _wrap_result(graph, graph_path_handle)
+    return _wrap_graphpath(graph, graph_path_handle)    
 
 
 def metric_tsp_two_approx(graph):
@@ -114,7 +102,7 @@ def metric_tsp_two_approx(graph):
     :rtype: :py:class:`.GraphPath`
     """
     graph_path_handle = _backend.jgrapht_xx_tour_metric_tsp_two_approx(graph.handle)
-    return _wrap_result(graph, graph_path_handle)
+    return _wrap_graphpath(graph, graph_path_handle)
 
 
 def tsp_held_karp(graph):
@@ -128,7 +116,7 @@ def tsp_held_karp(graph):
     :rtype: :py:class:`.GraphPath`
     """
     graph_path_handle = _backend.jgrapht_xx_tour_tsp_held_karp(graph.handle)
-    return _wrap_result(graph, graph_path_handle)
+    return _wrap_graphpath(graph, graph_path_handle)
 
 
 def hamiltonian_palmer(graph):
@@ -141,7 +129,7 @@ def hamiltonian_palmer(graph):
     :rtype: :py:class:`.GraphPath`
     """
     graph_path_handle = _backend.jgrapht_xx_tour_hamiltonian_palmer(graph.handle)
-    return _wrap_result(graph, graph_path_handle)
+    return _wrap_graphpath(graph, graph_path_handle)
 
 
 def tsp_two_opt_heuristic(graph, k=1, min_cost_improvement=0.0001, seed=None):
@@ -166,7 +154,7 @@ def tsp_two_opt_heuristic(graph, k=1, min_cost_improvement=0.0001, seed=None):
     graph_path_handle = _backend.jgrapht_xx_tour_tsp_two_opt_heuristic(
         graph.handle, *custom
     )
-    return _wrap_result(graph, graph_path_handle)
+    return _wrap_graphpath(graph, graph_path_handle)    
 
 
 def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=None):
@@ -190,9 +178,4 @@ def tsp_two_opt_heuristic_improve(graph_path, min_cost_improvement=0.0001, seed=
     new_graph_path_handle = _backend.jgrapht_xx_tour_tsp_two_opt_heuristic_improve(
         graph_path.handle, min_cost_improvement, seed
     )
-
-    graph = graph_path.graph
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPath(new_graph_path_handle, graph)
-    else:
-        return _JGraphTGraphPath(new_graph_path_handle, graph)
+    return _wrap_graphpath(graph_path.graph, new_graph_path_handle)

@@ -1,16 +1,6 @@
 from .. import backend as _backend
+from .._internals._results import _wrap_edge_set
 
-from .._internals._collections import _JGraphTIntegerSet
-
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._anyhashableg_collections import _AnyHashableGraphEdgeSet
-
-
-def _wrap_result(graph, weight, mst_handle):
-    if _is_anyhashable_graph(graph):
-        return weight, _AnyHashableGraphEdgeSet(mst_handle, graph)
-    else:
-        return weight, _JGraphTIntegerSet(mst_handle)
 
 
 def kruskal(graph):
@@ -26,7 +16,7 @@ def kruskal(graph):
     :returns: A tuple (weight, mst) 
     """
     weight, mst_handle = _backend.jgrapht_xx_mst_exec_kruskal(graph.handle)
-    return _wrap_result(graph, weight, mst_handle)
+    return weight, _wrap_edge_set(graph, mst_handle)
 
 
 def prim(graph):
@@ -41,7 +31,7 @@ def prim(graph):
     :returns: A tuple (weight, mst) 
     """
     weight, mst_handle = _backend.jgrapht_xx_mst_exec_prim(graph.handle)
-    return _wrap_result(graph, weight, mst_handle)
+    return weight, _wrap_edge_set(graph, mst_handle)
 
 
 def boruvka(graph):
@@ -57,7 +47,7 @@ def boruvka(graph):
     :returns: A tuple (weight, mst) 
     """
     weight, mst_handle = _backend.jgrapht_xx_mst_exec_boruvka(graph.handle)
-    return _wrap_result(graph, weight, mst_handle)
+    return weight, _wrap_edge_set(graph, mst_handle)
 
 
 def multiplicative_greedy(graph, k):
@@ -88,4 +78,4 @@ def multiplicative_greedy(graph, k):
     weight, spanner = _backend.jgrapht_xx_spanner_exec_greedy_multiplicative(
         graph.handle, k
     )
-    return weight, _JGraphTIntegerSet(spanner)
+    return weight, _wrap_edge_set(graph, spanner)    

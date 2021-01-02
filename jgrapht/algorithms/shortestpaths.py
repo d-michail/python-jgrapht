@@ -1,14 +1,15 @@
 from .. import backend as _backend
-from .._internals._paths import (
-    _JGraphTGraphPath,
-    _JGraphTGraphPathIterator,
-    _JGraphTSingleSourcePaths,
-    _JGraphTMultiObjectiveSingleSourcePaths,
-    _JGraphTAllPairsPaths,
-    _JGraphTContractionHierarchies,
-    _JGraphTContractionHierarchiesManyToMany,
+from .._internals._results import (
+    _build_vertex_set,
+    _wrap_graphpath,
+    _wrap_graphpath_iterator,
+    _wrap_single_source_paths,
+    _wrap_allpairs_paths,
+    _wrap_multi_objective_single_source_paths,
+    _wrap_contraction_hierarchies,
+    _wrap_manytomany_contraction_hierarchies,
 )
-from .._internals._collections import _JGraphTIntegerMutableSet
+
 from .._internals._callbacks import _create_wrapped_callback
 
 from .._internals._anyhashableg import (
@@ -17,29 +18,10 @@ from .._internals._anyhashableg import (
     _vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
     _edge_g_to_anyhashableg as _edge_g_to_attrsg,
 )
-from .._internals._anyhashableg_paths import (
-    _AnyHashableGraphGraphPath,
-    _AnyHashableGraphGraphPathIterator,
-    _AnyHashableGraphSingleSourcePaths,
-    _AnyHashableGraphMultiObjectiveSingleSourcePaths,
-    _AnyHashableGraphAllPairsPaths,
-    _AnyHashableGraphContractionHierarchiesManyToMany,
-)
 
 import ctypes
 import multiprocessing
 import time
-
-
-def _vertex_set_to_backend(graph, vertexset):
-    mutable_set = _JGraphTIntegerMutableSet(linked=True)
-    if _is_anyhashable_graph(graph):
-        for v in vertexset:
-            mutable_set.add(_vertex_attrsg_to_g(graph, v))
-    else:
-        for v in vertexset:
-            mutable_set.add(v)
-    return mutable_set
 
 
 def _sp_singlesource_alg(name, graph, source_vertex, *args):
@@ -47,11 +29,7 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
-
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphSingleSourcePaths(handle, graph, source_vertex)
-    else:
-        return _JGraphTSingleSourcePaths(handle, graph, source_vertex)
+    return _wrap_single_source_paths(graph, handle, source_vertex)
 
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
@@ -66,11 +44,7 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     )
     if handle is None:
         return None
-
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPath(handle, graph)
-    else:
-        return _JGraphTGraphPath(handle, graph)
+    return _wrap_graphpath(graph, handle)
 
 
 def _sp_allpairs_alg(name, graph):
@@ -78,11 +52,7 @@ def _sp_allpairs_alg(name, graph):
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle)
-
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphAllPairsPaths(handle, graph)
-    else:
-        return _JGraphTAllPairsPaths(handle, graph)
+    return _wrap_allpairs_paths(graph, handle)
 
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
@@ -96,11 +66,7 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
         k,
         *args
     )
-
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPathIterator(handle, graph)
-    else:
-        return _JGraphTGraphPathIterator(handle, graph)
+    return _wrap_graphpath_iterator(graph, handle)
 
 
 def _multisp_singlesource_alg(name, graph, source_vertex, *args):
@@ -108,13 +74,7 @@ def _multisp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
-
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphMultiObjectiveSingleSourcePaths(
-            handle, graph, source_vertex
-        )
-    else:
-        return _JGraphTMultiObjectiveSingleSourcePaths(handle, graph, source_vertex)
+    return _wrap_multi_objective_single_source_paths(graph, handle, source_vertex)
 
 
 def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
@@ -235,7 +195,6 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
             return heuristic_cb(
                 _vertex_g_to_attrsg(graph, s), _vertex_g_to_attrsg(graph, t)
             )
-
     else:
         actual_heuristic_cb = heuristic_cb
 
@@ -305,7 +264,7 @@ def a_star_with_alt_heuristic(
     :returns: a :py:class:`.GraphPath`
     """
 
-    landmarks_set = _vertex_set_to_backend(graph, landmarks)
+    landmarks_set = _build_vertex_set(graph, landmarks)
     custom = [landmarks_set.handle]
 
     if use_bidirectional:
@@ -470,17 +429,14 @@ def martin_multiobjective(
             _vertex_attrsg_to_g(graph, target_vertex),
             *custom
         )
-        if _is_anyhashable_graph(graph):
-            return _AnyHashableGraphGraphPathIterator(res, graph)
-        else:
-            return _JGraphTGraphPathIterator(res, graph)
+        return _wrap_graphpath_iterator(graph, res)
 
 
 def precompute_contraction_hierarchies(graph, parallelism=None, seed=None):
     r"""Precompute contraction hierarchies.
 
     This is a preprocessing technique which speeds up shortest path queries. See
-    :py:meth:`contraction_hierarchies_many_to_many` and 
+    :py:meth:`contraction_hierarchies_many_to_many` and
     :py:meth:`contraction_hierarchies_dijkstra` on how to use this object.
 
     :param graph: the graph
@@ -496,7 +452,7 @@ def precompute_contraction_hierarchies(graph, parallelism=None, seed=None):
     res = _backend.jgrapht_xx_sp_exec_contraction_hierarchy(
         graph.handle, parallelism, seed
     )
-    return _JGraphTContractionHierarchies(res, graph)
+    return _wrap_contraction_hierarchies(graph, res)
 
 
 def contraction_hierarchies_many_to_many(graph, sources, targets, ch=None):
@@ -509,8 +465,8 @@ def contraction_hierarchies_many_to_many(graph, sources, targets, ch=None):
     :returns: a set of shortest paths
     :rtype: :py:class:`.ManyToManyPaths`
     """
-    jgrapht_sources = _vertex_set_to_backend(graph, sources)
-    jgrapht_targets = _vertex_set_to_backend(graph, targets)
+    jgrapht_sources = _build_vertex_set(graph, sources)
+    jgrapht_targets = _build_vertex_set(graph, targets)
 
     if ch is None:
         ch = precompute_contraction_hierarchies(graph)
@@ -518,11 +474,7 @@ def contraction_hierarchies_many_to_many(graph, sources, targets, ch=None):
     handle = _backend.jgrapht_xx_sp_exec_contraction_hierarchy_get_manytomany(
         ch.handle, jgrapht_sources.handle, jgrapht_targets.handle
     )
-
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphContractionHierarchiesManyToMany(handle, graph)
-    else:
-        return _JGraphTContractionHierarchiesManyToMany(handle, graph)
+    return _wrap_manytomany_contraction_hierarchies(graph, handle)
 
 
 def contraction_hierarchies_dijkstra(
@@ -539,8 +491,8 @@ def contraction_hierarchies_dijkstra(
     :returns: a shortest path
     :rtype: :py:class:`.GraphPath`
     """
-    if radius is None: 
-        radius = float.fromhex('0x1.fffffffffffffP+1023')
+    if radius is None:
+        radius = float.fromhex("0x1.fffffffffffffP+1023")
 
     if ch is None:
         ch = precompute_contraction_hierarchies(graph)
@@ -549,13 +501,9 @@ def contraction_hierarchies_dijkstra(
         ch.handle,
         _vertex_attrsg_to_g(graph, source_vertex),
         _vertex_attrsg_to_g(graph, target_vertex),
-        radius
+        radius,
     )
 
     if handle is None:
         return None
-
-    if _is_anyhashable_graph(graph):
-        return _AnyHashableGraphGraphPath(handle, graph)
-    else:
-        return _JGraphTGraphPath(handle, graph)
+    return _wrap_graphpath(graph, handle)

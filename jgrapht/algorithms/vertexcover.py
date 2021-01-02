@@ -1,23 +1,5 @@
 from .. import backend as _backend
-
-from .._internals._collections import (
-    _JGraphTIntegerDoubleMutableMap,
-    _JGraphTIntegerSet,
-)
-
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._anyhashableg_collections import _AnyHashableGraphVertexSet
-
-
-def _copy_vertex_weights(graph, vertex_weights):
-    jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
-    if _is_anyhashable_graph(graph):
-        for key, val in vertex_weights.items():
-            jgrapht_vertex_weights[graph._vertex_hash_to_id[key]] = val
-    else:
-        for key, val in vertex_weights.items():
-            jgrapht_vertex_weights[key] = val
-    return jgrapht_vertex_weights
+from .._internals._results import _wrap_vertex_set, _build_vertex_weights
 
 
 def _vertexcover_alg(name, graph, vertex_weights=None):
@@ -27,15 +9,12 @@ def _vertexcover_alg(name, graph, vertex_weights=None):
     alg_method = getattr(_backend, alg_method_name)
 
     if vertex_weights is not None:
-        jgrapht_vertex_weights = _copy_vertex_weights(graph, vertex_weights)
+        jgrapht_vertex_weights = _build_vertex_weights(graph, vertex_weights)
         weight, vc_handle = alg_method(graph.handle, jgrapht_vertex_weights.handle)
     else:
         weight, vc_handle = alg_method(graph.handle)
 
-    if _is_anyhashable_graph(graph):
-        return weight, _AnyHashableGraphVertexSet(vc_handle, graph)
-    else:
-        return weight, _JGraphTIntegerSet(vc_handle)
+    return weight, _wrap_vertex_set(graph, vc_handle)
 
 
 def greedy(graph, vertex_weights=None):

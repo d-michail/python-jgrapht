@@ -14,11 +14,18 @@ from ._collections import (
     _JGraphTLongListIterator,
     _JGraphTLongIntegerMap,
     _JGraphTIntegerDoubleMap,
+    _JGraphTIntegerDoubleMutableMap,
     _JGraphTLongDoubleMap,
+    _JGraphTLongDoubleMutableMap,
 )
 from ._paths import (
     _JGraphTGraphPath,
     _JGraphTGraphPathIterator,
+    _JGraphTSingleSourcePaths,
+    _JGraphTAllPairsPaths,
+    _JGraphTMultiObjectiveSingleSourcePaths,
+    _JGraphTContractionHierarchies,
+    _JGraphTContractionHierarchiesManyToMany,
 )
 from ._clustering import (
     _JGraphTIntegerClustering,
@@ -39,12 +46,16 @@ from ._anyhashableg_collections import (
     _AnyHashableGraphVertexSetIterator,
     _AnyHashableGraphVertexListIterator,
     _AnyHashableGraphVertexIntegerMap,
-    _AnyHashableGraphVertexDoubleMap,        
+    _AnyHashableGraphVertexDoubleMap,
     _AnyHashableGraphEdgeSet,
 )
 from ._anyhashableg_paths import (
     _AnyHashableGraphGraphPath,
     _AnyHashableGraphGraphPathIterator,
+    _AnyHashableGraphSingleSourcePaths,
+    _AnyHashableGraphAllPairsPaths,
+    _AnyHashableGraphMultiObjectiveSingleSourcePaths,
+    _AnyHashableGraphContractionHierarchiesManyToMany,
 )
 from ._anyhashableg_clustering import (
     _AnyHashableGraphClustering,
@@ -59,8 +70,8 @@ from ._anyhashableg_flows import (
 
 def _wrap_vertex_set(graph, handle):
     """Given a vertex set in the JVM, build a vertex set in Python. The wrapper
-       graph takes ownership and will delete the JVM resource when Python deletes
-       the instance."""
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphVertexSet, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongSet, [handle]),
@@ -72,8 +83,8 @@ def _wrap_vertex_set(graph, handle):
 
 def _wrap_edge_set(graph, handle):
     """Given an edge set in the JVM, build an edge set in Python. The wrapper
-       graph takes ownership and will delete the JVM resource when Python deletes
-       the instance."""
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphEdgeSet, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongSet, [handle]),
@@ -85,8 +96,8 @@ def _wrap_edge_set(graph, handle):
 
 def _wrap_vertex_set_iterator(graph, handle):
     """Given an vertex set iterator in the JVM, build one in Python. The wrapper
-       graph takes ownership and will delete the JVM resource when Python deletes
-       the instance."""
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphVertexSetIterator, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongSetIterator, [handle]),
@@ -98,8 +109,8 @@ def _wrap_vertex_set_iterator(graph, handle):
 
 def _wrap_vertex_list_iterator(graph, handle):
     """Given an vertex list iterator in the JVM, build one in Python. The wrapper
-       graph takes ownership and will delete the JVM resource when Python deletes
-       the instance."""
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphVertexListIterator, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongListIterator, [handle]),
@@ -111,8 +122,8 @@ def _wrap_vertex_list_iterator(graph, handle):
 
 def _wrap_vertex_coloring(graph, handle):
     """Given a vertex coloring in the JVM, build one in Python. The wrapper
-       graph takes ownership and will delete the JVM resource when Python deletes
-       the instance."""
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphVertexIntegerMap, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongIntegerMap, [handle]),
@@ -124,8 +135,8 @@ def _wrap_vertex_coloring(graph, handle):
 
 def _wrap_graphpath(graph, handle):
     """Given a graph path in the JVM, build one in Python. The wrapper
-       graph takes ownership and will delete the JVM resource when Python deletes
-       the instance."""
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphGraphPath, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTGraphPath, [handle, graph]),
@@ -137,8 +148,8 @@ def _wrap_graphpath(graph, handle):
 
 def _wrap_graphpath_iterator(graph, handle):
     """Given a graph path iterator in the JVM, build one in Python. The wrapper
-           graph takes ownership and will delete the JVM resource when Python deletes
-           the instance."""
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphGraphPathIterator, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTGraphPathIterator, [handle, graph]),
@@ -148,10 +159,105 @@ def _wrap_graphpath_iterator(graph, handle):
     return alg[0](*alg[1])
 
 
+def _wrap_single_source_paths(graph, handle, source_vertex):
+    """Given a single source paths result in the JVM, build one in Python. The wrapper
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
+    cases = {
+        _AnyHashableGraph: (
+            _AnyHashableGraphSingleSourcePaths,
+            [handle, graph, source_vertex],
+        ),
+        _JGraphTLongGraph: (_JGraphTSingleSourcePaths, [handle, graph, source_vertex]),
+        _JGraphTIntegerGraph: (_JGraphTSingleSourcePaths, [handle, graph, source_vertex]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_allpairs_paths(graph, handle):
+    """Given an all pairs paths result in the JVM, build one in Python. The wrapper
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphAllPairsPaths, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTAllPairsPaths, [handle, graph]),
+        _JGraphTIntegerGraph: (_JGraphTAllPairsPaths, [handle, graph]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_multi_objective_single_source_paths(graph, handle, source_vertex):
+    """Given a multi objective single source paths result in the JVM, build one in Python.
+    The wrapper graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
+    cases = {
+        _AnyHashableGraph: (
+            _AnyHashableGraphMultiObjectiveSingleSourcePaths,
+            [handle, graph, source_vertex],
+        ),
+        _JGraphTLongGraph: (
+            _JGraphTMultiObjectiveSingleSourcePaths,
+            [handle, graph, source_vertex],
+        ),
+        _JGraphTIntegerGraph: (
+            _JGraphTMultiObjectiveSingleSourcePaths,
+            [handle, graph, source_vertex],
+        ),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_contraction_hierarchies(graph, handle):
+    """Given contraction hierarchies in the JVM, build one in Python. The wrapper
+    takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
+    cases = {
+        _AnyHashableGraph: (
+            _JGraphTContractionHierarchies,
+            [handle, graph],
+        ),
+        _JGraphTLongGraph: (
+            _JGraphTContractionHierarchies,
+            [handle, graph],
+        ),
+        _JGraphTIntegerGraph: (
+            _JGraphTContractionHierarchies,
+            [handle, graph],
+        ),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_manytomany_contraction_hierarchies(graph, handle):
+    """Given many-to-many contraction hierarchies in the JVM, build one in Python.
+    The wrapper takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
+    cases = {
+        _AnyHashableGraph: (
+            _AnyHashableGraphContractionHierarchiesManyToMany,
+            [handle, graph],
+        ),
+        _JGraphTLongGraph: (
+            _JGraphTContractionHierarchiesManyToMany,
+            [handle, graph],
+        ),
+        _JGraphTIntegerGraph: (
+            _JGraphTContractionHierarchiesManyToMany,
+            [handle, graph],
+        ),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
 def _wrap_vertex_clustering(graph, handle):
     """Given a vertex clustering in the JVM, build one in Python. The wrapper
-       takes ownership and will delete the JVM resource when Python deletes
-       the instance."""
+    takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphClustering, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongClustering, [handle]),
@@ -163,7 +269,7 @@ def _wrap_vertex_clustering(graph, handle):
 
 def _wrap_cut(graph, handle, weight):
     """Given a cut in the JVM, build one in Python. The wrapper takes ownership
-       and will delete the JVM resource when Python deletes the instance.
+    and will delete the JVM resource when Python deletes the instance.
     """
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphCut, [graph, weight, handle]),
@@ -176,7 +282,7 @@ def _wrap_cut(graph, handle, weight):
 
 def _wrap_gomory_hu_tree(graph, handle):
     """Given a gomory hu tree in the JVM, build one in Python. The wrapper takes
-       ownership and will delete the JVM resource when Python deletes the instance.
+    ownership and will delete the JVM resource when Python deletes the instance.
     """
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphGomoryHuTree, [handle, graph]),
@@ -189,7 +295,7 @@ def _wrap_gomory_hu_tree(graph, handle):
 
 def _wrap_equivalent_flow_tree(graph, handle):
     """Given an equivalent flow tree in the JVM, build one in Python. The wrapper takes
-       ownership and will delete the JVM resource when Python deletes the instance.
+    ownership and will delete the JVM resource when Python deletes the instance.
     """
     cases = {
         _AnyHashableGraph: (_AnyHashableGraphEquivalentFlowTree, [handle, graph]),
@@ -205,7 +311,10 @@ def _wrap_flow(graph, handle, source, sink, value):
     and will delete the JVM resource when Python deletes the instance.
     """
     cases = {
-        _AnyHashableGraph: (_AnyHashableGraphFlow, [graph, handle, source, sink, value]),
+        _AnyHashableGraph: (
+            _AnyHashableGraphFlow,
+            [graph, handle, source, sink, value],
+        ),
         _JGraphTLongGraph: (_JGraphTLongFlow, [handle, source, sink, value]),
         _JGraphTIntegerGraph: (_JGraphTIntegerFlow, [handle, source, sink, value]),
     }
@@ -258,3 +367,20 @@ def _build_vertex_set(graph, vertex_set):
         mutable_set.add(v)
 
     return mutable_set
+
+
+def _build_vertex_weights(graph, vertex_weights):
+    """Given a vertex weights dictionary in Python, build one inside the JVM."""
+    if _is_anyhashable_graph(graph):
+        jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
+        for key, val in vertex_weights.items():
+            jgrapht_vertex_weights[graph._vertex_hash_to_id[key]] = val
+    elif _is_long_graph(graph):
+        jgrapht_vertex_weights = _JGraphTLongDoubleMutableMap()
+        for key, val in vertex_weights.items():
+            jgrapht_vertex_weights[key] = val
+    else:
+        jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
+        for key, val in vertex_weights.items():
+            jgrapht_vertex_weights[key] = val
+    return jgrapht_vertex_weights
