@@ -1,6 +1,8 @@
 from .. import backend as _backend
 from .._internals._results import (
     _build_vertex_set,
+    _unwrap_vertex,
+    _unwrap_astar_heuristic_cb,
     _wrap_graphpath,
     _wrap_graphpath_iterator,
     _wrap_single_source_paths,
@@ -9,14 +11,12 @@ from .._internals._results import (
     _wrap_contraction_hierarchies,
     _wrap_manytomany_contraction_hierarchies,
 )
-
 from .._internals._callbacks import _create_wrapped_callback
 
 from .._internals._anyhashableg import (
     _is_anyhashable_graph,
-    _vertex_anyhashableg_to_g as _vertex_attrsg_to_g,
-    _vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
-    _edge_g_to_anyhashableg as _edge_g_to_attrsg,
+    _vertex_anyhashableg_to_g,
+    _edge_g_to_anyhashableg,
 )
 
 import ctypes
@@ -28,7 +28,7 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method_name = "jgrapht_ii_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
-    handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
+    handle = alg_method(graph.handle, _unwrap_vertex(graph, source_vertex), *args)
     return _wrap_single_source_paths(graph, handle, source_vertex)
 
 
@@ -38,8 +38,8 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
 
     handle = alg_method(
         graph.handle,
-        _vertex_attrsg_to_g(graph, source_vertex),
-        _vertex_attrsg_to_g(graph, target_vertex),
+        _unwrap_vertex(graph, source_vertex),
+        _unwrap_vertex(graph, target_vertex),
         *args
     )
     if handle is None:
@@ -61,8 +61,8 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
 
     handle = alg_method(
         graph.handle,
-        _vertex_attrsg_to_g(graph, source_vertex),
-        _vertex_attrsg_to_g(graph, target_vertex),
+        _unwrap_vertex(graph, source_vertex),
+        _unwrap_vertex(graph, target_vertex),
         k,
         *args
     )
@@ -73,7 +73,7 @@ def _multisp_singlesource_alg(name, graph, source_vertex, *args):
     alg_method_name = "jgrapht_ii_multisp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
-    handle = alg_method(graph.handle, _vertex_attrsg_to_g(graph, source_vertex), *args)
+    handle = alg_method(graph.handle, _unwrap_vertex(graph, source_vertex), *args)
     return _wrap_multi_objective_single_source_paths(graph, handle, source_vertex)
 
 
@@ -189,15 +189,7 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
     :returns: a :py:class:`.GraphPath`
     """
 
-    if _is_anyhashable_graph(graph):
-        # redefine in order to translate from integer to user vertices
-        def actual_heuristic_cb(s, t):
-            return heuristic_cb(
-                _vertex_g_to_attrsg(graph, s), _vertex_g_to_attrsg(graph, t)
-            )
-    else:
-        actual_heuristic_cb = heuristic_cb
-
+    actual_heuristic_cb = _unwrap_astar_heuristic_cb(graph, heuristic_cb)
     heuristic_f_type = ctypes.CFUNCTYPE(
         ctypes.c_double, ctypes.c_longlong, ctypes.c_longlong
     )
@@ -395,7 +387,7 @@ def martin_multiobjective(
     if _is_anyhashable_graph(graph):
 
         def inner_edge_weight_cb(edge):
-            edge = _edge_g_to_attrsg(graph, edge)
+            edge = _edge_g_to_anyhashableg(graph, edge)
             weights = edge_weight_cb(edge)[:edge_weight_dimension]
             array = (ctypes.c_double * len(weights))(*weights)
             array_ptr = ctypes.cast(array, ctypes.c_void_p)
@@ -425,8 +417,8 @@ def martin_multiobjective(
     else:
         res = _backend.jgrapht_ii_multisp_exec_martin_get_paths_between_vertices(
             graph.handle,
-            _vertex_attrsg_to_g(graph, source_vertex),
-            _vertex_attrsg_to_g(graph, target_vertex),
+            _vertex_anyhashableg_to_g(graph, source_vertex),
+            _vertex_anyhashableg_to_g(graph, target_vertex),
             *custom
         )
         return _wrap_graphpath_iterator(graph, res)
@@ -499,8 +491,8 @@ def contraction_hierarchies_dijkstra(
 
     handle = _backend.jgrapht_ii_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
         ch.handle,
-        _vertex_attrsg_to_g(graph, source_vertex),
-        _vertex_attrsg_to_g(graph, target_vertex),
+        _vertex_anyhashableg_to_g(graph, source_vertex),
+        _vertex_anyhashableg_to_g(graph, target_vertex),
         radius,
     )
 

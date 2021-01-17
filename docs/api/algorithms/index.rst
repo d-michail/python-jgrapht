@@ -20,6 +20,7 @@ The JGraphT contains a large collection of advanced algorithms.
    scoring
    planar
    cuts
+   matching
    flow
    drawing
    isomorphism

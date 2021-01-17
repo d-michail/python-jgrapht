@@ -1,12 +1,9 @@
 from .. import backend as _backend
-from .._internals._results import _wrap_cut, _wrap_equivalent_flow_tree, _wrap_flow
-
-from .._internals._anyhashableg import (
-    _is_anyhashable_graph,
-    _vertex_anyhashableg_to_g as _vertex_anyhashableg_to_g,
-)
-from .._internals._anyhashableg_flows import (
-    _AnyHashableGraphFlow,
+from .._internals._results import (
+    _wrap_cut,
+    _wrap_equivalent_flow_tree,
+    _wrap_flow,
+    _unwrap_vertex,
 )
 
 
@@ -15,10 +12,7 @@ def _maxflow_alg(name, graph, source, sink, *args):
     alg_method = getattr(_backend, "jgrapht_ii_maxflow_exec_" + name)
 
     flow_value, flow_handle, cut_source_partition_handle = alg_method(
-        graph.handle,
-        _vertex_anyhashableg_to_g(graph, source),
-        _vertex_anyhashableg_to_g(graph, sink),
-        *args
+        graph.handle, _unwrap_vertex(graph, source), _unwrap_vertex(graph, sink), *args
     )
     return _wrap_flow(graph, flow_handle, source, sink, flow_value), _wrap_cut(
         graph, cut_source_partition_handle, flow_value

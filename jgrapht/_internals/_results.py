@@ -1,7 +1,16 @@
 from ._int_graphs import _JGraphTIntegerGraph, _is_int_graph
 from ._long_graphs import _JGraphTLongGraph, _is_long_graph
-from ._anyhashableg import _AnyHashableGraph, _is_anyhashable_graph
+from ._anyhashableg import (
+    _AnyHashableGraph,
+    _is_anyhashable_graph,
+    _vertex_anyhashableg_to_g,
+    _vertex_g_to_anyhashableg,
+)
 
+from ._wrappers import (
+    _JGraphTIntegerIterator,
+    _JGraphTLongIterator,
+)
 from ._collections import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
@@ -40,6 +49,10 @@ from ._flows import (
     _JGraphTIntegerFlow,
     _JGraphTLongFlow,
 )
+from ._anyhashableg_wrappers import (
+    _AnyHashableGraphVertexIterator,
+    _AnyHashableGraphEdgeIterator,
+)
 from ._anyhashableg_collections import (
     _AnyHashableGraphVertexSet,
     _AnyHashableGraphMutableVertexSet,
@@ -66,6 +79,38 @@ from ._anyhashableg_flows import (
     _AnyHashableGraphGomoryHuTree,
     _AnyHashableGraphEquivalentFlowTree,
 )
+
+
+def _unwrap_vertex(graph, vertex):
+    """Given a vertex in Python, return the corresponding vertex in the JVM
+    (if different)."""
+    if vertex is None:
+        return None
+    cases = {
+        _AnyHashableGraph: (
+            lambda graph, v: _vertex_anyhashableg_to_g(graph, v),
+            [graph, vertex],
+        ),
+        _JGraphTLongGraph: (lambda v: v, [vertex]),
+        _JGraphTIntegerGraph: (lambda v: v, [vertex]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _unwrap_astar_heuristic_cb(graph, heuristic_cb):
+    """Given a heuristic callback method for astar in Python, create one for the JVM.
+    """
+    if _is_anyhashable_graph(graph):
+        # redefine in order to translate from integer to user vertices
+        def actual_heuristic_cb(s, t):
+            return heuristic_cb(
+                _vertex_g_to_anyhashableg(graph, s), _vertex_g_to_anyhashableg(graph, t)
+            )
+    else:
+        actual_heuristic_cb = heuristic_cb
+    
+    return actual_heuristic_cb
 
 
 def _wrap_vertex_set(graph, handle):
@@ -102,6 +147,32 @@ def _wrap_vertex_set_iterator(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphVertexSetIterator, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongSetIterator, [handle]),
         _JGraphTIntegerGraph: (_JGraphTIntegerSetIterator, [handle]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_vertex_iterator(graph, handle):
+    """Given an vertex iterator in the JVM, build one in Python. The wrapper
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphVertexIterator, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTLongIterator, [handle]),
+        _JGraphTIntegerGraph: (_JGraphTIntegerIterator, [handle]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_edge_iterator(graph, handle):
+    """Given an edge iterator in the JVM, build one in Python. The wrapper
+    graph takes ownership and will delete the JVM resource when Python deletes
+    the instance."""
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphEdgeIterator, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTLongIterator, [handle]),
+        _JGraphTIntegerGraph: (_JGraphTIntegerIterator, [handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])
@@ -169,7 +240,10 @@ def _wrap_single_source_paths(graph, handle, source_vertex):
             [handle, graph, source_vertex],
         ),
         _JGraphTLongGraph: (_JGraphTSingleSourcePaths, [handle, graph, source_vertex]),
-        _JGraphTIntegerGraph: (_JGraphTSingleSourcePaths, [handle, graph, source_vertex]),
+        _JGraphTIntegerGraph: (
+            _JGraphTSingleSourcePaths,
+            [handle, graph, source_vertex],
+        ),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])
