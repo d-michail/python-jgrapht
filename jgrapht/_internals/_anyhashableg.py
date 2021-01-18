@@ -633,7 +633,7 @@ class _MaskedSubgraphAnyHashableGraph(_AnyHashableGraph):
 def _create_anyhashable_graph_subgraph(anyhashable_graph, subgraph):
     """Create an any hashable graph subgraph.
 
-    This function create an any-hashable graph with the identical structure as the
+    This function creates an any-hashable graph with the identical structure as the
     subgraph (which is a default graph with integer vertices/edges). The assumption
     is that the subgraph is an actual subgraph of the backing graph of the any-hashable
     graph. In other words, for each integer vertex or edge in the subgraph, the 

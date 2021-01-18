@@ -5,6 +5,7 @@ from ._anyhashableg import (
     _is_anyhashable_graph,
     _vertex_anyhashableg_to_g,
     _vertex_g_to_anyhashableg,
+    _create_anyhashable_graph_subgraph,
 )
 
 from ._wrappers import (
@@ -49,6 +50,10 @@ from ._flows import (
     _JGraphTIntegerFlow,
     _JGraphTLongFlow,
 )
+from ._planar import (
+    _JGraphTIntegerPlanarEmbedding, 
+    _JGraphTLongPlanarEmbedding,
+)
 from ._anyhashableg_wrappers import (
     _AnyHashableGraphVertexIterator,
     _AnyHashableGraphEdgeIterator,
@@ -78,6 +83,9 @@ from ._anyhashableg_flows import (
     _AnyHashableGraphFlow,
     _AnyHashableGraphGomoryHuTree,
     _AnyHashableGraphEquivalentFlowTree,
+)
+from ._anyhashableg_planar import (
+    _AnyHashableGraphPlanarEmbedding
 )
 
 
@@ -420,6 +428,35 @@ def _wrap_vertex_double_map(graph, handle):
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])
+
+
+def _wrap_planar_embedding(graph, handle):
+    """Given a planar embedding in the JVM, build one in Python. The wrapper takes
+    ownership and will delete the JVM resource when Python deletes the instance.
+    """
+    cases = {
+        _AnyHashableGraph: (_AnyHashableGraphPlanarEmbedding, [handle, graph]),
+        _JGraphTLongGraph: (_JGraphTLongPlanarEmbedding, [handle]),
+        _JGraphTIntegerGraph: (_JGraphTIntegerPlanarEmbedding, [handle]),
+    }
+    alg = cases[type(graph)]
+    return alg[0](*alg[1])
+
+
+def _wrap_subgraph(graph, handle):
+    """Given a subgraph in the JVM, build one in Python. The wrapper takes
+    ownership and will delete the JVM resource when Python deletes the instance.
+    """
+    if _is_anyhashable_graph(graph):
+        sub = _JGraphTIntegerGraph(handle=handle)
+        return _create_anyhashable_graph_subgraph(graph, sub)
+    else:
+        cases = {
+            _JGraphTLongGraph: (_JGraphTLongGraph, [handle]),
+            _JGraphTIntegerGraph: (_JGraphTIntegerGraph, [handle]),
+        }
+        alg = cases[type(graph)]
+        return alg[0](*alg[1])
 
 
 def _build_vertex_set(graph, vertex_set):

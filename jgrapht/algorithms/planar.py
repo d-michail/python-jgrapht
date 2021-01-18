@@ -1,13 +1,6 @@
 from .. import backend as _backend
 
-from .._internals._planar import _JGraphTPlanarEmbedding
-from .._internals._int_graphs import _JGraphTIntegerGraph
-
-from .._internals._anyhashableg import (
-    _is_anyhashable_graph,
-    _create_anyhashable_graph_subgraph,
-)
-from .._internals._anyhashableg_planar import _AnyHashableGraphPlanarEmbedding
+from .._internals._results import _wrap_planar_embedding, _wrap_subgraph
 
 
 def _planarity_alg(name, graph, *args):
@@ -18,19 +11,9 @@ def _planarity_alg(name, graph, *args):
     is_planar, embedding, kuratowski_subdivision = alg_method(graph.handle, *args)
 
     if is_planar:
-        if _is_anyhashable_graph(graph):
-            return is_planar, _AnyHashableGraphPlanarEmbedding(embedding, graph)
-        else:
-            return is_planar, _JGraphTPlanarEmbedding(embedding)
+        return is_planar, _wrap_planar_embedding(graph, embedding)
     else:
-        kuratowski_as_graph = _JGraphTIntegerGraph(handle=kuratowski_subdivision)
-        if _is_anyhashable_graph(graph):
-            return (
-                is_planar,
-                _create_anyhashable_graph_subgraph(graph, kuratowski_as_graph),
-            )
-        else:
-            return is_planar, kuratowski_as_graph
+        return is_planar, _wrap_subgraph(graph, kuratowski_subdivision)
 
 
 def boyer_myrvold(graph):
