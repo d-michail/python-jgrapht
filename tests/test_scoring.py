@@ -129,21 +129,67 @@ def test_betweenness_centrality():
     assert result == expected
 
 
-def test_alpha_centrality():
+def test_edge_betweenness_centrality():
     g = build_graph()
-    scores = scoring.alpha_centrality(g)
+    scores = scoring.edge_betweenness_centrality(g)
+    result = [scores[e] for e in g.edges]
+    expected = [
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+    ]
+    assert result == expected
+
+
+def test_eigenvector_centrality():
+    g = build_graph()
+    scores = scoring.eigenvector_centrality(g)
     result = [scores[v] for v in g.vertices]
     expected = [
-        1.09284015241,
-        1.03155950011,
-        1.03155950011,
-        1.03155950011,
-        1.03155950011,
-        1.03155950011,
-        1.03155950011,
-        1.03155950011,
-        1.03155950011,
-        1.03155950011,
+        0.5846838630260444,
+        0.27042040938692763,
+        0.27042040938692763,
+        0.27042040938692763,
+        0.27042040938692763,
+        0.27042040938692763,
+        0.27042040938692763,
+        0.27042040938692763,
+        0.27042040938692763,
+        0.27042040938692763,
+    ]
+    assert result == expected
+
+
+def test_katz_centrality():
+    g = build_graph()
+    scores = scoring.katz_centrality(g)
+    result = [scores[v] for v in g.vertices]
+    expected = [
+        1.09284013,
+        1.03155949,
+        1.03155949,
+        1.03155949,
+        1.03155949,
+        1.03155949,
+        1.03155949,
+        1.03155949,
+        1.03155949,
+        1.03155949,
     ]
     assert result == expected
 
@@ -216,7 +262,6 @@ def test_anyhashableg_clustering_coefficient():
         0.6666666666666666,
     ]
     assert result == expected
-
 
 
 def test_anyhashableg_coreness():

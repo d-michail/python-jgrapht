@@ -249,6 +249,8 @@ int jgrapht_xx_clustering_exec_k_spanning_tree(void *, int, void** OUTPUT);
 
 int jgrapht_xx_clustering_exec_label_propagation(void *, int, long long int, void** OUTPUT);
 
+int jgrapht_xx_clustering_exec_girvan_newman(void *, int, void** OUTPUT);
+
 int jgrapht_xx_clustering_get_number_clusters(void *, int* OUTPUT);
 
 int jgrapht_xx_clustering_ith_cluster_vit(void *, int, void** OUTPUT);
@@ -355,6 +357,8 @@ int jgrapht_xx_drawing_exec_fr_layout_2d(void *, void *, int, double, long long 
 
 int jgrapht_xx_drawing_exec_indexed_fr_layout_2d(void *, void *, int, double, long long int, double, double);
 
+int jgrapht_xx_drawing_exec_rescale_layout_2d(void *, void *, double);
+
 // exporter
 
 int jgrapht_ii_export_file_dimacs(void *, char*, dimacs_format_t, int, void*);
@@ -414,6 +418,10 @@ int jgrapht_ll_maxflow_exec_dinic(void *, long long int, long long int, double* 
 int jgrapht_ii_maxflow_exec_edmonds_karp(void *, int, int, double* OUTPUT, void** OUTPUT, void** OUTPUT);
 
 int jgrapht_ll_maxflow_exec_edmonds_karp(void *, long long int, long long int, double* OUTPUT, void** OUTPUT, void** OUTPUT);
+
+int jgrapht_ii_maxflow_exec_boykov_kolmogorov(void *, int, int, double* OUTPUT, void **OUTPUT, void **OUTPUT);
+
+int jgrapht_ll_maxflow_exec_boykov_kolmogorov(void *, long long int, long long int, double* OUTPUT, void **OUTPUT, void **OUTPUT);
 
 int jgrapht_ii_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double* OUTPUT, void** OUTPUT, void** OUTPUT);
 
@@ -959,6 +967,29 @@ int jgrapht_it_next_object(void *, void** OUTPUT);
 
 int jgrapht_it_hasnext(void *, int* OUTPUT);
 
+// link prediction
+
+int jgrapht_ii_link_prediction_exec_adamic_adar_index(void *, int, int, double* OUTPUT);
+int jgrapht_ll_link_prediction_exec_adamic_adar_index(void *, long long int, long long int, double* OUTPUT);
+int jgrapht_ii_link_prediction_common_neighbors(void *, int, int, double* OUTPUT);
+int jgrapht_ll_link_prediction_common_neighbors(void *, long long int, long long int, double* OUTPUT);
+int jgrapht_ii_link_prediction_hub_depressed_index(void *, int, int, double* OUTPUT);
+int jgrapht_ll_link_prediction_hub_depressed_index(void *, long long int, long long int, double* OUTPUT);
+int jgrapht_ii_link_prediction_hub_promoted_index(void *, int, int, double* OUTPUT);
+int jgrapht_ll_link_prediction_hub_promoted_index(void *, long long int, long long int, double* OUTPUT);
+int jgrapht_ii_link_prediction_jaccard_coefficient(void *, int, int, double* OUTPUT);
+int jgrapht_ll_link_prediction_jaccard_coefficient(void *, long long int, long long int, double* OUTPUT);
+int jgrapht_ii_link_prediction_leicht_holme_newman_index(void *, int, int, double* OUTPUT);
+int jgrapht_ll_link_prediction_leicht_holme_newman_index(void *, long long int, long long int, double* OUTPUT);
+int jgrapht_ii_link_prediction_preferential_attachment(void *, int, int, double* OUTPUT);
+int jgrapht_ll_link_prediction_preferential_attachment(void *, long long int, long long int, double* OUTPUT);
+int jgrapht_ii_link_prediction_resource_allocation_index(void *, int, int, double* OUTPUT);
+int jgrapht_ll_link_prediction_resource_allocation_index(void *, long long int, long long int, double* OUTPUT);
+int jgrapht_ii_link_prediction_salton_index(void *, int, int, double* OUTPUT);
+int jgrapht_ll_link_prediction_salton_index(void *, long long int, long long int, double* OUTPUT);
+int jgrapht_ii_link_prediction_sorensen_index(void *, int, int, double* OUTPUT);
+int jgrapht_ll_link_prediction_sorensen_index(void *, long long int, long long int, double* OUTPUT);
+
 // list
 
 int jgrapht_list_create(void** OUTPUT);
@@ -1117,28 +1148,21 @@ int jgrapht_ll_planarity_embedding_edges_around_vertex(void *, long long int, vo
 
 // scoring
 
-int jgrapht_xx_scoring_exec_alpha_centrality(void *, void** OUTPUT);
-
-int jgrapht_xx_scoring_exec_custom_alpha_centrality(void *, double, double, int, double, void** OUTPUT);
-
+int jgrapht_xx_scoring_exec_eigenvector_centrality(void *, void** OUTPUT);
+int jgrapht_xx_scoring_exec_custom_eigenvector_centrality(void *, int, double, void** OUTPUT);
+int jgrapht_xx_scoring_exec_katz_centrality(void *, void** OUTPUT);
+int jgrapht_ii_scoring_exec_custom_katz_centrality(void *, double, void *LONG_TO_FPTR, int, double, void** OUTPUT);
+int jgrapht_ll_scoring_exec_custom_katz_centrality(void *, double, void *LONG_TO_FPTR, int, double, void** OUTPUT);
 int jgrapht_xx_scoring_exec_betweenness_centrality(void *, void** OUTPUT);
-
 int jgrapht_xx_scoring_exec_custom_betweenness_centrality(void *, int, void** OUTPUT);
-
+int jgrapht_xx_scoring_exec_edge_betweenness_centrality(void *, void** OUTPUT);
 int jgrapht_xx_scoring_exec_closeness_centrality(void *, void** OUTPUT);
-
 int jgrapht_xx_scoring_exec_custom_closeness_centrality(void *, int, int, void** OUTPUT);
-
 int jgrapht_xx_scoring_exec_harmonic_centrality(void *, void** OUTPUT);
-
 int jgrapht_xx_scoring_exec_custom_harmonic_centrality(void *, int, int, void** OUTPUT);
-
 int jgrapht_xx_scoring_exec_pagerank(void *, void** OUTPUT);
-
 int jgrapht_xx_scoring_exec_custom_pagerank(void *, double, int, double, void** OUTPUT);
-
 int jgrapht_xx_scoring_exec_coreness(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_scoring_exec_clustering_coefficient(void *, double* OUTPUT, double* OUTPUT, void** OUTPUT);
 
 // set
@@ -1258,16 +1282,16 @@ int jgrapht_ll_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *, lo
 // contraction hierarchy
 
 int jgrapht_ii_sp_manytomany_get_path_between_vertices(void *, int, int, void** OUTPUT);
-
 int jgrapht_ll_sp_manytomany_get_path_between_vertices(void *, long long int, long long int, void** OUTPUT);
-
 int jgrapht_xx_sp_exec_contraction_hierarchy(void *, int, long long int, void** OUTPUT);
-
 int jgrapht_xx_sp_exec_contraction_hierarchy_get_manytomany(void *, void *, void *, void** OUTPUT);
-
 int jgrapht_ii_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *, int, int, double, void** OUTPUT);
-
 int jgrapht_ll_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *, long long int, long long int, double, void** OUTPUT);
+int jgrapht_xx_sp_exec_transit_node_routing(void *, int, void** OUTPUT);
+int jgrapht_ii_sp_exec_transit_node_routing_get_path_between_vertices(void *, int, int, void**  OUTPUT);
+int jgrapht_ll_sp_exec_transit_node_routing_get_path_between_vertices(void *, long long int, long long int, void**  OUTPUT);
+int jgrapht_ii_sp_exec_transit_node_routing_get_singlesource_from_vertex(void *, int, void**  OUTPUT);
+int jgrapht_ll_sp_exec_transit_node_routing_get_singlesource_from_vertex(void *, long long int, void**  OUTPUT);
 
 // spanner
 

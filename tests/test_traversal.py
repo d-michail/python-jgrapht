@@ -52,13 +52,13 @@ def test_traversals():
     assert lex_bfs == [0, 1, 2, 9, 3, 8, 4, 7, 5, 6]
 
     max_card = list(traversal.max_cardinality_traversal(g))
-    assert max_card == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    assert max_card == [0, 1, 2, 9, 3, 8, 4, 7, 5, 6]
 
     degeneracy_ordering = list(traversal.degeneracy_ordering_traversal(g))
     assert degeneracy_ordering == [1, 2, 3, 4, 5, 6, 0, 7, 8, 9]
 
     random_walk = list(traversal.random_walk_traversal(g, 0, False, 3, 17))
-    assert random_walk == [7, 0, 2]
+    assert random_walk == [0, 7, 0, 2]
 
     random_walk_it = traversal.random_walk_traversal(g, 0, False)
     for i in range(0,100):
@@ -147,13 +147,13 @@ def test_property_graph_traversals():
     assert lex_bfs == ["0", "1", "2", "node9", "3", "8", "4", "7", "5", "6"]
 
     max_card = list(traversal.max_cardinality_traversal(g))
-    assert max_card == ["0", "1", "2", "3", "4", "5", "6", "7", "8", "node9"]
+    assert max_card == ['0', '1', '2', 'node9', '3', '8', '4', '7', '5', '6']
 
     degeneracy_ordering = list(traversal.degeneracy_ordering_traversal(g))
     assert degeneracy_ordering == ["1", "2", "3", "4", "5", "6", "0", "7", "8", "node9"]
 
     random_walk = list(traversal.random_walk_traversal(g, "0", False, 3, 17))
-    assert random_walk == ["7", "0", "2"]
+    assert random_walk == ["0", "7", "0", "2"]
 
     closest_first = list(traversal.closest_first_traversal(g, "0"))
     assert closest_first == ["0", "1", "3", "5", "4", "node9", "8", "2", "7", "6"]

@@ -4,45 +4,71 @@ from .._internals._results import (
     _wrap_vertex_integer_map,
 )
 
-
-def alpha_centrality(
+def eigenvector_centrality(
     graph,
-    damping_factor=0.01,
-    exogenous_factor=1.0,
     max_iterations=100,
     tolerance=0.0001,
 ):
-    r"""Alpha centrality.
+    r"""Eigenvector centrality.
 
-    See https://en.wikipedia.org/wiki/Alpha_centrality for a description of alpha centrality.
+    See https://en.wikipedia.org/wiki/Eigenvector_centrality for a description of eigenvector centrality.
 
     This is a simple iterative implementation of which stops after a given number of iterations
-    or if the centralityvalues between two iterations do not change more than a predefined value.
+    or if the centrality values between two iterations do not change more than a predefined value.
 
     Each iteration of the algorithm runs in linear time :math:`\mathcal{O}(n+m)` when :math:`n` is
     the number of nodes and :math:`m` the number of edges in the graph. The maximum number of
     iterations can be adjusted by the caller. 
     
-    By adjusting the exogenous factor, users may compute either eigenvector centrality 
-    (https://en.wikipedia.org/wiki/Eigenvector_centrality) or Katz centrality
-    (https://en.wikipedia.org/wiki/Katz_centrality).
-
     :param graph: the graph
-    :param damping_factor: the damping factor
-    :param exogenous_factor: the exogenous factor
     :param max_iterations: maximum iterations
     :param tolerance: tolerance. The calculation will stop if the difference of centrality
        values between iterations change less than this value
     :returns: a dictionary from vertices to double values
     """
-    custom = [damping_factor, exogenous_factor, max_iterations, tolerance]
-    scores_handle = _backend.jgrapht_xx_scoring_exec_custom_alpha_centrality(
+    custom = [max_iterations, tolerance]
+    scores_handle = _backend.jgrapht_xx_scoring_exec_custom_eigenvector_centrality(
         graph.handle, *custom
     )
     return _wrap_vertex_double_map(graph, scores_handle)
 
 
-def betweenness_centrality(graph, incoming=False, normalize=False):
+def katz_centrality(
+    graph,
+    damping_factor=0.01,
+    max_iterations=100,
+    tolerance=0.0001,
+):
+    r"""Katz centrality.
+
+    See https://en.wikipedia.org/wiki/Katz_centrality for a description of katz centrality.
+
+    This is a simple iterative implementation of Katz centrality which stops after a given number of
+    iterations or if the Katz centrality values between two iterations do not change more than a
+    predefined value. Each iteration increases the length of the paths contributing to the centrality
+    value. Note that unless the damping factor is smaller than the reciprocal of the
+    `spectral radius <https://en.wikipedia.org/wiki/Spectral_radius>`_ of the adjacency
+    matrix, the computation will not converge.
+
+    Each iteration of the algorithm runs in linear time :math:`\mathcal{O}(n+m)` when :math:`n` is
+    the number of nodes and :math:`m` the number of edges in the graph. The maximum number of
+    iterations can be adjusted by the caller. 
+    
+    :param graph: the graph
+    :param damping_factor: the damping factor
+    :param max_iterations: maximum iterations
+    :param tolerance: tolerance. The calculation will stop if the difference of centrality
+       values between iterations change less than this value
+    :returns: a dictionary from vertices to double values
+    """
+    custom = [damping_factor, 0, max_iterations, tolerance]
+    scores_handle = _backend.jgrapht_ii_scoring_exec_custom_katz_centrality(
+        graph.handle, *custom
+    )
+    return _wrap_vertex_double_map(graph, scores_handle)
+
+
+def betweenness_centrality(graph, normalize=False):
     r"""Betweenness centrality.
     
     For the definition see https://en.wikipedia.org/wiki/Betweenness_centrality. 
@@ -65,6 +91,28 @@ def betweenness_centrality(graph, incoming=False, normalize=False):
     custom = [normalize]
     scores_handle = _backend.jgrapht_xx_scoring_exec_custom_betweenness_centrality(
         graph.handle, *custom
+    )
+    return _wrap_vertex_double_map(graph, scores_handle)
+
+
+def edge_betweenness_centrality(graph):
+    r"""Edge betweenness centrality.
+    
+    For the definition see https://en.wikipedia.org/wiki/Betweenness_centrality. 
+
+    The algorithm is based on:
+
+     * Brandes, Ulrik (2001). "A faster algorithm for betweenness centrality". Journal of
+       Mathematical Sociology. 25 (2): 163–177.
+
+    Running time is :math:`\mathcal{O}(nm +n^2 \log n)` for weighted and :math:`\mathcal{O}(mn)` 
+    for unweighted graphs.
+
+    :param graph: the graph
+    :returns: a dictionary from edges to double values
+    """
+    scores_handle = _backend.jgrapht_xx_scoring_exec_edge_betweenness_centrality(
+        graph.handle
     )
     return _wrap_vertex_double_map(graph, scores_handle)
 
