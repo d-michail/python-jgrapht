@@ -1,0 +1,132 @@
+name: Python JHeaps
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-20.04
+    container:
+      image: dmichail/manylinux:1634888a5feacaf6c3b8e4d181d00fee57b390b4
+    steps:
+    - name: OS name
+      run: | 
+        uname -a
+    - name: Clone repository
+      run: |
+        git clone --recursive https://github.com/d-michail/python-jgrapht.git $GITHUB_WORKSPACE/../python-jgrapht
+        git checkout $GITHUB_SHA
+    - name: ls GITHUB_WORKSPACE
+      run: |
+        ls $GITHUB_WORKSPACE
+    - name: Build
+      run:  $GITHUB_WORKSPACE/.github/scripts/build-manylinux2010_x86_64.sh
+      shell: bash
+    - name: list all wheels
+      run: |
+        ls $GITHUB_WORKSPACE/dist/*.whl
+    - name: upload to PyPi
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+      run:  $GITHUB_WORKSPACE/.github/scripts/upload-pypi.sh
+      shell: bash
+      env:
+        PYPI_USER: __token__
+        #PYPI_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        PYPI_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+
+  build-non-linux:
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        config: 
+        - { os: windows-2019, python-version: "3.9", gu: "gu.cmd" }        
+        - { os: windows-2019, python-version: "3.8", gu: "gu.cmd" }
+        - { os: windows-2019, python-version: "3.7", gu: "gu.cmd" }
+        - { os: windows-2019, python-version: "3.6", gu: "gu.cmd" }
+        - { os: macos-10.15,  python-version: "3.9", gu: "gu"     }
+        - { os: macos-10.15,  python-version: "3.8", gu: "gu"     }
+        - { os: macos-10.15,  python-version: "3.7", gu: "gu"     }
+        - { os: macos-10.15,  python-version: "3.6", gu: "gu"     }
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.python-version }}
+        architecture: x64
+    - name: Display Python version
+      run: |
+        python -c "import sys; print(sys.version)"
+    - name: Setup GraalVM
+      id: setup-graalvm
+      uses: DeLaGuardo/setup-graalvm@4.0
+      with:
+        graalvm: '21.0.0.2'
+        java: 'java11'
+        arch: 'amd64'
+    - name: Install native-image component
+      run: |
+        ${{ matrix.config.gu }} install native-image
+    - name: Install swig (MacOS)
+      if: runner.os == 'MacOS'
+      run: |
+        brew install swig
+    - name: Install swig (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        choco install swig --version=4.0.1
+    - name: Build Library
+      run: |
+        pip install wheel
+        python setup.py bdist_wheel
+    - name: Install and run tests
+      run: |
+        pip install -r requirements/test.txt
+        pip install jgrapht --no-index -f dist/
+        pytest
+    - name: Upload wheel artifacts
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheel-${{matrix.config.os}}-${{matrix.config.python-version}}-artifact
+        path: dist/
+        if-no-files-found: error
+
+  upload-pypi-non-linux:
+    needs: build-non-linux  
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    strategy:
+      matrix:
+        config: 
+        - { os: windows-2019, python-version: "3.9" }        
+        - { os: windows-2019, python-version: "3.8" }
+        - { os: windows-2019, python-version: "3.7" }
+        - { os: windows-2019, python-version: "3.6" }
+        - { os: macos-10.15,  python-version: "3.9" }
+        - { os: macos-10.15,  python-version: "3.8" }
+        - { os: macos-10.15,  python-version: "3.7" }
+        - { os: macos-10.15,  python-version: "3.6" }              
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: wheel-${{matrix.config.os}}-${{matrix.config.python-version}}-artifact
+        path: dist
+    - name: List files
+      run: ls -R
+    - name: Upload to PyPi
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        #password: ${{ secrets.PYPI_API_TOKEN }}
+        verbose: true
+        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        repository_url: https://test.pypi.org/legacy/
+
