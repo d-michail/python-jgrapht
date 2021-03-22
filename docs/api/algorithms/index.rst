@@ -18,6 +18,7 @@ The JGraphT contains a large collection of advanced algorithms.
    coloring
    clustering
    scoring
+   linkprediction
    planar
    cuts
    matching

@@ -2043,94 +2043,94 @@ int jgrapht_ll_link_prediction_exec_adamic_adar_index(void *g, long long int u, 
     return jgrapht_capi_ll_link_prediction_exec_adamic_adar_index(thread, g, u, v, res);
 }
 
-int jgrapht_ii_link_prediction_common_neighbors(void *g, int u, int v, double* res) { 
+int jgrapht_ii_link_prediction_exec_common_neighbors(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_link_prediction_common_neighbors(thread, g, u, v, res);
+    return jgrapht_capi_ii_link_prediction_exec_common_neighbors(thread, g, u, v, res);
 }
 
-int jgrapht_ll_link_prediction_common_neighbors(void *g, long long int u, long long int v, double* res) { 
+int jgrapht_ll_link_prediction_exec_common_neighbors(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_link_prediction_common_neighbors(thread, g, u, v, res);
+    return jgrapht_capi_ll_link_prediction_exec_common_neighbors(thread, g, u, v, res);
 }
 
-int jgrapht_ii_link_prediction_hub_depressed_index(void *g, int u, int v, double* res) { 
+int jgrapht_ii_link_prediction_exec_hub_depressed_index(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_link_prediction_hub_depressed_index(thread, g, u, v, res);
+    return jgrapht_capi_ii_link_prediction_exec_hub_depressed_index(thread, g, u, v, res);
 }
 
-int jgrapht_ll_link_prediction_hub_depressed_index(void *g, long long int u, long long int v, double* res) { 
+int jgrapht_ll_link_prediction_exec_hub_depressed_index(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_link_prediction_hub_depressed_index(thread, g, u, v, res);
+    return jgrapht_capi_ll_link_prediction_exec_hub_depressed_index(thread, g, u, v, res);
 }
 
-int jgrapht_ii_link_prediction_hub_promoted_index(void *g, int u, int v, double* res) { 
+int jgrapht_ii_link_prediction_exec_hub_promoted_index(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_link_prediction_hub_promoted_index(thread, g, u, v, res);
+    return jgrapht_capi_ii_link_prediction_exec_hub_promoted_index(thread, g, u, v, res);
 }
 
-int jgrapht_ll_link_prediction_hub_promoted_index(void *g, long long int u, long long int v, double* res) { 
+int jgrapht_ll_link_prediction_exec_hub_promoted_index(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_link_prediction_hub_promoted_index(thread, g, u, v, res);
+    return jgrapht_capi_ll_link_prediction_exec_hub_promoted_index(thread, g, u, v, res);
 }
 
-int jgrapht_ii_link_prediction_jaccard_coefficient(void *g, int u, int v, double* res) { 
+int jgrapht_ii_link_prediction_exec_jaccard_coefficient(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_link_prediction_jaccard_coefficient(thread, g, u, v, res);
+    return jgrapht_capi_ii_link_prediction_exec_jaccard_coefficient(thread, g, u, v, res);
 }
 
-int jgrapht_ll_link_prediction_jaccard_coefficient(void *g, long long int u, long long int v, double* res) { 
+int jgrapht_ll_link_prediction_exec_jaccard_coefficient(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_link_prediction_jaccard_coefficient(thread, g, u, v, res);
+    return jgrapht_capi_ll_link_prediction_exec_jaccard_coefficient(thread, g, u, v, res);
 }
 
-int jgrapht_ii_link_prediction_leicht_holme_newman_index(void *g, int u, int v, double* res) { 
+int jgrapht_ii_link_prediction_exec_leicht_holme_newman_index(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_link_prediction_leicht_holme_newman_index(thread, g, u, v, res);
+    return jgrapht_capi_ii_link_prediction_exec_leicht_holme_newman_index(thread, g, u, v, res);
 }
 
-int jgrapht_ll_link_prediction_leicht_holme_newman_index(void *g, long long int u, long long int v, double* res) { 
+int jgrapht_ll_link_prediction_exec_leicht_holme_newman_index(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_link_prediction_leicht_holme_newman_index(thread, g, u, v, res);
+    return jgrapht_capi_ll_link_prediction_exec_leicht_holme_newman_index(thread, g, u, v, res);
 }
 
-int jgrapht_ii_link_prediction_preferential_attachment(void *g, int u, int v, double* res) { 
+int jgrapht_ii_link_prediction_exec_preferential_attachment(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_link_prediction_preferential_attachment(thread, g, u, v, res);
+    return jgrapht_capi_ii_link_prediction_exec_preferential_attachment(thread, g, u, v, res);
 }
 
-int jgrapht_ll_link_prediction_preferential_attachment(void *g, long long int u, long long int v, double* res) { 
+int jgrapht_ll_link_prediction_exec_preferential_attachment(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_link_prediction_preferential_attachment(thread, g, u, v, res);
+    return jgrapht_capi_ll_link_prediction_exec_preferential_attachment(thread, g, u, v, res);
 }
 
-int jgrapht_ii_link_prediction_resource_allocation_index(void *g, int u, int v, double* res) { 
+int jgrapht_ii_link_prediction_exec_resource_allocation_index(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_link_prediction_resource_allocation_index(thread, g, u, v, res);
+    return jgrapht_capi_ii_link_prediction_exec_resource_allocation_index(thread, g, u, v, res);
 }
 
-int jgrapht_ll_link_prediction_resource_allocation_index(void *g, long long int u, long long int v, double* res) { 
+int jgrapht_ll_link_prediction_exec_resource_allocation_index(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_link_prediction_resource_allocation_index(thread, g, u, v, res);
+    return jgrapht_capi_ll_link_prediction_exec_resource_allocation_index(thread, g, u, v, res);
 }
 
-int jgrapht_ii_link_prediction_salton_index(void *g, int u, int v, double* res) { 
+int jgrapht_ii_link_prediction_exec_salton_index(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_link_prediction_salton_index(thread, g, u, v, res);
+    return jgrapht_capi_ii_link_prediction_exec_salton_index(thread, g, u, v, res);
 }
 
-int jgrapht_ll_link_prediction_salton_index(void *g, long long int u, long long int v, double* res) { 
+int jgrapht_ll_link_prediction_exec_salton_index(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_link_prediction_salton_index(thread, g, u, v, res);
+    return jgrapht_capi_ll_link_prediction_exec_salton_index(thread, g, u, v, res);
 }
 
-int jgrapht_ii_link_prediction_sorensen_index(void *g, int u, int v, double* res) { 
+int jgrapht_ii_link_prediction_exec_sorensen_index(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_link_prediction_sorensen_index(thread, g, u, v, res);
+    return jgrapht_capi_ii_link_prediction_exec_sorensen_index(thread, g, u, v, res);
 }
 
-int jgrapht_ll_link_prediction_sorensen_index(void *g, long long int u, long long int v, double* res) { 
+int jgrapht_ll_link_prediction_exec_sorensen_index(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_link_prediction_sorensen_index(thread, g, u, v, res);
+    return jgrapht_capi_ll_link_prediction_exec_sorensen_index(thread, g, u, v, res);
 }
 
 // list
