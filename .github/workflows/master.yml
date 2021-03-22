@@ -44,10 +44,10 @@ jobs:
       matrix:
         config: 
         - { os: macos-10.15,  python-version: "3.6", gu: "gu"     }
+        - { os: windows-2019, python-version: "3.6", gu: "gu.cmd" }
         #- { os: windows-2019, python-version: "3.9", gu: "gu.cmd" }        
         #- { os: windows-2019, python-version: "3.8", gu: "gu.cmd" }
         #- { os: windows-2019, python-version: "3.7", gu: "gu.cmd" }
-        #- { os: windows-2019, python-version: "3.6", gu: "gu.cmd" }
         #- { os: macos-10.15,  python-version: "3.9", gu: "gu"     }
         #- { os: macos-10.15,  python-version: "3.8", gu: "gu"     }
         #- { os: macos-10.15,  python-version: "3.7", gu: "gu"     }
