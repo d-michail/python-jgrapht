@@ -3,7 +3,7 @@ name: Python JGraphT
 on:
   push:
     branches:
-      - backend-1.5.1
+      - master
 
 jobs:
   build-linux:
@@ -35,8 +35,8 @@ jobs:
       shell: bash
       env:
         PYPI_USER: __token__
-        #PYPI_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        PYPI_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        PYPI_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        #PYPI_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
   build-non-linux:
     runs-on: ${{ matrix.config.os }}
@@ -128,8 +128,8 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
-        #password: ${{ secrets.PYPI_API_TOKEN }}
+        password: ${{ secrets.PYPI_API_TOKEN }}
         verbose: true
-        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        repository_url: https://test.pypi.org/legacy/
+        #password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        #repository_url: https://test.pypi.org/legacy/
 
