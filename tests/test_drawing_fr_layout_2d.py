@@ -37,7 +37,6 @@ def test_fr_layout():
         (5.651036062420804, 4.13103626560845),
     ]
 
-
     area = (0, 0, 10, 10)
     model = drawing.fruchterman_reingold_layout_2d(g, area)
     assert model.area == area
@@ -46,7 +45,6 @@ def test_fr_layout():
     assert len(locations) == 5
 
 
-@pytest.mark.skip(reason="HANGS")
 def test_fr_layout_indexed():
     g = create_graph(
         directed=False,
@@ -73,11 +71,11 @@ def test_fr_layout_indexed():
     locations = [(x, y) for x, y in locations]
 
     assert locations == [
-        (4.725218032924005, 3.9732829503535427),
-        (4.728709956380587, 3.9791561961012207),
-        (4.723631541658893, 3.9780496186190404),
-        (4.723099507642359, 3.9730366244091533),
-        (4.7277641668738415, 3.974929737653007),
+        (7.323115139597316, 6.973704783607497),
+        (0.8295611145017068, 8.162364511057307),
+        (0.443859375038691, 2.3973661293649284),
+        (7.07454821689446, 6.594836922590074),
+        (8.58996580616418, 0.03754742582413595),
     ]
 
 
@@ -119,7 +117,6 @@ def test_anyhashableg_fr_layout():
     ]
 
 
-@pytest.mark.skip(reason="HANGS")
 def test_anyhashableg_fr_layout_indexed():
     g = create_graph(
         directed=False,
@@ -129,14 +126,14 @@ def test_anyhashableg_fr_layout_indexed():
         any_hashable=True,
     )
     g.add_vertices_from(range(0, 5))
-    g.add_edge(0, 1, edge='0')
-    g.add_edge(1, 2, edge='1')
-    g.add_edge(2, 3, edge='2')
-    g.add_edge(3, 0, edge='3')
-    g.add_edge(4, 0, edge='4')
-    g.add_edge(4, 1, edge='5')
-    g.add_edge(4, 2, edge='6')
-    g.add_edge(4, 3, edge='7')
+    g.add_edge(0, 1, edge="0")
+    g.add_edge(1, 2, edge="1")
+    g.add_edge(2, 3, edge="2")
+    g.add_edge(3, 0, edge="3")
+    g.add_edge(4, 0, edge="4")
+    g.add_edge(4, 1, edge="5")
+    g.add_edge(4, 2, edge="6")
+    g.add_edge(4, 3, edge="7")
 
     area = (0, 0, 10, 10)
     model = drawing.fruchterman_reingold_indexed_layout_2d(g, area, seed=17)
@@ -147,13 +144,12 @@ def test_anyhashableg_fr_layout_indexed():
     locations = [(x, y) for x, y in locations]
 
     assert locations == [
-        (4.725218032924005, 3.9732829503535427),
-        (4.728709956380587, 3.9791561961012207),
-        (4.723631541658893, 3.9780496186190404),
-        (4.723099507642359, 3.9730366244091533),
-        (4.7277641668738415, 3.974929737653007),
+        (7.323115139597316, 6.973704783607497),
+        (0.8295611145017068, 8.162364511057307),
+        (0.443859375038691, 2.3973661293649284),
+        (7.07454821689446, 6.594836922590074),
+        (8.58996580616418, 0.03754742582413595),
     ]
-
 
     area = (0, 0, 10, 10)
     model = drawing.fruchterman_reingold_indexed_layout_2d(g, area)
