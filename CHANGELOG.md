@@ -3,6 +3,11 @@
 ## [Unreleased]
 ### Added
 - Added changelog file
+- Added support for backend version 1.5.1
+- Added link prediction algorithms
+- Added transit node routing algorithms
+- Added edge betweenness centrality
+- Added katz and eigenvector centrality
 
 ### Fixed
 - Fixed wrong PyPi classifier for windows
