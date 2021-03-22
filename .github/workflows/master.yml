@@ -3,7 +3,7 @@ name: Python JHeaps
 on:
   push:
     branches:
-      - master
+      - backend-1.5.1
 
 jobs:
   build-linux:
