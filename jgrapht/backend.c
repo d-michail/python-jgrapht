@@ -456,6 +456,37 @@ int jgrapht_xx_drawing_exec_rescale_layout_2d(void *g, void *model, double scale
     return jgrapht_capi_xx_drawing_exec_rescale_layout_2d(thread, g, model, scale);
 }
 
+int jgrapht_ii_drawing_exec_two_layered_bipartite_layout_2d(void *g, void *model, void *partition, void *vertex_comparator, int vertical) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_drawing_exec_two_layered_bipartite_layout_2d(thread, g, model, partition, vertex_comparator, vertical);
+}
+
+int jgrapht_ll_drawing_exec_two_layered_bipartite_layout_2d(void *g, void *model, void *partition, void *vertex_comparator, int vertical) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_drawing_exec_two_layered_bipartite_layout_2d(thread, g, model, partition, vertex_comparator, vertical);
+}
+
+int jgrapht_ii_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(void *g, void *model, void *partition, void *vertex_comparator, int vertical) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(thread, g, model, partition, vertex_comparator, vertical);
+}
+
+int jgrapht_ll_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(void *g, void *model, void *partition, void *vertex_comparator, int vertical) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(thread, g, model, partition, vertex_comparator, vertical);
+}
+
+int jgrapht_ii_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(void *g, void *model, void *partition, void *vertex_comparator, int vertical) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(thread, g, model, partition, vertex_comparator, vertical);
+}
+
+int jgrapht_ll_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(void *g, void *model, void *partition, void *vertex_comparator, int vertical) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ll_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(thread, g, model, partition, vertex_comparator, vertical);
+}
+
+
 // exporter
 
 int jgrapht_ii_export_file_dimacs(void *g, char* filename, dimacs_format_t format, int export_edge_weights, void* vertex_id_store) { 

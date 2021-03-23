@@ -328,36 +328,27 @@ int jgrapht_xx_cycles_fundamental_basis_exec_paton(void *, double* OUTPUT, void*
 // drawing
 
 int jgrapht_xx_drawing_layout_model_2d_create(double, double, double, double, void** OUTPUT);
-
 int jgrapht_xx_drawing_layout_model_2d_get_drawable_area(void *, double* OUTPUT, double* OUTPUT, double* OUTPUT, double* OUTPUT);
-
 int jgrapht_ii_drawing_layout_model_2d_get_vertex(void *, int, double* OUTPUT, double* OUTPUT);
-
 int jgrapht_ll_drawing_layout_model_2d_get_vertex(void *, long long int, double* OUTPUT, double* OUTPUT);
-
 int jgrapht_ii_drawing_layout_model_2d_put_vertex(void *, int, double, double);
-
 int jgrapht_ll_drawing_layout_model_2d_put_vertex(void *, long long int, double, double);
-
 int jgrapht_ii_drawing_layout_model_2d_get_fixed(void *, int, int* OUTPUT);
-
 int jgrapht_ll_drawing_layout_model_2d_get_fixed(void *, long long int, int* OUTPUT);
-
 int jgrapht_ii_drawing_layout_model_2d_set_fixed(void *, int, int);
-
 int jgrapht_ll_drawing_layout_model_2d_set_fixed(void *, long long int, int);
-
 int jgrapht_xx_drawing_exec_random_layout_2d(void *, void *, long long int);
-
 int jgrapht_ii_drawing_exec_circular_layout_2d(void *, void *, double, void *LONG_TO_FPTR);
-
 int jgrapht_ll_drawing_exec_circular_layout_2d(void *, void *, double, void *LONG_TO_FPTR);
-
 int jgrapht_xx_drawing_exec_fr_layout_2d(void *, void *, int, double, long long int);
-
 int jgrapht_xx_drawing_exec_indexed_fr_layout_2d(void *, void *, int, double, long long int, double, double);
-
 int jgrapht_xx_drawing_exec_rescale_layout_2d(void *, void *, double);
+int jgrapht_ii_drawing_exec_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
+int jgrapht_ll_drawing_exec_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
+int jgrapht_ii_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
+int jgrapht_ll_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
+int jgrapht_ii_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
+int jgrapht_ll_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
 
 // exporter
 
