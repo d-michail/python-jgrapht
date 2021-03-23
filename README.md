@@ -21,7 +21,7 @@ The result is a *native self-contained library* with *no dependency* on the JVM!
 
 ## Installing
 
-We automatically build 64-bit wheels for python versions 3.6, 3.7, and 3.8 on Linux,
+We automatically build 64-bit wheels for python versions 3.6, 3.7, 3.8, and 3.9 on Linux,
 Windows and MacOSX. They can be directly downloaded from [PyPI](https://pypi.org/project/jgrapht/)
 or using pip.
 For linux we use [PEP 571](https://www.python.org/dev/peps/pep-0571/)

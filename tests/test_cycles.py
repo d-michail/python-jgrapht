@@ -1,4 +1,5 @@
 import pytest
+import math
 
 from jgrapht import create_graph
 import jgrapht.algorithms.cycles as cycles
@@ -573,3 +574,78 @@ def test_anyhashableg_simple_cycles_hawick_james():
 
     with pytest.raises(StopIteration):
         next(it)
+
+
+def test_howard():
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g.add_vertices_from([0, 1, 2, 3, 4, 5, 6])
+    g.add_edge(0, 1)
+    e12 = g.add_edge(1, 2)
+    g.set_edge_weight(e12, 100.0)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 6)
+    e63 = g.add_edge(6, 3)
+    g.set_edge_weight(e63, 2.0)
+
+    mean, cycle = cycles.howard_minimum_cycle_mean(g)
+
+    assert mean == pytest.approx(1.25)
+    assert cycle is not None
+    assert cycle.edges == [4, 5, 6, 7]
+
+
+def test_howard_on_dag():
+
+    # test with no cycle 
+    g1 = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+    )
+
+    g1.add_vertices_from([0, 1, 2])
+    g1.add_edge(0, 1)
+    g1.add_edge(1, 2)
+    g1.add_edge(0, 2)
+
+    mean, cycle = cycles.howard_minimum_cycle_mean(g1)
+    assert mean == math.inf
+    assert cycle is None
+
+
+def test_howard_any_hashable():
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        any_hashable=True,
+    )
+
+    g.add_vertices_from(["0", "1", "2", "3", "4", "5", "6"])
+    g.add_edge("0", "1")
+    e12 = g.add_edge("1", "2")
+    g.set_edge_weight(e12, 100.0)
+    g.add_edge("2", "3", edge="2")
+    g.add_edge("3", "0", edge="3")
+    g.add_edge("3", "4", edge="4")
+    g.add_edge("4", "5", edge="5")
+    g.add_edge("5", "6", edge="6")
+    e63 = g.add_edge("6", "3", edge="7")
+    g.set_edge_weight(e63, 2.0)
+
+    mean, cycle = cycles.howard_minimum_cycle_mean(g)
+
+    assert mean == pytest.approx(1.25)
+    assert cycle is not None
+    assert cycle.edges == ["4", "5", "6", "7"]

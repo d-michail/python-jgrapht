@@ -374,6 +374,11 @@ int jgrapht_xx_cycles_fundamental_basis_exec_paton(void *g, double* weight_res, 
     return jgrapht_capi_xx_cycles_fundamental_basis_exec_paton(thread, g, weight_res, res);
 }
 
+int jgrapht_xx_cycles_mean_exec_howard(void *g, int iterations, double tolerance, double* mean_res, void** cycle_res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xx_cycles_mean_exec_howard(thread, g, iterations, tolerance, mean_res, cycle_res);
+}
+
 // drawing
 
 int jgrapht_xx_drawing_layout_model_2d_create(double x_min, double y_min, double width, double height, void** res) { 

@@ -306,24 +306,16 @@ int jgrapht_xx_cut_oddmincutset_exec_padberg_rao(void *, void *, int, double* OU
 // cycles
 
 int jgrapht_xx_cycles_eulerian_exec_hierholzer(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_cycles_chinese_postman_exec_edmonds_johnson(void *, void** OUTPUT);
-
 int jgrapht_xx_cycles_simple_enumeration_exec_tarjan(void *, void** OUTPUT);
-
 int jgrapht_xx_cycles_simple_enumeration_exec_tiernan(void *, void** OUTPUT);
-
 int jgrapht_xx_cycles_simple_enumeration_exec_szwarcfiter_lauer(void *, void** OUTPUT);
-
 int jgrapht_xx_cycles_simple_enumeration_exec_johnson(void *, void** OUTPUT);
-
 int jgrapht_xx_cycles_simple_enumeration_exec_hawick_james(void *, void** OUTPUT);
-
 int jgrapht_xx_cycles_fundamental_basis_exec_queue_bfs(void *, double* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_cycles_fundamental_basis_exec_stack_bfs(void *, double* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_cycles_fundamental_basis_exec_paton(void *, double* OUTPUT, void** OUTPUT);
+int jgrapht_xx_cycles_mean_exec_howard(void *, int, double, double* OUTPUT, void** OUTPUT);
 
 // drawing
 
