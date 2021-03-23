@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.org/d-michail/python-jgrapht.svg?branch=master)](https://travis-ci.org/d-michail/python-jgrapht)
+[![Build Status](https://github.com/d-michail/python-jgrapht/actions/workflows/master.yml/badge.svg)](https://github.com/d-michail/python-jgrapht/actions/workflows/master.yml)
+[![PyPi](https://img.shields.io/pypi/v/jgrapht)](https://pypi.org/project/jgrapht)
+[![License](https://img.shields.io/badge/license-LGPL%202.1-blue.svg)](http://www.gnu.org/licenses/lgpl-2.1.html)
+[![License](https://img.shields.io/badge/license-EPL%202.0-blue.svg)](http://www.eclipse.org/legal/epl-2.0)
 
 # Python-JGraphT
 
