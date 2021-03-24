@@ -27,6 +27,7 @@ def _module_cleanup_function():
 
     backend.jgrapht_cleanup()
 
+
 atexit.register(_module_cleanup_function)
 del atexit
 
@@ -40,6 +41,7 @@ from ._internals._int_graphs import (
     _create_int_dag,
     _create_sparse_int_graph,
     _copy_to_sparse_int_graph,
+    IncomingEdgesSupport,
 )
 from ._internals._anyhashableg import (
     _is_anyhashable_graph,
@@ -52,6 +54,7 @@ from ._internals._anyhashableg import (
 #
 # The graph creation API
 #
+
 
 def create_graph(
     directed=True,
@@ -136,6 +139,7 @@ def create_sparse_graph(
     num_of_vertices=None,
     directed=True,
     weighted=True,
+    incoming_edges_support=IncomingEdgesSupport.LAZY_INCOMING_EDGES,
     any_hashable=False,
     vertex_supplier=None,
     edge_supplier=None,
@@ -145,21 +149,20 @@ def create_sparse_graph(
     By default this function creates graphs with integer vertices. When parameter
     `any_hashable` is true, the returned graph will be able to (a) have any
     hashable as vertices and edges, and (b) associate attributes/properties with the vertices
-    and edges. Such a any-hashable graph needs to be able to create new objects for vertices
-    and edges. This is accomplished by providing two functions called *vertex supplier* and
-    *edge supplier*. If not provided by the user, the default implementation creates instances
-    of :py:class:`object`.
-
+    and edges. 
+    
     The structure (topology) of a sparse graph is unmodifiable, but weights and properties can be
     modified.
 
-    :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs. If `any_hashable` is 
+    :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs. If `any_hashable` is
       false, the vertices must be integers.
-    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0 
+    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0
       and increase continuously. If not explicitly given and `any_hashable` is false, the edgelist
       will be traversed in order to find out the number of vertices
     :param directed: if True the graph will be directed, otherwise undirected
     :param weighted: if True the graph will be weighted, otherwise unweighted
+    :param incoming_edges_support: full support, lazily constructed or no support for incoming edges. Only
+           valid for directed graphs. Defaults to lazily constructed.
     :param any_hashable: if True then the graph will allow the use of any
       hashable as vertices and edges instead of just integers. This also makes the graph
       an instance of :class:`~jgrapht.types.AttributesGraph`
@@ -177,6 +180,7 @@ def create_sparse_graph(
             edgelist=edgelist,
             directed=directed,
             weighted=weighted,
+            incoming_edges_support=incoming_edges_support,
             vertex_supplier=vertex_supplier,
             edge_supplier=edge_supplier,
         )
@@ -186,6 +190,7 @@ def create_sparse_graph(
             num_of_vertices=num_of_vertices,
             directed=directed,
             weighted=weighted,
+            incoming_edges_support=incoming_edges_support,
         )
 
 
@@ -202,7 +207,7 @@ def copy_to_sparse_graph(graph):
     """
     if _is_anyhashable_graph(graph):
         return _copy_to_sparse_anyhashable_graph(graph)
-    else: 
+    else:
         return _copy_to_sparse_int_graph(graph)
 
 

@@ -309,7 +309,7 @@ int jgrapht_ii_graph_create(int, int, int, int, void*, void*, void**);
 
 int jgrapht_ll_graph_create(int, int, int, int, void*, void*, void**);
 
-int jgrapht_ii_graph_sparse_create(int, int, int, void *, void**);
+int jgrapht_ii_graph_sparse_create(int, int, int, void *, incoming_edges_support_t, void**);
 
 int jgrapht_ii_graph_vertices_count(void *, int*);
 

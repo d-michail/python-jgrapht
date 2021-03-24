@@ -12,6 +12,7 @@ from ..types import (
     AttributesGraph,
     DirectedAcyclicGraph,
     ListenableGraph,
+    IncomingEdgesSupport,
 )
 from ..utils import IntegerSupplier
 
@@ -38,13 +39,13 @@ from ._anyhashableg_collections import (
 
 class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
     """A graph which allows the use of any hashable as vertex and edges.
-    
-    This is a wrapper around the default graph which has integer identifiers, 
-    which means that there is a performance penalty involved. The graph also 
+
+    This is a wrapper around the default graph which has integer identifiers,
+    which means that there is a performance penalty involved. The graph also
     supports attributes on graph vertices/edges and the graph itself.
 
-    This graph does not directly wrap a backend graph, but it passes through 
-    the handle which means that it is usable in all algorithms. The result 
+    This graph does not directly wrap a backend graph, but it passes through
+    the handle which means that it is usable in all algorithms. The result
     however will refer to the actual graph and not the any-hashable graph wrapper which
     means that it needs to be translated back when returning from the call.
     Most algorithms do such a check and perform the translation automatically.
@@ -55,7 +56,7 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
     ):
         """Initialize an any-hashable graph
 
-        :param graph: the actual graph which we are wrapping. Must have integer 
+        :param graph: the actual graph which we are wrapping. Must have integer
           vertices and edges.
         :param vertex_supplier: function which returns new vertices on each call. If
           None then object instances are used.
@@ -381,7 +382,7 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
 
         @classmethod
         def _from_iterable(cls, it):
-            return set(it)    
+            return set(it)
 
     class _AnyHashableGraphEdgeSet(Set):
         def __init__(self, graph):
@@ -411,7 +412,7 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
 
         @classmethod
         def _from_iterable(cls, it):
-            return set(it)    
+            return set(it)
 
     class _VertexAttributes(MutableMapping):
         """Wrapper around a dictionary to ensure vertex existence."""
@@ -542,7 +543,7 @@ class _AnyHashableDirectedAcyclicGraph(_AnyHashableGraph, DirectedAcyclicGraph):
     def __init__(self, graph, vertex_supplier=None, edge_supplier=None, **kwargs):
         """Initialize an any-hashable dag
 
-        :param graph: the actual graph which we are wrapping. Must have integer 
+        :param graph: the actual graph which we are wrapping. Must have integer
           vertices and edges.
         :param vertex_supplier: function which returns new vertices on each call. If
           None then object instances are used.
@@ -636,11 +637,11 @@ def _create_anyhashable_graph_subgraph(anyhashable_graph, subgraph):
     This function creates an any-hashable graph with the identical structure as the
     subgraph (which is a default graph with integer vertices/edges). The assumption
     is that the subgraph is an actual subgraph of the backing graph of the any-hashable
-    graph. In other words, for each integer vertex or edge in the subgraph, the 
+    graph. In other words, for each integer vertex or edge in the subgraph, the
     any-hashable graph contains a corresponding vertex or edge.
-    
+
     The new any-hashable graph uses the same vertices and edges that the any-hashable graph
-    is using and has the same structure as the subgraph. However, its backing graph 
+    is using and has the same structure as the subgraph. However, its backing graph
     is a copy and therefore might have different integer vertices/edges.
 
     :param anyhashable_graph: the any-hashable graph from which to copy vertices and edges
@@ -784,7 +785,7 @@ def _as_masked_subgraph_anyhashable_graph(
 
 def _is_anyhashable_graph(graph):
     """Check if a graph instance is an any-hashable graph.
-    
+
     :param graph: the graph
     :returns: True if the graph is an any-hashable graph, False otherwise.
     """
@@ -836,7 +837,7 @@ def _create_anyhashable_graph(
     :param vertex_supplier: function which returns new vertices on each call. If
         None then object instances are used.
     :param edge_supplier: function which returns new edges on each call. If
-        None then object instances are used.    
+        None then object instances are used.
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph` and :class:`~jgrapht.types.AttributesGraph`
     """
@@ -864,7 +865,7 @@ def _create_anyhashable_dag(
     :param vertex_supplier: function which returns new vertices on each call. If
         None then object instances are used.
     :param edge_supplier: function which returns new edge on each call. If
-        None then object instances are used.        
+        None then object instances are used.
     :returns: a graph
     :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph` and :class:`~jgrapht.types.Graph` and :class:`~jgrapht.types.AttributesGraph`
     """
@@ -877,7 +878,12 @@ def _create_anyhashable_dag(
 
 
 def _create_sparse_anyhashable_graph(
-    edgelist, directed=True, weighted=True, vertex_supplier=None, edge_supplier=None,
+    edgelist,
+    directed=True,
+    weighted=True,
+    incoming_edges_support=IncomingEdgesSupport.LAZY_INCOMING_EDGES,
+    vertex_supplier=None,
+    edge_supplier=None,
 ):
     """Create a sparse any-hashable graph.
 
@@ -898,6 +904,7 @@ def _create_sparse_anyhashable_graph(
     :param edgelist: list of tuple (u,v) or (u,v,weight) for weighted graphs
     :param directed: whether the graph will be directed or undirected
     :param weighted: whether the graph will be weighted or not
+    :param incoming_edges_support: full, lazy constructed or no support for incoming edges
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
@@ -914,7 +921,11 @@ def _create_sparse_anyhashable_graph(
 
     # Create graph
     sparse_int_graph = _create_sparse_int_graph(
-        int_edgelist, num_of_vertices=len(vertex_hash_to_id), directed=directed, weighted=weighted
+        int_edgelist,
+        num_of_vertices=len(vertex_hash_to_id),
+        directed=directed,
+        weighted=weighted,
+        incoming_edges_support=incoming_edges_support
     )
     g = _AnyHashableGraph(
         sparse_int_graph, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
@@ -961,10 +972,15 @@ def _copy_to_sparse_anyhashable_graph(graph):
 
     # create graph
     sparse_int_graph = _create_sparse_int_graph(
-        int_edgelist, num_of_vertices=len(vertex_hash_to_id), directed=graph.type.directed, weighted=graph.type.weighted
+        int_edgelist,
+        num_of_vertices=len(vertex_hash_to_id),
+        directed=graph.type.directed,
+        weighted=graph.type.weighted,
     )
     sparse = _AnyHashableGraph(
-        sparse_int_graph, vertex_supplier=graph._vertex_supplier, edge_supplier=graph._edge_supplier
+        sparse_int_graph,
+        vertex_supplier=graph._vertex_supplier,
+        edge_supplier=graph._edge_supplier,
     )
 
     # record mapping of existing vertices and copy attributes
@@ -980,9 +996,8 @@ def _copy_to_sparse_anyhashable_graph(graph):
         sparse._edge_id_to_hash[eid] = ehash
         for k, v in graph.edge_attrs[ehash].items():
             sparse.edge_attrs[ehash][k] = v
-    
+
     for k, v in graph.graph_attrs.items():
         sparse.graph_attrs[k] = v
 
     return sparse
-

@@ -4,6 +4,7 @@ from jgrapht import (
     create_graph,
     create_sparse_graph,
     copy_to_sparse_graph,
+    IncomingEdgesSupport,
 )
 
 
@@ -379,7 +380,7 @@ def test_graph_sparse():
 
     edgelist2 = []
     for e in g.edges:
-        u, v, w = g.edge_tuple(e)
+        u, v, _ = g.edge_tuple(e)
         edgelist2.append((u, v))
     assert edgelist2 == edgelist
 
@@ -400,7 +401,7 @@ def test_graph_sparse_no_vertex_count():
 
     edgelist2 = []
     for e in g.edges:
-        u, v, w = g.edge_tuple(e)
+        u, v, _ = g.edge_tuple(e)
         edgelist2.append((u, v))
     assert edgelist2 == edgelist
 
@@ -466,13 +467,13 @@ def test_graph_copy_to_sparse():
 
     assert g.vertices, set([0, 1, 2, 3, 4])
 
-    e12 = g.add_edge(v1, v2)
-    e23 = g.add_edge(v2, v3)
-    e14 = g.add_edge(v1, v4)
-    e11 = g.add_edge(v1, v1)
-    e45 = g.add_edge(v4, v5)
-    e51_1 = g.add_edge(v5, v1)
-    e51_2 = g.add_edge(v5, v1)
+    g.add_edge(v1, v2)
+    g.add_edge(v2, v3)
+    g.add_edge(v1, v4)
+    g.add_edge(v1, v1)
+    g.add_edge(v4, v5)
+    g.add_edge(v5, v1)
+    g.add_edge(v5, v1)
 
     assert len(g.edges) == 7
 
@@ -569,7 +570,9 @@ def test_dag():
 
 
 def test_anyhashableg_dag():
-    g = create_graph(allowing_multiple_edges=True, weighted=True, dag=True, any_hashable=True)
+    g = create_graph(
+        allowing_multiple_edges=True, weighted=True, dag=True, any_hashable=True
+    )
 
     assert g.type.directed
     assert not g.type.undirected
@@ -578,7 +581,7 @@ def test_anyhashableg_dag():
     assert g.type.weighted
     assert not g.type._allowing_cycles
 
-    for i in range(0,11):
+    for i in range(0, 11):
         g.add_vertex(str(i))
 
     g.add_edge("0", "1")
@@ -611,7 +614,9 @@ def test_anyhashableg_dag():
     with pytest.raises(ValueError):
         g.ancestors("unknown")
 
-    g1 = create_graph(allowing_multiple_edges=False, weighted=False, dag=True, any_hashable=True)
+    g1 = create_graph(
+        allowing_multiple_edges=False, weighted=False, dag=True, any_hashable=True
+    )
 
     assert g1.type.directed
     assert not g1.type.undirected
@@ -625,6 +630,7 @@ def test_anyhashableg_dag():
 
     with pytest.raises(ValueError):
         g1.add_edge("0", "1")
+
 
 def test_graph_type():
 
@@ -660,3 +666,45 @@ def test_graph_type():
 
     repr(gtype_directed)
     str(gtype_directed)
+
+
+def test_graph_sparse_no_incoming():
+
+    edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
+
+    g = create_sparse_graph(edgelist, 7, weighted=False, incoming_edges_support=IncomingEdgesSupport.NO_INCOMING_EDGES)
+
+    assert g.type.directed
+    assert not g.type.weighted
+
+    assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
+
+    # no incoming support
+    with pytest.raises(ValueError):
+        g.inedges_of(3)
+
+
+def test_graph_sparse_full_incoming():
+
+    edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
+    g = create_sparse_graph(edgelist, 7, weighted=False, incoming_edges_support=IncomingEdgesSupport.FULL_INCOMING_EDGES)
+
+    assert g.type.directed
+    assert not g.type.weighted
+
+    assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
+
+    assert set(g.inedges_of(3)) == { 2, 3, 4 }
+
+
+def test_graph_sparse_lazy_incoming():
+
+    edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
+    g = create_sparse_graph(edgelist, 7, weighted=False, incoming_edges_support=IncomingEdgesSupport.LAZY_INCOMING_EDGES)
+
+    assert g.type.directed
+    assert not g.type.weighted
+
+    assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
+
+    assert set(g.inedges_of(3)) == { 2, 3, 4 }

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Mapping
-from .backend import GraphEvent
+from .backend import GraphEvent, IncomingEdgesSupport
 
 
 class GraphType:

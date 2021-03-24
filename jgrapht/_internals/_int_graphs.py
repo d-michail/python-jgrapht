@@ -1,9 +1,5 @@
 from .. import backend
-from ..types import (
-    Graph,
-    GraphType,
-    DirectedAcyclicGraph,
-)
+from ..types import Graph, GraphType, DirectedAcyclicGraph, IncomingEdgesSupport
 
 from collections.abc import Set
 
@@ -242,7 +238,11 @@ def _create_int_graph(
 
 
 def _create_sparse_int_graph(
-    edgelist, num_of_vertices=None, directed=True, weighted=True
+    edgelist,
+    num_of_vertices=None,
+    directed=True,
+    weighted=True,
+    incoming_edges_support=IncomingEdgesSupport.LAZY_INCOMING_EDGES,
 ):
     """Create a sparse graph with integer vertices/edges.
 
@@ -265,6 +265,7 @@ def _create_sparse_int_graph(
       order to find out the number of vertices
     :param directed: whether the graph will be directed or undirected
     :param weighted: whether the graph will be weighted or not
+    :param incoming_edges_support: full, lazy constructed or no support for incoming edges
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
@@ -303,7 +304,7 @@ def _create_sparse_int_graph(
             num_of_vertices += 1
 
     handle = backend.jgrapht_ii_graph_sparse_create(
-        directed, weighted, num_of_vertices, e_list
+        directed, weighted, num_of_vertices, e_list, incoming_edges_support.value
     )
 
     if e_list_owner:

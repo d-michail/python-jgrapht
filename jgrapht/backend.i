@@ -96,6 +96,12 @@ typedef enum {
     ATTRIBUTE_TYPE_IDENTIFIER,
 } attribute_type_t;
 
+typedef enum { 
+    INCOMING_EDGES_SUPPORT_NO_INCOMING_EDGES = 0,
+    INCOMING_EDGES_SUPPORT_LAZY_INCOMING_EDGES,
+    INCOMING_EDGES_SUPPORT_FULL_INCOMING_EDGES,
+} incoming_edges_support_t;
+
 // library init
 
 void jgrapht_init();
@@ -197,7 +203,14 @@ class GraphEvent(Enum):
     EDGE_ADDED = _backend.GRAPH_EVENT_EDGE_ADDED
     EDGE_REMOVED = _backend.GRAPH_EVENT_EDGE_REMOVED
     EDGE_WEIGHT_UPDATED = _backend.GRAPH_EVENT_EDGE_WEIGHT_UPDATED
+
+class IncomingEdgesSupport(Enum):
+    NO_INCOMING_EDGES = _backend.INCOMING_EDGES_SUPPORT_NO_INCOMING_EDGES
+    LAZY_INCOMING_EDGES = _backend.INCOMING_EDGES_SUPPORT_LAZY_INCOMING_EDGES
+    FULL_INCOMING_EDGES = _backend.INCOMING_EDGES_SUPPORT_FULL_INCOMING_EDGES
+
 %}
+
 
 // attribute store 
 
@@ -472,7 +485,7 @@ int jgrapht_ii_graph_create(int, int, int, int, void* LONG_TO_FPTR, void* LONG_T
 
 int jgrapht_ll_graph_create(int, int, int, int, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void **OUTPUT);
 
-int jgrapht_ii_graph_sparse_create(int, int, int, void *, void** OUTPUT);
+int jgrapht_ii_graph_sparse_create(int, int, int, void *, incoming_edges_support_t, void** OUTPUT);
 
 int jgrapht_ii_graph_vertices_count(void *, int* OUTPUT);
 
