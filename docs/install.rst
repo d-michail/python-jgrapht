@@ -3,7 +3,7 @@
 Install
 =======
 
-We automatically build 64-bit wheels for python versions 3.6, 3.7, and 3.8 on Linux,
+We automatically build 64-bit wheels for python versions 3.6, 3.7, 3.8, and 3.9 on Linux,
 Windows and MacOSX. For linux we use `PEP 571 <https://www.python.org/dev/peps/pep-0571/>`_
 which means that pip version must be ``>= 19.0``. 
 

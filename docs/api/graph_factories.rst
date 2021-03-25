@@ -45,4 +45,25 @@ Building sparse graphs can be performed by using edge lists. See the section
 :ref:`edge list importers <io/edgelist>`.
 
 
+Succinct Graph
+^^^^^^^^^^^^^^
+
+The following function creates a special *succinct* graph representation. Succinct graphs 
+are very compact representations close to the theoretical lower-bound. This means that it 
+is going to be smaller than a sparse representation, but also a little bit slower. 
+Similarly to the sparse representation they (a) cannot be modified after construction and (b) force
+the user to use vertex and edges that are integers starting from 0 in a continuous range.
+Since modification is not possible, a user needs to bulk-load the graph by providing both the number
+of vertices and all edges before hand.
+
+.. autofunction:: jgrapht.create_succinct_graph
+
+A helper function :py:meth:`jgrapht.copy_to_succinct_graph` can help in order to create a succinct
+graph from another graph. 
+
+.. autofunction:: jgrapht.copy_to_succinct_graph
+
+Building succinct graphs can be performed by using edge lists. See the section
+:ref:`edge list importers <io/edgelist>`.
+
 

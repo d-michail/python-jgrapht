@@ -13,6 +13,7 @@ the |Bindings| provide.
 
    default_graph
    sparse_graph
+   succinct_graph
    any_graph
    
 

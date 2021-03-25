@@ -55,6 +55,11 @@ is a static variant which can only be bulk-loaded from a list of edges. Its bene
 condiderably faster and less memory hungry, at the expense of not being modifiable. It is best suited 
 for less dynamic workloads where the user creates a graph once and executes complex algorithms on it.
 
+Another special version of the integer graph is called the *succinct* graph. The succinct graph 
+is a static variant which is very compact, close to the theoretical lower-bound. This means that it is 
+going to be even smaller in footprint than the sparse graph, at the expense of beeing a bit slower. 
+It also is not modifiable. It is best suited for very large graphs and static workloads.
+
 any-hashable graphs
 """""""""""""""""""
    
