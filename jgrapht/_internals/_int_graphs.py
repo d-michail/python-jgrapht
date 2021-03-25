@@ -313,7 +313,59 @@ def _create_sparse_int_graph(
     return _JGraphTIntegerGraph(handle)
 
 
-def _copy_to_sparse_int_graph(graph):
+def _create_succinct_int_graph(
+    edgelist,
+    num_of_vertices=None,
+    directed=True,
+    incoming_edges_support=IncomingEdgesSupport.FULL_INCOMING_EDGES,
+):
+    """Create a succinct graph with integer vertices/edges.
+
+    A succinct graph is a very compact graph representation close to the theoretical
+    lower-bound. Their drawback is that they assume a continuous range of vertices
+    and edges and that they are not modifiable after construction.
+
+    .. note :: Succinct graphs cannot be modified after construction. They are best suited
+       for executing algorithms which do not need to modify the graph after loading.
+
+    Succinct graphs support self-loops but not multiple-edges. They do not support edge weights.
+
+    :param edgelist: list of tuple (u,v)
+    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0
+      and increase continuously. If not explicitly given the edgelist will be traversed in
+      order to find out the number of vertices
+    :param directed: whether the graph will be directed or undirected
+    :param incoming_edges_support: full, lazy constructed or no support for incoming edges
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.Graph`
+    """
+    track_num_vertices = num_of_vertices is None
+
+    e_list = backend.jgrapht_list_create()
+
+    if track_num_vertices:
+        num_of_vertices = 0
+
+    for u, v, *w in edgelist:
+        backend.jgrapht_ii_list_edge_pair_add(e_list, u, v)
+        if track_num_vertices:
+            num_of_vertices = max(u, v, num_of_vertices)
+
+    if track_num_vertices:
+        num_of_vertices += 1
+
+    handle = backend.jgrapht_ii_graph_succinct_create(
+        directed, num_of_vertices, e_list, incoming_edges_support.value
+    )
+
+    backend.jgrapht_handles_destroy(e_list)
+
+    return _JGraphTIntegerGraph(handle)
+
+
+def _copy_to_sparse_int_graph(
+    graph, incoming_edges_support=IncomingEdgesSupport.FULL_INCOMING_EDGES
+):
     """Copy a graph to a sparse graph.
 
     .. note :: The resulting graph might have more vertices that the source graph. The reason is
@@ -326,6 +378,7 @@ def _copy_to_sparse_int_graph(graph):
       being raised.
 
     :param graph: the input graph
+    :param incoming_edges_support: full, lazy constructed or no support for incoming edges
     :returns: a sparse graph
     :rtype: :class:`jgrapht.types.Graph`
     """
@@ -336,7 +389,44 @@ def _copy_to_sparse_int_graph(graph):
     edgelist = [graph.edge_tuple(e) for e in graph.edges]
 
     return _create_sparse_int_graph(
-        edgelist, max_vertex + 1, graph.type.directed, graph.type.weighted
+        edgelist,
+        max_vertex + 1,
+        graph.type.directed,
+        graph.type.weighted,
+        incoming_edges_support=incoming_edges_support,
+    )
+
+
+def _copy_to_succinct_int_graph(
+    graph, incoming_edges_support=IncomingEdgesSupport.FULL_INCOMING_EDGES
+):
+    """Copy a graph to a succinct graph.
+
+    .. note :: The resulting graph might have more vertices that the source graph. The reason is
+      that succinct graphs have a continuous range of vertices. Thus, if your input graph contains
+      three vertices 0, 5, and 10 the resulting sparse graph will contain all vertices from 0 up to
+      10 (inclusive). The extra vertices will be isolated, meaning that they will not have any incident
+      edges.
+
+    .. note :: Succinct graphs are unmodifiable. Attempting to alter one will result in an error
+      being raised.
+
+    :param graph: the input graph
+    :param incoming_edges_support: full, lazy constructed or no support for incoming edges
+    :returns: a succinct graph
+    :rtype: :class:`jgrapht.types.Graph`
+    """
+    if len(graph.vertices) == 0:
+        raise ValueError("Graph with no vertices")
+
+    max_vertex = max(graph.vertices)
+    edgelist = [graph.edge_tuple(e) for e in graph.edges]
+
+    return _create_succinct_int_graph(
+        edgelist,
+        max_vertex + 1,
+        graph.type.directed,
+        incoming_edges_support=incoming_edges_support,
     )
 
 

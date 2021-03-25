@@ -41,6 +41,8 @@ from ._internals._int_graphs import (
     _create_int_dag,
     _create_sparse_int_graph,
     _copy_to_sparse_int_graph,
+    _create_succinct_int_graph,
+    _copy_to_succinct_int_graph,
     IncomingEdgesSupport,
 )
 from ._internals._anyhashableg import (
@@ -49,6 +51,8 @@ from ._internals._anyhashableg import (
     _create_anyhashable_dag,
     _create_sparse_anyhashable_graph,
     _copy_to_sparse_anyhashable_graph,
+    _create_succinct_anyhashable_graph,
+    _copy_to_succinct_anyhashable_graph,
 )
 
 #
@@ -149,8 +153,8 @@ def create_sparse_graph(
     By default this function creates graphs with integer vertices. When parameter
     `any_hashable` is true, the returned graph will be able to (a) have any
     hashable as vertices and edges, and (b) associate attributes/properties with the vertices
-    and edges. 
-    
+    and edges.
+
     The structure (topology) of a sparse graph is unmodifiable, but weights and properties can be
     modified.
 
@@ -209,6 +213,87 @@ def copy_to_sparse_graph(graph):
         return _copy_to_sparse_anyhashable_graph(graph)
     else:
         return _copy_to_sparse_int_graph(graph)
+
+
+def create_succinct_graph(
+    edgelist,
+    num_of_vertices=None,
+    directed=True,
+    incoming_edges_support=IncomingEdgesSupport.FULL_INCOMING_EDGES,
+    any_hashable=False,
+    vertex_supplier=None,
+    edge_supplier=None,
+):
+    """Create a succinct graph.
+
+    By default this function creates graphs with integer vertices. When parameter
+    `any_hashable` is true, the returned graph will be able to (a) have any
+    hashable as vertices and edges, and (b) associate attributes/properties with the vertices
+    and edges.
+
+    The structure (topology) of a succinct graph is unmodifiable, but properties can be
+    modified. The graph will be unweighted. 
+
+    .. note:: Succinct graphs support self-loops but not multiple-edges! A ValueError will be raised
+              if multiple-edges are detected.
+
+    :param edgelist: list of tuple (u,v). If `any_hashable` is false, the vertices must be integers.
+    :param num_of_vertices: number of vertices in the graph. Vertices always start from 0
+      and increase continuously. If not explicitly given and `any_hashable` is false, the edgelist
+      will be traversed in order to find out the number of vertices
+    :param directed: if True the graph will be directed, otherwise undirected
+    :param incoming_edges_support: full support, or no support for incoming edges. Only
+           valid for directed graphs. Defaults to full support. Lazy is not supported and will result in
+           full support.
+    :param any_hashable: if True then the graph will allow the use of any
+      hashable as vertices and edges instead of just integers. This also makes the graph
+      an instance of :class:`~jgrapht.types.AttributesGraph`
+    :param vertex_supplier: used only in the case that the graph allows any hashable as
+      vertices/edges. Called everytime the graph needs to create a new vertex. If not given,
+      then object instances are used.
+    :param edge_supplier: used only in the case that the graph allows any hashable as
+      vertices/edges. Called everytime the graph needs to create a new edge. If not given,
+      then object instances are used.
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.Graph`
+    """
+    if incoming_edges_support is IncomingEdgesSupport.LAZY_INCOMING_EDGES:
+        incoming_edges_support = IncomingEdgesSupport.FULL_INCOMING_EDGES
+
+    if any_hashable:
+        return _create_succinct_anyhashable_graph(
+            edgelist=edgelist,
+            directed=directed,
+            incoming_edges_support=incoming_edges_support,
+            vertex_supplier=vertex_supplier,
+            edge_supplier=edge_supplier,
+        )
+    else:
+        return _create_succinct_int_graph(
+            edgelist=edgelist,
+            num_of_vertices=num_of_vertices,
+            directed=directed,
+            incoming_edges_support=incoming_edges_support,
+        )
+
+
+def copy_to_succinct_graph(graph):
+    """Copy a graph to a succinct graph.
+
+    .. note :: Succinct graphs are unmodifiable w.r.t their structure (topology).
+       Attempting to alter one will result in an error being raised. Attributes can be modified.
+
+    .. note:: Succinct graphs support self-loops but not multiple-edges! A ValueError will be raised
+              if multiple-edges are detected.       
+
+    :param graph: the input graph
+    :returns: a succinct graph
+    :rtype: :class:`jgrapht.types.Graph`
+    """
+    if _is_anyhashable_graph(graph):
+        return _copy_to_succinct_anyhashable_graph(graph)
+    else:
+        return _copy_to_succinct_int_graph(graph)
 
 
 from . import (

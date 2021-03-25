@@ -479,158 +479,93 @@ int jgrapht_xx_generate_windmill(void *, int, int, int);
 
 int jgrapht_xx_generate_linearized_chord_diagram(void *, int, int, long long int);
 
-// graph
+// graph - create
 
 int jgrapht_ii_graph_create(int, int, int, int, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void **OUTPUT);
-
 int jgrapht_ll_graph_create(int, int, int, int, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void **OUTPUT);
-
 int jgrapht_ii_graph_sparse_create(int, int, int, void *, incoming_edges_support_t, void** OUTPUT);
+int jgrapht_ii_graph_succinct_create(int, int, void *, incoming_edges_support_t, void** OUTPUT);
+
+// graph
 
 int jgrapht_ii_graph_vertices_count(void *, int* OUTPUT);
-
 int jgrapht_ll_graph_vertices_count(void *, long long* OUTPUT);
-
 int jgrapht_ii_graph_edges_count(void *, int* OUTPUT);
-
 int jgrapht_ll_graph_edges_count(void *, long long* OUTPUT);
-
 int jgrapht_ii_graph_add_vertex(void *, int* OUTPUT);
-
 int jgrapht_ll_graph_add_vertex(void *, long long* OUTPUT);
-
 int jgrapht_ii_graph_add_given_vertex(void *, int, int *OUTPUT);
-
 int jgrapht_ll_graph_add_given_vertex(void *, long long int, int *OUTPUT);
-
 int jgrapht_ii_graph_remove_vertex(void *, int, int* OUTPUT);
-
 int jgrapht_ll_graph_remove_vertex(void *, long long int, int* OUTPUT);
-
 int jgrapht_ii_graph_contains_vertex(void *, int, int* OUTPUT);
-
 int jgrapht_ll_graph_contains_vertex(void *, long long int, int* OUTPUT);
-
 int jgrapht_ii_graph_add_edge(void *, int, int, int* OUTPUT);
-
 int jgrapht_ll_graph_add_edge(void *, long long int, long long int, long long* OUTPUT);
-
 int jgrapht_ii_graph_add_given_edge(void *, int, int, int, int* OUTPUT);
-
 int jgrapht_ll_graph_add_given_edge(void *, long long int, long long int, long long int, int* OUTPUT);
-
 int jgrapht_ii_graph_remove_edge(void *, int, int* OUTPUT);
-
 int jgrapht_ll_graph_remove_edge(void *, long long int, int* OUTPUT);
-
 int jgrapht_ii_graph_contains_edge(void *, int, int* OUTPUT);
-
 int jgrapht_ll_graph_contains_edge(void *, long long int, int* OUTPUT);
-
 int jgrapht_ii_graph_contains_edge_between(void *, int, int, int* OUTPUT);
-
 int jgrapht_ll_graph_contains_edge_between(void *, long long int, long long int, int* OUTPUT);
-
 int jgrapht_ii_graph_degree_of(void *, int, int* OUTPUT);
-
 int jgrapht_ll_graph_degree_of(void *, long long int, long long* OUTPUT);
-
 int jgrapht_ii_graph_indegree_of(void *, int, int* OUTPUT);
-
 int jgrapht_ll_graph_indegree_of(void *, long long int, long long* OUTPUT);
-
 int jgrapht_ii_graph_outdegree_of(void *, int, int* OUTPUT);
-
 int jgrapht_ll_graph_outdegree_of(void *, long long int, long long * OUTPUT);
-
 int jgrapht_ii_graph_edge_source(void *, int, int* OUTPUT);
-
 int jgrapht_ll_graph_edge_source(void *, long long int, long long* OUTPUT);
-
 int jgrapht_ii_graph_edge_target(void *, int, int* OUTPUT);
-
 int jgrapht_ll_graph_edge_target(void *, long long int, long long* OUTPUT);
-
 int jgrapht_xx_graph_is_weighted(void *, int* OUTPUT);
-
 int jgrapht_xx_graph_is_directed(void *, int* OUTPUT);
-
 int jgrapht_xx_graph_is_undirected(void *, int* OUTPUT);
-
 int jgrapht_xx_graph_is_allowing_selfloops(void *, int* OUTPUT);
-
 int jgrapht_xx_graph_is_allowing_multipleedges(void *, int* OUTPUT);
-
 int jgrapht_xx_graph_is_allowing_cycles(void *, int* OUTPUT);
-
 int jgrapht_xx_graph_is_modifiable(void *, int* OUTPUT);
-
 int jgrapht_ii_graph_get_edge_weight(void *, int, double* OUTPUT);
-
 int jgrapht_ll_graph_get_edge_weight(void *, long long int, double* OUTPUT);
-
 int jgrapht_ii_graph_set_edge_weight(void *, int, double);
-
 int jgrapht_ll_graph_set_edge_weight(void *, long long int, double);
-
 int jgrapht_xx_graph_create_all_vit(void *, void** OUTPUT);
-
 int jgrapht_xx_graph_create_all_eit(void *, void** OUTPUT);
-
 int jgrapht_ii_graph_create_between_eit(void *, int, int, void** OUTPUT);
-
 int jgrapht_ll_graph_create_between_eit(void *, long long int, long long int, void** OUTPUT);
-
 int jgrapht_ii_graph_vertex_create_eit(void *, int, void** OUTPUT);
-
 int jgrapht_ll_graph_vertex_create_eit(void *, long long int, void** OUTPUT);
-
 int jgrapht_ii_graph_vertex_create_out_eit(void *, int, void** OUTPUT);
-
 int jgrapht_ll_graph_vertex_create_out_eit(void *, long long int, void** OUTPUT);
-
 int jgrapht_ii_graph_vertex_create_in_eit(void *, int, void** OUTPUT);
-
 int jgrapht_ll_graph_vertex_create_in_eit(void *, long long int, void** OUTPUT);
 
+// graph wrappers
+
 int jgrapht_xx_graph_as_undirected(void *, void** OUTPUT);
-
 int jgrapht_xx_graph_as_unmodifiable(void *, void** OUTPUT);
-
 int jgrapht_xx_graph_as_unweighted(void *, void** OUTPUT);
-
 int jgrapht_xx_graph_as_edgereversed(void *, void** OUTPUT);
-
 int jgrapht_ii_graph_as_weighted(void *, void *LONG_TO_FPTR, int, int, void** OUTPUT);
-
 int jgrapht_ll_graph_as_weighted(void *, void *LONG_TO_FPTR, int, int, void** OUTPUT);
-
 int jgrapht_ii_graph_as_masked_subgraph(void *, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
-
 int jgrapht_ll_graph_as_masked_subgraph(void *, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
-
 int jgrapht_ii_graph_as_subgraph(void *, void *, void *, void** OUTPUT);
-
 int jgrapht_ll_graph_as_subgraph(void *, void *, void *, void** OUTPUT);
-
 int jgrapht_ii_graph_as_graph_union(void *, void *, void *LONG_TO_FPTR, void** OUTPUT);
-
 int jgrapht_ll_graph_as_graph_union(void *, void *, void *LONG_TO_FPTR, void** OUTPUT);
 
+//  dag
+
 int jgrapht_ii_graph_dag_create(int, int, void** OUTPUT);
-
 int jgrapht_ll_graph_dag_create(int, int, void** OUTPUT);
-
 int jgrapht_ll_graph_dag_create_with_suppliers(int, int, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void **OUTPUT);
-
 int jgrapht_xx_graph_dag_topological_it(void *, void** OUTPUT);
-
 int jgrapht_ii_graph_dag_vertex_descendants(void *, int, void** OUTPUT);
-
 int jgrapht_ll_graph_dag_vertex_descendants(void *, long long int, void** OUTPUT);
-
 int jgrapht_ii_graph_dag_vertex_ancestors(void *, int, void** OUTPUT);
-
 int jgrapht_ll_graph_dag_vertex_ancestors(void *, long long int, void** OUTPUT);
 
 // graph metrics

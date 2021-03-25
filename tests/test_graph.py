@@ -4,6 +4,8 @@ from jgrapht import (
     create_graph,
     create_sparse_graph,
     copy_to_sparse_graph,
+    create_succinct_graph,
+    copy_to_succinct_graph,
     IncomingEdgesSupport,
 )
 
@@ -708,3 +710,88 @@ def test_graph_sparse_lazy_incoming():
     assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
 
     assert set(g.inedges_of(3)) == { 2, 3, 4 }
+
+
+def test_graph_copy_to_succinct():
+
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+    )
+
+    assert not g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
+
+    assert g.add_vertex(0) == 0
+    v1 = 0
+    assert g.add_vertex(1) == 1
+    v2 = 1
+    assert g.add_vertex(2) == 2
+    v3 = 2
+    assert g.add_vertex(3) == 3
+    v4 = 3
+    assert g.add_vertex(4) == 4
+    v5 = 4
+
+    assert g.vertices, set([0, 1, 2, 3, 4])
+
+    g.add_edge(v1, v2)
+    g.add_edge(v2, v3)
+    g.add_edge(v1, v4)
+    g.add_edge(v1, v1)
+    g.add_edge(v4, v5)
+    g.add_edge(v5, v1)
+    g.add_edge(v5, v2)
+
+    assert len(g.edges) == 7
+
+    gs = copy_to_succinct_graph(g)
+
+    assert gs.vertices == set([0, 1, 2, 3, 4])
+    assert len(gs.edges) == 7
+
+
+def test_graph_succinct():
+
+    edges = [(0,1), (1,2), (0,3), (0, 4), (3,4), (4,0), (4,2), (3,3)]
+
+    gs = create_succinct_graph(edges, num_of_vertices=5, directed=True)
+
+    assert {gs.opposite(e, 4) for e in gs.inedges_of(4)} == {0, 3}
+    assert {gs.opposite(e, 0) for e in gs.outedges_of(0)} == {1, 4, 3}
+
+    assert gs.vertices == set([0, 1, 2, 3, 4])
+    assert len(gs.edges) == 8
+
+
+def test_graph_succinct_no_incoming():
+
+    edges = [(0,1), (1,2), (0,3), (0, 4), (3,4), (4,0), (4,2), (3,3)]
+
+    gs = create_succinct_graph(edges, num_of_vertices=5, directed=True, incoming_edges_support=IncomingEdgesSupport.NO_INCOMING_EDGES)
+
+    assert {gs.opposite(e, 0) for e in gs.outedges_of(0)} == {1, 4, 3}
+
+    assert gs.vertices == set([0, 1, 2, 3, 4])
+    assert len(gs.edges) == 8
+
+    with pytest.raises(ValueError):
+        gs.inedges_of(4)
+
+
+def test_hashable_graph_succinct():
+
+    edges = [("0","1"), ("1",2), ("0",3), ("0", 4), (3,4), (4,"0"), (4,2), (3,3)]
+
+    gs = create_succinct_graph(edges, num_of_vertices=5, directed=True, any_hashable=True)
+
+    assert {gs.opposite(e, 4) for e in gs.inedges_of(4)} == {"0", 3}
+    assert {gs.opposite(e, "0") for e in gs.outedges_of("0")} == {"1", 4, 3}
+
+    assert gs.vertices == set(["0", "1", 2, 3, 4])
+    assert len(gs.edges) == 8
+

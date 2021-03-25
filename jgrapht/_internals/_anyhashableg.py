@@ -17,9 +17,10 @@ from ..types import (
 from ..utils import IntegerSupplier
 
 from ._int_graphs import (
-    _create_int_graph as _create_int_graph,
-    _create_int_dag as _create_int_dag,
-    _create_sparse_int_graph as _create_sparse_int_graph,
+    _create_int_graph,
+    _create_int_dag,
+    _create_sparse_int_graph,
+    _create_succinct_int_graph,
 )
 from ._views import (
     _ListenableView,
@@ -905,6 +906,8 @@ def _create_sparse_anyhashable_graph(
     :param directed: whether the graph will be directed or undirected
     :param weighted: whether the graph will be weighted or not
     :param incoming_edges_support: full, lazy constructed or no support for incoming edges
+    :param vertex_supplier vertex supplier for the resulting anyhashable graph
+    :param edge_supplier edge supplier for the resulting anyhashable graph
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
@@ -925,7 +928,7 @@ def _create_sparse_anyhashable_graph(
         num_of_vertices=len(vertex_hash_to_id),
         directed=directed,
         weighted=weighted,
-        incoming_edges_support=incoming_edges_support
+        incoming_edges_support=incoming_edges_support,
     )
     g = _AnyHashableGraph(
         sparse_int_graph, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
@@ -945,13 +948,17 @@ def _create_sparse_anyhashable_graph(
     return g
 
 
-def _copy_to_sparse_anyhashable_graph(graph):
+def _copy_to_sparse_anyhashable_graph(
+    graph,
+    incoming_edges_support=IncomingEdgesSupport.FULL_INCOMING_EDGES,
+):
     """Copy an any-hashable graph to a sparse any-hashable graph.
 
     .. note :: Sparse graphs are unmodifiable. Attempting to alter one will result in
       an error being raised. Attributes and edge weights can be modified.
 
     :param graph: the input graph
+    :param incoming_edges_support: full, lazy constructed or no support for incoming edges
     :returns: a sparse graph
     :rtype: :class:`jgrapht.types.Graph`
     """
@@ -976,6 +983,7 @@ def _copy_to_sparse_anyhashable_graph(graph):
         num_of_vertices=len(vertex_hash_to_id),
         directed=graph.type.directed,
         weighted=graph.type.weighted,
+        incoming_edges_support=incoming_edges_support,
     )
     sparse = _AnyHashableGraph(
         sparse_int_graph,
@@ -1001,3 +1009,120 @@ def _copy_to_sparse_anyhashable_graph(graph):
         sparse.graph_attrs[k] = v
 
     return sparse
+
+
+def _create_succinct_anyhashable_graph(
+    edgelist,
+    directed=True,
+    incoming_edges_support=IncomingEdgesSupport.FULL_INCOMING_EDGES,
+    vertex_supplier=None,
+    edge_supplier=None,
+):
+    """Create a succinct any-hashable graph.
+
+    A succinct graph is a very compact graph representation close to the theoretical
+    lower-bound. Their drawback is that they assume a continuous range of vertices
+    and edges and that they are not modifiable after construction.
+
+    .. note :: Succinct graphs cannot be modified after construction. They are best suited
+       for executing algorithms which do not need to modify the graph after loading.
+
+    Succinct graphs support self-loops but not multiple-edges. They do not support edge weights.
+
+    :param edgelist: list of tuple (u,v)
+    :param directed: whether the graph will be directed or undirected
+    :param incoming_edges_support: full, lazy constructed or no support for incoming edges
+    :param vertex_supplier vertex supplier for the resulting anyhashable graph
+    :param edge_supplier edge supplier for the resulting anyhashable graph
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.Graph`
+    """
+    # Transform edge list from hashable to ints
+    next_int = IntegerSupplier()
+    vertex_hash_to_id = defaultdict(lambda: next_int())
+    int_edgelist = list()
+    for v, u, *w in edgelist:
+        int_edgelist.append((vertex_hash_to_id[v], vertex_hash_to_id[u]))
+
+    # Create graph
+    succinct_int_graph = _create_succinct_int_graph(
+        int_edgelist,
+        num_of_vertices=len(vertex_hash_to_id),
+        directed=directed,
+        incoming_edges_support=incoming_edges_support,
+    )
+    g = _AnyHashableGraph(
+        succinct_int_graph, vertex_supplier=vertex_supplier, edge_supplier=edge_supplier
+    )
+
+    # Record mapping of existing vertices
+    for vhash, vid in vertex_hash_to_id.items():
+        g._vertex_hash_to_id[vhash] = vid
+        g._vertex_id_to_hash[vid] = vhash
+
+    # Record mapping of existing edges
+    for eid in range(0, len(int_edgelist)):
+        ehash = g._edge_supplier()
+        g._edge_hash_to_id[ehash] = eid
+        g._edge_id_to_hash[eid] = ehash
+
+    return g
+
+
+def _copy_to_succinct_anyhashable_graph(
+    graph,
+    incoming_edges_support=IncomingEdgesSupport.FULL_INCOMING_EDGES,
+):
+    """Copy an any-hashable graph to a succinct any-hashable graph.
+
+    .. note :: Succinct graphs are unmodifiable. Attempting to alter one will result in
+      an error being raised. Attributes and edge weights can be modified.
+
+    :param graph: the input graph
+    :param incoming_edges_support: full, lazy constructed or no support for incoming edges
+    :returns: a sparse graph
+    :rtype: :class:`jgrapht.types.Graph`
+    """
+    if len(graph.vertices) == 0:
+        raise ValueError("Graph with no vertices")
+
+    # transform edge list from hashable to ints
+    next_int = IntegerSupplier()
+    vertex_hash_to_id = defaultdict(lambda: next_int())
+    int_edgelist = list()
+    edgelist = [graph.edge_tuple(e) for e in graph.edges]
+    for v, u, *w in edgelist:
+        int_edgelist.append((vertex_hash_to_id[v], vertex_hash_to_id[u]))
+
+    # create graph
+    succinct_int_graph = _create_succinct_int_graph(
+        int_edgelist,
+        num_of_vertices=len(vertex_hash_to_id),
+        directed=graph.type.directed,
+        weighted=graph.type.weighted,
+        incoming_edges_support=incoming_edges_support,
+    )
+    succinct = _AnyHashableGraph(
+        succinct_int_graph,
+        vertex_supplier=graph._vertex_supplier,
+        edge_supplier=graph._edge_supplier,
+    )
+
+    # record mapping of existing vertices and copy attributes
+    for vhash, vid in vertex_hash_to_id.items():
+        succinct._vertex_hash_to_id[vhash] = vid
+        succinct._vertex_id_to_hash[vid] = vhash
+        for k, v in graph.vertex_attrs[vhash].items():
+            succinct.vertex_attrs[vhash][k] = v
+
+    # record mapping of existing edges and copy attributes
+    for ehash, eid in zip(graph.edges, range(0, len(graph.edges))):
+        succinct._edge_hash_to_id[ehash] = eid
+        succinct._edge_id_to_hash[eid] = ehash
+        for k, v in graph.edge_attrs[ehash].items():
+            succinct.edge_attrs[ehash][k] = v
+
+    for k, v in graph.graph_attrs.items():
+        succinct.graph_attrs[k] = v
+
+    return succinct

@@ -807,7 +807,7 @@ int jgrapht_xx_generate_linearized_chord_diagram(void *g, int n, int m, long lon
     return jgrapht_capi_xx_generate_linearized_chord_diagram(thread, g, n, m, seed);
 }
 
-// graph
+// graph - create
 
 int jgrapht_ii_graph_create(int directed, int allowing_self_loops, int allowing_multiple_edges, int weighted, void* vertex_supplier, void* edge_supplier, void** res) { 
     LAZY_THREAD_ATTACH
@@ -823,6 +823,13 @@ int jgrapht_ii_graph_sparse_create(int directed, int weighted, int num_vertices,
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ii_graph_sparse_create(thread, directed, weighted, num_vertices, edges, ies, res);
 }
+
+int jgrapht_ii_graph_succinct_create(int directed, int num_vertices, void *edges, incoming_edges_support_t ies, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_graph_succinct_create(thread, directed, num_vertices, edges, ies, res);
+}
+
+// graph
 
 int jgrapht_ii_graph_vertices_count(void *g, int* res) { 
     LAZY_THREAD_ATTACH
@@ -1089,6 +1096,8 @@ int jgrapht_ll_graph_vertex_create_in_eit(void *g, long long int v, void** res) 
     return jgrapht_capi_ll_graph_vertex_create_in_eit(thread, g, v, res);
 }
 
+// graph - wrappers
+
 int jgrapht_xx_graph_as_undirected(void *g, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_xx_graph_as_undirected(thread, g, res);
@@ -1148,6 +1157,8 @@ int jgrapht_ll_graph_as_graph_union(void *g1, void *g2, void *weight_combiner_fu
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ll_graph_as_graph_union(thread, g1, g2, weight_combiner_function, res);
 }
+
+// dag
 
 int jgrapht_ii_graph_dag_create(int allowing_multiple_edges, int weighted, void** res) { 
     LAZY_THREAD_ATTACH
