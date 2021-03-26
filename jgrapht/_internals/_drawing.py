@@ -19,19 +19,19 @@ class _JGraphTIntegerLayoutModel2D(_HandleWrapper, LayoutModel2D):
         return _box2d_class(*res)
 
     def get_vertex_location(self, vertex):
-        res = backend.jgrapht_ii_drawing_layout_model_2d_get_vertex(self.handle, vertex)
+        res = backend.jgrapht_ix_drawing_layout_model_2d_get_vertex(self.handle, vertex)
         return _point2d_class(*res)
 
     def set_vertex_location(self, vertex, point_2d):
-        backend.jgrapht_ii_drawing_layout_model_2d_put_vertex(
+        backend.jgrapht_ix_drawing_layout_model_2d_put_vertex(
             self.handle, vertex, *point_2d
         )
 
     def is_fixed(self, vertex):
-        return backend.jgrapht_ii_drawing_layout_model_2d_get_fixed(self.handle, vertex)
+        return backend.jgrapht_ix_drawing_layout_model_2d_get_fixed(self.handle, vertex)
 
     def set_fixed(self, vertex, fixed):
-        backend.jgrapht_ii_drawing_layout_model_2d_set_fixed(self.handle, vertex, fixed)
+        backend.jgrapht_ix_drawing_layout_model_2d_set_fixed(self.handle, vertex, fixed)
 
     def __repr__(self):
         return "_JGraphTIntegerLayoutModel2D(%r)" % self._handle

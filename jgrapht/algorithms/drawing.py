@@ -73,7 +73,7 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
     ) = _create_wrapped_int_vertex_comparator_callback(actual_vertex_comparator_cb)
 
     custom = [radius, vertex_comparator_f_ptr]
-    _backend.jgrapht_ii_drawing_exec_circular_layout_2d(
+    _backend.jgrapht_ix_drawing_exec_circular_layout_2d(
         graph.handle, model.handle, *custom
     )
     return model
@@ -219,7 +219,7 @@ def two_layered_bipartite_layout_2d(
         vertex_comparator_f_ptr = 0
 
     custom = [partition_handle, vertex_comparator_f_ptr, vertical]
-    _backend.jgrapht_ii_drawing_exec_two_layered_bipartite_layout_2d(
+    _backend.jgrapht_ix_drawing_exec_two_layered_bipartite_layout_2d(
         graph.handle, model.handle, *custom
     )
     return model
@@ -286,7 +286,7 @@ def barycenter_greedy_two_layered_bipartite_layout_2d(
         vertex_comparator_f_ptr = 0
 
     custom = [partition_handle, vertex_comparator_f_ptr, vertical]
-    _backend.jgrapht_ii_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(
+    _backend.jgrapht_ix_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(
         graph.handle, model.handle, *custom
     )
     return model
@@ -350,7 +350,7 @@ def median_greedy_two_layered_bipartite_layout_2d(
         vertex_comparator_f_ptr = 0
 
     custom = [partition_handle, vertex_comparator_f_ptr, vertical]
-    _backend.jgrapht_ii_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(
+    _backend.jgrapht_ix_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(
         graph.handle, model.handle, *custom
     )
     return model

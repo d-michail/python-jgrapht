@@ -19,7 +19,7 @@ def bfs_traversal(graph, start_vertex=None):
         it = _backend.jgrapht_xx_traverse_create_bfs_from_all_vertices_vit(graph.handle)
     else:
         start_vertex = _unwrap_vertex(graph, start_vertex)
-        it = _backend.jgrapht_ii_traverse_create_bfs_from_vertex_vit(
+        it = _backend.jgrapht_ix_traverse_create_bfs_from_vertex_vit(
             graph.handle, start_vertex
         )
     return _wrap_vertex_iterator(graph, it)
@@ -58,7 +58,7 @@ def dfs_traversal(graph, start_vertex=None):
         it = _backend.jgrapht_xx_traverse_create_dfs_from_all_vertices_vit(graph.handle)
     else:
         start_vertex = _unwrap_vertex(graph, start_vertex)
-        it = _backend.jgrapht_ii_traverse_create_dfs_from_vertex_vit(
+        it = _backend.jgrapht_ix_traverse_create_dfs_from_vertex_vit(
             graph.handle, start_vertex
         )
     return _wrap_vertex_iterator(graph, it)
@@ -101,7 +101,7 @@ def random_walk_traversal(
 
     start_vertex = _unwrap_vertex(graph, start_vertex)
 
-    it = _backend.jgrapht_ii_traverse_create_custom_random_walk_from_vertex_vit(
+    it = _backend.jgrapht_ix_traverse_create_custom_random_walk_from_vertex_vit(
         graph.handle, start_vertex, weighted, max_steps, seed
     )
     return _wrap_vertex_iterator(graph, it)
@@ -157,11 +157,11 @@ def closest_first_traversal(graph, start_vertex, radius=None):
     """
     start_vertex = _unwrap_vertex(graph, start_vertex)
     if radius is None:
-        it = _backend.jgrapht_ii_traverse_create_closest_first_from_vertex_vit(
+        it = _backend.jgrapht_ix_traverse_create_closest_first_from_vertex_vit(
             graph.handle, start_vertex
         )
     else:
-        it = _backend.jgrapht_ii_traverse_create_custom_closest_first_from_vertex_vit(
+        it = _backend.jgrapht_ix_traverse_create_custom_closest_first_from_vertex_vit(
             graph.handle, start_vertex, radius
         )
     return _wrap_vertex_iterator(graph, it)

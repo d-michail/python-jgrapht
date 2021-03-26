@@ -149,7 +149,7 @@ class _WeightedView(_JGraphTIntegerGraph):
         self._edge_weight_cb_fptr, self._edge_weight_cb = _create_wrapped_callback(
             edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_int)
         )
-        res = backend.jgrapht_ii_graph_as_weighted(
+        res = backend.jgrapht_xi_graph_as_weighted(
             graph.handle,
             self._edge_weight_cb_fptr,
             cache_weights,
@@ -190,7 +190,7 @@ class _GraphUnion(_JGraphTIntegerGraph):
         )
 
         # create graph union at the backend
-        res = backend.jgrapht_ii_graph_as_graph_union(
+        res = backend.jgrapht_xx_graph_as_graph_union(
             graph1.handle, graph2.handle, self._edge_weight_combiner_cb_fptr
         )
 

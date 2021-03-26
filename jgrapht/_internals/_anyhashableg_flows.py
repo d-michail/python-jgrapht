@@ -89,7 +89,7 @@ class _AnyHashableGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
         (
             cut_value,
             cut_source_partition_handle,
-        ) = _backend.jgrapht_ii_cut_gomoryhu_min_st_cut(self.handle, s, t)
+        ) = _backend.jgrapht_ix_cut_gomoryhu_min_st_cut(self.handle, s, t)
         return _AnyHashableGraphCut(self._graph, cut_value, cut_source_partition_handle)
 
     def __repr__(self):
@@ -133,7 +133,7 @@ class _AnyHashableGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
     def max_st_flow_value(self, s, t):
         s = _vertex_anyhashableg_to_g(self._graph, s)
         t = _vertex_anyhashableg_to_g(self._graph, t)
-        return _backend.jgrapht_ii_equivalentflowtree_max_st_flow(self.handle, s, t)
+        return _backend.jgrapht_ix_equivalentflowtree_max_st_flow(self.handle, s, t)
 
     def __repr__(self):
         return "_AnyHashableGraphEquivalentFlowTree(%r)" % self._handle

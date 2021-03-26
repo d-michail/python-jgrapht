@@ -33,7 +33,7 @@ class _AnyHashableGraphGraphMapping(_HandleWrapper, GraphMapping):
         (
             exists,
             other,
-        ) = backend.jgrapht_ii_isomorphism_graph_mapping_vertex_correspondence(
+        ) = backend.jgrapht_ix_isomorphism_graph_mapping_vertex_correspondence(
             self._handle, vertex, forward
         )
         if not exists:
@@ -52,7 +52,7 @@ class _AnyHashableGraphGraphMapping(_HandleWrapper, GraphMapping):
         (
             exists,
             other,
-        ) = backend.jgrapht_ii_isomorphism_graph_mapping_edge_correspondence(
+        ) = backend.jgrapht_xi_isomorphism_graph_mapping_edge_correspondence(
             self._handle, edge, forward
         )
         if not exists:

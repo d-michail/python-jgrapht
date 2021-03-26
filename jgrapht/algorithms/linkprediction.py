@@ -5,7 +5,7 @@ from .._internals._results import (
 
 
 def _linkprediction_alg(name, graph, u, v):
-    alg_method = getattr(_backend, "jgrapht_ii_link_prediction_exec_{}".format(name))
+    alg_method = getattr(_backend, "jgrapht_ix_link_prediction_exec_{}".format(name))
     score = alg_method(
         graph.handle, _unwrap_vertex(graph, u), _unwrap_vertex(graph, v)
     )

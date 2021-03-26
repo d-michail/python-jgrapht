@@ -25,7 +25,7 @@ import time
 
 
 def _sp_singlesource_alg(name, graph, source_vertex, *args):
-    alg_method_name = "jgrapht_ii_sp_exec_" + name
+    alg_method_name = "jgrapht_ix_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _unwrap_vertex(graph, source_vertex), *args)
@@ -33,7 +33,7 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
 
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
-    alg_method_name = "jgrapht_ii_sp_exec_" + name
+    alg_method_name = "jgrapht_ix_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
@@ -56,7 +56,7 @@ def _sp_allpairs_alg(name, graph):
 
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
-    alg_method_name = "jgrapht_ii_sp_exec_" + name
+    alg_method_name = "jgrapht_ix_sp_exec_" + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
@@ -489,7 +489,7 @@ def contraction_hierarchies_dijkstra(
     if ch is None:
         ch = precompute_contraction_hierarchies(graph)
 
-    handle = _backend.jgrapht_ii_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
+    handle = _backend.jgrapht_ix_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
         ch.handle,
         _vertex_anyhashableg_to_g(graph, source_vertex),
         _vertex_anyhashableg_to_g(graph, target_vertex),

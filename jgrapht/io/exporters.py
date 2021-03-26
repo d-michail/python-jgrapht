@@ -11,7 +11,7 @@ from .._internals._anyhashableg import _is_anyhashable_graph
 
 def _export_to_file(name, graph, filename, *args):
     if name == "dimacs":
-        alg_method_name = "jgrapht_ii_export_file_" + name
+        alg_method_name = "jgrapht_ix_export_file_" + name
     else:
         alg_method_name = "jgrapht_xx_export_file_" + name
     alg_method = getattr(_backend, alg_method_name)
@@ -20,7 +20,7 @@ def _export_to_file(name, graph, filename, *args):
 
 def _export_to_string(name, graph, *args):
     if name == "dimacs":
-        alg_method_name = "jgrapht_ii_export_string_" + name
+        alg_method_name = "jgrapht_ix_export_string_" + name
     else:
         alg_method_name = "jgrapht_xx_export_string_" + name
     alg_method = getattr(_backend, alg_method_name)

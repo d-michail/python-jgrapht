@@ -18,7 +18,7 @@ class _JGraphTIntegerGraphMapping(_HandleWrapper, GraphMapping):
         (
             exists,
             other,
-        ) = backend.jgrapht_ii_isomorphism_graph_mapping_vertex_correspondence(
+        ) = backend.jgrapht_ix_isomorphism_graph_mapping_vertex_correspondence(
             self._handle, vertex, forward
         )
         return other if exists else None
@@ -27,7 +27,7 @@ class _JGraphTIntegerGraphMapping(_HandleWrapper, GraphMapping):
         (
             exists,
             other,
-        ) = backend.jgrapht_ii_isomorphism_graph_mapping_edge_correspondence(
+        ) = backend.jgrapht_xi_isomorphism_graph_mapping_edge_correspondence(
             self._handle, edge, forward
         )
         return other if exists else None

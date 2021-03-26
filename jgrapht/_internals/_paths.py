@@ -71,7 +71,7 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
                 start_vertex,
                 end_vertex,
                 eit,
-            ) = backend.jgrapht_ii_handles_get_graphpath(self._handle)
+            ) = backend.jgrapht_ix_handles_get_graphpath(self._handle)
             self._edges = list(_JGraphTIntegerIterator(eit))
         elif _is_long_graph(self._graph):
             (
@@ -79,7 +79,7 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
                 start_vertex,
                 end_vertex,
                 eit,
-            ) = backend.jgrapht_ll_handles_get_graphpath(self._handle)
+            ) = backend.jgrapht_lx_handles_get_graphpath(self._handle)
             self._edges = list(_JGraphTLongIterator(eit))
         else:
             raise TypeError("Not supported graph type")
@@ -130,11 +130,11 @@ class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
         :returns: a path from the source to the target vertex.
         """
         if _is_long_graph(self._graph):
-            gp = backend.jgrapht_ll_sp_singlesource_get_path_to_vertex(
+            gp = backend.jgrapht_lx_sp_singlesource_get_path_to_vertex(
                 self._handle, target_vertex
             )
         elif _is_int_graph(self._graph):
-            gp = backend.jgrapht_ii_sp_singlesource_get_path_to_vertex(
+            gp = backend.jgrapht_ix_sp_singlesource_get_path_to_vertex(
                 self._handle, target_vertex
             )
         else:
@@ -154,11 +154,11 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
 
     def get_path(self, source_vertex, target_vertex):
         if _is_long_graph(self._graph):
-            gp = backend.jgrapht_ll_sp_allpairs_get_path_between_vertices(
+            gp = backend.jgrapht_lx_sp_allpairs_get_path_between_vertices(
                 self._handle, source_vertex, target_vertex
             )
         elif _is_int_graph(self._graph):
-            gp = backend.jgrapht_ii_sp_allpairs_get_path_between_vertices(
+            gp = backend.jgrapht_ix_sp_allpairs_get_path_between_vertices(
                 self._handle, source_vertex, target_vertex
             )
         else:
@@ -167,11 +167,11 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
 
     def get_paths_from(self, source_vertex):
         if _is_long_graph(self._graph):
-            singlesource = backend.jgrapht_ll_sp_allpairs_get_singlesource_from_vertex(
+            singlesource = backend.jgrapht_lx_sp_allpairs_get_singlesource_from_vertex(
                 self._handle, source_vertex
             )
         elif _is_int_graph(self._graph):
-            singlesource = backend.jgrapht_ii_sp_allpairs_get_singlesource_from_vertex(
+            singlesource = backend.jgrapht_ix_sp_allpairs_get_singlesource_from_vertex(
                 self._handle, source_vertex
             )
         else:
@@ -201,11 +201,11 @@ class _JGraphTMultiObjectiveSingleSourcePaths(
 
     def get_paths(self, target_vertex):
         if _is_long_graph(self._graph):
-            gp_it = backend.jgrapht_ll_multisp_multiobjectivesinglesource_get_paths_to_vertex(
+            gp_it = backend.jgrapht_lx_multisp_multiobjectivesinglesource_get_paths_to_vertex(
                 self._handle, target_vertex
             )
         elif _is_int_graph(self._graph):
-            gp_it = backend.jgrapht_ii_multisp_multiobjectivesinglesource_get_paths_to_vertex(
+            gp_it = backend.jgrapht_ix_multisp_multiobjectivesinglesource_get_paths_to_vertex(
                 self._handle, target_vertex
             )
         else:
@@ -240,7 +240,7 @@ class _JGraphTContractionHierarchiesManyToMany(_HandleWrapper, ManyToManyPaths):
                 self._handle, source_vertex, target_vertex
             )
         elif _is_int_graph(self._graph):
-            gp = backend.jgrapht_ii_sp_manytomany_get_path_between_vertices(
+            gp = backend.jgrapht_ix_sp_manytomany_get_path_between_vertices(
                 self._handle, source_vertex, target_vertex
             )
         else:

@@ -62,7 +62,7 @@ def katz_centrality(
     :returns: a dictionary from vertices to double values
     """
     custom = [damping_factor, 0, max_iterations, tolerance]
-    scores_handle = _backend.jgrapht_ii_scoring_exec_custom_katz_centrality(
+    scores_handle = _backend.jgrapht_ix_scoring_exec_custom_katz_centrality(
         graph.handle, *custom
     )
     return _wrap_vertex_double_map(graph, scores_handle)

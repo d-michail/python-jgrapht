@@ -169,7 +169,7 @@ class _JGraphTIntegerGomoryHuTree(_HandleWrapper, GomoryHuTree):
         (
             cut_value,
             cut_source_partition_handle,
-        ) = _backend.jgrapht_ii_cut_gomoryhu_min_st_cut(self.handle, s, t)
+        ) = _backend.jgrapht_ix_cut_gomoryhu_min_st_cut(self.handle, s, t)
         return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)
 
     def __repr__(self):
@@ -217,7 +217,7 @@ class _JGraphTIntegerEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         return _JGraphTIntegerGraph(tree_handle)
 
     def max_st_flow_value(self, s, t):
-        return _backend.jgrapht_ii_equivalentflowtree_max_st_flow(self.handle, s, t)
+        return _backend.jgrapht_ix_equivalentflowtree_max_st_flow(self.handle, s, t)
 
     def __repr__(self):
         return "_JGraphTIntegerEquivalentFlowTree(%r)" % self._handle

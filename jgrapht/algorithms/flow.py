@@ -9,7 +9,7 @@ from .._internals._results import (
 
 def _maxflow_alg(name, graph, source, sink, *args):
 
-    alg_method = getattr(_backend, "jgrapht_ii_maxflow_exec_" + name)
+    alg_method = getattr(_backend, "jgrapht_ix_maxflow_exec_" + name)
 
     flow_value, flow_handle, cut_source_partition_handle = alg_method(
         graph.handle, _unwrap_vertex(graph, source), _unwrap_vertex(graph, sink), *args

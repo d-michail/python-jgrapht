@@ -14,7 +14,7 @@ class _JGraphTIntegerPlanarEmbedding(_HandleWrapper, PlanarEmbedding):
         super().__init__(handle=handle, **kwargs)
 
     def edges_around(self, vertex):
-        res = backend.jgrapht_ii_planarity_embedding_edges_around_vertex(
+        res = backend.jgrapht_ix_planarity_embedding_edges_around_vertex(
             self._handle, vertex
         )
         return list(_JGraphTIntegerIterator(res))
@@ -30,7 +30,7 @@ class _JGraphTLongPlanarEmbedding(_HandleWrapper, PlanarEmbedding):
         super().__init__(handle=handle, **kwargs)
 
     def edges_around(self, vertex):
-        res = backend.jgrapht_ll_planarity_embedding_edges_around_vertex(
+        res = backend.jgrapht_lx_planarity_embedding_edges_around_vertex(
             self._handle, vertex
         )
         return list(_JGraphTLongIterator(res))
