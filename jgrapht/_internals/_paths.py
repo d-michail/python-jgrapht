@@ -236,7 +236,7 @@ class _JGraphTContractionHierarchiesManyToMany(_HandleWrapper, ManyToManyPaths):
 
     def get_path(self, source_vertex, target_vertex):
         if _is_long_graph(self._graph):
-            gp = backend.jgrapht_ll_sp_manytomany_get_path_between_vertices(
+            gp = backend.jgrapht_lx_sp_manytomany_get_path_between_vertices(
                 self._handle, source_vertex, target_vertex
             )
         elif _is_int_graph(self._graph):

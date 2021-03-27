@@ -198,7 +198,7 @@ class _JGraphTLongGomoryHuTree(_HandleWrapper, GomoryHuTree):
         (
             cut_value,
             cut_source_partition_handle,
-        ) = _backend.jgrapht_ll_cut_gomoryhu_min_st_cut(self.handle, s, t)
+        ) = _backend.jgrapht_lx_cut_gomoryhu_min_st_cut(self.handle, s, t)
         return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)
 
     def __repr__(self):
@@ -235,7 +235,7 @@ class _JGraphTLongEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         return _JGraphTLongGraph(tree_handle)
 
     def max_st_flow_value(self, s, t):
-        return _backend.jgrapht_ll_equivalentflowtree_max_st_flow(self.handle, s, t)
+        return _backend.jgrapht_lx_equivalentflowtree_max_st_flow(self.handle, s, t)
 
     def __repr__(self):
         return "_JGraphTLongEquivalentFlowTree(%r)" % self._handle
