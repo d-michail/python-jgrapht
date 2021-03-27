@@ -403,7 +403,7 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
                 return False
             # important to do both checks here, as some views might share
             # the _edge_hash_to_id dictionary
-            return backend.jgrapht_ii_graph_contains_edge(self._handle, e)
+            return backend.jgrapht_xi_graph_contains_edge(self._handle, e)
 
         def __repr__(self):
             return "_AnyHashableGraphEdgeSet(%r)" % self._handle

@@ -911,24 +911,24 @@ int jgrapht_ll_graph_add_given_edge(void *g, long long int u, long long int v, l
     return jgrapht_capi_ll_graph_add_given_edge(thread, g, u, v, edge, res);
 }
 
-int jgrapht_ii_graph_remove_edge(void *g, int e, int* res) { 
+int jgrapht_xi_graph_remove_edge(void *g, int e, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_graph_remove_edge(thread, g, e, res);
+    return jgrapht_capi_xi_graph_remove_edge(thread, g, e, res);
 }
 
-int jgrapht_ll_graph_remove_edge(void *g, long long int e, int* res) { 
+int jgrapht_xl_graph_remove_edge(void *g, long long int e, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_graph_remove_edge(thread, g, e, res);
+    return jgrapht_capi_xl_graph_remove_edge(thread, g, e, res);
 }
 
-int jgrapht_ii_graph_contains_edge(void *g, int e, int* res) { 
+int jgrapht_xi_graph_contains_edge(void *g, int e, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_graph_contains_edge(thread, g, e, res);
+    return jgrapht_capi_xi_graph_contains_edge(thread, g, e, res);
 }
 
-int jgrapht_ll_graph_contains_edge(void *g, long long int e, int* res) { 
+int jgrapht_xl_graph_contains_edge(void *g, long long int e, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_graph_contains_edge(thread, g, e, res);
+    return jgrapht_capi_xl_graph_contains_edge(thread, g, e, res);
 }
 
 int jgrapht_ix_graph_contains_edge_between(void *g, int u, int v, int* res) { 

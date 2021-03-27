@@ -74,10 +74,10 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph):
     def remove_edge(self, e):
         if e is None:
             raise ValueError("Edge cannot be None")
-        return backend.jgrapht_ii_graph_remove_edge(self._handle, e)
+        return backend.jgrapht_xi_graph_remove_edge(self._handle, e)
 
     def contains_edge(self, e):
-        return backend.jgrapht_ii_graph_contains_edge(self._handle, e)
+        return backend.jgrapht_xi_graph_contains_edge(self._handle, e)
 
     def contains_edge_between(self, u, v):
         return backend.jgrapht_ix_graph_contains_edge_between(self._handle, u, v)
@@ -179,7 +179,7 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph):
             return backend.jgrapht_ix_graph_edges_count(self._handle)
 
         def __contains__(self, v):
-            return backend.jgrapht_ix_graph_contains_edge(self._handle, v)
+            return backend.jgrapht_xi_graph_contains_edge(self._handle, v)
 
         def __repr__(self):
             return "_JGraphTIntegerGraph-EdgeSet(%r)" % self._handle

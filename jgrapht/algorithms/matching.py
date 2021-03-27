@@ -3,7 +3,7 @@ from .._internals._results import _wrap_edge_set, _build_vertex_set
 
 
 def greedy_max_cardinality(graph, sort=False):
-    """The greedy algorithm for maximum cardinality matching in arbitrary graphs. 
+    r"""The greedy algorithm for maximum cardinality matching in arbitrary graphs. 
 
     The algorithm can run in two modes: sorted or unsorted. When unsorted, the matching
     is obtained by iterating through the edges and adding an edge if it doesn't conflict
@@ -155,7 +155,7 @@ def greedy_max_weight(graph, normalize_edge_costs=False, tolerance=1e-9):
 
 
 def pathgrowing_max_weight(graph):
-    """The pathgrowing approximation matching algorithm. 
+    r"""The pathgrowing approximation matching algorithm. 
     
     A linear time 1/2 approximation algorithm for finding a maximum weight matching in an
     arbitrary graph. Linear time here means :math:`\mathcal{O}(m)` where :math:`m` is the
@@ -186,7 +186,7 @@ def pathgrowing_max_weight(graph):
 
 
 def blossom5_max_weight(graph, perfect=False):
-    """Compute maximum (perfect or not) weighted matchings in general graphs using the 
+    r"""Compute maximum (perfect or not) weighted matchings in general graphs using the 
     blossom V algorithm.
 
     For more information about the algorithm see the following paper: Kolmogorov, V.
@@ -213,7 +213,7 @@ def blossom5_max_weight(graph, perfect=False):
 
 
 def blossom5_min_weight(graph, perfect=False):
-    """Compute minimm (perfect or not) weighted matchings in general graphs using the 
+    r"""Compute minimm (perfect or not) weighted matchings in general graphs using the 
     blossom V algorithm.
 
     For more information about the algorithm see the following paper: Kolmogorov, V.
@@ -240,7 +240,7 @@ def blossom5_min_weight(graph, perfect=False):
 
 
 def bipartite_max_cardinality(graph):
-    """The well-known Hopcroft Karp algorithm to compute a matching of maximum cardinality
+    r"""The well-known Hopcroft Karp algorithm to compute a matching of maximum cardinality
     in a bipartite graph.
 
     The algorithm runs in :math:`\mathcal{O}(m \sqrt{n})` time. This implementation accepts
@@ -269,7 +269,7 @@ def bipartite_max_cardinality(graph):
 
 
 def bipartite_max_weight(graph):
-    """Maximum weight matching in bipartite graphs.
+    r"""Maximum weight matching in bipartite graphs.
 
     Running time is :math:`\mathcal{O}(n(m+n \log n))` where :math:`n` is the number of
     vertices and :math:`m` the number of edges of the input graph. Uses exact arithmetic
@@ -289,7 +289,7 @@ def bipartite_max_weight(graph):
 
 
 def bipartite_perfect_min_weight(graph, partition_a, partition_b):
-    """Kuhn-Munkres algorithm. 
+    r"""Kuhn-Munkres algorithm. 
     
     The Kuhn-Munkres (named in honor of Harold Kuhn and James Munkres) solving the assignment
     problem also known as the hungarian algorithm (in the honor of hungarian mathematicians
