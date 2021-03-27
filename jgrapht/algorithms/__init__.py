@@ -9,6 +9,7 @@ from . import (
     flow,
     independent,
     isomorphism,
+    linkprediction,
     matching,
     partition,
     planar,
