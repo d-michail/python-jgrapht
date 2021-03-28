@@ -249,9 +249,9 @@ int jgrapht_ii_graph_succinct_create(int, int, void *, incoming_edges_support_t,
 // graph
 
 int jgrapht_ix_graph_vertices_count(void *, int*);
-int jgrapht_lx_graph_vertices_count(void *, long long*);
+int jgrapht_xx_graph_vertices_count(void *, long long*);
 int jgrapht_ix_graph_edges_count(void *, int*);
-int jgrapht_lx_graph_edges_count(void *, long long*);
+int jgrapht_xx_graph_edges_count(void *, long long*);
 int jgrapht_ix_graph_add_vertex(void *, int*);
 int jgrapht_lx_graph_add_vertex(void *, long long*);
 int jgrapht_ix_graph_add_given_vertex(void *, int, int *);

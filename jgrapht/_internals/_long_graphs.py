@@ -153,7 +153,7 @@ class _JGraphTLongGraph(_HandleWrapper, Graph):
             return _JGraphTLongIterator(res)
 
         def __len__(self):
-            return backend.jgrapht_lx_graph_vertices_count(self._handle)
+            return backend.jgrapht_xx_graph_vertices_count(self._handle)
 
         def __contains__(self, v):
             return backend.jgrapht_lx_graph_contains_vertex(self._handle, v)
@@ -179,7 +179,7 @@ class _JGraphTLongGraph(_HandleWrapper, Graph):
             return _JGraphTLongIterator(res)
 
         def __len__(self):
-            return backend.jgrapht_lx_graph_edges_count(self._handle)
+            return backend.jgrapht_xx_graph_edges_count(self._handle)
 
         def __contains__(self, v):
             return backend.jgrapht_xl_graph_contains_edge(self._handle, v)

@@ -836,9 +836,9 @@ int jgrapht_ix_graph_vertices_count(void *g, int* res) {
     return jgrapht_capi_ix_graph_vertices_count(thread, g, res);
 }
 
-int jgrapht_lx_graph_vertices_count(void *g, long long* res) { 
+int jgrapht_xx_graph_vertices_count(void *g, long long* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_graph_vertices_count(thread, g, res);
+    return jgrapht_capi_xx_graph_vertices_count(thread, g, res);
 }
 
 int jgrapht_ix_graph_edges_count(void *g, int* res) { 
@@ -846,9 +846,9 @@ int jgrapht_ix_graph_edges_count(void *g, int* res) {
     return jgrapht_capi_ix_graph_edges_count(thread, g, res);
 }
 
-int jgrapht_lx_graph_edges_count(void *g, long long* res) { 
+int jgrapht_xx_graph_edges_count(void *g, long long* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_graph_edges_count(thread, g, res);
+    return jgrapht_capi_xx_graph_edges_count(thread, g, res);
 }
 
 int jgrapht_ix_graph_add_vertex(void *g, int* res) { 

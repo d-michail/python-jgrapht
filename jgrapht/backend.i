@@ -168,6 +168,22 @@ int raise_exception_on_error(int result) {
     }
     return 0;
 }
+
+// TODO
+long jgrapht_hash(void *obj) { 
+    PyObject *o = (PyObject*) obj;
+    Py_ssize_t h = PyObject_Hash(o);
+    return (long) h;
+}
+
+// TODO
+int jgrapht_equals(void *obj1, void *obj2) { 
+    PyObject *o1 = (PyObject*) obj1;
+    PyObject *o2 = (PyObject*) obj2;
+
+    return PyObject_RichCompareBool(o1, o2, Py_EQ);
+}
+
 %}
 
 %exception { 
@@ -425,9 +441,9 @@ int jgrapht_ii_graph_succinct_create(int, int, void *, incoming_edges_support_t,
 // graph
 
 int jgrapht_ix_graph_vertices_count(void *, int* OUTPUT);
-int jgrapht_lx_graph_vertices_count(void *, long long* OUTPUT);
+int jgrapht_xx_graph_vertices_count(void *, long long* OUTPUT);
 int jgrapht_ix_graph_edges_count(void *, int* OUTPUT);
-int jgrapht_lx_graph_edges_count(void *, long long* OUTPUT);
+int jgrapht_xx_graph_edges_count(void *, long long* OUTPUT);
 int jgrapht_ix_graph_add_vertex(void *, int* OUTPUT);
 int jgrapht_lx_graph_add_vertex(void *, long long* OUTPUT);
 int jgrapht_ix_graph_add_given_vertex(void *, int, int *OUTPUT);
