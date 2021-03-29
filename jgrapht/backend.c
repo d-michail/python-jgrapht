@@ -2539,6 +2539,34 @@ int jgrapht_lx_planarity_embedding_edges_around_vertex(void *embedding, long lon
     return jgrapht_capi_lx_planarity_embedding_edges_around_vertex(thread, embedding, vertex, it_res);
 }
 
+// ref graphs
+
+int jgrapht_rr_graph_create(int directed, int allow_self_loops, int allow_multiple_edges, int weighted, void *vertex_supplier_fptr, void *edge_supplier_fptr, void *hash_lookup_fptr, void *equals_lookup_fptr, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_create(thread, directed, allow_self_loops, allow_multiple_edges, weighted, vertex_supplier_fptr, edge_supplier_fptr, hash_lookup_fptr, equals_lookup_fptr, res);
+}
+
+int jgrapht_rr_graph_add_vertex(void *g, void** vertex_res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_add_vertex(thread, g, vertex_res);
+}
+
+int jgrapht_rr_graph_add_given_vertex(void *g, void *vertex, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_add_given_vertex(thread, g, vertex, res);
+}
+
+int jgrapht_rr_graph_remove_vertex(void *g, void *vertex, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_remove_vertex(thread, g, vertex, res);
+}
+
+int jgrapht_rr_graph_contains_vertex(void *g, void *vertex, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_contains_vertex(thread, g, vertex, res);
+}
+
+
 // scoring
 
 int jgrapht_xx_scoring_exec_eigenvector_centrality(void *g, void** res) { 

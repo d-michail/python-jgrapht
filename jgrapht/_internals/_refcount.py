@@ -37,7 +37,7 @@ def _ref_count(obj, normalize=True):
 
 def _id_to_obj(id):
     """Cast an id to an object. Note that this method if 
-       called on non-existent object, will crash Python.
+       called on a non-existent object, will crash Python.
     """
     return ctypes.cast(id, ctypes.py_object).value
 
@@ -93,4 +93,5 @@ class _CallbackWrapper:
     @property
     def fptr(self):
         return self._f_ptr
+
 

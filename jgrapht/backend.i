@@ -831,6 +831,14 @@ int jgrapht_xx_planarity_exec_boyer_myrvold(void *, int* OUTPUT, void** OUTPUT, 
 int jgrapht_ix_planarity_embedding_edges_around_vertex(void *, int, void** OUTPUT);
 int jgrapht_lx_planarity_embedding_edges_around_vertex(void *, long long int, void** OUTPUT);
 
+// ref graphs
+
+int jgrapht_rr_graph_create(int, int, int, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_rr_graph_add_vertex(void *, void** OUTPUT);
+int jgrapht_rr_graph_add_given_vertex(void *, void *, int* OUTPUT);
+int jgrapht_rr_graph_remove_vertex(void *, void *, int* OUTPUT);
+int jgrapht_rr_graph_contains_vertex(void *, void *, int* OUTPUT);
+
 // scoring
 
 int jgrapht_xx_scoring_exec_eigenvector_centrality(void *, void** OUTPUT);
