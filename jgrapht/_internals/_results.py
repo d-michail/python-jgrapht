@@ -90,7 +90,7 @@ from ._anyhashableg_planar import (
 )
 
 from ._ref_results import (
-    _ref_set_to_python_set
+    _jgrapht_ref_set_to_python_set
 )
 
 
