@@ -4,7 +4,6 @@ from collections import namedtuple
 from collections.abc import Iterator
 
 
-
 class _HandleWrapper:
     """A handle wrapper. Keeps a handle to a backend object and cleans up
        on deletion.

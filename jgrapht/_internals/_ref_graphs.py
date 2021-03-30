@@ -7,7 +7,7 @@ from ..types import (
 )
 
 import ctypes
-from . import _refcount
+from . import _refcount, _ref_hashequals
 from ._wrappers import _HandleWrapper, _JGraphTRefObjectIterator
 
 
@@ -25,7 +25,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
     Additionally, user vertex and edge suppliers are called directly from the JVM in order
     to construct new vertices and edges when needed.
 
-    The implementation delegates the hashCode and equals methods in the JVM to the hash and __eq__ 
+    The implementation delegates the hashCode and equals methods in the JVM to the hash and __eq__
     methods in Python.
 
     Do not construct this instance directly, look at the corresponding factory method for the
@@ -37,8 +37,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         handle,
         vertex_supplier_fptr_wrapper,
         edge_supplier_fptr_wrapper,
-        hash_lookup_fptr_wrapper,
-        equals_lookup_fptr_wrapper,
+        equals_hash_wrapper,
         **kwargs
     ):
         super().__init__(handle=handle, **kwargs)
@@ -69,8 +68,8 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         # keep ctypes callbacks from being garbage collected
         self._vertex_supplier_fptr_wrapper = vertex_supplier_fptr_wrapper
         self._edge_supplier_fptr_wrapper = edge_supplier_fptr_wrapper
-        self._hash_lookup_fptr_wrapper = hash_lookup_fptr_wrapper
-        self._equals_lookup_fptr_wrapper = equals_lookup_fptr_wrapper
+        self._equals_hash_wrapper = equals_hash_wrapper
+
 
     @property
     def type(self):
@@ -256,40 +255,10 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
 def _fallback_vertex_supplier():
     return object()
 
+
 def _fallback_edge_supplier():
     return object()
 
-__hash_fptr_wrapper = None
-
-def _get_hash_fptr_wrapper():
-    global __hash_fptr_wrapper
-    if __hash_fptr_wrapper is None: 
-        hash_type = ctypes.CFUNCTYPE(ctypes.c_long, ctypes.py_object)
-        __hash_fptr_wrapper = _refcount._CallbackWrapper(
-            hash, hash_type
-        )
-    return __hash_fptr_wrapper
-
-def _hash_lookup(o):
-    return _get_hash_fptr_wrapper().fptr
-
-__equals_fptr_wrapper = None
-
-def _get_equals_fptr_wrapper():
-    global __equals_fptr_wrapper
-    if __equals_fptr_wrapper is None: 
-
-        def _equals(o1, o2): 
-            return o1 == o2
-
-        equals_type = ctypes.CFUNCTYPE(ctypes.c_long, ctypes.py_object, ctypes.py_object)
-        __equals_fptr_wrapper = _refcount._CallbackWrapper(
-            _equals, equals_type
-        )
-    return __equals_fptr_wrapper
-
-def _equals_lookup(o):
-    return _get_equals_fptr_wrapper().fptr
 
 def _create_ref_graph(
     directed=True,
@@ -322,13 +291,8 @@ def _create_ref_graph(
         edge_supplier, edge_supplier_type
     )
 
-    hash_lookup_fptr_wrapper = _refcount._CallbackWrapper(
-        _hash_lookup, ctypes.CFUNCTYPE(ctypes.c_long, ctypes.py_object)
-    )
-
-    equals_lookup_fptr_wrapper = _refcount._CallbackWrapper(
-        _equals_lookup, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.py_object)
-    )
+    # create python hash-equals ctypes wrappers and setup JVM object
+    equals_hash_wrapper = _ref_hashequals._get_equals_hash_wrapper()
 
     handle = backend.jgrapht_rr_graph_create(
         directed,
@@ -337,16 +301,14 @@ def _create_ref_graph(
         weighted,
         vertex_supplier_fptr_wrapper.fptr,
         edge_supplier_fptr_wrapper.fptr,
-        hash_lookup_fptr_wrapper.fptr,
-        equals_lookup_fptr_wrapper.fptr,
+        equals_hash_wrapper.handle
     )
 
     return _JGraphTRefGraph(
         handle,
         vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
         edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
-        hash_lookup_fptr_wrapper=hash_lookup_fptr_wrapper,
-        equals_lookup_fptr_wrapper=equals_lookup_fptr_wrapper,
+        equals_hash_wrapper=equals_hash_wrapper,
     )
 
 
@@ -357,4 +319,3 @@ def _is_ref_graph(graph):
     :returns: True if the graph is a ref graph, False otherwise.
     """
     return isinstance(graph, (_JGraphTRefGraph))
-    

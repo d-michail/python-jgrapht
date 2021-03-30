@@ -646,7 +646,8 @@ int jgrapht_lx_planarity_embedding_edges_around_vertex(void *, long long int, vo
 
 // ref graphs
 
-int jgrapht_rr_graph_create(int, int, int, int, void *, void *, void *, void *, void**);
+int jgrapht_rr_graph_hash_equals_resolver_create(void *, void *, void **);
+int jgrapht_rr_graph_create(int, int, int, int, void *, void *, void *, void**);
 int jgrapht_rr_graph_add_vertex(void *, void**);
 int jgrapht_rr_graph_add_given_vertex(void *, void *, int*);
 int jgrapht_rr_graph_remove_vertex(void *, void *, int*);
