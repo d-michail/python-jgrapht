@@ -89,6 +89,10 @@ from ._anyhashableg_planar import (
     _AnyHashableGraphPlanarEmbedding
 )
 
+from ._ref_results import (
+    _ref_set_to_python_set
+)
+
 
 def _unwrap_vertex(graph, vertex):
     """Given a vertex in Python, return the corresponding vertex in the JVM
@@ -131,6 +135,7 @@ def _wrap_vertex_set(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphVertexSet, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongSet, [handle]),
         _JGraphTIntegerGraph: (_JGraphTIntegerSet, [handle]),
+        _JGraphTRefGraph: (_jgrapht_ref_set_to_python_set, [handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])
@@ -144,6 +149,7 @@ def _wrap_edge_set(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphEdgeSet, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongSet, [handle]),
         _JGraphTIntegerGraph: (_JGraphTIntegerSet, [handle]),
+        _JGraphTRefGraph: (_jgrapht_ref_set_to_python_set, [handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])

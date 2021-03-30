@@ -54,6 +54,10 @@ from ._internals._anyhashableg import (
     _create_succinct_anyhashable_graph,
     _copy_to_succinct_anyhashable_graph,
 )
+from ._internals._ref_graphs import (
+    _is_ref_graph, 
+    _create_ref_graph,
+)
 
 #
 # The graph creation API
@@ -67,6 +71,7 @@ def create_graph(
     weighted=True,
     dag=False,
     any_hashable=False,
+    ref_graph=False,
     vertex_supplier=None,
     edge_supplier=None,
 ):
@@ -120,6 +125,18 @@ def create_graph(
                 vertex_supplier=vertex_supplier,
                 edge_supplier=edge_supplier,
             )
+    elif ref_graph:
+        if dag:
+            raise ValueError("Not yet supported")
+        else:
+            return _create_ref_graph(
+                directed=directed,
+                allowing_self_loops=allowing_self_loops,
+                allowing_multiple_edges=allowing_multiple_edges,
+                weighted=weighted,
+                vertex_supplier=vertex_supplier,
+                edge_supplier=edge_supplier,
+            )            
     else:
         if dag:
             if not directed:
