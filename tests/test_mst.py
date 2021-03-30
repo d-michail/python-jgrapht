@@ -1,6 +1,6 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
 
 import jgrapht.algorithms.spanning as spanning
 import jgrapht.generators as generators
@@ -129,7 +129,7 @@ def test_refgraph_prim():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        ref_graph=True,
+        backend=GraphBackend.REF_GRAPH
     )
 
     g.add_vertex("0")

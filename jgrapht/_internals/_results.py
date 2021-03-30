@@ -41,6 +41,7 @@ from ._paths import (
 from ._clustering import (
     _JGraphTIntegerClustering,
     _JGraphTLongClustering,
+    _JGraphTRefClustering,
 )
 from ._flows import (
     _JGraphTCut,
@@ -352,6 +353,7 @@ def _wrap_vertex_clustering(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphClustering, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongClustering, [handle]),
         _JGraphTIntegerGraph: (_JGraphTIntegerClustering, [handle]),
+        _JGraphTRefGraph: (_JGraphTRefClustering, [handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])

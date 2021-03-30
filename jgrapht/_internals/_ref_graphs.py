@@ -110,7 +110,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
             edge = _refcount._swig_ptr_to_obj(e_ptr)
             _refcount._inc_ref(edge)
             if weight is not None:
-                backend.jgrapht_rr_graph_set_edge_weight(self._handle, e_ptr, weight)
+                backend.jgrapht_rr_graph_set_edge_weight(self._handle, id(edge), weight)
         return edge
 
     def remove_edge(self, e):
