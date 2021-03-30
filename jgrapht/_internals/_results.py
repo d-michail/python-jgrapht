@@ -367,6 +367,7 @@ def _wrap_cut(graph, handle, weight):
         _AnyHashableGraph: (_AnyHashableGraphCut, [graph, weight, handle]),
         _JGraphTLongGraph: (_JGraphTCut, [graph, weight, handle]),
         _JGraphTIntegerGraph: (_JGraphTCut, [graph, weight, handle]),
+        _JGraphTRefGraph: (_JGraphTCut, [graph, weight, handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])

@@ -16,8 +16,10 @@ from ._collections import (
 )
 from ._anyhashableg import _is_anyhashable_graph
 from ._anyhashableg_collections import _AnyHashableGraphVertexSet
-from ._int_graphs import _JGraphTIntegerGraph
+from ._int_graphs import _JGraphTIntegerGraph, _is_int_graph
 from ._long_graphs import _JGraphTLongGraph, _is_long_graph
+from ._ref_graphs import _is_ref_graph
+from ._ref_results import _jgrapht_ref_set_to_python_set
 
 
 class _JGraphTCut(Cut):
@@ -33,8 +35,15 @@ class _JGraphTCut(Cut):
             )
         elif _is_long_graph(graph):
             self._source_partition = _JGraphTLongSet(source_partition_handle)
-        else:
+        elif _is_int_graph(graph):
             self._source_partition = _JGraphTIntegerSet(source_partition_handle)
+        elif _is_ref_graph(graph):
+            self._source_partition = _jgrapht_ref_set_to_python_set(
+                source_partition_handle
+            )
+        else:
+            raise ValueError("Not recognized graph")
+
         self._target_partition = None
         self._edges = None
 
