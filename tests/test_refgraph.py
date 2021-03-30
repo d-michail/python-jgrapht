@@ -11,6 +11,43 @@ class CustomVertex:
         return "CustomVertex(%r)" % self._id
 
 
+class AnotherCustomVertex:
+    def __init__(self, id): 
+        self._id = id
+
+    def __eq__(self, o): 
+        return self._id == o._id
+
+    def __hash__(self):
+        return hash(self._id)
+
+    def __repr__(self):
+        return "AnotherCustomVertex(%r)" % self._id
+
+
+class AnotherCustomEdge:
+    def __init__(self, id): 
+        self._id = id
+
+    def __eq__(self, o): 
+        return self._id == o._id
+
+    def __hash__(self):
+        return hash(self._id)
+
+    def __repr__(self):
+        return "AnotherCustomEdge(%r)" % self._id
+
+class AnotherCustomEdgeSupplier: 
+    def __init__(self):
+        self._next = 0
+    
+    def __call__(self):
+        ret = self._next
+        self._next += 1
+        return AnotherCustomEdge(ret)
+
+
 def test_ref_graph_directed_inoutedges():
 
     g = _create_ref_graph(
@@ -99,3 +136,47 @@ def test_ref_graph_directed_inoutedges():
     assert g.indegree_of(v5) == 1
 
     assert set(g.edges) == set([e12, e23, e14, e11, e45, e51_1, e51_2])
+
+
+def test_ref_graph_directed_inoutedges_custom_hash_and_equals():
+
+    g = _create_ref_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=True,
+        weighted=True,
+        edge_supplier=AnotherCustomEdgeSupplier()
+    )
+
+    assert g.type.directed
+    assert g.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges
+    assert g.type.weighted
+    assert g.type.allowing_cycles
+
+    v1 = AnotherCustomVertex(1)
+    v2 = AnotherCustomVertex(2)
+
+    g.add_vertex(v1)
+    assert g.contains_vertex(v1)
+    assert g.contains_vertex(AnotherCustomVertex(1))
+    assert not g.contains_vertex(AnotherCustomVertex(2))
+    assert not g.contains_vertex(v2)
+    assert g.number_of_vertices == 1
+
+    g.add_vertex(v2)
+    assert g.contains_vertex(AnotherCustomVertex(2))
+    assert g.contains_vertex(v2)
+    assert g.number_of_vertices == 2
+
+    assert set(g.vertices) == set([AnotherCustomVertex(1), AnotherCustomVertex(2)])
+
+    e1 = g.add_edge(AnotherCustomVertex(1), AnotherCustomVertex(2))
+    e2 = g.add_edge(AnotherCustomVertex(1), AnotherCustomVertex(2))
+    e3 = g.add_edge(AnotherCustomVertex(1), AnotherCustomVertex(2))
+
+    assert set(g.edges) == set([AnotherCustomEdge(0), AnotherCustomEdge(1), AnotherCustomEdge(2)])
+
+    assert not g.contains_edge(AnotherCustomEdge(3))
+    assert g.contains_edge(AnotherCustomEdge(1))
+

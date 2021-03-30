@@ -238,20 +238,40 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
 def _fallback_vertex_supplier():
     return object()
 
-
 def _fallback_edge_supplier():
     return object()
 
+__hash_fptr_wrapper = None
+
+def _get_hash_fptr_wrapper():
+    global __hash_fptr_wrapper
+    if __hash_fptr_wrapper is None: 
+        hash_type = ctypes.CFUNCTYPE(ctypes.c_long, ctypes.py_object)
+        __hash_fptr_wrapper = _refcount._CallbackWrapper(
+            hash, hash_type
+        )
+    return __hash_fptr_wrapper
 
 def _hash_lookup(o):
-    """TODO"""
-    return 0
+    return _get_hash_fptr_wrapper().fptr
 
+__equals_fptr_wrapper = None
+
+def _get_equals_fptr_wrapper():
+    global __equals_fptr_wrapper
+    if __equals_fptr_wrapper is None: 
+
+        def _equals(o1, o2): 
+            return o1 == o2
+
+        equals_type = ctypes.CFUNCTYPE(ctypes.c_long, ctypes.py_object, ctypes.py_object)
+        __equals_fptr_wrapper = _refcount._CallbackWrapper(
+            _equals, equals_type
+        )
+    return __equals_fptr_wrapper
 
 def _equals_lookup(o):
-    """TODO"""
-    return 0
-
+    return _get_equals_fptr_wrapper().fptr
 
 def _create_ref_graph(
     directed=True,
@@ -270,7 +290,6 @@ def _create_ref_graph(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
-
     if vertex_supplier is None:
         vertex_supplier = _fallback_vertex_supplier
     vertex_supplier_type = ctypes.CFUNCTYPE(ctypes.py_object)
@@ -286,11 +305,11 @@ def _create_ref_graph(
     )
 
     hash_lookup_fptr_wrapper = _refcount._CallbackWrapper(
-        _hash_lookup, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)
+        _hash_lookup, ctypes.CFUNCTYPE(ctypes.c_long, ctypes.py_object)
     )
 
     equals_lookup_fptr_wrapper = _refcount._CallbackWrapper(
-        _equals_lookup, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)
+        _equals_lookup, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.py_object)
     )
 
     handle = backend.jgrapht_rr_graph_create(
