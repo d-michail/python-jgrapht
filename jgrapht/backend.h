@@ -520,6 +520,7 @@ int jgrapht_it_next_double(void *, double*);
 int jgrapht_it_next_int_edge_triple(void *, int *, int *, double*);
 int jgrapht_it_next_long_edge_triple(void *, long long *, long long *, double*);
 int jgrapht_it_next_str_edge_triple(void *, char **, char **, double*);
+int jgrapht_it_next_ref(void *, void**);
 int jgrapht_it_next_object(void *, void**);
 int jgrapht_it_hasnext(void *, int*);
 

@@ -30,6 +30,11 @@
     $1 = PyLong_AsVoidPtr($input);    
 }
 
+// convert a long to a void function pointer
+%typemap(in) void *LONG_TO_PTR { 
+    $1 = PyLong_AsVoidPtr($input);    
+}
+
 // convert bytearray to c-string
 %typemap(in) char *BYTEARRAY {
     if ($input != Py_None) { 
@@ -713,6 +718,7 @@ int jgrapht_it_next_double(void *, double* OUTPUT);
 int jgrapht_it_next_int_edge_triple(void *, int *OUTPUT, int *OUTPUT, double* OUTPUT);
 int jgrapht_it_next_long_edge_triple(void *, long long *OUTPUT, long long *OUTPUT, double* OUTPUT);
 int jgrapht_it_next_str_edge_triple(void *, char **OUTPUT, char **OUTPUT, double* OUTPUT);
+int jgrapht_it_next_ref(void *, void** OUTPUT);
 int jgrapht_it_next_object(void *, void** OUTPUT);
 int jgrapht_it_hasnext(void *, int* OUTPUT);
 
@@ -835,25 +841,25 @@ int jgrapht_lx_planarity_embedding_edges_around_vertex(void *, long long int, vo
 
 int jgrapht_rr_graph_create(int, int, int, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
 int jgrapht_rr_graph_add_vertex(void *, void** OUTPUT);
-int jgrapht_rr_graph_add_given_vertex(void *, void *, int* OUTPUT);
-int jgrapht_rr_graph_remove_vertex(void *, void *, int* OUTPUT);
-int jgrapht_rr_graph_contains_vertex(void *, void *, int* OUTPUT);
-int jgrapht_rr_graph_add_edge(void *, void *, void *, void** OUTPUT);
-int jgrapht_rr_graph_add_given_edge(void *, void *, void *, void *, int* OUTPUT);
-int jgrapht_rr_graph_remove_edge(void *, void *, int* OUTPUT);
-int jgrapht_rr_graph_contains_edge(void *, void *, int* OUTPUT);
-int jgrapht_rr_graph_contains_edge_between(void *, void *, void *, int* OUTPUT);
-int jgrapht_rr_graph_degree_of(void *, void *, long long* OUTPUT);
-int jgrapht_rr_graph_indegree_of(void *, void *, long long* OUTPUT);
-int jgrapht_rr_graph_outdegree_of(void *, void *, long long* OUTPUT);
-int jgrapht_rr_graph_edge_source(void *, void *, void** OUTPUT);
-int jgrapht_rr_graph_edge_target(void *, void *, void** OUTPUT);
-int jgrapht_rr_graph_get_edge_weight(void *, void *, double* OUTPUT);
-int jgrapht_rr_graph_set_edge_weight(void *, void *, double);
-int jgrapht_rr_graph_create_between_eit(void *, void *, void *, void** OUTPUT);
-int jgrapht_rr_graph_vertex_create_eit(void *, void *, void** OUTPUT);
-int jgrapht_rr_graph_vertex_create_out_eit(void *, void *, void** OUTPUT);
-int jgrapht_rr_graph_vertex_create_in_eit(void *, void *, void** OUTPUT);
+int jgrapht_rr_graph_add_given_vertex(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rr_graph_remove_vertex(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rr_graph_contains_vertex(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rr_graph_add_edge(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void** OUTPUT);
+int jgrapht_rr_graph_add_given_edge(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rr_graph_remove_edge(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rr_graph_contains_edge(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rr_graph_contains_edge_between(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rr_graph_degree_of(void *, void *LONG_TO_PTR, long long* OUTPUT);
+int jgrapht_rr_graph_indegree_of(void *, void *LONG_TO_PTR, long long* OUTPUT);
+int jgrapht_rr_graph_outdegree_of(void *, void *LONG_TO_PTR, long long* OUTPUT);
+int jgrapht_rr_graph_edge_source(void *, void *LONG_TO_PTR, void** OUTPUT);
+int jgrapht_rr_graph_edge_target(void *, void *LONG_TO_PTR, void** OUTPUT);
+int jgrapht_rr_graph_get_edge_weight(void *, void *LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rr_graph_set_edge_weight(void *, void *LONG_TO_PTR, double);
+int jgrapht_rr_graph_create_between_eit(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void** OUTPUT);
+int jgrapht_rr_graph_vertex_create_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
+int jgrapht_rr_graph_vertex_create_out_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
+int jgrapht_rr_graph_vertex_create_in_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
 
 // scoring
 

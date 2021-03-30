@@ -67,7 +67,6 @@ def _id_comparator(a_id, b_id):
         return 0
     return 1
 
-
 def _create_wrapped_id_comparator_callback(callback):
     if callback is not None:
         # wrap the comparator with a ctypes function pointer

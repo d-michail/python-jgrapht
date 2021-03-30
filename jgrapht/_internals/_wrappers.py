@@ -1,6 +1,8 @@
 from .. import backend
+from . import _refcount
 from collections import namedtuple
 from collections.abc import Iterator
+
 
 
 class _HandleWrapper:
@@ -176,10 +178,29 @@ class _JGraphTStringIterator(_HandleWrapper, Iterator):
         return "_JGraphTStringIterator(%r)" % self._handle
 
 
+class _JGraphTRefIterator(_HandleWrapper, Iterator):
+    """A JGraphT iterator. This iterator returns frontend objects
+    resolved from references kept in the backend.
+    """
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def __next__(self):
+        res = backend.jgrapht_it_hasnext(self._handle)
+        if not res:
+            raise StopIteration()
+        value = backend.jgrapht_it_next_ref(self._handle)
+        return _refcount._swig_ptr_to_obj(value)
+
+    def __repr__(self):
+        return "_JGraphTRefIterator(%r)" % self._handle
+
 
 class _JGraphTObjectIterator(_HandleWrapper, Iterator):
     """A JGraphT iterator. This iterator returns handles to 
-    backend objects. 
+    backend objects. Note that someone should take the ownership 
+    of these handles. 
     """
 
     def __init__(self, handle, **kwargs):

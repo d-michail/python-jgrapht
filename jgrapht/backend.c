@@ -2058,6 +2058,11 @@ int jgrapht_it_next_str_edge_triple(void *it, char **source, char **target, doub
     return jgrapht_capi_it_next_str_edge_triple(thread, it, source, target, weight);
 }
 
+int jgrapht_it_next_ref(void *it, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_it_next_ref(thread, it, res);
+}
+
 int jgrapht_it_next_object(void *it, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_it_next_object(thread, it, res);
