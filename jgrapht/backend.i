@@ -174,21 +174,6 @@ int raise_exception_on_error(int result) {
     return 0;
 }
 
-// TODO
-long jgrapht_hash(void *obj) { 
-    PyObject *o = (PyObject*) obj;
-    Py_ssize_t h = PyObject_Hash(o);
-    return (long) h;
-}
-
-// TODO
-int jgrapht_equals(void *obj1, void *obj2) { 
-    PyObject *o1 = (PyObject*) obj1;
-    PyObject *o2 = (PyObject*) obj2;
-
-    return PyObject_RichCompareBool(o1, o2, Py_EQ);
-}
-
 %}
 
 %exception { 
@@ -201,7 +186,6 @@ int jgrapht_equals(void *obj1, void *obj2) {
 // ignore the integer return code
 // we already handled this using the exception 
 %typemap(out) int  "$result = SWIG_Py_Void();";
-
 
 // Put some init code in python
 %pythonbegin %{
@@ -594,6 +578,8 @@ int jgrapht_xl_graph_attrs_edge_size(void *, long long int, int* OUTPUT);
 // handles
 
 int jgrapht_handles_destroy(void *);
+int jgrapht_capi_handles_put_ref(void *LONG_TO_PTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_capi_handles_get_ref(void *, void** OUTPUT, void** OUTPUT, void** OUTPUT);
 int jgrapht_handles_get_ccharpointer(void *, char** OUTPUT);
 int jgrapht_handles_get_edge_pair(void *, int* OUTPUT, int* OUTPUT);
 int jgrapht_handles_get_long_edge_pair(void *, long long* OUTPUT, long long* OUTPUT);
@@ -718,7 +704,7 @@ int jgrapht_it_next_double(void *, double* OUTPUT);
 int jgrapht_it_next_int_edge_triple(void *, int *OUTPUT, int *OUTPUT, double* OUTPUT);
 int jgrapht_it_next_long_edge_triple(void *, long long *OUTPUT, long long *OUTPUT, double* OUTPUT);
 int jgrapht_it_next_str_edge_triple(void *, char **OUTPUT, char **OUTPUT, double* OUTPUT);
-int jgrapht_it_next_ref(void *, void** OUTPUT);
+int jgrapht_it_next_ref(void *, int, void** OUTPUT);
 int jgrapht_it_next_object(void *, void** OUTPUT);
 int jgrapht_it_hasnext(void *, int* OUTPUT);
 
@@ -753,6 +739,7 @@ int jgrapht_list_size(void *, int* OUTPUT);
 int jgrapht_list_int_add(void *, int, int* OUTPUT);
 int jgrapht_list_long_add(void *, long long int, int* OUTPUT);
 int jgrapht_list_double_add(void *, double, int* OUTPUT);
+int jgrapht_list_ref_add(void *, void *, int* OUTPUT);
 int jgrapht_ii_list_edge_pair_add(void *, int, int, int* OUTPUT);
 int jgrapht_ll_list_edge_pair_add(void *, long long int, long long int, int* OUTPUT);
 int jgrapht_ii_list_edge_triple_add(void *, int, int, double, int* OUTPUT);
@@ -760,9 +747,11 @@ int jgrapht_ll_list_edge_triple_add(void *, long long int, long long int, double
 int jgrapht_list_int_remove(void *, int);
 int jgrapht_list_long_remove(void *, long long int);
 int jgrapht_list_double_remove(void *, double);
+int jgrapht_list_ref_remove(void *, void *);
 int jgrapht_list_int_contains(void *, int, int* OUTPUT);
 int jgrapht_list_long_contains(void *, long long int, int* OUTPUT);
 int jgrapht_list_double_contains(void *, double, int* OUTPUT);
+int jgrapht_list_ref_contains(void *, void *, int* OUTPUT);
 int jgrapht_list_clear(void *);
 
 // listenable
@@ -889,12 +878,15 @@ int jgrapht_set_size(void *, int* OUTPUT);
 int jgrapht_set_int_add(void *, int, int* OUTPUT);
 int jgrapht_set_long_add(void *, long long int, int* OUTPUT);
 int jgrapht_set_double_add(void *, double, int* OUTPUT);
+int jgrapht_set_ref_add(void *, void *, int* OUTPUT);
 int jgrapht_set_int_remove(void *, int);
 int jgrapht_set_long_remove(void *, long long int);
 int jgrapht_set_double_remove(void *, double);
+int jgrapht_set_ref_remove(void *, void *);
 int jgrapht_set_int_contains(void *, int, int* OUTPUT);
 int jgrapht_set_long_contains(void *, long long int, int* OUTPUT);
 int jgrapht_set_double_contains(void *, double, int* OUTPUT);
+int jgrapht_set_ref_contains(void *, void *, int* OUTPUT);
 int jgrapht_set_clear(void *);
 
 // shortest paths

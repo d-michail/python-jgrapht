@@ -396,6 +396,8 @@ int jgrapht_xl_graph_attrs_edge_size(void *, long long int, int*);
 // handles
 
 int jgrapht_handles_destroy(void *);
+int jgrapht_handles_put_ref(void *, void *, void *, void**);
+int jgrapht_handles_get_ref(void *, void**, void**, void**);
 int jgrapht_handles_get_ccharpointer(void *, char**);
 int jgrapht_handles_get_edge_pair(void *, int*, int*);
 int jgrapht_handles_get_long_edge_pair(void *, long long*, long long*);
@@ -520,7 +522,7 @@ int jgrapht_it_next_double(void *, double*);
 int jgrapht_it_next_int_edge_triple(void *, int *, int *, double*);
 int jgrapht_it_next_long_edge_triple(void *, long long *, long long *, double*);
 int jgrapht_it_next_str_edge_triple(void *, char **, char **, double*);
-int jgrapht_it_next_ref(void *, void**);
+int jgrapht_it_next_ref(void *, int, void**);
 int jgrapht_it_next_object(void *, void**);
 int jgrapht_it_hasnext(void *, int*);
 
@@ -555,6 +557,7 @@ int jgrapht_list_size(void *, int*);
 int jgrapht_list_int_add(void *, int, int*);
 int jgrapht_list_long_add(void *, long long int, int*);
 int jgrapht_list_double_add(void *, double, int*);
+int jgrapht_list_ref_add(void *, void *, int*);
 int jgrapht_ii_list_edge_pair_add(void *, int, int, int*);
 int jgrapht_ll_list_edge_pair_add(void *, long long int, long long int, int*);
 int jgrapht_ii_list_edge_triple_add(void *, int, int, double, int*);
@@ -562,9 +565,11 @@ int jgrapht_ll_list_edge_triple_add(void *, long long int, long long int, double
 int jgrapht_list_int_remove(void *, int);
 int jgrapht_list_long_remove(void *, long long int);
 int jgrapht_list_double_remove(void *, double);
+int jgrapht_list_ref_remove(void *, void *);
 int jgrapht_list_int_contains(void *, int, int*);
 int jgrapht_list_long_contains(void *, long long int, int*);
 int jgrapht_list_double_contains(void *, double, int*);
+int jgrapht_list_ref_contains(void *, void *, int*);
 int jgrapht_list_clear(void *);
 
 // listenable
@@ -691,12 +696,15 @@ int jgrapht_set_size(void *, int*);
 int jgrapht_set_int_add(void *, int, int*);
 int jgrapht_set_long_add(void *, long long int, int*);
 int jgrapht_set_double_add(void *, double, int *);
+int jgrapht_set_ref_add(void *, void *, int*);
 int jgrapht_set_int_remove(void *, int);
 int jgrapht_set_long_remove(void *, long long int);
 int jgrapht_set_double_remove(void *, double);
+int jgrapht_set_ref_remove(void *, void *);
 int jgrapht_set_int_contains(void *, int, int*);
 int jgrapht_set_long_contains(void *, long long int, int*);
 int jgrapht_set_double_contains(void *, double, int*);
+int jgrapht_set_ref_contains(void *, void *, int*);
 int jgrapht_set_clear(void *);
 
 // shortest paths 

@@ -170,7 +170,6 @@ def _wrap_vertex_iterator(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphVertexIterator, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongIterator, [handle]),
         _JGraphTIntegerGraph: (_JGraphTIntegerIterator, [handle]),
-        _JGraphTRefGraph: (_JGraphTRefIterator, [handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])
@@ -184,7 +183,6 @@ def _wrap_edge_iterator(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphEdgeIterator, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongIterator, [handle]),
         _JGraphTIntegerGraph: (_JGraphTIntegerIterator, [handle]),
-        _JGraphTRefGraph: (_JGraphTRefIterator, [handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])

@@ -43,6 +43,22 @@ class _JGraphTString(_HandleWrapper):
         return "_JGraphTString(%r)" % self._handle
 
 
+class _JGraphTExternalRef(_HandleWrapper):
+    """A JGraphT external reference.
+    
+       This object maintains a handle to a ExternalRef class inside the JVM.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def get(self): 
+        ptr, _, _ = backend.jgrapht_handles_get_ref(self._handle)
+        return _refcount._swig_ptr_to_obj(ptr)
+
+    def __repr__(self):
+        return "_JGraphTExternalRef(%r)" % self._handle
+
+
 class _JGraphTIntegerIterator(_HandleWrapper, Iterator):
     """Integer values iterator"""
 
@@ -178,7 +194,7 @@ class _JGraphTStringIterator(_HandleWrapper, Iterator):
         return "_JGraphTStringIterator(%r)" % self._handle
 
 
-class _JGraphTRefIterator(_HandleWrapper, Iterator):
+class _JGraphTRefObjectIterator(_HandleWrapper, Iterator):
     """A JGraphT iterator. This iterator returns frontend objects
     resolved from references kept in the backend.
     """
@@ -189,8 +205,25 @@ class _JGraphTRefIterator(_HandleWrapper, Iterator):
         res = backend.jgrapht_it_hasnext(self._handle)
         if not res:
             raise StopIteration()
-        value = backend.jgrapht_it_next_ref(self._handle)
+        value = backend.jgrapht_it_next_ref(self._handle, False)
         return _refcount._swig_ptr_to_obj(value)
+
+    def __repr__(self):
+        return "_JGraphTRefObjectIterator(%r)" % self._handle
+
+
+class _JGraphTRefIterator(_HandleWrapper, Iterator):
+    """A JGraphT iterator. This iterator returns backend references.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def __next__(self):
+        res = backend.jgrapht_it_hasnext(self._handle)
+        if not res:
+            raise StopIteration()
+        value = backend.jgrapht_it_next_ref(self._handle, True)
+        return _JGraphTExternalRef(handle=value)
 
     def __repr__(self):
         return "_JGraphTRefIterator(%r)" % self._handle

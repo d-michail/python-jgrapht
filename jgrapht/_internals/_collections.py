@@ -9,6 +9,7 @@ from ._wrappers import (
     _JGraphTEdgeLongTripleIterator,
     _JGraphTEdgeIntegerTripleIterator,
     _JGraphTEdgeStrTripleIterator,    
+    _JGraphTRefIterator,
 )
 
 from collections.abc import (
@@ -159,6 +160,36 @@ class _JGraphTLongSetIterator(_JGraphTObjectIterator):
 
     def __repr__(self):
         return "_JGraphTLongSetIterator(%r)" % self._handle
+
+
+class _JGraphTRefSet(_HandleWrapper, Set):
+    """JGraphT Ref Set"""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def __iter__(self):
+        res = backend.jgrapht_set_it_create(self._handle)
+        return _JGraphTRefIterator(res)
+
+    def __len__(self):
+        res = backend.jgrapht_set_size(self._handle)
+        return res
+
+    def __contains__(self, x):
+        res = backend.jgrapht_set_int_contains(self._handle, x)
+        return res
+
+    def __repr__(self):
+        return "_JGraphTIntegerSet(%r)" % self._handle
+
+    def __str__(self):
+        return "{" + ", ".join(str(x) for x in self) + "}"
+
+    @classmethod
+    def _from_iterable(cls, it):
+        return set(it)    
+
 
 
 class _JGraphTIntegerList(_HandleWrapper, Collection):
