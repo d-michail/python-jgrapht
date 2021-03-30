@@ -41,11 +41,17 @@ def _id_to_obj(id):
     """
     return ctypes.cast(id, ctypes.py_object).value
 
-
 def _map_ids_to_objs(iterable):
     """Map an iterable of ids to an iterator of objects. 
     """
     return map(lambda item_id: _id_to_obj(item_id), iterable)
+
+def _swig_ptr_to_obj(swig_ptr):
+    """Cast a Swig pointer to an object. Assumes that the swig pointer points 
+    to a valid python object. Otherwise Python will crash.
+    """
+    id = int(swig_ptr)
+    return ctypes.cast(id, ctypes.py_object).value
 
 
 def _id_comparator(a_id, b_id):

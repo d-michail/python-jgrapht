@@ -46,11 +46,11 @@ class _JGraphTRefGraph(_HandleWrapper):
 
     def add_vertex(self, vertex=None):
         if vertex is not None:
-            added = backend.jgrapht_rr_graph_add_given_vertex(self._handle, vertex)
-            if added: 
+            if backend.jgrapht_rr_graph_add_given_vertex(self._handle, vertex):
                 _refcount._inc_ref(vertex)
         else:
-            vertex = backend.jgrapht_rr_graph_add_vertex(self._handle)
+            vertex_ptr = backend.jgrapht_rr_graph_add_vertex(self._handle)
+            vertex = _refcount._swig_ptr_to_obj(vertex_ptr)
             _refcount._inc_ref(vertex)
         return vertex
 
@@ -62,8 +62,88 @@ class _JGraphTRefGraph(_HandleWrapper):
     def contains_vertex(self, v):
         return backend.jgrapht_rr_graph_contains_vertex(self._handle, v)
 
+    def add_edge(self, u, v, weight=None, edge=None):
+        if edge is not None:
+            if backend.jgrapht_rr_graph_add_given_edge(self._handle, u, v, edge):
+                _refcount._inc_ref(edge)
+                if weight is not None:
+                    backend.jgrapht_rr_graph_set_edge_weight(self._handle, edge, weight)
+        else:
+            edge_ptr = backend.jgrapht_rr_graph_add_edge(self._handle, u, v)
+            edge = _refcount._swig_ptr_to_obj(edge_ptr)
+            _refcount._inc_ref(edge)
+            if weight is not None:
+                backend.jgrapht_ll_graph_set_edge_weight(self._handle, edge, weight)
+        return edge
+
+    def remove_edge(self, e):
+        if e is None:
+            raise ValueError("Edge cannot be None")
+        if backend.jgrapht_rr_graph_remove_edge(self._handle, e):
+            _refcount._dec_ref(e)
+            return True
+        else:
+            return False
+
+    def contains_edge(self, e):
+        return backend.jgrapht_rr_graph_contains_edge(self._handle, e)
+
+    def contains_edge_between(self, u, v):
+        return backend.jgrapht_rr_graph_contains_edge_between(
+            self._handle, u, v
+        )
+
+    def degree_of(self, v):
+        return backend.jgrapht_rr_graph_degree_of(self._handle, v)
+
+    def indegree_of(self, v):
+        return backend.jgrapht_rr_graph_indegree_of(self._handle, v)
+
+    def outdegree_of(self, v):
+        return backend.jgrapht_rr_graph_outdegree_of(self._handle, v)
+
+    def edge_source(self, e):
+        return backend.jgrapht_rr_graph_edge_source(self._handle, e)
+
+    def edge_target(self, e):
+        return backend.jgrapht_rr_graph_edge_target(self._handle, e)
+
+    def get_edge_weight(self, e):
+        return backend.jgrapht_rr_graph_get_edge_weight(self._handle, e)
+
+    def set_edge_weight(self, e, weight):
+        backend.jgrapht_rr_graph_set_edge_weight(self._handle, e, weight)
+
+    @property
+    def number_of_vertices(self):
+        return backend.jgrapht_xx_graph_vertices_count(self._handle)
+
+    @property
+    def vertices(self):
+        #if self._vertex_set is None:
+        #    self._vertex_set = self._VertexSet(self._handle)
+        return self._vertex_set
+
+    @property
+    def number_of_edges(self):
+        return backend.jgrapht_xx_graph_edges_count(self._handle)
+
+    @property
+    def edges(self):
+        #if self._edge_set is None:
+        #    self._edge_set = self._EdgeSet(self._handle)
+        return self._edge_set
+
     def __repr__(self):
         return "_JGraphTRefGraph(%r)" % self._handle
+
+    def __del__(self):
+        # Cleanup reference counts
+        #for e in self.edges:
+        #    _refcount._dec_ref(e)
+        #for v in self.vertices:
+        #    _refcount._dec_ref(v)
+        super().__del__()
 
 
 def _fallback_vertex_supplier():
@@ -126,6 +206,7 @@ def _create_ref_graph(
         _equals_lookup, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)
     )
 
+
     handle = backend.jgrapht_rr_graph_create(
         directed,
         allowing_self_loops,
@@ -136,5 +217,8 @@ def _create_ref_graph(
         hash_lookup_fptr_wrapper.fptr,
         equals_lookup_fptr_wrapper.fptr,
     )
+
+    # TODO: store suppliers wrappers in actual graph to avoid 
+    # garbage collection
 
     return _JGraphTRefGraph(handle)

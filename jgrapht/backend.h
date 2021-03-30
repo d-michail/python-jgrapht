@@ -645,6 +645,22 @@ int jgrapht_rr_graph_add_vertex(void *, void**);
 int jgrapht_rr_graph_add_given_vertex(void *, void *, int*);
 int jgrapht_rr_graph_remove_vertex(void *, void *, int*);
 int jgrapht_rr_graph_contains_vertex(void *, void *, int*);
+int jgrapht_rr_graph_add_edge(void *, void *, void *, void**);
+int jgrapht_rr_graph_add_given_edge(void *, void *, void *, void *, int*);
+int jgrapht_rr_graph_remove_edge(void *, void *, int*);
+int jgrapht_rr_graph_contains_edge(void *, void *, int*);
+int jgrapht_rr_graph_contains_edge_between(void *, void *, void *, int*);
+int jgrapht_rr_graph_degree_of(void *, void *, long long*);
+int jgrapht_rr_graph_indegree_of(void *, void *, long long*);
+int jgrapht_rr_graph_outdegree_of(void *, void *, long long*);
+int jgrapht_rr_graph_edge_source(void *, void *, void**);
+int jgrapht_rr_graph_edge_target(void *, void *, void**);
+int jgrapht_rr_graph_get_edge_weight(void *, void *, double*);
+int jgrapht_rr_graph_set_edge_weight(void *, void *, double);
+int jgrapht_rr_graph_create_between_eit(void *, void *, void *, void**);
+int jgrapht_rr_graph_vertex_create_eit(void *, void *, void**);
+int jgrapht_rr_graph_vertex_create_out_eit(void *, void *, void**);
+int jgrapht_rr_graph_vertex_create_in_eit(void *, void *, void**);
 
 // scoring
 

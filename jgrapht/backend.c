@@ -2566,6 +2566,85 @@ int jgrapht_rr_graph_contains_vertex(void *g, void *vertex, int* res) {
     return jgrapht_capi_rr_graph_contains_vertex(thread, g, vertex, res);
 }
 
+int jgrapht_rr_graph_add_edge(void *g, void *source, void *target, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_add_edge(thread, g, source, target, res);
+}
+
+int jgrapht_rr_graph_add_given_edge(void *g, void *source, void *target, void *edge, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_add_given_edge(thread, g, source, target, edge, res);
+}
+
+int jgrapht_rr_graph_remove_edge(void *g, void *edge, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_remove_edge(thread, g, edge, res);
+}
+
+int jgrapht_rr_graph_contains_edge(void *g, void *edge, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_contains_edge(thread, g, edge, res);
+}
+
+int jgrapht_rr_graph_contains_edge_between(void *g, void *source, void *target, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_contains_edge_between(thread, g, source, target, res);
+}
+
+int jgrapht_rr_graph_degree_of(void *g, void *vertex, long long* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_degree_of(thread, g, vertex, res);
+}
+
+int jgrapht_rr_graph_indegree_of(void *g, void *vertex, long long* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_indegree_of(thread, g, vertex, res);
+}
+
+int jgrapht_rr_graph_outdegree_of(void *g, void *vertex, long long* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_outdegree_of(thread, g, vertex, res);
+}
+
+int jgrapht_rr_graph_edge_source(void *g, void *edge, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_edge_source(thread, g, edge, res);
+}
+
+int jgrapht_rr_graph_edge_target(void *g, void *edge, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_edge_target(thread, g, edge, res);
+}
+
+int jgrapht_rr_graph_get_edge_weight(void *g, void *edge, double* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_get_edge_weight(thread, g, edge, res);
+}
+
+int jgrapht_rr_graph_set_edge_weight(void *g, void *edge, double weight) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_set_edge_weight(thread, g, edge, weight);
+}
+
+int jgrapht_rr_graph_create_between_eit(void *g, void *source, void *target, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_create_between_eit(thread, g, source, target, res);
+}
+
+int jgrapht_rr_graph_vertex_create_eit(void *g, void *vertex, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_vertex_create_eit(thread, g, vertex, res);
+}
+
+int jgrapht_rr_graph_vertex_create_out_eit(void *g, void *vertex, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_vertex_create_out_eit(thread, g, vertex, res);
+}
+
+int jgrapht_rr_graph_vertex_create_in_eit(void *g, void *vertex, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_vertex_create_in_eit(thread, g, vertex, res);
+}
 
 // scoring
 
