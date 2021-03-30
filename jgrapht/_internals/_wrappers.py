@@ -182,7 +182,6 @@ class _JGraphTRefIterator(_HandleWrapper, Iterator):
     """A JGraphT iterator. This iterator returns frontend objects
     resolved from references kept in the backend.
     """
-
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 

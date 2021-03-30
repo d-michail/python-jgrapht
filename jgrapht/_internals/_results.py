@@ -1,5 +1,6 @@
 from ._int_graphs import _JGraphTIntegerGraph, _is_int_graph
 from ._long_graphs import _JGraphTLongGraph, _is_long_graph
+from ._ref_graphs import _JGraphTRefGraph, _is_ref_graph
 from ._anyhashableg import (
     _AnyHashableGraph,
     _is_anyhashable_graph,
@@ -101,6 +102,7 @@ def _unwrap_vertex(graph, vertex):
         ),
         _JGraphTLongGraph: (lambda v: v, [vertex]),
         _JGraphTIntegerGraph: (lambda v: v, [vertex]),
+        _JGraphTRefGraph: (lambda v: id(v), [vertex])
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])
@@ -168,6 +170,7 @@ def _wrap_vertex_iterator(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphVertexIterator, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongIterator, [handle]),
         _JGraphTIntegerGraph: (_JGraphTIntegerIterator, [handle]),
+        _JGraphTRefGraph: (_JGraphTRefIterator, [handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])
@@ -181,6 +184,7 @@ def _wrap_edge_iterator(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphEdgeIterator, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongIterator, [handle]),
         _JGraphTIntegerGraph: (_JGraphTIntegerIterator, [handle]),
+        _JGraphTRefGraph: (_JGraphTRefIterator, [handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])

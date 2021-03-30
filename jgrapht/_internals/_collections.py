@@ -21,7 +21,6 @@ from collections.abc import (
     Sized,
 )
 
-
 class _JGraphTIntegerSet(_HandleWrapper, Set):
     """JGraphT Integer Set"""
 
@@ -832,3 +831,4 @@ class _JGraphTEdgeStrTripleList(_HandleWrapper, Iterable, Sized):
 
     def __str__(self):
         return "[" + ", ".join(str(x) for x in self) + "]"
+

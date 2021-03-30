@@ -12,7 +12,25 @@ from ._wrappers import _HandleWrapper, _JGraphTRefIterator
 
 
 class _JGraphTRefGraph(_HandleWrapper, Graph):
-    """The ref graph implementation."""
+    """The ref graph implementation. A graph which allows the use of any hashable as vertex
+    and edges.
+
+    The actual implementation uses maps python hashables using their ids. The reference count
+    of each hashable is increased by one when it is inserted in the graph and decreased by one
+    when it is removed from the graph. This means that all intermediate results (e.g. such as
+    a vertex set returns from a vertex cover algorithm) need to be translated into Python
+    collections, to keep a positive reference count even when vertices or edges removed from
+    the graph.
+
+    Additionally, user vertex and edge suppliers are called directly from the JVM in order
+    to construct new vertices and edges when needed.
+
+    The implementation delegates the hashCode and equals methods in the JVM to the hash and __eq__ 
+    methods in Python.
+
+    Do not construct this instance directly, look at the corresponding factory method for the
+    right way to initialize this object.
+    """
 
     def __init__(
         self,
@@ -330,3 +348,13 @@ def _create_ref_graph(
         hash_lookup_fptr_wrapper=hash_lookup_fptr_wrapper,
         equals_lookup_fptr_wrapper=equals_lookup_fptr_wrapper,
     )
+
+
+def _is_ref_graph(graph):
+    """Check if a graph instance is a ref graph.
+
+    :param graph: the graph
+    :returns: True if the graph is a ref graph, False otherwise.
+    """
+    return isinstance(graph, (_JGraphTRefGraph))
+    
