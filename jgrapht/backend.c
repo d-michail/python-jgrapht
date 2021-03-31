@@ -2441,6 +2441,16 @@ int jgrapht_map_int_string_put(void *map, int key, char* value) {
     return jgrapht_capi_map_int_string_put(thread, map, key, value);
 }
 
+int jgrapht_map_int_ref_put(void *map, int key, void *value) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_int_ref_put(thread, map, key, value);
+}
+
+int jgrapht_map_int_ref_put_direct(void *map, int key, void *value, void *hash_equals_resolver_handle) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_int_ref_put_direct(thread, map, key, value, hash_equals_resolver_handle);
+}
+
 int jgrapht_map_long_double_put(void *map, long long int key, double value) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_map_long_double_put(thread, map, key, value);
@@ -2454,6 +2464,16 @@ int jgrapht_map_long_int_put(void *map, long long int key, int value) {
 int jgrapht_map_long_string_put(void *map, long long int key, char* value) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_map_long_string_put(thread, map, key, value);
+}
+
+int jgrapht_map_long_ref_put(void *map, long long int key, void *value) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_ref_put(thread, map, key, value);
+}
+
+int jgrapht_map_long_ref_put_direct(void *map, long long int key, void *value, void *hash_equals_resolver_handle) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_ref_put_direct(thread, map, key, value, hash_equals_resolver_handle);
 }
 
 int jgrapht_map_int_double_get(void *map, int key, double* res) { 
@@ -2471,6 +2491,16 @@ int jgrapht_map_int_string_get(void *map, int key, void** res) {
     return jgrapht_capi_map_int_string_get(thread, map, key, res);
 }
 
+int jgrapht_map_int_obj_get(void *map, int key, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_int_obj_get(thread, map, key, res);
+}
+
+int jgrapht_map_int_ref_get_direct(void *map, int key, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_int_ref_get_direct(thread, map, key, res);
+}
+
 int jgrapht_map_long_double_get(void *map, long long int key, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_map_long_double_get(thread, map, key, res);
@@ -2484,6 +2514,16 @@ int jgrapht_map_long_int_get(void *map, long long int key, int* res) {
 int jgrapht_map_long_string_get(void *map, long long int key, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_map_long_string_get(thread, map, key, res);
+}
+
+int jgrapht_map_long_obj_get(void *map, long long int key, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_obj_get(thread, map, key, res);
+}
+
+int jgrapht_map_long_ref_get_direct(void *map, long long int key, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_ref_get_direct(thread, map, key, res);
 }
 
 int jgrapht_map_int_contains_key(void *map, int key, int* res) { 
@@ -2511,6 +2551,16 @@ int jgrapht_map_int_string_remove(void *map, int key, void** res) {
     return jgrapht_capi_map_int_string_remove(thread, map, key, res);
 }
 
+int jgrapht_map_int_obj_remove(void *map, int key, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_int_obj_remove(thread, map, key, res);
+}
+
+int jgrapht_map_int_ref_remove_direct(void *map, int key, void** res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_int_ref_remove_direct(thread, map, key, res);
+}
+
 int jgrapht_map_long_double_remove(void *map, long long int key, double* res) {
     LAZY_THREAD_ATTACH
     return jgrapht_capi_map_long_double_remove(thread, map, key, res);
@@ -2524,6 +2574,16 @@ int jgrapht_map_long_int_remove(void *map, long long int key, int* res) {
 int jgrapht_map_long_string_remove(void *map, long long int key, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_map_long_string_remove(thread, map, key, res);
+}
+
+int jgrapht_map_long_obj_remove(void *map, long long int key, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_obj_remove(thread, map, key, res);
+}
+
+int jgrapht_map_long_ref_remove_direct(void *map, long long int key, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_map_long_ref_remove_direct(thread, map, key, res);
 }
 
 int jgrapht_map_clear(void *map) { 
