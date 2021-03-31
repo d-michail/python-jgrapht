@@ -11,9 +11,12 @@ from ._wrappers import (
     _JGraphTIntegerIterator,
     _JGraphTLongIterator,
     _JGraphTObjectIterator,
+    _JGraphTRefDirectIterator,
 )
 from ._int_graphs import _is_int_graph
 from ._long_graphs import _is_long_graph
+from ._ref_graphs import _is_ref_graph
+from . import _ref_utils
 
 
 class _JGraphTGraphPath(_HandleWrapper, GraphPath):
@@ -81,6 +84,16 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
                 eit,
             ) = backend.jgrapht_lx_handles_get_graphpath(self._handle)
             self._edges = list(_JGraphTLongIterator(eit))
+        elif _is_ref_graph(self._graph):
+            (
+                weight,
+                start_vertex_ptr,
+                end_vertex_ptr,
+                eit,
+            ) = backend.jgrapht_rr_handles_get_graphpath(self._handle)
+            start_vertex = _ref_utils._swig_ptr_to_obj(start_vertex_ptr)
+            end_vertex = _ref_utils._swig_ptr_to_obj(end_vertex_ptr)
+            self._edges = list(_JGraphTRefDirectIterator(eit))
         else:
             raise TypeError("Not supported graph type")
 

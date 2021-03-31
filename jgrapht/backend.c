@@ -1548,6 +1548,11 @@ int jgrapht_lx_handles_get_graphpath(void *graph_path, double* weight, long long
     return jgrapht_capi_lx_handles_get_graphpath(thread, graph_path, weight, start_vertex, end_vertex, eit);
 }
 
+int jgrapht_rr_handles_get_graphpath(void *graph_path, double* weight, void** start_vertex, void** end_vertex, void** eit) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_handles_get_graphpath(thread, graph_path, weight, start_vertex, end_vertex, eit);
+}
+
 // importers
 
 int jgrapht_ii_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 

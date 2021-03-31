@@ -229,6 +229,7 @@ def _wrap_graphpath(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphGraphPath, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTGraphPath, [handle, graph]),
         _JGraphTIntegerGraph: (_JGraphTGraphPath, [handle, graph]),
+        _JGraphTRefGraph: (_JGraphTGraphPath, [handle, graph]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])

@@ -407,6 +407,7 @@ int jgrapht_handles_get_long_edge_triple(void *, long long*, long long*, double*
 int jgrapht_handles_get_str_edge_triple(void *, char**, char**, double*);
 int jgrapht_ix_handles_get_graphpath(void *, double*, int*, int*, void**);
 int jgrapht_lx_handles_get_graphpath(void *, double*, long long*, long long*, void**);
+int jgrapht_rr_handles_get_graphpath(void *, double*, void**, void**, void**);
 
 // importers
 
