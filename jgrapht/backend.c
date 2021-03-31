@@ -2885,29 +2885,29 @@ int jgrapht_set_ref_add_direct(void *set, void *ref_ptr, void *hash_equals_resol
     return jgrapht_capi_set_ref_add_direct(thread, set, ref_ptr, hash_equals_resolver, res);
 }
 
-int jgrapht_set_int_remove(void *set, int elem) { 
+int jgrapht_set_int_remove(void *set, int elem, int *res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_set_int_remove(thread, set, elem);
+    return jgrapht_capi_set_int_remove(thread, set, elem, res);
 }
 
-int jgrapht_set_long_remove(void *set, long long int elem) { 
+int jgrapht_set_long_remove(void *set, long long int elem, int *res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_set_long_remove(thread, set, elem);
+    return jgrapht_capi_set_long_remove(thread, set, elem, res);
 }
 
-int jgrapht_set_double_remove(void *set, double elem) { 
+int jgrapht_set_double_remove(void *set, double elem, int *res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_set_double_remove(thread, set, elem);
+    return jgrapht_capi_set_double_remove(thread, set, elem, res);
 }
 
-int jgrapht_set_ref_remove(void *set, void *elem) { 
+int jgrapht_set_ref_remove(void *set, void *elem, int *res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_set_ref_remove(thread, set, elem);
+    return jgrapht_capi_set_ref_remove(thread, set, elem, res);
 }
 
-int jgrapht_set_ref_remove_direct(void *list, void *ref_ptr, void *hash_equals_resolver) { 
+int jgrapht_set_ref_remove_direct(void *list, void *ref_ptr, void *hash_equals_resolver, int *res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_set_ref_remove_direct(thread, list, ref_ptr, hash_equals_resolver);
+    return jgrapht_capi_set_ref_remove_direct(thread, list, ref_ptr, hash_equals_resolver, res);
 }
 
 int jgrapht_set_int_contains(void *set, int elem, int* res) { 

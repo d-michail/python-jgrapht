@@ -1,6 +1,10 @@
+from .. import backend
+
 from ._int_graphs import _JGraphTIntegerGraph, _is_int_graph
 from ._long_graphs import _JGraphTLongGraph, _is_long_graph
 from ._ref_graphs import _JGraphTRefGraph, _is_ref_graph
+
+from . import _ref_hashequals, _ref_results
 
 from ._anyhashableg import (
     _AnyHashableGraph,
@@ -25,6 +29,8 @@ from ._collections import (
     _JGraphTLongMutableSet,
     _JGraphTLongSetIterator,
     _JGraphTLongListIterator,
+    _JGraphTRefSet,
+    _JGraphTRefMutableSet,
     _JGraphTLongIntegerMap,
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerDoubleMutableMap,
@@ -55,7 +61,7 @@ from ._flows import (
     _JGraphTLongFlow,
 )
 from ._planar import (
-    _JGraphTIntegerPlanarEmbedding, 
+    _JGraphTIntegerPlanarEmbedding,
     _JGraphTLongPlanarEmbedding,
 )
 from ._anyhashableg_wrappers import (
@@ -88,13 +94,7 @@ from ._anyhashableg_flows import (
     _AnyHashableGraphGomoryHuTree,
     _AnyHashableGraphEquivalentFlowTree,
 )
-from ._anyhashableg_planar import (
-    _AnyHashableGraphPlanarEmbedding
-)
-
-from ._ref_results import (
-    _jgrapht_ref_set_to_python_set
-)
+from ._anyhashableg_planar import _AnyHashableGraphPlanarEmbedding
 
 
 def _unwrap_vertex(graph, vertex):
@@ -109,24 +109,24 @@ def _unwrap_vertex(graph, vertex):
         ),
         GraphBackend.LONG_GRAPH: (lambda v: v, [vertex]),
         GraphBackend.INT_GRAPH: (lambda v: v, [vertex]),
-        GraphBackend.REF_GRAPH: (lambda v: id(v), [vertex])
+        GraphBackend.REF_GRAPH: (lambda v: id(v), [vertex]),
     }
     alg = cases[graph._backend_type]
     return alg[0](*alg[1])
 
 
 def _unwrap_astar_heuristic_cb(graph, heuristic_cb):
-    """Given a heuristic callback method for astar in Python, create one for the JVM.
-    """
+    """Given a heuristic callback method for astar in Python, create one for the JVM."""
     if _is_anyhashable_graph(graph):
         # redefine in order to translate from integer to user vertices
         def actual_heuristic_cb(s, t):
             return heuristic_cb(
                 _vertex_g_to_anyhashableg(graph, s), _vertex_g_to_anyhashableg(graph, t)
             )
+
     else:
         actual_heuristic_cb = heuristic_cb
-    
+
     return actual_heuristic_cb
 
 
@@ -138,7 +138,7 @@ def _wrap_vertex_set(graph, handle):
         _AnyHashableGraph: (_AnyHashableGraphVertexSet, [handle, graph]),
         _JGraphTLongGraph: (_JGraphTLongSet, [handle]),
         _JGraphTIntegerGraph: (_JGraphTIntegerSet, [handle]),
-        _JGraphTRefGraph: (_jgrapht_ref_set_to_python_set, [handle]),
+        _JGraphTRefGraph: (_ref_results._jgrapht_ref_set_to_python_set, [handle]),
     }
     alg = cases[type(graph)]
     return alg[0](*alg[1])
@@ -152,7 +152,7 @@ def _wrap_edge_set(graph, handle):
         GraphBackend.ANY_HASHABLE_GRAPH: (_AnyHashableGraphEdgeSet, [handle, graph]),
         GraphBackend.LONG_GRAPH: (_JGraphTLongSet, [handle]),
         GraphBackend.INT_GRAPH: (_JGraphTIntegerSet, [handle]),
-        GraphBackend.REF_GRAPH: (_jgrapht_ref_set_to_python_set, [handle]),
+        GraphBackend.REF_GRAPH: (_ref_results._jgrapht_ref_set_to_python_set, [handle]),
     }
     alg = cases[graph._backend_type]
     return alg[0](*alg[1])
@@ -475,18 +475,30 @@ def _wrap_subgraph(graph, handle):
 
 def _build_vertex_set(graph, vertex_set):
     """Given a vertex set in Python, build a vertex set inside the JVM."""
-    if _is_anyhashable_graph(graph):
+
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
         if isinstance(vertex_set, _AnyHashableGraphVertexSet):
             return vertex_set
-        mutable_set = _AnyHashableGraphMutableVertexSet(handle=None, graph=graph)
-    elif _is_long_graph(graph):
+        mutable_set = _AnyHashableGraphMutableVertexSet(
+            handle=backend.jgrapht_set_linked_create(), graph=graph
+        )
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
         if isinstance(vertex_set, _JGraphTLongSet):
             return vertex_set
-        mutable_set = _JGraphTLongMutableSet()
-    else:
+        mutable_set = _JGraphTLongMutableSet(handle=backend.jgrapht_set_linked_create())
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
         if isinstance(vertex_set, _JGraphTIntegerSet):
             return vertex_set
-        mutable_set = _JGraphTIntegerMutableSet()
+        mutable_set = _JGraphTIntegerMutableSet(
+            handle=backend.jgrapht_set_linked_create()
+        )
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        mutable_set = _JGraphTRefMutableSet(
+            handle=backend.jgrapht_set_linked_create(),
+            hash_equals_resolver_handle=_ref_hashequals._get_equals_hash_wrapper().handle,
+        )
+    else:
+        raise ValueError("Not supported graph backend")
 
     for v in vertex_set:
         mutable_set.add(v)

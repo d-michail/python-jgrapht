@@ -1,5 +1,6 @@
 from .. import backend
 
+from . import _ref_utils, _ref_hashequals
 from ._wrappers import (
     _HandleWrapper,
     _JGraphTString,
@@ -8,8 +9,9 @@ from ._wrappers import (
     _JGraphTLongIterator,
     _JGraphTEdgeLongTripleIterator,
     _JGraphTEdgeIntegerTripleIterator,
-    _JGraphTEdgeStrTripleIterator,    
+    _JGraphTEdgeStrTripleIterator,
     _JGraphTRefIterator,
+    _JGraphTRefDirectIterator,
 )
 
 from collections.abc import (
@@ -22,15 +24,11 @@ from collections.abc import (
     Sized,
 )
 
+
 class _JGraphTIntegerSet(_HandleWrapper, Set):
     """JGraphT Integer Set"""
 
-    def __init__(self, handle=None, linked=True, **kwargs):
-        if handle is None:
-            if linked:
-                handle = backend.jgrapht_set_linked_create()
-            else:
-                handle = backend.jgrapht_set_create()
+    def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
@@ -53,14 +51,14 @@ class _JGraphTIntegerSet(_HandleWrapper, Set):
 
     @classmethod
     def _from_iterable(cls, it):
-        return set(it)            
+        return set(it)
 
 
 class _JGraphTIntegerMutableSet(_JGraphTIntegerSet, MutableSet):
     """JGraphT Integer Mutable Set"""
 
-    def __init__(self, handle=None, linked=True, **kwargs):
-        super().__init__(handle=handle, linked=linked, **kwargs)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
 
     def add(self, x):
         backend.jgrapht_set_int_add(self._handle, x)
@@ -95,12 +93,7 @@ class _JGraphTIntegerSetIterator(_JGraphTObjectIterator):
 class _JGraphTLongSet(_HandleWrapper, Set):
     """JGraphT Long Set"""
 
-    def __init__(self, handle=None, linked=True, **kwargs):
-        if handle is None:
-            if linked:
-                handle = backend.jgrapht_set_linked_create()
-            else:
-                handle = backend.jgrapht_set_create()
+    def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
@@ -129,8 +122,8 @@ class _JGraphTLongSet(_HandleWrapper, Set):
 class _JGraphTLongMutableSet(_JGraphTLongSet, MutableSet):
     """JGraphT Long Mutable Set"""
 
-    def __init__(self, handle=None, linked=True, **kwargs):
-        super().__init__(handle=handle, linked=linked, **kwargs)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
 
     def add(self, x):
         backend.jgrapht_set_long_add(self._handle, x)
@@ -160,6 +153,80 @@ class _JGraphTLongSetIterator(_JGraphTObjectIterator):
 
     def __repr__(self):
         return "_JGraphTLongSetIterator(%r)" % self._handle
+
+
+class _JGraphTRefSet(_HandleWrapper, Set):
+    """JGraphT Ref Set"""
+
+    def __init__(self, handle, hash_equals_resolver_handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._hash_equals_resolver_handle = hash_equals_resolver_handle
+
+    def __iter__(self):
+        res = backend.jgrapht_set_it_create(self._handle)
+        return _JGraphTRefDirectIterator(res)
+
+    def __len__(self):
+        res = backend.jgrapht_set_size(self._handle)
+        return res
+
+    def __contains__(self, x):
+        res = backend.jgrapht_set_ref_contains_direct(
+            self._handle, id(x), self._hash_equals_resolver_handle
+        )
+        return res
+
+    def __repr__(self):
+        return "_JGraphTRefSet(%r)" % self._handle
+
+    def __str__(self):
+        return "{" + ", ".join(str(x) for x in self) + "}"
+
+    @classmethod
+    def _from_iterable(cls, it):
+        return set(it)
+
+
+class _JGraphTRefMutableSet(_JGraphTRefSet, MutableSet):
+    """JGraphT Ref Mutable Set"""
+
+    def __init__(self, handle, hash_equals_resolver_handle, **kwargs):
+        super().__init__(
+            handle=handle,
+            hash_equals_resolver_handle=hash_equals_resolver_handle,
+            **kwargs
+        )
+
+    def add(self, x):
+        if backend.jgrapht_set_ref_add_direct(
+            self._handle, id(x), self._hash_equals_resolver_handle
+        ):
+            _ref_utils._inc_ref(x)
+
+    def discard(self, x):
+        if backend.jgrapht_set_ref_remove_direct(
+            self._handle, id(x), self._hash_equals_resolver_handle
+        ):
+            _ref_utils._dec_ref(x)
+
+    def clear(self):
+        # cleanup reference counts
+        for x in self:
+            _ref_utils._dec_ref(x)
+        backend.jgrapht_set_clear(self._handle)
+
+    def __repr__(self):
+        return "_JGraphTRefMutableSet(%r)" % self._handle
+
+    @classmethod
+    def _from_iterable(cls, it):
+        return MutableSet(it)
+
+    def __del__(self):
+        # Cleanup reference counts
+        for x in self:
+            _ref_utils._dec_ref(x)
+        super().__del__()
 
 
 class _JGraphTIntegerList(_HandleWrapper, Collection):
@@ -574,7 +641,7 @@ class _JGraphTLongIntegerMap(_HandleWrapper, Mapping):
         items = ["{}: {}".format(k, v) for k, v in self.items()]
         return "{" + ", ".join(items) + "}"
 
-    
+
 class _JGraphTLongIntegerMutableMap(_JGraphTLongIntegerMap, MutableMapping):
     """JGraphT Mutable Map with long keys and integer values"""
 
@@ -832,4 +899,3 @@ class _JGraphTEdgeStrTripleList(_HandleWrapper, Iterable, Sized):
 
     def __str__(self):
         return "[" + ", ".join(str(x) for x in self) + "]"
-
