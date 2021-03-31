@@ -1,16 +1,8 @@
 import pytest
 
 from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier
 import jgrapht.algorithms.cuts as cuts
-
-class IntSupplier:
-    def __init__(self):
-        self._id = 0
-
-    def __call__(self):
-        ret = self._id
-        self._id += 1
-        return ret
 
 
 def build_graph(backend):
@@ -21,7 +13,7 @@ def build_graph(backend):
         allowing_multiple_edges=False,
         weighted=True,
         backend=backend,
-        edge_supplier=IntSupplier()
+        edge_supplier=IntegerSupplier()
     )
 
     for i in range(0, 10):

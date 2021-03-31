@@ -2105,6 +2105,11 @@ int jgrapht_lx_link_prediction_exec_adamic_adar_index(void *g, long long int u, 
     return jgrapht_capi_lx_link_prediction_exec_adamic_adar_index(thread, g, u, v, res);
 }
 
+int jgrapht_rr_link_prediction_exec_adamic_adar_index(void *g, void* u, void* v, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_link_prediction_exec_adamic_adar_index(thread, g, u, v, res);
+}
+
 int jgrapht_ix_link_prediction_exec_common_neighbors(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ix_link_prediction_exec_common_neighbors(thread, g, u, v, res);
@@ -2113,6 +2118,11 @@ int jgrapht_ix_link_prediction_exec_common_neighbors(void *g, int u, int v, doub
 int jgrapht_lx_link_prediction_exec_common_neighbors(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_lx_link_prediction_exec_common_neighbors(thread, g, u, v, res);
+}
+
+int jgrapht_rr_link_prediction_exec_common_neighbors(void *g, void* u, void* v, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_link_prediction_exec_common_neighbors(thread, g, u, v, res);
 }
 
 int jgrapht_ix_link_prediction_exec_hub_depressed_index(void *g, int u, int v, double* res) { 
@@ -2125,6 +2135,11 @@ int jgrapht_lx_link_prediction_exec_hub_depressed_index(void *g, long long int u
     return jgrapht_capi_lx_link_prediction_exec_hub_depressed_index(thread, g, u, v, res);
 }
 
+int jgrapht_rr_link_prediction_exec_hub_depressed_index(void *g, void* u, void* v, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_link_prediction_exec_hub_depressed_index(thread, g, u, v, res);
+}
+
 int jgrapht_ix_link_prediction_exec_hub_promoted_index(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ix_link_prediction_exec_hub_promoted_index(thread, g, u, v, res);
@@ -2133,6 +2148,11 @@ int jgrapht_ix_link_prediction_exec_hub_promoted_index(void *g, int u, int v, do
 int jgrapht_lx_link_prediction_exec_hub_promoted_index(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_lx_link_prediction_exec_hub_promoted_index(thread, g, u, v, res);
+}
+
+int jgrapht_rr_link_prediction_exec_hub_promoted_index(void *g, void* u, void* v, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_link_prediction_exec_hub_promoted_index(thread, g, u, v, res);
 }
 
 int jgrapht_ix_link_prediction_exec_jaccard_coefficient(void *g, int u, int v, double* res) { 
@@ -2145,6 +2165,11 @@ int jgrapht_lx_link_prediction_exec_jaccard_coefficient(void *g, long long int u
     return jgrapht_capi_lx_link_prediction_exec_jaccard_coefficient(thread, g, u, v, res);
 }
 
+int jgrapht_rr_link_prediction_exec_jaccard_coefficient(void *g, void* u, void* v, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_link_prediction_exec_jaccard_coefficient(thread, g, u, v, res);
+}
+
 int jgrapht_ix_link_prediction_exec_leicht_holme_newman_index(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ix_link_prediction_exec_leicht_holme_newman_index(thread, g, u, v, res);
@@ -2153,6 +2178,11 @@ int jgrapht_ix_link_prediction_exec_leicht_holme_newman_index(void *g, int u, in
 int jgrapht_lx_link_prediction_exec_leicht_holme_newman_index(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_lx_link_prediction_exec_leicht_holme_newman_index(thread, g, u, v, res);
+}
+
+int jgrapht_rr_link_prediction_exec_leicht_holme_newman_index(void *g, void* u, void* v, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_link_prediction_exec_leicht_holme_newman_index(thread, g, u, v, res);
 }
 
 int jgrapht_ix_link_prediction_exec_preferential_attachment(void *g, int u, int v, double* res) { 
@@ -2165,6 +2195,11 @@ int jgrapht_lx_link_prediction_exec_preferential_attachment(void *g, long long i
     return jgrapht_capi_lx_link_prediction_exec_preferential_attachment(thread, g, u, v, res);
 }
 
+int jgrapht_rr_link_prediction_exec_preferential_attachment(void *g, void* u, void* v, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_link_prediction_exec_preferential_attachment(thread, g, u, v, res);
+}
+
 int jgrapht_ix_link_prediction_exec_resource_allocation_index(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ix_link_prediction_exec_resource_allocation_index(thread, g, u, v, res);
@@ -2173,6 +2208,11 @@ int jgrapht_ix_link_prediction_exec_resource_allocation_index(void *g, int u, in
 int jgrapht_lx_link_prediction_exec_resource_allocation_index(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_lx_link_prediction_exec_resource_allocation_index(thread, g, u, v, res);
+}
+
+int jgrapht_rr_link_prediction_exec_resource_allocation_index(void *g, void* u, void* v, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_link_prediction_exec_resource_allocation_index(thread, g, u, v, res);
 }
 
 int jgrapht_ix_link_prediction_exec_salton_index(void *g, int u, int v, double* res) { 
@@ -2185,6 +2225,11 @@ int jgrapht_lx_link_prediction_exec_salton_index(void *g, long long int u, long 
     return jgrapht_capi_lx_link_prediction_exec_salton_index(thread, g, u, v, res);
 }
 
+int jgrapht_rr_link_prediction_exec_salton_index(void *g, void* u, void* v, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_link_prediction_exec_salton_index(thread, g, u, v, res);
+}
+
 int jgrapht_ix_link_prediction_exec_sorensen_index(void *g, int u, int v, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ix_link_prediction_exec_sorensen_index(thread, g, u, v, res);
@@ -2193,6 +2238,11 @@ int jgrapht_ix_link_prediction_exec_sorensen_index(void *g, int u, int v, double
 int jgrapht_lx_link_prediction_exec_sorensen_index(void *g, long long int u, long long int v, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_lx_link_prediction_exec_sorensen_index(thread, g, u, v, res);
+}
+
+int jgrapht_rr_link_prediction_exec_sorensen_index(void *g, void* u, void* v, double* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_link_prediction_exec_sorensen_index(thread, g, u, v, res);
 }
 
 // list

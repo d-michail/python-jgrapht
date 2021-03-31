@@ -103,15 +103,15 @@ def _unwrap_vertex(graph, vertex):
     if vertex is None:
         return None
     cases = {
-        _AnyHashableGraph: (
+        GraphBackend.ANY_HASHABLE_GRAPH: (
             lambda graph, v: _vertex_anyhashableg_to_g(graph, v),
             [graph, vertex],
         ),
-        _JGraphTLongGraph: (lambda v: v, [vertex]),
-        _JGraphTIntegerGraph: (lambda v: v, [vertex]),
-        _JGraphTRefGraph: (lambda v: id(v), [vertex])
+        GraphBackend.LONG_GRAPH: (lambda v: v, [vertex]),
+        GraphBackend.INT_GRAPH: (lambda v: v, [vertex]),
+        GraphBackend.REF_GRAPH: (lambda v: id(v), [vertex])
     }
-    alg = cases[type(graph)]
+    alg = cases[graph._backend_type]
     return alg[0](*alg[1])
 
 

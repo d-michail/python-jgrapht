@@ -532,24 +532,34 @@ int jgrapht_it_hasnext(void *, int*);
 
 int jgrapht_ix_link_prediction_exec_adamic_adar_index(void *, int, int, double*);
 int jgrapht_lx_link_prediction_exec_adamic_adar_index(void *, long long int, long long int, double*);
+int jgrapht_rr_link_prediction_exec_adamic_adar_index(void *, void*, void*, double*);
 int jgrapht_ix_link_prediction_exec_common_neighbors(void *, int, int, double*);
 int jgrapht_lx_link_prediction_exec_common_neighbors(void *, long long int, long long int, double*);
+int jgrapht_rr_link_prediction_exec_common_neighbors(void *, void*, void*, double*);
 int jgrapht_ix_link_prediction_exec_hub_depressed_index(void *, int, int, double*);
 int jgrapht_lx_link_prediction_exec_hub_depressed_index(void *, long long int, long long int, double*);
+int jgrapht_rr_link_prediction_exec_hub_depressed_index(void *, void*, void*, double*);
 int jgrapht_ix_link_prediction_exec_hub_promoted_index(void *, int, int, double*);
 int jgrapht_lx_link_prediction_exec_hub_promoted_index(void *, long long int, long long int, double*);
+int jgrapht_rr_link_prediction_exec_hub_promoted_index(void *, void*, void*, double*);
 int jgrapht_ix_link_prediction_exec_jaccard_coefficient(void *, int, int, double*);
 int jgrapht_lx_link_prediction_exec_jaccard_coefficient(void *, long long int, long long int, double*);
+int jgrapht_rr_link_prediction_exec_jaccard_coefficient(void *, void*, void*, double*);
 int jgrapht_ix_link_prediction_exec_leicht_holme_newman_index(void *, int, int, double*);
 int jgrapht_lx_link_prediction_exec_leicht_holme_newman_index(void *, long long int, long long int, double*);
+int jgrapht_rr_link_prediction_exec_leicht_holme_newman_index(void *, void*, void*, double*);
 int jgrapht_ix_link_prediction_exec_preferential_attachment(void *, int, int, double*);
 int jgrapht_lx_link_prediction_exec_preferential_attachment(void *, long long int, long long int, double*);
+int jgrapht_rr_link_prediction_exec_preferential_attachment(void *, void*, void*, double*);
 int jgrapht_ix_link_prediction_exec_resource_allocation_index(void *, int, int, double*);
 int jgrapht_lx_link_prediction_exec_resource_allocation_index(void *, long long int, long long int, double*);
+int jgrapht_rr_link_prediction_exec_resource_allocation_index(void *, void*, void*, double*);
 int jgrapht_ix_link_prediction_exec_salton_index(void *, int, int, double*);
 int jgrapht_lx_link_prediction_exec_salton_index(void *, long long int, long long int, double*);
+int jgrapht_rr_link_prediction_exec_salton_index(void *, void*, void*, double*);
 int jgrapht_ix_link_prediction_exec_sorensen_index(void *, int, int, double*);
 int jgrapht_lx_link_prediction_exec_sorensen_index(void *, long long int, long long int, double*);
+int jgrapht_rr_link_prediction_exec_sorensen_index(void *, void*, void*, double*);
 
 // list
 
