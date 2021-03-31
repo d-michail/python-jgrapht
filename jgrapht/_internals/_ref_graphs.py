@@ -8,7 +8,7 @@ from ..types import (
 
 import ctypes
 from . import _ref_utils, _ref_hashequals
-from ._wrappers import _HandleWrapper, _JGraphTRefDirectIterator
+from ._wrappers import _HandleWrapper, _JGraphTRefDirectIterator, GraphBackend
 
 
 class _JGraphTRefGraph(_HandleWrapper, Graph):
@@ -70,10 +70,13 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         self._edge_supplier_fptr_wrapper = edge_supplier_fptr_wrapper
         self._equals_hash_wrapper = equals_hash_wrapper
 
-
     @property
     def type(self):
         return self._type
+
+    @property
+    def _backend_type(self):
+        return GraphBackend.REF_GRAPH
 
     def add_vertex(self, vertex=None):
         if vertex is not None:
@@ -301,7 +304,7 @@ def _create_ref_graph(
         weighted,
         vertex_supplier_fptr_wrapper.fptr,
         edge_supplier_fptr_wrapper.fptr,
-        equals_hash_wrapper.handle
+        equals_hash_wrapper.handle,
     )
 
     return _JGraphTRefGraph(

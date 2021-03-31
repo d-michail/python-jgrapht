@@ -3,7 +3,7 @@ from ..types import Graph, GraphType, DirectedAcyclicGraph, IncomingEdgesSupport
 
 from collections.abc import Set
 
-from ._wrappers import _HandleWrapper
+from ._wrappers import _HandleWrapper, GraphBackend
 from ._collections import (
     _JGraphTIntegerIterator,
     _JGraphTIntegerSet,
@@ -46,6 +46,10 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph):
     @property
     def type(self):
         return self._type
+
+    @property
+    def _backend_type(self):
+        return GraphBackend.INT_GRAPH
 
     def add_vertex(self, vertex=None):
         if vertex is not None:

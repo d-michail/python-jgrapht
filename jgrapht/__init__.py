@@ -36,8 +36,7 @@ import logging
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
-from enum import Enum
-
+from ._internals._wrappers import GraphBackend
 from ._internals._int_graphs import (
     _create_int_graph,
     _create_int_dag,
@@ -68,16 +67,6 @@ from ._internals._ref_graphs import (
 #
 # The graph creation API
 #
-
-class GraphBackend(Enum):
-    """Different backend graph implementations. Each backend exhibits different
-       characteristics between performance and user-friendliness.
-    """
-    INT_GRAPH = 1
-    LONG_GRAPH = 2
-    ANY_HASHABLE_GRAPH = 3
-    REF_GRAPH = 4
-
 
 
 def create_graph(

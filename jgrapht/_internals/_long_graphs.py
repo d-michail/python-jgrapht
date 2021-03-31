@@ -7,7 +7,7 @@ from ..types import (
 
 from collections.abc import Set
 
-from ._wrappers import _HandleWrapper
+from ._wrappers import _HandleWrapper, GraphBackend
 from ._collections import (
     _JGraphTLongIterator,
     _JGraphTLongSet,
@@ -49,6 +49,10 @@ class _JGraphTLongGraph(_HandleWrapper, Graph):
     @property
     def type(self):
         return self._type
+
+    @property
+    def _backend_type(self):
+        return GraphBackend.LONG_GRAPH
 
     def add_vertex(self, vertex=None):
         if vertex is not None:

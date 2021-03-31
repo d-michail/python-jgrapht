@@ -1,6 +1,7 @@
 from ._int_graphs import _JGraphTIntegerGraph, _is_int_graph
 from ._long_graphs import _JGraphTLongGraph, _is_long_graph
 from ._ref_graphs import _JGraphTRefGraph, _is_ref_graph
+
 from ._anyhashableg import (
     _AnyHashableGraph,
     _is_anyhashable_graph,
@@ -12,6 +13,7 @@ from ._anyhashableg import (
 from ._wrappers import (
     _JGraphTIntegerIterator,
     _JGraphTLongIterator,
+    GraphBackend,
 )
 from ._collections import (
     _JGraphTIntegerSet,
@@ -147,12 +149,12 @@ def _wrap_edge_set(graph, handle):
     graph takes ownership and will delete the JVM resource when Python deletes
     the instance."""
     cases = {
-        _AnyHashableGraph: (_AnyHashableGraphEdgeSet, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTLongSet, [handle]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerSet, [handle]),
-        _JGraphTRefGraph: (_jgrapht_ref_set_to_python_set, [handle]),
+        GraphBackend.ANY_HASHABLE_GRAPH: (_AnyHashableGraphEdgeSet, [handle, graph]),
+        GraphBackend.LONG_GRAPH: (_JGraphTLongSet, [handle]),
+        GraphBackend.INT_GRAPH: (_JGraphTIntegerSet, [handle]),
+        GraphBackend.REF_GRAPH: (_jgrapht_ref_set_to_python_set, [handle]),
     }
-    alg = cases[type(graph)]
+    alg = cases[graph._backend_type]
     return alg[0](*alg[1])
 
 

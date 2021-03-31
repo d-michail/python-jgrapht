@@ -16,6 +16,7 @@ from ..types import (
 )
 from ..utils import IntegerSupplier
 
+from ._wrappers import GraphBackend
 from ._int_graphs import (
     _create_int_graph,
     _create_int_dag,
@@ -134,6 +135,10 @@ class _AnyHashableGraph(Graph, AttributesGraph, ListenableGraph):
     @property
     def type(self):
         return self._graph.type
+
+    @property
+    def _backend_type(self):
+        return GraphBackend.ANY_HASHABLE_GRAPH
 
     @property
     def vertex_supplier(self):

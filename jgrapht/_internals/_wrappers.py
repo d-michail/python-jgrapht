@@ -2,6 +2,17 @@ from .. import backend
 from . import _ref_utils
 from collections import namedtuple
 from collections.abc import Iterator
+from enum import Enum
+
+
+class GraphBackend(Enum):
+    """Different backend graph implementations. Each backend exhibits different
+       characteristics between performance and user-friendliness.
+    """
+    INT_GRAPH = 1
+    LONG_GRAPH = 2
+    ANY_HASHABLE_GRAPH = 3
+    REF_GRAPH = 4
 
 
 class _HandleWrapper:
