@@ -7,7 +7,7 @@ from ..types import (
     EquivalentFlowTree,
 )
 
-from ._wrappers import _HandleWrapper
+from ._wrappers import _HandleWrapper, GraphBackend
 from ._collections import (
     _JGraphTIntegerSet,
     _JGraphTLongSet,
@@ -29,20 +29,21 @@ class _JGraphTCut(Cut):
         super().__init__(**kwargs)
         self._graph = graph
         self._capacity = capacity
-        if _is_anyhashable_graph(graph):
+
+        if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
             self._source_partition = _AnyHashableGraphVertexSet(
                 source_partition_handle, graph
             )
-        elif _is_long_graph(graph):
+        elif graph._backend_type == GraphBackend.LONG_GRAPH:
             self._source_partition = _JGraphTLongSet(source_partition_handle)
-        elif _is_int_graph(graph):
+        elif graph._backend_type == GraphBackend.INT_GRAPH:
             self._source_partition = _JGraphTIntegerSet(source_partition_handle)
-        elif _is_ref_graph(graph):
+        elif graph._backend_type == GraphBackend.REF_GRAPH:
             self._source_partition = _jgrapht_ref_set_to_python_set(
                 source_partition_handle
             )
         else:
-            raise ValueError("Not recognized graph")
+            raise ValueError("Not recognized graph backend")
 
         self._target_partition = None
         self._edges = None

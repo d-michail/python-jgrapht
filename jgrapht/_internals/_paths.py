@@ -7,6 +7,7 @@ from ..types import (
     ManyToManyPaths,
 )
 from ._wrappers import (
+    GraphBackend,
     _HandleWrapper,
     _JGraphTIntegerIterator,
     _JGraphTLongIterator,
@@ -68,7 +69,7 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
         if self._edges is not None:
             return
 
-        if _is_int_graph(self._graph):
+        if self._graph._backend_type == GraphBackend.INT_GRAPH:
             (
                 weight,
                 start_vertex,
@@ -76,7 +77,7 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
                 eit,
             ) = backend.jgrapht_ix_handles_get_graphpath(self._handle)
             self._edges = list(_JGraphTIntegerIterator(eit))
-        elif _is_long_graph(self._graph):
+        elif self._graph._backend_type == GraphBackend.LONG_GRAPH:
             (
                 weight,
                 start_vertex,
@@ -84,7 +85,7 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
                 eit,
             ) = backend.jgrapht_lx_handles_get_graphpath(self._handle)
             self._edges = list(_JGraphTLongIterator(eit))
-        elif _is_ref_graph(self._graph):
+        elif self._graph._backend_type == GraphBackend.REF_GRAPH:
             (
                 weight,
                 start_vertex_ptr,

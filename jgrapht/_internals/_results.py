@@ -231,12 +231,12 @@ def _wrap_graphpath(graph, handle):
     graph takes ownership and will delete the JVM resource when Python deletes
     the instance."""
     cases = {
-        _AnyHashableGraph: (_AnyHashableGraphGraphPath, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTGraphPath, [handle, graph]),
-        _JGraphTIntegerGraph: (_JGraphTGraphPath, [handle, graph]),
-        _JGraphTRefGraph: (_JGraphTGraphPath, [handle, graph]),
+        GraphBackend.ANY_HASHABLE_GRAPH: (_AnyHashableGraphGraphPath, [handle, graph]),
+        GraphBackend.LONG_GRAPH: (_JGraphTGraphPath, [handle, graph]),
+        GraphBackend.INT_GRAPH: (_JGraphTGraphPath, [handle, graph]),
+        GraphBackend.REF_GRAPH: (_JGraphTGraphPath, [handle, graph]),
     }
-    alg = cases[type(graph)]
+    alg = cases[graph._backend_type]
     return alg[0](*alg[1])
 
 
@@ -245,11 +245,12 @@ def _wrap_graphpath_iterator(graph, handle):
     graph takes ownership and will delete the JVM resource when Python deletes
     the instance."""
     cases = {
-        _AnyHashableGraph: (_AnyHashableGraphGraphPathIterator, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTGraphPathIterator, [handle, graph]),
-        _JGraphTIntegerGraph: (_JGraphTGraphPathIterator, [handle, graph]),
-    }
-    alg = cases[type(graph)]
+        GraphBackend.ANY_HASHABLE_GRAPH: (_AnyHashableGraphGraphPathIterator, [handle, graph]),
+        GraphBackend.LONG_GRAPH: (_JGraphTGraphPathIterator, [handle, graph]),
+        GraphBackend.INT_GRAPH: (_JGraphTGraphPathIterator, [handle, graph]),
+        GraphBackend.REF_GRAPH: (_JGraphTGraphPathIterator, [handle, graph]),
+    }    
+    alg = cases[graph._backend_type]
     return alg[0](*alg[1])
 
 
@@ -370,12 +371,12 @@ def _wrap_cut(graph, handle, weight):
     and will delete the JVM resource when Python deletes the instance.
     """
     cases = {
-        _AnyHashableGraph: (_AnyHashableGraphCut, [graph, weight, handle]),
-        _JGraphTLongGraph: (_JGraphTCut, [graph, weight, handle]),
-        _JGraphTIntegerGraph: (_JGraphTCut, [graph, weight, handle]),
-        _JGraphTRefGraph: (_JGraphTCut, [graph, weight, handle]),
+        GraphBackend.ANY_HASHABLE_GRAPH: (_AnyHashableGraphCut, [graph, weight, handle]),
+        GraphBackend.LONG_GRAPH: (_JGraphTCut, [graph, weight, handle]),
+        GraphBackend.INT_GRAPH: (_JGraphTCut, [graph, weight, handle]),
+        GraphBackend.REF_GRAPH: (_JGraphTCut, [graph, weight, handle]),
     }
-    alg = cases[type(graph)]
+    alg = cases[graph._backend_type]    
     return alg[0](*alg[1])
 
 
