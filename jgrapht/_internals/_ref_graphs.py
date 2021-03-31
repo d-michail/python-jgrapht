@@ -7,8 +7,8 @@ from ..types import (
 )
 
 import ctypes
-from . import _refcount, _ref_hashequals
-from ._wrappers import _HandleWrapper, _JGraphTRefObjectIterator
+from . import _ref_utils, _ref_hashequals
+from ._wrappers import _HandleWrapper, _JGraphTRefDirectIterator
 
 
 class _JGraphTRefGraph(_HandleWrapper, Graph):
@@ -78,17 +78,17 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
     def add_vertex(self, vertex=None):
         if vertex is not None:
             if backend.jgrapht_rr_graph_add_given_vertex(self._handle, id(vertex)):
-                _refcount._inc_ref(vertex)
+                _ref_utils._inc_ref(vertex)
         else:
             v_ptr = backend.jgrapht_rr_graph_add_vertex(self._handle)
-            vertex = _refcount._swig_ptr_to_obj(v_ptr)
-            _refcount._inc_ref(vertex)
+            vertex = _ref_utils._swig_ptr_to_obj(v_ptr)
+            _ref_utils._inc_ref(vertex)
         return vertex
 
     def remove_vertex(self, v):
         removed = backend.jgrapht_rr_graph_remove_vertex(self._handle, id(v))
         if removed:
-            _refcount._dec_ref(v)
+            _ref_utils._dec_ref(v)
 
     def contains_vertex(self, v):
         return backend.jgrapht_rr_graph_contains_vertex(self._handle, id(v))
@@ -99,15 +99,15 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
             if backend.jgrapht_rr_graph_add_given_edge(
                 self._handle, id(u), id(v), e_ptr
             ):
-                _refcount._inc_ref(edge)
+                _ref_utils._inc_ref(edge)
                 if weight is not None:
                     backend.jgrapht_rr_graph_set_edge_weight(
                         self._handle, e_ptr, weight
                     )
         else:
             e_ptr = backend.jgrapht_rr_graph_add_edge(self._handle, id(u), id(v))
-            edge = _refcount._swig_ptr_to_obj(e_ptr)
-            _refcount._inc_ref(edge)
+            edge = _ref_utils._swig_ptr_to_obj(e_ptr)
+            _ref_utils._inc_ref(edge)
             if weight is not None:
                 backend.jgrapht_rr_graph_set_edge_weight(self._handle, id(edge), weight)
         return edge
@@ -116,7 +116,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         if e is None:
             raise ValueError("Edge cannot be None")
         if backend.jgrapht_rr_graph_remove_edge(self._handle, id(e)):
-            _refcount._dec_ref(e)
+            _ref_utils._dec_ref(e)
             return True
         else:
             return False
@@ -140,11 +140,11 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
 
     def edge_source(self, e):
         v_ptr = backend.jgrapht_rr_graph_edge_source(self._handle, id(e))
-        return _refcount._swig_ptr_to_obj(v_ptr)
+        return _ref_utils._swig_ptr_to_obj(v_ptr)
 
     def edge_target(self, e):
         v_ptr = backend.jgrapht_rr_graph_edge_target(self._handle, id(e))
-        return _refcount._swig_ptr_to_obj(v_ptr)
+        return _ref_utils._swig_ptr_to_obj(v_ptr)
 
     def get_edge_weight(self, e):
         return backend.jgrapht_rr_graph_get_edge_weight(self._handle, id(e))
@@ -174,19 +174,19 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
 
     def edges_between(self, u, v):
         it = backend.jgrapht_rr_graph_create_between_eit(self._handle, id(u), id(v))
-        return _JGraphTRefObjectIterator(it)
+        return _JGraphTRefDirectIterator(it)
 
     def edges_of(self, v):
         it = backend.jgrapht_rr_graph_vertex_create_eit(self._handle, id(v))
-        return _JGraphTRefObjectIterator(it)
+        return _JGraphTRefDirectIterator(it)
 
     def inedges_of(self, v):
         it = backend.jgrapht_rr_graph_vertex_create_in_eit(self._handle, id(v))
-        return _JGraphTRefObjectIterator(it)
+        return _JGraphTRefDirectIterator(it)
 
     def outedges_of(self, v):
         it = backend.jgrapht_rr_graph_vertex_create_out_eit(self._handle, id(v))
-        return _JGraphTRefObjectIterator(it)
+        return _JGraphTRefDirectIterator(it)
 
     def __repr__(self):
         return "_JGraphTRefGraph(%r)" % self._handle
@@ -199,7 +199,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
 
         def __iter__(self):
             res = backend.jgrapht_xx_graph_create_all_vit(self._handle)
-            return _JGraphTRefObjectIterator(res)
+            return _JGraphTRefDirectIterator(res)
 
         def __len__(self):
             return backend.jgrapht_xx_graph_vertices_count(self._handle)
@@ -225,7 +225,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
 
         def __iter__(self):
             res = backend.jgrapht_xx_graph_create_all_eit(self._handle)
-            return _JGraphTRefObjectIterator(res)
+            return _JGraphTRefDirectIterator(res)
 
         def __len__(self):
             return backend.jgrapht_xx_graph_edges_count(self._handle)
@@ -246,9 +246,9 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
     def __del__(self):
         # Cleanup reference counts
         for e in self.edges:
-            _refcount._dec_ref(e)
+            _ref_utils._dec_ref(e)
         for v in self.vertices:
-            _refcount._dec_ref(v)
+            _ref_utils._dec_ref(v)
         super().__del__()
 
 
@@ -280,14 +280,14 @@ def _create_ref_graph(
     if vertex_supplier is None:
         vertex_supplier = _fallback_vertex_supplier
     vertex_supplier_type = ctypes.CFUNCTYPE(ctypes.py_object)
-    vertex_supplier_fptr_wrapper = _refcount._CallbackWrapper(
+    vertex_supplier_fptr_wrapper = _ref_utils._CallbackWrapper(
         vertex_supplier, vertex_supplier_type
     )
 
     if edge_supplier is None:
         edge_supplier = _fallback_edge_supplier
     edge_supplier_type = ctypes.CFUNCTYPE(ctypes.py_object)
-    edge_supplier_fptr_wrapper = _refcount._CallbackWrapper(
+    edge_supplier_fptr_wrapper = _ref_utils._CallbackWrapper(
         edge_supplier, edge_supplier_type
     )
 

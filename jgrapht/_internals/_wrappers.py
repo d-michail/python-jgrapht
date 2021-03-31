@@ -1,5 +1,5 @@
 from .. import backend
-from . import _refcount
+from . import _ref_utils
 from collections import namedtuple
 from collections.abc import Iterator
 
@@ -52,7 +52,7 @@ class _JGraphTExternalRef(_HandleWrapper):
 
     def get(self): 
         ptr, _, _ = backend.jgrapht_handles_get_ref(self._handle)
-        return _refcount._swig_ptr_to_obj(ptr)
+        return _ref_utils._swig_ptr_to_obj(ptr)
 
     def __repr__(self):
         return "_JGraphTExternalRef(%r)" % self._handle
@@ -193,9 +193,10 @@ class _JGraphTStringIterator(_HandleWrapper, Iterator):
         return "_JGraphTStringIterator(%r)" % self._handle
 
 
-class _JGraphTRefObjectIterator(_HandleWrapper, Iterator):
+class _JGraphTRefDirectIterator(_HandleWrapper, Iterator):
     """A JGraphT iterator. This iterator returns frontend objects
-    resolved from references kept in the backend.
+    resolved from references kept in the backend. It does not 
+    create objects in the backend.
     """
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -205,10 +206,10 @@ class _JGraphTRefObjectIterator(_HandleWrapper, Iterator):
         if not res:
             raise StopIteration()
         value = backend.jgrapht_it_next_ref(self._handle, False)
-        return _refcount._swig_ptr_to_obj(value)
+        return _ref_utils._swig_ptr_to_obj(value)
 
     def __repr__(self):
-        return "_JGraphTRefObjectIterator(%r)" % self._handle
+        return "_JGraphTRefDirectIterator(%r)" % self._handle
 
 
 class _JGraphTRefIterator(_HandleWrapper, Iterator):
