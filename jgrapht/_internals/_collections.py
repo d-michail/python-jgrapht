@@ -229,6 +229,23 @@ class _JGraphTRefMutableSet(_JGraphTRefSet, MutableSet):
         super().__del__()
 
 
+class _JGraphTRefSetIterator(_JGraphTObjectIterator):
+    """An iterator which returns sets with refs."""
+
+    def __init__(self, handle, hash_equals_resolver_handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._hash_equals_resolver_handle = hash_equals_resolver_handle
+
+    def __next__(self):
+        return _JGraphTRefSet(
+            handle=super().__next__(),
+            hash_equals_resolver_handle=self._hash_equals_resolver_handle,
+        )
+
+    def __repr__(self):
+        return "_JGraphTRefSetIterator(%r)" % self._handle
+
+
 class _JGraphTIntegerList(_HandleWrapper, Collection):
     """JGraphT Integer List"""
 

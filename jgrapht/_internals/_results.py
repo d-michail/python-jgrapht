@@ -31,6 +31,7 @@ from ._collections import (
     _JGraphTLongListIterator,
     _JGraphTRefSet,
     _JGraphTRefMutableSet,
+    _JGraphTRefSetIterator,
     _JGraphTLongIntegerMap,
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerDoubleMutableMap,
@@ -162,12 +163,14 @@ def _wrap_vertex_set_iterator(graph, handle):
     """Given an vertex set iterator in the JVM, build one in Python. The wrapper
     graph takes ownership and will delete the JVM resource when Python deletes
     the instance."""
+    hash_equals_resolver_handle = _ref_hashequals._get_equals_hash_wrapper().handle
     cases = {
-        _AnyHashableGraph: (_AnyHashableGraphVertexSetIterator, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTLongSetIterator, [handle]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerSetIterator, [handle]),
+        GraphBackend.ANY_HASHABLE_GRAPH: (_AnyHashableGraphVertexSetIterator, [handle, graph]),
+        GraphBackend.LONG_GRAPH: (_JGraphTLongSetIterator, [handle]),
+        GraphBackend.INT_GRAPH: (_JGraphTIntegerSetIterator, [handle]),
+        GraphBackend.REF_GRAPH: (_JGraphTRefSetIterator, [handle, hash_equals_resolver_handle]),
     }
-    alg = cases[type(graph)]
+    alg = cases[graph._backend_type]
     return alg[0](*alg[1])
 
 
@@ -353,12 +356,12 @@ def _wrap_vertex_clustering(graph, handle):
     takes ownership and will delete the JVM resource when Python deletes
     the instance."""
     cases = {
-        _AnyHashableGraph: (_AnyHashableGraphClustering, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTLongClustering, [handle]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerClustering, [handle]),
-        _JGraphTRefGraph: (_JGraphTRefClustering, [handle]),
+        GraphBackend.ANY_HASHABLE_GRAPH: (_AnyHashableGraphClustering, [handle, graph]),
+        GraphBackend.LONG_GRAPH: (_JGraphTLongClustering, [handle]),
+        GraphBackend.INT_GRAPH: (_JGraphTIntegerClustering, [handle]),
+        GraphBackend.REF_GRAPH: (_JGraphTRefClustering, [handle]),
     }
-    alg = cases[type(graph)]
+    alg = cases[graph._backend_type]
     return alg[0](*alg[1])
 
 

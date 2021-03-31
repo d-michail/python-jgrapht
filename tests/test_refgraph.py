@@ -48,6 +48,7 @@ class AnotherCustomEdgeSupplier:
         return AnotherCustomEdge(ret)
 
 
+
 def test_ref_graph_directed_inoutedges():
 
     g = _create_ref_graph(
