@@ -19,19 +19,21 @@ from ._wrappers import (
     _JGraphTLongIterator,
     GraphBackend,
 )
-from ._collections import (
+from ._collections_set import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
     _JGraphTIntegerSetIterator,
-    _JGraphTIntegerListIterator,
-    _JGraphTIntegerIntegerMap,
     _JGraphTLongSet,
     _JGraphTLongMutableSet,
     _JGraphTLongSetIterator,
-    _JGraphTLongListIterator,
     _JGraphTRefSet,
     _JGraphTRefMutableSet,
     _JGraphTRefSetIterator,
+)
+from ._collections import (
+    _JGraphTIntegerListIterator,
+    _JGraphTIntegerIntegerMap,
+    _JGraphTLongListIterator,
     _JGraphTLongIntegerMap,
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerDoubleMutableMap,

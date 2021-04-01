@@ -6,10 +6,8 @@ from ..types import (
 )
 
 from collections.abc import Set
-
-from ._wrappers import _HandleWrapper, GraphBackend
-from ._collections import (
-    _JGraphTLongIterator,
+from ._wrappers import _HandleWrapper, GraphBackend, _JGraphTLongIterator
+from ._collections_set import (
     _JGraphTLongSet,
 )
 

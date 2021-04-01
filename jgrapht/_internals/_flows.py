@@ -8,9 +8,11 @@ from ..types import (
 )
 
 from ._wrappers import _HandleWrapper, GraphBackend
-from ._collections import (
+from ._collections_set import (
     _JGraphTIntegerSet,
     _JGraphTLongSet,
+)
+from ._collections import (
     _JGraphTIntegerDoubleMap,
     _JGraphTLongDoubleMap,
 )

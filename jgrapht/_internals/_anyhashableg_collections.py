@@ -5,9 +5,11 @@ from ._anyhashableg_wrappers import (
     _AnyHashableGraphVertexIterator,
     _AnyHashableGraphEdgeIterator,
 )
-from ._collections import (
+from ._collections_set import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
+)
+from ._collections import (
     _JGraphTIntegerList,
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerIntegerMap,

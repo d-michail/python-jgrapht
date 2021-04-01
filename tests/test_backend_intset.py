@@ -3,7 +3,7 @@ import pytest
 import jgrapht._backend as _backend
 
 from jgrapht._internals import _ref_hashequals
-from jgrapht._internals._collections import (
+from jgrapht._internals._collections_set import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
     _JGraphTLongMutableSet,

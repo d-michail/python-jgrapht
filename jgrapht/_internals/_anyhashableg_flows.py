@@ -1,9 +1,7 @@
 from .. import backend as _backend
 
 from ..types import Flow, GomoryHuTree, EquivalentFlowTree
-
 from ._wrappers import _HandleWrapper
-
 from ._int_graphs import _JGraphTIntegerGraph
 from ._anyhashableg import (
     _create_anyhashable_graph,
@@ -11,7 +9,6 @@ from ._anyhashableg import (
     _vertex_g_to_anyhashableg,
 )
 from ._anyhashableg_collections import _AnyHashableGraphEdgeDoubleMap
-
 from ._flows import _JGraphTCut as _AnyHashableGraphCut
 
 

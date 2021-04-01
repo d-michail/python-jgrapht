@@ -3,10 +3,11 @@ from ..types import Graph, GraphType, DirectedAcyclicGraph, IncomingEdgesSupport
 
 from collections.abc import Set
 
-from ._wrappers import _HandleWrapper, GraphBackend
-from ._collections import (
-    _JGraphTIntegerIterator,
+from ._wrappers import _HandleWrapper, GraphBackend, _JGraphTIntegerIterator
+from ._collections_set import (
     _JGraphTIntegerSet,
+)
+from ._collections import (
     _JGraphTEdgeTripleList,
 )
 
