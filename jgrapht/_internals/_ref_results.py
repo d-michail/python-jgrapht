@@ -28,7 +28,7 @@ def _jgrapht_ref_iterator_to_python_list(handle, refs_owner=False):
 def _jgrapht_ref_set_to_python_set(handle, owner=True):
     """Return a Python set from a set with references in the JVM."""
     result = set()
-    it_handle = backend.jgrapht_set_it_create(handle)
+    it_handle = backend.jgrapht_x_set_it_create(handle)
     has_next = backend.jgrapht_it_hasnext(it_handle)
     while has_next:
         value = backend.jgrapht_it_next_ref(it_handle, False)

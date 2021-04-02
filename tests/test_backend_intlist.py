@@ -10,10 +10,10 @@ from jgrapht._internals._collections import (
 
 def test_IntegerList():
 
-    handle = _backend.jgrapht_list_create()
-    _backend.jgrapht_list_int_add(handle, 5)
-    _backend.jgrapht_list_int_add(handle, 7)
-    _backend.jgrapht_list_int_add(handle, 9)
+    handle = _backend.jgrapht_x_list_create()
+    _backend.jgrapht_i_list_add(handle, 5)
+    _backend.jgrapht_i_list_add(handle, 7)
+    _backend.jgrapht_i_list_add(handle, 9)
 
     s = _JGraphTIntegerList(handle=handle)
 

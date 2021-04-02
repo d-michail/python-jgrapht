@@ -32,15 +32,15 @@ class _JGraphTIntegerSet(_HandleWrapper, Set):
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_set_it_create(self._handle)
+        res = backend.jgrapht_x_set_it_create(self._handle)
         return _JGraphTIntegerIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_set_size(self._handle)
+        res = backend.jgrapht_x_set_size(self._handle)
         return res
 
     def __contains__(self, x):
-        res = backend.jgrapht_set_int_contains(self._handle, x)
+        res = backend.jgrapht_i_set_contains(self._handle, x)
         return res
 
     def __repr__(self):
@@ -61,13 +61,13 @@ class _JGraphTIntegerMutableSet(_JGraphTIntegerSet, MutableSet):
         super().__init__(handle=handle, **kwargs)
 
     def add(self, x):
-        backend.jgrapht_set_int_add(self._handle, x)
+        backend.jgrapht_i_set_add(self._handle, x)
 
     def discard(self, x):
-        backend.jgrapht_set_int_remove(self._handle, x)
+        backend.jgrapht_i_set_remove(self._handle, x)
 
     def clear(self):
-        backend.jgrapht_set_clear(self._handle)
+        backend.jgrapht_x_set_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTIntegerMutableSet(%r)" % self._handle
@@ -97,15 +97,15 @@ class _JGraphTLongSet(_HandleWrapper, Set):
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_set_it_create(self._handle)
+        res = backend.jgrapht_x_set_it_create(self._handle)
         return _JGraphTLongIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_set_size(self._handle)
+        res = backend.jgrapht_x_set_size(self._handle)
         return res
 
     def __contains__(self, x):
-        res = backend.jgrapht_set_long_contains(self._handle, x)
+        res = backend.jgrapht_l_set_contains(self._handle, x)
         return res
 
     def __repr__(self):
@@ -126,13 +126,13 @@ class _JGraphTLongMutableSet(_JGraphTLongSet, MutableSet):
         super().__init__(handle=handle, **kwargs)
 
     def add(self, x):
-        backend.jgrapht_set_long_add(self._handle, x)
+        backend.jgrapht_l_set_add(self._handle, x)
 
     def discard(self, x):
-        backend.jgrapht_set_long_remove(self._handle, x)
+        backend.jgrapht_l_set_remove(self._handle, x)
 
     def clear(self):
-        backend.jgrapht_set_clear(self._handle)
+        backend.jgrapht_x_set_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTLongMutableSet(%r)" % self._handle
@@ -163,15 +163,15 @@ class _JGraphTRefSet(_HandleWrapper, Set):
         self._hash_equals_resolver_handle = hash_equals_resolver_handle
 
     def __iter__(self):
-        res = backend.jgrapht_set_it_create(self._handle)
+        res = backend.jgrapht_x_set_it_create(self._handle)
         return _JGraphTRefDirectIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_set_size(self._handle)
+        res = backend.jgrapht_x_set_size(self._handle)
         return res
 
     def __contains__(self, x):
-        res = backend.jgrapht_set_ref_contains_direct(
+        res = backend.jgrapht_r_set_contains(
             self._handle, id(x), self._hash_equals_resolver_handle
         )
         return res
@@ -198,13 +198,13 @@ class _JGraphTRefMutableSet(_JGraphTRefSet, MutableSet):
         )
 
     def add(self, x):
-        if backend.jgrapht_set_ref_add_direct(
+        if backend.jgrapht_r_set_add(
             self._handle, id(x), self._hash_equals_resolver_handle
         ):
             _ref_utils._inc_ref(x)
 
     def discard(self, x):
-        if backend.jgrapht_set_ref_remove_direct(
+        if backend.jgrapht_r_set_remove(
             self._handle, id(x), self._hash_equals_resolver_handle
         ):
             _ref_utils._dec_ref(x)
@@ -213,7 +213,7 @@ class _JGraphTRefMutableSet(_JGraphTRefSet, MutableSet):
         # cleanup reference counts
         for x in self:
             _ref_utils._dec_ref(x)
-        backend.jgrapht_set_clear(self._handle)
+        backend.jgrapht_x_set_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTRefMutableSet(%r)" % self._handle

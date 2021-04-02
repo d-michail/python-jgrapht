@@ -24,12 +24,12 @@ class _AnyHashableGraphVertexSet(_JGraphTIntegerSet):
         self._graph = graph
 
     def __iter__(self):
-        res = backend.jgrapht_set_it_create(self._handle)
+        res = backend.jgrapht_x_set_it_create(self._handle)
         return _AnyHashableGraphVertexIterator(res, self._graph)
 
     def __contains__(self, x):
         x = self._graph._vertex_hash_to_id[x]
-        return backend.jgrapht_set_int_contains(self._handle, x)
+        return backend.jgrapht_i_set_contains(self._handle, x)
 
     def __repr__(self):
         return "_AnyHashableGraphVertexSet(%r)" % self._handle
@@ -46,20 +46,20 @@ class _AnyHashableGraphMutableVertexSet(_JGraphTIntegerMutableSet):
         self._graph = graph
 
     def __iter__(self):
-        res = backend.jgrapht_set_it_create(self._handle)
+        res = backend.jgrapht_x_set_it_create(self._handle)
         return _AnyHashableGraphVertexIterator(res, self._graph)
 
     def __contains__(self, x):
         x = self._graph._vertex_hash_to_id[x]
-        return backend.jgrapht_set_int_contains(self._handle, x)
+        return backend.jgrapht_i_set_contains(self._handle, x)
 
     def add(self, x):
         x = self._graph._vertex_hash_to_id[x]
-        backend.jgrapht_set_int_add(self._handle, x)
+        backend.jgrapht_i_set_add(self._handle, x)
 
     def discard(self, x):
         x = self._graph._vertex_hash_to_id[x]
-        backend.jgrapht_set_int_remove(self._handle, x)
+        backend.jgrapht_i_set_remove(self._handle, x)
 
     def __repr__(self):
         return "_AnyHashableGraphMutableVertexSet(%r)" % self._handle
@@ -76,12 +76,12 @@ class _AnyHashableGraphEdgeSet(_JGraphTIntegerSet):
         self._graph = graph
 
     def __iter__(self):
-        res = backend.jgrapht_set_it_create(self._handle)
+        res = backend.jgrapht_x_set_it_create(self._handle)
         return _AnyHashableGraphEdgeIterator(res, self._graph)
 
     def __contains__(self, x):
         x = self._graph._edge_hash_to_id[x]
-        return backend.jgrapht_set_int_contains(self._handle, x)
+        return backend.jgrapht_i_set_contains(self._handle, x)
 
     def __repr__(self):
         return "_AnyHashableGraphEdgeSet(%r)" % self._handle
@@ -221,12 +221,12 @@ class _AnyHashableGraphVertexList(_JGraphTIntegerList):
         self._graph = graph
 
     def __iter__(self):
-        res = backend.jgrapht_list_it_create(self._handle)
+        res = backend.jgrapht_x_list_it_create(self._handle)
         return _AnyHashableGraphVertexIterator(res, self._graph)
 
     def __contains__(self, x):
         x = self._graph._vertex_hash_to_id[x]
-        return backend.jgrapht_list_int_contains(self._handle, x)
+        return backend.jgrapht_i_list_contains(self._handle, x)
 
     def __repr__(self):
         return "_AnyHashableGraphVertexList(%r)" % self._handle

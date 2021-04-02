@@ -488,21 +488,21 @@ def _build_vertex_set(graph, vertex_set):
         if isinstance(vertex_set, _AnyHashableGraphVertexSet):
             return vertex_set
         mutable_set = _AnyHashableGraphMutableVertexSet(
-            handle=backend.jgrapht_set_linked_create(), graph=graph
+            handle=backend.jgrapht_x_set_linked_create(), graph=graph
         )
     elif graph._backend_type == GraphBackend.LONG_GRAPH:
         if isinstance(vertex_set, _JGraphTLongSet):
             return vertex_set
-        mutable_set = _JGraphTLongMutableSet(handle=backend.jgrapht_set_linked_create())
+        mutable_set = _JGraphTLongMutableSet(handle=backend.jgrapht_x_set_linked_create())
     elif graph._backend_type == GraphBackend.INT_GRAPH:
         if isinstance(vertex_set, _JGraphTIntegerSet):
             return vertex_set
         mutable_set = _JGraphTIntegerMutableSet(
-            handle=backend.jgrapht_set_linked_create()
+            handle=backend.jgrapht_x_set_linked_create()
         )
     elif graph._backend_type == GraphBackend.REF_GRAPH:
         mutable_set = _JGraphTRefMutableSet(
-            handle=backend.jgrapht_set_linked_create(),
+            handle=backend.jgrapht_x_set_linked_create(),
             hash_equals_resolver_handle=_ref_hashequals._get_equals_hash_wrapper().handle,
         )
     else:

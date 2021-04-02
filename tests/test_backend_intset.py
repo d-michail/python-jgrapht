@@ -13,10 +13,10 @@ from jgrapht._internals._collections_set import (
 
 def test_IntegerSet():
 
-    handle = _backend.jgrapht_set_linked_create()
-    _backend.jgrapht_set_int_add(handle, 5)
-    _backend.jgrapht_set_int_add(handle, 7)
-    _backend.jgrapht_set_int_add(handle, 9)
+    handle = _backend.jgrapht_x_set_linked_create()
+    _backend.jgrapht_i_set_add(handle, 5)
+    _backend.jgrapht_i_set_add(handle, 7)
+    _backend.jgrapht_i_set_add(handle, 9)
 
     s = _JGraphTIntegerSet(handle=handle)
 
@@ -36,7 +36,7 @@ def test_IntegerSet():
 
 def test_IntegerMutableSet():
 
-    handle = _backend.jgrapht_set_create()
+    handle = _backend.jgrapht_x_set_create()
     s = _JGraphTIntegerMutableSet(handle=handle)
 
     s.add(5)
@@ -80,7 +80,7 @@ def test_IntegerMutableSet():
 
 def test_IntegerMutableSet_linked():
 
-    handle = _backend.jgrapht_set_linked_create()
+    handle = _backend.jgrapht_x_set_linked_create()
     s = _JGraphTIntegerMutableSet(handle=handle)
 
     s.add(5)
@@ -127,7 +127,7 @@ def test_IntegerMutableSet_linked():
 
 def test_LongMutableSet():
 
-    handle = _backend.jgrapht_set_create()
+    handle = _backend.jgrapht_x_set_create()
     s = _JGraphTLongMutableSet(handle=handle)
 
     s.add(5)
@@ -171,7 +171,7 @@ def test_LongMutableSet():
 
 def test_RefMutableSet():
 
-    handle = _backend.jgrapht_set_linked_create()
+    handle = _backend.jgrapht_x_set_linked_create()
     hash_equals_resolver_handle = _ref_hashequals._get_equals_hash_wrapper().handle
 
     s = _JGraphTRefMutableSet(

@@ -289,19 +289,19 @@ def _create_sparse_int_graph(
             num_of_vertices += 1
     else:
         e_list_owner = True
-        e_list = backend.jgrapht_list_create()
+        e_list = backend.jgrapht_x_list_create()
 
         if track_num_vertices:
             num_of_vertices = 0
 
         if weighted:
             for u, v, w in edgelist:
-                backend.jgrapht_ii_list_edge_triple_add(e_list, u, v, w)
+                backend.jgrapht_iid_t_list_add(e_list, u, v, w)
                 if track_num_vertices:
                     num_of_vertices = max(u, v, num_of_vertices)
         else:
             for u, v, *w in edgelist:
-                backend.jgrapht_ii_list_edge_pair_add(e_list, u, v)
+                backend.jgrapht_ii_p_list_add(e_list, u, v)
                 if track_num_vertices:
                     num_of_vertices = max(u, v, num_of_vertices)
 
@@ -346,13 +346,13 @@ def _create_succinct_int_graph(
     """
     track_num_vertices = num_of_vertices is None
 
-    e_list = backend.jgrapht_list_create()
+    e_list = backend.jgrapht_x_list_create()
 
     if track_num_vertices:
         num_of_vertices = 0
 
     for u, v, *w in edgelist:
-        backend.jgrapht_ii_list_edge_pair_add(e_list, u, v)
+        backend.jgrapht_ii_p_list_add(e_list, u, v)
         if track_num_vertices:
             num_of_vertices = max(u, v, num_of_vertices)
 

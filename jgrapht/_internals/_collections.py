@@ -29,19 +29,19 @@ class _JGraphTIntegerList(_HandleWrapper, Collection):
 
     def __init__(self, handle=None, **kwargs):
         if handle is None:
-            handle = backend.jgrapht_list_create()
+            handle = backend.jgrapht_x_list_create()
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_list_it_create(self._handle)
+        res = backend.jgrapht_x_list_it_create(self._handle)
         return _JGraphTIntegerIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_list_size(self._handle)
+        res = backend.jgrapht_x_list_size(self._handle)
         return res
 
     def __contains__(self, x):
-        res = backend.jgrapht_list_int_contains(self._handle, x)
+        res = backend.jgrapht_i_list_contains(self._handle, x)
         return res
 
     def __repr__(self):
@@ -58,13 +58,13 @@ class _JGraphTIntegerMutableList(_JGraphTIntegerList):
         super().__init__(handle=handle, **kwargs)
 
     def add(self, x):
-        backend.jgrapht_list_int_add(self._handle, x)
+        backend.jgrapht_i_list_add(self._handle, x)
 
     def discard(self, x):
-        backend.jgrapht_list_int_remove(self._handle, x)
+        backend.jgrapht_i_list_remove(self._handle, x)
 
     def clear(self):
-        backend.jgrapht_list_clear(self._handle)
+        backend.jgrapht_x_list_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTIntegerMutableList(%r)" % self._handle
@@ -88,19 +88,19 @@ class _JGraphTLongList(_HandleWrapper, Collection):
 
     def __init__(self, handle=None, **kwargs):
         if handle is None:
-            handle = backend.jgrapht_list_create()
+            handle = backend.jgrapht_x_list_create()
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_list_it_create(self._handle)
+        res = backend.jgrapht_x_list_it_create(self._handle)
         return _JGraphTLongIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_list_size(self._handle)
+        res = backend.jgrapht_x_list_size(self._handle)
         return res
 
     def __contains__(self, x):
-        res = backend.jgrapht_list_long_contains(self._handle, x)
+        res = backend.jgrapht_l_list_contains(self._handle, x)
         return res
 
     def __repr__(self):
@@ -117,13 +117,13 @@ class _JGraphTLongMutableList(_JGraphTLongList):
         super().__init__(handle=handle, **kwargs)
 
     def add(self, x):
-        backend.jgrapht_list_long_add(self._handle, x)
+        backend.jgrapht_l_list_add(self._handle, x)
 
     def discard(self, x):
-        backend.jgrapht_list_long_remove(self._handle, x)
+        backend.jgrapht_l_list_remove(self._handle, x)
 
     def clear(self):
-        backend.jgrapht_list_clear(self._handle)
+        backend.jgrapht_x_list_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTLongMutableList(%r)" % self._handle
@@ -643,8 +643,8 @@ class _JGraphTEdgeTripleList(_HandleWrapper, Iterable, Sized):
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_list_it_create(self._handle)
-        return _JGraphTEdgeTripleIterator(res)
+        res = backend.jgrapht_x_list_it_create(self._handle)
+        return _JGraphTEdgeIntegerTripleIterator(res)
 
     def __len__(self):
         return backend.jgrapht_list_size(self._handle)
@@ -663,11 +663,11 @@ class _JGraphTEdgeLongTripleList(_HandleWrapper, Iterable, Sized):
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_list_it_create(self._handle)
+        res = backend.jgrapht_x_list_it_create(self._handle)
         return _JGraphTEdgeLongTripleIterator(res)
 
     def __len__(self):
-        return backend.jgrapht_list_size(self._handle)
+        return backend.jgrapht_x_list_size(self._handle)
 
     def __repr__(self):
         return "_JGraphTEdgeLongTripleList(%r)" % self._handle
@@ -683,11 +683,11 @@ class _JGraphTEdgeStrTripleList(_HandleWrapper, Iterable, Sized):
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_list_it_create(self._handle)
+        res = backend.jgrapht_x_list_it_create(self._handle)
         return _JGraphTEdgeStrTripleIterator(res)
 
     def __len__(self):
-        return backend.jgrapht_list_size(self._handle)
+        return backend.jgrapht_x_list_size(self._handle)
 
     def __repr__(self):
         return "_JGraphTEdgeStrTripleList(%r)" % self._handle
