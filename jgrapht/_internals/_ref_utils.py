@@ -83,20 +83,4 @@ def _create_wrapped_id_comparator_callback(callback):
         return (0, None)
 
 
-class _CallbackWrapper:
-
-    def __init__(self, callback, callback_type):
-        if callback is None:
-            self._cb = None
-            self._f = None
-            self._f_ptr = 0
-        else:
-            self._cb = callback
-            self._f = callback_type(callback)
-            self._f_ptr = ctypes.cast(self._f, ctypes.c_void_p).value 
-
-    @property
-    def fptr(self):
-        return self._f_ptr
-
 

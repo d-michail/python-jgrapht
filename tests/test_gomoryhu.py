@@ -1,16 +1,28 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier
 import jgrapht.algorithms.cuts as cuts
 
 
-
-def test_gomory_hu_tree():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_gomory_hu_tree(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -43,13 +55,22 @@ def test_gomory_hu_tree():
     assert edge_tuples == [(1,0,30.0), (2,1,50.0), (3,2,30.0)]
 
 
-def test_anyhashableg_gomory_hu_tree():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_gomory_hu_tree(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertex(0)

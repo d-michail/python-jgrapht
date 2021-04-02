@@ -7,7 +7,7 @@ from ..types import (
 )
 
 import ctypes
-from . import _ref_utils, _ref_hashequals
+from . import _callbacks, _ref_utils, _ref_hashequals
 from ._wrappers import _HandleWrapper, _JGraphTRefDirectIterator, GraphBackend
 
 
@@ -255,14 +255,6 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         super().__del__()
 
 
-def _fallback_vertex_supplier():
-    return object()
-
-
-def _fallback_edge_supplier():
-    return object()
-
-
 def _create_ref_graph(
     directed=True,
     allowing_self_loops=False,
@@ -280,18 +272,13 @@ def _create_ref_graph(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
-    if vertex_supplier is None:
-        vertex_supplier = _fallback_vertex_supplier
-    vertex_supplier_type = ctypes.CFUNCTYPE(ctypes.py_object)
-    vertex_supplier_fptr_wrapper = _ref_utils._CallbackWrapper(
-        vertex_supplier, vertex_supplier_type
+    # create vertex supplier
+    vertex_supplier_fptr_wrapper = _callbacks._create_py_object_supplier(
+        supplier=vertex_supplier
     )
-
-    if edge_supplier is None:
-        edge_supplier = _fallback_edge_supplier
-    edge_supplier_type = ctypes.CFUNCTYPE(ctypes.py_object)
-    edge_supplier_fptr_wrapper = _ref_utils._CallbackWrapper(
-        edge_supplier, edge_supplier_type
+    # create edge supplier
+    edge_supplier_fptr_wrapper = _callbacks._create_py_object_supplier(
+        supplier=edge_supplier
     )
 
     # create python hash-equals ctypes wrappers and setup JVM object

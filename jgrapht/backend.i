@@ -294,7 +294,7 @@ int jgrapht_rx_cut_gomoryhu_min_st_cut(void *, void *LONG_TO_PTR, void *LONG_TO_
 int jgrapht_xx_cut_gomoryhu_min_cut(void *, double* OUTPUT, void** OUTPUT);
 int jgrapht_ii_cut_gomoryhu_tree(void *, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void** OUTPUT);
 int jgrapht_ll_cut_gomoryhu_tree(void *, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void** OUTPUT);
-int jgrapht_rr_cut_gomoryhu_tree(void *, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_rr_cut_gomoryhu_tree(void *, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void *, void** OUTPUT);
 int jgrapht_xx_cut_oddmincutset_exec_padberg_rao(void *, void *, int, double* OUTPUT, void** OUTPUT);
 
 // cycles

@@ -7,6 +7,7 @@ from ..types import (
     EquivalentFlowTree,
 )
 
+from . import _callbacks, _ref_hashequals
 from ._wrappers import _HandleWrapper, GraphBackend
 from ._collections_set import (
     _JGraphTIntegerSet,
@@ -167,7 +168,7 @@ class _JGraphTIntegerGomoryHuTree(_HandleWrapper, GomoryHuTree):
         self._graph = graph
 
     def as_graph(self):
-        tree_handle = _backend.jgrapht_ii_cut_gomoryhu_tree(self.handle, None, None)
+        tree_handle = _backend.jgrapht_ii_cut_gomoryhu_tree(self.handle, 0, 0)
         return _JGraphTIntegerGraph(tree_handle)
 
     def min_cut(self):
@@ -196,7 +197,7 @@ class _JGraphTLongGomoryHuTree(_HandleWrapper, GomoryHuTree):
         self._graph = graph
 
     def as_graph(self):
-        tree_handle = _backend.jgrapht_ll_cut_gomoryhu_tree(self.handle, None, None)
+        tree_handle = _backend.jgrapht_ll_cut_gomoryhu_tree(self.handle, 0, 0)
         return _JGraphTLongGraph(tree_handle)
 
     def min_cut(self):
@@ -225,9 +226,23 @@ class _JGraphTRefGomoryHuTree(_HandleWrapper, GomoryHuTree):
         self._graph = graph
 
     def as_graph(self):
-        # TODO: fixme
-        tree_handle = _backend.jgrapht_rr_cut_gomoryhu_tree(self.handle, None, None)
-        return _JGraphTRefGraph(tree_handle)
+        vertex_supplier_fptr_wrapper = self._graph._vertex_supplier_fptr_wrapper
+        edge_supplier_fptr_wrapper = self._graph._edge_supplier_fptr_wrapper
+        equals_hash_wrapper = self._graph._equals_hash_wrapper
+
+        tree_handle = _backend.jgrapht_rr_cut_gomoryhu_tree(
+            self.handle,
+            vertex_supplier_fptr_wrapper.fptr,
+            edge_supplier_fptr_wrapper.fptr,
+            equals_hash_wrapper.handle,
+        )
+
+        return _JGraphTRefGraph(
+            tree_handle,
+            vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
+            edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
+            equals_hash_wrapper=equals_hash_wrapper,
+        )
 
     def min_cut(self):
         (
@@ -240,7 +255,9 @@ class _JGraphTRefGomoryHuTree(_HandleWrapper, GomoryHuTree):
         (
             cut_value,
             cut_source_partition_handle,
-        ) = _backend.jgrapht_lx_cut_gomoryhu_min_st_cut(self.handle, s, t)
+        ) = _backend.jgrapht_rx_cut_gomoryhu_min_st_cut(
+            self.handle, id(s), id(t), self._graph._equals_hash_wrapper.handle
+        )
         return _JGraphTCut(self._graph, cut_value, cut_source_partition_handle)
 
     def __repr__(self):
