@@ -48,7 +48,7 @@ class _AnyHashableGraphGomoryHuTree(_HandleWrapper, GomoryHuTree):
         self._graph = graph
 
     def as_graph(self):
-        tree_handle = _backend.jgrapht_ii_cut_gomoryhu_tree(self.handle)
+        tree_handle = _backend.jgrapht_ii_cut_gomoryhu_tree(self.handle, None, None)
         tree_as_graph = _JGraphTIntegerGraph(tree_handle)
 
         # The resulting tree has the same vertices as the original graph. When using

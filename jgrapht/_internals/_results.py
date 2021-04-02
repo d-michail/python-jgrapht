@@ -58,6 +58,7 @@ from ._flows import (
     _JGraphTCut,
     _JGraphTIntegerGomoryHuTree,
     _JGraphTLongGomoryHuTree,
+    _JGraphTRefGomoryHuTree,
     _JGraphTIntegerEquivalentFlowTree,
     _JGraphTLongEquivalentFlowTree,
     _JGraphTIntegerFlow,
@@ -387,11 +388,12 @@ def _wrap_gomory_hu_tree(graph, handle):
     ownership and will delete the JVM resource when Python deletes the instance.
     """
     cases = {
-        _AnyHashableGraph: (_AnyHashableGraphGomoryHuTree, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTLongGomoryHuTree, [handle, graph]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerGomoryHuTree, [handle, graph]),
+        GraphBackend.ANY_HASHABLE_GRAPH: (_AnyHashableGraphGomoryHuTree, [handle, graph]),
+        GraphBackend.LONG_GRAPH: (_JGraphTLongGomoryHuTree, [handle, graph]),
+        GraphBackend.INT_GRAPH: (_JGraphTIntegerGomoryHuTree, [handle, graph]),
+        GraphBackend.REF_GRAPH: (_JGraphTRefGomoryHuTree, [handle, graph]),
     }
-    alg = cases[type(graph)]
+    alg = cases[graph._backend_type]
     return alg[0](*alg[1])
 
 
