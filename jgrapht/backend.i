@@ -254,51 +254,34 @@ int jgrapht_attributes_registry_unregister_attribute(void *, char* BYTEARRAY, ch
 // clique
 
 int jgrapht_xx_clique_exec_bron_kerbosch(void *, long long int, void** OUTPUT);
-
 int jgrapht_xx_clique_exec_bron_kerbosch_pivot(void *, long long int, void** OUTPUT);
-
 int jgrapht_xx_clique_exec_bron_kerbosch_pivot_degeneracy_ordering(void *, long long int, void** OUTPUT);
-
 int jgrapht_xx_clique_exec_chordal_max_clique(void *, void** OUTPUT);
 
 // clustering
 
 int jgrapht_xx_clustering_exec_k_spanning_tree(void *, int, void** OUTPUT);
-
 int jgrapht_xx_clustering_exec_label_propagation(void *, int, long long int, void** OUTPUT);
-
 int jgrapht_xx_clustering_exec_girvan_newman(void *, int, void** OUTPUT);
-
 int jgrapht_xx_clustering_get_number_clusters(void *, int* OUTPUT);
-
 int jgrapht_xx_clustering_ith_cluster_vit(void *, int, void** OUTPUT);
 
 // coloring
 
 int jgrapht_xx_coloring_exec_greedy(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_coloring_exec_greedy_smallestdegreelast(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_coloring_exec_backtracking_brown(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_coloring_exec_greedy_largestdegreefirst(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_coloring_exec_greedy_random(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_coloring_exec_greedy_random_with_seed(void *, long long int, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_coloring_exec_greedy_dsatur(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_coloring_exec_color_refinement(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_coloring_exec_chordal_minimum_coloring(void *, int* OUTPUT, void** OUTPUT);
 
 // connectivity
 
 int jgrapht_xx_connectivity_strong_exec_kosaraju(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_connectivity_strong_exec_gabow(void *, int* OUTPUT, void** OUTPUT);
-
 int jgrapht_xx_connectivity_weak_exec_bfs(void *, int* OUTPUT, void** OUTPUT);
 
 // cut
@@ -307,10 +290,11 @@ int jgrapht_xx_cut_mincut_exec_stoer_wagner(void *, double* OUTPUT, void** OUTPU
 int jgrapht_xx_cut_gomoryhu_exec_gusfield(void *, void** OUTPUT);
 int jgrapht_ix_cut_gomoryhu_min_st_cut(void *, int, int, double* OUTPUT, void** OUTPUT);
 int jgrapht_lx_cut_gomoryhu_min_st_cut(void *, long long int, long long int, double* OUTPUT, void** OUTPUT);
+int jgrapht_rx_cut_gomoryhu_min_st_cut(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *, double* OUTPUT, void** OUTPUT);
 int jgrapht_xx_cut_gomoryhu_min_cut(void *, double* OUTPUT, void** OUTPUT);
-int jgrapht_ii_cut_gomoryhu_tree(void *, void** OUTPUT);
-int jgrapht_ll_cut_gomoryhu_tree(void *, void** OUTPUT);
-int jgrapht_ll_cut_gomoryhu_tree_with_suppliers(void *, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_ii_cut_gomoryhu_tree(void *, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_ll_cut_gomoryhu_tree(void *, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_rr_cut_gomoryhu_tree(void *, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void** OUTPUT);
 int jgrapht_xx_cut_oddmincutset_exec_padberg_rao(void *, void *, int, double* OUTPUT, void** OUTPUT);
 
 // cycles
@@ -333,24 +317,32 @@ int jgrapht_xx_drawing_layout_model_2d_create(double, double, double, double, vo
 int jgrapht_xx_drawing_layout_model_2d_get_drawable_area(void *, double* OUTPUT, double* OUTPUT, double* OUTPUT, double* OUTPUT);
 int jgrapht_ix_drawing_layout_model_2d_get_vertex(void *, int, double* OUTPUT, double* OUTPUT);
 int jgrapht_lx_drawing_layout_model_2d_get_vertex(void *, long long int, double* OUTPUT, double* OUTPUT);
+int jgrapht_rx_drawing_layout_model_2d_get_vertex(void *, void *LONG_TO_PTR, void *, double* OUTPUT, double* OUTPUT);
 int jgrapht_ix_drawing_layout_model_2d_put_vertex(void *, int, double, double);
 int jgrapht_lx_drawing_layout_model_2d_put_vertex(void *, long long int, double, double);
+int jgrapht_rx_drawing_layout_model_2d_put_vertex(void *, void *LONG_TO_PTR, void *, double, double);
 int jgrapht_ix_drawing_layout_model_2d_get_fixed(void *, int, int* OUTPUT);
 int jgrapht_lx_drawing_layout_model_2d_get_fixed(void *, long long int, int* OUTPUT);
+int jgrapht_rx_drawing_layout_model_2d_get_fixed(void *, void *LONG_TO_PTR, void *, int* OUTPUT);
 int jgrapht_ix_drawing_layout_model_2d_set_fixed(void *, int, int);
 int jgrapht_lx_drawing_layout_model_2d_set_fixed(void *, long long int, int);
+int jgrapht_rx_drawing_layout_model_2d_set_fixed(void *, void *LONG_TO_PTR, void *, int);
 int jgrapht_xx_drawing_exec_random_layout_2d(void *, void *, long long int);
 int jgrapht_ix_drawing_exec_circular_layout_2d(void *, void *, double, void *LONG_TO_FPTR);
 int jgrapht_lx_drawing_exec_circular_layout_2d(void *, void *, double, void *LONG_TO_FPTR);
+int jgrapht_rx_drawing_exec_circular_layout_2d(void *, void *, double, void *LONG_TO_FPTR);
 int jgrapht_xx_drawing_exec_fr_layout_2d(void *, void *, int, double, long long int);
 int jgrapht_xx_drawing_exec_indexed_fr_layout_2d(void *, void *, int, double, long long int, double, double);
 int jgrapht_xx_drawing_exec_rescale_layout_2d(void *, void *, double);
 int jgrapht_ix_drawing_exec_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
 int jgrapht_lx_drawing_exec_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
+int jgrapht_rx_drawing_exec_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
 int jgrapht_ix_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
 int jgrapht_lx_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
+int jgrapht_rx_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
 int jgrapht_ix_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
 int jgrapht_lx_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
+int jgrapht_rx_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(void *, void *, void *, void *LONG_TO_FPTR, int);
 
 // exporter
 
@@ -852,31 +844,32 @@ int jgrapht_xx_partition_exec_bipartite(void *, int* OUTPUT, void** OUTPUT, void
 int jgrapht_xx_planarity_exec_boyer_myrvold(void *, int* OUTPUT, void** OUTPUT, void** OUTPUT);
 int jgrapht_ix_planarity_embedding_edges_around_vertex(void *, int, void** OUTPUT);
 int jgrapht_lx_planarity_embedding_edges_around_vertex(void *, long long int, void** OUTPUT);
+int jgrapht_rx_planarity_embedding_edges_around_vertex(void *, void *LONG_TO_PTR, void *, void** OUTPUT);
 
 // ref graphs
 
 int jgrapht_rr_graph_hash_equals_resolver_create(void *LONG_TO_FPTR, void *LONG_TO_FPTR, void **OUTPUT);
 int jgrapht_rr_graph_create(int, int, int, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *, void** OUTPUT);
-int jgrapht_rr_graph_add_vertex(void *, void** OUTPUT);
-int jgrapht_rr_graph_add_given_vertex(void *, void *LONG_TO_PTR, int* OUTPUT);
-int jgrapht_rr_graph_remove_vertex(void *, void *LONG_TO_PTR, int* OUTPUT);
-int jgrapht_rr_graph_contains_vertex(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rx_graph_add_vertex(void *, void** OUTPUT);
+int jgrapht_rx_graph_add_given_vertex(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rx_graph_remove_vertex(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rx_graph_contains_vertex(void *, void *LONG_TO_PTR, int* OUTPUT);
 int jgrapht_rr_graph_add_edge(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void** OUTPUT);
 int jgrapht_rr_graph_add_given_edge(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *LONG_TO_PTR, int* OUTPUT);
-int jgrapht_rr_graph_remove_edge(void *, void *LONG_TO_PTR, int* OUTPUT);
-int jgrapht_rr_graph_contains_edge(void *, void *LONG_TO_PTR, int* OUTPUT);
-int jgrapht_rr_graph_contains_edge_between(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, int* OUTPUT);
-int jgrapht_rr_graph_degree_of(void *, void *LONG_TO_PTR, long long* OUTPUT);
-int jgrapht_rr_graph_indegree_of(void *, void *LONG_TO_PTR, long long* OUTPUT);
-int jgrapht_rr_graph_outdegree_of(void *, void *LONG_TO_PTR, long long* OUTPUT);
+int jgrapht_xr_graph_remove_edge(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_xr_graph_contains_edge(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rx_graph_contains_edge_between(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_rx_graph_degree_of(void *, void *LONG_TO_PTR, long long* OUTPUT);
+int jgrapht_rx_graph_indegree_of(void *, void *LONG_TO_PTR, long long* OUTPUT);
+int jgrapht_rx_graph_outdegree_of(void *, void *LONG_TO_PTR, long long* OUTPUT);
 int jgrapht_rr_graph_edge_source(void *, void *LONG_TO_PTR, void** OUTPUT);
 int jgrapht_rr_graph_edge_target(void *, void *LONG_TO_PTR, void** OUTPUT);
-int jgrapht_rr_graph_get_edge_weight(void *, void *LONG_TO_PTR, double* OUTPUT);
-int jgrapht_rr_graph_set_edge_weight(void *, void *LONG_TO_PTR, double);
-int jgrapht_rr_graph_create_between_eit(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void** OUTPUT);
-int jgrapht_rr_graph_vertex_create_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
-int jgrapht_rr_graph_vertex_create_out_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
-int jgrapht_rr_graph_vertex_create_in_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
+int jgrapht_xr_graph_get_edge_weight(void *, void *LONG_TO_PTR, double* OUTPUT);
+int jgrapht_xr_graph_set_edge_weight(void *, void *LONG_TO_PTR, double);
+int jgrapht_rx_graph_create_between_eit(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void** OUTPUT);
+int jgrapht_rx_graph_vertex_create_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
+int jgrapht_rx_graph_vertex_create_out_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
+int jgrapht_rx_graph_vertex_create_in_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
 
 // scoring
 
@@ -885,6 +878,7 @@ int jgrapht_xx_scoring_exec_custom_eigenvector_centrality(void *, int, double, v
 int jgrapht_xx_scoring_exec_katz_centrality(void *, void** OUTPUT);
 int jgrapht_ix_scoring_exec_custom_katz_centrality(void *, double, void *LONG_TO_FPTR, int, double, void** OUTPUT);
 int jgrapht_lx_scoring_exec_custom_katz_centrality(void *, double, void *LONG_TO_FPTR, int, double, void** OUTPUT);
+int jgrapht_rx_scoring_exec_custom_katz_centrality(void *, double, void *LONG_TO_FPTR, int, double, void** OUTPUT);
 int jgrapht_xx_scoring_exec_betweenness_centrality(void *, void** OUTPUT);
 int jgrapht_xx_scoring_exec_custom_betweenness_centrality(void *, int, void** OUTPUT);
 int jgrapht_xx_scoring_exec_edge_betweenness_centrality(void *, void** OUTPUT);
@@ -1002,21 +996,27 @@ int jgrapht_xx_tour_tsp_two_opt_heuristic_improve(void *, double, long long int,
 int jgrapht_xx_traverse_create_bfs_from_all_vertices_vit(void *, void** OUTPUT);
 int jgrapht_ix_traverse_create_bfs_from_vertex_vit(void *, int, void** OUTPUT);
 int jgrapht_lx_traverse_create_bfs_from_vertex_vit(void *, long long int, void** OUTPUT);
+int jgrapht_rx_traverse_create_bfs_from_vertex_vit(void *, void *LONG_TO_PTR, void** OUTPUT);
 int jgrapht_xx_traverse_create_lex_bfs_vit(void *, void** OUTPUT);
 int jgrapht_xx_traverse_create_dfs_from_all_vertices_vit(void *, void** OUTPUT);
 int jgrapht_ix_traverse_create_dfs_from_vertex_vit(void *, int, void** OUTPUT);
 int jgrapht_lx_traverse_create_dfs_from_vertex_vit(void *, long long int, void** OUTPUT);
+int jgrapht_rx_traverse_create_dfs_from_vertex_vit(void *, void *LONG_TO_PTR, void** OUTPUT);
 int jgrapht_xx_traverse_create_topological_order_vit(void *, void** OUTPUT);
 int jgrapht_ix_traverse_create_random_walk_from_vertex_vit(void *, int, void** OUTPUT);
 int jgrapht_lx_traverse_create_random_walk_from_vertex_vit(void *, long long int, void** OUTPUT);
+int jgrapht_rx_traverse_create_random_walk_from_vertex_vit(void *, void *LONG_TO_PTR, void** OUTPUT);
 int jgrapht_ix_traverse_create_custom_random_walk_from_vertex_vit(void *, int, int, long long int, long long int, void** OUTPUT);
 int jgrapht_lx_traverse_create_custom_random_walk_from_vertex_vit(void *, long long int, int, long long int, long long int, void** OUTPUT);
+int jgrapht_rx_traverse_create_custom_random_walk_from_vertex_vit(void *, void *LONG_TO_PTR, int, long long int, long long int, void** OUTPUT);
 int jgrapht_xx_traverse_create_max_cardinality_vit(void *, void** OUTPUT);
 int jgrapht_xx_traverse_create_degeneracy_ordering_vit(void *, void** OUTPUT);
 int jgrapht_ix_traverse_create_closest_first_from_vertex_vit(void *, int, void** OUTPUT);
 int jgrapht_lx_traverse_create_closest_first_from_vertex_vit(void *, long long int, void** OUTPUT);
+int jgrapht_rx_traverse_create_closest_first_from_vertex_vit(void *, void *LONG_TO_PTR, void** OUTPUT);
 int jgrapht_ix_traverse_create_custom_closest_first_from_vertex_vit(void *, int, double, void** OUTPUT);
 int jgrapht_lx_traverse_create_custom_closest_first_from_vertex_vit(void *, long long int, double, void** OUTPUT);
+int jgrapht_rx_traverse_create_custom_closest_first_from_vertex_vit(void *, void *LONG_TO_PTR, double, void** OUTPUT);
 
 // vertex cover
 
