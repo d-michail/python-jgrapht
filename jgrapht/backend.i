@@ -220,35 +220,20 @@ class IncomingEdgesSupport(Enum):
 // attribute store 
 
 int jgrapht_xx_attributes_store_create(void** OUTPUT);
-
 int jgrapht_ii_attributes_store_put_boolean_attribute(void *, int, char* BYTEARRAY, int);
-
 int jgrapht_ll_attributes_store_put_boolean_attribute(void *, long long int, char* BYTEARRAY, int);
-
 int jgrapht_ii_attributes_store_put_int_attribute(void *, int, char* BYTEARRAY, int);
-
 int jgrapht_ll_attributes_store_put_int_attribute(void *, long long int, char* BYTEARRAY, int);
-
 int jgrapht_ii_attributes_store_put_long_attribute(void *,  int, char* BYTEARRAY, long long int);
-
 int jgrapht_ll_attributes_store_put_long_attribute(void *,  long long int, char* BYTEARRAY, long long int);
-
 int jgrapht_ii_attributes_store_put_double_attribute(void *, int, char* BYTEARRAY, double);
-
 int jgrapht_ll_attributes_store_put_double_attribute(void *, long long int, char* BYTEARRAY, double);
-
 int jgrapht_ii_attributes_store_put_string_attribute(void *, int, char* BYTEARRAY, char* BYTEARRAY);
-
 int jgrapht_ll_attributes_store_put_string_attribute(void *, long long int, char* BYTEARRAY, char* BYTEARRAY);
-
 int jgrapht_ii_attributes_store_remove_attribute(void *, int, char* BYTEARRAY);
-
 int jgrapht_ll_attributes_store_remove_attribute(void *, long long int, char* BYTEARRAY);
-
 int jgrapht_attributes_registry_create(void** OUTPUT);
-
 int jgrapht_attributes_registry_register_attribute(void *, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY);
-
 int jgrapht_attributes_registry_unregister_attribute(void *, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY);
 
 // clique
@@ -687,53 +672,55 @@ int jgrapht_xx_isomorphism_exec_vf2(void *, void *, int* OUTPUT, void** OUTPUT);
 int jgrapht_xx_isomorphism_exec_vf2_subgraph(void *, void *, int* OUTPUT, void** OUTPUT);
 int jgrapht_xi_isomorphism_graph_mapping_edge_correspondence(void *, int, int, int* OUTPUT, int* OUTPUT);
 int jgrapht_xl_isomorphism_graph_mapping_edge_correspondence(void *, long long int, int, int* OUTPUT, long long* OUTPUT);
+int jgrapht_xr_isomorphism_graph_mapping_edge_correspondence(void *, void *LONG_TO_PTR, void *, int, int* OUTPUT, void** OUTPUT);
 int jgrapht_ix_isomorphism_graph_mapping_vertex_correspondence(void *, int, int, int* OUTPUT, int* OUTPUT);
 int jgrapht_lx_isomorphism_graph_mapping_vertex_correspondence(void *, long long int, int, int* OUTPUT, long long* OUTPUT);
+int jgrapht_rx_isomorphism_graph_mapping_vertex_correspondence(void *, void *LONG_TO_PTR, void *, int, int* OUTPUT, void** OUTPUT);
 
 // iterators
 
-int jgrapht_it_next_int(void *, int* OUTPUT);
-int jgrapht_it_next_long(void *, long long* OUTPUT);
-int jgrapht_it_next_double(void *, double* OUTPUT);
-int jgrapht_it_next_int_edge_triple(void *, int *OUTPUT, int *OUTPUT, double* OUTPUT);
-int jgrapht_it_next_long_edge_triple(void *, long long *OUTPUT, long long *OUTPUT, double* OUTPUT);
-int jgrapht_it_next_str_edge_triple(void *, char **OUTPUT, char **OUTPUT, double* OUTPUT);
-int jgrapht_it_next_ref(void *, int, void** OUTPUT);
-int jgrapht_it_next_object(void *, void** OUTPUT);
-int jgrapht_it_hasnext(void *, int* OUTPUT);
+int jgrapht_i_it_next(void *, int* OUTPUT);
+int jgrapht_l_it_next(void *, long long* OUTPUT);
+int jgrapht_d_it_next(void *, double* OUTPUT);
+int jgrapht_iid_t_it_next(void *, int *OUTPUT, int *OUTPUT, double* OUTPUT);
+int jgrapht_lld_t_it_next(void *, long long *OUTPUT, long long *OUTPUT, double* OUTPUT);
+int jgrapht_ssd_t_it_next(void *, char **OUTPUT, char **OUTPUT, double* OUTPUT);
+int jgrapht_r_it_next(void *, int, void** OUTPUT);
+int jgrapht_x_it_next(void *, void** OUTPUT);
+int jgrapht_x_it_hasnext(void *, int* OUTPUT);
 
 // link prediction
 
 int jgrapht_ix_link_prediction_exec_adamic_adar_index(void *, int, int, double* OUTPUT);
 int jgrapht_lx_link_prediction_exec_adamic_adar_index(void *, long long int, long long int, double* OUTPUT);
-int jgrapht_rr_link_prediction_exec_adamic_adar_index(void *, void* LONG_TO_PTR, void*  LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rx_link_prediction_exec_adamic_adar_index(void *, void* LONG_TO_PTR, void*  LONG_TO_PTR, double* OUTPUT);
 int jgrapht_ix_link_prediction_exec_common_neighbors(void *, int, int, double* OUTPUT);
 int jgrapht_lx_link_prediction_exec_common_neighbors(void *, long long int, long long int, double* OUTPUT);
-int jgrapht_rr_link_prediction_exec_common_neighbors(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rx_link_prediction_exec_common_neighbors(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
 int jgrapht_ix_link_prediction_exec_hub_depressed_index(void *, int, int, double* OUTPUT);
 int jgrapht_lx_link_prediction_exec_hub_depressed_index(void *, long long int, long long int, double* OUTPUT);
-int jgrapht_rr_link_prediction_exec_hub_depressed_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rx_link_prediction_exec_hub_depressed_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
 int jgrapht_ix_link_prediction_exec_hub_promoted_index(void *, int, int, double* OUTPUT);
 int jgrapht_lx_link_prediction_exec_hub_promoted_index(void *, long long int, long long int, double* OUTPUT);
-int jgrapht_rr_link_prediction_exec_hub_promoted_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rx_link_prediction_exec_hub_promoted_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
 int jgrapht_ix_link_prediction_exec_jaccard_coefficient(void *, int, int, double* OUTPUT);
 int jgrapht_lx_link_prediction_exec_jaccard_coefficient(void *, long long int, long long int, double* OUTPUT);
-int jgrapht_rr_link_prediction_exec_jaccard_coefficient(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rx_link_prediction_exec_jaccard_coefficient(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
 int jgrapht_ix_link_prediction_exec_leicht_holme_newman_index(void *, int, int, double* OUTPUT);
 int jgrapht_lx_link_prediction_exec_leicht_holme_newman_index(void *, long long int, long long int, double* OUTPUT);
-int jgrapht_rr_link_prediction_exec_leicht_holme_newman_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rx_link_prediction_exec_leicht_holme_newman_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
 int jgrapht_ix_link_prediction_exec_preferential_attachment(void *, int, int, double* OUTPUT);
 int jgrapht_lx_link_prediction_exec_preferential_attachment(void *, long long int, long long int, double* OUTPUT);
-int jgrapht_rr_link_prediction_exec_preferential_attachment(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rx_link_prediction_exec_preferential_attachment(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
 int jgrapht_ix_link_prediction_exec_resource_allocation_index(void *, int, int, double* OUTPUT);
 int jgrapht_lx_link_prediction_exec_resource_allocation_index(void *, long long int, long long int, double* OUTPUT);
-int jgrapht_rr_link_prediction_exec_resource_allocation_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rx_link_prediction_exec_resource_allocation_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
 int jgrapht_ix_link_prediction_exec_salton_index(void *, int, int, double* OUTPUT);
 int jgrapht_lx_link_prediction_exec_salton_index(void *, long long int, long long int, double* OUTPUT);
-int jgrapht_rr_link_prediction_exec_salton_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rx_link_prediction_exec_salton_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
 int jgrapht_ix_link_prediction_exec_sorensen_index(void *, int, int, double* OUTPUT);
 int jgrapht_lx_link_prediction_exec_sorensen_index(void *, long long int, long long int, double* OUTPUT);
-int jgrapht_rr_link_prediction_exec_sorensen_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
+int jgrapht_rx_link_prediction_exec_sorensen_index(void *, void* LONG_TO_PTR, void* LONG_TO_PTR, double* OUTPUT);
 
 // list
 
@@ -743,7 +730,7 @@ int jgrapht_x_list_size(void *, int* OUTPUT);
 int jgrapht_i_list_add(void *, int, int* OUTPUT);
 int jgrapht_l_list_add(void *, long long int, int* OUTPUT);
 int jgrapht_d_list_add(void *, double, int* OUTPUT);
-int jgrapht_R_list_add(void *, void *, int* OUTPUT);
+int jgrapht_x_list_add(void *, void *, int* OUTPUT);
 int jgrapht_r_list_add(void *, void *LONG_TO_PTR, void *, int* OUTPUT);
 int jgrapht_ii_p_list_add(void *, int, int, int* OUTPUT);
 int jgrapht_ll_p_list_add(void *, long long int, long long int, int* OUTPUT);
@@ -752,12 +739,12 @@ int jgrapht_lld_t_list_add(void *, long long int, long long int, double, int* OU
 int jgrapht_i_list_remove(void *, int);
 int jgrapht_l_list_remove(void *, long long int);
 int jgrapht_d_list_remove(void *, double);
-int jgrapht_R_list_remove(void *, void *);
+int jgrapht_x_list_remove(void *, void *);
 int jgrapht_r_list_remove(void *, void *LONG_TO_PTR, void *);
 int jgrapht_i_list_contains(void *, int, int* OUTPUT);
 int jgrapht_l_list_contains(void *, long long int, int* OUTPUT);
 int jgrapht_d_list_contains(void *, double, int* OUTPUT);
-int jgrapht_R_list_contains(void *, void *, int* OUTPUT);
+int jgrapht_x_list_contains(void *, void *, int* OUTPUT);
 int jgrapht_r_list_contains(void *, void *LONG_TO_PTR, void*, int* OUTPUT);
 int jgrapht_x_list_clear(void *);
 
@@ -766,10 +753,9 @@ int jgrapht_x_list_clear(void *);
 int jgrapht_xx_listenable_as_listenable(void *, void** OUTPUT);
 int jgrapht_ii_listenable_create_graph_listener(void *LONG_TO_FPTR, void** OUTPUT);
 int jgrapht_ll_listenable_create_graph_listener(void *LONG_TO_FPTR, void** OUTPUT);
-int jgrapht_ii_listenable_add_graph_listener(void *, void *);
-int jgrapht_ll_listenable_add_graph_listener(void *, void *);
-int jgrapht_ii_listenable_remove_graph_listener(void *, void *);
-int jgrapht_ll_listenable_remove_graph_listener(void *, void *);
+int jgrapht_rr_listenable_create_graph_listener(void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_xx_listenable_add_graph_listener(void *, void *);
+int jgrapht_xx_listenable_remove_graph_listener(void *, void *);
 
 // map
 
@@ -900,17 +886,17 @@ int jgrapht_x_set_size(void *, int* OUTPUT);
 int jgrapht_i_set_add(void *, int, int* OUTPUT);
 int jgrapht_l_set_add(void *, long long int, int* OUTPUT);
 int jgrapht_d_set_add(void *, double, int* OUTPUT);
-int jgrapht_R_set_add(void *, void *, int* OUTPUT);
+int jgrapht_x_set_add(void *, void *, int* OUTPUT);
 int jgrapht_r_set_add(void *, void *LONG_TO_PTR, void *, int* OUTPUT);
 int jgrapht_i_set_remove(void *, int, int* OUTPUT);
 int jgrapht_l_set_remove(void *, long long int, int* OUTPUT);
 int jgrapht_d_set_remove(void *, double, int* OUTPUT);
-int jgrapht_R_set_remove(void *, void *, int* OUTPUT);
+int jgrapht_x_set_remove(void *, void *, int* OUTPUT);
 int jgrapht_r_set_remove(void *, void *LONG_TO_PTR, void *, int* OUTPUT);
 int jgrapht_i_set_contains(void *, int, int* OUTPUT);
 int jgrapht_l_set_contains(void *, long long int, int* OUTPUT);
 int jgrapht_d_set_contains(void *, double, int* OUTPUT);
-int jgrapht_R_set_contains(void *, void *, int* OUTPUT);
+int jgrapht_x_set_contains(void *, void *, int* OUTPUT);
 int jgrapht_r_set_contains(void *, void *LONG_TO_PTR, void*, int* OUTPUT);
 int jgrapht_x_set_clear(void *);
 
@@ -918,38 +904,55 @@ int jgrapht_x_set_clear(void *);
 
 int jgrapht_ix_sp_exec_dijkstra_get_path_between_vertices(void *, int, int, void** OUTPUT);
 int jgrapht_lx_sp_exec_dijkstra_get_path_between_vertices(void *, long long int, long long int, void** OUTPUT);
+int jgrapht_rx_sp_exec_dijkstra_get_path_between_vertices(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void*, void** OUTPUT);
 int jgrapht_ix_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, int, int, void** OUTPUT);
 int jgrapht_lx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, long long int, long long int, void** OUTPUT);
+int jgrapht_rx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *, void** OUTPUT);
 int jgrapht_ix_sp_exec_dijkstra_get_singlesource_from_vertex(void *, int, void** OUTPUT);
 int jgrapht_lx_sp_exec_dijkstra_get_singlesource_from_vertex(void *, long long int, void** OUTPUT);
+int jgrapht_rx_sp_exec_dijkstra_get_singlesource_from_vertex(void *, void *LONG_TO_PTR, void *, void** OUTPUT);
 int jgrapht_ix_sp_exec_bellmanford_get_singlesource_from_vertex(void *, int, void** OUTPUT);
 int jgrapht_lx_sp_exec_bellmanford_get_singlesource_from_vertex(void *, long long int, void** OUTPUT);
+int jgrapht_rx_sp_exec_bellmanford_get_singlesource_from_vertex(void *, void *LONG_TO_PTR, void *, void** OUTPUT);
 int jgrapht_ix_sp_exec_bfs_get_singlesource_from_vertex(void *, int, void** OUTPUT);
 int jgrapht_lx_sp_exec_bfs_get_singlesource_from_vertex(void *, long long int, void** OUTPUT);
+int jgrapht_rx_sp_exec_bfs_get_singlesource_from_vertex(void *, void *LONG_TO_PTR, void *, void** OUTPUT);
 int jgrapht_xx_sp_exec_johnson_get_allpairs(void *, void** OUTPUT);
 int jgrapht_xx_sp_exec_floydwarshall_get_allpairs(void *, void** OUTPUT);
 int jgrapht_ix_sp_singlesource_get_path_to_vertex(void *, int, void** OUTPUT);
 int jgrapht_lx_sp_singlesource_get_path_to_vertex(void *, long long int, void** OUTPUT);
+int jgrapht_rx_sp_singlesource_get_path_to_vertex(void *, void *LONG_TO_PTR, void *, void** OUTPUT);
 int jgrapht_ix_sp_allpairs_get_path_between_vertices(void *, int, int, void** OUTPUT);
 int jgrapht_lx_sp_allpairs_get_path_between_vertices(void *, long long int, long long int, void** OUTPUT);
+int jgrapht_rx_sp_allpairs_get_path_between_vertices(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *, void** OUTPUT);
 int jgrapht_ix_sp_allpairs_get_singlesource_from_vertex(void *, int, void** OUTPUT);
 int jgrapht_lx_sp_allpairs_get_singlesource_from_vertex(void *, long long int, void** OUTPUT);
+int jgrapht_rx_sp_allpairs_get_singlesource_from_vertex(void *, void *LONG_TO_PTR, void *, void** OUTPUT);
 int jgrapht_ix_sp_exec_astar_get_path_between_vertices(void *, int, int, void *LONG_TO_FPTR, void** OUTPUT);
 int jgrapht_lx_sp_exec_astar_get_path_between_vertices(void *, long long int, long long int, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_rx_sp_exec_astar_get_path_between_vertices(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *, void *LONG_TO_FPTR, void** OUTPUT);
 int jgrapht_ix_sp_exec_bidirectional_astar_get_path_between_vertices(void *, int, int, void *LONG_TO_FPTR, void** OUTPUT);
 int jgrapht_lx_sp_exec_bidirectional_astar_get_path_between_vertices(void *, long long int, long long int, void *LONG_TO_FPTR, void** OUTPUT);
+int jgrapht_rx_sp_exec_bidirectional_astar_get_path_between_vertices(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *, void *LONG_TO_FPTR, void** OUTPUT);
 int jgrapht_ix_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void** OUTPUT);
 int jgrapht_lx_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, long long int, long long int, void *, void** OUTPUT);
+int jgrapht_rx_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *, void *, void** OUTPUT);
 int jgrapht_ix_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void** OUTPUT);
 int jgrapht_lx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, long long int, long long int, void *, void** OUTPUT);
+int jgrapht_rx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *, void *, void** OUTPUT);
 int jgrapht_ix_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, int, int, int, void** OUTPUT);
 int jgrapht_lx_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, long long int, long long int, int, void** OUTPUT);
+int jgrapht_rx_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *, int, void** OUTPUT);
 int jgrapht_ix_sp_exec_eppstein_get_k_paths_between_vertices(void *, int, int, int, void** OUTPUT);
 int jgrapht_lx_sp_exec_eppstein_get_k_paths_between_vertices(void *, long long int, long long int, int, void** OUTPUT);
+int jgrapht_rx_sp_exec_eppstein_get_k_paths_between_vertices(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void *, int, void** OUTPUT);
+
 int jgrapht_ix_sp_exec_delta_stepping_get_path_between_vertices(void *, int, int, double, int, void** OUTPUT);
 int jgrapht_lx_sp_exec_delta_stepping_get_path_between_vertices(void *, long long int, long long int, double, int, void** OUTPUT);
+int jgrapht_rx_sp_exec_delta_stepping_get_path_between_vertices(void *, void *LONG_TO_PTR, void *LONG_TO_PTR, void*, double, int, void** OUTPUT);
 int jgrapht_ix_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, int, double, int, void** OUTPUT);
 int jgrapht_lx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, long long int, double, int, void** OUTPUT);
+int jgrapht_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, void *LONG_TO_PTR, void *, double, int, void** OUTPUT);
 
 // multi objective shortest paths
 
