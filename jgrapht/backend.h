@@ -517,7 +517,7 @@ int jgrapht_d_it_next(void *, double*);
 int jgrapht_iid_t_it_next(void *, int *, int *, double*);
 int jgrapht_lld_t_it_next(void *, long long *, long long *, double*);
 int jgrapht_ssd_t_it_next(void *, char **, char **, double*);
-int jgrapht_r_it_next(void *, int, void**);
+int jgrapht_r_it_next(void *, void**);
 int jgrapht_x_it_next(void *, void**);
 int jgrapht_x_it_hasnext(void *, int*);
 
@@ -736,24 +736,24 @@ int jgrapht_x_set_clear(void *);
 
 int jgrapht_ix_sp_exec_dijkstra_get_path_between_vertices(void *, int, int, void**);
 int jgrapht_lx_sp_exec_dijkstra_get_path_between_vertices(void *, long long int, long long int, void**);
-int jgrapht_rx_sp_exec_dijkstra_get_path_between_vertices(void *, void *, void *, void*, void**);
+int jgrapht_rx_sp_exec_dijkstra_get_path_between_vertices(void *, void *, void*, void**);
 int jgrapht_ix_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, int, int, void**);
 int jgrapht_lx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, long long int, long long int, void**);
-int jgrapht_rx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, void *, void *, void *, void**);
+int jgrapht_rx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *, void *, void *, void**);
 int jgrapht_ix_sp_exec_dijkstra_get_singlesource_from_vertex(void *, int, void**);
 int jgrapht_lx_sp_exec_dijkstra_get_singlesource_from_vertex(void *, long long int, void**);
-int jgrapht_rx_sp_exec_dijkstra_get_singlesource_from_vertex(void *, void *, void *, void**);
+int jgrapht_rx_sp_exec_dijkstra_get_singlesource_from_vertex(void *, void *, void**);
 int jgrapht_ix_sp_exec_bellmanford_get_singlesource_from_vertex(void *, int, void**);
 int jgrapht_lx_sp_exec_bellmanford_get_singlesource_from_vertex(void *, long long int, void**);
-int jgrapht_rx_sp_exec_bellmanford_get_singlesource_from_vertex(void *, void *, void *, void**);
+int jgrapht_rx_sp_exec_bellmanford_get_singlesource_from_vertex(void *, void *, void**);
 int jgrapht_ix_sp_exec_bfs_get_singlesource_from_vertex(void *, int, void**);
 int jgrapht_lx_sp_exec_bfs_get_singlesource_from_vertex(void *, long long int, void**);
-int jgrapht_rx_sp_exec_bfs_get_singlesource_from_vertex(void *, void *, void *, void**);
+int jgrapht_rx_sp_exec_bfs_get_singlesource_from_vertex(void *, void *, void**);
 int jgrapht_xx_sp_exec_johnson_get_allpairs(void *, void**);
 int jgrapht_xx_sp_exec_floydwarshall_get_allpairs(void *, void**);
 int jgrapht_ix_sp_singlesource_get_path_to_vertex(void *, int, void**);
 int jgrapht_lx_sp_singlesource_get_path_to_vertex(void *, long long int, void**);
-int jgrapht_rx_sp_singlesource_get_path_to_vertex(void *, void *, void *, void**);
+int jgrapht_rx_sp_singlesource_get_path_to_vertex(void *, void *, void**);
 int jgrapht_ix_sp_allpairs_get_path_between_vertices(void *, int, int, void**);
 int jgrapht_lx_sp_allpairs_get_path_between_vertices(void *, long long int, long long int, void**);
 int jgrapht_rx_sp_allpairs_get_path_between_vertices(void *, void *, void *, void *, void**);
@@ -762,51 +762,58 @@ int jgrapht_lx_sp_allpairs_get_singlesource_from_vertex(void *, long long int, v
 int jgrapht_rx_sp_allpairs_get_singlesource_from_vertex(void *, void *, void *, void**);
 int jgrapht_ix_sp_exec_astar_get_path_between_vertices(void *, int, int, void *, void**);
 int jgrapht_lx_sp_exec_astar_get_path_between_vertices(void *, long long int, long long int, void *, void**);
-int jgrapht_rx_sp_exec_astar_get_path_between_vertices(void *, void *, void *, void *, void *, void**);
+int jgrapht_rx_sp_exec_astar_get_path_between_vertices(void *, void *, void *, void *, void**);
 int jgrapht_ix_sp_exec_bidirectional_astar_get_path_between_vertices(void *, int, int, void *, void**);
 int jgrapht_lx_sp_exec_bidirectional_astar_get_path_between_vertices(void *, long long int, long long int, void *, void**);
-int jgrapht_rx_sp_exec_bidirectional_astar_get_path_between_vertices(void *, void *, void *, void *, void *, void**);
+int jgrapht_rx_sp_exec_bidirectional_astar_get_path_between_vertices(void *, void *, void *, void *, void**);
 int jgrapht_ix_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void**);
 int jgrapht_lx_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, long long int, long long int, void *, void**);
-int jgrapht_rx_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, void *, void *, void *, void *, void**);
+int jgrapht_rx_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *, void *, void *, void *, void**);
 int jgrapht_ix_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, int, int, void *, void**);
 int jgrapht_lx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, long long int, long long int, void *, void**);
-int jgrapht_rx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, void *, void *, void *, void *, void**);
+int jgrapht_rx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *, void *, void *, void *, void**);
 int jgrapht_ix_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, int, int, int, void**);
 int jgrapht_lx_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, long long int, long long int, int, void**);
-int jgrapht_rx_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, void *, void *, void *, int, void**);
+int jgrapht_rx_sp_exec_yen_get_k_loopless_paths_between_vertices(void *, void *, void *, int, void**);
 int jgrapht_ix_sp_exec_eppstein_get_k_paths_between_vertices(void *, int, int, int, void**);
 int jgrapht_lx_sp_exec_eppstein_get_k_paths_between_vertices(void *, long long int, long long int, int, void**);
-int jgrapht_rx_sp_exec_eppstein_get_k_paths_between_vertices(void *, void *, void *, void *, int, void**);
+int jgrapht_rx_sp_exec_eppstein_get_k_paths_between_vertices(void *, void *, void *, int, void**);
 int jgrapht_ix_sp_exec_delta_stepping_get_path_between_vertices(void *, int, int, double, int, void**);
 int jgrapht_lx_sp_exec_delta_stepping_get_path_between_vertices(void *, long long int, long long int, double, int, void**);
-int jgrapht_rx_sp_exec_delta_stepping_get_path_between_vertices(void *, void *, void *, void*, double, int, void**);
+int jgrapht_rx_sp_exec_delta_stepping_get_path_between_vertices(void *, void *, void*, double, int, void**);
 int jgrapht_ix_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, int, double, int, void**);
 int jgrapht_lx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, long long int, double, int, void**);
-int jgrapht_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, void *, void *, double, int, void**);
+int jgrapht_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *, void *, double, int, void**);
 
 // multi objective shortest paths
 
 int jgrapht_ii_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *, int, void *, int, void**);
 int jgrapht_ll_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *, long long int, void *, int, void**);
+int jgrapht_rr_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *, void *, void *, int, void**);
 int jgrapht_ii_multisp_exec_martin_get_paths_between_vertices(void *, int, int, void *, int, void**);
 int jgrapht_ll_multisp_exec_martin_get_paths_between_vertices(void *, long long int, long long int, void *, int, void**);
+int jgrapht_rr_multisp_exec_martin_get_paths_between_vertices(void *, void *, void *, void *, int, void**);
 int jgrapht_ix_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *, int, void**);
 int jgrapht_lx_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *, long long int, void**);
+int jgrapht_rx_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *, void *, void**);
 
 // contraction hierarchy
 
 int jgrapht_ix_sp_manytomany_get_path_between_vertices(void *, int, int, void**);
 int jgrapht_lx_sp_manytomany_get_path_between_vertices(void *, long long int, long long int, void**);
+int jgrapht_rx_sp_manytomany_get_path_between_vertices(void *, void *, void *, void *, void**);
 int jgrapht_xx_sp_exec_contraction_hierarchy(void *, int, long long int, void**);
 int jgrapht_xx_sp_exec_contraction_hierarchy_get_manytomany(void *, void *, void *, void**);
 int jgrapht_ix_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *, int, int, double, void**);
 int jgrapht_lx_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *, long long int, long long int, double, void**);
+int jgrapht_rx_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *, void *, void *, double, void**);
 int jgrapht_xx_sp_exec_transit_node_routing(void *, int, void**);
 int jgrapht_ix_sp_exec_transit_node_routing_get_path_between_vertices(void *, int, int, void**);
 int jgrapht_lx_sp_exec_transit_node_routing_get_path_between_vertices(void *, long long int, long long int, void**);
+int jgrapht_rx_sp_exec_transit_node_routing_get_path_between_vertices(void *, void *, void *, void*, void**);
 int jgrapht_ix_sp_exec_transit_node_routing_get_singlesource_from_vertex(void *, int, void**);
 int jgrapht_lx_sp_exec_transit_node_routing_get_singlesource_from_vertex(void *, long long int, void**);
+int jgrapht_rx_sp_exec_transit_node_routing_get_singlesource_from_vertex(void *, void *, void*, void**);
 
 // spanner
 

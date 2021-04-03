@@ -10,7 +10,7 @@ def _linkprediction_alg(name, graph, u, v):
         GraphBackend.ANY_HASHABLE_GRAPH: "ix",
         GraphBackend.LONG_GRAPH: "lx",
         GraphBackend.INT_GRAPH: "ix",
-        GraphBackend.REF_GRAPH: "rr",
+        GraphBackend.REF_GRAPH: "rx",
     }
     graph_backend_type = cases[graph._backend_type]
 

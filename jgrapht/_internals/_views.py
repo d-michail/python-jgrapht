@@ -227,7 +227,7 @@ class _ListenableView(_JGraphTIntegerGraph, ListenableGraph):
         )
 
         listener_handle = backend.jgrapht_ii_listenable_create_graph_listener(cb_fptr)
-        backend.jgrapht_ii_listenable_add_graph_listener(self.handle, listener_handle)
+        backend.jgrapht_xx_listenable_add_graph_listener(self.handle, listener_handle)
 
         # create listener identifier
         listener_id = self._next_id
@@ -242,7 +242,7 @@ class _ListenableView(_JGraphTIntegerGraph, ListenableGraph):
     def remove_listener(self, listener_id):
         listener_handle, cb = self._listeners.pop(listener_id)
 
-        backend.jgrapht_ii_listenable_remove_graph_listener(self.handle, listener_handle)
+        backend.jgrapht_xx_listenable_remove_graph_listener(self.handle, listener_handle)
         backend.jgrapht_handles_destroy(listener_handle)
 
     def __repr__(self):

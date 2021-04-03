@@ -2111,7 +2111,7 @@ int jgrapht_l_it_next(void *it, long long* res) {
     return jgrapht_capi_l_it_next(thread, it, res);
 }
 
-int jgrapht_d_it_next_double(void *it, double* res) { 
+int jgrapht_d_it_next(void *it, double* res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_d_it_next(thread, it, res);
 }
@@ -2131,9 +2131,9 @@ int jgrapht_ssd_t_it_next(void *it, char **source, char **target, double* weight
     return jgrapht_capi_ssd_t_it_next(thread, it, source, target, weight);
 }
 
-int jgrapht_t_it_next(void *it, int create_handle, void** res) { 
+int jgrapht_r_it_next(void *it, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_t_it_next(thread, it, create_handle, res);
+    return jgrapht_capi_r_it_next(thread, it, res);
 }
 
 int jgrapht_x_it_next(void *it, void** res) { 
@@ -2995,7 +2995,7 @@ int jgrapht_d_set_add(void *set, double elem, int* res) {
 
 int jgrapht_x_set_add(void *set, void *elem, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_R_set_add(thread, set, elem, res);
+    return jgrapht_capi_x_set_add(thread, set, elem, res);
 }
 
 int jgrapht_r_set_add(void *set, void *ref_ptr, void *hash_equals_resolver, int* res) { 
@@ -3020,7 +3020,7 @@ int jgrapht_d_set_remove(void *set, double elem, int *res) {
 
 int jgrapht_x_set_remove(void *set, void *elem, int *res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_R_set_remove(thread, set, elem, res);
+    return jgrapht_capi_x_set_remove(thread, set, elem, res);
 }
 
 int jgrapht_r_set_remove(void *list, void *ref_ptr, void *hash_equals_resolver, int *res) { 
@@ -3045,7 +3045,7 @@ int jgrapht_d_set_contains(void *set, double elem, int* res) {
 
 int jgrapht_x_set_contains(void *set, void *elem, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_R_set_contains(thread, set, elem, res);
+    return jgrapht_capi_x_set_contains(thread, set, elem, res);
 }
 
 int jgrapht_r_set_contains(void *set, void *ref_ptr, void* hash_equals_resolver, int* res) { 
@@ -3070,9 +3070,9 @@ int jgrapht_lx_sp_exec_dijkstra_get_path_between_vertices(void *g, long long int
     return jgrapht_capi_lx_sp_exec_dijkstra_get_path_between_vertices(thread, g, source, target, res);
 }
 
-int jgrapht_rx_sp_exec_dijkstra_get_path_between_vertices(void *g, void *source, void *target, void* hash_equals_resolver, void** res) {    
+int jgrapht_rx_sp_exec_dijkstra_get_path_between_vertices(void *g, void *source, void *target, void** res) {    
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_dijkstra_get_path_between_vertices(thread, g, source, target, hash_equals_resolver, res);
+    return jgrapht_capi_rx_sp_exec_dijkstra_get_path_between_vertices(thread, g, source, target, res);
 }
 
 int jgrapht_ix_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *g, int source, int target, void** res) {
@@ -3085,9 +3085,9 @@ int jgrapht_lx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *g,
     return jgrapht_capi_lx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(thread, g, source, target, res);
 }
 
-int jgrapht_rx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *g, void *source, void *target, void *hash_equals_resolver, void** res) { 
+int jgrapht_rx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(void *g, void *source, void *target, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(thread, g, source, target, hash_equals_resolver, res);
+    return jgrapht_capi_rx_sp_exec_bidirectional_dijkstra_get_path_between_vertices(thread, g, source, target, res);
 }
 
 int jgrapht_ix_sp_exec_dijkstra_get_singlesource_from_vertex(void *g, int source, void** res) {
@@ -3100,9 +3100,9 @@ int jgrapht_lx_sp_exec_dijkstra_get_singlesource_from_vertex(void *g, long long 
     return jgrapht_capi_lx_sp_exec_dijkstra_get_singlesource_from_vertex(thread, g, source, res);
 }
 
-int jgrapht_rx_sp_exec_dijkstra_get_singlesource_from_vertex(void *g, void *source, void *hash_equals_resolver, void** res) { 
+int jgrapht_rx_sp_exec_dijkstra_get_singlesource_from_vertex(void *g, void *source, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_dijkstra_get_singlesource_from_vertex(thread, g, source, hash_equals_resolver, res);
+    return jgrapht_capi_rx_sp_exec_dijkstra_get_singlesource_from_vertex(thread, g, source, res);
 }
 
 int jgrapht_ix_sp_exec_bellmanford_get_singlesource_from_vertex(void *g, int source, void** res) {
@@ -3115,9 +3115,9 @@ int jgrapht_lx_sp_exec_bellmanford_get_singlesource_from_vertex(void *g, long lo
     return jgrapht_capi_lx_sp_exec_bellmanford_get_singlesource_from_vertex(thread, g, source, res);
 }
 
-int jgrapht_rx_sp_exec_bellmanford_get_singlesource_from_vertex(void *g, void *source, void *hash_equals_resolver, void** res) { 
+int jgrapht_rx_sp_exec_bellmanford_get_singlesource_from_vertex(void *g, void *source, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_bellmanford_get_singlesource_from_vertex(thread, g, source, hash_equals_resolver, res);
+    return jgrapht_capi_rx_sp_exec_bellmanford_get_singlesource_from_vertex(thread, g, source, res);
 }
 
 int jgrapht_ix_sp_exec_bfs_get_singlesource_from_vertex(void *g, int source, void** res) {
@@ -3130,9 +3130,9 @@ int jgrapht_lx_sp_exec_bfs_get_singlesource_from_vertex(void *g, long long int s
     return jgrapht_capi_lx_sp_exec_bfs_get_singlesource_from_vertex(thread, g, source, res);
 }
 
-int jgrapht_rx_sp_exec_bfs_get_singlesource_from_vertex(void *g, void *source, void *hash_equals_resolver, void** res) { 
+int jgrapht_rx_sp_exec_bfs_get_singlesource_from_vertex(void *g, void *source, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_bfs_get_singlesource_from_vertex(thread, g, source, hash_equals_resolver, res);
+    return jgrapht_capi_rx_sp_exec_bfs_get_singlesource_from_vertex(thread, g, source, res);
 }
 
 int jgrapht_xx_sp_exec_johnson_get_allpairs(void *g, void** res) {
@@ -3155,9 +3155,9 @@ int jgrapht_lx_sp_singlesource_get_path_to_vertex(void *singlesource, long long 
     return jgrapht_capi_lx_sp_singlesource_get_path_to_vertex(thread, singlesource, target, res);
 }
 
-int jgrapht_rx_sp_singlesource_get_path_to_vertex(void *singlesource, void *target, void *hash_equals_resolver, void** res) { 
+int jgrapht_rx_sp_singlesource_get_path_to_vertex(void *singlesource, void *target, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_singlesource_get_path_to_vertex(thread, singlesource, target, hash_equals_resolver, res);
+    return jgrapht_capi_rx_sp_singlesource_get_path_to_vertex(thread, singlesource, target, res);
 }
 
 int jgrapht_ix_sp_allpairs_get_path_between_vertices(void *allpairs, int source, int target, void** res) {
@@ -3200,9 +3200,9 @@ int jgrapht_lx_sp_exec_astar_get_path_between_vertices(void *g, long long int so
     return jgrapht_capi_lx_sp_exec_astar_get_path_between_vertices(thread, g, source, target, heuristic, res);
 }
 
-int jgrapht_rx_sp_exec_astar_get_path_between_vertices(void *g, void *source, void *target, void *hash_equals_resolver, void *heuristic, void** res) { 
+int jgrapht_rx_sp_exec_astar_get_path_between_vertices(void *g, void *source, void *target, void *heuristic, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_astar_get_path_between_vertices(thread, g, source, target, hash_equals_resolver, heuristic, res);
+    return jgrapht_capi_rx_sp_exec_astar_get_path_between_vertices(thread, g, source, target, heuristic, res);
 }
 
 int jgrapht_ix_sp_exec_bidirectional_astar_get_path_between_vertices(void *g, int source, int target, void *heuristic, void** res) { 
@@ -3215,9 +3215,9 @@ int jgrapht_lx_sp_exec_bidirectional_astar_get_path_between_vertices(void *g, lo
     return jgrapht_capi_lx_sp_exec_bidirectional_astar_get_path_between_vertices(thread, g, source, target, heuristic, res);
 }
 
-int jgrapht_rx_sp_exec_bidirectional_astar_get_path_between_vertices(void *g, void *source, void *target, void *hash_equals_resolver, void *heuristic, void** res) { 
+int jgrapht_rx_sp_exec_bidirectional_astar_get_path_between_vertices(void *g, void *source, void *target, void *heuristic, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_bidirectional_astar_get_path_between_vertices(thread, g, source, target, hash_equals_resolver, heuristic, res);
+    return jgrapht_capi_rx_sp_exec_bidirectional_astar_get_path_between_vertices(thread, g, source, target, heuristic, res);
 }
 
 int jgrapht_ix_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *g, int source, int target, void *landmarks_set, void** res) {
@@ -3230,9 +3230,9 @@ int jgrapht_lx_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *g, lo
     return jgrapht_capi_lx_sp_exec_astar_alt_heuristic_get_path_between_vertices(thread, g, source, target, landmarks_set, res);
 }
 
-int jgrapht_rx_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *g, void *source, void *target, void *hash_equals_resolver, void *landmarks_set, void** res) { 
+int jgrapht_rx_sp_exec_astar_alt_heuristic_get_path_between_vertices(void *g, void *source, void *target, void *landmarks_set, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_astar_alt_heuristic_get_path_between_vertices(thread, g, source, target, hash_equals_resolver, landmarks_set, res);
+    return jgrapht_capi_rx_sp_exec_astar_alt_heuristic_get_path_between_vertices(thread, g, source, target, landmarks_set, res);
 }
 
 int jgrapht_ix_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *g, int source, int target, void *landmarks_set, void** res) { 
@@ -3245,9 +3245,9 @@ int jgrapht_lx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertic
     return jgrapht_capi_lx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(thread, g, source, target, landmarks_set, res);
 }
 
-int jgrapht_rx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *g, void *source, void *target, void *hash_equals_resolver, void *landmarks_set, void**res) { 
+int jgrapht_rx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(void *g, void *source, void *target, void *landmarks_set, void**res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(thread, g, source, target, hash_equals_resolver, landmarks_set, res);
+    return jgrapht_capi_rx_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(thread, g, source, target, landmarks_set, res);
 }
 
 int jgrapht_ix_sp_exec_yen_get_k_loopless_paths_between_vertices(void *g, int source, int target, int k, void**res) { 
@@ -3260,9 +3260,9 @@ int jgrapht_lx_sp_exec_yen_get_k_loopless_paths_between_vertices(void *g, long l
     return jgrapht_capi_lx_sp_exec_yen_get_k_loopless_paths_between_vertices(thread, g, source, target, k, res);
 }
 
-int jgrapht_rx_sp_exec_yen_get_k_loopless_paths_between_vertices(void *g, void *source, void *target, void *hash_equals_resolver, int k, void** res) {
+int jgrapht_rx_sp_exec_yen_get_k_loopless_paths_between_vertices(void *g, void *source, void *target, int k, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_yen_get_k_loopless_paths_between_vertices(thread, g, source, target, hash_equals_resolver, k, res);
+    return jgrapht_capi_rx_sp_exec_yen_get_k_loopless_paths_between_vertices(thread, g, source, target, k, res);
 }
 
 int jgrapht_ix_sp_exec_eppstein_get_k_paths_between_vertices(void *g, int source, int target, int k, void** res) { 
@@ -3275,9 +3275,9 @@ int jgrapht_lx_sp_exec_eppstein_get_k_paths_between_vertices(void *g, long long 
     return jgrapht_capi_lx_sp_exec_eppstein_get_k_paths_between_vertices(thread, g, source, target, k, res);
 }
 
-int jgrapht_rx_sp_exec_eppstein_get_k_paths_between_vertices(void *g, void *source, void *target, void *hash_equals_resolver, int k, void** res) { 
+int jgrapht_rx_sp_exec_eppstein_get_k_paths_between_vertices(void *g, void *source, void *target, int k, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_eppstein_get_k_paths_between_vertices(thread, g, source, target, hash_equals_resolver, k, res);
+    return jgrapht_capi_rx_sp_exec_eppstein_get_k_paths_between_vertices(thread, g, source, target, k, res);
 }
 
 int jgrapht_ix_sp_exec_delta_stepping_get_path_between_vertices(void *g, int source, int target, double delta, int parallelism, void**res) { 
@@ -3290,9 +3290,9 @@ int jgrapht_lx_sp_exec_delta_stepping_get_path_between_vertices(void *g, long lo
     return jgrapht_capi_lx_sp_exec_delta_stepping_get_path_between_vertices(thread, g, source, target, delta, parallelism, res);
 }
 
-int jgrapht_rx_sp_exec_delta_stepping_get_path_between_vertices(void *g, void *source, void *target, void* hash_equals_resolver, double delta, int parallelism, void** res) { 
+int jgrapht_rx_sp_exec_delta_stepping_get_path_between_vertices(void *g, void *source, void *target, double delta, int parallelism, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_delta_stepping_get_path_between_vertices(thread, g, source, target, hash_equals_resolver, delta, parallelism, res);
+    return jgrapht_capi_rx_sp_exec_delta_stepping_get_path_between_vertices(thread, g, source, target, delta, parallelism, res);
 }
 
 int jgrapht_ix_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, int source, double delta, int parallelism, void** res) { 
@@ -3305,9 +3305,9 @@ int jgrapht_lx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, long
     return jgrapht_capi_lx_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, delta, parallelism, res);
 }
 
-int jgrapht_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, void *source, void *hash_equals_resolver, double delta, int parallelism, void** res) { 
+int jgrapht_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, void *source, double delta, int parallelism, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, hash_equals_resolver, delta, parallelism, res);
+    return jgrapht_capi_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, delta, parallelism, res);
 }
 
 // multi objective shortest paths
@@ -3322,6 +3322,11 @@ int jgrapht_ll_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(vo
     return jgrapht_capi_ll_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(thread, g, source, cost_function, dimensions, res);
 }
 
+int jgrapht_rr_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(void *g, void *source, void *cost_function, int dimensions, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(thread, g, source, cost_function, dimensions, res);
+}
+
 int jgrapht_ii_multisp_exec_martin_get_paths_between_vertices(void *g, int source, int target, void *cost_function, int dimensions, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ii_multisp_exec_martin_get_paths_between_vertices(thread, g, source, target, cost_function, dimensions, res);    
@@ -3330,6 +3335,11 @@ int jgrapht_ii_multisp_exec_martin_get_paths_between_vertices(void *g, int sourc
 int jgrapht_ll_multisp_exec_martin_get_paths_between_vertices(void *g, long long int source, long long int target, void *cost_function, int dimensions, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ll_multisp_exec_martin_get_paths_between_vertices(thread, g, source, target, cost_function, dimensions, res);    
+}
+
+int jgrapht_rr_multisp_exec_martin_get_paths_between_vertices(void *g, void *source, void *target, void *cost_function, int dimensions, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_multisp_exec_martin_get_paths_between_vertices(thread, g, source, target, cost_function, dimensions, res);
 }
 
 int jgrapht_ix_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *multiobjectivesinglesource, int target, void** res) { 
@@ -3342,6 +3352,11 @@ int jgrapht_lx_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *mult
     return jgrapht_capi_lx_multisp_multiobjectivesinglesource_get_paths_to_vertex(thread, multiobjectivesinglesource, target, res);
 }
 
+int jgrapht_rx_multisp_multiobjectivesinglesource_get_paths_to_vertex(void *multiobjectivesinglesource, void *target, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rx_multisp_multiobjectivesinglesource_get_paths_to_vertex(thread, multiobjectivesinglesource, target, res);
+}
+
 // contraction hierarchy
 
 int jgrapht_ix_sp_manytomany_get_path_between_vertices(void *mm, int source, int target, void** res) { 
@@ -3352,6 +3367,11 @@ int jgrapht_ix_sp_manytomany_get_path_between_vertices(void *mm, int source, int
 int jgrapht_lx_sp_manytomany_get_path_between_vertices(void *mm, long long int source, long long int target, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_lx_sp_manytomany_get_path_between_vertices(thread, mm, source, target, res);
+}
+
+int jgrapht_rx_sp_manytomany_get_path_between_vertices(void *mm, void *source, void *target, void *hash_equals_resolver, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rx_sp_manytomany_get_path_between_vertices(thread, mm, source, target, hash_equals_resolver, res);
 }
 
 int jgrapht_xx_sp_exec_contraction_hierarchy(void *g, int parallelism, long long int seed, void** res) { 
@@ -3374,6 +3394,11 @@ int jgrapht_lx_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_bet
     return jgrapht_capi_lx_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(thread, ch, source, target, radius, res);
 }
 
+int jgrapht_rx_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(void *ch, void *source, void *target, double radius, void**res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rx_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(thread, ch, source, target, radius, res);
+}
+
 int jgrapht_xx_sp_exec_transit_node_routing(void *g, int parallelism, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_xx_sp_exec_transit_node_routing(thread, g, parallelism, res);
@@ -3389,6 +3414,11 @@ int jgrapht_lx_sp_exec_transit_node_routing_get_path_between_vertices(void *tnr,
     return jgrapht_capi_lx_sp_exec_transit_node_routing_get_path_between_vertices(thread, tnr, source, target, path_res);
 }
 
+int jgrapht_rx_sp_exec_transit_node_routing_get_path_between_vertices(void *tnr, void *source, void *target, void* hash_equals_resolver, void** path_res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rx_sp_exec_transit_node_routing_get_path_between_vertices(thread, tnr, source, target, hash_equals_resolver, path_res);
+}
+
 int jgrapht_ix_sp_exec_transit_node_routing_get_singlesource_from_vertex(void *tnr, int source, void** paths_res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ix_sp_exec_transit_node_routing_get_singlesource_from_vertex(thread, tnr, source, paths_res);
@@ -3399,6 +3429,10 @@ int jgrapht_lx_sp_exec_transit_node_routing_get_singlesource_from_vertex(void *t
     return jgrapht_capi_lx_sp_exec_transit_node_routing_get_singlesource_from_vertex(thread, tnr, source, paths_res);
 }
 
+int jgrapht_rx_sp_exec_transit_node_routing_get_singlesource_from_vertex(void *tnr, void *source, void* hash_equals_resolver, void** paths_res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rx_sp_exec_transit_node_routing_get_singlesource_from_vertex(thread, tnr, source, hash_equals_resolver, paths_res);
+}
 
 // spanner
 
