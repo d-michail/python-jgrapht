@@ -1,16 +1,20 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier
 import jgrapht.algorithms.shortestpaths as sp
 import math
 
 
-def get_graph():
+def get_graph(backend=GraphBackend.INT_GRAPH):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     for i in range(0, 6):
@@ -28,13 +32,15 @@ def get_graph():
     return g
 
 
-def get_anyhashableg_graph():
+def get_anyhashableg_graph(backend=GraphBackend.ANY_HASHABLE_GRAPH):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     for i in range(0, 6):
@@ -52,12 +58,15 @@ def get_anyhashableg_graph():
     return g
 
 
-def get_graph_with_negative_edges():
+def get_graph_with_negative_edges(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     assert g.type.directed
@@ -111,8 +120,17 @@ def get_anyhashableg_graph_with_negative_edges():
     return g
 
 
-def test_dijkstra():
-    g = get_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_dijkstra(backend):
+    g = get_graph(backend)
 
     single_path = sp.dijkstra(g, 0, 5)
     assert single_path.weight == 62.0
@@ -149,8 +167,15 @@ def test_dijkstra():
     assert nopath is None
 
 
-def test_anyhashableg_dijkstra():
-    g = get_anyhashableg_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_dijkstra(backend):
+    g = get_anyhashableg_graph(backend)
 
     single_path = sp.dijkstra(g, 0, 5)
     assert single_path.weight == 62.0
@@ -179,8 +204,17 @@ def test_anyhashableg_dijkstra():
     assert list(single_path.edges) == [0, 1]
 
 
-def test_bfs():
-    g = get_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_bfs(backend):
+    g = get_graph(backend)
 
     from_paths = sp.bfs(g, 0)
     assert from_paths.source_vertex == 0
@@ -191,8 +225,15 @@ def test_bfs():
     assert list(single_path.edges) == [7]
 
 
-def test_anyhashableg_bfs():
-    g = get_anyhashableg_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_bfs(backend):
+    g = get_anyhashableg_graph(backend)
 
     from_paths = sp.bfs(g, 0)
     assert from_paths.source_vertex == 0
@@ -203,8 +244,17 @@ def test_anyhashableg_bfs():
     assert list(single_path.edges) == [7]
 
 
-def test_bellman():
-    g = get_graph_with_negative_edges()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_bellman(backend):
+    g = get_graph_with_negative_edges(backend)
 
     from_paths = sp.bellman_ford(g, 0)
     assert from_paths.source_vertex == 0
@@ -243,8 +293,17 @@ def test_anyhashableg_bellman():
     assert list(path15.edges) == [1, 4]
 
 
-def test_johnsons():
-    g = get_graph_with_negative_edges()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_johnsons(backend):
+    g = get_graph_with_negative_edges(backend)
 
     allpairs = sp.johnson_allpairs(g)
     repr(allpairs)
@@ -290,8 +349,17 @@ def test_anyhashableg_johnsons():
     assert list(path05.edges) == ["2", 3, 5]
 
 
-def test_floyd_warshall():
-    g = get_graph_with_negative_edges()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_floyd_warshall(backend):
+    g = get_graph_with_negative_edges(backend)
 
     allpairs = sp.floyd_warshall_allpairs(g)
     path05 = allpairs.get_path(0, 5)

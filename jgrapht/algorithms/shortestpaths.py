@@ -1,4 +1,6 @@
 from .. import backend as _backend
+
+from .._internals._wrappers import GraphBackend
 from .._internals._results import (
     _build_vertex_set,
     _unwrap_vertex,
@@ -25,7 +27,13 @@ import time
 
 
 def _sp_singlesource_alg(name, graph, source_vertex, *args):
-    alg_method_name = "jgrapht_ix_sp_exec_" + name
+    cases = {
+        GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ix_sp_exec_",
+        GraphBackend.LONG_GRAPH: "jgrapht_lx_sp_exec_",
+        GraphBackend.INT_GRAPH: "jgrapht_ix_sp_exec_",
+        GraphBackend.REF_GRAPH: "jgrapht_rx_sp_exec_",
+    }
+    alg_method_name = cases[graph._backend_type] + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _unwrap_vertex(graph, source_vertex), *args)
@@ -33,7 +41,13 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
 
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
-    alg_method_name = "jgrapht_ix_sp_exec_" + name
+    cases = {
+        GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ix_sp_exec_",
+        GraphBackend.LONG_GRAPH: "jgrapht_lx_sp_exec_",
+        GraphBackend.INT_GRAPH: "jgrapht_ix_sp_exec_",
+        GraphBackend.REF_GRAPH: "jgrapht_rx_sp_exec_",
+    } 
+    alg_method_name = cases[graph._backend_type] + name       
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
@@ -56,7 +70,13 @@ def _sp_allpairs_alg(name, graph):
 
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
-    alg_method_name = "jgrapht_ix_sp_exec_" + name
+    cases = {
+        GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ix_sp_exec_",
+        GraphBackend.LONG_GRAPH: "jgrapht_lx_sp_exec_",
+        GraphBackend.INT_GRAPH: "jgrapht_ix_sp_exec_",
+        GraphBackend.REF_GRAPH: "jgrapht_rx_sp_exec_",
+    } 
+    alg_method_name = cases[graph._backend_type] + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
@@ -70,7 +90,13 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
 
 
 def _multisp_singlesource_alg(name, graph, source_vertex, *args):
-    alg_method_name = "jgrapht_ii_multisp_exec_" + name
+    cases = {
+        GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ii_multisp_exec_",
+        GraphBackend.LONG_GRAPH: "jgrapht_ll_multisp_exec_",
+        GraphBackend.INT_GRAPH: "jgrapht_ii_multisp_exec_",
+        GraphBackend.REF_GRAPH: "jgrapht_rr_multisp_exec_",
+    } 
+    alg_method_name = cases[graph._backend_type] + name    
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _unwrap_vertex(graph, source_vertex), *args)

@@ -179,7 +179,10 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
             )
         elif self._graph._backend_type == GraphBackend.REF_GRAPH:
             gp = backend.jgrapht_rx_sp_allpairs_get_path_between_vertices(
-                self._handle, id(source_vertex), id(target_vertex)
+                self._handle,
+                id(source_vertex),
+                id(target_vertex),
+                self._graph._equals_hash_wrapper.handle,
             )
         else:
             raise TypeError("Not supported graph type")
@@ -196,8 +199,10 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
             )
         elif self._graph._backend_type == GraphBackend.REF_GRAPH:
             singlesource = backend.jgrapht_rx_sp_allpairs_get_singlesource_from_vertex(
-                self._handle, id(source_vertex)
-            )            
+                self._handle,
+                id(source_vertex),
+                self._graph._equals_hash_wrapper.handle,
+            )
         else:
             raise TypeError("Not supported graph type")
         return _JGraphTSingleSourcePaths(singlesource, self._graph, source_vertex)
@@ -235,7 +240,7 @@ class _JGraphTMultiObjectiveSingleSourcePaths(
         elif self._graph._backend_type == GraphBackend.REF_GRAPH:
             gp_it = backend.jgrapht_rx_multisp_multiobjectivesinglesource_get_paths_to_vertex(
                 self._handle, id(target_vertex)
-            )            
+            )
         else:
             raise TypeError("Not supported graph type")
         return _JGraphTGraphPathIterator(handle=gp_it, graph=self._graph)
@@ -274,7 +279,7 @@ class _JGraphTContractionHierarchiesManyToMany(_HandleWrapper, ManyToManyPaths):
         elif self._graph._backend_type == GraphBackend.REF_GRAPH:
             gp = backend.jgrapht_rx_sp_manytomany_get_path_between_vertices(
                 self._handle, id(source_vertex), id(target_vertex)
-            )   
+            )
         else:
             raise TypeError("Not supported graph type")
         return _JGraphTGraphPath(gp, self._graph) if gp is not None else None
