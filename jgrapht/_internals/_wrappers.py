@@ -139,7 +139,6 @@ class _JGraphTEdgeIntegerTripleIterator(_HandleWrapper, Iterator):
         return "_JGraphTEdgeIntegerTripleIterator(%r)" % self._handle
 
 
-
 class _JGraphTEdgeLongTripleIterator(_HandleWrapper, Iterator):
     """An edge triple iterator"""
 
@@ -160,7 +159,6 @@ class _JGraphTEdgeLongTripleIterator(_HandleWrapper, Iterator):
 
     def __repr__(self):
         return "_JGraphTEdgeLongTripleIterator(%r)" % self._handle
-
 
 
 class _JGraphTEdgeStrTripleIterator(_HandleWrapper, Iterator):
@@ -185,7 +183,6 @@ class _JGraphTEdgeStrTripleIterator(_HandleWrapper, Iterator):
         return "_JGraphTEdgeStrTripleIterator(%r)" % self._handle
 
 
-
 class _JGraphTStringIterator(_HandleWrapper, Iterator):
     """A JGraphT string iterator.
     """
@@ -204,10 +201,9 @@ class _JGraphTStringIterator(_HandleWrapper, Iterator):
         return "_JGraphTStringIterator(%r)" % self._handle
 
 
-class _JGraphTRefDirectIterator(_HandleWrapper, Iterator):
+class _JGraphTRefIterator(_HandleWrapper, Iterator):
     """A JGraphT iterator. This iterator returns frontend objects
-    resolved from references kept in the backend. It does not 
-    create objects in the backend.
+    resolved from references kept in the backend. 
     """
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -218,23 +214,6 @@ class _JGraphTRefDirectIterator(_HandleWrapper, Iterator):
             raise StopIteration()
         value = backend.jgrapht_r_it_next(self._handle)
         return _ref_utils._swig_ptr_to_obj(value)
-
-    def __repr__(self):
-        return "_JGraphTRefDirectIterator(%r)" % self._handle
-
-
-class _JGraphTRefIterator(_HandleWrapper, Iterator):
-    """A JGraphT iterator. This iterator returns backend references.
-    """
-    def __init__(self, handle, **kwargs):
-        super().__init__(handle=handle, **kwargs)
-
-    def __next__(self):
-        res = backend.jgrapht_x_it_hasnext(self._handle)
-        if not res:
-            raise StopIteration()
-        value = backend.jgrapht_x_it_next(self._handle)
-        return _JGraphTExternalRef(handle=value)
 
     def __repr__(self):
         return "_JGraphTRefIterator(%r)" % self._handle

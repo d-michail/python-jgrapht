@@ -11,7 +11,7 @@ from ._wrappers import (
     _JGraphTEdgeIntegerTripleIterator,
     _JGraphTEdgeStrTripleIterator,
     _JGraphTRefIterator,
-    _JGraphTRefDirectIterator,
+    _JGraphTRefIterator,
 )
 
 from collections.abc import (
@@ -23,6 +23,7 @@ from collections.abc import (
     Iterable,
     Sized,
 )
+
 
 class _JGraphTIntegerList(_HandleWrapper, Collection):
     """JGraphT Integer List"""
@@ -140,6 +141,83 @@ class _JGraphTLongListIterator(_JGraphTObjectIterator):
 
     def __repr__(self):
         return "_JGraphTLongListIterator(%r)" % self._handle
+
+
+class _JGraphTRefList(_HandleWrapper, Collection):
+    """JGraphT Ref List"""
+
+    def __init__(self, handle, hash_equals_resolver_handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._hash_equals_resolver_handle = hash_equals_resolver_handle
+
+    def __iter__(self):
+        res = backend.jgrapht_x_list_it_create(self._handle)
+        return _JGraphTRefIterator(res)
+
+    def __len__(self):
+        res = backend.jgrapht_x_list_size(self._handle)
+        return res
+
+    def __contains__(self, x):
+        res = backend.jgrapht_r_list_contains(
+            self._handle, id(x), self._hash_equals_resolver_handle
+        )
+        return res
+
+    def __repr__(self):
+        return "_JGraphTRefList(%r)" % self._handle
+
+    def __str__(self):
+        return "{" + ", ".join(str(x) for x in self) + "}"
+
+
+class _JGraphTRefMutableList(_JGraphTRefList):
+    """JGraphT Ref List"""
+
+    def __init__(self, handle, hash_equals_resolver_handle, **kwargs):
+        super().__init__(
+            handle=handle,
+            hash_equals_resolver_handle=hash_equals_resolver_handle,
+            **kwargs
+        )
+
+    def add(self, x):
+        if backend.jgrapht_r_list_add(
+            self._handle, id(x), self._hash_equals_resolver_handle
+        ):
+            _ref_utils._inc_ref(x)
+
+    def discard(self, x):
+        if backend.jgrapht_r_list_remove(
+            self._handle, id(x), self._hash_equals_resolver_handle
+        ):
+            _ref_utils._dec_ref(x)
+
+    def clear(self):
+        # cleanup reference counts
+        for x in self:
+            _ref_utils._dec_ref(x)
+        backend.jgrapht_x_list_clear(self._handle)
+
+    def __repr__(self):
+        return "_JGraphTRefMutableList(%r)" % self._handle
+
+
+class _JGraphTRefListIterator(_JGraphTObjectIterator):
+    """An iterator which returns lists with references."""
+
+    def __init__(self, handle, hash_equals_resolver_handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._hash_equals_resolver_handle = hash_equals_resolver_handle
+
+    def __next__(self):
+        return _JGraphTRefList(
+            handle=super().__next__(),
+            hash_equals_resolver_handle=self._hash_equals_resolver_handle,
+        )
+
+    def __repr__(self):
+        return "_JGraphTRefListIterator(%r)" % self._handle
 
 
 class _JGraphTIntegerDoubleMap(_HandleWrapper, Mapping):

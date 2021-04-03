@@ -1,27 +1,21 @@
 from .. import backend
-from ._wrappers import _JGraphTRefIterator, _JGraphTRefDirectIterator
+from ._wrappers import _JGraphTRefIterator, _JGraphTRefIterator
 from . import _ref_utils
 
 
-def _jgrapht_ref_iterator_to_python_set(handle, refs_owner=False):
+def _jgrapht_ref_iterator_to_python_set(handle):
     """Return a Python set from a ref iterator in the JVM.
     Takes ownership.
     """
-    if refs_owner: 
-        it = _JGraphTRefIterator(handle)
-    else:
-        it = _JGraphTRefDirectIterator(handle)
+    it = _JGraphTRefIterator(handle)
     return set(it)
 
 
-def _jgrapht_ref_iterator_to_python_list(handle, refs_owner=False):
+def _jgrapht_ref_iterator_to_python_list(handle):
     """Return a Python set from a ref iterator in the JVM.
     Takes ownership.
     """
-    if refs_owner: 
-        it = _JGraphTRefIterator(handle)
-    else:
-        it = _JGraphTRefDirectIterator(handle)    
+    it = _JGraphTRefIterator(handle)
     return list(it)
 
 

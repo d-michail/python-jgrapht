@@ -12,7 +12,7 @@ from ._wrappers import (
     _JGraphTIntegerIterator,
     _JGraphTLongIterator,
     _JGraphTObjectIterator,
-    _JGraphTRefDirectIterator,
+    _JGraphTRefIterator,
 )
 from ._int_graphs import _is_int_graph
 from ._long_graphs import _is_long_graph
@@ -21,9 +21,7 @@ from . import _ref_utils
 
 
 class _JGraphTGraphPath(_HandleWrapper, GraphPath):
-    """A class representing a graph path. Works for both
-    int and long graphs.
-    """
+    """A class representing a graph path."""
 
     def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
@@ -94,7 +92,7 @@ class _JGraphTGraphPath(_HandleWrapper, GraphPath):
             ) = backend.jgrapht_rr_handles_get_graphpath(self._handle)
             start_vertex = _ref_utils._swig_ptr_to_obj(start_vertex_ptr)
             end_vertex = _ref_utils._swig_ptr_to_obj(end_vertex_ptr)
-            self._edges = list(_JGraphTRefDirectIterator(eit))
+            self._edges = list(_JGraphTRefIterator(eit))
         else:
             raise TypeError("Not supported graph type")
 
@@ -143,13 +141,17 @@ class _JGraphTSingleSourcePaths(_HandleWrapper, SingleSourcePaths):
         :param target_vertex: The target vertex.
         :returns: a path from the source to the target vertex.
         """
-        if _is_long_graph(self._graph):
+        if self._graph._backend_type == GraphBackend.LONG_GRAPH:
             gp = backend.jgrapht_lx_sp_singlesource_get_path_to_vertex(
                 self._handle, target_vertex
             )
-        elif _is_int_graph(self._graph):
+        elif self._graph._backend_type == GraphBackend.INT_GRAPH:
             gp = backend.jgrapht_ix_sp_singlesource_get_path_to_vertex(
                 self._handle, target_vertex
+            )
+        elif self._graph._backend_type == GraphBackend.REF_GRAPH:
+            gp = backend.jgrapht_rx_sp_singlesource_get_path_to_vertex(
+                self._handle, id(target_vertex)
             )
         else:
             raise TypeError("Not supported graph type")
@@ -167,27 +169,35 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
         self._graph = graph
 
     def get_path(self, source_vertex, target_vertex):
-        if _is_long_graph(self._graph):
+        if self._graph._backend_type == GraphBackend.LONG_GRAPH:
             gp = backend.jgrapht_lx_sp_allpairs_get_path_between_vertices(
                 self._handle, source_vertex, target_vertex
             )
-        elif _is_int_graph(self._graph):
+        elif self._graph._backend_type == GraphBackend.INT_GRAPH:
             gp = backend.jgrapht_ix_sp_allpairs_get_path_between_vertices(
                 self._handle, source_vertex, target_vertex
+            )
+        elif self._graph._backend_type == GraphBackend.REF_GRAPH:
+            gp = backend.jgrapht_rx_sp_allpairs_get_path_between_vertices(
+                self._handle, id(source_vertex), id(target_vertex)
             )
         else:
             raise TypeError("Not supported graph type")
         return _JGraphTGraphPath(gp, self._graph) if gp is not None else None
 
     def get_paths_from(self, source_vertex):
-        if _is_long_graph(self._graph):
+        if self._graph._backend_type == GraphBackend.LONG_GRAPH:
             singlesource = backend.jgrapht_lx_sp_allpairs_get_singlesource_from_vertex(
                 self._handle, source_vertex
             )
-        elif _is_int_graph(self._graph):
+        elif self._graph._backend_type == GraphBackend.INT_GRAPH:
             singlesource = backend.jgrapht_ix_sp_allpairs_get_singlesource_from_vertex(
                 self._handle, source_vertex
             )
+        elif self._graph._backend_type == GraphBackend.REF_GRAPH:
+            singlesource = backend.jgrapht_rx_sp_allpairs_get_singlesource_from_vertex(
+                self._handle, id(source_vertex)
+            )            
         else:
             raise TypeError("Not supported graph type")
         return _JGraphTSingleSourcePaths(singlesource, self._graph, source_vertex)
@@ -214,14 +224,18 @@ class _JGraphTMultiObjectiveSingleSourcePaths(
         return self._source_vertex
 
     def get_paths(self, target_vertex):
-        if _is_long_graph(self._graph):
+        if self._graph._backend_type == GraphBackend.LONG_GRAPH:
             gp_it = backend.jgrapht_lx_multisp_multiobjectivesinglesource_get_paths_to_vertex(
                 self._handle, target_vertex
             )
-        elif _is_int_graph(self._graph):
+        elif self._graph._backend_type == GraphBackend.INT_GRAPH:
             gp_it = backend.jgrapht_ix_multisp_multiobjectivesinglesource_get_paths_to_vertex(
                 self._handle, target_vertex
             )
+        elif self._graph._backend_type == GraphBackend.REF_GRAPH:
+            gp_it = backend.jgrapht_rx_multisp_multiobjectivesinglesource_get_paths_to_vertex(
+                self._handle, id(target_vertex)
+            )            
         else:
             raise TypeError("Not supported graph type")
         return _JGraphTGraphPathIterator(handle=gp_it, graph=self._graph)
@@ -249,14 +263,18 @@ class _JGraphTContractionHierarchiesManyToMany(_HandleWrapper, ManyToManyPaths):
         self._graph = graph
 
     def get_path(self, source_vertex, target_vertex):
-        if _is_long_graph(self._graph):
+        if self._graph._backend_type == GraphBackend.LONG_GRAPH:
             gp = backend.jgrapht_lx_sp_manytomany_get_path_between_vertices(
                 self._handle, source_vertex, target_vertex
             )
-        elif _is_int_graph(self._graph):
+        elif self._graph._backend_type == GraphBackend.INT_GRAPH:
             gp = backend.jgrapht_ix_sp_manytomany_get_path_between_vertices(
                 self._handle, source_vertex, target_vertex
             )
+        elif self._graph._backend_type == GraphBackend.REF_GRAPH:
+            gp = backend.jgrapht_rx_sp_manytomany_get_path_between_vertices(
+                self._handle, id(source_vertex), id(target_vertex)
+            )   
         else:
             raise TypeError("Not supported graph type")
         return _JGraphTGraphPath(gp, self._graph) if gp is not None else None

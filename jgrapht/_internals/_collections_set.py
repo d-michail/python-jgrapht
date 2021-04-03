@@ -11,7 +11,6 @@ from ._wrappers import (
     _JGraphTEdgeIntegerTripleIterator,
     _JGraphTEdgeStrTripleIterator,
     _JGraphTRefIterator,
-    _JGraphTRefDirectIterator,
 )
 
 from collections.abc import (
@@ -164,7 +163,7 @@ class _JGraphTRefSet(_HandleWrapper, Set):
 
     def __iter__(self):
         res = backend.jgrapht_x_set_it_create(self._handle)
-        return _JGraphTRefDirectIterator(res)
+        return _JGraphTRefIterator(res)
 
     def __len__(self):
         res = backend.jgrapht_x_set_size(self._handle)

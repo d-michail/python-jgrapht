@@ -8,7 +8,7 @@ from ..types import (
 
 import ctypes
 from . import _callbacks, _ref_utils, _ref_hashequals
-from ._wrappers import _HandleWrapper, _JGraphTRefDirectIterator, GraphBackend
+from ._wrappers import _HandleWrapper, _JGraphTRefIterator, GraphBackend
 
 
 class _JGraphTRefGraph(_HandleWrapper, Graph):
@@ -177,19 +177,19 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
 
     def edges_between(self, u, v):
         it = backend.jgrapht_rx_graph_create_between_eit(self._handle, id(u), id(v))
-        return _JGraphTRefDirectIterator(it)
+        return _JGraphTRefIterator(it)
 
     def edges_of(self, v):
         it = backend.jgrapht_rx_graph_vertex_create_eit(self._handle, id(v))
-        return _JGraphTRefDirectIterator(it)
+        return _JGraphTRefIterator(it)
 
     def inedges_of(self, v):
         it = backend.jgrapht_rx_graph_vertex_create_in_eit(self._handle, id(v))
-        return _JGraphTRefDirectIterator(it)
+        return _JGraphTRefIterator(it)
 
     def outedges_of(self, v):
         it = backend.jgrapht_rx_graph_vertex_create_out_eit(self._handle, id(v))
-        return _JGraphTRefDirectIterator(it)
+        return _JGraphTRefIterator(it)
 
     def __repr__(self):
         return "_JGraphTRefGraph(%r)" % self._handle
@@ -202,7 +202,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
 
         def __iter__(self):
             res = backend.jgrapht_xx_graph_create_all_vit(self._handle)
-            return _JGraphTRefDirectIterator(res)
+            return _JGraphTRefIterator(res)
 
         def __len__(self):
             return backend.jgrapht_xx_graph_vertices_count(self._handle)
@@ -228,7 +228,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
 
         def __iter__(self):
             res = backend.jgrapht_xx_graph_create_all_eit(self._handle)
-            return _JGraphTRefDirectIterator(res)
+            return _JGraphTRefIterator(res)
 
         def __len__(self):
             return backend.jgrapht_xx_graph_edges_count(self._handle)
