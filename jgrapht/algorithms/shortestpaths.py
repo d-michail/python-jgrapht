@@ -376,6 +376,9 @@ def delta_stepping(
     :returns: either a :py:class:`.GraphPath` or :py:class:`.SingleSourcePaths` depending on whether a
               target vertex is provided
     """
+    if graph._backend_type == GraphBackend.REF_GRAPH:
+        raise ValueError("Delta stepping not supported with ref-graph backend")
+
     if parallelism is None:
         parallelism = multiprocessing.cpu_count()
     if delta is None:

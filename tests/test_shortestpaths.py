@@ -889,6 +889,7 @@ def test_anyhashableg_eppstein_k(backend):
 def test_delta_stepping(backend):
     g = get_graph(backend)
 
+
     single_path = sp.delta_stepping(g, 0, 5)
     assert single_path.weight == 62.0
     assert single_path.start_vertex == 0
