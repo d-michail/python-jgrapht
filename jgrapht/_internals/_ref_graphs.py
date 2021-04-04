@@ -37,7 +37,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         handle,
         vertex_supplier_fptr_wrapper,
         edge_supplier_fptr_wrapper,
-        equals_hash_wrapper,
+        hash_equals_wrapper,
         **kwargs
     ):
         super().__init__(handle=handle, **kwargs)
@@ -68,7 +68,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         # keep ctypes callbacks from being garbage collected
         self._vertex_supplier_fptr_wrapper = vertex_supplier_fptr_wrapper
         self._edge_supplier_fptr_wrapper = edge_supplier_fptr_wrapper
-        self._equals_hash_wrapper = equals_hash_wrapper
+        self._hash_equals_wrapper = hash_equals_wrapper
 
     @property
     def type(self):
@@ -269,6 +269,10 @@ def _create_ref_graph(
     :param allowing_self_loops: if True the graph will allow the addition of self-loops
     :param allowing_multiple_edges: if True the graph will allow multiple-edges
     :param weighted: if True the graph will be weighted, otherwise unweighted
+    :param vertex_supplier: function which returns new vertices on each call. If
+        None then object instances are used.
+    :param edge_supplier: function which returns new edge on each call. If
+        None then object instances are used.    
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
@@ -282,7 +286,7 @@ def _create_ref_graph(
     )
 
     # create python hash-equals ctypes wrappers and setup JVM object
-    equals_hash_wrapper = _ref_hashequals._get_equals_hash_wrapper()
+    hash_equals_wrapper = _ref_hashequals._get_hash_equals_wrapper()
 
     handle = backend.jgrapht_rr_graph_create(
         directed,
@@ -291,14 +295,14 @@ def _create_ref_graph(
         weighted,
         vertex_supplier_fptr_wrapper.fptr,
         edge_supplier_fptr_wrapper.fptr,
-        equals_hash_wrapper.handle,
+        hash_equals_wrapper.handle,
     )
 
     return _JGraphTRefGraph(
         handle,
         vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
         edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
-        equals_hash_wrapper=equals_hash_wrapper,
+        hash_equals_wrapper=hash_equals_wrapper,
     )
 
 

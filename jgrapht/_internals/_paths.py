@@ -182,7 +182,7 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
                 self._handle,
                 id(source_vertex),
                 id(target_vertex),
-                self._graph._equals_hash_wrapper.handle,
+                self._graph._hash_equals_wrapper.handle,
             )
         else:
             raise TypeError("Not supported graph type")
@@ -201,7 +201,7 @@ class _JGraphTAllPairsPaths(_HandleWrapper, AllPairsPaths):
             singlesource = backend.jgrapht_rx_sp_allpairs_get_singlesource_from_vertex(
                 self._handle,
                 id(source_vertex),
-                self._graph._equals_hash_wrapper.handle,
+                self._graph._hash_equals_wrapper.handle,
             )
         else:
             raise TypeError("Not supported graph type")

@@ -6,7 +6,7 @@ import ctypes
 from . import _callbacks
 from ._wrappers import _HandleWrapper
 
-__equals_hash_wrapper = None
+__hash_equals_wrapper = None
 __hash_fptr_wrapper = None
 __equals_fptr_wrapper = None
 
@@ -20,6 +20,7 @@ def _get_hash_fptr_wrapper():
 
 
 def _hash_lookup(o):
+    print("Looking hash function for object: {}".format(o))
     return _get_hash_fptr_wrapper().fptr
 
 
@@ -28,6 +29,7 @@ def _get_equals_fptr_wrapper():
     if __equals_fptr_wrapper is None:
 
         def _equals(o1, o2):
+            print('Comparing equals {} and {}'.format(o1, o2))
             return o1 == o2
 
         equals_type = ctypes.CFUNCTYPE(
@@ -38,10 +40,11 @@ def _get_equals_fptr_wrapper():
 
 
 def _equals_lookup(o):
+    print("Looking equals function for object: {}".format(o))
     return _get_equals_fptr_wrapper().fptr
 
 
-class _EqualsHashWrapper(_HandleWrapper):
+class _HashEqualsWrapper(_HandleWrapper):
     
     def __init__(self):
         self._hash_lookup_fptr_wrapper = _callbacks._CallbackWrapper(
@@ -58,8 +61,8 @@ class _EqualsHashWrapper(_HandleWrapper):
         super().__init__(handle)
 
 
-def _get_equals_hash_wrapper():
-    global __equals_hash_wrapper
-    if __equals_hash_wrapper is None:
-        __equals_hash_wrapper = _EqualsHashWrapper()
-    return __equals_hash_wrapper
+def _get_hash_equals_wrapper():
+    global __hash_equals_wrapper
+    if __hash_equals_wrapper is None:
+        __hash_equals_wrapper = _HashEqualsWrapper()
+    return __hash_equals_wrapper

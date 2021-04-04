@@ -176,7 +176,7 @@ def _wrap_vertex_set_iterator(graph, handle):
     """Given an vertex set iterator in the JVM, build one in Python. The wrapper
     graph takes ownership and will delete the JVM resource when Python deletes
     the instance."""
-    hash_equals_resolver_handle = _ref_hashequals._get_equals_hash_wrapper().handle
+    hash_equals_resolver_handle = _ref_hashequals._get_hash_equals_wrapper().handle
     cases = {
         GraphBackend.ANY_HASHABLE_GRAPH: (
             _AnyHashableGraphVertexSetIterator,
@@ -546,7 +546,7 @@ def _build_vertex_set(graph, vertex_set):
     elif graph._backend_type == GraphBackend.REF_GRAPH:
         mutable_set = _JGraphTRefMutableSet(
             handle=backend.jgrapht_x_set_linked_create(),
-            hash_equals_resolver_handle=_ref_hashequals._get_equals_hash_wrapper().handle,
+            hash_equals_resolver_handle=_ref_hashequals._get_hash_equals_wrapper().handle,
         )
     else:
         raise ValueError("Not supported graph backend")

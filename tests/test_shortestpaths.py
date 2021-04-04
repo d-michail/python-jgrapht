@@ -6,6 +6,42 @@ import jgrapht.algorithms.shortestpaths as sp
 import math
 
 
+class CustomVertex:
+    def __init__(self, id):
+        self._id = id
+
+    def __repr__(self):
+        return "CustomVertex(%r)" % self._id
+
+
+class CustomEdge:
+    def __init__(self, id):
+        self._id = id
+
+    def __repr__(self):
+        return "CustomEdge(%r)" % self._id
+
+
+class CustomVertexSupplier:
+    def __init__(self):
+        self._next = 0
+
+    def __call__(self):
+        ret = self._next
+        self._next += 1
+        return CustomVertex(ret)
+
+
+class CustomEdgeSupplier:
+    def __init__(self):
+        self._next = 0
+
+    def __call__(self):
+        ret = self._next
+        self._next += 1
+        return CustomEdge(ret)
+
+
 def get_graph(backend=GraphBackend.INT_GRAPH):
     g = create_graph(
         directed=True,
@@ -44,7 +80,7 @@ def get_anyhashableg_graph(backend=GraphBackend.ANY_HASHABLE_GRAPH):
     )
 
     for i in range(0, 6):
-        g.add_vertex(i)
+        g.add_vertex()
 
     g.add_edge(0, 1, weight=3.0, edge=0)
     g.add_edge(1, 3, weight=100.0, edge=1)
@@ -72,7 +108,7 @@ def get_graph_with_negative_edges(backend):
     assert g.type.directed
 
     for i in range(0, 7):
-        assert g.add_vertex(i) == i
+        assert g.add_vertex() == i
 
     g.add_edge(0, 1, weight=3.0)
     g.add_edge(1, 3, weight=100.0)
@@ -83,6 +119,38 @@ def get_graph_with_negative_edges(backend):
     g.add_edge(5, 0, weight=13.0)
     g.add_edge(0, 6, weight=1000.0)
     g.add_edge(6, 3, weight=-900.0)
+
+    assert len(g.vertices) == 7
+    assert len(g.edges) == 9
+
+    assert g.edges == {0, 1, 2, 3, 4, 5, 6, 7, 8}
+    return g
+
+
+def get_graph_custom_vertices_with_negative_edges(backend):
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        backend=backend,
+        vertex_supplier=CustomVertexSupplier(),
+        edge_supplier=CustomEdgeSupplier(),
+    )
+
+    assert g.type.directed
+
+    v = [g.add_vertex() for i in range(0,7)]
+
+    g.add_edge(v[0], v[1], weight=3.0)
+    g.add_edge(v[1], v[3], weight=100.0)
+    g.add_edge(v[0], v[2], weight=40.0)
+    g.add_edge(v[2], v[4], weight=20.0)
+    g.add_edge(v[3], v[5], weight=2.0)
+    g.add_edge(v[4], v[5], weight=2.0)
+    g.add_edge(v[5], v[0], weight=13.0)
+    g.add_edge(v[0], v[6], weight=1000.0)
+    g.add_edge(v[6], v[3], weight=-900.0)
 
     assert len(g.vertices) == 7
     assert len(g.edges) == 9
@@ -324,6 +392,63 @@ def test_johnsons(backend):
     assert path05.start_vertex == 0
     assert path05.end_vertex == 5
     assert list(path05.edges) == [2, 3, 5]
+
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_johnsons_refgraph_custom(backend):
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        backend=backend,
+        vertex_supplier=CustomVertexSupplier(),
+        edge_supplier=CustomEdgeSupplier(),
+    )
+
+    assert g.type.directed
+
+    v = [g.add_vertex() for i in range(0,7)]
+
+    e0 = g.add_edge(v[0], v[1], weight=3.0)
+    e1 = g.add_edge(v[1], v[3], weight=100.0)
+    e2 = g.add_edge(v[0], v[2], weight=40.0)
+    e3 = g.add_edge(v[2], v[4], weight=20.0)
+    e4 = g.add_edge(v[3], v[5], weight=2.0)
+    e5 = g.add_edge(v[4], v[5], weight=2.0)
+    e6 = g.add_edge(v[5], v[0], weight=13.0)
+    e7 = g.add_edge(v[0], v[6], weight=1000.0)
+    e8 = g.add_edge(v[6], v[3], weight=-900.0)
+
+    assert len(g.vertices) == 7
+    assert len(g.edges) == 9
+
+    allpairs = sp.johnson_allpairs(g)
+    repr(allpairs)
+
+    path05 = allpairs.get_path(v[0], v[5])
+    assert path05.weight == 62.0
+    assert path05.start_vertex == v[0]
+    assert path05.end_vertex == v[5]
+    print(path05.edges)
+    assert list(path05.edges) == [e2, e3, e5]
+
+    path15 = allpairs.get_path(v[1], v[5])
+    assert path15.weight == 102.0
+    assert path15.start_vertex == v[1]
+    assert path15.end_vertex == v[5]
+    assert list(path15.edges) == [e1, e4]
+
+    path05 = allpairs.get_paths_from(v[0]).get_path(v[5])
+    assert path05.weight == 62.0
+    assert path05.start_vertex == v[0]
+    assert path05.end_vertex == v[5]
+    assert list(path05.edges) == [e2, e3, e5]    
 
 
 def test_anyhashableg_johnsons():

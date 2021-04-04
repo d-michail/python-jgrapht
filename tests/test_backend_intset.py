@@ -172,7 +172,7 @@ def test_LongMutableSet():
 def test_RefMutableSet():
 
     handle = _backend.jgrapht_x_set_linked_create()
-    hash_equals_resolver_handle = _ref_hashequals._get_equals_hash_wrapper().handle
+    hash_equals_resolver_handle = _ref_hashequals._get_hash_equals_wrapper().handle
 
     s = _JGraphTRefMutableSet(
         handle=handle, hash_equals_resolver_handle=hash_equals_resolver_handle
