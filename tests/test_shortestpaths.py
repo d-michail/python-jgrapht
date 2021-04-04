@@ -42,7 +42,7 @@ class CustomEdgeSupplier:
         return CustomEdge(ret)
 
 
-def get_graph(backend=GraphBackend.INT_GRAPH):
+def get_graph(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
@@ -68,7 +68,7 @@ def get_graph(backend=GraphBackend.INT_GRAPH):
     return g
 
 
-def get_anyhashableg_graph(backend=GraphBackend.ANY_HASHABLE_GRAPH):
+def get_anyhashableg_graph(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
@@ -158,13 +158,13 @@ def get_graph_custom_vertices_with_negative_edges(backend):
     return g
 
 
-def get_anyhashableg_graph_with_negative_edges():
+def get_anyhashableg_graph_with_negative_edges(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend
     )
 
     assert g.type.directed
@@ -341,8 +341,15 @@ def test_bellman(backend):
     assert list(path15.edges) == [1, 4]
 
 
-def test_anyhashableg_bellman():
-    g = get_anyhashableg_graph_with_negative_edges()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_bellman(backend):
+    g = get_anyhashableg_graph_with_negative_edges(backend)
 
     from_paths = sp.bellman_ford(g, 0)
     assert from_paths.source_vertex == 0
@@ -451,8 +458,15 @@ def test_johnsons_refgraph_custom(backend):
     assert list(path05.edges) == [e2, e3, e5]    
 
 
-def test_anyhashableg_johnsons():
-    g = get_anyhashableg_graph_with_negative_edges()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_johnsons(backend):
+    g = get_anyhashableg_graph_with_negative_edges(backend)
 
     allpairs = sp.johnson_allpairs(g)
     path05 = allpairs.get_path(0, 5)
@@ -506,8 +520,15 @@ def test_floyd_warshall(backend):
     assert list(path05.edges) == [2, 3, 5]
 
 
-def test_anyhashableg_floyd_warshall():
-    g = get_anyhashableg_graph_with_negative_edges()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_floyd_warshall(backend):
+    g = get_anyhashableg_graph_with_negative_edges(backend)
 
     allpairs = sp.floyd_warshall_allpairs(g)
     repr(allpairs)
@@ -788,9 +809,16 @@ def test_yen_k(backend):
     assert next(it, None) == None
 
 
-def test_anyhashableg_yen_k():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_yen_k(backend):
 
-    g = get_anyhashableg_graph()
+    g = get_anyhashableg_graph(backend)
 
     it = sp.yen_k_loopless(g, 0, 5, 2)
 
@@ -804,9 +832,18 @@ def test_anyhashableg_yen_k():
     assert next(it, None) == None
 
 
-def test_eppstein_k():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_eppstein_k(backend):
 
-    g = get_graph()
+    g = get_graph(backend)
 
     it = sp.eppstein_k(g, 0, 5, 2)
 
@@ -819,9 +856,16 @@ def test_eppstein_k():
     assert next(it, None) == None
 
 
-def test_anyhashableg_eppstein_k():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_eppstein_k(backend):
 
-    g = get_anyhashableg_graph()
+    g = get_anyhashableg_graph(backend)
 
     it = sp.eppstein_k(g, 0, 5, 2)
 
@@ -834,8 +878,16 @@ def test_anyhashableg_eppstein_k():
     assert next(it, None) == None
 
 
-def test_delta_stepping():
-    g = get_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_delta_stepping(backend):
+    g = get_graph(backend)
 
     single_path = sp.delta_stepping(g, 0, 5)
     assert single_path.weight == 62.0
@@ -876,8 +928,14 @@ def test_delta_stepping():
     assert list(single_path.edges) == [2, 3, 5]
 
 
-def test_anyhashableg_delta_stepping():
-    g = get_anyhashableg_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+    ],
+)
+def test_anyhashableg_delta_stepping(backend):
+    g = get_anyhashableg_graph(backend)
 
     single_path = sp.delta_stepping(g, 0, 5)
     assert single_path.weight == 62.0
@@ -918,13 +976,25 @@ def test_anyhashableg_delta_stepping():
     assert list(single_path.edges) == ["2", 3, 5]
 
 
-def test_martin():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_martin(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertices_from(range(1, 6))
@@ -976,14 +1046,21 @@ def test_martin():
     assert next(it, "Exhausted") == "Exhausted"
 
 
-def test_anyhashableg_martin():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_martin(backend):
 
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable=True,
+        backend=backend
     )
 
     g.add_vertices_from(range(1, 6))

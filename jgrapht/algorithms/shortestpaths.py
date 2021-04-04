@@ -46,8 +46,8 @@ def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
         GraphBackend.LONG_GRAPH: "jgrapht_lx_sp_exec_",
         GraphBackend.INT_GRAPH: "jgrapht_ix_sp_exec_",
         GraphBackend.REF_GRAPH: "jgrapht_rx_sp_exec_",
-    } 
-    alg_method_name = cases[graph._backend_type] + name       
+    }
+    alg_method_name = cases[graph._backend_type] + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(
@@ -75,7 +75,7 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
         GraphBackend.LONG_GRAPH: "jgrapht_lx_sp_exec_",
         GraphBackend.INT_GRAPH: "jgrapht_ix_sp_exec_",
         GraphBackend.REF_GRAPH: "jgrapht_rx_sp_exec_",
-    } 
+    }
     alg_method_name = cases[graph._backend_type] + name
     alg_method = getattr(_backend, alg_method_name)
 
@@ -95,12 +95,31 @@ def _multisp_singlesource_alg(name, graph, source_vertex, *args):
         GraphBackend.LONG_GRAPH: "jgrapht_ll_multisp_exec_",
         GraphBackend.INT_GRAPH: "jgrapht_ii_multisp_exec_",
         GraphBackend.REF_GRAPH: "jgrapht_rr_multisp_exec_",
-    } 
-    alg_method_name = cases[graph._backend_type] + name    
+    }
+    alg_method_name = cases[graph._backend_type] + name
     alg_method = getattr(_backend, alg_method_name)
 
     handle = alg_method(graph.handle, _unwrap_vertex(graph, source_vertex), *args)
     return _wrap_multi_objective_single_source_paths(graph, handle, source_vertex)
+
+
+def _multisp_between_alg(name, graph, source_vertex, target_vertex, *args):
+    cases = {
+        GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ii_multisp_exec_",
+        GraphBackend.LONG_GRAPH: "jgrapht_ll_multisp_exec_",
+        GraphBackend.INT_GRAPH: "jgrapht_ii_multisp_exec_",
+        GraphBackend.REF_GRAPH: "jgrapht_rr_multisp_exec_",
+    }
+    alg_method_name = cases[graph._backend_type] + name
+    alg_method = getattr(_backend, alg_method_name)
+
+    handle = alg_method(
+        graph.handle,
+        _unwrap_vertex(graph, source_vertex),
+        _unwrap_vertex(graph, target_vertex),
+        *args
+    )
+    return _wrap_graphpath_iterator(graph, handle)
 
 
 def dijkstra(graph, source_vertex, target_vertex=None, use_bidirectional=True):
@@ -404,7 +423,7 @@ def martin_multiobjective(
 
     # we need a function which accepts an edge and returns a pointer to an
     # array with double values
-    if _is_anyhashable_graph(graph):
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
 
         def inner_edge_weight_cb(edge):
             edge = _edge_g_to_anyhashableg(graph, edge)
@@ -412,6 +431,34 @@ def martin_multiobjective(
             array = (ctypes.c_double * len(weights))(*weights)
             array_ptr = ctypes.cast(array, ctypes.c_void_p)
             return array_ptr.value
+
+        cb_fptr, cb = _create_wrapped_callback(
+            inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_int)
+        )
+
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+
+        def inner_edge_weight_cb(edge):
+            weights = edge_weight_cb(edge)[:edge_weight_dimension]
+            array = (ctypes.c_double * len(weights))(*weights)
+            array_ptr = ctypes.cast(array, ctypes.c_void_p)
+            return array_ptr.value
+
+        cb_fptr, cb = _create_wrapped_callback(
+            inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_longlong)
+        )
+
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+
+        def inner_edge_weight_cb(edge):
+            weights = edge_weight_cb(edge)[:edge_weight_dimension]
+            array = (ctypes.c_double * len(weights))(*weights)
+            array_ptr = ctypes.cast(array, ctypes.c_void_p)
+            return array_ptr.value
+
+        cb_fptr, cb = _create_wrapped_callback(
+            inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.py_object)
+        )    
 
     else:
 
@@ -421,9 +468,9 @@ def martin_multiobjective(
             array_ptr = ctypes.cast(array, ctypes.c_void_p)
             return array_ptr.value
 
-    cb_fptr, cb = _create_wrapped_callback(
-        inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_int)
-    )
+        cb_fptr, cb = _create_wrapped_callback(
+            inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_int)
+        )
 
     custom = [cb_fptr, edge_weight_dimension]
 
@@ -435,13 +482,13 @@ def martin_multiobjective(
             *custom
         )
     else:
-        res = _backend.jgrapht_ii_multisp_exec_martin_get_paths_between_vertices(
-            graph.handle,
-            _vertex_anyhashableg_to_g(graph, source_vertex),
-            _vertex_anyhashableg_to_g(graph, target_vertex),
+        return _multisp_between_alg(
+            "martin_get_paths_between_vertices",
+            graph, 
+            source_vertex, 
+            target_vertex,
             *custom
         )
-        return _wrap_graphpath_iterator(graph, res)
 
 
 def precompute_contraction_hierarchies(graph, parallelism=None, seed=None):
