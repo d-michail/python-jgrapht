@@ -20,7 +20,6 @@ def _get_hash_fptr_wrapper():
 
 
 def _hash_lookup(o):
-    print("Looking hash function for object: {}".format(o))
     return _get_hash_fptr_wrapper().fptr
 
 
@@ -29,7 +28,6 @@ def _get_equals_fptr_wrapper():
     if __equals_fptr_wrapper is None:
 
         def _equals(o1, o2):
-            print('Comparing equals {} and {}'.format(o1, o2))
             return o1 == o2
 
         equals_type = ctypes.CFUNCTYPE(
@@ -40,7 +38,6 @@ def _get_equals_fptr_wrapper():
 
 
 def _equals_lookup(o):
-    print("Looking equals function for object: {}".format(o))
     return _get_equals_fptr_wrapper().fptr
 
 

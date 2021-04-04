@@ -209,20 +209,14 @@ def a_star(graph, source_vertex, target_vertex, heuristic_cb, use_bidirectional=
     :param graph: the graph
     :param source_vertex: the source vertex
     :param target_vertex: the target vertex.
-    :param heuristic_cb: the heuristic callback. Must be a function which accepts two long parameters
+    :param heuristic_cb: the heuristic callback. Must be a function which accepts two vertex parameters
       (source and target) and returns a double
     :param use_bidirectional: use a bidirectional search
     :returns: a :py:class:`.GraphPath`
     """
 
-    actual_heuristic_cb = _unwrap_astar_heuristic_cb(graph, heuristic_cb)
-    heuristic_f_type = ctypes.CFUNCTYPE(
-        ctypes.c_double, ctypes.c_longlong, ctypes.c_longlong
-    )
-    heuristic_f = heuristic_f_type(actual_heuristic_cb)
-    heuristic_f_ptr = ctypes.cast(heuristic_f, ctypes.c_void_p).value
-
-    custom = [heuristic_f_ptr]
+    actual_heuristic_cb_wrapper = _unwrap_astar_heuristic_cb(graph, heuristic_cb)
+    custom = [actual_heuristic_cb_wrapper.fptr]
 
     if use_bidirectional:
         return _sp_between_alg(

@@ -531,13 +531,25 @@ def test_anyhashableg_floyd_warshall():
     assert list(path05.edges) == ["2", 3, 5]
 
 
-def test_a_star():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_a_star(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=IntegerSupplier(),
+        edge_supplier=IntegerSupplier(),
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
@@ -590,14 +602,21 @@ def test_a_star():
     assert path1.end_vertex == 8
 
 
-def test_anyhashableg_a_star():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_a_star(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend
     )
 
     g.add_vertices_from([0, 1, 2, "3", 4, "5", 6, 7, "8"])
@@ -650,14 +669,25 @@ def test_anyhashableg_a_star():
     assert path1.end_vertex == "8"
 
 
-
-def test_a_star_with_alt_heuristic():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_a_star_with_alt_heuristic(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=IntegerSupplier(),
+        edge_supplier=IntegerSupplier(),        
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5, 6, 7, 8])
@@ -688,14 +718,21 @@ def test_a_star_with_alt_heuristic():
     assert path1.end_vertex == 8
 
 
-def test_anyhashableg_a_star_with_alt_heuristic():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_anyhashableg_a_star_with_alt_heuristic(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend,
     )
 
     g.add_vertices_from([0, 1, 2, "3", 4, 5, 6, 7, 8])
@@ -726,9 +763,18 @@ def test_anyhashableg_a_star_with_alt_heuristic():
     assert path1.end_vertex == 8
 
 
-def test_yen_k():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_yen_k(backend):
 
-    g = get_graph()
+    g = get_graph(backend)
 
     it = sp.yen_k_loopless(g, 0, 5, 2)
 

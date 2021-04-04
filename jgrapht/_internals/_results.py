@@ -4,6 +4,8 @@ from ._int_graphs import _JGraphTIntegerGraph, _is_int_graph
 from ._long_graphs import _JGraphTLongGraph, _is_long_graph
 from ._ref_graphs import _JGraphTRefGraph, _is_ref_graph
 
+import ctypes
+from . import _callbacks
 from . import _ref_hashequals, _ref_utils, _ref_results
 
 from ._anyhashableg import (
@@ -122,7 +124,10 @@ def _unwrap_vertex(graph, vertex):
 
 
 def _unwrap_astar_heuristic_cb(graph, heuristic_cb):
-    """Given a heuristic callback method for astar in Python, create one for the JVM."""
+    """Given a heuristic callback method for astar in Python, create one for the JVM.
+    We return a callback wrapper which contains the new callback together with a function pointer
+    that can be passed directly to the JVM.
+    """
 
     if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
         # redefine in order to translate from integer to user vertices
@@ -130,18 +135,27 @@ def _unwrap_astar_heuristic_cb(graph, heuristic_cb):
             return heuristic_cb(
                 _vertex_g_to_anyhashableg(graph, s), _vertex_g_to_anyhashableg(graph, t)
             )
+        actual_heuristic_callback_type = ctypes.CFUNCTYPE(
+            ctypes.c_double, ctypes.c_longlong, ctypes.c_longlong
+        )
 
     elif graph._backend_type == GraphBackend.REF_GRAPH:
-        # redefine in order to translate from pointer to user vertices
-        def actual_heuristic_cb(s, t):
-            return heuristic_cb(
-                _ref_utils._swig_ptr_to_obj(s), _ref_utils._swig_ptr_to_obj(t)
-            )
+        actual_heuristic_cb = heuristic_cb
+        actual_heuristic_callback_type = ctypes.CFUNCTYPE(
+            ctypes.c_double, ctypes.py_object, ctypes.py_object
+        )
 
     else:
         actual_heuristic_cb = heuristic_cb
+        actual_heuristic_callback_type = ctypes.CFUNCTYPE(
+            ctypes.c_double, ctypes.c_longlong, ctypes.c_longlong
+        )
 
-    return actual_heuristic_cb
+    callback_wrapper = _callbacks._CallbackWrapper(
+        actual_heuristic_cb, actual_heuristic_callback_type
+    )
+
+    return callback_wrapper
 
 
 def _wrap_vertex_set(graph, handle):
