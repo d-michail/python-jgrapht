@@ -1241,6 +1241,11 @@ int jgrapht_ll_graph_dag_create_with_suppliers(int allowing_multiple_edges, int 
     return jgrapht_capi_ll_graph_dag_create_with_suppliers(thread, allowing_multiple_edges, weighted, vertex_supplier, edge_supplier, res);
 }
 
+int jgrapht_rr_graph_dag_create(int allowing_multiple_edges, int weighted, void* vertex_supplier, void* edge_supplier, void *hash_equals_resolver, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_dag_create(thread, allowing_multiple_edges, weighted, vertex_supplier, edge_supplier, hash_equals_resolver, res);
+}
+
 int jgrapht_xx_graph_dag_topological_it(void *g, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_xx_graph_dag_topological_it(thread, g, res);
@@ -1256,6 +1261,11 @@ int jgrapht_lx_graph_dag_vertex_descendants(void *g, long long int vertex, void*
     return jgrapht_capi_lx_graph_dag_vertex_descendants(thread, g, vertex, res);
 }
 
+int jgrapht_rx_graph_dag_vertex_descendants(void *g, void* vertex, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rx_graph_dag_vertex_descendants(thread, g, vertex, res);
+}
+
 int jgrapht_ix_graph_dag_vertex_ancestors(void *g, int vertex, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ix_graph_dag_vertex_ancestors(thread, g, vertex, res);
@@ -1264,6 +1274,11 @@ int jgrapht_ix_graph_dag_vertex_ancestors(void *g, int vertex, void** res) {
 int jgrapht_lx_graph_dag_vertex_ancestors(void *g, long long int vertex, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_lx_graph_dag_vertex_ancestors(thread, g, vertex, res);
+}
+
+int jgrapht_rx_graph_dag_vertex_ancestors(void *g, void* vertex, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rx_graph_dag_vertex_ancestors(thread, g, vertex, res);
 }
 
 // graph metrics

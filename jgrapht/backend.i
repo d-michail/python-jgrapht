@@ -484,11 +484,14 @@ int jgrapht_xx_graph_as_graph_union(void *, void *, void *LONG_TO_FPTR, void** O
 int jgrapht_ii_graph_dag_create(int, int, void** OUTPUT);
 int jgrapht_ll_graph_dag_create(int, int, void** OUTPUT);
 int jgrapht_ll_graph_dag_create_with_suppliers(int, int, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void **OUTPUT);
+int jgrapht_rr_graph_dag_create(int, int, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void*, void **OUTPUT);
 int jgrapht_xx_graph_dag_topological_it(void *, void** OUTPUT);
 int jgrapht_ix_graph_dag_vertex_descendants(void *, int, void** OUTPUT);
 int jgrapht_lx_graph_dag_vertex_descendants(void *, long long int, void** OUTPUT);
+int jgrapht_rx_graph_dag_vertex_descendants(void *, void *LONG_TO_PTR, void** OUTPUT);
 int jgrapht_ix_graph_dag_vertex_ancestors(void *, int, void** OUTPUT);
 int jgrapht_lx_graph_dag_vertex_ancestors(void *, long long int, void** OUTPUT);
+int jgrapht_rx_graph_dag_vertex_ancestors(void *, void *LONG_TO_PTR, void** OUTPUT);
 
 // graph metrics
 
