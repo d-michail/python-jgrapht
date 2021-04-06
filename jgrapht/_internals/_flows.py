@@ -272,7 +272,7 @@ class _JGraphTIntegerEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         self._graph = graph
 
     def as_graph(self):
-        tree_handle = _backend.jgrapht_ii_equivalentflowtree_tree(self.handle)
+        tree_handle = _backend.jgrapht_ii_equivalentflowtree_tree(self.handle, 0, 0)
         return _JGraphTIntegerGraph(tree_handle)
 
     def max_st_flow_value(self, s, t):
@@ -290,7 +290,7 @@ class _JGraphTLongEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         self._graph = graph
 
     def as_graph(self):
-        tree_handle = _backend.jgrapht_ll_equivalentflowtree_tree(self.handle)
+        tree_handle = _backend.jgrapht_ll_equivalentflowtree_tree(self.handle, 0, 0)
         return _JGraphTLongGraph(tree_handle)
 
     def max_st_flow_value(self, s, t):
@@ -298,3 +298,37 @@ class _JGraphTLongEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
 
     def __repr__(self):
         return "_JGraphTLongEquivalentFlowTree(%r)" % self._handle
+
+
+class _JGraphTRefEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
+    """An Equivalent Flow Tree."""
+
+    def __init__(self, handle, graph, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._graph = graph
+
+    def as_graph(self):
+        vertex_supplier_fptr_wrapper = self._graph._vertex_supplier_fptr_wrapper
+        edge_supplier_fptr_wrapper = self._graph._edge_supplier_fptr_wrapper
+        hash_equals_wrapper = self._graph._hash_equals_wrapper
+
+        tree_handle = _backend.jgrapht_rr_equivalentflowtree_tree(
+            self.handle,
+            vertex_supplier_fptr_wrapper.fptr,
+            edge_supplier_fptr_wrapper.fptr,
+            hash_equals_wrapper.handle,
+        )
+
+        return _JGraphTRefGraph(
+            tree_handle,
+            vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
+            edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
+            hash_equals_wrapper=hash_equals_wrapper,
+        )        
+
+    def max_st_flow_value(self, s, t):
+        return _backend.jgrapht_rx_equivalentflowtree_max_st_flow(self.handle, id(s), id(t))
+
+    def __repr__(self):
+        return "_JGraphTRefEquivalentFlowTree(%r)" % self._handle
+    

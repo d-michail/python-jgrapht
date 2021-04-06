@@ -98,29 +98,29 @@ class _AnyHashableGraphVertexDoubleMap(_JGraphTIntegerDoubleMap):
         self._graph = graph
 
     def __iter__(self):
-        res = backend.jgrapht_map_keys_it_create(self._handle)
+        res = backend.jgrapht_xx_map_keys_it_create(self._handle)
         return _AnyHashableGraphVertexIterator(res, self._graph)
 
     def get(self, key, value=None):
         key = self._graph._vertex_hash_to_id[key]
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             if value is not None:
                 return value
             else:
                 raise KeyError()
-        return backend.jgrapht_map_int_double_get(self._handle, key)
+        return backend.jgrapht_id_map_get(self._handle, key)
 
     def __contains__(self, key):
         key = self._graph._vertex_hash_to_id[key]
-        return backend.jgrapht_map_int_contains_key(self._handle, key)
+        return backend.jgrapht_ix_map_contains_key(self._handle, key)
 
     def __getitem__(self, key):
         key = self._graph._vertex_hash_to_id[key]
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        return backend.jgrapht_map_int_double_get(self._handle, key)
+        return backend.jgrapht_id_map_get(self._handle, key)
 
     def __repr__(self):
         return "_AnyHashableGraphVertexDoubleMap(%r)" % self._handle
@@ -134,29 +134,29 @@ class _AnyHashableGraphEdgeDoubleMap(_JGraphTIntegerDoubleMap):
         self._graph = graph
 
     def __iter__(self):
-        res = backend.jgrapht_map_keys_it_create(self._handle)
+        res = backend.jgrapht_xx_map_keys_it_create(self._handle)
         return _AnyHashableGraphEdgeIterator(res, self._graph)
 
     def get(self, key, value=None):
         key = self._graph._edge_hash_to_id[key]
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             if value is not None:
                 return value
             else:
                 raise KeyError()
-        return backend.jgrapht_map_int_double_get(self._handle, key)
+        return backend.jgrapht_id_map_get(self._handle, key)
 
     def __contains__(self, key):
         key = self._graph._edge_hash_to_id[key]
-        return backend.jgrapht_map_int_contains_key(self._handle, key)
+        return backend.jgrapht_ix_map_contains_key(self._handle, key)
 
     def __getitem__(self, key):
         key = self._graph._edge_hash_to_id[key]
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        return backend.jgrapht_map_int_double_get(self._handle, key)
+        return backend.jgrapht_id_map_get(self._handle, key)
 
     def __repr__(self):
         return "_AnyHashableGraphEdgeDoubleMap(%r)" % self._handle
@@ -184,30 +184,30 @@ class _AnyHashableGraphVertexIntegerMap(_JGraphTIntegerIntegerMap):
         self._graph = graph
 
     def __iter__(self):
-        res = backend.jgrapht_map_keys_it_create(self._handle)
+        res = backend.jgrapht_xx_map_keys_it_create(self._handle)
         return _AnyHashableGraphVertexIterator(res, self._graph)
 
     def get(self, key, value=None):
         key = self._graph._vertex_hash_to_id[key]
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             if value is not None:
                 return value
             else:
                 raise KeyError()
-        res = backend.jgrapht_map_int_int_get(self._handle, key)
+        res = backend.jgrapht_ii_map_get(self._handle, key)
         return res
 
     def __contains__(self, key):
         key = self._graph._vertex_hash_to_id[key]
-        return backend.jgrapht_map_int_contains_key(self._handle, key)
+        return backend.jgrapht_ix_map_contains_key(self._handle, key)
 
     def __getitem__(self, key):
         key = self._graph._vertex_hash_to_id[key]
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        return backend.jgrapht_map_int_int_get(self._handle, key)
+        return backend.jgrapht_ii_map_get(self._handle, key)
 
     def __repr__(self):
         return "_AnyHashableGraphVertexIntegerMap(%r)" % self._handle

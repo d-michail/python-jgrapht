@@ -73,7 +73,7 @@ class _JGraphTIntegerMutableSet(_JGraphTIntegerSet, MutableSet):
 
     @classmethod
     def _from_iterable(cls, it):
-        return MutableSet(it)
+        return set(it)
 
 
 class _JGraphTIntegerSetIterator(_JGraphTObjectIterator):
@@ -138,7 +138,7 @@ class _JGraphTLongMutableSet(_JGraphTLongSet, MutableSet):
 
     @classmethod
     def _from_iterable(cls, it):
-        return MutableSet(it)
+        return set(it)
 
 
 class _JGraphTLongSetIterator(_JGraphTObjectIterator):
@@ -219,7 +219,7 @@ class _JGraphTRefMutableSet(_JGraphTRefSet, MutableSet):
 
     @classmethod
     def _from_iterable(cls, it):
-        return MutableSet(it)
+        return set(it)
 
     def __del__(self):
         # Cleanup reference counts

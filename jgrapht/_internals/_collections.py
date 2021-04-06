@@ -226,39 +226,38 @@ class _JGraphTIntegerDoubleMap(_HandleWrapper, Mapping):
     def __init__(self, handle=None, linked=True, **kwargs):
         if handle is None:
             if linked:
-                handle = backend.jgrapht_map_linked_create()
+                handle = backend.jgrapht_xx_map_linked_create()
             else:
-                handle = backend.jgrapht_map_create()
-            owner = True
+                handle = backend.jgrapht_xx_map_create()
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_map_keys_it_create(self._handle)
+        res = backend.jgrapht_xx_map_keys_it_create(self._handle)
         return _JGraphTIntegerIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_map_size(self._handle)
+        res = backend.jgrapht_xx_map_size(self._handle)
         return res
 
     def get(self, key, value=None):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             if value is not None:
                 return value
             else:
                 raise KeyError()
-        res = backend.jgrapht_map_int_double_get(self._handle, key)
+        res = backend.jgrapht_id_map_get(self._handle, key)
         return res
 
     def __contains__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         return res
 
     def __getitem__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_map_int_double_get(self._handle, key)
+        res = backend.jgrapht_id_map_get(self._handle, key)
         return res
 
     def __repr__(self):
@@ -276,13 +275,13 @@ class _JGraphTIntegerDoubleMutableMap(_JGraphTIntegerDoubleMap, MutableMapping):
         super().__init__(handle=handle, linked=linked, **kwargs)
 
     def add(self, key, value):
-        backend.jgrapht_map_int_double_put(self._handle, key, value)
+        backend.jgrapht_id_map_put(self._handle, key, value)
 
     __marker = object()
 
     def pop(self, key, defaultvalue=__marker):
         try:
-            return backend.jgrapht_map_int_double_remove(self._handle, key)
+            return backend.jgrapht_id_map_remove(self._handle, key)
         except ValueError:
             if defaultvalue is self.__marker:
                 raise KeyError()
@@ -290,16 +289,16 @@ class _JGraphTIntegerDoubleMutableMap(_JGraphTIntegerDoubleMap, MutableMapping):
                 return defaultvalue
 
     def __setitem__(self, key, value):
-        backend.jgrapht_map_int_double_put(self._handle, key, value)
+        backend.jgrapht_id_map_put(self._handle, key, value)
 
     def __delitem__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        backend.jgrapht_map_int_double_remove(self._handle, key)
+        backend.jgrapht_id_map_remove(self._handle, key)
 
     def clear(self):
-        backend.jgrapht_map_clear(self._handle)
+        backend.jgrapht_xx_map_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTIntegerDoubleMutableMap(%r)" % self._handle
@@ -311,38 +310,38 @@ class _JGraphTIntegerIntegerMap(_HandleWrapper, Mapping):
     def __init__(self, handle=None, linked=True, **kwargs):
         if handle is None:
             if linked:
-                handle = backend.jgrapht_map_linked_create()
+                handle = backend.jgrapht_xx_map_linked_create()
             else:
-                handle = backend.jgrapht_map_create()
+                handle = backend.jgrapht_xx_map_create()
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_map_keys_it_create(self._handle)
+        res = backend.jgrapht_xx_map_keys_it_create(self._handle)
         return _JGraphTIntegerIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_map_size(self._handle)
+        res = backend.jgrapht_xx_map_size(self._handle)
         return res
 
     def get(self, key, value=None):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             if value is not None:
                 return value
             else:
                 raise KeyError()
-        res = backend.jgrapht_map_int_int_get(self._handle, key)
+        res = backend.jgrapht_ii_map_get(self._handle, key)
         return res
 
     def __contains__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         return res
 
     def __getitem__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_map_int_int_get(self._handle, key)
+        res = backend.jgrapht_ii_map_get(self._handle, key)
         return res
 
     def __repr__(self):
@@ -360,13 +359,13 @@ class _JGraphTIntegerIntegerMutableMap(_JGraphTIntegerIntegerMap, MutableMapping
         super().__init__(handle=handle, linked=linked, **kwargs)
 
     def add(self, key, value):
-        backend.jgrapht_map_int_int_put(self._handle, key, value)
+        backend.jgrapht_ii_map_put(self._handle, key, value)
 
     __marker = object()
 
     def pop(self, key, defaultvalue=__marker):
         try:
-            return backend.jgrapht_map_int_int_remove(self._handle, key)
+            return backend.jgrapht_ii_map_remove(self._handle, key)
         except ValueError:
             if defaultvalue is self.__marker:
                 raise KeyError()
@@ -374,16 +373,16 @@ class _JGraphTIntegerIntegerMutableMap(_JGraphTIntegerIntegerMap, MutableMapping
                 return defaultvalue
 
     def __setitem__(self, key, value):
-        backend.jgrapht_map_int_int_put(self._handle, key, value)
+        backend.jgrapht_ii_map_put(self._handle, key, value)
 
     def __delitem__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_map_int_int_remove(self._handle, key)
+        res = backend.jgrapht_ii_map_remove(self._handle, key)
 
     def clear(self):
-        backend.jgrapht_map_clear(self._handle)
+        backend.jgrapht_xx_map_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTIntegerIntegerMutableMap(%r)" % self._handle
@@ -395,38 +394,38 @@ class _JGraphTIntegerStringMap(_HandleWrapper, MutableMapping):
     def __init__(self, handle=None, linked=True, **kwargs):
         if handle is None:
             if linked:
-                handle = backend.jgrapht_map_linked_create()
+                handle = backend.jgrapht_xx_map_linked_create()
             else:
-                handle = backend.jgrapht_map_create()
+                handle = backend.jgrapht_xx_map_create()
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_map_keys_it_create(self._handle)
+        res = backend.jgrapht_xx_map_keys_it_create(self._handle)
         return _JGraphTIntegerIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_map_size(self._handle)
+        res = backend.jgrapht_xx_map_size(self._handle)
         return res
 
     __marker = object()
 
     def get(self, key, value=__marker):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             if value is self.__marker:
                 raise KeyError
             else:
                 return value
-        res = backend.jgrapht_map_int_string_get(self._handle, key)
+        res = backend.jgrapht_is_map_get(self._handle, key)
         return _JGraphTString(res)
 
     def add(self, key, value):
         encoded_value = bytearray(value, encoding="utf-8")
-        backend.jgrapht_map_int_string_put(self._handle, key, encoded_value)
+        backend.jgrapht_is_map_put(self._handle, key, encoded_value)
 
     def pop(self, key, defaultvalue=__marker):
         try:
-            res = backend.jgrapht_map_int_string_remove(self._handle, key)
+            res = backend.jgrapht_is_map_remove(self._handle, key)
             return _JGraphTString(res)
         except ValueError:
             if defaultvalue is self.__marker:
@@ -435,29 +434,29 @@ class _JGraphTIntegerStringMap(_HandleWrapper, MutableMapping):
                 return defaultvalue
 
     def __contains__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         return res
 
     def __getitem__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_map_int_string_get(self._handle, key)
+        res = backend.jgrapht_is_map_get(self._handle, key)
         return _JGraphTString(res)
 
     def __setitem__(self, key, value):
         encoded_value = bytearray(value, encoding="utf-8")
-        backend.jgrapht_map_int_string_put(self._handle, key, encoded_value)
+        backend.jgrapht_is_map_put(self._handle, key, encoded_value)
 
     def __delitem__(self, key):
-        res = backend.jgrapht_map_int_contains_key(self._handle, key)
+        res = backend.jgrapht_ix_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_map_int_string_remove(self._handle, key)
+        res = backend.jgrapht_is_map_remove(self._handle, key)
         return _JGraphTString(res)
 
     def clear(self):
-        backend.jgrapht_map_clear(self._handle)
+        backend.jgrapht_xx_map_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTIntegerStringMap(%r)" % self._handle
@@ -473,38 +472,38 @@ class _JGraphTLongIntegerMap(_HandleWrapper, Mapping):
     def __init__(self, handle=None, linked=True, **kwargs):
         if handle is None:
             if linked:
-                handle = backend.jgrapht_map_linked_create()
+                handle = backend.jgrapht_xx_map_linked_create()
             else:
-                handle = backend.jgrapht_map_create()
+                handle = backend.jgrapht_xx_map_create()
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_map_keys_it_create(self._handle)
+        res = backend.jgrapht_xx_map_keys_it_create(self._handle)
         return _JGraphTLongIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_map_size(self._handle)
+        res = backend.jgrapht_xx_map_size(self._handle)
         return res
 
     def get(self, key, value=None):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         if not res:
             if value is not None:
                 return value
             else:
                 raise KeyError()
-        res = backend.jgrapht_map_long_int_get(self._handle, key)
+        res = backend.jgrapht_li_map_get(self._handle, key)
         return res
 
     def __contains__(self, key):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         return res
 
     def __getitem__(self, key):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_map_long_int_get(self._handle, key)
+        res = backend.jgrapht_lx_map_get(self._handle, key)
         return res
 
     def __repr__(self):
@@ -522,13 +521,13 @@ class _JGraphTLongIntegerMutableMap(_JGraphTLongIntegerMap, MutableMapping):
         super().__init__(handle=handle, linked=linked, **kwargs)
 
     def add(self, key, value):
-        backend.jgrapht_map_long_int_put(self._handle, key, value)
+        backend.jgrapht_li_map_put(self._handle, key, value)
 
     __marker = object()
 
     def pop(self, key, defaultvalue=__marker):
         try:
-            return backend.jgrapht_map_long_int_remove(self._handle, key)
+            return backend.jgrapht_li_map_remove(self._handle, key)
         except ValueError:
             if defaultvalue is self.__marker:
                 raise KeyError()
@@ -536,16 +535,16 @@ class _JGraphTLongIntegerMutableMap(_JGraphTLongIntegerMap, MutableMapping):
                 return defaultvalue
 
     def __setitem__(self, key, value):
-        backend.jgrapht_map_long_int_put(self._handle, key, value)
+        backend.jgrapht_li_map_put(self._handle, key, value)
 
     def __delitem__(self, key):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_map_long_int_remove(self._handle, key)
+        res = backend.jgrapht_li_map_remove(self._handle, key)
 
     def clear(self):
-        backend.jgrapht_map_clear(self._handle)
+        backend.jgrapht_xx_map_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTLongIntegerMutableMap(%r)" % self._handle
@@ -557,39 +556,38 @@ class _JGraphTLongDoubleMap(_HandleWrapper, Mapping):
     def __init__(self, handle=None, linked=True, **kwargs):
         if handle is None:
             if linked:
-                handle = backend.jgrapht_map_linked_create()
+                handle = backend.jgrapht_xx_map_linked_create()
             else:
-                handle = backend.jgrapht_map_create()
-            owner = True
+                handle = backend.jgrapht_xx_map_create()
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_map_keys_it_create(self._handle)
+        res = backend.jgrapht_xx_map_keys_it_create(self._handle)
         return _JGraphTLongIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_map_size(self._handle)
+        res = backend.jgrapht_xx_map_size(self._handle)
         return res
 
     def get(self, key, value=None):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         if not res:
             if value is not None:
                 return value
             else:
                 raise KeyError()
-        res = backend.jgrapht_map_long_double_get(self._handle, key)
+        res = backend.jgrapht_ld_map_get(self._handle, key)
         return res
 
     def __contains__(self, key):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         return res
 
     def __getitem__(self, key):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_map_long_double_get(self._handle, key)
+        res = backend.jgrapht_ld_map_get(self._handle, key)
         return res
 
     def __repr__(self):
@@ -607,13 +605,13 @@ class _JGraphTLongDoubleMutableMap(_JGraphTLongDoubleMap, MutableMapping):
         super().__init__(handle=handle, linked=linked, **kwargs)
 
     def add(self, key, value):
-        backend.jgrapht_map_long_double_put(self._handle, key, value)
+        backend.jgrapht_ld_map_put(self._handle, key, value)
 
     __marker = object()
 
     def pop(self, key, defaultvalue=__marker):
         try:
-            return backend.jgrapht_map_long_double_remove(self._handle, key)
+            return backend.jgrapht_ld_map_remove(self._handle, key)
         except ValueError:
             if defaultvalue is self.__marker:
                 raise KeyError()
@@ -621,16 +619,16 @@ class _JGraphTLongDoubleMutableMap(_JGraphTLongDoubleMap, MutableMapping):
                 return defaultvalue
 
     def __setitem__(self, key, value):
-        backend.jgrapht_map_long_double_put(self._handle, key, value)
+        backend.jgrapht_ld_map_put(self._handle, key, value)
 
     def __delitem__(self, key):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        backend.jgrapht_map_long_double_remove(self._handle, key)
+        backend.jgrapht_ld_map_remove(self._handle, key)
 
     def clear(self):
-        backend.jgrapht_map_clear(self._handle)
+        backend.jgrapht_xx_map_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTLongDoubleMutableMap(%r)" % self._handle
@@ -642,38 +640,38 @@ class _JGraphTLongStringMap(_HandleWrapper, MutableMapping):
     def __init__(self, handle=None, linked=True, **kwargs):
         if handle is None:
             if linked:
-                handle = backend.jgrapht_map_linked_create()
+                handle = backend.jgrapht_xx_map_linked_create()
             else:
-                handle = backend.jgrapht_map_create()
+                handle = backend.jgrapht_xx_map_create()
         super().__init__(handle=handle, **kwargs)
 
     def __iter__(self):
-        res = backend.jgrapht_map_keys_it_create(self._handle)
+        res = backend.jgrapht_xx_map_keys_it_create(self._handle)
         return _JGraphTLongIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_map_size(self._handle)
+        res = backend.jgrapht_xx_map_size(self._handle)
         return res
 
     __marker = object()
 
     def get(self, key, value=__marker):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         if not res:
             if value is self.__marker:
                 raise KeyError
             else:
                 return value
-        res = backend.jgrapht_map_long_string_get(self._handle, key)
+        res = backend.jgrapht_ls_map_get(self._handle, key)
         return _JGraphTString(res)
 
     def add(self, key, value):
         encoded_value = bytearray(value, encoding="utf-8")
-        backend.jgrapht_map_long_string_put(self._handle, key, encoded_value)
+        backend.jgrapht_ls_map_put(self._handle, key, encoded_value)
 
     def pop(self, key, defaultvalue=__marker):
         try:
-            res = backend.jgrapht_map_long_string_remove(self._handle, key)
+            res = backend.jgrapht_ls_map_remove(self._handle, key)
             return _JGraphTString(res)
         except ValueError:
             if defaultvalue is self.__marker:
@@ -682,29 +680,29 @@ class _JGraphTLongStringMap(_HandleWrapper, MutableMapping):
                 return defaultvalue
 
     def __contains__(self, key):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         return res
 
     def __getitem__(self, key):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_map_long_string_get(self._handle, key)
+        res = backend.jgrapht_ls_map_get(self._handle, key)
         return _JGraphTString(res)
 
     def __setitem__(self, key, value):
         encoded_value = bytearray(value, encoding="utf-8")
-        backend.jgrapht_map_long_string_put(self._handle, key, encoded_value)
+        backend.jgrapht_ls_map_put(self._handle, key, encoded_value)
 
     def __delitem__(self, key):
-        res = backend.jgrapht_map_long_contains_key(self._handle, key)
+        res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_map_long_string_remove(self._handle, key)
+        res = backend.jgrapht_ls_map_remove(self._handle, key)
         return _JGraphTString(res)
 
     def clear(self):
-        backend.jgrapht_map_clear(self._handle)
+        backend.jgrapht_xx_map_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTLongStringMap(%r)" % self._handle
@@ -725,7 +723,7 @@ class _JGraphTEdgeTripleList(_HandleWrapper, Iterable, Sized):
         return _JGraphTEdgeIntegerTripleIterator(res)
 
     def __len__(self):
-        return backend.jgrapht_list_size(self._handle)
+        return backend.jgrapht_x_list_size(self._handle)
 
     def __repr__(self):
         return "_JGraphTEdgeTripleList(%r)" % self._handle

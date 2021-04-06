@@ -137,14 +137,14 @@ int jgrapht_ls_attributes_store_put(void *store, long long int element, char* ke
     return jgrapht_capi_ls_attributes_store_put(thread, store, element, key, value);
 }
 
-int jgrapht_ix_attributes_store_remove_attribute(void *store, int element, char* key) { 
+int jgrapht_ix_attributes_store_remove(void *store, int element, char* key) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ix_attributes_store_remove_attribute(thread, store, element, key);
+    return jgrapht_capi_ix_attributes_store_remove(thread, store, element, key);
 }
 
-int jgrapht_lx_attributes_store_remove_attribute(void *store, long long int element, char* key) { 
+int jgrapht_lx_attributes_store_remove(void *store, long long int element, char* key) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_attributes_store_remove_attribute(thread, store, element, key);
+    return jgrapht_capi_lx_attributes_store_remove(thread, store, element, key);
 }
 
 int jgrapht_attributes_registry_create(void** res) { 
@@ -1434,7 +1434,7 @@ int jgrapht_xxl_graph_attrs_get(void *g, char* key, long long* res) {
 
 int jgrapht_ixl_graph_attrs_vertex_get(void *g, int vertex, char* key, long long* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ix_graph_attrs_vertex_get(thread, g, vertex, key, res);
+    return jgrapht_capi_ixl_graph_attrs_vertex_get(thread, g, vertex, key, res);
 }
 
 int jgrapht_lxl_graph_attrs_vertex_get(void *g, long long int vertex, char* key, long long* res) { 
@@ -2606,7 +2606,7 @@ int jgrapht_ir_map_put(void *map, int key, void *value, void *hash_equals_resolv
     return jgrapht_capi_ir_map_put(thread, map, key, value, hash_equals_resolver_handle);
 }
 
-int jgraph_ld_map_put(void *map, long long int key, double value) { 
+int jgrapht_ld_map_put(void *map, long long int key, double value) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ld_map_put(thread, map, key, value);
 }
@@ -2646,7 +2646,7 @@ int jgrapht_is_map_get(void *map, int key, void** res) {
     return jgrapht_capi_is_map_get(thread, map, key, res);
 }
 
-int jgrapht_ix_mapget(void *map, int key, void** res) { 
+int jgrapht_ix_map_get(void *map, int key, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ix_map_get(thread, map, key, res);
 }

@@ -230,8 +230,8 @@ int jgrapht_li_attributes_store_put(void *, long long int, char* BYTEARRAY, int)
 int jgrapht_ll_attributes_store_put(void *, long long int, char* BYTEARRAY, long long int);
 int jgrapht_ld_attributes_store_put(void *, long long int, char* BYTEARRAY, double);
 int jgrapht_ls_attributes_store_put(void *, long long int, char* BYTEARRAY, char* BYTEARRAY);
-int jgrapht_ix_attributes_store_remove_attribute(void *, int, char* BYTEARRAY);
-int jgrapht_lx_attributes_store_remove_attribute(void *, long long int, char* BYTEARRAY);
+int jgrapht_ix_attributes_store_remove(void *, int, char* BYTEARRAY);
+int jgrapht_lx_attributes_store_remove(void *, long long int, char* BYTEARRAY);
 int jgrapht_attributes_registry_create(void** OUTPUT);
 int jgrapht_attributes_registry_register_attribute(void *, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY);
 int jgrapht_attributes_registry_unregister_attribute(void *, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY, char* BYTEARRAY);
@@ -537,7 +537,7 @@ int jgrapht_xil_graph_attrs_edge_get(void *, int, char* BYTEARRAY, long long* OU
 int jgrapht_xll_graph_attrs_edge_get(void *, long long int, char* BYTEARRAY, long long* OUTPUT);
 int jgrapht_xll_graph_attrs_edge_get(void *, long long int, char* BYTEARRAY, long long* OUTPUT);
 int jgrapht_xrl_graph_attrs_edge_get(void *, void *LONG_TO_PTR, char* BYTEARRAY, long long* OUTPUT);
-int jgraphtl_xxl_graph_attrs_put(void *, char* BYTEARRAY, long long int);
+int jgrapht_xxl_graph_attrs_put(void *, char* BYTEARRAY, long long int);
 int jgrapht_ixl_graph_attrs_vertex_put(void *, int, char* BYTEARRAY, long long int);
 int jgrapht_lxl_graph_attrs_vertex_put(void *, long long int, char* BYTEARRAY, long long int);
 int jgrapht_rxl_graph_attrs_vertex_put(void *, void *LONG_TO_PTR, char* BYTEARRAY, long long int);

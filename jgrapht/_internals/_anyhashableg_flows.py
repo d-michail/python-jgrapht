@@ -101,7 +101,7 @@ class _AnyHashableGraphEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
         self._graph = graph
 
     def as_graph(self):
-        tree_handle = _backend.jgrapht_ii_equivalentflowtree_tree(self.handle)
+        tree_handle = _backend.jgrapht_ii_equivalentflowtree_tree(self.handle, 0, 0)
         tree_as_graph = _JGraphTIntegerGraph(tree_handle)
 
         # The resulting tree has the same vertices as the original graph. When using

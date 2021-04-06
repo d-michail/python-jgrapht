@@ -174,10 +174,10 @@ def test_JGraphTIntegerIntegerMutableMap():
 
 def test_JGraphTIntegerIntegerMap():
 
-    handle = _backend.jgrapht_map_create()
-    _backend.jgrapht_map_int_int_put(handle, 1, 5)
-    _backend.jgrapht_map_int_int_put(handle, 2, 10)
-    _backend.jgrapht_map_int_int_put(handle, 3, 20)
+    handle = _backend.jgrapht_xx_map_create()
+    _backend.jgrapht_ii_map_put(handle, 1, 5)
+    _backend.jgrapht_ii_map_put(handle, 2, 10)
+    _backend.jgrapht_ii_map_put(handle, 3, 20)
 
     s = _JGraphTIntegerIntegerMap(handle)
     assert len(s) == 3
