@@ -33,39 +33,20 @@ void jgrapht_vmLocatorSymbol();
 // attribute store 
 
 int jgrapht_xx_attributes_store_create(void**);
-
-int jgrapht_ii_attributes_store_put_boolean_attribute(void *, int, char*, int);
-
-int jgrapht_ll_attributes_store_put_boolean_attribute(void *, long long int, char*, int);
-
-int jgrapht_ii_attributes_store_put_boolean_attribute(void *, int, char*, int);
-
-int jgrapht_ll_attributes_store_put_boolean_attribute(void *, long long int, char*, int);
-
-int jgrapht_ii_attributes_store_put_int_attribute(void *, int, char*, int);
-
-int jgrapht_ll_attributes_store_put_int_attribute(void *, long long int, char*, int);
-
-int jgrapht_ii_attributes_store_put_long_attribute(void *, int, char*, long long int);
-
-int jgrapht_ll_attributes_store_put_long_attribute(void *, long long int, char*, long long int);
-
-int jgrapht_ii_attributes_store_put_double_attribute(void *, int, char*, double);
-
-int jgrapht_ll_attributes_store_put_double_attribute(void *, long long int, char*, double);
-
-int jgrapht_ii_attributes_store_put_string_attribute(void *, int, char*, char*);
-
-int jgrapht_ll_attributes_store_put_string_attribute(void *, long long int, char*, char*);
-
-int jgrapht_ii_attributes_store_remove_attribute(void *, int, char*);
-
-int jgrapht_ll_attributes_store_remove_attribute(void *, long long int, char*);
-
+int jgrapht_iz_attributes_store_put(void *, int, char*, int);
+int jgrapht_ii_attributes_store_put(void *, int, char*, int);
+int jgrapht_il_attributes_store_put(void *, int, char*, long long int);
+int jgrapht_id_attributes_store_put(void *, int, char*, double);
+int jgrapht_is_attributes_store_put(void *, int, char*, char*);
+int jgrapht_lz_attributes_store_put(void *, long long int, char*, int);
+int jgrapht_li_attributes_store_put(void *, long long int, char*, int);
+int jgrapht_ll_attributes_store_put(void *, long long int, char*, long long int);
+int jgrapht_ld_attributes_store_put(void *, long long int, char*, double);
+int jgrapht_ls_attributes_store_put(void *, long long int, char*, char*);
+int jgrapht_ix_attributes_store_remove_attribute(void *, int, char*);
+int jgrapht_lx_attributes_store_remove_attribute(void *, long long int, char*);
 int jgrapht_attributes_registry_create(void**);
-
 int jgrapht_attributes_registry_register_attribute(void *, char*, char*, char*, char*);
-
 int jgrapht_attributes_registry_unregister_attribute(void *, char*, char*, char*, char*);
 
 // clique
@@ -191,20 +172,26 @@ int jgrapht_xx_export_string_graphml(void *, void *, void *, void *, void *, int
 
 int jgrapht_ix_maxflow_exec_push_relabel(void *, int, int, double*, void**, void**);
 int jgrapht_lx_maxflow_exec_push_relabel(void *, long long int, long long int, double*, void**, void**);
+int jgrapht_rx_maxflow_exec_push_relabel(void *, void *, void *, double*, void**, void**);
 int jgrapht_ix_maxflow_exec_dinic(void *, int, int, double*, void**, void**);
 int jgrapht_lx_maxflow_exec_dinic(void *, long long int, long long int, double*, void**, void**);
+int jgrapht_rx_maxflow_exec_dinic(void *, void *, void *, double*, void**, void**);
 int jgrapht_ix_maxflow_exec_edmonds_karp(void *, int, int, double*, void**, void**);
 int jgrapht_lx_maxflow_exec_edmonds_karp(void *, long long int, long long int, double*, void**, void**);
+int jgrapht_rx_maxflow_exec_edmonds_karp(void *, void *, void *, double*, void**, void**);
 int jgrapht_ix_maxflow_exec_boykov_kolmogorov(void *, int, int, double*, void **, void **);
 int jgrapht_lx_maxflow_exec_boykov_kolmogorov(void *, long long int, long long int, double*, void **, void **);
+int jgrapht_rx_maxflow_exec_boykov_kolmogorov(void *, void *, void *, double*, void **, void **);
 int jgrapht_ii_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double*, void**, void**);
 int jgrapht_ll_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double*, void**, void**);
+int jgrapht_rr_mincostflow_exec_capacity_scaling(void *, void *, void *, void *, int, double*, void**, void**);
 int jgrapht_xx_equivalentflowtree_exec_gusfield(void *, void**);
 int jgrapht_ix_equivalentflowtree_max_st_flow(void *, int, int, double*);
 int jgrapht_lx_equivalentflowtree_max_st_flow(void *, long long int, long long int, double*);
-int jgrapht_ii_equivalentflowtree_tree(void *, void**);
-int jgrapht_ll_equivalentflowtree_tree(void *, void**);
-int jgrapht_ll_equivalentflowtree_tree_with_suppliers(void *, void*, void*, void**);
+int jgrapht_rx_equivalentflowtree_max_st_flow(void *, void *, void *, void *, double*);
+int jgrapht_ii_equivalentflowtree_tree(void *, void*, void*, void**);
+int jgrapht_ll_equivalentflowtree_tree(void *, void*, void*, void**);
+int jgrapht_rr_equivalentflowtree_tree(void *, void*, void*, void**);
 
 // generate
 

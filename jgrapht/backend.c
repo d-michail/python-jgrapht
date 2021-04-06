@@ -87,64 +87,64 @@ int jgrapht_xx_attributes_store_create(void** res) {
     return jgrapht_capi_xx_attributes_store_create(thread, res);
 }
 
-int jgrapht_ii_attributes_store_put_boolean_attribute(void *store, int element, char* key, int value) {
+int jgrapht_iz_attributes_store_put(void *store, int element, char* key, int value) {
     LAZY_THREAD_ATTACH 
-    return jgrapht_capi_ii_attributes_store_put_boolean_attribute(thread, store, element, key, value);
+    return jgrapht_capi_iz_attributes_store_put(thread, store, element, key, value);
 }
 
-int jgrapht_ll_attributes_store_put_boolean_attribute(void *store, long long int element, char* key, int value) {
+int jgrapht_ii_attributes_store_put(void *store, int element, char* key, int value) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ii_attributes_store_put(thread, store, element, key, value);
+}
+
+int jgrapht_il_attributes_store_put(void *store, int element, char* key, long long int value) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_il_attributes_store_put(thread, store, element, key, value);
+}
+
+int jgrapht_id_attributes_store_put(void *store, int element, char* key, double value) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_id_attributes_store_put(thread, store, element, key, value);
+}
+
+int jgrapht_is_attributes_store_put(void *store, int element, char* key, char* value) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_is_attributes_store_put(thread, store, element, key, value);
+}
+
+int jgrapht_lz_attributes_store_put(void *store, long long int element, char* key, int value) {
     LAZY_THREAD_ATTACH 
-    return jgrapht_capi_ll_attributes_store_put_boolean_attribute(thread, store, element, key, value);
+    return jgrapht_capi_lz_attributes_store_put(thread, store, element, key, value);
 }
 
-int jgrapht_ii_attributes_store_put_int_attribute(void *store, int element, char* key, int value) {
+int jgrapht_li_attributes_store_put(void *store, long long int element, char* key, int value) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_attributes_store_put_int_attribute(thread, store, element, key, value);
+    return jgrapht_capi_li_attributes_store_put(thread, store, element, key, value);
 }
 
-int jgrapht_ll_attributes_store_put_int_attribute(void *store, long long int element, char* key, int value) {
+int jgrapht_ll_attributes_store_put(void *store, long long int element, char* key, long long int value) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_attributes_store_put_int_attribute(thread, store, element, key, value);
+    return jgrapht_capi_ll_attributes_store_put(thread, store, element, key, value);
 }
 
-int jgrapht_ii_attributes_store_put_long_attribute(void *store, int element, char* key, long long int value) {
+int jgrapht_ld_attributes_store_put(void *store, long long int element, char* key, double value) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_attributes_store_put_long_attribute(thread, store, element, key, value);
+    return jgrapht_capi_ld_attributes_store_put(thread, store, element, key, value);
 }
 
-int jgrapht_ll_attributes_store_put_long_attribute(void *store, long long int element, char* key, long long int value) {
+int jgrapht_ls_attributes_store_put(void *store, long long int element, char* key, char* value) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_attributes_store_put_long_attribute(thread, store, element, key, value);
+    return jgrapht_capi_ls_attributes_store_put(thread, store, element, key, value);
 }
 
-int jgrapht_ii_attributes_store_put_double_attribute(void *store, int element, char* key, double value) {
+int jgrapht_ix_attributes_store_remove_attribute(void *store, int element, char* key) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_attributes_store_put_double_attribute(thread, store, element, key, value);
+    return jgrapht_capi_ix_attributes_store_remove_attribute(thread, store, element, key);
 }
 
-int jgrapht_ll_attributes_store_put_double_attribute(void *store, long long int element, char* key, double value) {
+int jgrapht_lx_attributes_store_remove_attribute(void *store, long long int element, char* key) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_attributes_store_put_double_attribute(thread, store, element, key, value);
-}
-
-int jgrapht_ii_attributes_store_put_string_attribute(void *store, int element, char* key, char* value) {
-    LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_attributes_store_put_string_attribute(thread, store, element, key, value);
-}
-
-int jgrapht_ll_attributes_store_put_string_attribute(void *store, long long int element, char* key, char* value) {
-    LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_attributes_store_put_string_attribute(thread, store, element, key, value);
-}
-
-int jgrapht_ii_attributes_store_remove_attribute(void *store, int element, char* key) { 
-    LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_attributes_store_remove_attribute(thread, store, element, key);
-}
-
-int jgrapht_ll_attributes_store_remove_attribute(void *store, long long int element, char* key) { 
-    LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_attributes_store_remove_attribute(thread, store, element, key);
+    return jgrapht_capi_lx_attributes_store_remove_attribute(thread, store, element, key);
 }
 
 int jgrapht_attributes_registry_create(void** res) { 
@@ -670,6 +670,11 @@ int jgrapht_lx_maxflow_exec_push_relabel(void *g, long long int source,  long lo
     return jgrapht_capi_lx_maxflow_exec_push_relabel(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);
 }
 
+int jgrapht_rx_maxflow_exec_push_relabel(void *g, void *source, void *target, double* value_res, void** flow_map_res, void** cut_source_partition_res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rx_maxflow_exec_push_relabel(thread, g, source, target, value_res, flow_map_res, cut_source_partition_res);
+}
+
 int jgrapht_ix_maxflow_exec_dinic(void *g, int source, int sink, double* valueRes, void** flowMapRes, void** cutSourcePartitionRes) {
     LAZY_THREAD_ATTACH 
     return jgrapht_capi_ix_maxflow_exec_dinic(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);    
@@ -678,6 +683,11 @@ int jgrapht_ix_maxflow_exec_dinic(void *g, int source, int sink, double* valueRe
 int jgrapht_lx_maxflow_exec_dinic(void *g, long long int source, long long int sink, double* valueRes, void** flowMapRes, void** cutSourcePartitionRes) {
     LAZY_THREAD_ATTACH 
     return jgrapht_capi_lx_maxflow_exec_dinic(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);    
+}
+
+int jgrapht_rx_maxflow_exec_dinic(void *g, void* source, void* sink, double* valueRes, void** flowMapRes, void** cutSourcePartitionRes) {
+    LAZY_THREAD_ATTACH 
+    return jgrapht_capi_rx_maxflow_exec_dinic(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);    
 }
 
 int jgrapht_ix_maxflow_exec_edmonds_karp(void *g, int source, int sink, double* valueRes, void** flowMapRes, void** cutSourcePartitionRes) {
@@ -690,6 +700,11 @@ int jgrapht_lx_maxflow_exec_edmonds_karp(void *g, long long int source, long lon
     return jgrapht_capi_lx_maxflow_exec_edmonds_karp(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);
 }
 
+int jgrapht_rx_maxflow_exec_edmonds_karp(void *g, void* source, void* sink, double* valueRes, void** flowMapRes, void** cutSourcePartitionRes) {
+    LAZY_THREAD_ATTACH 
+    return jgrapht_capi_rx_maxflow_exec_edmonds_karp(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);
+}
+
 int jgrapht_ix_maxflow_exec_boykov_kolmogorov(void *g, int source, int sink, double* valueRes, void ** flowMapRes, void ** cutSourcePartitionRes) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_ix_maxflow_exec_boykov_kolmogorov(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);
@@ -698,6 +713,11 @@ int jgrapht_ix_maxflow_exec_boykov_kolmogorov(void *g, int source, int sink, dou
 int jgrapht_lx_maxflow_exec_boykov_kolmogorov(void *g, long long int source, long long int sink, double* valueRes, void ** flowMapRes, void **cutSourcePartitionRes) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_lx_maxflow_exec_boykov_kolmogorov(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);
+}
+
+int jgrapht_rx_maxflow_exec_boykov_kolmogorov(void *g, void* source, void* sink, double* valueRes, void ** flowMapRes, void **cutSourcePartitionRes) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rx_maxflow_exec_boykov_kolmogorov(thread, g, source, sink, valueRes, flowMapRes, cutSourcePartitionRes);
 }
 
 int jgrapht_ii_mincostflow_exec_capacity_scaling(void *g, void *node_supply_fptr, void *arc_capacity_lower_bound_fptr, \
@@ -711,6 +731,13 @@ int jgrapht_ll_mincostflow_exec_capacity_scaling(void *g, void *node_supply_fptr
    void *arc_capacity_upper_bound_fptr, int scaling_factor, double* cost_res, void** flow_res, void** dual_res) {
     LAZY_THREAD_ATTACH 
     return jgrapht_capi_ll_mincostflow_exec_capacity_scaling(thread, g, node_supply_fptr, arc_capacity_lower_bound_fptr, \
+        arc_capacity_upper_bound_fptr, scaling_factor, cost_res, flow_res, dual_res);
+}
+
+int jgrapht_rr_mincostflow_exec_capacity_scaling(void *g, void *node_supply_fptr, void *arc_capacity_lower_bound_fptr, \
+   void *arc_capacity_upper_bound_fptr, int scaling_factor, double* cost_res, void** flow_res, void** dual_res) {
+    LAZY_THREAD_ATTACH 
+    return jgrapht_capi_rr_mincostflow_exec_capacity_scaling(thread, g, node_supply_fptr, arc_capacity_lower_bound_fptr, \
         arc_capacity_upper_bound_fptr, scaling_factor, cost_res, flow_res, dual_res);
 }
 
@@ -729,19 +756,24 @@ int jgrapht_lx_equivalentflowtree_max_st_flow(void *eft, long long int source, l
     return jgrapht_capi_lx_equivalentflowtree_max_st_flow(thread, eft, source, sink, value_res);
 }
 
-int jgrapht_ii_equivalentflowtree_tree(void *eft, void** tree_res) { 
+int jgrapht_rx_equivalentflowtree_max_st_flow(void *eft, void* source, void* sink, void* hash_equals_resolver, double* value_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_equivalentflowtree_tree(thread, eft, tree_res);
+    return jgrapht_capi_rx_equivalentflowtree_max_st_flow(thread, eft, source, sink, hash_equals_resolver, value_res);
 }
 
-int jgrapht_ll_equivalentflowtree_tree(void *eft, void** tree_res) { 
+int jgrapht_ii_equivalentflowtree_tree(void *eft, void *vertex_supplier, void *edge_supplier, void** tree_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_equivalentflowtree_tree(thread, eft, tree_res);
+    return jgrapht_capi_ii_equivalentflowtree_tree(thread, eft, vertex_supplier, edge_supplier, tree_res);
 }
 
-int jgrapht_ll_equivalentflowtree_tree_with_suppliers(void *eft, void *vertex_supplier, void *edge_supplier, void** tree_res) { 
+int jgrapht_ll_equivalentflowtree_tree(void *eft, void *vertex_supplier, void *edge_supplier, void** tree_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_equivalentflowtree_tree_with_suppliers(thread, eft, vertex_supplier, edge_supplier, tree_res);
+    return jgrapht_capi_ll_equivalentflowtree_tree(thread, eft, vertex_supplier, edge_supplier, tree_res);
+}
+
+int jgrapht_rr_equivalentflowtree_tree(void *eft, void *vertex_supplier, void *edge_supplier, void** tree_res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_equivalentflowtree_tree(thread, eft, vertex_supplier, edge_supplier, tree_res);
 }
 
 // generate
