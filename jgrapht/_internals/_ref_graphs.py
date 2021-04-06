@@ -4,6 +4,11 @@ from .. import backend
 from ..types import (
     Graph,
     GraphType,
+    DirectedAcyclicGraph,
+)
+
+from ._collections_set import (
+    _JGraphTRefSet,
 )
 
 import ctypes
@@ -255,6 +260,48 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         super().__del__()
 
 
+class _JGraphTRefDirectedAcyclicGraph(_JGraphTRefGraph, DirectedAcyclicGraph):
+    """The directed acyclic graph wrapper."""
+
+    def __init__(
+        self,
+        handle,
+        vertex_supplier_fptr_wrapper,
+        edge_supplier_fptr_wrapper,
+        hash_equals_wrapper,
+        **kwargs
+    ):
+        super().__init__(
+            handle=handle,
+            vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
+            edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
+            hash_equals_wrapper=hash_equals_wrapper,
+            **kwargs
+        )
+
+    def descendants(self, vertex):
+        set_handle = backend.jgrapht_rx_graph_dag_vertex_descendants(
+            self.handle, id(vertex)
+        )
+        return _JGraphTRefSet(
+            handle=set_handle,
+            hash_equals_resolver_handle=self._hash_equals_wrapper.handle,
+        )
+
+    def ancestors(self, vertex):
+        set_handle = backend.jgrapht_rx_graph_dag_vertex_ancestors(
+            self.handle, id(vertex)
+        )
+        return _JGraphTRefSet(
+            handle=set_handle,
+            hash_equals_resolver_handle=self._hash_equals_wrapper.handle,
+        )
+
+    def __iter__(self):
+        it_handle = backend.jgrapht_xx_graph_dag_topological_it(self.handle)
+        return _JGraphTRefIterator(handle=it_handle)
+
+
 def _create_ref_graph(
     directed=True,
     allowing_self_loops=False,
@@ -272,7 +319,7 @@ def _create_ref_graph(
     :param vertex_supplier: function which returns new vertices on each call. If
         None then object instances are used.
     :param edge_supplier: function which returns new edge on each call. If
-        None then object instances are used.    
+        None then object instances are used.
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
@@ -304,6 +351,51 @@ def _create_ref_graph(
         edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
         hash_equals_wrapper=hash_equals_wrapper,
     )
+
+
+def _create_ref_dag(
+    allowing_multiple_edges=False,
+    weighted=True,
+    vertex_supplier=None,
+    edge_supplier=None,    
+):
+    """Create a directed acyclic graph.
+
+    :param allowing_multiple_edges: if True the graph will allow multiple-edges
+    :param weighted: if True the graph will be weighted, otherwise unweighted
+    :param vertex_supplier: function which returns new vertices on each call. If
+        None then object instances are used.
+    :param edge_supplier: function which returns new edge on each call. If
+        None then object instances are used.    
+    :returns: a graph
+    :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph`
+    """
+    # create vertex supplier
+    vertex_supplier_fptr_wrapper = _callbacks._create_py_object_supplier(
+        supplier=vertex_supplier
+    )
+    # create edge supplier
+    edge_supplier_fptr_wrapper = _callbacks._create_py_object_supplier(
+        supplier=edge_supplier
+    )
+
+    # create python hash-equals ctypes wrappers and setup JVM object
+    hash_equals_wrapper = _ref_hashequals._get_hash_equals_wrapper()
+
+    handle = backend.jgrapht_rr_graph_dag_create(
+        allowing_multiple_edges,
+        weighted,
+        vertex_supplier_fptr_wrapper.fptr,
+        edge_supplier_fptr_wrapper.fptr,
+        hash_equals_wrapper.handle,
+    )
+
+    return _JGraphTRefDirectedAcyclicGraph(
+        handle,
+        vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
+        edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
+        hash_equals_wrapper=hash_equals_wrapper,
+    )    
 
 
 def _is_ref_graph(graph):

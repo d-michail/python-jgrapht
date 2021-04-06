@@ -62,6 +62,7 @@ from ._internals._anyhashableg import (
 from ._internals._ref_graphs import (
     _is_ref_graph, 
     _create_ref_graph,
+    _create_ref_dag,
 )
 
 #
@@ -169,7 +170,12 @@ def create_graph(
 
     if backend == GraphBackend.REF_GRAPH:
         if dag:
-            raise ValueError("Not yet supported")
+            return _create_ref_dag(
+                allowing_multiple_edges=allowing_multiple_edges,
+                weighted=weighted,
+                vertex_supplier=vertex_supplier,
+                edge_supplier=edge_supplier,
+            )
         else:
             return _create_ref_graph(
                 directed=directed,
