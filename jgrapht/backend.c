@@ -771,9 +771,9 @@ int jgrapht_ll_equivalentflowtree_tree(void *eft, void *vertex_supplier, void *e
     return jgrapht_capi_ll_equivalentflowtree_tree(thread, eft, vertex_supplier, edge_supplier, tree_res);
 }
 
-int jgrapht_rr_equivalentflowtree_tree(void *eft, void *vertex_supplier, void *edge_supplier, void** tree_res) { 
+int jgrapht_rr_equivalentflowtree_tree(void *eft, void *vertex_supplier, void *edge_supplier, void *hash_equals_resolver, void** tree_res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rr_equivalentflowtree_tree(thread, eft, vertex_supplier, edge_supplier, tree_res);
+    return jgrapht_capi_rr_equivalentflowtree_tree(thread, eft, vertex_supplier, edge_supplier, hash_equals_resolver, tree_res);
 }
 
 // generate
@@ -1427,154 +1427,214 @@ int jgrapht_xx_graph_test_is_k5_subdivision(void *g, int* res) {
 
 // graph attributes
 
-int jgrapht_xx_graph_attrs_get_long(void *g, char* key, long long* res) { 
+int jgrapht_xxl_graph_attrs_get(void *g, char* key, long long* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xx_graph_attrs_get_long(thread, g, key, res);
+    return jgrapht_capi_xxl_graph_attrs_get(thread, g, key, res);
 }
 
-int jgrapht_ix_graph_attrs_vertex_get_long(void *g, int vertex, char* key, long long* res) { 
+int jgrapht_ixl_graph_attrs_vertex_get(void *g, int vertex, char* key, long long* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ix_graph_attrs_vertex_get_long(thread, g, vertex, key, res);
+    return jgrapht_capi_ix_graph_attrs_vertex_get(thread, g, vertex, key, res);
 }
 
-int jgrapht_lx_graph_attrs_vertex_get_long(void *g, long long int vertex, char* key, long long* res) { 
+int jgrapht_lxl_graph_attrs_vertex_get(void *g, long long int vertex, char* key, long long* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_graph_attrs_vertex_get_long(thread, g, vertex, key, res);
+    return jgrapht_capi_lxl_graph_attrs_vertex_get(thread, g, vertex, key, res);
 }
 
-int jgrapht_xi_graph_attrs_edge_get_long(void *g, int edge, char* key, long long* res) { 
+int jgrapht_rxl_graph_attrs_vertex_get(void *g, void *vertex, char* key, long long* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xi_graph_attrs_edge_get_long(thread, g, edge, key, res);
+    return jgrapht_capi_rxl_graph_attrs_vertex_get(thread, g, vertex, key, res);
 }
 
-int jgrapht_xl_graph_attrs_edge_get_long(void *g, long long int edge, char* key, long long* res) { 
+int jgrapht_xil_graph_attrs_edge_get(void *g, int edge, char* key, long long* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xl_graph_attrs_edge_get_long(thread, g, edge, key, res);
+    return jgrapht_capi_xil_graph_attrs_edge_get(thread, g, edge, key, res);
 }
 
-int jgrapht_xx_graph_attrs_put_long(void *g, char* key, long long int value) { 
+int jgrapht_xll_graph_attrs_edge_get(void *g, long long int edge, char* key, long long* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xx_graph_attrs_put_long(thread, g, key, value);
+    return jgrapht_capi_xll_graph_attrs_edge_get(thread, g, edge, key, res);
 }
 
-int jgrapht_ix_graph_attrs_vertex_put_long(void *g, int vertex, char* key, long long int value) { 
+int jgrapht_xrl_graph_attrs_edge_get(void *g, void* edge, char* key, long long* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ix_graph_attrs_vertex_put_long(thread, g, vertex, key, value);
+    return jgrapht_capi_xrl_graph_attrs_edge_get(thread, g, edge, key, res);
 }
 
-int jgrapht_lx_graph_attrs_vertex_put_long(void *g, long long int vertex, char* key, long long int value) { 
+int jgrapht_xxl_graph_attrs_put(void *g, char* key, long long int value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_graph_attrs_vertex_put_long(thread, g, vertex, key, value);
+    return jgrapht_capi_xxl_graph_attrs_put(thread, g, key, value);
 }
 
-int jgrapht_xi_graph_attrs_edge_put_long(void *g, int edge, char* key, long long int value) { 
+int jgrapht_ixl_graph_attrs_vertex_put(void *g, int vertex, char* key, long long int value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xi_graph_attrs_edge_put_long(thread, g, edge, key, value);
+    return jgrapht_capi_ixl_graph_attrs_vertex_put(thread, g, vertex, key, value);
 }
 
-int jgrapht_xl_graph_attrs_edge_put_long(void *g, long long int edge, char* key, long long int value) { 
+int jgrapht_lxl_graph_attrs_vertex_put(void *g, long long int vertex, char* key, long long int value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xl_graph_attrs_edge_put_long(thread, g, edge, key, value);
+    return jgrapht_capi_lxl_graph_attrs_vertex_put(thread, g, vertex, key, value);
 }
 
-int jgrapht_xx_graph_attrs_remove(void *g, char* key)  { 
+int jgrapht_rxl_graph_attrs_vertex_put(void *g, void* vertex, char* key, long long int value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xx_graph_attrs_remove(thread, g, key);
+    return jgrapht_capi_rxl_graph_attrs_vertex_put(thread, g, vertex, key, value);
 }
 
-int jgrapht_ix_graph_attrs_vertex_remove(void *g, int vertex, char* key) { 
+int jgrapht_xil_graph_attrs_edge_put(void *g, int edge, char* key, long long int value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ix_graph_attrs_vertex_remove(thread, g, vertex, key);
+    return jgrapht_capi_xil_graph_attrs_edge_put(thread, g, edge, key, value);
 }
 
-int jgrapht_lx_graph_attrs_vertex_remove(void *g, long long int vertex, char* key) { 
+int jgrapht_xll_graph_attrs_edge_put(void *g, long long int edge, char* key, long long int value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_graph_attrs_vertex_remove(thread, g, vertex, key);
+    return jgrapht_capi_xll_graph_attrs_edge_put(thread, g, edge, key, value);
 }
 
-int jgrapht_xi_graph_attrs_edge_remove(void *g, int edge, char* key) { 
+int jgrapht_xrl_graph_attrs_edge_put(void *g, void* edge, char* key, long long int value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xi_graph_attrs_edge_remove(thread, g, edge, key);
+    return jgrapht_capi_xrl_graph_attrs_edge_put(thread, g, edge, key, value);
 }
 
-int jgrapht_xl_graph_attrs_edge_remove(void *g, long long int edge, char* key) { 
+int jgrapht_xxx_graph_attrs_remove(void *g, char* key)  { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xl_graph_attrs_edge_remove(thread, g, edge, key);
+    return jgrapht_capi_xxx_graph_attrs_remove(thread, g, key);
 }
 
-int jgrapht_xx_graph_attrs_contains(void *g, char* key, int* res) { 
+int jgrapht_ixx_graph_attrs_vertex_remove(void *g, int vertex, char* key) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xx_graph_attrs_contains(thread, g, key, res);
+    return jgrapht_capi_ixx_graph_attrs_vertex_remove(thread, g, vertex, key);
 }
 
-int jgrapht_ix_graph_attrs_vertex_contains(void *g, int vertex, char* key, int* res) {
+int jgrapht_lxx_graph_attrs_vertex_remove(void *g, long long int vertex, char* key) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ix_graph_attrs_vertex_contains(thread, g, vertex, key, res);
+    return jgrapht_capi_lxx_graph_attrs_vertex_remove(thread, g, vertex, key);
 }
 
-int jgrapht_lx_graph_attrs_vertex_contains(void *g, long long int vertex, char* key, int* res) { 
+int jgrapht_rxx_graph_attrs_vertex_remove(void *g, void* vertex, char* key) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_graph_attrs_vertex_contains(thread, g, vertex, key, res);
+    return jgrapht_capi_rxx_graph_attrs_vertex_remove(thread, g, vertex, key);
 }
 
-int jgrapht_xi_graph_attrs_edge_contains(void *g, int edge, char* key, int* res) { 
+int jgrapht_xix_graph_attrs_edge_remove(void *g, int edge, char* key) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xi_graph_attrs_edge_contains(thread, g, edge, key, res);
+    return jgrapht_capi_xix_graph_attrs_edge_remove(thread, g, edge, key);
 }
 
-int jgrapht_xl_graph_attrs_edge_contains(void *g, long long int edge, char* key, int* res) { 
+int jgrapht_xlx_graph_attrs_edge_remove(void *g, long long int edge, char* key) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xl_graph_attrs_edge_contains(thread, g, edge, key, res);
+    return jgrapht_capi_xlx_graph_attrs_edge_remove(thread, g, edge, key);
 }
 
-int jgrapht_xx_graph_attrs_keys_iterator(void *g, void**res) { 
+int jgrapht_xrx_graph_attrs_edge_remove(void *g, void* edge, char* key) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xx_graph_attrs_keys_iterator(thread, g, res);
+    return jgrapht_capi_xrx_graph_attrs_edge_remove(thread, g, edge, key);
 }
 
-int jgrapht_ix_graph_attrs_vertex_keys_iterator(void *g, int vertex, void** res) { 
+int jgrapht_xxx_graph_attrs_contains(void *g, char* key, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ix_graph_attrs_vertex_keys_iterator(thread, g, vertex, res);
+    return jgrapht_capi_xxx_graph_attrs_contains(thread, g, key, res);
 }
 
-int jgrapht_lx_graph_attrs_vertex_keys_iterator(void *g, long long int vertex, void** res) { 
+int jgrapht_ixx_graph_attrs_vertex_contains(void *g, int vertex, char* key, int* res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_graph_attrs_vertex_keys_iterator(thread, g, vertex, res);
+    return jgrapht_capi_ixx_graph_attrs_vertex_contains(thread, g, vertex, key, res);
 }
 
-int jgrapht_xi_graph_attrs_edge_keys_iterator(void *g, int edge, void** res) { 
+int jgrapht_lxx_graph_attrs_vertex_contains(void *g, long long int vertex, char* key, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xi_graph_attrs_edge_keys_iterator(thread, g, edge, res);
+    return jgrapht_capi_lxx_graph_attrs_vertex_contains(thread, g, vertex, key, res);
 }
 
-int jgrapht_xl_graph_attrs_edge_keys_iterator(void *g, long long int edge, void** res) { 
+int jgrapht_rxx_graph_attrs_vertex_contains(void *g, void* vertex, char* key, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xl_graph_attrs_edge_keys_iterator(thread, g, edge, res);
+    return jgrapht_capi_rxx_graph_attrs_vertex_contains(thread, g, vertex, key, res);
 }
 
-int jgrapht_xx_graph_attrs_size(void *g, int* res) { 
+int jgrapht_xix_graph_attrs_edge_contains(void *g, int edge, char* key, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xx_graph_attrs_size(thread, g, res);
+    return jgrapht_capi_xix_graph_attrs_edge_contains(thread, g, edge, key, res);
 }
 
-int jgrapht_ix_graph_attrs_vertex_size(void *g, int vertex, int* res) {
+int jgrapht_xlx_graph_attrs_edge_contains(void *g, long long int edge, char* key, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ix_graph_attrs_vertex_size(thread, g, vertex, res);
+    return jgrapht_capi_xlx_graph_attrs_edge_contains(thread, g, edge, key, res);
+}
+
+int jgrapht_xrx_graph_attrs_edge_contains(void *g, void* edge, char* key, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xrx_graph_attrs_edge_contains(thread, g, edge, key, res);
+}
+
+int jgrapht_xxx_graph_attrs_keys_iterator(void *g, void**res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xxx_graph_attrs_keys_iterator(thread, g, res);
+}
+
+int jgrapht_ixx_graph_attrs_vertex_keys_iterator(void *g, int vertex, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ixx_graph_attrs_vertex_keys_iterator(thread, g, vertex, res);
+}
+
+int jgrapht_lxx_graph_attrs_vertex_keys_iterator(void *g, long long int vertex, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_lxx_graph_attrs_vertex_keys_iterator(thread, g, vertex, res);
+}
+
+int jgrapht_rxx_graph_attrs_vertex_keys_iterator(void *g, void* vertex, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rxx_graph_attrs_vertex_keys_iterator(thread, g, vertex, res);
+}
+
+int jgrapht_xix_graph_attrs_edge_keys_iterator(void *g, int edge, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xix_graph_attrs_edge_keys_iterator(thread, g, edge, res);
+}
+
+int jgrapht_xlx_graph_attrs_edge_keys_iterator(void *g, long long int edge, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xlx_graph_attrs_edge_keys_iterator(thread, g, edge, res);
+}
+
+int jgrapht_xrx_graph_attrs_edge_keys_iterator(void *g, void* edge, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xrx_graph_attrs_edge_keys_iterator(thread, g, edge, res);
+}
+
+int jgrapht_xxx_graph_attrs_size(void *g, int* res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xxx_graph_attrs_size(thread, g, res);
+}
+
+int jgrapht_ixx_graph_attrs_vertex_size(void *g, int vertex, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ixx_graph_attrs_vertex_size(thread, g, vertex, res);
 }
  
-int jgrapht_lx_graph_attrs_vertex_size(void *g, long long int vertex, int* res) {
+int jgrapht_lxx_graph_attrs_vertex_size(void *g, long long int vertex, int* res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_graph_attrs_vertex_size(thread, g, vertex, res);
-}
- 
-int jgrapht_xi_graph_attrs_edge_size(void *g, int edge, int* res) {
-    LAZY_THREAD_ATTACH
-    return jgrapht_capi_xi_graph_attrs_edge_size(thread, g, edge, res);
+    return jgrapht_capi_lxx_graph_attrs_vertex_size(thread, g, vertex, res);
 }
 
-int jgrapht_xl_graph_attrs_edge_size(void *g, long long int edge, int* res) {
+int jgrapht_rxx_graph_attrs_vertex_size(void *g, void* vertex, int* res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xl_graph_attrs_edge_size(thread, g, edge, res);
+    return jgrapht_capi_rxx_graph_attrs_vertex_size(thread, g, vertex, res);
+}
+ 
+int jgrapht_xix_graph_attrs_edge_size(void *g, int edge, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xix_graph_attrs_edge_size(thread, g, edge, res);
+}
+
+int jgrapht_xlx_graph_attrs_edge_size(void *g, long long int edge, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xlx_graph_attrs_edge_size(thread, g, edge, res);
+}
+
+int jgrapht_xrx_graph_attrs_edge_size(void *g, void* edge, int* res) {
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xrx_graph_attrs_edge_size(thread, g, edge, res);
 }
 
 // handles
@@ -2496,194 +2556,194 @@ int jgrapht_xx_listenable_remove_graph_listener(void *g, void *listener) {
 
 // map
 
-int jgrapht_map_create(void** res) { 
+int jgrapht_xx_map_create(void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_create(thread, res);
+    return jgrapht_capi_xx_map_create(thread, res);
 }
 
-int jgrapht_map_linked_create(void** res) { 
+int jgrapht_xx_map_linked_create(void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_linked_create(thread, res);
+    return jgrapht_capi_xx_map_linked_create(thread, res);
 }
 
-int jgrapht_map_keys_it_create(void *map, void** res) {
+int jgrapht_xx_map_keys_it_create(void *map, void** res) {
     LAZY_THREAD_ATTACH 
-    return jgrapht_capi_map_keys_it_create(thread, map, res);
+    return jgrapht_capi_xx_map_keys_it_create(thread, map, res);
 }
 
-int jgrapht_map_size(void *map, int* res) { 
+int jgrapht_xx_map_size(void *map, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_size(thread, map, res);
+    return jgrapht_capi_xx_map_size(thread, map, res);
 }
 
-int jgrapht_map_values_it_create(void *map, void** res) { 
+int jgrapht_xx_map_values_it_create(void *map, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_values_it_create(thread, map, res);
+    return jgrapht_capi_xx_map_values_it_create(thread, map, res);
 }
 
-int jgrapht_map_int_double_put(void *map, int key, double value) { 
+int jgrapht_id_map_put(void *map, int key, double value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_double_put(thread, map, key, value);
+    return jgrapht_capi_id_map_put(thread, map, key, value);
 }
 
-int jgrapht_map_int_int_put(void *map, int key, int value) { 
+int jgrapht_ii_map_put(void *map, int key, int value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_int_put(thread, map, key, value);
+    return jgrapht_capi_ii_map_put(thread, map, key, value);
 }
 
-int jgrapht_map_int_string_put(void *map, int key, char* value) { 
+int jgrapht_is_map_put(void *map, int key, char* value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_string_put(thread, map, key, value);
+    return jgrapht_capi_is_map_put(thread, map, key, value);
 }
 
-int jgrapht_map_int_ref_put(void *map, int key, void *value) { 
+int jgrapht_ix_map_put(void *map, int key, void *value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_ref_put(thread, map, key, value);
+    return jgrapht_capi_ix_map_put(thread, map, key, value);
 }
 
-int jgrapht_map_int_ref_put_direct(void *map, int key, void *value, void *hash_equals_resolver_handle) { 
+int jgrapht_ir_map_put(void *map, int key, void *value, void *hash_equals_resolver_handle) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_ref_put_direct(thread, map, key, value, hash_equals_resolver_handle);
+    return jgrapht_capi_ir_map_put(thread, map, key, value, hash_equals_resolver_handle);
 }
 
-int jgrapht_map_long_double_put(void *map, long long int key, double value) { 
+int jgraph_ld_map_put(void *map, long long int key, double value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_double_put(thread, map, key, value);
+    return jgrapht_capi_ld_map_put(thread, map, key, value);
 }
 
-int jgrapht_map_long_int_put(void *map, long long int key, int value) { 
+int jgrapht_li_map_put(void *map, long long int key, int value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_int_put(thread, map, key, value);
+    return jgrapht_capi_li_map_put(thread, map, key, value);
 }
 
-int jgrapht_map_long_string_put(void *map, long long int key, char* value) { 
+int jgrapht_ls_map_put(void *map, long long int key, char* value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_string_put(thread, map, key, value);
+    return jgrapht_capi_ls_map_put(thread, map, key, value);
 }
 
-int jgrapht_map_long_ref_put(void *map, long long int key, void *value) { 
+int jgrapht_lx_map_put(void *map, long long int key, void *value) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_ref_put(thread, map, key, value);
+    return jgrapht_capi_lx_map_put(thread, map, key, value);
 }
 
-int jgrapht_map_long_ref_put_direct(void *map, long long int key, void *value, void *hash_equals_resolver_handle) { 
+int jgrapht_lr_map_put(void *map, long long int key, void *value, void *hash_equals_resolver_handle) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_ref_put_direct(thread, map, key, value, hash_equals_resolver_handle);
+    return jgrapht_capi_lr_map_put(thread, map, key, value, hash_equals_resolver_handle);
 }
 
-int jgrapht_map_int_double_get(void *map, int key, double* res) { 
+int jgrapht_id_map_get(void *map, int key, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_double_get(thread, map, key, res);
+    return jgrapht_capi_id_map_get(thread, map, key, res);
 }
 
-int jgrapht_map_int_int_get(void *map, int key, int* res) { 
+int jgrapht_ii_map_get(void *map, int key, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_int_get(thread, map, key, res);
+    return jgrapht_capi_ii_map_get(thread, map, key, res);
 }
 
-int jgrapht_map_int_string_get(void *map, int key, void** res) { 
+int jgrapht_is_map_get(void *map, int key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_string_get(thread, map, key, res);
+    return jgrapht_capi_is_map_get(thread, map, key, res);
 }
 
-int jgrapht_map_int_obj_get(void *map, int key, void** res) { 
+int jgrapht_ix_mapget(void *map, int key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_obj_get(thread, map, key, res);
+    return jgrapht_capi_ix_map_get(thread, map, key, res);
 }
 
-int jgrapht_map_int_ref_get_direct(void *map, int key, void** res) { 
+int jgrapht_ir_map_get(void *map, int key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_ref_get_direct(thread, map, key, res);
+    return jgrapht_capi_ir_map_get(thread, map, key, res);
 }
 
-int jgrapht_map_long_double_get(void *map, long long int key, double* res) { 
+int jgrapht_ld_map_get(void *map, long long int key, double* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_double_get(thread, map, key, res);
+    return jgrapht_capi_ld_map_get(thread, map, key, res);
 }
 
-int jgrapht_map_long_int_get(void *map, long long int key, int* res) { 
+int jgrapht_li_map_get(void *map, long long int key, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_int_get(thread, map, key, res);
+    return jgrapht_capi_li_map_get(thread, map, key, res);
 }
 
-int jgrapht_map_long_string_get(void *map, long long int key, void** res) { 
+int jgrapht_ls_map_get(void *map, long long int key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_string_get(thread, map, key, res);
+    return jgrapht_capi_ls_map_get(thread, map, key, res);
 }
 
-int jgrapht_map_long_obj_get(void *map, long long int key, void** res) {
+int jgrapht_lx_map_get(void *map, long long int key, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_obj_get(thread, map, key, res);
+    return jgrapht_capi_lx_map_get(thread, map, key, res);
 }
 
-int jgrapht_map_long_ref_get_direct(void *map, long long int key, void** res) {
+int jgrapht_lr_map_get(void *map, long long int key, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_ref_get_direct(thread, map, key, res);
+    return jgrapht_capi_lr_map_get(thread, map, key, res);
 }
 
-int jgrapht_map_int_contains_key(void *map, int key, int* res) { 
+int jgrapht_ix_map_contains_key(void *map, int key, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_contains_key(thread, map, key, res);
+    return jgrapht_capi_ix_map_contains_key(thread, map, key, res);
 }
 
-int jgrapht_map_long_contains_key(void *map, long long int key, int* res) { 
+int jgrapht_lx_map_contains_key(void *map, long long int key, int* res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_contains_key(thread, map, key, res);
+    return jgrapht_capi_lx_map_contains_key(thread, map, key, res);
 }
 
-int jgrapht_map_int_double_remove(void *map, int key, double* res) {
+int jgrapht_id_map_remove(void *map, int key, double* res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_double_remove(thread, map, key, res);
+    return jgrapht_capi_id_map_remove(thread, map, key, res);
 }
 
-int jgrapht_map_int_int_remove(void *map, int key, int* res) {
+int jgrapht_ii_map_remove(void *map, int key, int* res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_int_remove(thread, map, key, res);
+    return jgrapht_capi_ii_map_remove(thread, map, key, res);
 }
 
-int jgrapht_map_int_string_remove(void *map, int key, void** res) { 
+int jgrapht_is_map_remove(void *map, int key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_string_remove(thread, map, key, res);
+    return jgrapht_capi_is_map_remove(thread, map, key, res);
 }
 
-int jgrapht_map_int_obj_remove(void *map, int key, void** res) {
+int jgrapht_ix_map_remove(void *map, int key, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_obj_remove(thread, map, key, res);
+    return jgrapht_capi_ix_map_remove(thread, map, key, res);
 }
 
-int jgrapht_map_int_ref_remove_direct(void *map, int key, void** res) {
+int jgrapht_ir_map_remove(void *map, int key, void** res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_int_ref_remove_direct(thread, map, key, res);
+    return jgrapht_capi_ir_map_remove(thread, map, key, res);
 }
 
-int jgrapht_map_long_double_remove(void *map, long long int key, double* res) {
+int jgrapht_ld_map_remove(void *map, long long int key, double* res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_double_remove(thread, map, key, res);
+    return jgrapht_capi_ld_map_remove(thread, map, key, res);
 }
 
-int jgrapht_map_long_int_remove(void *map, long long int key, int* res) {
+int jgrapht_li_map_remove(void *map, long long int key, int* res) {
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_int_remove(thread, map, key, res);
+    return jgrapht_capi_li_map_remove(thread, map, key, res);
 }
 
-int jgrapht_map_long_string_remove(void *map, long long int key, void** res) { 
+int jgrapht_ls_map_remove(void *map, long long int key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_string_remove(thread, map, key, res);
+    return jgrapht_capi_ls_map_remove(thread, map, key, res);
 }
 
-int jgrapht_map_long_obj_remove(void *map, long long int key, void** res) { 
+int jgrapht_lx_map_remove(void *map, long long int key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_obj_remove(thread, map, key, res);
+    return jgrapht_capi_lx_map_remove(thread, map, key, res);
 }
 
-int jgrapht_map_long_ref_remove_direct(void *map, long long int key, void** res) { 
+int jgrapht_lr_map_remove(void *map, long long int key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_long_ref_remove_direct(thread, map, key, res);
+    return jgrapht_capi_lr_map_remove(thread, map, key, res);
 }
 
-int jgrapht_map_clear(void *map) { 
+int jgrapht_xx_map_clear(void *map) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_map_clear(thread, map);
+    return jgrapht_capi_xx_map_clear(thread, map);
 }
 
 // matching
