@@ -878,6 +878,11 @@ int jgrapht_rx_graph_vertex_create_eit(void *, void *LONG_TO_PTR, void** OUTPUT)
 int jgrapht_rx_graph_vertex_create_out_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
 int jgrapht_rx_graph_vertex_create_in_eit(void *, void *LONG_TO_PTR, void** OUTPUT);
 
+// ref graphs wrappers
+
+int jgrapht_capi_xr_graph_as_weighted(void *, void *LONG_TO_FPTR, int, int, void** OUTPUT);
+int jgrapht_capi_rr_graph_as_masked_subgraph(void *, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void** OUTPUT);
+
 // scoring
 
 int jgrapht_xx_scoring_exec_eigenvector_centrality(void *, void** OUTPUT);

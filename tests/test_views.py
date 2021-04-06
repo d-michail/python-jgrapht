@@ -1,7 +1,7 @@
 import pytest
 
-from jgrapht import create_graph
-from jgrapht.utils import create_vertex_supplier, create_edge_supplier
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier, create_vertex_supplier, create_edge_supplier
 
 from jgrapht.types import GraphEvent
 from jgrapht.views import (
@@ -16,12 +16,24 @@ from jgrapht.views import (
 )
 
 
-def test_as_unweighted():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_unweighted(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertex(0)

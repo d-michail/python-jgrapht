@@ -1,35 +1,62 @@
 from .. import backend
 from ..types import GraphType, GraphEvent, ListenableGraph
 from ._int_graphs import _JGraphTIntegerGraph
+from ._long_graphs import _JGraphTLongGraph
+from ._ref_graphs import _JGraphTRefGraph
 from ._callbacks import _create_wrapped_callback
 
 import ctypes
 import copy
 
 
-class _UnweightedGraphView(_JGraphTIntegerGraph):
+class _UnweightedIntegerGraphView(_JGraphTIntegerGraph):
     def __init__(self, graph):
-        res = backend.jgrapht_xx_graph_as_unweighted(graph.handle)
+        handle = backend.jgrapht_xx_graph_as_unweighted(graph.handle)
 
-        super().__init__(res)
-
-        self._type = graph.type.as_unweighted()
+        super().__init__(handle=handle)
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
         # collected here, the same will happen inside the JVM.
         self._graph = graph
 
-    @property
-    def type(self):
-        """Query the graph type.
+    def __repr__(self):
+        return "_UnweightedIntegerGraphView(%r)" % self._handle
 
-        :returns: The graph type.
-        """
-        return self._type
+
+class _UnweightedLongGraphView(_JGraphTLongGraph):
+    def __init__(self, graph):
+        handle = backend.jgrapht_xx_graph_as_unweighted(graph.handle)
+
+        super().__init__(handle=handle)
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
 
     def __repr__(self):
-        return "_UnweightedGraphView(%r)" % self._handle
+        return "_UnweightedLongGraphView(%r)" % self._handle
+
+
+class _UnweightedRefGraphView(_JGraphTRefGraph):
+    def __init__(self, graph):
+        handle = backend.jgrapht_xx_graph_as_unweighted(graph.handle)
+
+        super().__init__(
+            handle=handle,
+            vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
+            edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
+            hash_equals_wrapper=graph._hash_equals_wrapper,
+        )
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
+
+    def __repr__(self):
+        return "_UnweightedRefGraphView(%r)" % self._handle
 
 
 class _UndirectedGraphView(_JGraphTIntegerGraph):
@@ -242,7 +269,9 @@ class _ListenableView(_JGraphTIntegerGraph, ListenableGraph):
     def remove_listener(self, listener_id):
         listener_handle, cb = self._listeners.pop(listener_id)
 
-        backend.jgrapht_xx_listenable_remove_graph_listener(self.handle, listener_handle)
+        backend.jgrapht_xx_listenable_remove_graph_listener(
+            self.handle, listener_handle
+        )
         backend.jgrapht_handles_destroy(listener_handle)
 
     def __repr__(self):

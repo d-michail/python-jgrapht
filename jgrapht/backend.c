@@ -2976,6 +2976,16 @@ int jgrapht_rx_graph_vertex_create_in_eit(void *g, void *vertex, void** res) {
     return jgrapht_capi_rx_graph_vertex_create_in_eit(thread, g, vertex, res);
 }
 
+int jgrapht_xr_graph_as_weighted(void *g, void *weight_function, int cache_weights, int write_weights_through, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xr_graph_as_weighted(thread, g, weight_function, cache_weights, write_weights_through, res);
+
+}
+int jgrapht_rr_graph_as_masked_subgraph(void *g, void *vertex_mask_function, void *edge_mask_function, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_as_masked_subgraph(thread, g, vertex_mask_function, edge_mask_function, res);
+}
+
 // scoring
 
 int jgrapht_xx_scoring_exec_eigenvector_centrality(void *g, void** res) { 

@@ -25,7 +25,7 @@ from ._int_graphs import (
 )
 from ._views import (
     _ListenableView,
-    _UnweightedGraphView,
+    _UnweightedIntegerGraphView,
     _UndirectedGraphView,
     _UnmodifiableGraphView,
     _EdgeReversedGraphView,
@@ -685,7 +685,7 @@ def _create_anyhashable_graph_subgraph(anyhashable_graph, subgraph):
 def _as_unweighted_anyhashable_graph(anyhashable_graph):
     """Create an unweighted view of an any-hashable graph."""
     graph = anyhashable_graph._graph
-    unweighted_graph = _UnweightedGraphView(graph)
+    unweighted_graph = _UnweightedIntegerGraphView(graph)
 
     unweighted_anyhashable_graph = _AnyHashableGraph(
         unweighted_graph, copy_from=anyhashable_graph

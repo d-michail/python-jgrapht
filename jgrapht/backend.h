@@ -692,6 +692,11 @@ int jgrapht_rx_graph_vertex_create_eit(void *, void *, void**);
 int jgrapht_rx_graph_vertex_create_out_eit(void *, void *, void**);
 int jgrapht_rx_graph_vertex_create_in_eit(void *, void *, void**);
 
+// ref graphs wrappers
+
+int jgrapht_xr_graph_as_weighted(void *, void *, int, int, void**);
+int jgrapht_rr_graph_as_masked_subgraph(void *, void *, void *, void**);
+
 // scoring
 
 int jgrapht_xx_scoring_exec_eigenvector_centrality(void *, void**);
