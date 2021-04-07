@@ -5,9 +5,15 @@ from ._internals._views import (
     _UnweightedIntegerGraphView,
     _UnweightedLongGraphView,
     _UnweightedRefGraphView,
-    _UnmodifiableGraphView,
-    _UndirectedGraphView,
-    _EdgeReversedGraphView,
+    _UnmodifiableIntegerGraphView,
+    _UnmodifiableLongGraphView,
+    _UnmodifiableRefGraphView,    
+    _UndirectedIntegerGraphView,
+    _UndirectedLongGraphView,
+    _UndirectedRefGraphView,
+    _EdgeReversedIntegerGraphView,
+    _EdgeReversedLongGraphView,
+    _EdgeReversedRefGraphView,            
     _MaskedSubgraphView,
     _WeightedView,
     _GraphUnion,
@@ -51,10 +57,16 @@ def as_undirected(graph):
     :param graph: the original graph
     :returns: an undirected graph
     """
-    if _is_anyhashable_graph(graph):
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
         return _as_undirected_anyhashable_graph(graph)
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _UndirectedRefGraphView(graph)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _UndirectedIntegerGraphView(graph)    
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _UndirectedLongGraphView(graph)            
     else:
-        return _UndirectedGraphView(graph)
+        raise ValueError("Unkwown backend type")    
 
 
 def as_unmodifiable(graph):
@@ -64,10 +76,16 @@ def as_unmodifiable(graph):
     :param graph: the original graph
     :returns: an unmodifiable graph
     """
-    if _is_anyhashable_graph(graph):
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
         return _as_unmodifiable_anyhashable_graph(graph)
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _UnmodifiableRefGraphView(graph)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _UnmodifiableIntegerGraphView(graph)    
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _UnmodifiableLongGraphView(graph)            
     else:
-        return _UnmodifiableGraphView(graph)
+        raise ValueError("Unkwown backend type")
 
 
 def as_edge_reversed(graph):
@@ -77,10 +95,16 @@ def as_edge_reversed(graph):
     :param graph: the original graph
     :returns: a graph with reversed edges
     """
-    if _is_anyhashable_graph(graph):
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
         return _as_edgereversed_anyhashable_graph(graph)
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _EdgeReversedRefGraphView(graph)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _EdgeReversedIntegerGraphView(graph)    
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _EdgeReversedLongGraphView(graph)            
     else:
-        return _EdgeReversedGraphView(graph)
+        raise ValueError("Unkwown backend type")
 
 
 def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):

@@ -33,7 +33,7 @@ def test_as_unweighted(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -65,12 +65,24 @@ def test_as_unweighted(backend):
     assert g1.get_edge_weight(e45) == 1.0
 
 
-def test_as_undirected():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_undirected(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertex(0)
@@ -93,18 +105,29 @@ def test_as_undirected():
 
     # undirected
     g2 = as_undirected(g)
-    assert g2.type.directed is False
+    assert not g2.type.directed
     assert not g.contains_edge_between(2, 1)
     assert g2.contains_edge_between(2, 1)
 
 
-def test_as_unmodifiable():
-
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_unmodifiable(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -127,17 +150,29 @@ def test_as_unmodifiable():
 
     # unmodifiable
     g3 = as_unmodifiable(g)
-    assert g3.type.modifiable is False
+    assert not g3.type.modifiable
     with pytest.raises(ValueError):
         g3.add_edge(v2, v2)
 
 
-def test_as_edge_reversed():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_edge_reversed(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertex(0)

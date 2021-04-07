@@ -26,9 +26,9 @@ from ._int_graphs import (
 from ._views import (
     _ListenableView,
     _UnweightedIntegerGraphView,
-    _UndirectedGraphView,
-    _UnmodifiableGraphView,
-    _EdgeReversedGraphView,
+    _UndirectedIntegerGraphView,
+    _UnmodifiableIntegerGraphView,
+    _EdgeReversedIntegerGraphView,
     _WeightedView,
     _MaskedSubgraphView,
 )
@@ -697,7 +697,7 @@ def _as_unweighted_anyhashable_graph(anyhashable_graph):
 def _as_undirected_anyhashable_graph(anyhashable_graph):
     """Create an undirected view of an any-hashable graph."""
     graph = anyhashable_graph._graph
-    undirected_graph = _UndirectedGraphView(graph)
+    undirected_graph = _UndirectedIntegerGraphView(graph)
 
     undirected_anyhashable_graph = _AnyHashableGraph(
         undirected_graph, copy_from=anyhashable_graph
@@ -709,7 +709,7 @@ def _as_undirected_anyhashable_graph(anyhashable_graph):
 def _as_unmodifiable_anyhashable_graph(anyhashable_graph):
     """Create an unmodifiable view of an any-hashable graph."""
     graph = anyhashable_graph._graph
-    unmodifiable_graph = _UnmodifiableGraphView(graph)
+    unmodifiable_graph = _UnmodifiableIntegerGraphView(graph)
 
     unmodifiable_anyhashable_graph = _AnyHashableGraph(
         unmodifiable_graph, copy_from=anyhashable_graph
@@ -721,7 +721,7 @@ def _as_unmodifiable_anyhashable_graph(anyhashable_graph):
 def _as_edgereversed_anyhashable_graph(anyhashable_graph):
     """Create an edge reversed view of an any-hashable graph."""
     graph = anyhashable_graph._graph
-    edgereversed_graph = _EdgeReversedGraphView(graph)
+    edgereversed_graph = _EdgeReversedIntegerGraphView(graph)
 
     edgereversed_anyhashable_graph = _AnyHashableGraph(
         edgereversed_graph, copy_from=anyhashable_graph

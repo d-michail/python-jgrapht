@@ -12,13 +12,13 @@ import copy
 class _UnweightedIntegerGraphView(_JGraphTIntegerGraph):
     def __init__(self, graph):
         handle = backend.jgrapht_xx_graph_as_unweighted(graph.handle)
-
         super().__init__(handle=handle)
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
         # collected here, the same will happen inside the JVM.
         self._graph = graph
+        
 
     def __repr__(self):
         return "_UnweightedIntegerGraphView(%r)" % self._handle
@@ -27,7 +27,6 @@ class _UnweightedIntegerGraphView(_JGraphTIntegerGraph):
 class _UnweightedLongGraphView(_JGraphTLongGraph):
     def __init__(self, graph):
         handle = backend.jgrapht_xx_graph_as_unweighted(graph.handle)
-
         super().__init__(handle=handle)
 
         # Keep a reference to avoid gargage collection. This is important since the
@@ -42,7 +41,6 @@ class _UnweightedLongGraphView(_JGraphTLongGraph):
 class _UnweightedRefGraphView(_JGraphTRefGraph):
     def __init__(self, graph):
         handle = backend.jgrapht_xx_graph_as_unweighted(graph.handle)
-
         super().__init__(
             handle=handle,
             vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
@@ -59,79 +57,145 @@ class _UnweightedRefGraphView(_JGraphTRefGraph):
         return "_UnweightedRefGraphView(%r)" % self._handle
 
 
-class _UndirectedGraphView(_JGraphTIntegerGraph):
+class _UndirectedIntegerGraphView(_JGraphTIntegerGraph):
     def __init__(self, graph):
-        res = backend.jgrapht_xx_graph_as_undirected(graph.handle)
-
-        super().__init__(res)
-
-        self._type = graph.type.as_undirected()
+        handle = backend.jgrapht_xx_graph_as_undirected(graph.handle)
+        super().__init__(handle=handle)
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
         # collected here, the same will happen inside the JVM.
         self._graph = graph
 
-    @property
-    def type(self):
-        """Query the graph type.
-
-        :returns: The graph type.
-        """
-        return self._type
-
     def __repr__(self):
-        return "_UndirectedGraphView(%r)" % self._handle
+        return "_UndirectedIntegerGraphView(%r)" % self._handle
 
 
-class _UnmodifiableGraphView(_JGraphTIntegerGraph):
+class _UndirectedLongGraphView(_JGraphTLongGraph):
     def __init__(self, graph):
-        res = backend.jgrapht_xx_graph_as_unmodifiable(graph.handle)
-
-        super().__init__(res)
-
-        self._type = graph.type.as_unmodifiable()
+        handle = backend.jgrapht_xx_graph_as_undirected(graph.handle)
+        super().__init__(handle=handle)
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
         # collected here, the same will happen inside the JVM.
         self._graph = graph
 
-    @property
-    def type(self):
-        """Query the graph type.
-
-        :returns: The graph type.
-        """
-        return self._type
-
     def __repr__(self):
-        return "_UnmodifiableGraphView(%r)" % self._handle
+        return "_UndirectedLongGraphView(%r)" % self._handle
 
 
-class _EdgeReversedGraphView(_JGraphTIntegerGraph):
+class _UndirectedRefGraphView(_JGraphTRefGraph):
     def __init__(self, graph):
-        res = backend.jgrapht_xx_graph_as_edgereversed(graph.handle)
-
-        super().__init__(res)
-
-        self._type = copy.copy(graph.type)
+        handle = backend.jgrapht_xx_graph_as_undirected(graph.handle)
+        super().__init__(
+            handle=handle,
+            vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
+            edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
+            hash_equals_wrapper=graph._hash_equals_wrapper,
+        )
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
         # collected here, the same will happen inside the JVM.
         self._graph = graph
 
-    @property
-    def type(self):
-        """Query the graph type.
+    def __repr__(self):
+        return "_UndirectedRefGraphView(%r)" % self._handle
 
-        :returns: The graph type.
-        """
-        return self._type
+
+class _UnmodifiableIntegerGraphView(_JGraphTIntegerGraph):
+    def __init__(self, graph):
+        handle = backend.jgrapht_xx_graph_as_unmodifiable(graph.handle)
+        super().__init__(handle=handle)
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
 
     def __repr__(self):
-        return "_EdgeReversedGraphView(%r)" % self._handle
+        return "_UnmodifiableIntegerGraphView(%r)" % self._handle
+
+
+class _UnmodifiableLongGraphView(_JGraphTLongGraph):
+    def __init__(self, graph):
+        handle = backend.jgrapht_xx_graph_as_unmodifiable(graph.handle)
+        super().__init__(handle=handle)
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
+
+    def __repr__(self):
+        return "_UnmodifiableLongGraphView(%r)" % self._handle
+
+
+class _UnmodifiableRefGraphView(_JGraphTRefGraph):
+    def __init__(self, graph):
+        handle = backend.jgrapht_xx_graph_as_unmodifiable(graph.handle)
+        super().__init__(
+            handle=handle,
+            vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
+            edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
+            hash_equals_wrapper=graph._hash_equals_wrapper,
+        )
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
+
+    def __repr__(self):
+        return "_UnmodifiableRefGraphView(%r)" % self._handle
+
+
+class _EdgeReversedIntegerGraphView(_JGraphTIntegerGraph):
+    def __init__(self, graph):
+        handle = backend.jgrapht_xx_graph_as_edgereversed(graph.handle)
+        super().__init__(handle=handle)
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
+
+    def __repr__(self):
+        return "_EdgeReversedIntegerGraphView(%r)" % self._handle
+
+
+class _EdgeReversedLongGraphView(_JGraphTLongGraph):
+    def __init__(self, graph):
+        handle = backend.jgrapht_xx_graph_as_edgereversed(graph.handle)
+        super().__init__(handle=handle)
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
+
+    def __repr__(self):
+        return "_EdgeReversedLongGraphView(%r)" % self._handle
+
+
+class _EdgeReversedRefGraphView(_JGraphTRefGraph):
+    def __init__(self, graph):
+        handle = backend.jgrapht_xx_graph_as_edgereversed(graph.handle)
+        super().__init__(
+            handle=handle,
+            vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
+            edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
+            hash_equals_wrapper=graph._hash_equals_wrapper,
+        )
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
+
+    def __repr__(self):
+        return "_EdgeReversedRefGraphView(%r)" % self._handle
 
 
 class _MaskedSubgraphView(_JGraphTIntegerGraph):
