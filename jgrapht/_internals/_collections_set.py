@@ -195,36 +195,49 @@ class _JGraphTRefMutableSet(_JGraphTRefSet, MutableSet):
             hash_equals_resolver_handle=hash_equals_resolver_handle,
             **kwargs
         )
+        # Dictionary which keeps a mapping from objects whole reference count we have 
+        # increased to their actual ids. This solves the issue that a user might override 
+        # equals and use two different objects when inserting and removing an element.
+        self._ref_ids = dict()
 
     def add(self, x):
         if backend.jgrapht_r_set_add(
             self._handle, id(x), self._hash_equals_resolver_handle
         ):
-            _ref_utils._inc_ref(x)
+            self._inc_ref_count(x)
 
     def discard(self, x):
         if backend.jgrapht_r_set_remove(
             self._handle, id(x), self._hash_equals_resolver_handle
         ):
-            _ref_utils._dec_ref(x)
+            self._dec_ref_count(x)
 
     def clear(self):
-        # cleanup reference counts
-        for x in self:
-            _ref_utils._dec_ref(x)
+        self._dec_all_ref_counts()
         backend.jgrapht_x_set_clear(self._handle)
 
     def __repr__(self):
         return "_JGraphTRefMutableSet(%r)" % self._handle
+
+    def _inc_ref_count(self, element):
+        self._ref_ids[element] = id(element)
+        _ref_utils._inc_ref(element)
+
+    def _dec_ref_count(self, element):
+        element_id = self._ref_ids.pop(element)
+        _ref_utils._dec_ref_by_id(element_id)
+
+    def _dec_all_ref_counts(self):
+        for elem_id in self._ref_ids.values():
+            _ref_utils._dec_ref_by_id(elem_id)
+        self._ref_ids.clear()
 
     @classmethod
     def _from_iterable(cls, it):
         return set(it)
 
     def __del__(self):
-        # Cleanup reference counts
-        for x in self:
-            _ref_utils._dec_ref(x)
+        self._dec_all_ref_counts()
         super().__del__()
 
 

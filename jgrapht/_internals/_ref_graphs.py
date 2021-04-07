@@ -280,11 +280,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
             return set(it)
 
     def __del__(self):
-        # Cleanup reference counts
-        for e in self.edges:
-            _ref_utils._dec_ref(e)
-        for v in self.vertices:
-            _ref_utils._dec_ref(v)
+        self._dec_all_ref_counts()
         super().__del__()
 
 
