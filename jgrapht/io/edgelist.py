@@ -1,6 +1,6 @@
 from .. import backend as _backend
 
-from .._internals._collections import _JGraphTEdgeStrTripleList
+from .._internals._collections_list import _JGraphTEdgeStrTripleList
 from .._internals._ioutils import (
     _create_wrapped_import_string_id_callback,
     _create_wrapped_import_integer_id_callback,

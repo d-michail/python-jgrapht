@@ -9,8 +9,10 @@ from ._collections_set import (
     _JGraphTIntegerSet,
     _JGraphTIntegerMutableSet,
 )
-from ._collections import (
+from ._collections_list import (
     _JGraphTIntegerList,
+)
+from ._collections_map import (
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerIntegerMap,
 )

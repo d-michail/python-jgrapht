@@ -33,10 +33,12 @@ from ._collections_set import (
     _JGraphTRefMutableSet,
     _JGraphTRefSetIterator,
 )
-from ._collections import (
+from ._collections_list import (
     _JGraphTIntegerListIterator,
     _JGraphTLongListIterator,
     _JGraphTRefListIterator,
+)
+from ._collections_map import (
     _JGraphTIntegerIntegerMap,
     _JGraphTLongIntegerMap,
     _JGraphTIntegerDoubleMap,

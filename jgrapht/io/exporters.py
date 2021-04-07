@@ -1,7 +1,7 @@
 from .. import backend as _backend
 
 from .._internals._wrappers import _JGraphTString
-from .._internals._collections import _JGraphTIntegerStringMap
+from .._internals._collections_map import _JGraphTIntegerStringMap
 from .._internals._attributes import (
     _JGraphTAttributeStore,
     _JGraphTAttributesRegistry,

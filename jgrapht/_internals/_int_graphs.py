@@ -7,7 +7,7 @@ from ._wrappers import _HandleWrapper, GraphBackend, _JGraphTIntegerIterator
 from ._collections_set import (
     _JGraphTIntegerSet,
 )
-from ._collections import (
+from ._collections_list import (
     _JGraphTEdgeTripleList,
 )
 

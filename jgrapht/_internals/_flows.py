@@ -13,7 +13,7 @@ from ._collections_set import (
     _JGraphTIntegerSet,
     _JGraphTLongSet,
 )
-from ._collections import (
+from ._collections_map import (
     _JGraphTIntegerDoubleMap,
     _JGraphTLongDoubleMap,
 )

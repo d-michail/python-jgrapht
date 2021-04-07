@@ -1,7 +1,7 @@
 import pytest
 
 import jgrapht._backend as _backend
-from jgrapht._internals._collections import (
+from jgrapht._internals._collections_list import (
     _JGraphTIntegerList,
     _JGraphTIntegerMutableList,
 )
