@@ -11,19 +11,14 @@ extern "C" {
 // library init
 
 void jgrapht_init();
-
 void jgrapht_cleanup();
-
 int jgrapht_is_initialized();
 
 // error
 
 void jgrapht_error_clear_errno();
-
 int jgrapht_error_get_errno();
-
 char *jgrapht_error_get_errno_msg();
-
 void jgrapht_error_print_stack_trace();
 
 // vm
@@ -43,8 +38,14 @@ int jgrapht_li_attributes_store_put(void *, long long int, char*, int);
 int jgrapht_ll_attributes_store_put(void *, long long int, char*, long long int);
 int jgrapht_ld_attributes_store_put(void *, long long int, char*, double);
 int jgrapht_ls_attributes_store_put(void *, long long int, char*, char*);
+int jgrapht_rz_attributes_store_put(void *, void *, void *, char*, int);
+int jgrapht_ri_attributes_store_put(void *, void *, void *, char*, int);
+int jgrapht_rl_attributes_store_put(void *, void *, void *, char*, long long int);
+int jgrapht_rd_attributes_store_put(void *, void *, void *, char*, double);
+int jgrapht_rs_attributes_store_put(void *, void *, void *, char*, char*);
 int jgrapht_ix_attributes_store_remove(void *, int, char*);
 int jgrapht_lx_attributes_store_remove(void *, long long int, char*);
+int jgrapht_rx_attributes_store_remove(void *, void *, void *, char*);
 int jgrapht_attributes_registry_create(void**);
 int jgrapht_attributes_registry_register_attribute(void *, char*, char*, char*, char*);
 int jgrapht_attributes_registry_unregister_attribute(void *, char*, char*, char*, char*);
@@ -147,8 +148,10 @@ int jgrapht_rx_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(void *
 
 int jgrapht_ix_export_file_dimacs(void *, char*, dimacs_format_t, int, void *);
 int jgrapht_lx_export_file_dimacs(void *, char*, dimacs_format_t, int, void *);
+int jgrapht_rx_export_file_dimacs(void *, char*, dimacs_format_t, int, void *);
 int jgrapht_ix_export_string_dimacs(void *, dimacs_format_t, int, void *, void**);
 int jgrapht_lx_export_string_dimacs(void *, dimacs_format_t, int, void *, void**);
+int jgrapht_rx_export_string_dimacs(void *, dimacs_format_t, int, void *, void**);
 int jgrapht_xx_export_file_gml(void *, char*, int, int, int, void *, void *, void *);
 int jgrapht_xx_export_string_gml(void *, int, int, int, void *, void *, void *, void **);
 int jgrapht_xx_export_file_json(void *, char*, void *, void *, void *);
@@ -609,6 +612,11 @@ int jgrapht_li_map_put(void *, long long int, int);
 int jgrapht_ls_map_put(void *, long long int, char*);
 int jgrapht_lx_map_put(void *, long long int, void *);
 int jgrapht_lr_map_put(void *, long long int, void *, void *);
+int jgrapht_rd_map_put(void *, void *, void *, double);
+int jgrapht_ri_map_put(void *, void *, void *, int);
+int jgrapht_rs_map_put(void *, void *, void *, char*);
+int jgrapht_rx_map_put(void *, void *, void *, void *);
+int jgrapht_rr_map_put(void *, void *, void *, void *);
 int jgrapht_id_map_get(void *, int, double*);
 int jgrapht_ii_map_get(void *, int, int*);
 int jgrapht_is_map_get(void *, int, void**);
@@ -619,8 +627,14 @@ int jgrapht_li_map_get(void *, long long int, int*);
 int jgrapht_ls_map_get(void *, long long int, void**);
 int jgrapht_lx_map_get(void *, long long int, void**);
 int jgrapht_lr_map_get(void *, long long int, void**);
+int jgrapht_rd_map_get(void *, void *, void *, double*);
+int jgrapht_ri_map_get(void *, void *, void *, int*);
+int jgrapht_rs_map_get(void *, void *, void *, void**);
+int jgrapht_rx_map_get(void *, void *, void *, void**);
+int jgrapht_rr_map_get(void *, void *, void *, void**);
 int jgrapht_ix_map_contains_key(void *, int, int*);
 int jgrapht_lx_map_contains_key(void *, long long int, int*);
+int jgrapht_rx_map_contains_key(void *, void *, void *, int*);
 int jgrapht_id_map_remove(void *, int, double*);
 int jgrapht_ii_map_remove(void *, int, int*);
 int jgrapht_is_map_remove(void *, int, void**);
@@ -631,6 +645,11 @@ int jgrapht_li_map_remove(void *, long long int, int*);
 int jgrapht_ls_map_remove(void *, long long int, void**);
 int jgrapht_lx_map_remove(void *, long long int, void**);
 int jgrapht_lr_map_remove(void *, long long int, void**);
+int jgrapht_rd_map_remove(void *, void *, void *, double*);
+int jgrapht_ri_map_remove(void *, void *, void *, int*);
+int jgrapht_rs_map_remove(void *, void *, void *, void**);
+int jgrapht_rx_map_remove(void *, void *, void *, void**);
+int jgrapht_rr_map_remove(void *, void *, void *, void**);
 int jgrapht_xx_map_clear(void *);
 
 // matching

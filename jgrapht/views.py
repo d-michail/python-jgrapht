@@ -1,7 +1,10 @@
+from . import GraphBackend
 from .types import ListenableGraph
 
 from ._internals._views import (
-    _UnweightedGraphView,
+    _UnweightedIntegerGraphView,
+    _UnweightedLongGraphView,
+    _UnweightedRefGraphView,
     _UnmodifiableGraphView,
     _UndirectedGraphView,
     _EdgeReversedGraphView,
@@ -29,10 +32,16 @@ def as_unweighted(graph):
     :param graph: the original graph
     :returns: an unweighted graph
     """
-    if _is_anyhashable_graph(graph):
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
         return _as_unweighted_anyhashable_graph(graph)
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _UnweightedRefGraphView(graph)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _UnweightedIntegerGraphView(graph)    
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _UnweightedLongGraphView(graph)            
     else:
-        return _UnweightedGraphView(graph)
+        raise ValueError("Unkwown backend type")
 
 
 def as_undirected(graph):
