@@ -23,7 +23,7 @@ def test_chordal(backend):
         weighted=False,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
 
     for i in range(0, 6):

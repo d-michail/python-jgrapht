@@ -307,7 +307,7 @@ class _JGraphTLongIntegerMap(_HandleWrapper, Mapping):
         res = backend.jgrapht_lx_map_contains_key(self._handle, key)
         if not res:
             raise KeyError()
-        res = backend.jgrapht_lx_map_get(self._handle, key)
+        res = backend.jgrapht_li_map_get(self._handle, key)
         return res
 
     def __repr__(self):
@@ -626,6 +626,12 @@ class _JGraphTRefIntegerMutableMap(_JGraphTRefIntegerMap, MutableMapping):
             _ref_utils._dec_ref(x)
         backend.jgrapht_xx_map_clear(self._handle)
 
+    def __del__(self):
+        # Cleanup reference counts
+        for x in self:
+            _ref_utils._dec_ref(x)
+        super().__del__()
+
     def __repr__(self):
         return "_JGraphTRefIntegerMutableMap(%r)" % self._handle
 
@@ -740,6 +746,12 @@ class _JGraphTRefDoubleMutableMap(_JGraphTRefDoubleMap, MutableMapping):
             _ref_utils._dec_ref(x)
         backend.jgrapht_xx_map_clear(self._handle)
 
+    def __del__(self):
+        # Cleanup reference counts
+        for x in self:
+            _ref_utils._dec_ref(x)
+        super().__del__()
+
     def __repr__(self):
         return "_JGraphTRefDoubleMutableMap(%r)" % self._handle
 
@@ -831,6 +843,12 @@ class _JGraphTRefStringMap(_HandleWrapper, MutableMapping):
         for x in self:
             _ref_utils._dec_ref(x)
         backend.jgrapht_xx_map_clear(self._handle)
+
+    def __del__(self):
+        # Cleanup reference counts
+        for x in self:
+            _ref_utils._dec_ref(x)
+        super().__del__()
 
     def __repr__(self):
         return "_JGraphTRefStringMap(%r)" % self._handle

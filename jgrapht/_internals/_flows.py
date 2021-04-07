@@ -16,12 +16,13 @@ from ._collections_set import (
 from ._collections_map import (
     _JGraphTIntegerDoubleMap,
     _JGraphTLongDoubleMap,
+    _JGraphTRefDoubleMap,
 )
 from ._anyhashableg import _is_anyhashable_graph
 from ._anyhashableg_collections import _AnyHashableGraphVertexSet
-from ._int_graphs import _JGraphTIntegerGraph, _is_int_graph
-from ._long_graphs import _JGraphTLongGraph, _is_long_graph
-from ._ref_graphs import _JGraphTRefGraph, _is_ref_graph
+from ._int_graphs import _JGraphTIntegerGraph
+from ._long_graphs import _JGraphTLongGraph
+from ._ref_graphs import _JGraphTRefGraph
 from ._ref_results import _jgrapht_ref_set_to_python_set
 
 
@@ -158,6 +159,40 @@ class _JGraphTLongFlow(_JGraphTLongDoubleMap, Flow):
 
     def __repr__(self):
         return "_JGraphTLongFlow(%r)" % self._handle
+
+
+class _JGraphTRefFlow(_JGraphTRefDoubleMap, Flow):
+    """Flow representation as a map from edges to double values."""
+
+    def __init__(
+        self, handle, hash_equals_resolver_handle, source, sink, value, **kwargs
+    ):
+        self._source = source
+        self._sink = sink
+        self._value = value
+        super().__init__(
+            handle=handle,
+            hash_equals_resolver_handle=hash_equals_resolver_handle,
+            **kwargs
+        )
+
+    @property
+    def source(self):
+        """Source vertex in flow network."""
+        return self._source
+
+    @property
+    def sink(self):
+        """Sink vertex in flow network."""
+        return self._sink
+
+    @property
+    def value(self):
+        """Flow value."""
+        return self._value
+
+    def __repr__(self):
+        return "_JGraphTRefFlow(%r)" % self._handle
 
 
 class _JGraphTIntegerGomoryHuTree(_HandleWrapper, GomoryHuTree):
@@ -324,11 +359,12 @@ class _JGraphTRefEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
             vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
             hash_equals_wrapper=hash_equals_wrapper,
-        )        
+        )
 
     def max_st_flow_value(self, s, t):
-        return _backend.jgrapht_rx_equivalentflowtree_max_st_flow(self.handle, id(s), id(t))
+        return _backend.jgrapht_rx_equivalentflowtree_max_st_flow(
+            self.handle, id(s), id(t), self._graph._hash_equals_wrapper.handle
+        )
 
     def __repr__(self):
         return "_JGraphTRefEquivalentFlowTree(%r)" % self._handle
-    

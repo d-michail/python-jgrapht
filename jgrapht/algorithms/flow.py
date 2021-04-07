@@ -1,4 +1,5 @@
 from .. import backend as _backend
+from .. import GraphBackend as _GraphBackend
 from .._internals._results import (
     _wrap_cut,
     _wrap_equivalent_flow_tree,
@@ -8,8 +9,14 @@ from .._internals._results import (
 
 
 def _maxflow_alg(name, graph, source, sink, *args):
-
-    alg_method = getattr(_backend, "jgrapht_ix_maxflow_exec_" + name)
+    cases = {
+        _GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ix_maxflow_exec_",
+        _GraphBackend.LONG_GRAPH: "jgrapht_lx_maxflow_exec_",
+        _GraphBackend.INT_GRAPH: "jgrapht_ix_maxflow_exec_",
+        _GraphBackend.REF_GRAPH: "jgrapht_rx_maxflow_exec_",
+    }
+    alg_method_name = cases[graph._backend_type] + name
+    alg_method = getattr(_backend, alg_method_name)
 
     flow_value, flow_handle, cut_source_partition_handle = alg_method(
         graph.handle, _unwrap_vertex(graph, source), _unwrap_vertex(graph, sink), *args

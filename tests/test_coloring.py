@@ -1,15 +1,28 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier
 import jgrapht.algorithms.coloring as coloring
 
 
-def test_coloring():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_coloring(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     for i in range(0, 10):
@@ -130,7 +143,6 @@ def test_coloring():
     color_count, color_map = coloring.color_refinement(g)
     assert color_count == 10
 
-
     color_count, color_map = coloring.greedy_smallestdegreelast(g)
     assert color_count == 4
     assert all(
@@ -154,12 +166,24 @@ def test_coloring():
     )
 
 
-def test_chordal():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.ANY_HASHABLE_GRAPH,
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_chordal(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     for i in range(0, 6):
@@ -177,6 +201,7 @@ def test_chordal():
 
     color_count, color_map = coloring.chordal_min_coloring(g)
 
+
     assert color_count == 3
     assert color_map == {0: 0, 1: 1, 2: 0, 3: 2, 4: 1, 5: 2}
 
@@ -187,7 +212,7 @@ def test_anyhashableg_chordal():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True
+        any_hashable=True,
     )
 
     for i in range(0, 6):
@@ -207,7 +232,6 @@ def test_anyhashableg_chordal():
 
     assert color_count == 3
     assert color_map == {"0": 0, "1": 1, "2": 0, "3": 2, "4": 1, "5": 2}
-
 
     color_count, color_map = coloring.backtracking_brown(g)
     assert color_count == 3

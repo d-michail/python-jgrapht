@@ -41,10 +41,13 @@ from ._collections_list import (
 from ._collections_map import (
     _JGraphTIntegerIntegerMap,
     _JGraphTLongIntegerMap,
+    _JGraphTRefIntegerMap,
     _JGraphTIntegerDoubleMap,
     _JGraphTIntegerDoubleMutableMap,
     _JGraphTLongDoubleMap,
     _JGraphTLongDoubleMutableMap,
+    _JGraphTRefDoubleMap,
+    _JGraphTRefDoubleMutableMap,
 )
 from ._paths import (
     _JGraphTGraphPath,
@@ -67,12 +70,15 @@ from ._flows import (
     _JGraphTRefGomoryHuTree,
     _JGraphTIntegerEquivalentFlowTree,
     _JGraphTLongEquivalentFlowTree,
+    _JGraphTRefEquivalentFlowTree,
     _JGraphTIntegerFlow,
     _JGraphTLongFlow,
+    _JGraphTRefFlow,
 )
 from ._planar import (
     _JGraphTIntegerPlanarEmbedding,
     _JGraphTLongPlanarEmbedding,
+    _JGraphTRefPlanarEmbedding,
 )
 from ._anyhashableg_wrappers import (
     _AnyHashableGraphVertexIterator,
@@ -137,6 +143,7 @@ def _unwrap_astar_heuristic_cb(graph, heuristic_cb):
             return heuristic_cb(
                 _vertex_g_to_anyhashableg(graph, s), _vertex_g_to_anyhashableg(graph, t)
             )
+
         actual_heuristic_callback_type = ctypes.CFUNCTYPE(
             ctypes.c_double, ctypes.c_longlong, ctypes.c_longlong
         )
@@ -192,21 +199,16 @@ def _wrap_vertex_set_iterator(graph, handle):
     """Given an vertex set iterator in the JVM, build one in Python. The wrapper
     graph takes ownership and will delete the JVM resource when Python deletes
     the instance."""
-    hash_equals_resolver_handle = _ref_hashequals._get_hash_equals_wrapper().handle
-    cases = {
-        GraphBackend.ANY_HASHABLE_GRAPH: (
-            _AnyHashableGraphVertexSetIterator,
-            [handle, graph],
-        ),
-        GraphBackend.LONG_GRAPH: (_JGraphTLongSetIterator, [handle]),
-        GraphBackend.INT_GRAPH: (_JGraphTIntegerSetIterator, [handle]),
-        GraphBackend.REF_GRAPH: (
-            _JGraphTRefSetIterator,
-            [handle, hash_equals_resolver_handle],
-        ),
-    }
-    alg = cases[graph._backend_type]
-    return alg[0](*alg[1])
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
+        return _AnyHashableGraphVertexSetIterator(handle, graph)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _JGraphTLongSetIterator(handle)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _JGraphTIntegerSetIterator(handle)        
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _JGraphTRefSetIterator(handle, graph._hash_equals_wrapper.handle)
+    else:
+        raise ValueError("Backend not supported")
 
 
 def _wrap_vertex_iterator(graph, handle):
@@ -230,47 +232,48 @@ def _wrap_edge_iterator(graph, handle):
     """Given an edge iterator in the JVM, build one in Python. The wrapper
     graph takes ownership and will delete the JVM resource when Python deletes
     the instance."""
-    cases = {
-        GraphBackend.ANY_HASHABLE_GRAPH: (
-            _AnyHashableGraphEdgeIterator,
-            [handle, graph],
-        ),
-        GraphBackend.LONG_GRAPH: (_JGraphTLongIterator, [handle]),
-        GraphBackend.INT_GRAPH: (_JGraphTIntegerIterator, [handle]),
-        GraphBackend.REF_GRAPH: (_JGraphTRefIterator, [handle]),
-    }
-    alg = cases[graph._backend_type]
-    return alg[0](*alg[1])
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
+        return _AnyHashableGraphEdgeIterator(handle, graph)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _JGraphTLongIterator(handle)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _JGraphTIntegerIterator(handle)        
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _JGraphTRefIterator(handle, graph._hash_equals_wrapper.handle)
+    else:
+        raise ValueError("Backend not supported")
 
 
 def _wrap_vertex_list_iterator(graph, handle):
     """Given an vertex list iterator in the JVM, build one in Python. The wrapper
     graph takes ownership and will delete the JVM resource when Python deletes
     the instance."""
-    cases = {
-        GraphBackend.ANY_HASHABLE_GRAPH: (
-            _AnyHashableGraphVertexListIterator,
-            [handle, graph],
-        ),
-        GraphBackend.LONG_GRAPH: (_JGraphTLongListIterator, [handle]),
-        GraphBackend.INT_GRAPH: (_JGraphTIntegerListIterator, [handle]),
-        GraphBackend.REF_GRAPH: (_JGraphTRefListIterator, [handle]),
-    }
-    alg = cases[graph._backend_type]
-    return alg[0](*alg[1])
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
+        return _AnyHashableGraphVertexListIterator(handle, graph)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _JGraphTLongListIterator(handle)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _JGraphTIntegerListIterator(handle)        
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _JGraphTRefListIterator(handle, graph._hash_equals_wrapper.handle)
+    else:
+        raise ValueError("Backend not supported")
 
 
 def _wrap_vertex_coloring(graph, handle):
     """Given a vertex coloring in the JVM, build one in Python. The wrapper
     graph takes ownership and will delete the JVM resource when Python deletes
     the instance."""
-    cases = {
-        _AnyHashableGraph: (_AnyHashableGraphVertexIntegerMap, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTLongIntegerMap, [handle]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerIntegerMap, [handle]),
-    }
-    alg = cases[type(graph)]
-    return alg[0](*alg[1])
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
+        return _AnyHashableGraphVertexIntegerMap(handle, graph)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _JGraphTLongIntegerMap(handle)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _JGraphTIntegerIntegerMap(handle)        
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _JGraphTRefIntegerMap(handle, graph._hash_equals_wrapper.handle)
+    else:
+        raise ValueError("Backend not supported")
 
 
 def _wrap_graphpath(graph, handle):
@@ -459,11 +462,15 @@ def _wrap_equivalent_flow_tree(graph, handle):
     ownership and will delete the JVM resource when Python deletes the instance.
     """
     cases = {
-        _AnyHashableGraph: (_AnyHashableGraphEquivalentFlowTree, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTLongEquivalentFlowTree, [handle, graph]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerEquivalentFlowTree, [handle, graph]),
+        GraphBackend.ANY_HASHABLE_GRAPH: (
+            _AnyHashableGraphEquivalentFlowTree,
+            [handle, graph],
+        ),
+        GraphBackend.LONG_GRAPH: (_JGraphTLongEquivalentFlowTree, [handle, graph]),
+        GraphBackend.INT_GRAPH: (_JGraphTIntegerEquivalentFlowTree, [handle, graph]),
+        GraphBackend.REF_GRAPH: (_JGraphTRefEquivalentFlowTree, [handle, graph]),
     }
-    alg = cases[type(graph)]
+    alg = cases[graph._backend_type]
     return alg[0](*alg[1])
 
 
@@ -471,55 +478,64 @@ def _wrap_flow(graph, handle, source, sink, value):
     """Given a flow in the JVM, build one in Python. The wrapper takes ownership
     and will delete the JVM resource when Python deletes the instance.
     """
-    cases = {
-        _AnyHashableGraph: (
-            _AnyHashableGraphFlow,
-            [graph, handle, source, sink, value],
-        ),
-        _JGraphTLongGraph: (_JGraphTLongFlow, [handle, source, sink, value]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerFlow, [handle, source, sink, value]),
-    }
-    alg = cases[type(graph)]
-    return alg[0](*alg[1])
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
+        return _AnyHashableGraphFlow(graph, handle, source, sink, value)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _JGraphTLongFlow(handle, source, sink, value)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _JGraphTIntegerFlow(handle, source, sink, value)        
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _JGraphTRefFlow(handle, graph._hash_equals_wrapper.handle, source, sink, value)
+    else:
+        raise ValueError("Backend not supported")
 
 
 def _wrap_vertex_integer_map(graph, handle):
     """Given a vertex integer map in the JVM, build one in Python. The wrapper takes ownership
     and will delete the JVM resource when Python deletes the instance.
     """
-    cases = {
-        _AnyHashableGraph: (_AnyHashableGraphVertexIntegerMap, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTLongIntegerMap, [handle]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerIntegerMap, [handle]),
-    }
-    alg = cases[type(graph)]
-    return alg[0](*alg[1])
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
+        return _AnyHashableGraphVertexIntegerMap(handle, graph)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _JGraphTLongIntegerMap(handle)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _JGraphTIntegerIntegerMap(handle)        
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _JGraphTRefIntegerMap(handle, graph._hash_equals_wrapper.handle)
+    else:
+        raise ValueError("Backend not supported")
 
 
 def _wrap_vertex_double_map(graph, handle):
     """Given a vertex double map in the JVM, build one in Python. The wrapper takes ownership
     and will delete the JVM resource when Python deletes the instance.
     """
-    cases = {
-        _AnyHashableGraph: (_AnyHashableGraphVertexDoubleMap, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTLongDoubleMap, [handle]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerDoubleMap, [handle]),
-    }
-    alg = cases[type(graph)]
-    return alg[0](*alg[1])
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
+        return _AnyHashableGraphVertexDoubleMap(handle, graph)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _JGraphTLongDoubleMap(handle)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _JGraphTIntegerDoubleMap(handle)        
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _JGraphTRefDoubleMap(handle, graph._hash_equals_wrapper.handle)
+    else:
+        raise ValueError("Backend not supported")
 
 
 def _wrap_planar_embedding(graph, handle):
     """Given a planar embedding in the JVM, build one in Python. The wrapper takes
     ownership and will delete the JVM resource when Python deletes the instance.
     """
-    cases = {
-        _AnyHashableGraph: (_AnyHashableGraphPlanarEmbedding, [handle, graph]),
-        _JGraphTLongGraph: (_JGraphTLongPlanarEmbedding, [handle]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerPlanarEmbedding, [handle]),
-    }
-    alg = cases[type(graph)]
-    return alg[0](*alg[1])
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
+        return _AnyHashableGraphPlanarEmbedding(handle, graph)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _JGraphTLongPlanarEmbedding(handle)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _JGraphTIntegerPlanarEmbedding(handle)        
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _JGraphTRefPlanarEmbedding(handle, graph._hash_equals_wrapper.handle)
+    else:
+        raise ValueError("Backend not supported")
 
 
 def _wrap_subgraph(graph, handle):
@@ -575,16 +591,24 @@ def _build_vertex_set(graph, vertex_set):
 
 def _build_vertex_weights(graph, vertex_weights):
     """Given a vertex weights dictionary in Python, build one inside the JVM."""
-    if _is_anyhashable_graph(graph):
+    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
         jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[graph._vertex_hash_to_id[key]] = val
-    elif _is_long_graph(graph):
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
         jgrapht_vertex_weights = _JGraphTLongDoubleMutableMap()
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
-    else:
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
         jgrapht_vertex_weights = _JGraphTIntegerDoubleMutableMap()
+        for key, val in vertex_weights.items():
+            jgrapht_vertex_weights[key] = val
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        handle = backend.jgrapht_xx_map_linked_create()
+        hash_equals_resolver_handle = _ref_hashequals._get_hash_equals_wrapper().handle
+        jgrapht_vertex_weights = _JGraphTRefDoubleMutableMap(
+            handle=handle, hash_equals_resolver_handle=hash_equals_resolver_handle
+        )
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
     return jgrapht_vertex_weights
