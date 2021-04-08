@@ -8,7 +8,6 @@ import jgrapht.generators as generators
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -31,7 +30,6 @@ def test_barabasi_albert(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -45,7 +43,7 @@ def test_barabasi_albert_forest(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
     generators.barabasi_albert_forest(g, 10, 100)
     assert len(g.vertices) == 100
@@ -54,7 +52,6 @@ def test_barabasi_albert_forest(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -68,7 +65,7 @@ def test_complete(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
     generators.complete_graph(g, 10)
     assert len(g.vertices) == 10
@@ -77,7 +74,6 @@ def test_complete(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -91,7 +87,7 @@ def test_complete_bipartite(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(), 
+        vertex_supplier=IntegerSupplier(),
     )
     generators.complete_bipartite_graph(g, 10, 10)
     assert len(g.vertices) == 20
@@ -100,7 +96,6 @@ def test_complete_bipartite(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -123,7 +118,6 @@ def test_empty(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -137,7 +131,7 @@ def test_gnm_random(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
     generators.gnm_random_graph(g, 10, 30)
     assert len(g.vertices) == 10
@@ -146,7 +140,6 @@ def test_gnm_random(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -160,7 +153,7 @@ def test_gnp_random(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.gnp_random_graph(g, 10, 0.2)
     assert len(g.vertices) == 10
@@ -169,7 +162,6 @@ def test_gnp_random(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -192,7 +184,6 @@ def test_ring(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -215,7 +206,6 @@ def test_scalefree(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -229,7 +219,7 @@ def test_watts_strogatz(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
     generators.watts_strogatz_graph(g, 10, 2, 0.1)
     assert len(g.vertices) == 10
@@ -238,7 +228,6 @@ def test_watts_strogatz(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -252,7 +241,7 @@ def test_kleinberg_smallworld(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
     generators.kleinberg_smallworld_graph(g, 10, 2, 2, 1)
     assert len(g.vertices) == 100
@@ -261,7 +250,6 @@ def test_kleinberg_smallworld(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -275,7 +263,7 @@ def test_complement(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
     g_source.add_vertex(0)
     g_source.add_vertex(1)
@@ -290,7 +278,7 @@ def test_complement(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
 
     generators.complement_graph(g, g_source)
@@ -303,7 +291,6 @@ def test_complement(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -317,7 +304,7 @@ def test_generalized_petersen(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.generalized_petersen(g, 10, 4)
     assert len(g.vertices) == 20
@@ -326,7 +313,6 @@ def test_generalized_petersen(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -340,7 +326,7 @@ def test_grid(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.grid(g, 10, 4)
     assert len(g.vertices) == 40
@@ -349,7 +335,6 @@ def test_grid(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -363,7 +348,7 @@ def test_hypercube(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.hypercube(g, 4)
     assert len(g.vertices) == 16
@@ -372,7 +357,6 @@ def test_hypercube(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -386,7 +370,7 @@ def test_linear(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.linear(g, 10)
     assert len(g.vertices) == 10
@@ -395,7 +379,6 @@ def test_linear(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -409,7 +392,7 @@ def test_random_regular(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.random_regular(g, 10, 3, 17)
     assert len(g.vertices) == 10
@@ -418,7 +401,6 @@ def test_random_regular(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -432,7 +414,7 @@ def test_random_regular_no_seed(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.random_regular(g, 10, 3)
     assert len(g.vertices) == 10
@@ -441,7 +423,6 @@ def test_random_regular_no_seed(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -455,7 +436,7 @@ def test_star(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.star(g, 10)
     assert len(g.vertices) == 10
@@ -464,7 +445,6 @@ def test_star(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -478,7 +458,7 @@ def test_wheel(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.wheel(g, 10, False)
     assert len(g.vertices) == 10
@@ -487,7 +467,6 @@ def test_wheel(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -501,7 +480,7 @@ def test_windmill(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.windmill(g, 3, 3, dutch=False)
     assert len(g.vertices) == 7
@@ -510,7 +489,6 @@ def test_windmill(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -524,7 +502,7 @@ def test_linearized_chord_diagram(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.linearized_chord_diagram(g, 100, 3, 17)
     assert len(g.vertices) == 100
@@ -537,7 +515,7 @@ def test_linearized_chord_diagram(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     with pytest.raises(ValueError):
         generators.linearized_chord_diagram(g, 100, 3, 17)
@@ -546,7 +524,6 @@ def test_linearized_chord_diagram(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -560,7 +537,7 @@ def test_linearized_chord_diagram_no_seed(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.linearized_chord_diagram(g, 100, 3)
     assert len(g.vertices) == 100

@@ -7,7 +7,6 @@ from .._internals._results import (
 
 def _linkprediction_alg(name, graph, u, v):
     cases = {
-        GraphBackend.ANY_HASHABLE_GRAPH: "ix",
         GraphBackend.LONG_GRAPH: "lx",
         GraphBackend.INT_GRAPH: "ix",
         GraphBackend.REF_GRAPH: "rx",

@@ -1,4 +1,5 @@
 from .. import backend
+from .. import GraphBackend
 from ..types import GraphType, GraphEvent, ListenableGraph
 from ._int_graphs import _JGraphTIntegerGraph
 from ._long_graphs import _JGraphTLongGraph
@@ -309,15 +310,24 @@ class _ListenableView(_JGraphTIntegerGraph, ListenableGraph):
         self._next_id = 0
 
     def add_listener(self, listener_cb):
+
         def actual_cb(element, event_type):
             # convert integer event type to enum
             listener_cb(element, GraphEvent(event_type))
 
-        cb_fptr, cb = _create_wrapped_callback(
-            actual_cb, ctypes.CFUNCTYPE(None, ctypes.c_int, ctypes.c_int)
-        )
+        if self._graph._backend_type == GraphBackend.INT_GRAPH:
+            cb_fptr, cb = _create_wrapped_callback(
+                actual_cb, ctypes.CFUNCTYPE(None, ctypes.c_int, ctypes.c_int)
+            )
+            listener_handle = backend.jgrapht_ii_listenable_create_graph_listener(cb_fptr)
+        elif self._graph._backend_type == GraphBackend.LONG_GRAPH:
+            cb_fptr, cb = _create_wrapped_callback(
+                actual_cb, ctypes.CFUNCTYPE(None, ctypes.c_longlong, ctypes.c_longlong)
+            )
+            listener_handle = backend.jgrapht_ll_listenable_create_graph_listener(cb_fptr)
+        else:
+            raise ValueError("TODO: write rr graph")
 
-        listener_handle = backend.jgrapht_ii_listenable_create_graph_listener(cb_fptr)
         backend.jgrapht_xx_listenable_add_graph_listener(self.handle, listener_handle)
 
         # create listener identifier

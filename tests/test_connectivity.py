@@ -8,7 +8,6 @@ import jgrapht.algorithms.connectivity as connectivity
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -22,7 +21,7 @@ def test_weakly(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertices_from([0, 1, 2, 3])
@@ -56,7 +55,6 @@ def test_weakly(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -70,7 +68,7 @@ def test_weakly_directed(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertices_from([0, 1, 2, 3])
@@ -104,7 +102,6 @@ def test_weakly_directed(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -118,7 +115,7 @@ def test_strongly_kosaraju(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -156,7 +153,6 @@ def test_strongly_kosaraju(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -170,7 +166,7 @@ def test_strongly_gabow(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertices_from([0, 1, 2, 3, 4, 5])
@@ -208,7 +204,6 @@ def test_strongly_gabow(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -252,7 +247,6 @@ def test_is_connected(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -295,4 +289,3 @@ def test_anyhashableg_strongly_gabow(backend):
         next(components)
 
     assert component1 == set(["0", "1", "2", "3", "4", "5"])
-

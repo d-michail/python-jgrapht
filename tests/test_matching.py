@@ -11,7 +11,6 @@ import jgrapht.generators as generators
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -50,7 +49,6 @@ def test_bipartite_max_cardinality(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -76,7 +74,6 @@ def test_bipartite_perfect_min_weight(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -105,10 +102,10 @@ def test_bipartite_perfect_min_weight_with_custom_partitions(backend):
 
     assert weight == 4.0
 
+
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -120,12 +117,12 @@ def test_anyhashableg_bipartite_perfect_min_weight_with_custom_partitions(backen
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
-    bg.add_vertices_from(['0', '1', '2', '3', '4', '5', '6', '7'])
+    bg.add_vertices_from(["0", "1", "2", "3", "4", "5", "6", "7"])
 
-    part1 = set(['0', '1', '2', '3'])
-    part2 = set(['4', '5', '6', '7'])
+    part1 = set(["0", "1", "2", "3"])
+    part2 = set(["4", "5", "6", "7"])
 
     for v in part1:
         for u in part2:
@@ -139,7 +136,6 @@ def test_anyhashableg_bipartite_perfect_min_weight_with_custom_partitions(backen
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -153,7 +149,7 @@ def test_greedy_max_cardinality(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -165,7 +161,6 @@ def test_greedy_max_cardinality(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -179,7 +174,7 @@ def test_greedy_max_cardinality_with_sort(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -191,7 +186,6 @@ def test_greedy_max_cardinality_with_sort(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -205,7 +199,7 @@ def test_edmonds_max_cardinality(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),         
+        vertex_supplier=IntegerSupplier(),
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -221,7 +215,6 @@ def test_edmonds_max_cardinality(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -235,7 +228,7 @@ def test_greedy_max_weight(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),         
+        vertex_supplier=IntegerSupplier(),
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -251,7 +244,6 @@ def test_greedy_max_weight(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -265,7 +257,7 @@ def test_pathgrowing_max_weight(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),         
+        vertex_supplier=IntegerSupplier(),
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -277,7 +269,6 @@ def test_pathgrowing_max_weight(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -291,7 +282,7 @@ def test_blossom5_max_weight(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),         
+        vertex_supplier=IntegerSupplier(),
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -307,7 +298,6 @@ def test_blossom5_max_weight(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -321,7 +311,7 @@ def test_blossom5_min_weight(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),         
+        vertex_supplier=IntegerSupplier(),
     )
     generators.barabasi_albert(g, 5, 5, 100, seed=17)
 
@@ -337,7 +327,6 @@ def test_blossom5_min_weight(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -349,7 +338,7 @@ def test_anyhashableg_bipartite_perfect_min_weight(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),         
+        vertex_supplier=IntegerSupplier(),
     )
     generators.complete_bipartite_graph(bg, 10, 10)
     _, part1, part2 = partition.bipartite_partitions(bg)

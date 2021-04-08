@@ -108,9 +108,6 @@ def create_graph(
             backend = GraphBackend.REF_GRAPH
         else:
             backend = GraphBackend.INT_GRAPH
-    if backend == GraphBackend.ANY_HASHABLE_GRAPH:
-        # TODO: fixme
-        backend = GraphBackend.REF_GRAPH
 
     if dag:
         if not directed:

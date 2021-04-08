@@ -191,7 +191,6 @@ def get_anyhashableg_graph_with_negative_edges(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -238,7 +237,6 @@ def test_dijkstra(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -275,7 +273,6 @@ def test_anyhashableg_dijkstra(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -296,7 +293,6 @@ def test_bfs(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -315,7 +311,6 @@ def test_anyhashableg_bfs(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -344,7 +339,6 @@ def test_bellman(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -371,7 +365,6 @@ def test_anyhashableg_bellman(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -461,7 +454,6 @@ def test_johnsons_refgraph_custom(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -491,7 +483,6 @@ def test_anyhashableg_johnsons(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -523,7 +514,6 @@ def test_floyd_warshall(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -555,7 +545,6 @@ def test_anyhashableg_floyd_warshall(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -626,7 +615,6 @@ def test_a_star(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -693,7 +681,6 @@ def test_anyhashableg_a_star(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -742,7 +729,6 @@ def test_a_star_with_alt_heuristic(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -787,7 +773,6 @@ def test_anyhashableg_a_star_with_alt_heuristic(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -812,7 +797,6 @@ def test_yen_k(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -835,7 +819,6 @@ def test_anyhashableg_yen_k(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -859,7 +842,6 @@ def test_eppstein_k(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -881,7 +863,6 @@ def test_anyhashableg_eppstein_k(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
     ],
@@ -889,7 +870,6 @@ def test_anyhashableg_eppstein_k(backend):
 def test_delta_stepping(backend):
     g = get_graph(backend)
 
-
     single_path = sp.delta_stepping(g, 0, 5)
     assert single_path.weight == 62.0
     assert single_path.start_vertex == 0
@@ -932,55 +912,6 @@ def test_delta_stepping(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
-    ],
-)
-def test_anyhashableg_delta_stepping(backend):
-    g = get_anyhashableg_graph(backend)
-
-    single_path = sp.delta_stepping(g, 0, 5)
-    assert single_path.weight == 62.0
-    assert single_path.start_vertex == 0
-    assert single_path.end_vertex == 5
-    assert list(single_path.edges) == ["2", 3, 5]
-
-    single_path = sp.delta_stepping(g, 0, 5, delta=20.0)
-    assert single_path.weight == 62.0
-    assert single_path.start_vertex == 0
-    assert single_path.end_vertex == 5
-    assert list(single_path.edges) == ["2", 3, 5]
-
-    from_paths = sp.delta_stepping(g, 0)
-    assert from_paths.source_vertex == 0
-    single_path = from_paths.get_path(5)
-    assert single_path.weight == 62.0
-    assert single_path.start_vertex == 0
-    assert single_path.end_vertex == 5
-    assert list(single_path.edges) == ["2", 3, 5]
-
-    single_path = from_paths.get_path(3)
-    assert single_path.weight == 103.0
-    assert single_path.start_vertex == 0
-    assert single_path.end_vertex == 3
-    assert list(single_path.edges) == [0, 1]
-
-    single_path = sp.delta_stepping(g, 0, 5, delta=10.0, parallelism=2)
-    assert single_path.weight == 62.0
-    assert single_path.start_vertex == 0
-    assert single_path.end_vertex == 5
-    assert list(single_path.edges) == ["2", 3, 5]
-
-    single_path = sp.delta_stepping(g, 0, 5, delta=10.0, parallelism=16)
-    assert single_path.weight == 62.0
-    assert single_path.start_vertex == 0
-    assert single_path.end_vertex == 5
-    assert list(single_path.edges) == ["2", 3, 5]
-
-
-@pytest.mark.parametrize(
-    "backend",
-    [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -1050,7 +981,6 @@ def test_martin(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )

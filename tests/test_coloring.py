@@ -8,7 +8,6 @@ import jgrapht.algorithms.coloring as coloring
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -169,7 +168,6 @@ def test_coloring(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -201,7 +199,6 @@ def test_chordal(backend):
 
     color_count, color_map = coloring.chordal_min_coloring(g)
 
-
     assert color_count == 3
     assert color_map == {0: 0, 1: 1, 2: 0, 3: 2, 4: 1, 5: 2}
 
@@ -212,21 +209,23 @@ def test_anyhashableg_chordal():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
     )
 
-    for i in range(0, 6):
-        g.add_vertex(str(i))
+    v = [str(i) for i in range(0, 6)]
 
-    g.add_edge(str(0), str(1))
-    g.add_edge(str(1), str(2))
-    g.add_edge(str(2), str(3))
-    g.add_edge(str(4), str(5))
-    g.add_edge(str(5), str(0))
-    g.add_edge(str(0), str(3))
-    g.add_edge(str(0), str(4))
-    g.add_edge(str(1), str(5))
-    g.add_edge(str(1), str(3))
+    for i in range(0, 6):
+        g.add_vertex(v[i])
+
+    g.add_edge(v[0], v[1])
+    g.add_edge(v[1], v[2])
+    g.add_edge(v[2], v[3])
+    g.add_edge(v[4], v[5])
+    g.add_edge(v[5], v[0])
+    g.add_edge(v[0], v[3])
+    g.add_edge(v[0], v[4])
+    g.add_edge(v[1], v[5])
+    g.add_edge(v[1], v[3])
 
     color_count, color_map = coloring.chordal_min_coloring(g)
 

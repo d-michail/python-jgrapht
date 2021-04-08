@@ -10,7 +10,6 @@ from .._internals._results import (
 
 def _maxflow_alg(name, graph, source, sink, *args):
     cases = {
-        _GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ix_maxflow_exec_",
         _GraphBackend.LONG_GRAPH: "jgrapht_lx_maxflow_exec_",
         _GraphBackend.INT_GRAPH: "jgrapht_ix_maxflow_exec_",
         _GraphBackend.REF_GRAPH: "jgrapht_rx_maxflow_exec_",

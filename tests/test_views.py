@@ -19,7 +19,6 @@ from jgrapht.views import (
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -68,7 +67,6 @@ def test_as_unweighted(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -82,7 +80,7 @@ def test_as_undirected(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -113,7 +111,6 @@ def test_as_undirected(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -158,7 +155,6 @@ def test_as_unmodifiable(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -172,7 +168,7 @@ def test_as_edge_reversed(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -259,38 +255,38 @@ def test_anyhashableg_as_masked_subgraph():
         any_hashable=True,
     )
 
-    g.add_vertex('v0')
-    g.add_vertex('v1')
-    g.add_vertex('v2')
-    g.add_vertex('v3')
-    g.add_vertex('v4')
+    g.add_vertex("v0")
+    g.add_vertex("v1")
+    g.add_vertex("v2")
+    g.add_vertex("v3")
+    g.add_vertex("v4")
 
-    g.add_edge('v0', 'v1', edge='e1')
-    g.add_edge('v0', 'v2', edge='e2')
-    g.add_edge('v0', 'v3', edge='e3')
-    g.add_edge('v2', 'v3', edge='e4')
-    g.add_edge('v1', 'v3', edge='e5')
-    g.add_edge('v2', 'v4', edge='e6')
+    g.add_edge("v0", "v1", edge="e1")
+    g.add_edge("v0", "v2", edge="e2")
+    g.add_edge("v0", "v3", edge="e3")
+    g.add_edge("v2", "v3", edge="e4")
+    g.add_edge("v1", "v3", edge="e5")
+    g.add_edge("v2", "v4", edge="e6")
 
-    g.vertex_attrs['v0']['label'] = 'label0'
-    g.vertex_attrs['v1']['label'] = 'label1'
-    g.vertex_attrs['v2']['label'] = 'label2'
-    g.vertex_attrs['v3']['label'] = 'label3'
-    g.vertex_attrs['v4']['label'] = 'label4'
+    g.vertex_attrs["v0"]["label"] = "label0"
+    g.vertex_attrs["v1"]["label"] = "label1"
+    g.vertex_attrs["v2"]["label"] = "label2"
+    g.vertex_attrs["v3"]["label"] = "label3"
+    g.vertex_attrs["v4"]["label"] = "label4"
 
-    assert g.vertex_attrs['v0']['label'] == 'label0'
-    assert g.vertex_attrs['v1']['label'] == 'label1'
-    assert g.vertex_attrs['v2']['label'] == 'label2'
-    assert g.vertex_attrs['v3']['label'] == 'label3'
-    assert g.vertex_attrs['v4']['label'] == 'label4'
+    assert g.vertex_attrs["v0"]["label"] == "label0"
+    assert g.vertex_attrs["v1"]["label"] == "label1"
+    assert g.vertex_attrs["v2"]["label"] == "label2"
+    assert g.vertex_attrs["v3"]["label"] == "label3"
+    assert g.vertex_attrs["v4"]["label"] == "label4"
 
     def vertex_mask(v):
-        if v == 'v3':
+        if v == "v3":
             return True
         return False
 
     def edge_mask(e):
-        if e == 'e5':
+        if e == "e5":
             return True
         return False
 
@@ -298,58 +294,58 @@ def test_anyhashableg_as_masked_subgraph():
         g, vertex_mask_cb=vertex_mask, edge_mask_cb=edge_mask
     )
 
-
-    assert masked_graph.vertices == {'v0', 'v1', 'v2', 'v4'}
-    assert masked_graph.edges == {'e1', 'e2', 'e6'}
+    assert masked_graph.vertices == {"v0", "v1", "v2", "v4"}
+    assert masked_graph.edges == {"e1", "e2", "e6"}
     assert not masked_graph.type.modifiable
 
     # test that while the sets are shared, our view is masked
-    assert masked_graph._vertex_hash_to_id.__contains__('v3') == True
-    assert masked_graph.vertices.__contains__('v3') == False
-    assert masked_graph._edge_hash_to_id.__contains__('e5') == True
-    assert masked_graph.edges.__contains__('e5') == False
+    assert masked_graph._vertex_hash_to_id.__contains__("v3") == True
+    assert masked_graph.vertices.__contains__("v3") == False
+    assert masked_graph._edge_hash_to_id.__contains__("e5") == True
+    assert masked_graph.edges.__contains__("e5") == False
 
     # test that we see changes in the original graph
-    g.add_vertex('v5')
+    g.add_vertex("v5")
 
-    assert masked_graph.vertices == {'v0', 'v1', 'v2', 'v4', 'v5'}
+    assert masked_graph.vertices == {"v0", "v1", "v2", "v4", "v5"}
 
-    g.add_edge('v5', 'v4', edge='e7')
-    g.edge_attrs['e7']['capacity'] = 9.0
+    g.add_edge("v5", "v4", edge="e7")
+    g.edge_attrs["e7"]["capacity"] = 9.0
 
-    assert masked_graph.edges == {'e1', 'e2', 'e6', 'e7'}
+    assert masked_graph.edges == {"e1", "e2", "e6", "e7"}
 
     # test that we are unmodifiable
     with pytest.raises(ValueError):
-        masked_graph.add_vertex('v6')
+        masked_graph.add_vertex("v6")
 
     # test properties
-    assert masked_graph.vertex_attrs['v0']['label'] == 'label0'
-    assert masked_graph.vertex_attrs['v1']['label'] == 'label1'
-    assert masked_graph.vertex_attrs['v2']['label'] == 'label2'
-    assert masked_graph.vertex_attrs['v4']['label'] == 'label4'
+    assert masked_graph.vertex_attrs["v0"]["label"] == "label0"
+    assert masked_graph.vertex_attrs["v1"]["label"] == "label1"
+    assert masked_graph.vertex_attrs["v2"]["label"] == "label2"
+    assert masked_graph.vertex_attrs["v4"]["label"] == "label4"
 
     with pytest.raises(ValueError):
-        assert masked_graph.vertex_attrs['v3']['label'] == 'label3'
+        assert masked_graph.vertex_attrs["v3"]["label"] == "label3"
 
-    assert masked_graph.edge_attrs['e7']['capacity'] == 9.0
+    assert masked_graph.edge_attrs["e7"]["capacity"] == 9.0
 
     with pytest.raises(ValueError):
         masked_graph.add_vertex()
 
     with pytest.raises(ValueError):
-        masked_graph.remove_vertex('v2')
+        masked_graph.remove_vertex("v2")
 
     with pytest.raises(ValueError):
-        masked_graph.add_edge('v0', 'v1')
+        masked_graph.add_edge("v0", "v1")
 
     with pytest.raises(ValueError):
-        masked_graph.remove_edge('e1')    
+        masked_graph.remove_edge("e1")
 
-    assert masked_graph.contains_vertex('v2')
-    assert masked_graph.contains_edge('e1')
+    assert masked_graph.contains_vertex("v2")
+    assert masked_graph.contains_edge("e1")
 
     repr(masked_graph)
+
 
 def test_as_weighted():
     g = create_graph(
@@ -720,7 +716,6 @@ def test_anyhashableg_bad_union():
         g = as_graph_union(g1, g2)
 
 
-
 def test_anyhashableg_as_unweighted():
     g = create_graph(
         directed=True,
@@ -763,8 +758,8 @@ def test_anyhashableg_as_undirected():
     g.add_edge("0", "1", edge="e1")
     g.add_edge("1", "2", edge="e2")
 
-    g.edge_attrs['e1']['capacity'] = 5.0
-    g.edge_attrs['e2']['capacity'] = 15.0
+    g.edge_attrs["e1"]["capacity"] = 5.0
+    g.edge_attrs["e2"]["capacity"] = 15.0
 
     assert not g.contains_edge_between("1", "0")
 
@@ -777,12 +772,12 @@ def test_anyhashableg_as_undirected():
 
     assert ug.contains_edge_between("1", "0")
 
-    assert ug.edge_attrs['e1']['capacity'] == 5.0
-    assert ug.edge_attrs['e2']['capacity'] == 15.0
+    assert ug.edge_attrs["e1"]["capacity"] == 5.0
+    assert ug.edge_attrs["e2"]["capacity"] == 15.0
 
     # test that properties are shared
-    ug.edge_attrs['e1']['capacity'] = 105.0
-    assert g.edge_attrs['e1']['capacity'] == 105.0
+    ug.edge_attrs["e1"]["capacity"] = 105.0
+    assert g.edge_attrs["e1"]["capacity"] == 105.0
 
 
 def test_anyhashableg_as_unmodifiable():
@@ -808,7 +803,7 @@ def test_anyhashableg_as_unmodifiable():
     with pytest.raises(ValueError):
         ug.add_vertex("2")
 
-    
+
 def test_anyhashableg_two_wrappers():
     g = create_graph(
         directed=True,
@@ -852,18 +847,18 @@ def test_as_unweighted_on_property_graphs():
     g.add_vertex()
     g.add_vertex()
     g.add_vertex()
-    g.add_edge('v0', 'v1')
-    g.add_edge('v1', 'v2')
-    g.add_edge('v2', 'v3')
+    g.add_edge("v0", "v1")
+    g.add_edge("v1", "v2")
+    g.add_edge("v2", "v3")
 
-    g.set_edge_weight('e0', 100.0)
-    g.set_edge_weight('e1', 50.0)
-    g.set_edge_weight('e2', 25.0)
+    g.set_edge_weight("e0", 100.0)
+    g.set_edge_weight("e1", 50.0)
+    g.set_edge_weight("e2", 25.0)
 
-    g.vertex_attrs['v0']['before'] = 'v0'
-    g.vertex_attrs['v1']['before'] = 'v1'
-    g.edge_attrs['e0']['before'] = 'e0'
-    g.edge_attrs['e1']['before'] = 'e1'
+    g.vertex_attrs["v0"]["before"] = "v0"
+    g.vertex_attrs["v1"]["before"] = "v1"
+    g.edge_attrs["e0"]["before"] = "e0"
+    g.edge_attrs["e1"]["before"] = "e1"
 
     g1 = as_unweighted(g)
 
@@ -872,40 +867,40 @@ def test_as_unweighted_on_property_graphs():
     assert g.type.allowing_multiple_edges == g1.type.allowing_multiple_edges
     assert g.type.weighted != g1.type.weighted
 
-    assert g1.get_edge_weight('e0') == 1.0
-    assert g1.get_edge_weight('e1') == 1.0
-    assert g1.get_edge_weight('e2') == 1.0
+    assert g1.get_edge_weight("e0") == 1.0
+    assert g1.get_edge_weight("e1") == 1.0
+    assert g1.get_edge_weight("e2") == 1.0
 
     # test that properties still exist
-    assert g.vertex_attrs['v0']['before'] == 'v0'
-    assert g.vertex_attrs['v1']['before'] == 'v1'
-    assert g.edge_attrs['e0']['before'] == 'e0'
-    assert g.edge_attrs['e1']['before'] == 'e1'
+    assert g.vertex_attrs["v0"]["before"] == "v0"
+    assert g.vertex_attrs["v1"]["before"] == "v1"
+    assert g.edge_attrs["e0"]["before"] == "e0"
+    assert g.edge_attrs["e1"]["before"] == "e1"
 
-    assert g1.vertex_attrs['v0']['before'] == 'v0'
-    assert g1.vertex_attrs['v1']['before'] == 'v1'
-    assert g1.edge_attrs['e0']['before'] == 'e0'
-    assert g1.edge_attrs['e1']['before'] == 'e1'
+    assert g1.vertex_attrs["v0"]["before"] == "v0"
+    assert g1.vertex_attrs["v1"]["before"] == "v1"
+    assert g1.edge_attrs["e0"]["before"] == "e0"
+    assert g1.edge_attrs["e1"]["before"] == "e1"
 
     # test adding a property in g
-    g.vertex_attrs['v0']['after'] = 'v0'
-    assert g1.vertex_attrs['v0']['after'] == 'v0'
+    g.vertex_attrs["v0"]["after"] = "v0"
+    assert g1.vertex_attrs["v0"]["after"] == "v0"
 
     # test adding a property in g1
-    g1.edge_attrs['e0']['after'] = 'e0'
-    assert g.edge_attrs['e0']['after'] == 'e0'
+    g1.edge_attrs["e0"]["after"] = "e0"
+    assert g.edge_attrs["e0"]["after"] == "e0"
 
-    # test deleting a property from g 
-    del g.vertex_attrs['v1']['before']
+    # test deleting a property from g
+    del g.vertex_attrs["v1"]["before"]
     with pytest.raises(KeyError):
-        g1.vertex_attrs['v1']['before']
+        g1.vertex_attrs["v1"]["before"]
 
     with pytest.raises(ValueError):
-        g1.edge_attrs['e0']['weight'] = 200.0
+        g1.edge_attrs["e0"]["weight"] = 200.0
 
-    g.edge_attrs['e0']['weight'] = 200.0
-    assert g.edge_attrs['e0']['weight'] == 200.0
-    assert g1.edge_attrs['e0']['weight'] == 1.0
+    g.edge_attrs["e0"]["weight"] = 200.0
+    assert g.edge_attrs["e0"]["weight"] == 200.0
+    assert g1.edge_attrs["e0"]["weight"] == 1.0
 
 
 def test_anyhashableg_as_weighted():
@@ -917,28 +912,27 @@ def test_anyhashableg_as_weighted():
         any_hashable=True,
     )
 
-    g.add_vertex('0')
-    g.add_vertex('1')
-    g.add_edge('0', '1', edge='0')
+    g.add_vertex("0")
+    g.add_vertex("1")
+    g.add_edge("0", "1", edge="0")
 
     with pytest.raises(ValueError):
-        g.set_edge_weight('0', 5.0)
+        g.set_edge_weight("0", 5.0)
 
-    assert g.get_edge_weight('0') == 1.0
+    assert g.get_edge_weight("0") == 1.0
 
     def edge_weight(e):
         return 100.5
 
     wg = as_weighted(g, edge_weight, cache_weights=False, write_weights_through=False)
 
-    assert wg.get_edge_weight('0') == 100.5
+    assert wg.get_edge_weight("0") == 100.5
 
     print(g)
     print(wg)
 
     with pytest.raises(ValueError):
-        wg.set_edge_weight('0', 5.0)
-
+        wg.set_edge_weight("0", 5.0)
 
 
 def test_anyhashableg_as_weighted_with_None_function():
@@ -989,7 +983,7 @@ def test_anyhashableg_as_weighted_with_caching():
         g.set_edge_weight(0, 5.0)
 
     with pytest.raises(ValueError):
-        g.edge_attrs[0]['weight'] = 5.0
+        g.edge_attrs[0]["weight"] = 5.0
 
     assert g.get_edge_weight(0) == 1.0
 
@@ -1000,12 +994,12 @@ def test_anyhashableg_as_weighted_with_caching():
 
     assert wg.get_edge_weight(0) == 100.5
 
-    assert wg.edge_attrs[0]['weight'] == 100.5
+    assert wg.edge_attrs[0]["weight"] == 100.5
 
     wg.set_edge_weight(0, 5.0)
 
     assert wg.get_edge_weight(0) == 5.0
-    assert wg.edge_attrs[0]['weight'] == 5.0
+    assert wg.edge_attrs[0]["weight"] == 5.0
 
 
 def test_anyhashableg_as_weighted_with_caching_and_write_throught_with_unweighted():
@@ -1025,7 +1019,7 @@ def test_anyhashableg_as_weighted_with_caching_and_write_throught_with_unweighte
         g.set_edge_weight(0, 5.0)
 
     with pytest.raises(ValueError):
-        g.edge_attrs[0]['weight'] = 5.0
+        g.edge_attrs[0]["weight"] = 5.0
 
     assert g.get_edge_weight(0) == 1.0
 
@@ -1052,7 +1046,7 @@ def test_anyhashableg_as_weighted_with_caching_and_write_throught():
     g.set_edge_weight(0, 200.0)
     assert g.get_edge_weight(0) == 200.0
 
-    assert g.edge_attrs[0]['weight'] == 200.0
+    assert g.edge_attrs[0]["weight"] == 200.0
 
     def edge_weight(e):
         return 100.5
@@ -1065,11 +1059,11 @@ def test_anyhashableg_as_weighted_with_caching_and_write_throught():
 
     assert wg.get_edge_weight(0) == 5.0
 
-    assert wg.edge_attrs[0]['weight'] == 5.0
+    assert wg.edge_attrs[0]["weight"] == 5.0
 
     assert g.get_edge_weight(0) == 5.0
 
-    assert g.edge_attrs[0]['weight'] == 5.0
+    assert g.edge_attrs[0]["weight"] == 5.0
 
 
 def test_anyhashableg_as_weighted_with_no_caching_and_write_through():
@@ -1087,7 +1081,7 @@ def test_anyhashableg_as_weighted_with_no_caching_and_write_through():
 
     g.set_edge_weight(0, 5.0)
     assert g.get_edge_weight(0) == 5.0
-    assert g.edge_attrs[0]['weight'] == 5.0
+    assert g.edge_attrs[0]["weight"] == 5.0
 
     def edge_weight(e):
         return 100.5
@@ -1100,11 +1094,11 @@ def test_anyhashableg_as_weighted_with_no_caching_and_write_through():
         wg.set_edge_weight(0, 5.0)
 
     with pytest.raises(ValueError):
-        wg.edge_attrs[0]['weight'] = 5.0
+        wg.edge_attrs[0]["weight"] = 5.0
 
     assert wg.get_edge_weight(0) == 100.5
 
-    assert wg.edge_attrs[0]['weight'] == 100.5
+    assert wg.edge_attrs[0]["weight"] == 100.5
 
 
 pg_listener1_expected = """element v0, event GraphEvent.VERTEX_ADDED
@@ -1145,24 +1139,23 @@ def test_anyhashableg_listenable():
 
     listener_id_1 = lg.add_listener(listener1)
 
-    lg.add_vertex('v0')
-    lg.add_vertex('v1')
-    lg.add_vertex('v2')
-    lg.add_edge('v0', 'v1', edge='e0')
-    lg.add_edge('v1', 'v2', edge='e1')
+    lg.add_vertex("v0")
+    lg.add_vertex("v1")
+    lg.add_vertex("v2")
+    lg.add_edge("v0", "v1", edge="e0")
+    lg.add_edge("v1", "v2", edge="e1")
 
     listener_id_2 = lg.add_listener(listener2)
 
-    lg.remove_edge('e1')
-    lg.remove_vertex('v2')
-    lg.set_edge_weight('e0', 5.0)
+    lg.remove_edge("e1")
+    lg.remove_vertex("v2")
+    lg.set_edge_weight("e0", 5.0)
 
     lg.remove_listener(listener_id_1)
     lg.remove_listener(listener_id_2)
 
     assert listener1_results == pg_listener1_expected.splitlines()
     assert listener2_results == pg_listener2_expected.splitlines()
-
 
 
 def test_anyhashableg_as_edge_reversed():

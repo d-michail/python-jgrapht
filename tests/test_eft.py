@@ -5,11 +5,9 @@ from jgrapht.utils import IntegerSupplier
 import jgrapht.algorithms.flow as flow
 
 
-
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -23,7 +21,7 @@ def test_eft(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -41,16 +39,16 @@ def test_eft(backend):
 
     eft = flow.equivalent_flow_tree_gusfield(g)
 
-    assert eft.max_st_flow_value(2,3) == 30.0
-    assert eft.max_st_flow_value(1,3) == 30.0
-    assert eft.max_st_flow_value(0,1) == 30.0
-    assert eft.max_st_flow_value(0,2) == 30.0
-    assert eft.max_st_flow_value(0,3) == 30.0
-    assert eft.max_st_flow_value(0,4) == 10.0
+    assert eft.max_st_flow_value(2, 3) == 30.0
+    assert eft.max_st_flow_value(1, 3) == 30.0
+    assert eft.max_st_flow_value(0, 1) == 30.0
+    assert eft.max_st_flow_value(0, 2) == 30.0
+    assert eft.max_st_flow_value(0, 3) == 30.0
+    assert eft.max_st_flow_value(0, 4) == 10.0
 
     tree = eft.as_graph()
     edge_tuples = [tree.edge_tuple(e) for e in tree.edges]
-    assert edge_tuples == [(1,0,30.0), (2,1,50.0), (3,2,30.0), (4,3,10.0)]
+    assert edge_tuples == [(1, 0, 30.0), (2, 1, 50.0), (3, 2, 30.0), (4, 3, 10.0)]
 
 
 def test_anyhashableg_eft():
@@ -68,8 +66,8 @@ def test_anyhashableg_eft():
     g.add_vertex(3)
     g.add_vertex(4)
 
-    e01 = g.add_edge(0, 1, weight=20, edge='e01')
-    e02 = g.add_edge(0, 2, weight=10, edge='e02')
+    e01 = g.add_edge(0, 1, weight=20, edge="e01")
+    e02 = g.add_edge(0, 2, weight=10, edge="e02")
     g.add_edge(1, 2, weight=30)
     g.add_edge(1, 3, weight=10)
     g.add_edge(2, 3, weight=20)
@@ -77,13 +75,13 @@ def test_anyhashableg_eft():
 
     eft = flow.equivalent_flow_tree_gusfield(g)
 
-    assert eft.max_st_flow_value(2,3) == 30.0
-    assert eft.max_st_flow_value(1,3) == 30.0
-    assert eft.max_st_flow_value(0,1) == 30.0
-    assert eft.max_st_flow_value(0,2) == 30.0
-    assert eft.max_st_flow_value(0,3) == 30.0
-    assert eft.max_st_flow_value(0,4) == 10.0
+    assert eft.max_st_flow_value(2, 3) == 30.0
+    assert eft.max_st_flow_value(1, 3) == 30.0
+    assert eft.max_st_flow_value(0, 1) == 30.0
+    assert eft.max_st_flow_value(0, 2) == 30.0
+    assert eft.max_st_flow_value(0, 3) == 30.0
+    assert eft.max_st_flow_value(0, 4) == 10.0
 
     tree = eft.as_graph()
     edge_tuples = [tree.edge_tuple(e) for e in tree.edges]
-    assert edge_tuples == [(1,0,30.0), (2,1,50.0), (3,2,30.0), (4,3,10.0)]
+    assert edge_tuples == [(1, 0, 30.0), (2, 1, 50.0), (3, 2, 30.0), (4, 3, 10.0)]

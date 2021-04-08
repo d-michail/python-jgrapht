@@ -9,7 +9,6 @@ import jgrapht.algorithms.independent as independent
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -42,4 +41,3 @@ def test_chordal(backend):
     ind = independent.chordal_max_independent_set(g)
 
     assert ind == {2, 4}
-

@@ -13,7 +13,7 @@ def create_test_graph(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
 
     for i in range(0, 10):
@@ -54,9 +54,9 @@ def create_test_property_graph():
     g.add_vertex("0")
     for i in range(1, 5):
         g.add_vertex(i)
-    g.add_vertex("5")    
+    g.add_vertex("5")
     for i in range(6, 10):
-        g.add_vertex(i)    
+        g.add_vertex(i)
 
     g.add_edge("0", 1, edge="e01")
     g.add_edge("0", 2, edge="e02")
@@ -84,7 +84,6 @@ def create_test_property_graph():
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -98,7 +97,6 @@ def test_diameter(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -112,7 +110,6 @@ def test_radius(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -126,7 +123,6 @@ def test_girth(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -140,7 +136,6 @@ def test_count_triangles(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,

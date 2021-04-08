@@ -5,7 +5,6 @@ from jgrapht.utils import IntegerSupplier
 import jgrapht.algorithms.flow as flow
 
 
-
 def _do_run_both(algo, backend):
     g = create_graph(
         directed=True,
@@ -90,7 +89,7 @@ def _do_run_flow(algo, backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),                
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -151,8 +150,6 @@ def _do_run_anyhashableg_flow(algo):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
-        GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
     ],
@@ -165,9 +162,7 @@ def test_dinic(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
-        GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
     ],
 )
@@ -179,10 +174,8 @@ def test_push_relabel(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
-        GraphBackend.LONG_GRAPH,
     ],
 )
 def test_edmonds_karp(backend):
@@ -193,7 +186,6 @@ def test_edmonds_karp(backend):
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,

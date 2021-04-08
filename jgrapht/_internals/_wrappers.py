@@ -11,8 +11,7 @@ class GraphBackend(Enum):
     """
     INT_GRAPH = 1
     LONG_GRAPH = 2
-    ANY_HASHABLE_GRAPH = 3
-    REF_GRAPH = 4
+    REF_GRAPH = 3
 
 
 class _HandleWrapper:

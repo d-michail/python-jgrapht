@@ -8,7 +8,6 @@ import jgrapht.algorithms.cuts as cuts
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
@@ -52,13 +51,12 @@ def test_gomory_hu_tree(backend):
 
     tree = ght.as_graph()
     edge_tuples = [tree.edge_tuple(e) for e in tree.edges]
-    assert edge_tuples == [(1,0,30.0), (2,1,50.0), (3,2,30.0)]
+    assert edge_tuples == [(1, 0, 30.0), (2, 1, 50.0), (3, 2, 30.0)]
 
 
 @pytest.mark.parametrize(
     "backend",
     [
-        GraphBackend.ANY_HASHABLE_GRAPH,
         GraphBackend.REF_GRAPH,
     ],
 )
@@ -70,7 +68,7 @@ def test_anyhashableg_gomory_hu_tree(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -100,4 +98,4 @@ def test_anyhashableg_gomory_hu_tree(backend):
 
     tree = ght.as_graph()
     edge_tuples = [tree.edge_tuple(e) for e in tree.edges]
-    assert edge_tuples == [("1",0,30.0), (2,"1",50.0), (3,2,30.0)]
+    assert edge_tuples == [("1", 0, 30.0), (2, "1", 50.0), (3, 2, 30.0)]
