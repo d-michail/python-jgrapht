@@ -5,14 +5,7 @@ from .. import backend as _backend
 from .._internals._results import _build_vertex_set
 from .._internals._callbacks import _create_wrapped_int_vertex_comparator_callback
 
-from .._internals._anyhashableg import (
-    _is_anyhashable_graph,
-    _vertex_g_to_anyhashableg as _vertex_g_to_attrsg,
-)
 from .._internals._drawing import _create_int_layout_model_2d as create_layout_model_2d
-from .._internals._anyhashableg_drawing import (
-    _create_anyhashable_graph_layout_model_2d as create_attrs_graph_layout_model_2d,
-)
 
 
 def random_layout_2d(graph, area, seed=None):
@@ -28,10 +21,7 @@ def random_layout_2d(graph, area, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    if _is_anyhashable_graph(graph):
-        model = create_attrs_graph_layout_model_2d(graph, *area)
-    else:
-        model = create_layout_model_2d(*area)
+    model = create_layout_model_2d(*area)
 
     custom = [seed]
     _backend.jgrapht_xx_drawing_exec_random_layout_2d(
@@ -55,17 +45,8 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
       v1 > v2 in the ordering
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
-    if _is_anyhashable_graph(graph):
-        model = create_attrs_graph_layout_model_2d(graph, *area)
-
-        def actual_vertex_comparator_cb(v1, v2):
-            v1 = _vertex_g_to_attrsg(graph, v1)
-            v2 = _vertex_g_to_attrsg(graph, v2)
-            return vertex_comparator_cb(v1, v2)
-
-    else:
-        model = create_layout_model_2d(*area)
-        actual_vertex_comparator_cb = vertex_comparator_cb
+    model = create_layout_model_2d(*area)
+    actual_vertex_comparator_cb = vertex_comparator_cb
 
     (
         vertex_comparator_f_ptr,
@@ -102,11 +83,7 @@ def fruchterman_reingold_layout_2d(
     """
     if seed is None:
         seed = int(time.time())
-
-    if _is_anyhashable_graph(graph):
-        model = create_attrs_graph_layout_model_2d(graph, *area)
-    else:
-        model = create_layout_model_2d(*area)
+    model = create_layout_model_2d(*area)
 
     custom = [iterations, normalization_factor, seed]
     _backend.jgrapht_xx_drawing_exec_fr_layout_2d(graph.handle, model.handle, *custom)
@@ -155,10 +132,7 @@ def fruchterman_reingold_indexed_layout_2d(
     if tolerance is None:
         tolerance = 1e-9
 
-    if _is_anyhashable_graph(graph):
-        model = create_attrs_graph_layout_model_2d(graph, *area)
-    else:
-        model = create_layout_model_2d(*area)
+    model = create_layout_model_2d(*area)
 
     custom = [iterations, normalization_factor, seed, theta, tolerance]
     _backend.jgrapht_xx_drawing_exec_indexed_fr_layout_2d(
@@ -198,19 +172,10 @@ def two_layered_bipartite_layout_2d(
     else:
         partition_handle = None
 
-    if _is_anyhashable_graph(graph):
-        model = create_attrs_graph_layout_model_2d(graph, *area)
-    else:
-        model = create_layout_model_2d(*area)
+    model = create_layout_model_2d(*area)
 
     if vertex_comparator_cb is not None: 
-        if _is_anyhashable_graph(graph):
-            def actual_vertex_comparator_cb(v1, v2):
-                v1 = _vertex_g_to_attrsg(graph, v1)
-                v2 = _vertex_g_to_attrsg(graph, v2)
-                return vertex_comparator_cb(v1, v2)
-        else:
-            actual_vertex_comparator_cb = vertex_comparator_cb
+        actual_vertex_comparator_cb = vertex_comparator_cb
         (
             vertex_comparator_f_ptr,
             vertex_comparator_f,
@@ -265,19 +230,10 @@ def barycenter_greedy_two_layered_bipartite_layout_2d(
     else:
         partition_handle = None
 
-    if _is_anyhashable_graph(graph):
-        model = create_attrs_graph_layout_model_2d(graph, *area)
-    else:
-        model = create_layout_model_2d(*area)
+    model = create_layout_model_2d(*area)
 
     if vertex_comparator_cb is not None: 
-        if _is_anyhashable_graph(graph):
-            def actual_vertex_comparator_cb(v1, v2):
-                v1 = _vertex_g_to_attrsg(graph, v1)
-                v2 = _vertex_g_to_attrsg(graph, v2)
-                return vertex_comparator_cb(v1, v2)
-        else:
-            actual_vertex_comparator_cb = vertex_comparator_cb
+        actual_vertex_comparator_cb = vertex_comparator_cb
         (
             vertex_comparator_f_ptr,
             vertex_comparator_f,
@@ -329,19 +285,10 @@ def median_greedy_two_layered_bipartite_layout_2d(
     else:
         partition_handle = None
 
-    if _is_anyhashable_graph(graph):
-        model = create_attrs_graph_layout_model_2d(graph, *area)
-    else:
-        model = create_layout_model_2d(*area)
+    model = create_layout_model_2d(*area)
 
     if vertex_comparator_cb is not None: 
-        if _is_anyhashable_graph(graph):
-            def actual_vertex_comparator_cb(v1, v2):
-                v1 = _vertex_g_to_attrsg(graph, v1)
-                v2 = _vertex_g_to_attrsg(graph, v2)
-                return vertex_comparator_cb(v1, v2)
-        else:
-            actual_vertex_comparator_cb = vertex_comparator_cb
+        actual_vertex_comparator_cb = vertex_comparator_cb
         (
             vertex_comparator_f_ptr,
             vertex_comparator_f,

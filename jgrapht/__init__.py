@@ -50,15 +50,6 @@ from ._internals._long_graphs import (
     _create_long_dag,
     _create_long_graph,
 )
-from ._internals._anyhashableg import (
-    _is_anyhashable_graph,
-    _create_anyhashable_graph,
-    _create_anyhashable_dag,
-    _create_sparse_anyhashable_graph,
-    _copy_to_sparse_anyhashable_graph,
-    _create_succinct_anyhashable_graph,
-    _copy_to_succinct_anyhashable_graph,
-)
 from ._internals._ref_graphs import (
     _is_ref_graph, 
     _create_ref_graph,
@@ -114,7 +105,7 @@ def create_graph(
     """
     if backend is None:
         if any_hashable:
-            backend = GraphBackend.ANY_HASHABLE_GRAPH
+            backend = GraphBackend.REF_GRAPH
         else:
             backend = GraphBackend.INT_GRAPH
 
@@ -149,24 +140,6 @@ def create_graph(
                 allowing_multiple_edges=allowing_multiple_edges,
                 weighted=weighted,
             )            
-
-    if backend == GraphBackend.ANY_HASHABLE_GRAPH:
-        if dag:
-            return _create_anyhashable_dag(
-                allowing_multiple_edges=allowing_multiple_edges,
-                weighted=weighted,
-                vertex_supplier=vertex_supplier,
-                edge_supplier=edge_supplier,
-            )
-        else:
-            return _create_anyhashable_graph(
-                directed=directed,
-                allowing_self_loops=allowing_self_loops,
-                allowing_multiple_edges=allowing_multiple_edges,
-                weighted=weighted,
-                vertex_supplier=vertex_supplier,
-                edge_supplier=edge_supplier,
-            )
 
     if backend == GraphBackend.REF_GRAPH:
         if dag:
@@ -231,14 +204,7 @@ def create_sparse_graph(
     :rtype: :class:`~jgrapht.types.Graph`
     """
     if any_hashable:
-        return _create_sparse_anyhashable_graph(
-            edgelist=edgelist,
-            directed=directed,
-            weighted=weighted,
-            incoming_edges_support=incoming_edges_support,
-            vertex_supplier=vertex_supplier,
-            edge_supplier=edge_supplier,
-        )
+        raise ValueError("TODO")
     else:
         return _create_sparse_int_graph(
             edgelist=edgelist,
@@ -260,10 +226,7 @@ def copy_to_sparse_graph(graph):
     :returns: a sparse graph
     :rtype: :class:`jgrapht.types.Graph`
     """
-    if _is_anyhashable_graph(graph):
-        return _copy_to_sparse_anyhashable_graph(graph)
-    else:
-        return _copy_to_sparse_int_graph(graph)
+    return _copy_to_sparse_int_graph(graph)
 
 
 def create_succinct_graph(
@@ -312,13 +275,7 @@ def create_succinct_graph(
         incoming_edges_support = IncomingEdgesSupport.FULL_INCOMING_EDGES
 
     if any_hashable:
-        return _create_succinct_anyhashable_graph(
-            edgelist=edgelist,
-            directed=directed,
-            incoming_edges_support=incoming_edges_support,
-            vertex_supplier=vertex_supplier,
-            edge_supplier=edge_supplier,
-        )
+        raise ValueError("TODO")
     else:
         return _create_succinct_int_graph(
             edgelist=edgelist,
@@ -341,10 +298,7 @@ def copy_to_succinct_graph(graph):
     :returns: a succinct graph
     :rtype: :class:`jgrapht.types.Graph`
     """
-    if _is_anyhashable_graph(graph):
-        return _copy_to_succinct_anyhashable_graph(graph)
-    else:
-        return _copy_to_succinct_int_graph(graph)
+    return _copy_to_succinct_int_graph(graph)
 
 
 from . import (

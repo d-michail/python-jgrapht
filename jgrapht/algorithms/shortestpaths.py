@@ -15,12 +15,6 @@ from .._internals._results import (
 )
 from .._internals._callbacks import _create_wrapped_callback
 
-from .._internals._anyhashableg import (
-    _is_anyhashable_graph,
-    _vertex_anyhashableg_to_g,
-    _edge_g_to_anyhashableg,
-)
-
 import ctypes
 import multiprocessing
 import time
@@ -28,7 +22,6 @@ import time
 
 def _sp_singlesource_alg(name, graph, source_vertex, *args):
     cases = {
-        GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ix_sp_exec_",
         GraphBackend.LONG_GRAPH: "jgrapht_lx_sp_exec_",
         GraphBackend.INT_GRAPH: "jgrapht_ix_sp_exec_",
         GraphBackend.REF_GRAPH: "jgrapht_rx_sp_exec_",
@@ -42,7 +35,6 @@ def _sp_singlesource_alg(name, graph, source_vertex, *args):
 
 def _sp_between_alg(name, graph, source_vertex, target_vertex, *args):
     cases = {
-        GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ix_sp_exec_",
         GraphBackend.LONG_GRAPH: "jgrapht_lx_sp_exec_",
         GraphBackend.INT_GRAPH: "jgrapht_ix_sp_exec_",
         GraphBackend.REF_GRAPH: "jgrapht_rx_sp_exec_",
@@ -71,7 +63,6 @@ def _sp_allpairs_alg(name, graph):
 
 def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
     cases = {
-        GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ix_sp_exec_",
         GraphBackend.LONG_GRAPH: "jgrapht_lx_sp_exec_",
         GraphBackend.INT_GRAPH: "jgrapht_ix_sp_exec_",
         GraphBackend.REF_GRAPH: "jgrapht_rx_sp_exec_",
@@ -91,7 +82,6 @@ def _sp_k_between_alg(name, graph, source_vertex, target_vertex, k, *args):
 
 def _multisp_singlesource_alg(name, graph, source_vertex, *args):
     cases = {
-        GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ii_multisp_exec_",
         GraphBackend.LONG_GRAPH: "jgrapht_ll_multisp_exec_",
         GraphBackend.INT_GRAPH: "jgrapht_ii_multisp_exec_",
         GraphBackend.REF_GRAPH: "jgrapht_rr_multisp_exec_",
@@ -105,7 +95,6 @@ def _multisp_singlesource_alg(name, graph, source_vertex, *args):
 
 def _multisp_between_alg(name, graph, source_vertex, target_vertex, *args):
     cases = {
-        GraphBackend.ANY_HASHABLE_GRAPH: "jgrapht_ii_multisp_exec_",
         GraphBackend.LONG_GRAPH: "jgrapht_ll_multisp_exec_",
         GraphBackend.INT_GRAPH: "jgrapht_ii_multisp_exec_",
         GraphBackend.REF_GRAPH: "jgrapht_rr_multisp_exec_",
@@ -424,22 +413,7 @@ def martin_multiobjective(
     if edge_weight_dimension < 1:
         raise ValueError("Cost function needs to have a positive dimension")
 
-    # we need a function which accepts an edge and returns a pointer to an
-    # array with double values
-    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
-
-        def inner_edge_weight_cb(edge):
-            edge = _edge_g_to_anyhashableg(graph, edge)
-            weights = edge_weight_cb(edge)[:edge_weight_dimension]
-            array = (ctypes.c_double * len(weights))(*weights)
-            array_ptr = ctypes.cast(array, ctypes.c_void_p)
-            return array_ptr.value
-
-        cb_fptr, cb = _create_wrapped_callback(
-            inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_int)
-        )
-
-    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+    if graph._backend_type == GraphBackend.LONG_GRAPH:
 
         def inner_edge_weight_cb(edge):
             weights = edge_weight_cb(edge)[:edge_weight_dimension]
@@ -561,8 +535,8 @@ def contraction_hierarchies_dijkstra(
 
     handle = _backend.jgrapht_ix_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
         ch.handle,
-        _vertex_anyhashableg_to_g(graph, source_vertex),
-        _vertex_anyhashableg_to_g(graph, target_vertex),
+        _unwrap_vertex(graph, source_vertex),
+        _unwrap_vertex(graph, target_vertex),
         radius,
     )
 

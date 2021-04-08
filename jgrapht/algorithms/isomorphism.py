@@ -5,12 +5,6 @@ from .._internals._mapping import (
     _JGraphTIntegerGraphMappingIterator,
 )
 
-from .._internals._anyhashableg import _is_anyhashable_graph
-from .._internals._anyhashableg_mapping import (
-    _AnyHashableGraphGraphMapping,
-    _AnyHashableGraphMappingIterator,
-)
-
 
 def vf2(graph1, graph2):
     r"""The VF2 algorithm for detection of isomorphism between two graphs.
@@ -32,14 +26,9 @@ def vf2(graph1, graph2):
     if not exists:
         return None
 
-    if _is_anyhashable_graph(graph1) or _is_anyhashable_graph(graph2):
-        return _AnyHashableGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
-    else:
-        return _JGraphTIntegerGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
+    return _JGraphTIntegerGraphMappingIterator(
+        handle=map_it_handle, graph1=graph1, graph2=graph2
+    )
 
 
 def vf2_subgraph(graph1, graph2):
@@ -67,11 +56,6 @@ def vf2_subgraph(graph1, graph2):
     if not exists:
         return None
 
-    if _is_anyhashable_graph(graph1) or _is_anyhashable_graph(graph2):
-        return _AnyHashableGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
-    else:
-        return _JGraphTIntegerGraphMappingIterator(
-            handle=map_it_handle, graph1=graph1, graph2=graph2
-        )
+    return _JGraphTIntegerGraphMappingIterator(
+        handle=map_it_handle, graph1=graph1, graph2=graph2
+    )

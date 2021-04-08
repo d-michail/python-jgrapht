@@ -7,45 +7,33 @@ from ._internals._views import (
     _UnweightedRefGraphView,
     _UnmodifiableIntegerGraphView,
     _UnmodifiableLongGraphView,
-    _UnmodifiableRefGraphView,    
+    _UnmodifiableRefGraphView,
     _UndirectedIntegerGraphView,
     _UndirectedLongGraphView,
     _UndirectedRefGraphView,
     _EdgeReversedIntegerGraphView,
     _EdgeReversedLongGraphView,
-    _EdgeReversedRefGraphView,            
+    _EdgeReversedRefGraphView,
     _MaskedSubgraphView,
     _WeightedView,
     _GraphUnion,
     _ListenableView,
 )
 
-from ._internals._anyhashableg import (
-    _is_anyhashable_graph,
-    _as_unweighted_anyhashable_graph as _as_unweighted_anyhashable_graph,
-    _as_undirected_anyhashable_graph as _as_undirected_anyhashable_graph,
-    _as_unmodifiable_anyhashable_graph as _as_unmodifiable_anyhashable_graph,
-    _as_edgereversed_anyhashable_graph as _as_edgereversed_anyhashable_graph,
-    _as_weighted_anyhashable_graph as _as_weighted_anyhashable_graph,
-    _as_masked_subgraph_anyhashable_graph as _as_masked_subgraph_anyhashable_graph,
-)
-
 
 def as_unweighted(graph):
     """Create an unweighted view of a graph. Any updates in the original graph are reflected
     in the view.
-    
+
     :param graph: the original graph
     :returns: an unweighted graph
     """
-    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
-        return _as_unweighted_anyhashable_graph(graph)
-    elif graph._backend_type == GraphBackend.REF_GRAPH:
+    if graph._backend_type == GraphBackend.REF_GRAPH:
         return _UnweightedRefGraphView(graph)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _UnweightedIntegerGraphView(graph)    
+        return _UnweightedIntegerGraphView(graph)
     elif graph._backend_type == GraphBackend.LONG_GRAPH:
-        return _UnweightedLongGraphView(graph)            
+        return _UnweightedLongGraphView(graph)
     else:
         raise ValueError("Unkwown backend type")
 
@@ -53,20 +41,18 @@ def as_unweighted(graph):
 def as_undirected(graph):
     """Create an undirected view of a graph. Any updates in the original graph are reflected
     in the view.
-    
+
     :param graph: the original graph
     :returns: an undirected graph
     """
-    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
-        return _as_undirected_anyhashable_graph(graph)
-    elif graph._backend_type == GraphBackend.REF_GRAPH:
+    if graph._backend_type == GraphBackend.REF_GRAPH:
         return _UndirectedRefGraphView(graph)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _UndirectedIntegerGraphView(graph)    
+        return _UndirectedIntegerGraphView(graph)
     elif graph._backend_type == GraphBackend.LONG_GRAPH:
-        return _UndirectedLongGraphView(graph)            
+        return _UndirectedLongGraphView(graph)
     else:
-        raise ValueError("Unkwown backend type")    
+        raise ValueError("Unkwown backend type")
 
 
 def as_unmodifiable(graph):
@@ -76,14 +62,12 @@ def as_unmodifiable(graph):
     :param graph: the original graph
     :returns: an unmodifiable graph
     """
-    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
-        return _as_unmodifiable_anyhashable_graph(graph)
-    elif graph._backend_type == GraphBackend.REF_GRAPH:
+    if graph._backend_type == GraphBackend.REF_GRAPH:
         return _UnmodifiableRefGraphView(graph)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _UnmodifiableIntegerGraphView(graph)    
+        return _UnmodifiableIntegerGraphView(graph)
     elif graph._backend_type == GraphBackend.LONG_GRAPH:
-        return _UnmodifiableLongGraphView(graph)            
+        return _UnmodifiableLongGraphView(graph)
     else:
         raise ValueError("Unkwown backend type")
 
@@ -95,20 +79,18 @@ def as_edge_reversed(graph):
     :param graph: the original graph
     :returns: a graph with reversed edges
     """
-    if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
-        return _as_edgereversed_anyhashable_graph(graph)
-    elif graph._backend_type == GraphBackend.REF_GRAPH:
+    if graph._backend_type == GraphBackend.REF_GRAPH:
         return _EdgeReversedRefGraphView(graph)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _EdgeReversedIntegerGraphView(graph)    
+        return _EdgeReversedIntegerGraphView(graph)
     elif graph._backend_type == GraphBackend.LONG_GRAPH:
-        return _EdgeReversedLongGraphView(graph)            
+        return _EdgeReversedLongGraphView(graph)
     else:
         raise ValueError("Unkwown backend type")
 
 
 def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):
-    """Create a masked subgraph view. 
+    """Create a masked subgraph view.
 
     This is an unmodifiable subgraph induced by the vertex/edge masking callbacks. The subgraph
     will keep track of edges being added to its vertex subset as well as deletion of edges and
@@ -116,20 +98,15 @@ def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):
     over the vertices/edges of the base graph and discard vertices/edges that are masked (an
     edge with a masked endpoint vertex is discarded as well).
 
-    .. note :: Callback functions accept the vertex or edge as a parameter and they must return 
+    .. note :: Callback functions accept the vertex or edge as a parameter and they must return
       true or false indicating whether the vertex or edge should be masked.
 
     :param graph: the original graph
     :param vertex_mask_cb: a vertex mask callback
     :param edge_mask_cb: an edge mask callback
-    :returns: a masked subgraph 
+    :returns: a masked subgraph
     """
-    if _is_anyhashable_graph(graph):
-        return _as_masked_subgraph_anyhashable_graph(
-            graph, vertex_mask_cb, edge_mask_cb
-        )
-    else:
-        return _MaskedSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
+    return _MaskedSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
 
 
 def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through=False):
@@ -139,34 +116,27 @@ def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through
     of a weighted graph, or to provide different weighted views of the same underlying graph.
 
     The weights are calculated using the user provided edge_weight_cb callback function.
-    This function should take as argument the edge identifier and return its weight. If the 
-    edge weight callback is None, then a default function which always returns 1.0 is 
-    used. 
+    This function should take as argument the edge identifier and return its weight. If the
+    edge weight callback is None, then a default function which always returns 1.0 is
+    used.
 
     If parameter cache_weights is True, then the edge weight function is only called once
-    to initialize the weight. Other calls will return the cached weight without calling the 
-    provided function. Moreover, the returned value can be adjusted. Note that calling 
+    to initialize the weight. Other calls will return the cached weight without calling the
+    provided function. Moreover, the returned value can be adjusted. Note that calling
     :py:meth:`~jgrapht.types.Graph.set_edge_weight` with caching disabled will raise an error.
 
-    If parameter write_weights_through is True, the weight set by calling method 
+    If parameter write_weights_through is True, the weight set by calling method
     :py:meth:`~jgrapht.types.Graph.set_edge_weight` will be propagated to the backing graph.
     In this case the backing graph must be weighted, otherwise an error will be raised.
 
     :param graph: the original graph
     :param edge_weight_cb: edge weight function
     :param cache_weights: if true weights are cached once computed by the weight function
-    :param write_weights_through: if true, any weight adjustment by method 
+    :param write_weights_through: if true, any weight adjustment by method
       :py:meth:`~jgrapht.types.Graph.set_edge_weight` will be propagated to the backing graph
     :returns: a weighted view
     """
-    if _is_anyhashable_graph(graph):
-        return _as_weighted_anyhashable_graph(
-            graph, edge_weight_cb, cache_weights, write_weights_through
-        )
-    else:
-        return _WeightedView(
-            graph, edge_weight_cb, cache_weights, write_weights_through
-        )
+    return _WeightedView(graph, edge_weight_cb, cache_weights, write_weights_through)
 
 
 def as_listenable(graph):
@@ -176,7 +146,7 @@ def as_listenable(graph):
     :param graph: the original graph
     :returns: a listenable graph which is an instance of type :py:class:`~jgrapht.types.ListenableGraph`.
     """
-    if isinstance(graph, ListenableGraph) or _is_anyhashable_graph(graph):
+    if isinstance(graph, ListenableGraph):
         return graph
     return _ListenableView(graph)
 
@@ -186,9 +156,9 @@ def as_graph_union(graph1, graph2, edge_weight_combiner_cb=None):
     in the view.
 
     The resulting graph is unmodifiable and may contain multiple-edges even if the input graphs did
-    not contain multiple edges. If both graphs contain an edge with the same identifier, but the 
+    not contain multiple edges. If both graphs contain an edge with the same identifier, but the
     edge endpoints are different in the two graphs, then the graph union contains the edge with the
-    endpoints from the first graph. The weight of edge is computed using the combiner provided as 
+    endpoints from the first graph. The weight of edge is computed using the combiner provided as
     parameter.
 
     .. note:: Graph types must be the same. You cannot union a directed with an undirected graph.
@@ -196,10 +166,8 @@ def as_graph_union(graph1, graph2, edge_weight_combiner_cb=None):
     :param graph1: the first graph
     :param graph2: the second graph
     :param edge_weight_combiner_cb: function responsible for combining weights in edges which belong
-       to both graphs. If None then the default combiner is addition. The callback must accept two 
+       to both graphs. If None then the default combiner is addition. The callback must accept two
        double parameters and return one.
     :returns: a graph which is the union of the two graphs
     """
-    if _is_anyhashable_graph(graph1) or _is_anyhashable_graph(graph2):
-        raise ValueError("View not supported for any-hashable graphs")
     return _GraphUnion(graph1, graph2, edge_weight_combiner_cb)

@@ -1,22 +1,13 @@
-from .._internals._anyhashableg import _is_anyhashable_graph
 
 from .._internals._importers import (
     _parse_graph_dimacs,
-    _parse_anyhashable_graph_dimacs,
     _parse_graph_gml,
-    _parse_anyhashable_graph_gml,
     _parse_graph_json,
-    _parse_anyhashable_graph_json,
     _parse_graph_csv,
-    _parse_anyhashable_graph_csv,
     _parse_graph_gexf,
-    _parse_anyhashable_graph_gexf,
     _parse_graph_dot,
-    _parse_anyhashable_graph_dot,
     _parse_graph_graph6sparse6,
-    _parse_anyhashable_graph_graph6sparse6,
     _parse_graph_graphml,
-    _parse_anyhashable_graph_graphml,
 )
 
 
@@ -64,14 +55,9 @@ def read_dimacs(graph, filename, import_id_cb=None):
       must return an integer, for any-hashable graphs any hashable. If None the graph assigns automatically.
     :raises IOError: In case of an import error 
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_dimacs(
-            graph, filename, import_id_cb=import_id_cb, input_is_filename=True
-        )
-    else:
-        _parse_graph_dimacs(
-            graph, filename, import_id_cb=import_id_cb, input_is_filename=True,
-        )
+    _parse_graph_dimacs(
+        graph, filename, import_id_cb=import_id_cb, input_is_filename=True,
+    )
 
 
 def parse_dimacs(graph, input_string, import_id_cb=None):
@@ -118,14 +104,9 @@ def parse_dimacs(graph, input_string, import_id_cb=None):
       must return an integer, for any-hashable graphs any hashable. If None the graph assigns automatically.
     :raises IOError: In case of an import error 
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_dimacs(
-            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
-        )
-    else:
-        _parse_graph_dimacs(
-            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
-        )
+    _parse_graph_dimacs(
+        graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
+    )
 
 
 def read_gml(
@@ -210,18 +191,13 @@ def read_gml(
       edges.
     :raises IOError: In case of an import error 
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_gml(
-            graph, filename, import_id_cb=import_id_cb, input_is_filename=True
-        )
-    else:
-        _parse_graph_gml(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            input_is_filename=True,
-        )
+    _parse_graph_gml(
+        graph,
+        filename,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        input_is_filename=True,
+    )
 
 
 def parse_gml(
@@ -306,19 +282,14 @@ def parse_gml(
       edges.
     :raises IOError: In case of an import error 
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_gml(
-            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
-        )
-    else:
-        _parse_graph_gml(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=False,
-        )
+    _parse_graph_gml(
+        graph,
+        input_string,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=False,
+    )
 
 
 def read_json(
@@ -379,19 +350,14 @@ def read_json(
       edges.
     :raises IOError: In case of an import error    
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_json(
-            graph, filename, import_id_cb=import_id_cb, input_is_filename=True
-        )
-    else:
-        _parse_graph_json(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=True,
-        )
+    _parse_graph_json(
+        graph,
+        filename,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=True,
+    )
 
 
 def parse_json(
@@ -456,19 +422,14 @@ def parse_json(
       edges.
     :raises IOError: In case of an import error    
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_json(
-            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
-        )
-    else:
-        _parse_graph_json(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=False,
-        )
+    _parse_graph_json(
+        graph,
+        input_string,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=False,
+    )
 
 
 def read_csv(
@@ -500,28 +461,16 @@ def read_csv(
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error    
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_csv(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            format=format,
-            import_edge_weights=import_edge_weights,
-            matrix_format_node_id=matrix_format_node_id,
-            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
-            input_is_filename=True,
-        )
-    else:
-        _parse_graph_csv(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            format=format,
-            import_edge_weights=import_edge_weights,
-            matrix_format_node_id=matrix_format_node_id,
-            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
-            input_is_filename=True,
-        )
+    _parse_graph_csv(
+        graph,
+        filename,
+        import_id_cb=import_id_cb,
+        format=format,
+        import_edge_weights=import_edge_weights,
+        matrix_format_node_id=matrix_format_node_id,
+        matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
+        input_is_filename=True,
+    )
 
 
 def parse_csv(
@@ -553,28 +502,16 @@ def parse_csv(
     :param matrix_format_zero_when_noedge: only for the matrix format, whether the input contains zero for missing edges
     :raises IOError: in case of an import error    
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_csv(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            format=format,
-            import_edge_weights=import_edge_weights,
-            matrix_format_node_id=matrix_format_node_id,
-            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
-            input_is_filename=False,
-        )
-    else:
-        _parse_graph_csv(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            format=format,
-            import_edge_weights=import_edge_weights,
-            matrix_format_node_id=matrix_format_node_id,
-            matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
-            input_is_filename=False,
-        )
+    _parse_graph_csv(
+        graph,
+        input_string,
+        import_id_cb=import_id_cb,
+        format=format,
+        import_edge_weights=import_edge_weights,
+        matrix_format_node_id=matrix_format_node_id,
+        matrix_format_zero_when_noedge=matrix_format_zero_when_noedge,
+        input_is_filename=False,
+    )
 
 
 def read_gexf(
@@ -657,24 +594,15 @@ def read_gexf(
       edges.    
     :raises IOError: in case of an import error    
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_gexf(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            input_is_filename=True,
-            validate_schema=validate_schema,
-        )
-    else:
-        _parse_graph_gexf(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=True,
-            validate_schema=validate_schema,
-        )
+    _parse_graph_gexf(
+        graph,
+        filename,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=True,
+        validate_schema=validate_schema,
+    )
 
 
 def parse_gexf(
@@ -757,24 +685,15 @@ def parse_gexf(
       edges.    
     :raises IOError: in case of an import error    
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_gexf(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            input_is_filename=False,
-            validate_schema=validate_schema,
-        )
-    else:
-        _parse_graph_gexf(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=False,
-            validate_schema=validate_schema,
-        )
+    _parse_graph_gexf(
+        graph,
+        input_string,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=False,
+        validate_schema=validate_schema,
+    )
 
 
 def read_dot(
@@ -819,19 +738,14 @@ def read_dot(
       edges.
     :raises IOError: In case of an import error 
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_dot(
-            graph, filename, import_id_cb=import_id_cb, input_is_filename=True,
-        )
-    else:
-        _parse_graph_dot(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=True,
-        )
+    _parse_graph_dot(
+        graph,
+        filename,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=True,
+    )
 
 
 def parse_dot(
@@ -876,19 +790,14 @@ def parse_dot(
       edges.
     :raises IOError: in case of an import error 
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_dot(
-            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False,
-        )
-    else:
-        _parse_graph_dot(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=False,
-        )
+    _parse_graph_dot(
+        graph,
+        input_string,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=False,
+    )
 
 
 def read_graph6sparse6(
@@ -935,19 +844,14 @@ def read_graph6sparse6(
       edges.
     :raises IOError: in case of an import error 
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_graph6sparse6(
-            graph, filename, import_id_cb=import_id_cb, input_is_filename=True,
-        )
-    else:
-        _parse_graph_graph6sparse6(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=True,
-        )
+    _parse_graph_graph6sparse6(
+        graph,
+        filename,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=True,
+    )
 
 
 def parse_graph6sparse6(
@@ -995,19 +899,14 @@ def parse_graph6sparse6(
       edges.
     :raises IOError: in case of an import error 
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_graph6sparse6(
-            graph, input_string, import_id_cb=import_id_cb, input_is_filename=False,
-        )
-    else:
-        _parse_graph_graph6sparse6(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=False,
-        )
+    _parse_graph_graph6sparse6(
+        graph,
+        input_string,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=False,
+    )
 
 
 def read_graphml(
@@ -1114,26 +1013,16 @@ def read_graphml(
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error    
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_graphml(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            input_is_filename=True,
-            validate_schema=validate_schema,
-            simple=simple,
-        )
-    else:
-        _parse_graph_graphml(
-            graph,
-            filename,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=True,
-            validate_schema=validate_schema,
-            simple=simple,
-        )
+    _parse_graph_graphml(
+        graph,
+        filename,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=True,
+        validate_schema=validate_schema,
+        simple=simple,
+    )
 
 
 def parse_graphml(
@@ -1240,23 +1129,13 @@ def parse_graphml(
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error    
     """
-    if _is_anyhashable_graph(graph):
-        _parse_anyhashable_graph_graphml(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            input_is_filename=False,
-            validate_schema=validate_schema,
-            simple=simple,
-        )
-    else:
-        _parse_graph_graphml(
-            graph,
-            input_string,
-            import_id_cb=import_id_cb,
-            vertex_attribute_cb=vertex_attribute_cb,
-            edge_attribute_cb=edge_attribute_cb,
-            input_is_filename=False,
-            validate_schema=validate_schema,
-            simple=simple,
-        )
+    _parse_graph_graphml(
+        graph,
+        input_string,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        input_is_filename=False,
+        validate_schema=validate_schema,
+        simple=simple,
+    )

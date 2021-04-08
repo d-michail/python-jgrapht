@@ -18,8 +18,6 @@ from ._collections_map import (
     _JGraphTLongDoubleMap,
     _JGraphTRefDoubleMap,
 )
-from ._anyhashableg import _is_anyhashable_graph
-from ._anyhashableg_collections import _AnyHashableGraphVertexSet
 from ._int_graphs import _JGraphTIntegerGraph
 from ._long_graphs import _JGraphTLongGraph
 from ._ref_graphs import _JGraphTRefGraph
@@ -34,11 +32,7 @@ class _JGraphTCut(Cut):
         self._graph = graph
         self._capacity = capacity
 
-        if graph._backend_type == GraphBackend.ANY_HASHABLE_GRAPH:
-            self._source_partition = _AnyHashableGraphVertexSet(
-                source_partition_handle, graph
-            )
-        elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        if graph._backend_type == GraphBackend.LONG_GRAPH:
             self._source_partition = _JGraphTLongSet(source_partition_handle)
         elif graph._backend_type == GraphBackend.INT_GRAPH:
             self._source_partition = _JGraphTIntegerSet(source_partition_handle)
