@@ -1474,17 +1474,17 @@ int jgrapht_xxrr_graph_attrs_get(void *g, void *key, void** res) {
 
 int jgrapht_ixrr_graph_attrs_vertex_get(void *g, int elem, void *key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgraph_capi_ixrr_graph_attrs_vertex_get(thread, g, elem, key, res);
+    return jgrapht_capi_ixrr_graph_attrs_vertex_get(thread, g, elem, key, res);
 }
 
 int jgrapht_lxrr_graph_attrs_vertex_get(void *g, long long int elem, void *key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgraph_capi_lxrr_graph_attrs_vertex_get(thread, g, elem, key, res);
+    return jgrapht_capi_lxrr_graph_attrs_vertex_get(thread, g, elem, key, res);
 }
 
 int jgrapht_rxrr_graph_attrs_vertex_get(void *g, void *elem, void *key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgraph_capi_rxrr_graph_attrs_vertex_get(thread, g, elem, key, res);
+    return jgrapht_capi_rxrr_graph_attrs_vertex_get(thread, g, elem, key, res);
 }
 
 int jgrapht_xirr_graph_attrs_edge_get(void *g, int elem, void *key, void** res) { 

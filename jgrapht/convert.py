@@ -1,5 +1,4 @@
 from . import create_graph as _create_graph
-from ._internals._anyhashableg import _is_anyhashable_graph
 
 
 def _strip(elem):

@@ -5,7 +5,6 @@ from jgrapht.types import GraphEvent
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 from jgrapht.generators import complete_graph
 
-from jgrapht._internals._anyhashableg import _create_sparse_anyhashable_graph
 
 def test_any_graph():
 
@@ -458,43 +457,6 @@ def test_listenable_property_graph():
     complete_graph(g, 5)
 
     assert vertices == ["v0", "v1", "v2", "v3", "v4"]
-
-
-def test_anyhashable_graph_sparse_weighted():
-
-    edgelist = [
-        ('v0', 'v1', 5),
-        ('v0', 'v2', 2),
-        ('v0', 'v3', 3),
-        ('v1', 'v3', 1),
-        ('v2', 'v3', 7.7),
-        ('v2', 'v4', 3.3),
-        ('v2', 'v5', 13.0),
-        ('v0', 'v4', 9.999),
-        ('v2', 'v6', 3.0),
-    ]
-    g = _create_sparse_anyhashable_graph(edgelist, directed=False)
-
-    assert not g.type.directed
-    assert g.type.weighted
-
-    assert g.vertices == set(['v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6'])
-
-    edgelist2 = []
-    for e in g.edges:
-        edgelist2.append(g.edge_tuple(e))
-    assert edgelist2 == edgelist
-
-    # sparse graphs cannot be modified
-    with pytest.raises(ValueError):
-        g.add_edge('0', '5')
-
-    # But can modify the weights
-    for e in g.edges: 
-        g.edge_attrs[e]['weight'] += 1.0
-
-    weighted = [g.edge_attrs[e]['weight'] for e in g.edges]
-    assert weighted == [6.0, 3.0, 4.0, 2.0, 8.7, 4.3, 14.0, 10.999, 4.0]
 
 
 
