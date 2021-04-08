@@ -1,5 +1,11 @@
 from .. import backend
-from ..types import Graph, GraphType, DirectedAcyclicGraph, IncomingEdgesSupport
+from ..types import (
+    Graph,
+    GraphType,
+    DirectedAcyclicGraph,
+    IncomingEdgesSupport,
+    AttributesGraph,
+)
 
 from collections.abc import Set
 
@@ -12,7 +18,7 @@ from ._collections_list import (
 )
 
 
-class _JGraphTIntegerGraph(_HandleWrapper, Graph):
+class _JGraphTIntegerGraph(_HandleWrapper, Graph, AttributesGraph):
     """The int graph implementation. This implementation always uses integers
     for the vertices and the edges of the graph. All operations are delegated to
     the backend.
@@ -143,6 +149,18 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph):
     def outedges_of(self, v):
         res = backend.jgrapht_ix_graph_vertex_create_out_eit(self._handle, v)
         return _JGraphTIntegerIterator(res)
+
+    @property
+    def graph_attrs(self):
+        return self._graph_attrs
+
+    @property
+    def vertex_attrs(self):
+        return self._vertex_attrs
+
+    @property
+    def edge_attrs(self):
+        return self._edge_attrs
 
     class _VertexSet(Set):
         """Wrapper around the vertices of a JGraphT graph"""
