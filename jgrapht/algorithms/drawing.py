@@ -80,10 +80,8 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
     """
     model = create_layout_model_2d(graph, *area)
     vertex_comparator_wrapper = _create_vertex_comparator_wrapper(graph, vertex_comparator_cb)
-
-    _backend.jgrapht_ix_drawing_exec_circular_layout_2d(
-        graph.handle, model.handle, *[radius, vertex_comparator_wrapper.fptr]
-    )
+    custom = [radius, vertex_comparator_wrapper.fptr]
+    _drawing_alg("circular_layout_2d", graph, model, *custom)
     return model
 
 
