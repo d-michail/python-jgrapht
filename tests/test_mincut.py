@@ -13,7 +13,7 @@ def build_graph(backend):
         allowing_multiple_edges=False,
         weighted=True,
         backend=backend,
-        edge_supplier=IntegerSupplier()
+        edge_supplier=IntegerSupplier(),
     )
 
     for i in range(0, 10):
@@ -77,7 +77,9 @@ def build_anyhashableg_graph():
     return g
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.REF_GRAPH, GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend", [GraphBackend.REF_GRAPH, GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH]
+)
 def test_mincut_stoer_wagner(backend):
     g = build_graph(backend=backend)
     cut = cuts.mincut_stoer_wagner(g)
@@ -134,40 +136,23 @@ def test_anyhashableg_oddmincutset_padberg_rao():
         cuts.oddmincutset_padberg_rao(g, {1, 3, 4})
 
 
-def test_min_st_cut():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_min_st_cut(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-    )
-
-    g.add_vertex(0)
-    g.add_vertex(1)
-    g.add_vertex(2)
-    g.add_vertex(3)
-
-    e01 = g.add_edge(0, 1, weight=20)
-    e02 = g.add_edge(0, 2, weight=10)
-    g.add_edge(1, 2, weight=30)
-    g.add_edge(1, 3, weight=10)
-    g.add_edge(2, 3, weight=20)
-
-    cut = cuts.min_st_cut(g, 0, 3)
-
-    assert cut.capacity == 30.0
-    assert cut.edges == set([e01, e02])
-    assert cut.source_partition == set([0])
-    assert cut.target_partition == set([1, 2, 3])
-
-
-def test_anyhashableg_min_st_cut():
-    g = create_graph(
-        directed=True,
-        allowing_self_loops=False,
-        allowing_multiple_edges=False,
-        weighted=True,
-        any_hashable=True,
+        backend=backend,
+        vertex_supplier=IntegerSupplier(),
+        edge_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)

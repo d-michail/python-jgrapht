@@ -114,6 +114,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
         v_ptr = backend.jgrapht_rr_graph_vertex_get_ptr(self._handle, id(v))
         removed = backend.jgrapht_rx_graph_remove_vertex(self._handle, id(v))
         if removed:
+            self._vertex_attrs._unsafe_delitem(v)
             _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(v_ptr))
 
     def contains_vertex(self, v):
@@ -143,6 +144,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
             raise ValueError("Edge cannot be None")
         e_ptr = backend.jgrapht_rr_graph_edge_get_ptr(self._handle, id(e))
         if backend.jgrapht_xr_graph_remove_edge(self._handle, id(e)):
+            self._edge_attrs._unsafe_delitem(e)
             _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(e_ptr))
             return True
         else:

@@ -150,6 +150,7 @@ def _do_run_anyhashableg_flow(algo):
 @pytest.mark.parametrize(
     "backend",
     [
+        GraphBackend.REF_GRAPH,        
         GraphBackend.INT_GRAPH,
         GraphBackend.LONG_GRAPH,
     ],

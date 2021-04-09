@@ -7,16 +7,13 @@ from ..types import (
     AttributesGraph,
 )
 
+from collections import defaultdict
 from collections.abc import Set
 
 from ._wrappers import _HandleWrapper, GraphBackend, _JGraphTIntegerIterator
+from ._collections_set import _JGraphTIntegerSet
+from ._collections_list import _JGraphTEdgeTripleList
 from ._attributes import _VertexAttributes, _EdgeAttributes
-from ._collections_set import (
-    _JGraphTIntegerSet,
-)
-from ._collections_list import (
-    _JGraphTEdgeTripleList,
-)
 
 
 class _JGraphTIntegerGraph(_HandleWrapper, Graph, AttributesGraph):
@@ -50,7 +47,13 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph, AttributesGraph):
         )
         self._vertex_set = None
         self._edge_set = None
+
+        # support for graph attributes
         self._graph_attrs = dict()
+        self._vertex_to_attrs = defaultdict(lambda: {})
+        self._vertex_attrs = _VertexAttributes(self, self._vertex_to_attrs)
+        self._edge_to_attrs = defaultdict(lambda: {})
+        self._edge_attrs = _EdgeAttributes(self, self._edge_to_attrs)
 
     @property
     def type(self):
@@ -70,7 +73,9 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph, AttributesGraph):
     def remove_vertex(self, v):
         if v is None:
             raise ValueError("Vertex cannot be None")
-        backend.jgrapht_ix_graph_remove_vertex(self._handle, v)
+        removed = backend.jgrapht_ix_graph_remove_vertex(self._handle, v)
+        if removed: 
+            self._vertex_attrs._unsafe_delitem(v)
 
     def contains_vertex(self, v):
         return backend.jgrapht_ix_graph_contains_vertex(self._handle, v)
@@ -89,7 +94,10 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph, AttributesGraph):
     def remove_edge(self, e):
         if e is None:
             raise ValueError("Edge cannot be None")
-        return backend.jgrapht_xi_graph_remove_edge(self._handle, e)
+        removed = backend.jgrapht_xi_graph_remove_edge(self._handle, e)
+        if removed: 
+            self._edge_attrs._unsafe_delitem(e)
+        return removed
 
     def contains_edge(self, e):
         return backend.jgrapht_xi_graph_contains_edge(self._handle, e)
