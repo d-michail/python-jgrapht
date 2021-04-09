@@ -574,6 +574,7 @@ int jgrapht_rxxx_graph_attrs_vertex_size(void *, void *LONG_TO_PTR, int* OUTPUT)
 int jgrapht_xixx_graph_attrs_edge_size(void *, int, int* OUTPUT);
 int jgrapht_xlxx_graph_attrs_edge_size(void *, long long int, int* OUTPUT);
 int jgrapht_xrxx_graph_attrs_edge_size(void *, void *LONG_TO_PTR, int* OUTPUT);
+int jgrapht_xxxx_graph_attrs_clear(void *);
 
 // handles
 

@@ -5,6 +5,7 @@ from ..types import (
     Graph,
     GraphType,
     DirectedAcyclicGraph,
+    AttributesGraph,
 )
 
 from ._collections_set import (
@@ -14,9 +15,10 @@ from ._collections_set import (
 import ctypes
 from . import _callbacks, _ref_utils, _ref_hashequals
 from ._wrappers import _HandleWrapper, _JGraphTRefIterator, GraphBackend
+from ._attributes import _GraphAttributesMap
 
 
-class _JGraphTRefGraph(_HandleWrapper, Graph):
+class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
     """The ref graph implementation. A graph which allows the use of any hashable as vertex
     and edges.
 
@@ -70,11 +72,10 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         self._vertex_set = None
         self._edge_set = None
 
-        # Dictionary which keeps a mapping from objects whole reference count we have 
-        # increased to their actual ids. This solves the issue that a user might override 
-        # equals use two different objects when inserting and removing a graph element
-        self._vertex_ref_ids = dict()
-        self._edge_ref_ids = dict()
+        self._graph_attrs = _GraphAttributesMap(handle=handle)
+
+        self._vertex_ref_count = _ref_utils._SingleRefCount()
+        self._edge_ref_count = _ref_utils._SingleRefCount()
 
         # keep ctypes callbacks from being garbage collected
         self._vertex_supplier_fptr_wrapper = vertex_supplier_fptr_wrapper
@@ -92,17 +93,19 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
     def add_vertex(self, vertex=None):
         if vertex is not None:
             if backend.jgrapht_rx_graph_add_given_vertex(self._handle, id(vertex)):
-                self._inc_vertex_ref_count(vertex)
+                self._vertex_ref_count.inc(vertex)
         else:
             v_ptr = backend.jgrapht_rx_graph_add_vertex(self._handle)
             vertex = _ref_utils._swig_ptr_to_obj(v_ptr)
-            self._inc_vertex_ref_count(vertex)            
+            self._vertex_ref_count.inc(vertex)
         return vertex
 
     def remove_vertex(self, v):
+        if v is None:
+            raise ValueError("Vertex cannot be None")
         removed = backend.jgrapht_rx_graph_remove_vertex(self._handle, id(v))
         if removed:
-            self._dec_vertex_ref_count(v)
+            self._vertex_ref_count.dec(v)
 
     def contains_vertex(self, v):
         return backend.jgrapht_rx_graph_contains_vertex(self._handle, id(v))
@@ -113,7 +116,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
             if backend.jgrapht_rr_graph_add_given_edge(
                 self._handle, id(u), id(v), e_ptr
             ):
-                self._inc_edge_ref_count(edge)
+                self._edge_ref_count.inc(edge)
                 if weight is not None:
                     backend.jgrapht_xr_graph_set_edge_weight(
                         self._handle, e_ptr, weight
@@ -121,7 +124,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         else:
             e_ptr = backend.jgrapht_rr_graph_add_edge(self._handle, id(u), id(v))
             edge = _ref_utils._swig_ptr_to_obj(e_ptr)
-            self._inc_edge_ref_count(edge)            
+            self._edge_ref_count.inc(edge)
             if weight is not None:
                 backend.jgrapht_xr_graph_set_edge_weight(self._handle, id(edge), weight)
         return edge
@@ -130,7 +133,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
         if e is None:
             raise ValueError("Edge cannot be None")
         if backend.jgrapht_xr_graph_remove_edge(self._handle, id(e)):
-            self._dec_edge_ref_count(e)            
+            self._edge_ref_count.dec(e)
             return True
         else:
             return False
@@ -205,27 +208,17 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
     def __repr__(self):
         return "_JGraphTRefGraph(%r)" % self._handle
 
-    def _inc_vertex_ref_count(self, element):
-        self._vertex_ref_ids[element] = id(element)
-        _ref_utils._inc_ref(element)
+    @property
+    def graph_attrs(self):
+        return self._graph_attrs
 
-    def _inc_edge_ref_count(self, element):
-        self._edge_ref_ids[element] = id(element)
-        _ref_utils._inc_ref(element)        
+    @property
+    def vertex_attrs(self):
+        return self._vertex_attrs
 
-    def _dec_vertex_ref_count(self, element):
-        element_id = self._vertex_ref_ids.pop(element)
-        _ref_utils._dec_ref_by_id(element_id)
-
-    def _dec_edge_ref_count(self, element):
-        element_id = self._edge_ref_ids.pop(element)
-        _ref_utils._dec_ref_by_id(element_id)        
-
-    def _dec_all_ref_counts(self):
-        for v_id in self._vertex_ref_ids.values():
-            _ref_utils._dec_ref_by_id(v_id)
-        for e_id in self._edge_ref_ids.values():
-            _ref_utils._dec_ref_by_id(e_id)            
+    @property
+    def edge_attrs(self):
+        return self._edge_attrs
 
     class _VertexSet(Set):
         """Wrapper around the vertices of a JGraphT graph"""
@@ -280,7 +273,8 @@ class _JGraphTRefGraph(_HandleWrapper, Graph):
             return set(it)
 
     def __del__(self):
-        self._dec_all_ref_counts()
+        self._vertex_ref_count.dec_all()
+        self._edge_ref_count.dec_all()
         super().__del__()
 
 

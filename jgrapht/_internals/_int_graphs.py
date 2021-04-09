@@ -10,6 +10,7 @@ from ..types import (
 from collections.abc import Set
 
 from ._wrappers import _HandleWrapper, GraphBackend, _JGraphTIntegerIterator
+from ._attributes import _GraphAttributesMap
 from ._collections_set import (
     _JGraphTIntegerSet,
 )
@@ -49,6 +50,7 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph, AttributesGraph):
         )
         self._vertex_set = None
         self._edge_set = None
+        self._graph_attrs = _GraphAttributesMap(handle=handle)
 
     @property
     def type(self):
@@ -66,6 +68,8 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph, AttributesGraph):
         return vertex
 
     def remove_vertex(self, v):
+        if v is None:
+            raise ValueError("Vertex cannot be None")
         backend.jgrapht_ix_graph_remove_vertex(self._handle, v)
 
     def contains_vertex(self, v):

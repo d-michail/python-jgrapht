@@ -1,13 +1,16 @@
 from .. import backend
-from ._wrappers import _HandleWrapper
+from ._wrappers import _HandleWrapper, _JGraphTRefIterator
+from . import _ref_utils, _ref_hashequals
+
+from collections.abc import MutableMapping
 
 
 class _JGraphTAttributeStore(_HandleWrapper):
-    """Attribute Store. 
-    
-    This attribute store is used by the exporters. Users 
+    """Attribute Store.
+
+    This attribute store is used by the exporters. Users
     provide attributes as strings which are automatically converted
-    to UTF-8 encoded bytearrays and passed inside the Java context. 
+    to UTF-8 encoded bytearrays and passed inside the Java context.
     """
 
     def __init__(self, handle=None, **kwargs):
@@ -24,9 +27,7 @@ class _JGraphTAttributeStore(_HandleWrapper):
 
     def remove(self, element, key):
         encoded_key = bytearray(key, encoding="utf-8")
-        backend.jgrapht_ix_attributes_store_remove(
-            self._handle, element, encoded_key
-        )
+        backend.jgrapht_ix_attributes_store_remove(self._handle, element, encoded_key)
 
     def __repr__(self):
         return "_JGraphTAttributeStore(%r)" % self._handle
@@ -70,3 +71,105 @@ class _JGraphTAttributesRegistry(_HandleWrapper):
 
     def __repr__(self):
         return "_JGraphTAttributesRegistry(%r)" % self._handle
+
+
+class _GraphAttributesMap(MutableMapping):
+    """Map for graph attributes"""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(**kwargs)
+        self._handle = handle
+        self._keys_ref_counts = _ref_utils._SingleRefCount()
+        self._values_ref_counts = _ref_utils._SingleRefCount()
+
+    def __iter__(self):
+        res = backend.jgrapht_xxrx_graph_attrs_keys_iterator(self._handle)
+        return _JGraphTRefIterator(res)
+
+    def __len__(self):
+        return backend.jgrapht_xxxx_graph_attrs_size(self._handle)
+
+    __marker = object()
+
+    def get(self, key, value=__marker):
+        key_exists = self.__contains__(key)
+        if not key_exists:
+            if value is self.__marker:
+                raise KeyError
+            else:
+                return value
+        res_ptr = backend.jgrapht_xxrr_graph_attrs_get(self._handle, id(key))
+        res = _ref_utils._swig_ptr_to_obj(res_ptr)
+        return res
+
+    def add(self, key, value):
+        key_exists = self.__contains__(key)
+        if key_exists:
+            old_value_ptr = backend.jgrapht_xxrr_graph_attrs_get(self._handle, id(key))
+            old_value = _ref_utils._swig_ptr_to_obj(old_value_ptr)
+            self._keys_ref_counts.dec(key)
+            self._values_ref_counts.dec(old_value)
+        backend.jgrapht_xxrr_graph_attrs_put(self._handle, id(key), id(value))
+        self._keys_ref_counts.inc(key)
+        self._values_ref_counts.inc(value)
+
+    def pop(self, key, defaultvalue=__marker):
+        try:
+            value_ptr = backend.jgrapht_xxrr_graph_attrs_remove(self._handle, id(key))
+            value = _ref_utils._swig_ptr_to_obj(value_ptr)
+            self._keys_ref_counts.dec(key)
+            self._values_ref_counts.dec(value)
+            return value
+        except ValueError:
+            if defaultvalue is self.__marker:
+                raise KeyError()
+            else:
+                return defaultvalue
+
+    def __contains__(self, key):
+        return backend.jgrapht_xxrr_graph_attrs_contains(self._handle, id(key))
+
+    def __getitem__(self, key):
+        key_exists = self.__contains__(key)
+        if not key_exists:
+            raise KeyError()
+        value_ptr = backend.jgrapht_xxrr_graph_attrs_get(self._handle, id(key))
+        value = _ref_utils._swig_ptr_to_obj(value_ptr)
+        return value
+
+    def __setitem__(self, key, value):
+        key_exists = self.__contains__(key)
+        if key_exists:
+            old_value_ptr = backend.jgrapht_xxrr_graph_attrs_get(self._handle, id(key))
+            old_value = _ref_utils._swig_ptr_to_obj(old_value_ptr)
+            self._keys_ref_counts.dec(key)
+            self._values_ref_counts.dec(old_value)
+        backend.jgrapht_xxrr_graph_attrs_put(self._handle, id(key), id(value))
+        self._keys_ref_counts.inc(key)
+        self._values_ref_counts.inc(value)
+
+    def __delitem__(self, key):
+        key_exists = self.__contains__(key)
+        if not key_exists:
+            raise KeyError()
+        value_ptr = backend.jgrapht_xxrr_graph_attrs_remove(self._handle, id(key))
+        value = _ref_utils._swig_ptr_to_obj(value_ptr)
+        self._keys_ref_counts.dec(key)
+        self._values_ref_counts.dec(value)
+
+    def clear(self):
+        backend.jgrapht_xxxx_graph_attrs_clear(self._handle)
+        self._keys_ref_counts.dec_all()
+        self._values_ref_counts.dec_all()
+
+    def __del__(self):
+        self._keys_ref_counts.dec_all()
+        self._values_ref_counts.dec_all()
+        super().__del__()
+
+    def __repr__(self):
+        return "_GraphAttributesMap(%r)" % self._handle
+
+    def __str__(self):
+        items = ["{}: {}".format(k, v) for k, v in self.items()]
+        return "{" + ", ".join(items) + "}"

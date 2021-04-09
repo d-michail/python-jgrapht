@@ -28,26 +28,27 @@ def _dec_ref_by_id(id):
 
 
 def _ref_count(obj, normalize=True):
-    """Get the reference count of an object
-    """
+    """Get the reference count of an object"""
     count = sys.getrefcount(obj)
     if normalize:
         # remove function argument, getrefcount temporary reference and function stack
         return count - 3
 
+
 def _id_to_obj(id):
-    """Cast an id to an object. Note that this method if 
-       called on a non-existent object, will crash Python.
+    """Cast an id to an object. Note that this method if
+    called on a non-existent object, will crash Python.
     """
     return ctypes.cast(id, ctypes.py_object).value
 
+
 def _map_ids_to_objs(iterable):
-    """Map an iterable of ids to an iterator of objects. 
-    """
+    """Map an iterable of ids to an iterator of objects."""
     return map(lambda item_id: _id_to_obj(item_id), iterable)
 
+
 def _swig_ptr_to_obj(swig_ptr):
-    """Cast a Swig pointer to an object. Assumes that the swig pointer points 
+    """Cast a Swig pointer to an object. Assumes that the swig pointer points
     to a valid python object. Otherwise Python will crash.
     """
     id = int(swig_ptr)
@@ -67,10 +68,13 @@ def _id_comparator(a_id, b_id):
         return 0
     return 1
 
+
 def _create_wrapped_id_comparator_callback(callback):
     if callback is not None:
         # wrap the comparator with a ctypes function pointer
-        callback_type = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_longlong, ctypes.c_longlong)
+        callback_type = ctypes.CFUNCTYPE(
+            ctypes.c_int, ctypes.c_longlong, ctypes.c_longlong
+        )
         f = callback_type(callback)
 
         # get the function pointer of the ctypes wrapper by casting it to void* and taking its value
@@ -83,4 +87,17 @@ def _create_wrapped_id_comparator_callback(callback):
         return (0, None)
 
 
+class _SingleRefCount:
+    def __init__(self):
+        self._objects = set()
 
+    def inc(self, element):
+        if element in self._objects:
+            raise ValueError("Object is already kept")
+        self._objects.add(element)
+
+    def dec(self, element):
+        self._objects.remove(element)
+
+    def dec_all(self):
+        self._objects.clear()

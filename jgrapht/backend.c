@@ -1674,6 +1674,11 @@ int jgrapht_xrxx_graph_attrs_edge_size(void *g, void *elem, int* res) {
     return jgrapht_capi_xrxx_graph_attrs_edge_size(thread, g, elem, res);
 }
 
+int jgrapht_xxxx_graph_attrs_clear(void *g) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xxxx_graph_attrs_clear(thread, g);
+}
+
 // handles
 
 int jgrapht_handles_destroy(void *handle) { 

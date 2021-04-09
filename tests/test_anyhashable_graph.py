@@ -1,12 +1,11 @@
 import pytest
 
-from jgrapht import create_graph, copy_to_sparse_graph
+from jgrapht import create_graph, copy_to_sparse_graph, GraphBackend
 from jgrapht.types import GraphEvent
 from jgrapht.utils import create_edge_supplier, create_vertex_supplier
 from jgrapht.generators import complete_graph
 
 
-@pytest.mark.skip(reason="TODO")
 def test_any_graph():
 
     g = create_graph(
@@ -14,7 +13,7 @@ def test_any_graph():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
     )
 
     assert repr(g) is not None
@@ -91,7 +90,7 @@ def test_any_graph():
 
     assert set(g.edges_between("v5", "v1")) == {"e51_2", "e51_1"}
 
-    assert len(g.edges) == 8
+    assert g.contains_edge("e36")
     assert g.remove_edge("e36")
     assert not g.contains_edge("e36")
     assert len(g.edges) == 7
@@ -127,90 +126,91 @@ def test_any_graph():
     g.graph_attrs["name"] = "property graph"
     assert g.graph_attrs == {"name": "property graph"}
 
-    g.vertex_attrs["v2"]["name"] = "vertex 2"
-    g.vertex_attrs["v2"]["color"] = "red"
-    assert g.vertex_attrs["v2"]["name"] == "vertex 2"
-    assert g.vertex_attrs["v2"]["color"] == "red"
-    assert g.vertex_attrs["v2"] == {"name": "vertex 2", "color": "red"}
 
-    g.vertex_attrs["v3"]["name"] = "vertex 3"
+#    g.vertex_attrs["v2"]["name"] = "vertex 2"
+#    g.vertex_attrs["v2"]["color"] = "red"
+#    assert g.vertex_attrs["v2"]["name"] == "vertex 2"
+#    assert g.vertex_attrs["v2"]["color"] == "red"
+#    assert g.vertex_attrs["v2"] == {"name": "vertex 2", "color": "red"}
 
-    g.add_vertex("new vertex")
-    g.vertex_attrs["new vertex"]["color"] = "white"
-    g.remove_vertex("new vertex")
-    assert dict(g.vertex_attrs) == {
-        "v2": {"color": "red", "name": "vertex 2"},
-        "v3": {"name": "vertex 3"},
-    }
+#    g.vertex_attrs["v3"]["name"] = "vertex 3"
 
-    with pytest.raises(ValueError):
-        g.vertex_attrs["v20"]
+#    g.add_vertex("new vertex")
+#    g.vertex_attrs["new vertex"]["color"] = "white"
+#    g.remove_vertex("new vertex")
+#    assert dict(g.vertex_attrs) == {
+#        "v2": {"color": "red", "name": "vertex 2"},
+#        "v3": {"name": "vertex 3"},
+#    }
 
-    with pytest.raises(ValueError):
-        g.vertex_attrs["v30"]["color"] = "blue"
+#    with pytest.raises(ValueError):
+#        g.vertex_attrs["v20"]
 
-    with pytest.raises(ValueError):
-        g.vertex_attrs["v30"] = {}
+#    with pytest.raises(ValueError):
+#        g.vertex_attrs["v30"]["color"] = "blue"
 
-    with pytest.raises(ValueError):
-        del g.vertex_attrs["v30"]
+#    with pytest.raises(ValueError):
+#        g.vertex_attrs["v30"] = {}
 
-    del g.vertex_attrs["v3"]
-    assert len(g.vertex_attrs) == 1
-    g.vertex_attrs["v3"]["name"] = "vertex 3"
-    assert len(g.vertex_attrs) == 2
+#    with pytest.raises(ValueError):
+#        del g.vertex_attrs["v30"]
 
-    repr(g.vertex_attrs)
+#    del g.vertex_attrs["v3"]
+#    assert len(g.vertex_attrs) == 1
+#    g.vertex_attrs["v3"]["name"] = "vertex 3"
+#    assert len(g.vertex_attrs) == 2
 
-    g.edge_attrs["e13"]["length"] = 100.0
-    g.edge_attrs["e13"]["color"] = "white"
-    g.edge_attrs["e14"]["length"] = 150.0
-    g.edge_attrs["e14"]["color"] = "blue"
+#    repr(g.vertex_attrs)
 
-    assert dict(g.edge_attrs) == {
-        "e13": {"color": "white", "length": 100.0},
-        "e14": {"color": "blue", "length": 150.0},
-    }
+#    g.edge_attrs["e13"]["length"] = 100.0
+#    g.edge_attrs["e13"]["color"] = "white"
+#    g.edge_attrs["e14"]["length"] = 150.0
+#    g.edge_attrs["e14"]["color"] = "blue"
 
-    with pytest.raises(ValueError):
-        g.edge_attrs["e1345"]
+#    assert dict(g.edge_attrs) == {
+#        "e13": {"color": "white", "length": 100.0},
+#        "e14": {"color": "blue", "length": 150.0},
+#    }
 
-    g.remove_edge("e13")
+#    with pytest.raises(ValueError):
+#        g.edge_attrs["e1345"]
 
-    assert dict(g.edge_attrs) == {
-        "e14": {"color": "blue", "length": 150.0},
-    }
+#    g.remove_edge("e13")
 
-    with pytest.raises(ValueError):
-        g.edge_attrs["e13"]
+#    assert dict(g.edge_attrs) == {
+#        "e14": {"color": "blue", "length": 150.0},
+#    }
 
-    repr(g.edge_attrs)
+#    with pytest.raises(ValueError):
+#        g.edge_attrs["e13"]
 
-    with pytest.raises(ValueError):
-        g.edge_attrs["e53"] = {}
-    del g.edge_attrs["e14"]
-    with pytest.raises(ValueError):
-        del g.edge_attrs["e35"]
-    assert len(g.edge_attrs) == 0
-    g.edge_attrs["e14"]["color"] = "blue"
-    assert len(g.edge_attrs) == 1
+#    repr(g.edge_attrs)
 
-    with pytest.raises(TypeError):
-        g.edge_attrs["e14"]["weight"] = "5.0"
+#    with pytest.raises(ValueError):
+#        g.edge_attrs["e53"] = {}
+#    del g.edge_attrs["e14"]
+#    with pytest.raises(ValueError):
+#        del g.edge_attrs["e35"]
+#    assert len(g.edge_attrs) == 0
+#    g.edge_attrs["e14"]["color"] = "blue"
+#    assert len(g.edge_attrs) == 1
 
-    g.edge_attrs["e14"]["weight"] = 33.3
-    del g.edge_attrs["e14"]["weight"]
-    assert g.edge_attrs["e14"]["weight"] == 1.0
+#    with pytest.raises(TypeError):
+#        g.edge_attrs["e14"]["weight"] = "5.0"
 
-    g.edge_attrs["e14"]["color"] = "blue"
-    del g.edge_attrs["e14"]["color"]
+#    g.edge_attrs["e14"]["weight"] = 33.3
+#    del g.edge_attrs["e14"]["weight"]
+#    assert g.edge_attrs["e14"]["weight"] == 1.0
 
-    g.edge_attrs["e14"]["color"] = "blue"
-    repr(g.edge_attrs["e14"])
+#    g.edge_attrs["e14"]["color"] = "blue"
+#    del g.edge_attrs["e14"]["color"]
 
-    assert len(g.edge_attrs["e14"]) == 1
+#    g.edge_attrs["e14"]["color"] = "blue"
+#    repr(g.edge_attrs["e14"])
 
-    assert str(g.edge_attrs["e14"]) == "{'color': 'blue'}"
+#    assert len(g.edge_attrs["e14"]) == 1
+
+#    assert str(g.edge_attrs["e14"]) == "{'color': 'blue'}"
 
 
 def test_any_graph_of_graphs():
@@ -412,7 +412,6 @@ def test_bad_vertex_supplier_property_graph():
         g.add_vertex()
 
 
-
 def test_bad_edge_supplier_property_graph():
     def edge_supplier():
         return "e0"
@@ -460,7 +459,6 @@ def test_listenable_property_graph():
     complete_graph(g, 5)
 
     assert vertices == ["v0", "v1", "v2", "v3", "v4"]
-
 
 
 @pytest.mark.skip(reason="TODO")
@@ -558,40 +556,39 @@ def test_graph_copy_to_sparse_with_attrs():
     assert g.type.allowing_multiple_edges
     assert g.type.weighted
 
-    assert g.add_vertex('0') == '0'
-    assert g.add_vertex('5') == '5'
-    assert g.add_vertex('10') == '10'
+    assert g.add_vertex("0") == "0"
+    assert g.add_vertex("5") == "5"
+    assert g.add_vertex("10") == "10"
 
-    g.add_edge('0', '10', edge='e0')
-    g.add_edge('0', '5', edge='e1')
-    g.add_edge('10', '5', edge='e2')
+    g.add_edge("0", "10", edge="e0")
+    g.add_edge("0", "5", edge="e1")
+    g.add_edge("10", "5", edge="e2")
 
-    g.edge_attrs['e0']['color'] = 'red'
-    g.edge_attrs['e1']['color'] = 'blue'
-    g.edge_attrs['e2']['color'] = 'black'
+    g.edge_attrs["e0"]["color"] = "red"
+    g.edge_attrs["e1"]["color"] = "blue"
+    g.edge_attrs["e2"]["color"] = "black"
 
-    g.vertex_attrs['0']['color'] = 'black'
-    g.vertex_attrs['5']['color'] = 'red'
-    g.vertex_attrs['10']['color'] = 'unknown'
+    g.vertex_attrs["0"]["color"] = "black"
+    g.vertex_attrs["5"]["color"] = "red"
+    g.vertex_attrs["10"]["color"] = "unknown"
 
-    g.graph_attrs['type'] = 'directed'
+    g.graph_attrs["type"] = "directed"
 
     assert len(g.edges) == 3
 
     gs = copy_to_sparse_graph(g)
 
-    assert gs.vertices == { '0', '5', '10' }
+    assert gs.vertices == {"0", "5", "10"}
     assert len(gs.edges) == 3
     assert gs.type.weighted
     assert gs.type.directed
 
-    assert gs.edge_attrs['e0']['color'] == 'red'
-    assert gs.edge_attrs['e1']['color'] == 'blue'
-    assert gs.edge_attrs['e2']['color'] == 'black'
+    assert gs.edge_attrs["e0"]["color"] == "red"
+    assert gs.edge_attrs["e1"]["color"] == "blue"
+    assert gs.edge_attrs["e2"]["color"] == "black"
 
-    assert gs.vertex_attrs['0']['color'] == 'black'
-    assert gs.vertex_attrs['5']['color'] == 'red'
-    assert gs.vertex_attrs['10']['color'] == 'unknown'
+    assert gs.vertex_attrs["0"]["color"] == "black"
+    assert gs.vertex_attrs["5"]["color"] == "red"
+    assert gs.vertex_attrs["10"]["color"] == "unknown"
 
-    gs.graph_attrs['type'] == 'directed'
-    
+    gs.graph_attrs["type"] == "directed"
