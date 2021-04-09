@@ -200,6 +200,23 @@ class _JGraphTStringIterator(_HandleWrapper, Iterator):
         return "_JGraphTStringIterator(%r)" % self._handle
 
 
+class _JGraphTPtrIterator(_HandleWrapper, Iterator):
+    """A JGraphT iterator. This iterator returns frontend objects
+    resolved from references kept in the backend. 
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def __next__(self):
+        res = backend.jgrapht_x_it_hasnext(self._handle)
+        if not res:
+            raise StopIteration()
+        return backend.jgrapht_r_it_next(self._handle)
+
+    def __repr__(self):
+        return "_JGraphTPtrIterator(%r)" % self._handle
+
+
 class _JGraphTRefIterator(_HandleWrapper, Iterator):
     """A JGraphT iterator. This iterator returns frontend objects
     resolved from references kept in the backend. 

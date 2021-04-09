@@ -875,6 +875,8 @@ int jgrapht_rx_planarity_embedding_edges_around_vertex(void *, void *LONG_TO_PTR
 // ref graphs
 
 int jgrapht_rr_graph_hash_equals_resolver_create(void *LONG_TO_FPTR, void *LONG_TO_FPTR, void **OUTPUT);
+int jgrapht_rr_graph_vertex_get_ptr(void *, void *LONG_TO_PTR, void**OUTPUT);
+int jgrapht_rr_graph_edge_get_ptr(void *, void *LONG_TO_PTR, void**OUTPUT);
 int jgrapht_rr_graph_create(int, int, int, int, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void *, void** OUTPUT);
 int jgrapht_rx_graph_add_vertex(void *, void** OUTPUT);
 int jgrapht_rx_graph_add_given_vertex(void *, void *LONG_TO_PTR, int* OUTPUT);

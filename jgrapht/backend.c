@@ -2989,6 +2989,16 @@ int jgrapht_rr_graph_hash_equals_resolver_create(void *hash_lookup_fptr, void *e
     return jgrapht_capi_rr_graph_hash_equals_resolver_create(thread, hash_lookup_fptr, equals_lookup_fptr, res);
 }
 
+int jgrapht_rr_graph_vertex_get_ptr(void *g, void *vertex, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_vertex_get_ptr(thread, g, vertex, res);
+}
+
+int jgrapht_rr_graph_edge_get_ptr(void *g, void *edge, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rr_graph_edge_get_ptr(thread, g, edge, res);
+}
+
 int jgrapht_rr_graph_create(int directed, int allow_self_loops, int allow_multiple_edges, int weighted, void *vertex_supplier_fptr, void *edge_supplier_fptr, void *hash_equals_resolver, void** res) { 
     LAZY_THREAD_ATTACH
     return jgrapht_capi_rr_graph_create(thread, directed, allow_self_loops, allow_multiple_edges, weighted, vertex_supplier_fptr, edge_supplier_fptr, hash_equals_resolver, res);

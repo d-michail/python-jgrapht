@@ -14,7 +14,12 @@ from ._collections_set import (
 
 import ctypes
 from . import _callbacks, _ref_utils, _ref_hashequals
-from ._wrappers import _HandleWrapper, _JGraphTRefIterator, GraphBackend
+from ._wrappers import (
+    _HandleWrapper,
+    _JGraphTRefIterator,
+    _JGraphTPtrIterator,
+    GraphBackend,
+)
 from ._attributes import _GraphAttributesMap
 
 
@@ -74,9 +79,6 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
 
         self._graph_attrs = _GraphAttributesMap(handle=handle)
 
-        self._vertex_ref_count = _ref_utils._SingleRefCount()
-        self._edge_ref_count = _ref_utils._SingleRefCount()
-
         # keep ctypes callbacks from being garbage collected
         self._vertex_supplier_fptr_wrapper = vertex_supplier_fptr_wrapper
         self._edge_supplier_fptr_wrapper = edge_supplier_fptr_wrapper
@@ -93,19 +95,20 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
     def add_vertex(self, vertex=None):
         if vertex is not None:
             if backend.jgrapht_rx_graph_add_given_vertex(self._handle, id(vertex)):
-                self._vertex_ref_count.inc(vertex)
+                _ref_utils._inc_ref(vertex)
         else:
             v_ptr = backend.jgrapht_rx_graph_add_vertex(self._handle)
             vertex = _ref_utils._swig_ptr_to_obj(v_ptr)
-            self._vertex_ref_count.inc(vertex)
+            _ref_utils._inc_ref(vertex)
         return vertex
 
     def remove_vertex(self, v):
         if v is None:
             raise ValueError("Vertex cannot be None")
+        v_ptr = backend.jgrapht_rr_graph_vertex_get_ptr(self._handle, id(v))
         removed = backend.jgrapht_rx_graph_remove_vertex(self._handle, id(v))
         if removed:
-            self._vertex_ref_count.dec(v)
+            _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(v_ptr))
 
     def contains_vertex(self, v):
         return backend.jgrapht_rx_graph_contains_vertex(self._handle, id(v))
@@ -116,7 +119,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
             if backend.jgrapht_rr_graph_add_given_edge(
                 self._handle, id(u), id(v), e_ptr
             ):
-                self._edge_ref_count.inc(edge)
+                _ref_utils._inc_ref(edge)
                 if weight is not None:
                     backend.jgrapht_xr_graph_set_edge_weight(
                         self._handle, e_ptr, weight
@@ -124,7 +127,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
         else:
             e_ptr = backend.jgrapht_rr_graph_add_edge(self._handle, id(u), id(v))
             edge = _ref_utils._swig_ptr_to_obj(e_ptr)
-            self._edge_ref_count.inc(edge)
+            _ref_utils._inc_ref(edge)
             if weight is not None:
                 backend.jgrapht_xr_graph_set_edge_weight(self._handle, id(edge), weight)
         return edge
@@ -132,8 +135,9 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
     def remove_edge(self, e):
         if e is None:
             raise ValueError("Edge cannot be None")
+        e_ptr = backend.jgrapht_rr_graph_edge_get_ptr(self._handle, id(e))
         if backend.jgrapht_xr_graph_remove_edge(self._handle, id(e)):
-            self._edge_ref_count.dec(e)
+            _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(e_ptr))
             return True
         else:
             return False
@@ -273,8 +277,14 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
             return set(it)
 
     def __del__(self):
-        self._vertex_ref_count.dec_all()
-        self._edge_ref_count.dec_all()
+        for v_ptr in _JGraphTPtrIterator(
+            handle=backend.jgrapht_xx_graph_create_all_vit(self._handle)
+        ):
+            _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(v_ptr))
+        for e_ptr in _JGraphTPtrIterator(
+            handle=backend.jgrapht_xx_graph_create_all_eit(self._handle)
+        ):
+            _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(e_ptr))
         super().__del__()
 
 
@@ -375,7 +385,7 @@ def _create_ref_dag(
     allowing_multiple_edges=False,
     weighted=True,
     vertex_supplier=None,
-    edge_supplier=None,    
+    edge_supplier=None,
 ):
     """Create a directed acyclic graph.
 
@@ -384,7 +394,7 @@ def _create_ref_dag(
     :param vertex_supplier: function which returns new vertices on each call. If
         None then object instances are used.
     :param edge_supplier: function which returns new edge on each call. If
-        None then object instances are used.    
+        None then object instances are used.
     :returns: a graph
     :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph`
     """
@@ -413,7 +423,7 @@ def _create_ref_dag(
         vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
         edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
         hash_equals_wrapper=hash_equals_wrapper,
-    )    
+    )
 
 
 def _is_ref_graph(graph):
