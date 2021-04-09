@@ -1,15 +1,19 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier
 import jgrapht.algorithms.drawing as drawing
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(), 
     )
 
     for i in range(0, 6):
@@ -32,7 +36,7 @@ def build_anyhashable_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH
     )
 
     g.add_vertex("0")
@@ -53,8 +57,16 @@ def build_anyhashable_graph():
     return g
 
 
-def test_two_layered_bipartite_layout():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_two_layered_bipartite_layout(backend):
+    g = build_graph(backend)
 
     area = (0, 0, 10, 10)
     model = drawing.two_layered_bipartite_layout_2d(g, area)
@@ -77,6 +89,8 @@ def test_two_layered_bipartite_layout():
 def test_anyhashable_two_layered_bipartite_layout():
     g = build_anyhashable_graph()
 
+    print(g)
+
     area = (0, 0, 10, 10)
     model = drawing.two_layered_bipartite_layout_2d(g, area)
 
@@ -95,9 +109,16 @@ def test_anyhashable_two_layered_bipartite_layout():
     ]
 
 
-
-def test_two_layered_bipartite_layout_with_comparator():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_two_layered_bipartite_layout_with_comparator(backend):
+    g = build_graph(backend)
 
     area = (0, 0, 10, 10)
 
@@ -125,8 +146,16 @@ def test_two_layered_bipartite_layout_with_comparator():
     ]
 
 
-def test_two_layered_bipartite_layout_horizontal():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_two_layered_bipartite_layout_horizontal(backend):
+    g = build_graph(backend)
 
     area = (0, 0, 10, 10)
     model = drawing.two_layered_bipartite_layout_2d(g, area, vertical=False)
@@ -146,8 +175,16 @@ def test_two_layered_bipartite_layout_horizontal():
     ]
 
 
-def test_two_layered_bipartite_layout_with_partition():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_two_layered_bipartite_layout_with_partition(backend):
+    g = build_graph(backend)
     partition = [3, 4, 5]
 
     area = (0, 0, 10, 10)
@@ -169,8 +206,16 @@ def test_two_layered_bipartite_layout_with_partition():
     ]
 
 
-def test_barycenter_greedy_two_layered_bipartite_layout():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_barycenter_greedy_two_layered_bipartite_layout(backend):
+    g = build_graph(backend)
 
     area = (0, 0, 10, 10)
     model = drawing.barycenter_greedy_two_layered_bipartite_layout_2d(g, area)
@@ -192,8 +237,16 @@ def test_barycenter_greedy_two_layered_bipartite_layout():
     ]
 
 
-def test_median_greedy_two_layered_bipartite_layout():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_median_greedy_two_layered_bipartite_layout(backend):
+    g = build_graph(backend)
 
     area = (0, 0, 10, 10)
     model = drawing.median_greedy_two_layered_bipartite_layout_2d(g, area)

@@ -80,3 +80,4 @@ def _create_wrapped_long_supplier_callback(callback):
         return _create_wrapped_callback(callback, callback_ctype)
     else:
         return (0, None)
+

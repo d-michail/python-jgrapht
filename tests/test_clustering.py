@@ -161,7 +161,7 @@ def test_anyhashableg_label_propagation():
     assert set(c.ith_cluster(1)) == set([3, 4, 5])
 
 
-def test_k_spanning_tree():
+def test_k_spanning_tree1():
     g = create_graph(
         directed=False,
         allowing_self_loops=False,

@@ -1,11 +1,44 @@
 import time
 
 from .. import backend as _backend
+from .. import GraphBackend
 
 from .._internals._results import _build_vertex_set
-from .._internals._callbacks import _create_wrapped_int_vertex_comparator_callback
+from .._internals._callbacks_graph import _create_vertex_comparator_wrapper
 
-from .._internals._drawing import _create_int_layout_model_2d as create_layout_model_2d
+from .._internals._drawing import (
+    _create_int_layout_model_2d,
+    _create_long_layout_model_2d,
+    _create_ref_layout_model_2d,
+)
+
+
+def _drawing_alg(name, graph, model, *args):
+    if graph._backend_type == GraphBackend.INT_GRAPH:
+        alg_method_name = "jgrapht_ix_drawing_exec_" + name
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        alg_method_name = "jgrapht_lx_drawing_exec_" + name
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        alg_method_name = "jgrapht_rx_drawing_exec_" + name
+    else:
+        raise ValueError("Backend not recognised")
+        
+    alg_method = getattr(_backend, alg_method_name)
+    alg_method(graph.handle, model.handle, *args)
+
+
+
+def create_layout_model_2d(graph, min_x, min_y, width, height):
+    if graph._backend_type == GraphBackend.INT_GRAPH:
+        return _create_int_layout_model_2d(min_x, min_y, width, height)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _create_long_layout_model_2d(min_x, min_y, width, height)
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _create_ref_layout_model_2d(
+            min_x, min_y, width, height, graph._hash_equals_wrapper.handle
+        )
+    else:
+        raise ValueError("Invalid graph backend")
 
 
 def random_layout_2d(graph, area, seed=None):
@@ -21,7 +54,7 @@ def random_layout_2d(graph, area, seed=None):
     if seed is None:
         seed = int(time.time())
 
-    model = create_layout_model_2d(*area)
+    model = create_layout_model_2d(graph, *area)
 
     custom = [seed]
     _backend.jgrapht_xx_drawing_exec_random_layout_2d(
@@ -45,17 +78,11 @@ def circular_layout_2d(graph, area, radius, vertex_comparator_cb=None):
       v1 > v2 in the ordering
     :returns: a 2d layout model as an instance of :py:class:`jgrapht.types.LayoutModel2D`.
     """
-    model = create_layout_model_2d(*area)
-    actual_vertex_comparator_cb = vertex_comparator_cb
+    model = create_layout_model_2d(graph, *area)
+    vertex_comparator_wrapper = _create_vertex_comparator_wrapper(graph, vertex_comparator_cb)
 
-    (
-        vertex_comparator_f_ptr,
-        vertex_comparator_f,
-    ) = _create_wrapped_int_vertex_comparator_callback(actual_vertex_comparator_cb)
-
-    custom = [radius, vertex_comparator_f_ptr]
     _backend.jgrapht_ix_drawing_exec_circular_layout_2d(
-        graph.handle, model.handle, *custom
+        graph.handle, model.handle, *[radius, vertex_comparator_wrapper.fptr]
     )
     return model
 
@@ -83,7 +110,7 @@ def fruchterman_reingold_layout_2d(
     """
     if seed is None:
         seed = int(time.time())
-    model = create_layout_model_2d(*area)
+    model = create_layout_model_2d(graph, *area)
 
     custom = [iterations, normalization_factor, seed]
     _backend.jgrapht_xx_drawing_exec_fr_layout_2d(graph.handle, model.handle, *custom)
@@ -132,7 +159,7 @@ def fruchterman_reingold_indexed_layout_2d(
     if tolerance is None:
         tolerance = 1e-9
 
-    model = create_layout_model_2d(*area)
+    model = create_layout_model_2d(graph, *area)
 
     custom = [iterations, normalization_factor, seed, theta, tolerance]
     _backend.jgrapht_xx_drawing_exec_indexed_fr_layout_2d(
@@ -172,21 +199,10 @@ def two_layered_bipartite_layout_2d(
     else:
         partition_handle = None
 
-    model = create_layout_model_2d(*area)
-
-    if vertex_comparator_cb is not None: 
-        actual_vertex_comparator_cb = vertex_comparator_cb
-        (
-            vertex_comparator_f_ptr,
-            vertex_comparator_f,
-        ) = _create_wrapped_int_vertex_comparator_callback(actual_vertex_comparator_cb)
-    else:
-        vertex_comparator_f_ptr = 0
-
-    custom = [partition_handle, vertex_comparator_f_ptr, vertical]
-    _backend.jgrapht_ix_drawing_exec_two_layered_bipartite_layout_2d(
-        graph.handle, model.handle, *custom
-    )
+    model = create_layout_model_2d(graph, *area)
+    vertex_comparator_wrapper = _create_vertex_comparator_wrapper(graph, vertex_comparator_cb)
+    custom = [partition_handle, vertex_comparator_wrapper.fptr, vertical]
+    _drawing_alg("two_layered_bipartite_layout_2d", graph, model, *custom)        
     return model
 
 
@@ -230,22 +246,12 @@ def barycenter_greedy_two_layered_bipartite_layout_2d(
     else:
         partition_handle = None
 
-    model = create_layout_model_2d(*area)
-
-    if vertex_comparator_cb is not None: 
-        actual_vertex_comparator_cb = vertex_comparator_cb
-        (
-            vertex_comparator_f_ptr,
-            vertex_comparator_f,
-        ) = _create_wrapped_int_vertex_comparator_callback(actual_vertex_comparator_cb)
-    else:
-        vertex_comparator_f_ptr = 0
-
-    custom = [partition_handle, vertex_comparator_f_ptr, vertical]
-    _backend.jgrapht_ix_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(
-        graph.handle, model.handle, *custom
-    )
+    model = create_layout_model_2d(graph, *area)
+    vertex_comparator_wrapper = _create_vertex_comparator_wrapper(graph, vertex_comparator_cb)
+    custom = [partition_handle, vertex_comparator_wrapper.fptr, vertical]
+    _drawing_alg("barycenter_greedy_two_layered_bipartite_layout_2d", graph, model, *custom)    
     return model
+
 
 
 def median_greedy_two_layered_bipartite_layout_2d(
@@ -285,19 +291,8 @@ def median_greedy_two_layered_bipartite_layout_2d(
     else:
         partition_handle = None
 
-    model = create_layout_model_2d(*area)
-
-    if vertex_comparator_cb is not None: 
-        actual_vertex_comparator_cb = vertex_comparator_cb
-        (
-            vertex_comparator_f_ptr,
-            vertex_comparator_f,
-        ) = _create_wrapped_int_vertex_comparator_callback(actual_vertex_comparator_cb)
-    else:
-        vertex_comparator_f_ptr = 0
-
-    custom = [partition_handle, vertex_comparator_f_ptr, vertical]
-    _backend.jgrapht_ix_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(
-        graph.handle, model.handle, *custom
-    )
+    model = create_layout_model_2d(graph, *area)
+    vertex_comparator_wrapper = _create_vertex_comparator_wrapper(graph, vertex_comparator_cb)    
+    custom = [partition_handle, vertex_comparator_wrapper.fptr, vertical]
+    _drawing_alg("median_greedy_two_layered_bipartite_layout_2d", graph, model, *custom)
     return model
