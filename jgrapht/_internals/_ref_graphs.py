@@ -73,14 +73,15 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
         self._vertex_set = None
         self._edge_set = None
 
+        self._vertex_ref_count = _ref_utils._SingleRefCount()
+        self._edge_ref_count = _ref_utils._SingleRefCount()
+
+        # support for graph attributes
         self._graph_attrs = dict()
         self._vertex_to_attrs = defaultdict(lambda: {})
         self._vertex_attrs = _VertexAttributes(self, self._vertex_to_attrs)
         self._edge_to_attrs = defaultdict(lambda: {})
         self._edge_attrs = _EdgeAttributes(self, self._edge_to_attrs)
-
-        self._vertex_ref_count = _ref_utils._SingleRefCount()
-        self._edge_ref_count = _ref_utils._SingleRefCount()
 
         # keep ctypes callbacks from being garbage collected
         self._vertex_supplier_fptr_wrapper = vertex_supplier_fptr_wrapper

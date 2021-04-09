@@ -29,8 +29,8 @@ def test_gomory_hu_tree(backend):
     g.add_vertex(2)
     g.add_vertex(3)
 
-    e01 = g.add_edge(0, 1, weight=20)
-    e02 = g.add_edge(0, 2, weight=10)
+    g.add_edge(0, 1, weight=20)
+    g.add_edge(0, 2, weight=10)
     g.add_edge(1, 2, weight=30)
     g.add_edge(1, 3, weight=10)
     g.add_edge(2, 3, weight=20)
