@@ -1,4 +1,5 @@
 from . import backend as _backend
+from . import GraphBackend
 from ._internals._results import _wrap_vertex_iterator, _unwrap_vertex
 import time
 
@@ -19,9 +20,21 @@ def bfs_traversal(graph, start_vertex=None):
         it = _backend.jgrapht_xx_traverse_create_bfs_from_all_vertices_vit(graph.handle)
     else:
         start_vertex = _unwrap_vertex(graph, start_vertex)
-        it = _backend.jgrapht_ix_traverse_create_bfs_from_vertex_vit(
-            graph.handle, start_vertex
-        )
+        if graph._backend_type == GraphBackend.INT_GRAPH:
+            it = _backend.jgrapht_ix_traverse_create_bfs_from_vertex_vit(
+                graph.handle, start_vertex
+            )
+        elif graph._backend_type == GraphBackend.LONG_GRAPH:
+            it = _backend.jgrapht_lx_traverse_create_bfs_from_vertex_vit(
+                graph.handle, start_vertex
+            )
+        elif graph._backend_type == GraphBackend.REF_GRAPH:
+            it = _backend.jgrapht_rx_traverse_create_bfs_from_vertex_vit(
+                graph.handle, start_vertex
+            )
+        else: 
+            raise ValueError("Not supported graph backend")
+
     return _wrap_vertex_iterator(graph, it)
 
 
@@ -58,9 +71,21 @@ def dfs_traversal(graph, start_vertex=None):
         it = _backend.jgrapht_xx_traverse_create_dfs_from_all_vertices_vit(graph.handle)
     else:
         start_vertex = _unwrap_vertex(graph, start_vertex)
-        it = _backend.jgrapht_ix_traverse_create_dfs_from_vertex_vit(
-            graph.handle, start_vertex
-        )
+        if graph._backend_type == GraphBackend.INT_GRAPH:
+            it = _backend.jgrapht_ix_traverse_create_dfs_from_vertex_vit(
+                graph.handle, start_vertex
+            )
+        elif graph._backend_type == GraphBackend.LONG_GRAPH:
+            it = _backend.jgrapht_lx_traverse_create_dfs_from_vertex_vit(
+                graph.handle, start_vertex
+            )
+        elif graph._backend_type == GraphBackend.REF_GRAPH:
+            it = _backend.jgrapht_rx_traverse_create_dfs_from_vertex_vit(
+                graph.handle, start_vertex
+            )
+        else: 
+            raise ValueError("Not supported graph backend")
+
     return _wrap_vertex_iterator(graph, it)
 
 
@@ -101,9 +126,21 @@ def random_walk_traversal(
 
     start_vertex = _unwrap_vertex(graph, start_vertex)
 
-    it = _backend.jgrapht_ix_traverse_create_custom_random_walk_from_vertex_vit(
-        graph.handle, start_vertex, weighted, max_steps, seed
-    )
+    if graph._backend_type == GraphBackend.INT_GRAPH:
+        it = _backend.jgrapht_ix_traverse_create_custom_random_walk_from_vertex_vit(
+            graph.handle, start_vertex, weighted, max_steps, seed
+        )
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        it = _backend.jgrapht_lx_traverse_create_custom_random_walk_from_vertex_vit(
+            graph.handle, start_vertex, weighted, max_steps, seed
+        )
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        it = _backend.jgrapht_rx_traverse_create_custom_random_walk_from_vertex_vit(
+            graph.handle, start_vertex, weighted, max_steps, seed
+        )
+    else: 
+        raise ValueError("Not supported graph backend")    
+
     return _wrap_vertex_iterator(graph, it)
 
 
@@ -156,12 +193,35 @@ def closest_first_traversal(graph, start_vertex, radius=None):
     :param radius: if given restrict the search up to this radius
     """
     start_vertex = _unwrap_vertex(graph, start_vertex)
-    if radius is None:
-        it = _backend.jgrapht_ix_traverse_create_closest_first_from_vertex_vit(
-            graph.handle, start_vertex
-        )
-    else:
-        it = _backend.jgrapht_ix_traverse_create_custom_closest_first_from_vertex_vit(
-            graph.handle, start_vertex, radius
-        )
+
+    if graph._backend_type == GraphBackend.INT_GRAPH:
+        if radius is None:
+            it = _backend.jgrapht_ix_traverse_create_closest_first_from_vertex_vit(
+                graph.handle, start_vertex
+            )
+        else:
+            it = _backend.jgrapht_ix_traverse_create_custom_closest_first_from_vertex_vit(
+                graph.handle, start_vertex, radius
+            )
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        if radius is None:
+            it = _backend.jgrapht_lx_traverse_create_closest_first_from_vertex_vit(
+                graph.handle, start_vertex
+            )
+        else:
+            it = _backend.jgrapht_lx_traverse_create_custom_closest_first_from_vertex_vit(
+                graph.handle, start_vertex, radius
+            )
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        if radius is None:
+            it = _backend.jgrapht_rx_traverse_create_closest_first_from_vertex_vit(
+                graph.handle, start_vertex
+            )
+        else:
+            it = _backend.jgrapht_rx_traverse_create_custom_closest_first_from_vertex_vit(
+                graph.handle, start_vertex, radius
+            )
+    else: 
+        raise ValueError("Not supported graph backend")
+
     return _wrap_vertex_iterator(graph, it)

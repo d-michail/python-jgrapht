@@ -1,3 +1,4 @@
+from collections import defaultdict
 from collections.abc import Set
 
 from .. import backend
@@ -20,7 +21,7 @@ from ._wrappers import (
     _JGraphTPtrIterator,
     GraphBackend,
 )
-from ._attributes import _GraphAttributesMap
+from ._attributes import _VertexAttributes, _EdgeAttributes
 
 
 class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
@@ -77,7 +78,12 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
         self._vertex_set = None
         self._edge_set = None
 
-        self._graph_attrs = _GraphAttributesMap(handle=handle)
+        # support for graph attributes
+        self._graph_attrs = dict()
+        self._vertex_to_attrs = defaultdict(lambda: {})
+        self._vertex_attrs = _VertexAttributes(self, self._vertex_to_attrs)
+        self._edge_to_attrs = defaultdict(lambda: {})
+        self._edge_attrs = _EdgeAttributes(self, self._edge_to_attrs)
 
         # keep ctypes callbacks from being garbage collected
         self._vertex_supplier_fptr_wrapper = vertex_supplier_fptr_wrapper

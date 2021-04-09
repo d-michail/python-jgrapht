@@ -1,15 +1,28 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier
 import jgrapht.algorithms.drawing as drawing
 
 
-def test_fr_layout():
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_fr_layout(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
     g.add_vertices_from(range(0, 5))
     g.add_edge(0, 1)
@@ -45,12 +58,23 @@ def test_fr_layout():
     assert len(locations) == 5
 
 
-def test_fr_layout_indexed():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_fr_layout_indexed(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
     g.add_vertices_from(range(0, 5))
     g.add_edge(0, 1)
@@ -85,7 +109,7 @@ def test_anyhashableg_fr_layout():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH
     )
 
     for i in range(0, 5):
@@ -123,7 +147,7 @@ def test_anyhashableg_fr_layout_indexed():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH
     )
     g.add_vertices_from(range(0, 5))
     g.add_edge(0, 1, edge="0")

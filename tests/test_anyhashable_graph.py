@@ -126,91 +126,90 @@ def test_any_graph():
     g.graph_attrs["name"] = "property graph"
     assert g.graph_attrs == {"name": "property graph"}
 
+    g.vertex_attrs["v2"]["name"] = "vertex 2"
+    g.vertex_attrs["v2"]["color"] = "red"
+    assert g.vertex_attrs["v2"]["name"] == "vertex 2"
+    assert g.vertex_attrs["v2"]["color"] == "red"
+    assert g.vertex_attrs["v2"] == {"name": "vertex 2", "color": "red"}
 
-#    g.vertex_attrs["v2"]["name"] = "vertex 2"
-#    g.vertex_attrs["v2"]["color"] = "red"
-#    assert g.vertex_attrs["v2"]["name"] == "vertex 2"
-#    assert g.vertex_attrs["v2"]["color"] == "red"
-#    assert g.vertex_attrs["v2"] == {"name": "vertex 2", "color": "red"}
+    g.vertex_attrs["v3"]["name"] = "vertex 3"
 
-#    g.vertex_attrs["v3"]["name"] = "vertex 3"
+    g.add_vertex("new vertex")
+    g.vertex_attrs["new vertex"]["color"] = "white"
+    g.remove_vertex("new vertex")
+    assert dict(g.vertex_attrs) == {
+        "v2": {"color": "red", "name": "vertex 2"},
+        "v3": {"name": "vertex 3"},
+    }
 
-#    g.add_vertex("new vertex")
-#    g.vertex_attrs["new vertex"]["color"] = "white"
-#    g.remove_vertex("new vertex")
-#    assert dict(g.vertex_attrs) == {
-#        "v2": {"color": "red", "name": "vertex 2"},
-#        "v3": {"name": "vertex 3"},
-#    }
+    with pytest.raises(ValueError):
+        g.vertex_attrs["v20"]
 
-#    with pytest.raises(ValueError):
-#        g.vertex_attrs["v20"]
+    with pytest.raises(ValueError):
+        g.vertex_attrs["v30"]["color"] = "blue"
 
-#    with pytest.raises(ValueError):
-#        g.vertex_attrs["v30"]["color"] = "blue"
+    with pytest.raises(ValueError):
+        g.vertex_attrs["v30"] = {}
 
-#    with pytest.raises(ValueError):
-#        g.vertex_attrs["v30"] = {}
+    with pytest.raises(ValueError):
+        del g.vertex_attrs["v30"]
 
-#    with pytest.raises(ValueError):
-#        del g.vertex_attrs["v30"]
+    del g.vertex_attrs["v3"]
+    assert len(g.vertex_attrs) == 1
+    g.vertex_attrs["v3"]["name"] = "vertex 3"
+    assert len(g.vertex_attrs) == 2
 
-#    del g.vertex_attrs["v3"]
-#    assert len(g.vertex_attrs) == 1
-#    g.vertex_attrs["v3"]["name"] = "vertex 3"
-#    assert len(g.vertex_attrs) == 2
+    repr(g.vertex_attrs)
 
-#    repr(g.vertex_attrs)
+    g.edge_attrs["e13"]["length"] = 100.0
+    g.edge_attrs["e13"]["color"] = "white"
+    g.edge_attrs["e14"]["length"] = 150.0
+    g.edge_attrs["e14"]["color"] = "blue"
 
-#    g.edge_attrs["e13"]["length"] = 100.0
-#    g.edge_attrs["e13"]["color"] = "white"
-#    g.edge_attrs["e14"]["length"] = 150.0
-#    g.edge_attrs["e14"]["color"] = "blue"
+    assert dict(g.edge_attrs) == {
+        "e13": {"color": "white", "length": 100.0},
+        "e14": {"color": "blue", "length": 150.0},
+    }
 
-#    assert dict(g.edge_attrs) == {
-#        "e13": {"color": "white", "length": 100.0},
-#        "e14": {"color": "blue", "length": 150.0},
-#    }
+    with pytest.raises(ValueError):
+        g.edge_attrs["e1345"]
 
-#    with pytest.raises(ValueError):
-#        g.edge_attrs["e1345"]
+    g.remove_edge("e13")
 
-#    g.remove_edge("e13")
+    assert dict(g.edge_attrs) == {
+        "e14": {"color": "blue", "length": 150.0},
+    }
 
-#    assert dict(g.edge_attrs) == {
-#        "e14": {"color": "blue", "length": 150.0},
-#    }
+    with pytest.raises(ValueError):
+        g.edge_attrs["e13"]
 
-#    with pytest.raises(ValueError):
-#        g.edge_attrs["e13"]
+    repr(g.edge_attrs)
 
-#    repr(g.edge_attrs)
+    with pytest.raises(ValueError):
+        g.edge_attrs["e53"] = {}
+    del g.edge_attrs["e14"]
+    with pytest.raises(ValueError):
+        del g.edge_attrs["e35"]
+    assert len(g.edge_attrs) == 0
+    g.edge_attrs["e14"]["color"] = "blue"
+    assert len(g.edge_attrs) == 1
 
-#    with pytest.raises(ValueError):
-#        g.edge_attrs["e53"] = {}
-#    del g.edge_attrs["e14"]
-#    with pytest.raises(ValueError):
-#        del g.edge_attrs["e35"]
-#    assert len(g.edge_attrs) == 0
-#    g.edge_attrs["e14"]["color"] = "blue"
-#    assert len(g.edge_attrs) == 1
+    with pytest.raises(TypeError):
+        g.edge_attrs["e14"]["weight"] = "5.0"
 
-#    with pytest.raises(TypeError):
-#        g.edge_attrs["e14"]["weight"] = "5.0"
+    g.edge_attrs["e14"]["weight"] = 33.3
+    del g.edge_attrs["e14"]["weight"]
+    assert g.edge_attrs["e14"]["weight"] == 1.0
 
-#    g.edge_attrs["e14"]["weight"] = 33.3
-#    del g.edge_attrs["e14"]["weight"]
-#    assert g.edge_attrs["e14"]["weight"] == 1.0
+    g.edge_attrs["e14"]["color"] = "blue"
+    del g.edge_attrs["e14"]["color"]
 
-#    g.edge_attrs["e14"]["color"] = "blue"
-#    del g.edge_attrs["e14"]["color"]
+    g.edge_attrs["e14"]["color"] = "blue"
+    repr(g.edge_attrs["e14"])
 
-#    g.edge_attrs["e14"]["color"] = "blue"
-#    repr(g.edge_attrs["e14"])
+    assert len(g.edge_attrs["e14"]) == 1
 
-#    assert len(g.edge_attrs["e14"]) == 1
-
-#    assert str(g.edge_attrs["e14"]) == "{'color': 'blue'}"
+    assert str(g.edge_attrs["e14"]) == "{'color': 'blue'}"
 
 
 def test_any_graph_of_graphs():

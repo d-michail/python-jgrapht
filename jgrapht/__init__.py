@@ -51,7 +51,7 @@ from ._internals._long_graphs import (
     _create_long_graph,
 )
 from ._internals._ref_graphs import (
-    _is_ref_graph, 
+    _is_ref_graph,
     _create_ref_graph,
     _create_ref_dag,
 )
@@ -99,7 +99,7 @@ def create_graph(
       vertices/edges. Called everytime the graph needs to create a new edge. If not given,
       then object instances are used.
     :param backend: which backend implementation to use for the graph. Default is to choose
-      automatically. If set, the backend takes precidence over parameter any_hashable.      
+      automatically. If set, the backend takes precidence over parameter any_hashable.
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
@@ -139,7 +139,7 @@ def create_graph(
                 allowing_self_loops=allowing_self_loops,
                 allowing_multiple_edges=allowing_multiple_edges,
                 weighted=weighted,
-            )            
+            )
 
     if backend == GraphBackend.REF_GRAPH:
         if dag:
@@ -157,7 +157,7 @@ def create_graph(
                 weighted=weighted,
                 vertex_supplier=vertex_supplier,
                 edge_supplier=edge_supplier,
-            )            
+            )
 
     raise ValueError("Not supported backend")
 
@@ -168,17 +168,10 @@ def create_sparse_graph(
     directed=True,
     weighted=True,
     incoming_edges_support=IncomingEdgesSupport.LAZY_INCOMING_EDGES,
-    any_hashable=False,
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create a sparse graph.
-
-    By default this function creates graphs with integer vertices. When parameter
-    `any_hashable` is true, the returned graph will be able to (a) have any
-    hashable as vertices and edges, and (b) associate attributes/properties with the vertices
-    and edges.
-
+    """Create a sparse graph. The graph has integer vertices and edges.
     The structure (topology) of a sparse graph is unmodifiable, but weights and properties can be
     modified.
 
@@ -191,9 +184,6 @@ def create_sparse_graph(
     :param weighted: if True the graph will be weighted, otherwise unweighted
     :param incoming_edges_support: full support, lazily constructed or no support for incoming edges. Only
            valid for directed graphs. Defaults to lazily constructed.
-    :param any_hashable: if True then the graph will allow the use of any
-      hashable as vertices and edges instead of just integers. This also makes the graph
-      an instance of :class:`~jgrapht.types.AttributesGraph`
     :param vertex_supplier: used only in the case that the graph allows any hashable as
       vertices/edges. Called everytime the graph needs to create a new vertex. If not given,
       then object instances are used.
@@ -203,16 +193,13 @@ def create_sparse_graph(
     :returns: a graph
     :rtype: :class:`~jgrapht.types.Graph`
     """
-    if any_hashable:
-        raise ValueError("TODO")
-    else:
-        return _create_sparse_int_graph(
-            edgelist=edgelist,
-            num_of_vertices=num_of_vertices,
-            directed=directed,
-            weighted=weighted,
-            incoming_edges_support=incoming_edges_support,
-        )
+    return _create_sparse_int_graph(
+        edgelist=edgelist,
+        num_of_vertices=num_of_vertices,
+        directed=directed,
+        weighted=weighted,
+        incoming_edges_support=incoming_edges_support,
+    )
 
 
 def copy_to_sparse_graph(graph):
@@ -238,15 +225,9 @@ def create_succinct_graph(
     vertex_supplier=None,
     edge_supplier=None,
 ):
-    """Create a succinct graph.
-
-    By default this function creates graphs with integer vertices. When parameter
-    `any_hashable` is true, the returned graph will be able to (a) have any
-    hashable as vertices and edges, and (b) associate attributes/properties with the vertices
-    and edges.
-
+    """Create a succinct graph. The graph as integer vertices and edges.
     The structure (topology) of a succinct graph is unmodifiable, but properties can be
-    modified. The graph will be unweighted. 
+    modified. The graph will be unweighted.
 
     .. note:: Succinct graphs support self-loops but not multiple-edges! A ValueError will be raised
               if multiple-edges are detected.
@@ -274,15 +255,12 @@ def create_succinct_graph(
     if incoming_edges_support is IncomingEdgesSupport.LAZY_INCOMING_EDGES:
         incoming_edges_support = IncomingEdgesSupport.FULL_INCOMING_EDGES
 
-    if any_hashable:
-        raise ValueError("TODO")
-    else:
-        return _create_succinct_int_graph(
-            edgelist=edgelist,
-            num_of_vertices=num_of_vertices,
-            directed=directed,
-            incoming_edges_support=incoming_edges_support,
-        )
+    return _create_succinct_int_graph(
+        edgelist=edgelist,
+        num_of_vertices=num_of_vertices,
+        directed=directed,
+        incoming_edges_support=incoming_edges_support,
+    )
 
 
 def copy_to_succinct_graph(graph):
@@ -292,7 +270,7 @@ def copy_to_succinct_graph(graph):
        Attempting to alter one will result in an error being raised. Attributes can be modified.
 
     .. note:: Succinct graphs support self-loops but not multiple-edges! A ValueError will be raised
-              if multiple-edges are detected.       
+              if multiple-edges are detected.
 
     :param graph: the input graph
     :returns: a succinct graph

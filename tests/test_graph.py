@@ -674,7 +674,12 @@ def test_graph_sparse_no_incoming():
 
     edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
 
-    g = create_sparse_graph(edgelist, 7, weighted=False, incoming_edges_support=IncomingEdgesSupport.NO_INCOMING_EDGES)
+    g = create_sparse_graph(
+        edgelist,
+        7,
+        weighted=False,
+        incoming_edges_support=IncomingEdgesSupport.NO_INCOMING_EDGES,
+    )
 
     assert g.type.directed
     assert not g.type.weighted
@@ -689,27 +694,37 @@ def test_graph_sparse_no_incoming():
 def test_graph_sparse_full_incoming():
 
     edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
-    g = create_sparse_graph(edgelist, 7, weighted=False, incoming_edges_support=IncomingEdgesSupport.FULL_INCOMING_EDGES)
+    g = create_sparse_graph(
+        edgelist,
+        7,
+        weighted=False,
+        incoming_edges_support=IncomingEdgesSupport.FULL_INCOMING_EDGES,
+    )
 
     assert g.type.directed
     assert not g.type.weighted
 
     assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
 
-    assert set(g.inedges_of(3)) == { 2, 3, 4 }
+    assert set(g.inedges_of(3)) == {2, 3, 4}
 
 
 def test_graph_sparse_lazy_incoming():
 
     edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
-    g = create_sparse_graph(edgelist, 7, weighted=False, incoming_edges_support=IncomingEdgesSupport.LAZY_INCOMING_EDGES)
+    g = create_sparse_graph(
+        edgelist,
+        7,
+        weighted=False,
+        incoming_edges_support=IncomingEdgesSupport.LAZY_INCOMING_EDGES,
+    )
 
     assert g.type.directed
     assert not g.type.weighted
 
     assert g.vertices == set([0, 1, 2, 3, 4, 5, 6])
 
-    assert set(g.inedges_of(3)) == { 2, 3, 4 }
+    assert set(g.inedges_of(3)) == {2, 3, 4}
 
 
 def test_graph_copy_to_succinct():
@@ -757,7 +772,7 @@ def test_graph_copy_to_succinct():
 
 def test_graph_succinct():
 
-    edges = [(0,1), (1,2), (0,3), (0, 4), (3,4), (4,0), (4,2), (3,3)]
+    edges = [(0, 1), (1, 2), (0, 3), (0, 4), (3, 4), (4, 0), (4, 2), (3, 3)]
 
     gs = create_succinct_graph(edges, num_of_vertices=5, directed=True)
 
@@ -770,9 +785,14 @@ def test_graph_succinct():
 
 def test_graph_succinct_no_incoming():
 
-    edges = [(0,1), (1,2), (0,3), (0, 4), (3,4), (4,0), (4,2), (3,3)]
+    edges = [(0, 1), (1, 2), (0, 3), (0, 4), (3, 4), (4, 0), (4, 2), (3, 3)]
 
-    gs = create_succinct_graph(edges, num_of_vertices=5, directed=True, incoming_edges_support=IncomingEdgesSupport.NO_INCOMING_EDGES)
+    gs = create_succinct_graph(
+        edges,
+        num_of_vertices=5,
+        directed=True,
+        incoming_edges_support=IncomingEdgesSupport.NO_INCOMING_EDGES,
+    )
 
     assert {gs.opposite(e, 0) for e in gs.outedges_of(0)} == {1, 4, 3}
 
@@ -781,17 +801,3 @@ def test_graph_succinct_no_incoming():
 
     with pytest.raises(ValueError):
         gs.inedges_of(4)
-
-
-def test_hashable_graph_succinct():
-
-    edges = [("0","1"), ("1",2), ("0",3), ("0", 4), (3,4), (4,"0"), (4,2), (3,3)]
-
-    gs = create_succinct_graph(edges, num_of_vertices=5, directed=True, any_hashable=True)
-
-    assert {gs.opposite(e, 4) for e in gs.inedges_of(4)} == {"0", 3}
-    assert {gs.opposite(e, "0") for e in gs.outedges_of("0")} == {"1", 4, 3}
-
-    assert gs.vertices == set(["0", "1", 2, 3, 4])
-    assert len(gs.edges) == 8
-

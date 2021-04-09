@@ -1,16 +1,28 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier
 
 import jgrapht.traversal as traversal
 
 
-def test_traversals():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_traversals(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     for i in range(0, 10):
@@ -55,7 +67,7 @@ def test_traversals():
     assert max_card == [0, 1, 2, 9, 3, 8, 4, 7, 5, 6]
 
     degeneracy_ordering = list(traversal.degeneracy_ordering_traversal(g))
-    assert degeneracy_ordering == [1, 2, 3, 4, 5, 6, 0, 7, 8, 9]
+    assert degeneracy_ordering == [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
 
     random_walk = list(traversal.random_walk_traversal(g, 0, False, 3, 17))
     assert random_walk == [0, 7, 0, 2]
@@ -72,13 +84,24 @@ def test_traversals():
     assert closest_first == [0, 1, 3, 5, 4, 9, 8, 2, 7, 6]
 
 
-def test_dag():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_dag(backend):
     # Create a dag to test top
     g1 = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
     g1.add_vertex(0)
     g1.add_vertex(1)
@@ -99,7 +122,7 @@ def test_property_graph_traversals():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
     )
 
     for i in range(0, 9):
@@ -150,7 +173,7 @@ def test_property_graph_traversals():
     assert max_card == ['0', '1', '2', 'node9', '3', '8', '4', '7', '5', '6']
 
     degeneracy_ordering = list(traversal.degeneracy_ordering_traversal(g))
-    assert degeneracy_ordering == ["1", "2", "3", "4", "5", "6", "0", "7", "8", "node9"]
+    assert degeneracy_ordering == ["1", "2", "3", "4", "5", "6", "7", "8", "node9", "0"]
 
     random_walk = list(traversal.random_walk_traversal(g, "0", False, 3, 17))
     assert random_walk == ["0", "7", "0", "2"]
@@ -166,7 +189,7 @@ def test_anyhashableg_dag():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH
     )
     g1.add_vertex(0)
     g1.add_vertex(1)

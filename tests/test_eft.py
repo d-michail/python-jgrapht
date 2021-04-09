@@ -30,8 +30,8 @@ def test_eft(backend):
     g.add_vertex(3)
     g.add_vertex(4)
 
-    e01 = g.add_edge(0, 1, weight=20)
-    e02 = g.add_edge(0, 2, weight=10)
+    g.add_edge(0, 1, weight=20)
+    g.add_edge(0, 2, weight=10)
     g.add_edge(1, 2, weight=30)
     g.add_edge(1, 3, weight=10)
     g.add_edge(2, 3, weight=20)
@@ -57,7 +57,7 @@ def test_anyhashableg_eft():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH
     )
 
     g.add_vertex(0)
@@ -66,8 +66,8 @@ def test_anyhashableg_eft():
     g.add_vertex(3)
     g.add_vertex(4)
 
-    e01 = g.add_edge(0, 1, weight=20, edge="e01")
-    e02 = g.add_edge(0, 2, weight=10, edge="e02")
+    g.add_edge(0, 1, weight=20, edge="e01")
+    g.add_edge(0, 2, weight=10, edge="e02")
     g.add_edge(1, 2, weight=30)
     g.add_edge(1, 3, weight=10)
     g.add_edge(2, 3, weight=20)

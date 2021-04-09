@@ -67,13 +67,65 @@ class _JGraphTLongLayoutModel2D(_HandleWrapper, LayoutModel2D):
         return "_JGraphTLongLayoutModel2D(%r)" % self._handle
 
 
+class _JGraphTRefLayoutModel2D(_HandleWrapper, LayoutModel2D):
+    """A 2D layout model."""
+
+    def __init__(self, handle, hash_equals_resolver_handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self.hash_equals_resolver_handle = hash_equals_resolver_handle
+
+    @property
+    def area(self):
+        res = backend.jgrapht_xx_drawing_layout_model_2d_get_drawable_area(self.handle)
+        return _box2d_class(*res)
+
+    def get_vertex_location(self, vertex):
+        res = backend.jgrapht_rx_drawing_layout_model_2d_get_vertex(
+            self.handle, id(vertex), self.hash_equals_resolver_handle
+        )
+        return _point2d_class(*res)
+
+    def set_vertex_location(self, vertex, point_2d):
+        backend.jgrapht_rx_drawing_layout_model_2d_put_vertex(
+            self.handle, id(vertex), self.hash_equals_resolver_handle, *point_2d
+        )
+
+    def is_fixed(self, vertex):
+        return backend.jgrapht_rx_drawing_layout_model_2d_get_fixed(
+            self.handle, id(vertex), self.hash_equals_resolver_handle
+        )
+
+    def set_fixed(self, vertex, fixed):
+        backend.jgrapht_rx_drawing_layout_model_2d_set_fixed(
+            self.handle, id(vertex), self.hash_equals_resolver_handle, fixed
+        )
+
+    def __repr__(self):
+        return "_JGraphTRefLayoutModel2D(%r)" % self._handle
+
+
 def _create_int_layout_model_2d(min_x, min_y, width, height):
     """Factory for a 2d layout model."""
-    handle = backend.jgrapht_xx_drawing_layout_model_2d_create(min_x, min_y, width, height)
+    handle = backend.jgrapht_xx_drawing_layout_model_2d_create(
+        min_x, min_y, width, height
+    )
     return _JGraphTIntegerLayoutModel2D(handle)
 
 
 def _create_long_layout_model_2d(min_x, min_y, width, height):
     """Factory for a 2d layout model."""
-    handle = backend.jgrapht_xx_drawing_layout_model_2d_create(min_x, min_y, width, height)
+    handle = backend.jgrapht_xx_drawing_layout_model_2d_create(
+        min_x, min_y, width, height
+    )
     return _JGraphTLongLayoutModel2D(handle)
+
+
+def _create_ref_layout_model_2d(
+    min_x, min_y, width, height, hash_equals_resolver_handle
+):
+    """Factory for a 2d layout model."""
+    handle = backend.jgrapht_xx_drawing_layout_model_2d_create(
+        min_x, min_y, width, height
+    )
+    return _JGraphTRefLayoutModel2D(handle, hash_equals_resolver_handle)
+    

@@ -146,7 +146,7 @@ def _wrap_vertex_set_iterator(graph, handle):
     if graph._backend_type == GraphBackend.LONG_GRAPH:
         return _JGraphTLongSetIterator(handle)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _JGraphTIntegerSetIterator(handle)        
+        return _JGraphTIntegerSetIterator(handle)
     elif graph._backend_type == GraphBackend.REF_GRAPH:
         return _JGraphTRefSetIterator(handle, graph._hash_equals_wrapper.handle)
     else:
@@ -173,9 +173,9 @@ def _wrap_edge_iterator(graph, handle):
     if graph._backend_type == GraphBackend.LONG_GRAPH:
         return _JGraphTLongIterator(handle)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _JGraphTIntegerIterator(handle)        
+        return _JGraphTIntegerIterator(handle)
     elif graph._backend_type == GraphBackend.REF_GRAPH:
-        return _JGraphTRefIterator(handle, graph._hash_equals_wrapper.handle)
+        return _JGraphTRefIterator(handle)
     else:
         raise ValueError("Backend not supported")
 
@@ -187,7 +187,7 @@ def _wrap_vertex_list_iterator(graph, handle):
     if graph._backend_type == GraphBackend.LONG_GRAPH:
         return _JGraphTLongListIterator(handle)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _JGraphTIntegerListIterator(handle)        
+        return _JGraphTIntegerListIterator(handle)
     elif graph._backend_type == GraphBackend.REF_GRAPH:
         return _JGraphTRefListIterator(handle, graph._hash_equals_wrapper.handle)
     else:
@@ -201,7 +201,7 @@ def _wrap_vertex_coloring(graph, handle):
     if graph._backend_type == GraphBackend.LONG_GRAPH:
         return _JGraphTLongIntegerMap(handle)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _JGraphTIntegerIntegerMap(handle)        
+        return _JGraphTIntegerIntegerMap(handle)
     elif graph._backend_type == GraphBackend.REF_GRAPH:
         return _JGraphTRefIntegerMap(handle, graph._hash_equals_wrapper.handle)
     else:
@@ -379,9 +379,11 @@ def _wrap_flow(graph, handle, source, sink, value):
     if graph._backend_type == GraphBackend.LONG_GRAPH:
         return _JGraphTLongFlow(handle, source, sink, value)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _JGraphTIntegerFlow(handle, source, sink, value)        
+        return _JGraphTIntegerFlow(handle, source, sink, value)
     elif graph._backend_type == GraphBackend.REF_GRAPH:
-        return _JGraphTRefFlow(handle, graph._hash_equals_wrapper.handle, source, sink, value)
+        return _JGraphTRefFlow(
+            handle, graph._hash_equals_wrapper.handle, source, sink, value
+        )
     else:
         raise ValueError("Backend not supported")
 
@@ -393,7 +395,7 @@ def _wrap_vertex_integer_map(graph, handle):
     if graph._backend_type == GraphBackend.LONG_GRAPH:
         return _JGraphTLongIntegerMap(handle)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _JGraphTIntegerIntegerMap(handle)        
+        return _JGraphTIntegerIntegerMap(handle)
     elif graph._backend_type == GraphBackend.REF_GRAPH:
         return _JGraphTRefIntegerMap(handle, graph._hash_equals_wrapper.handle)
     else:
@@ -407,7 +409,7 @@ def _wrap_vertex_double_map(graph, handle):
     if graph._backend_type == GraphBackend.LONG_GRAPH:
         return _JGraphTLongDoubleMap(handle)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _JGraphTIntegerDoubleMap(handle)        
+        return _JGraphTIntegerDoubleMap(handle)
     elif graph._backend_type == GraphBackend.REF_GRAPH:
         return _JGraphTRefDoubleMap(handle, graph._hash_equals_wrapper.handle)
     else:
@@ -421,7 +423,7 @@ def _wrap_planar_embedding(graph, handle):
     if graph._backend_type == GraphBackend.LONG_GRAPH:
         return _JGraphTLongPlanarEmbedding(handle)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _JGraphTIntegerPlanarEmbedding(handle)        
+        return _JGraphTIntegerPlanarEmbedding(handle)
     elif graph._backend_type == GraphBackend.REF_GRAPH:
         return _JGraphTRefPlanarEmbedding(handle, graph._hash_equals_wrapper.handle)
     else:
@@ -432,12 +434,19 @@ def _wrap_subgraph(graph, handle):
     """Given a subgraph in the JVM, build one in Python. The wrapper takes
     ownership and will delete the JVM resource when Python deletes the instance.
     """
-    cases = {
-        _JGraphTLongGraph: (_JGraphTLongGraph, [handle]),
-        _JGraphTIntegerGraph: (_JGraphTIntegerGraph, [handle]),
-    }
-    alg = cases[type(graph)]
-    return alg[0](*alg[1])
+    if graph._backend_type == GraphBackend.INT_GRAPH:
+        return _JGraphTIntegerGraph(handle=handle)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _JGraphTLongGraph(handle=handle)
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        return _JGraphTRefGraph(
+            handle=handle,
+            vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
+            edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
+            hash_equals_wrapper=graph._hash_equals_wrapper,
+        )
+    else:
+        raise ValueError("Backend not supported")
 
 
 def _build_vertex_set(graph, vertex_set):
