@@ -10,7 +10,7 @@ from ..types import (
 from collections.abc import Set
 
 from ._wrappers import _HandleWrapper, GraphBackend, _JGraphTIntegerIterator
-from ._attributes import _GraphAttributesMap
+from ._attributes import _VertexAttributes, _EdgeAttributes
 from ._collections_set import (
     _JGraphTIntegerSet,
 )
@@ -50,7 +50,7 @@ class _JGraphTIntegerGraph(_HandleWrapper, Graph, AttributesGraph):
         )
         self._vertex_set = None
         self._edge_set = None
-        self._graph_attrs = _GraphAttributesMap(handle=handle)
+        self._graph_attrs = dict()
 
     @property
     def type(self):

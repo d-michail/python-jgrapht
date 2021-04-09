@@ -575,6 +575,12 @@ int jgrapht_xixx_graph_attrs_edge_size(void *, int, int* OUTPUT);
 int jgrapht_xlxx_graph_attrs_edge_size(void *, long long int, int* OUTPUT);
 int jgrapht_xrxx_graph_attrs_edge_size(void *, void *LONG_TO_PTR, int* OUTPUT);
 int jgrapht_xxxx_graph_attrs_clear(void *);
+int jgrapht_ixxx_graph_attrs_vertex_clear(void *, int);
+int jgrapht_lxxx_graph_attrs_vertex_clear(void *, long long int);
+int jgrapht_rxxx_graph_attrs_vertex_clear(void *, void *LONG_TO_PTR);
+int jgrapht_xixx_graph_attrs_edge_clear(void *, int);
+int jgrapht_xlxx_graph_attrs_edge_clear(void *, long long int);
+int jgrapht_xrxx_graph_attrs_edge_clear(void *, void *LONG_TO_PTR);
 
 // handles
 

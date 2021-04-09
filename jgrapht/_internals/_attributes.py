@@ -73,103 +73,133 @@ class _JGraphTAttributesRegistry(_HandleWrapper):
         return "_JGraphTAttributesRegistry(%r)" % self._handle
 
 
-class _GraphAttributesMap(MutableMapping):
-    """Map for graph attributes"""
+class _VertexAttributes(MutableMapping):
+        """Wrapper around a dictionary to ensure vertex existence."""
 
-    def __init__(self, handle, **kwargs):
-        super().__init__(**kwargs)
-        self._handle = handle
-        self._keys_ref_counts = _ref_utils._SingleRefCount()
-        self._values_ref_counts = _ref_utils._SingleRefCount()
+        def __init__(self, graph, storage):
+            self._graph = graph
+            self._storage = storage
 
-    def __iter__(self):
-        res = backend.jgrapht_xxrx_graph_attrs_keys_iterator(self._handle)
-        return _JGraphTRefIterator(res)
+        def __getitem__(self, key):
+            if key not in self._graph.vertices:
+                raise ValueError("Vertex {} not in graph".format(key))
+            return self._storage[key]
 
-    def __len__(self):
-        return backend.jgrapht_xxxx_graph_attrs_size(self._handle)
+        def __setitem__(self, key, value):
+            if key not in self._graph.vertices:
+                raise ValueError("Vertex {} not in graph".format(key))
+            self._storage[key] = value
 
-    __marker = object()
+        def __delitem__(self, key):
+            if key not in self._graph.vertices:
+                raise ValueError("Vertex {} not in graph".format(key))
+            del self._storage[key]
 
-    def get(self, key, value=__marker):
-        key_exists = self.__contains__(key)
-        if not key_exists:
-            if value is self.__marker:
-                raise KeyError
-            else:
-                return value
-        res_ptr = backend.jgrapht_xxrr_graph_attrs_get(self._handle, id(key))
-        res = _ref_utils._swig_ptr_to_obj(res_ptr)
-        return res
+        def _unsafe_delitem(self, key):
+            self._storage.pop(key, None)
 
-    def add(self, key, value):
-        key_exists = self.__contains__(key)
-        if key_exists:
-            old_value_ptr = backend.jgrapht_xxrr_graph_attrs_get(self._handle, id(key))
-            old_value = _ref_utils._swig_ptr_to_obj(old_value_ptr)
-            self._keys_ref_counts.dec(key)
-            self._values_ref_counts.dec(old_value)
-        backend.jgrapht_xxrr_graph_attrs_put(self._handle, id(key), id(value))
-        self._keys_ref_counts.inc(key)
-        self._values_ref_counts.inc(value)
+        def __len__(self):
+            return len(self._storage)
 
-    def pop(self, key, defaultvalue=__marker):
-        try:
-            value_ptr = backend.jgrapht_xxrr_graph_attrs_remove(self._handle, id(key))
-            value = _ref_utils._swig_ptr_to_obj(value_ptr)
-            self._keys_ref_counts.dec(key)
-            self._values_ref_counts.dec(value)
-            return value
-        except ValueError:
-            if defaultvalue is self.__marker:
-                raise KeyError()
-            else:
-                return defaultvalue
+        def __iter__(self):
+            return iter(self._storage)
 
-    def __contains__(self, key):
-        return backend.jgrapht_xxrr_graph_attrs_contains(self._handle, id(key))
+        def __repr__(self):
+            return "_VertexAttributes(%r)" % repr(self._storage)
+
+        def __str__(self):
+            items = []
+            for v in self._graph.vertices:
+                items.append("{}: {}".format(v, self._storage[v]))
+            return "{" + ", ".join(items) + "}"
+
+
+class _EdgeAttributes(MutableMapping):
+        """Wrapper around a dictionary to ensure edge existence."""
+
+        def __init__(self, graph, storage):
+            self._graph = graph
+            self._storage = storage
+
+        def __getitem__(self, key):
+            if key not in self._graph.edges:
+                raise ValueError("Edge {} not in graph".format(key))
+            return _PerEdgeWeightAwareDict(
+                self._graph, key, self._storage[key]
+            )
+
+        def __setitem__(self, key, value):
+            if key not in self._graph.edges:
+                raise ValueError("Edge {} not in graph".format(key))
+            self._storage[key] = value
+
+        def __delitem__(self, key):
+            if key not in self._graph.edges:
+                raise ValueError("Edge {} not in graph".format(key))
+            del self._storage[key]
+
+        def _unsafe_delitem(self, key):
+            self._storage.pop(key, None)
+
+        def __len__(self):
+            return len(self._storage)
+
+        def __iter__(self):
+            return iter(self._storage)
+
+        def __repr__(self):
+            return "_AnyHashableGraph-EdgeAttributes(%r)" % repr(self._storage)
+
+        def __str__(self):
+            items = []
+            for e in self._graph.edges:
+                items.append("{}: {}".format(e, self._storage[e]))
+            return "{" + ", ".join(items) + "}"
+
+
+class _PerEdgeWeightAwareDict(MutableMapping):
+    
+    """A dictionary view which knows about the special key weight and delegates
+    to the graph. This is only a view."""
+
+    def __init__(self, graph, edge, storage, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._graph = graph
+        self._edge = edge
+        self._storage = storage
 
     def __getitem__(self, key):
-        key_exists = self.__contains__(key)
-        if not key_exists:
-            raise KeyError()
-        value_ptr = backend.jgrapht_xxrr_graph_attrs_get(self._handle, id(key))
-        value = _ref_utils._swig_ptr_to_obj(value_ptr)
-        return value
+        if key == "weight":
+            return self._graph.get_edge_weight(self._edge)
+        else:
+            return self._storage[key]
 
     def __setitem__(self, key, value):
-        key_exists = self.__contains__(key)
-        if key_exists:
-            old_value_ptr = backend.jgrapht_xxrr_graph_attrs_get(self._handle, id(key))
-            old_value = _ref_utils._swig_ptr_to_obj(old_value_ptr)
-            self._keys_ref_counts.dec(key)
-            self._values_ref_counts.dec(old_value)
-        backend.jgrapht_xxrr_graph_attrs_put(self._handle, id(key), id(value))
-        self._keys_ref_counts.inc(key)
-        self._values_ref_counts.inc(value)
+        if key == "weight":
+            if not isinstance(value, (float)):
+                raise TypeError("Weight is not a floating point number")
+            self._graph.set_edge_weight(self._edge, value)
+        else:
+            self._storage[key] = value
 
     def __delitem__(self, key):
-        key_exists = self.__contains__(key)
-        if not key_exists:
-            raise KeyError()
-        value_ptr = backend.jgrapht_xxrr_graph_attrs_remove(self._handle, id(key))
-        value = _ref_utils._swig_ptr_to_obj(value_ptr)
-        self._keys_ref_counts.dec(key)
-        self._values_ref_counts.dec(value)
+        if key == "weight":
+            self._graph.set_edge_weight(self._edge, 1.0)
+        else:
+            del self._storage[key]
 
-    def clear(self):
-        backend.jgrapht_xxxx_graph_attrs_clear(self._handle)
-        self._keys_ref_counts.dec_all()
-        self._values_ref_counts.dec_all()
+    def __len__(self):
+        return len(self._storage)
 
-    def __del__(self):
-        self._keys_ref_counts.dec_all()
-        self._values_ref_counts.dec_all()
-        super().__del__()
+    def __iter__(self):
+        return iter(self._storage)
 
     def __repr__(self):
-        return "_GraphAttributesMap(%r)" % self._handle
+        return "_PerEdgeWeightAwareDict(%r, %r, %r)" % (
+            repr(self._graph),
+            repr(self._edge),
+            repr(self._storage),
+        )
 
     def __str__(self):
-        items = ["{}: {}".format(k, v) for k, v in self.items()]
-        return "{" + ", ".join(items) + "}"
+        return str(self._storage)

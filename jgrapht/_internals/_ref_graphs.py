@@ -1,3 +1,4 @@
+from collections import defaultdict
 from collections.abc import Set
 
 from .. import backend
@@ -15,7 +16,7 @@ from ._collections_set import (
 import ctypes
 from . import _callbacks, _ref_utils, _ref_hashequals
 from ._wrappers import _HandleWrapper, _JGraphTRefIterator, GraphBackend
-from ._attributes import _GraphAttributesMap
+from ._attributes import _VertexAttributes, _EdgeAttributes
 
 
 class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
@@ -72,7 +73,11 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
         self._vertex_set = None
         self._edge_set = None
 
-        self._graph_attrs = _GraphAttributesMap(handle=handle)
+        self._graph_attrs = dict()
+        self._vertex_to_attrs = defaultdict(lambda: {})
+        self._vertex_attrs = _VertexAttributes(self, self._vertex_to_attrs)
+        self._edge_to_attrs = defaultdict(lambda: {})
+        self._edge_attrs = _EdgeAttributes(self, self._edge_to_attrs)
 
         self._vertex_ref_count = _ref_utils._SingleRefCount()
         self._edge_ref_count = _ref_utils._SingleRefCount()
@@ -106,6 +111,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
         removed = backend.jgrapht_rx_graph_remove_vertex(self._handle, id(v))
         if removed:
             self._vertex_ref_count.dec(v)
+            self._vertex_attrs._unsafe_delitem(v)
 
     def contains_vertex(self, v):
         return backend.jgrapht_rx_graph_contains_vertex(self._handle, id(v))
@@ -134,6 +140,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
             raise ValueError("Edge cannot be None")
         if backend.jgrapht_xr_graph_remove_edge(self._handle, id(e)):
             self._edge_ref_count.dec(e)
+            self._edge_attrs._unsafe_delitem(e)
             return True
         else:
             return False
@@ -375,7 +382,7 @@ def _create_ref_dag(
     allowing_multiple_edges=False,
     weighted=True,
     vertex_supplier=None,
-    edge_supplier=None,    
+    edge_supplier=None,
 ):
     """Create a directed acyclic graph.
 
@@ -384,7 +391,7 @@ def _create_ref_dag(
     :param vertex_supplier: function which returns new vertices on each call. If
         None then object instances are used.
     :param edge_supplier: function which returns new edge on each call. If
-        None then object instances are used.    
+        None then object instances are used.
     :returns: a graph
     :rtype: :class:`~jgrapht.types.DirectedAcyclicGraph`
     """
@@ -413,7 +420,7 @@ def _create_ref_dag(
         vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
         edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
         hash_equals_wrapper=hash_equals_wrapper,
-    )    
+    )
 
 
 def _is_ref_graph(graph):

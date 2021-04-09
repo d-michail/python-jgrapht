@@ -1679,6 +1679,36 @@ int jgrapht_xxxx_graph_attrs_clear(void *g) {
     return jgrapht_capi_xxxx_graph_attrs_clear(thread, g);
 }
 
+int jgrapht_ixxx_graph_attrs_vertex_clear(void *g, int elem) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_ixxx_graph_attrs_vertex_clear(thread, g, elem);
+}
+
+int jgrapht_lxxx_graph_attrs_vertex_clear(void *g, long long int elem) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_lxxx_graph_attrs_vertex_clear(thread, g, elem);
+}
+
+int jgrapht_rxxx_graph_attrs_vertex_clear(void *g, void * elem) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_rxxx_graph_attrs_vertex_clear(thread, g, elem);
+}
+
+int jgrapht_xixx_graph_attrs_edge_clear(void *g, int elem) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xixx_graph_attrs_edge_clear(thread, g, elem);
+}
+
+int jgrapht_xlxx_graph_attrs_edge_clear(void *g, long long int elem) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xlxx_graph_attrs_edge_clear(thread, g, elem);
+}
+
+int jgrapht_xrxx_graph_attrs_edge_clear(void *g, void * elem) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_xrxx_graph_attrs_edge_clear(thread, g, elem);
+}
+
 // handles
 
 int jgrapht_handles_destroy(void *handle) { 
