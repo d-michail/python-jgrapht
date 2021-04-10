@@ -719,6 +719,7 @@ def parse_gexf(
 def read_dot(
     graph,
     filename,
+    populate_graph_with_attributes=True,    
     import_id_cb=None,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
@@ -758,12 +759,16 @@ def read_dot(
       edges.
     :raises IOError: In case of an import error
     """
+    if vertex_attribute_cb is not None or edge_attribute_cb is not None: 
+        populate_graph_with_attributes = False
+
     _parse_graph_dot(
         graph,
         filename,
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
+        populate_graph_with_attributes=populate_graph_with_attributes,
         input_is_filename=True,
     )
 
@@ -771,6 +776,7 @@ def read_dot(
 def parse_dot(
     graph,
     input_string,
+    populate_graph_with_attributes=True,    
     import_id_cb=None,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
@@ -810,15 +816,18 @@ def parse_dot(
       edges.
     :raises IOError: in case of an import error
     """
+    if vertex_attribute_cb is not None or edge_attribute_cb is not None: 
+        populate_graph_with_attributes = False
+
     _parse_graph_dot(
         graph,
         input_string,
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
+        populate_graph_with_attributes=populate_graph_with_attributes,
         input_is_filename=False,
     )
-
 
 def read_graph6sparse6(
     graph,

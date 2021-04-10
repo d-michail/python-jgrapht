@@ -351,49 +351,44 @@ def _parse_graph_gexf(
         edge_notify_f_ptr,
     )
 
-
 def _parse_graph_dot(
     graph,
     input,
     import_id_cb=None,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
+    populate_graph_with_attributes=True,
     input_is_filename=False,
 ):
     (
-        import_id_f_ptr,
-        import_id_f,  # pylint: disable=unused-variable
-        vertex_attribute_f_ptr,
-        vertex_attribute_f,  # pylint: disable=unused-variable
-        edge_attribute_f_ptr,
-        edge_attribute_f,  # pylint: disable=unused-variable
-        vertex_notify_f_ptr,
-        vertex_notify_f,  # pylint: disable=unused-variable
-        edge_notify_f_ptr,
-        edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_graph_callbacks(
+        import_id_wrapper,
+        vertex_attribute_wrapper,
+        edge_attribute_wrapper,
+        vertex_notify_id_wrapper,
+        edge_notify_id_wrapper,
+    ) = _create_callback_wrappers(
+        graph,
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
         vertex_notify_id_cb=None,
         edge_notify_id_cb=None,
+        integer_input_ids=False,
+        populate_graph_with_attributes=populate_graph_with_attributes,
     )
 
-    string_as_bytearray = bytearray(input, encoding="utf-8")
+    backend_method = _create_import_method(
+        graph, "file" if input_is_filename else "string", "dot"
+    )
 
-    if input_is_filename:
-        backend_function = _backend.jgrapht_ii_import_file_dot
-    else:
-        backend_function = _backend.jgrapht_ii_import_string_dot
-
-    backend_function(
+    backend_method(
         graph.handle,
-        string_as_bytearray,
-        import_id_f_ptr,
-        vertex_attribute_f_ptr,
-        edge_attribute_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
+        bytearray(input, encoding="utf-8"),
+        import_id_wrapper.fptr,
+        vertex_attribute_wrapper.fptr,
+        edge_attribute_wrapper.fptr,
+        vertex_notify_id_wrapper.fptr,
+        edge_notify_id_wrapper.fptr,
     )
 
 

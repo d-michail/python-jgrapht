@@ -2,19 +2,22 @@ import pytest
 
 import re
 
-from jgrapht import create_graph
-from jgrapht.utils import create_vertex_supplier, create_edge_supplier
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import create_vertex_supplier, create_edge_supplier, IntegerSupplier
 
 from jgrapht.io.exporters import write_dot, generate_dot
 from jgrapht.io.importers import read_dot, parse_dot
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -28,9 +31,18 @@ def build_graph():
     return g
 
 
-def test_output_dot(tmpdir):
 
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_dot(tmpdir, backend):
+
+    g = build_graph(backend)
     tmpfile = tmpdir.join("dot.out")
     tmpfilename = str(tmpfile)
 
@@ -56,6 +68,9 @@ def test_output_dot(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=IntegerSupplier(),
+        edge_supplier=IntegerSupplier(),
     )
     read_dot(g1, tmpfilename, edge_attribute_cb=ea_cb)
 
@@ -63,12 +78,24 @@ def test_output_dot(tmpdir):
     assert len(g1.edges) == 3
 
 
-def test_output_to_string():
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_to_string(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertices_from(range(0, 4))
@@ -93,7 +120,9 @@ def test_property_graph_output_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertex('v1')
@@ -123,7 +152,7 @@ def test_read_dot_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -154,7 +183,7 @@ def test_read_dot_property_graph_from_string1():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -195,7 +224,7 @@ def test_read_dot_property_graph_from_filename(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
         vertex_supplier=create_vertex_supplier(), 
         edge_supplier=create_edge_supplier()
     )
@@ -209,13 +238,24 @@ def test_read_dot_property_graph_from_filename(tmpdir):
     assert g.edge_attrs['e0']['capacity'] == '5.0'
 
 
-def test_read_dot_graph_from_string():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_read_dot_graph_from_string(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(), 
+        edge_supplier=create_edge_supplier()        
     )
 
     expected=r"""digraph G {
