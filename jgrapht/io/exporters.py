@@ -76,7 +76,7 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
 def _has_any_vertex_attrs(graph, attributes_dict):
     if attributes_dict is not None:
         for v in graph.vertices: 
-            if len(attributes_dict[v]) > 0:
+            if len(attributes_dict.get(v, [])) > 0:
                 return True
 
     for v in graph.vertices: 
@@ -116,7 +116,7 @@ def _vertex_attributes_store(graph, attributes_dict):
 def _has_any_edge_attrs(graph, attributes_dict):
     if attributes_dict is not None:
         for e in graph.edges: 
-            if len(attributes_dict[e]) > 0:
+            if len(attributes_dict.get(e, [])) > 0:
                 return True
 
     for e in graph.edges: 

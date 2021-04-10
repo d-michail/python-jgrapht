@@ -1,7 +1,7 @@
 import pytest
 
-from jgrapht import create_graph
-from jgrapht.utils import create_edge_supplier, create_vertex_supplier
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import create_edge_supplier, create_vertex_supplier, IntegerSupplier
 
 from jgrapht.io.exporters import write_gml, generate_gml
 from jgrapht.io.importers import read_gml, parse_gml
@@ -417,12 +417,15 @@ graph
 """
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     for i in range(0, 10):
@@ -451,8 +454,16 @@ def build_graph():
     return g
 
 
-def test_output_gml(tmpdir):
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_gml(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("gml.out")
     tmpfilename = str(tmpfile)
 
@@ -473,8 +484,16 @@ def test_output_gml(tmpdir):
     assert contents == expected
 
 
-def test_output_gml_without_automatic_labels(tmpdir):
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_gml_without_automatic_labels(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("gml.out")
     tmpfilename = str(tmpfile)
 
@@ -495,7 +514,15 @@ def test_output_gml_without_automatic_labels(tmpdir):
     assert contents == expected4
 
 
-def test_input_gml(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_gml(tmpdir, backend):
     tmpfile = tmpdir.join("gml.out")
     tmpfilename = str(tmpfile)
 
@@ -507,6 +534,9 @@ def test_input_gml(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     def va_cb(vertex, attribute_name, attribute_value):
@@ -530,13 +560,24 @@ def test_input_gml(tmpdir):
     read_gml(g, tmpfilename, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
 
-def test_input_gml_from_string(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_gml_from_string(tmpdir, backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     v_attrs = dict()
@@ -572,18 +613,25 @@ def test_input_anyhashableg_gml_from_file(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
-		vertex_supplier=create_vertex_supplier(),
-		edge_supplier=create_edge_supplier(),
+        backend=GraphBackend.REF_GRAPH,
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     read_gml(g, tmpfilename)
 
-    assert g.vertices == {'v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'}
+    assert g.vertices == {"v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"}
 
 
-
-def test_input_gml_nocallbacks(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_gml_nocallbacks(tmpdir, backend):
     tmpfile = tmpdir.join("gml.out")
     tmpfilename = str(tmpfile)
 
@@ -595,18 +643,32 @@ def test_input_gml_nocallbacks(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     read_gml(g, tmpfilename)
 
 
-def test_input_gml_from_string_create_new_vertices():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_gml_from_string_create_new_vertices(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     input_string = "Version 1 graph [ directed 0 node [ id 5 ] node [ id 7 ] edge [ source 5 target 7 ] ]"
@@ -616,13 +678,24 @@ def test_input_gml_from_string_create_new_vertices():
     assert g.vertices == set([0, 1])
 
 
-def test_input_gml_from_string_preserve_ids():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_gml_from_string_preserve_ids(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     input_string = "Version 1 graph [ directed 0 node [ id 5 ] node [ id 7 ] edge [ source 5 target 7 ] ]"
@@ -635,12 +708,23 @@ def test_input_gml_from_string_preserve_ids():
     assert g.vertices == set([5, 7])
 
 
-def test_output_to_string():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_to_string(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     g.add_vertices_from(range(0, 4))
@@ -654,13 +738,24 @@ def test_output_to_string():
     assert out.splitlines() == expected2.splitlines()
 
 
-def test_input_gml_from_string_rename_ids(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_gml_from_string_rename_ids(tmpdir, backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     def import_id(id):
@@ -677,7 +772,7 @@ def test_output_property_graph_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
     )
 
     g.add_vertex(0)
@@ -711,7 +806,7 @@ def test_read_gml_property_graph_from_string():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -735,7 +830,7 @@ def test_read_gml_property_graph_from_string_no_id_map():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -755,16 +850,16 @@ def test_output_bad_property_graph_to_string():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
     )
 
-    g.add_vertex('0')
-    g.add_vertex('2')
+    g.add_vertex("0")
+    g.add_vertex("2")
 
-    g.add_edge('0', '2', edge="e1")
-    g.add_edge('2', '0', edge="e2")
+    g.add_edge("0", "2", edge="e1")
+    g.add_edge("2", "0", edge="e2")
 
-    g.vertex_attrs['0']["color"] = "red"
+    g.vertex_attrs["0"]["color"] = "red"
 
     g.edge_attrs["e1"]["type"] = "forward"
     g.edge_attrs["e2"]["type"] = "backward"
@@ -775,7 +870,9 @@ def test_output_bad_property_graph_to_string():
 
     with pytest.raises(TypeError):
         out = generate_gml(
-            g, per_vertex_attrs_dict=more_vertex_props, per_edge_attrs_dict=more_edge_props
+            g,
+            per_vertex_attrs_dict=more_vertex_props,
+            per_edge_attrs_dict=more_edge_props,
         )
 
 
@@ -785,44 +882,58 @@ def test_output_bad_property_graph_to_string_with_convert():
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
     )
 
-    g.add_vertex('0')
-    g.add_vertex('2')
+    g.add_vertex("0")
+    g.add_vertex("2")
 
-    g.add_edge('0', '2', edge="e1")
-    g.add_edge('2', '0', edge="e2")
+    g.add_edge("0", "2", edge="e1")
+    g.add_edge("2", "0", edge="e2")
 
-    g.vertex_attrs['0']["color"] = "red"
+    g.vertex_attrs["0"]["color"] = "red"
 
     g.edge_attrs["e1"]["type"] = "forward"
     g.edge_attrs["e2"]["type"] = "backward"
 
     # test bad keys are ignores
-    more_vertex_props = {'1': {"color": "green"}}
+    more_vertex_props = {"1": {"color": "green"}}
     more_edge_props = {"e4": {"type": "forward"}}
 
-    def convert(id): 
+    def convert(id):
         return int(id)
 
     out = generate_gml(
-        g, per_vertex_attrs_dict=more_vertex_props, per_edge_attrs_dict=more_edge_props, export_vertex_id_cb=convert
+        g,
+        per_vertex_attrs_dict=more_vertex_props,
+        per_edge_attrs_dict=more_edge_props,
+        export_vertex_id_cb=convert,
     )
 
     assert out.splitlines() == expected5.splitlines()
 
-
     def bad_convert(id):
         return -int(id)
-    
+
     with pytest.raises(ValueError):
         out = generate_gml(
-            g, per_vertex_attrs_dict=more_vertex_props, per_edge_attrs_dict=more_edge_props, export_vertex_id_cb=bad_convert
+            g,
+            per_vertex_attrs_dict=more_vertex_props,
+            per_edge_attrs_dict=more_edge_props,
+            export_vertex_id_cb=bad_convert,
         )
 
-def test_write_gml_with_bad_converter(tmpdir):
-    g = build_graph()
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_write_gml_with_bad_converter(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("gml.out")
     tmpfilename = str(tmpfile)
 
@@ -838,11 +949,28 @@ def test_write_gml_with_bad_converter(tmpdir):
         return str(id)
 
     with pytest.raises(TypeError):
-        write_gml(g, tmpfilename, False, True, True, v_labels, e_labels, export_vertex_id_cb=bad_convert)
+        write_gml(
+            g,
+            tmpfilename,
+            False,
+            True,
+            True,
+            v_labels,
+            e_labels,
+            export_vertex_id_cb=bad_convert,
+        )
 
 
-def test_write_gml_with_bad_converter2(tmpdir):
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_write_gml_with_bad_converter2(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("gml.out")
     tmpfilename = str(tmpfile)
 
@@ -858,4 +986,13 @@ def test_write_gml_with_bad_converter2(tmpdir):
         return -id
 
     with pytest.raises(ValueError):
-        write_gml(g, tmpfilename, False, True, True, v_labels, e_labels, export_vertex_id_cb=bad_convert)
+        write_gml(
+            g,
+            tmpfilename,
+            False,
+            True,
+            True,
+            v_labels,
+            e_labels,
+            export_vertex_id_cb=bad_convert,
+        )

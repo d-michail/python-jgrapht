@@ -206,46 +206,6 @@ def _parse_graph_gml(
     )
 
 
-def _parse_graph_json(
-    graph,
-    input,
-    import_id_cb=None,
-    vertex_attribute_cb=None,
-    edge_attribute_cb=None,
-    populate_graph_with_attributes=True,
-    input_is_filename=False,
-):
-    (
-        import_id_wrapper,
-        vertex_attribute_wrapper,
-        edge_attribute_wrapper,
-        vertex_notify_id_wrapper,
-        edge_notify_id_wrapper,
-    ) = _create_callback_wrappers(
-        graph,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        vertex_notify_id_cb=None,
-        edge_notify_id_cb=None,
-        integer_input_ids=False,
-        populate_graph_with_attributes=populate_graph_with_attributes,
-    )
-
-    backend_method = _create_import_method(
-        graph, "file" if input_is_filename else "string", "json"
-    )
-
-    backend_method(
-        graph.handle,
-        bytearray(input, encoding="utf-8"),
-        import_id_wrapper.fptr,
-        vertex_attribute_wrapper.fptr,
-        edge_attribute_wrapper.fptr,
-        vertex_notify_id_wrapper.fptr,
-        edge_notify_id_wrapper.fptr,
-    )
-
 
 CSV_FORMATS = dict(
     {
@@ -351,9 +311,11 @@ def _parse_graph_gexf(
         edge_notify_f_ptr,
     )
 
-def _parse_graph_dot(
+def _parse_graph(
+    graph_format,
     graph,
     input,
+    integer_input_ids,
     import_id_cb=None,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
@@ -373,12 +335,12 @@ def _parse_graph_dot(
         edge_attribute_cb=edge_attribute_cb,
         vertex_notify_id_cb=None,
         edge_notify_id_cb=None,
-        integer_input_ids=False,
+        integer_input_ids=integer_input_ids,
         populate_graph_with_attributes=populate_graph_with_attributes,
     )
 
     backend_method = _create_import_method(
-        graph, "file" if input_is_filename else "string", "dot"
+        graph, "file" if input_is_filename else "string", graph_format
     )
 
     backend_method(

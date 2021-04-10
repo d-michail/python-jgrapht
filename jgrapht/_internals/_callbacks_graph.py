@@ -35,7 +35,7 @@ def _create_import_id_wrapper(graph, callback, integer_input_ids=False):
             callback_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_longlong)
         elif graph._backend_type == GraphBackend.REF_GRAPH:
             callback_ctype = ctypes.CFUNCTYPE(
-                ctypes.ctypes.py_object, ctypes.c_longlong
+                ctypes.py_object, ctypes.c_longlong
             )
         else:
             raise ValueError("Backend type invalid")
