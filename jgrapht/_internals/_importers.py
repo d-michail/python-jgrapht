@@ -1,11 +1,23 @@
 from collections import defaultdict
 
 from .. import backend as _backend
+from .. import GraphBackend as _GraphBackend
 
 from ._ioutils import _create_wrapped_import_integer_id_callback
 from ._ioutils import _create_wrapped_import_string_id_callback
 from ._ioutils import _create_wrapped_attribute_callback
 from ._ioutils import _create_wrapped_notify_id_callback
+
+
+def _create_import_method(graph, read_from, format):
+    if graph._backend_type == _GraphBackend.REF_GRAPH:
+        graph_type = "rr"
+    elif graph._backend_type == _GraphBackend.LONG_GRAPH:
+        graph_type = "ll"
+    else:
+        graph_type = "ii"
+    method_name = "jgrapht_{}_import_{}_{}".format(graph_type, read_from, format)
+    return getattr(_backend, method_name)        
 
 
 def _create_graph_callbacks(
@@ -162,17 +174,12 @@ def _parse_graph_json(
         vertex_notify_id_cb=None,
         edge_notify_id_cb=None,
     )
+    
+    backend_method = _create_import_method(graph, "file" if input_is_filename else "string", "json")
 
-    string_as_bytearray = bytearray(input, encoding="utf-8")
-
-    if input_is_filename:
-        backend_function = _backend.jgrapht_ii_import_file_json
-    else:
-        backend_function = _backend.jgrapht_ii_import_string_json
-
-    backend_function(
+    backend_method(
         graph.handle,
-        string_as_bytearray,
+        bytearray(input, encoding="utf-8"),
         import_id_f_ptr,
         vertex_attribute_f_ptr,
         edge_attribute_f_ptr,
