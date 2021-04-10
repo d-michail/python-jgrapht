@@ -1,14 +1,14 @@
 import pytest
 
 from jgrapht._internals._attributes import (
-    _JGraphTAttributeStore,
+    _JGraphTIntegerAttributeStore,
     _JGraphTAttributesRegistry,
 )
 
 
 def test_store():
 
-    s = _JGraphTAttributeStore()
+    s = _JGraphTIntegerAttributeStore()
 
     s.put(0, 'color', 'red')
     s.put(1, 'color', 'blue')

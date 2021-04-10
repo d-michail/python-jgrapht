@@ -3,16 +3,20 @@ from ..types import (
     Graph,
     GraphType,
     DirectedAcyclicGraph,
+    AttributesGraph,    
 )
 
+from collections import defaultdict
 from collections.abc import Set
+
 from ._wrappers import _HandleWrapper, GraphBackend, _JGraphTLongIterator
 from ._collections_set import (
     _JGraphTLongSet,
 )
+from ._attributes import _VertexAttributes, _EdgeAttributes
 
 
-class _JGraphTLongGraph(_HandleWrapper, Graph):
+class _JGraphTLongGraph(_HandleWrapper, Graph, AttributesGraph):
     """The long graph implementation. This implementation always uses longs
     for the vertices and the edges of the graph. All operations are delegated to
     the backend.
@@ -44,6 +48,13 @@ class _JGraphTLongGraph(_HandleWrapper, Graph):
         self._vertex_set = None
         self._edge_set = None
 
+        # support for graph attributes
+        self._graph_attrs = dict()
+        self._vertex_to_attrs = defaultdict(lambda: {})
+        self._vertex_attrs = _VertexAttributes(self, self._vertex_to_attrs)
+        self._edge_to_attrs = defaultdict(lambda: {})
+        self._edge_attrs = _EdgeAttributes(self, self._edge_to_attrs)        
+
     @property
     def type(self):
         return self._type
@@ -60,7 +71,9 @@ class _JGraphTLongGraph(_HandleWrapper, Graph):
         return vertex
 
     def remove_vertex(self, v):
-        backend.jgrapht_lx_graph_remove_vertex(self._handle, v)
+        removed = backend.jgrapht_lx_graph_remove_vertex(self._handle, v)
+        if removed: 
+            self._vertex_attrs._unsafe_delitem(v)
 
     def contains_vertex(self, v):
         return backend.jgrapht_lx_graph_contains_vertex(self._handle, v)
@@ -79,7 +92,10 @@ class _JGraphTLongGraph(_HandleWrapper, Graph):
     def remove_edge(self, e):
         if e is None:
             raise ValueError("Edge cannot be None")
-        return backend.jgrapht_xl_graph_remove_edge(self._handle, e)
+        removed = backend.jgrapht_xl_graph_remove_edge(self._handle, e)
+        if removed: 
+            self._edge_attrs._unsafe_delitem(e)
+        return removed
 
     def contains_edge(self, e):
         return backend.jgrapht_xl_graph_contains_edge(self._handle, e)
@@ -143,6 +159,18 @@ class _JGraphTLongGraph(_HandleWrapper, Graph):
     def outedges_of(self, v):
         res = backend.jgrapht_lx_graph_vertex_create_out_eit(self._handle, v)
         return _JGraphTLongIterator(res)
+
+    @property
+    def graph_attrs(self):
+        return self._graph_attrs
+
+    @property
+    def vertex_attrs(self):
+        return self._vertex_attrs
+
+    @property
+    def edge_attrs(self):
+        return self._edge_attrs
 
     class _VertexSet(Set):
         """Wrapper around the vertices of a JGraphT graph"""

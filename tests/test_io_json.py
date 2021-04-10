@@ -1,6 +1,8 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier
+
 from jgrapht.io.exporters import write_json, generate_json
 from jgrapht.io.importers import read_json, parse_json
 
@@ -16,12 +18,15 @@ expected4 = r'{"creator":"JGraphT JSON Exporter","version":"1","nodes":[{"id":"v
 expected5 = r'{"creator":"JGraphT JSON Exporter","version":"1","nodes":[{"id":"v0","color":"red"},{"id":"v1","color":"blue"},{"id":"v2"},{"id":"v3"}],"edges":[{"source":"v0","target":"v1","capacity":"100.0"},{"source":"v0","target":"v2","capacity":"20.0","type":"directed"},{"source":"v0","target":"v3"},{"source":"v2","target":"v3"}]}'
 
 
-def build_graph():
+def build_graph(backend=GraphBackend.INT_GRAPH):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     for i in range(0, 10):
@@ -50,8 +55,16 @@ def build_graph():
     return g
 
 
-def test_output_to_file_json(tmpdir):
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_to_file_json(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("json.out")
     tmpfilename = str(tmpfile)
 
@@ -70,12 +83,23 @@ def test_output_to_file_json(tmpdir):
     assert contents == expected_escaped
 
 
-def test_output_to_string():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_to_string(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertices_from(range(0, 4))
@@ -89,14 +113,23 @@ def test_output_to_string():
     assert out.splitlines() == expected2.splitlines()
 
 
-def test_output_to_string_with_labels():
-    g = build_graph()
-
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_to_string_with_labels(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
     g.add_vertex(0)
     v_labels = {0: {"label": "κόμβος 0"}}
@@ -105,7 +138,15 @@ def test_output_to_string_with_labels():
     assert out.splitlines() == expected1_escaped.splitlines()
 
 
-def test_input_json(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_json(tmpdir, backend):
     tmpfile = tmpdir.join("json.out")
     tmpfilename = str(tmpfile)
 
@@ -118,6 +159,9 @@ def test_input_json(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     v_attrs = dict()
@@ -143,7 +187,15 @@ def test_input_json(tmpdir):
     assert e_attrs[9]["label"] == "edge 1-2"
 
 
-def test_input_json_nocallbacks(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_json_nocallbacks(tmpdir, backend):
     tmpfile = tmpdir.join("json.out")
     tmpfilename = str(tmpfile)
 
@@ -155,18 +207,32 @@ def test_input_json_nocallbacks(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     read_json(g, tmpfilename)
 
 
-def test_input_json_from_string_nocallbacks(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_json_from_string_nocallbacks(tmpdir, backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     parse_json(g, expected3)
@@ -174,24 +240,46 @@ def test_input_json_from_string_nocallbacks(tmpdir):
     assert g.number_of_edges == 18
 
 
-def test_input_json_from_string_create_new_vertices():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_json_from_string_create_new_vertices(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
     input_string = r'{"version":"1","nodes":[{"id":"5"},{"id":"7"}],"edges":[{"source":"5","target":"7"}]}'
     parse_json(g, input_string)
     assert g.vertices == set([0, 1])
 
 
-def test_input_json_from_string_preserve_ids():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_json_from_string_preserve_ids(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),                
     )
     input_string = r'{"version":"1","nodes":[{"id":"5"},{"id":"7"}],"edges":[{"source":"5","target":"7"}]}'
 
@@ -202,12 +290,23 @@ def test_input_json_from_string_preserve_ids():
     assert g.vertices == set([5, 7])
 
 
-def test_input_from_string_with_labels():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_from_string_with_labels(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     def import_id(file_id):
@@ -235,13 +334,19 @@ def test_input_from_string_with_labels():
     assert len(g.edges) == 0
 
 
-def test_property_graph_output_to_string():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_property_graph_output_to_string(backend):
     pg = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable=True,
+        backend=backend
     )
 
     pg.add_vertex("v0")
@@ -259,13 +364,19 @@ def test_property_graph_output_to_string():
     assert out.splitlines() == expected4.splitlines()
 
 
-def test_property_graph_with_labels_output_to_string():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_property_graph_with_labels_output_to_string(backend):
     pg = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable=True,
+        backend=backend
     )
 
     pg.add_vertex("v0")
@@ -291,13 +402,19 @@ def test_property_graph_with_labels_output_to_string():
     assert out.splitlines() == expected5.splitlines()
 
 
-def test_property_graph_output_to_file_json(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_property_graph_output_to_file_json(tmpdir, backend):
     pg = create_graph(
         directed=True,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
-        any_hashable=True,
+        backend=backend
     )
 
     pg.add_vertex("v0")
@@ -321,7 +438,13 @@ def test_property_graph_output_to_file_json(tmpdir):
     assert contents.splitlines() == expected4.splitlines()
 
 
-def test_input_json_from_string_property_graph():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_input_json_from_string_property_graph(backend):
     class StringSupplier:
         def __init__(self, prefix):
             self._count = 0
@@ -337,7 +460,7 @@ def test_input_json_from_string_property_graph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend,
         vertex_supplier=StringSupplier("v"),
         edge_supplier=StringSupplier("e"),
     )
@@ -351,7 +474,13 @@ def test_input_json_from_string_property_graph():
     assert g.edges == set(["e0"])
 
 
-def test_input_json_from_file_property_graph(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_input_json_from_file_property_graph(tmpdir, backend):
     class StringSupplier:
         def __init__(self, prefix):
             self._count = 0
@@ -374,7 +503,7 @@ def test_input_json_from_file_property_graph(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend,
         vertex_supplier=StringSupplier("v"),
         edge_supplier=StringSupplier("e"),
     )

@@ -1,4 +1,5 @@
 from .. import backend
+from .. import GraphBackend
 from ._wrappers import _HandleWrapper, _JGraphTRefIterator
 from . import _ref_utils, _ref_hashequals
 
@@ -12,22 +13,51 @@ class _JGraphTAttributeStore(_HandleWrapper):
     provide attributes as strings which are automatically converted
     to UTF-8 encoded bytearrays and passed inside the Java context.
     """
-
-    def __init__(self, handle=None, **kwargs):
-        if handle is None:
-            handle = backend.jgrapht_xx_attributes_store_create()
+    def __init__(self, handle, graph, **kwargs):
         super().__init__(handle=handle, **kwargs)
+        self._graph = graph
 
     def put(self, element, key, value):
         encoded_key = bytearray(key, encoding="utf-8")
         encoded_value = bytearray(value, encoding="utf-8")
-        backend.jgrapht_is_attributes_store_put(
-            self._handle, element, encoded_key, encoded_value
-        )
+        if self._graph._backend_type == GraphBackend.INT_GRAPH:
+            backend.jgrapht_is_attributes_store_put(
+                self._handle, element, encoded_key, encoded_value
+            )
+        elif self._graph._backend_type == GraphBackend.LONG_GRAPH:
+            backend.jgrapht_ls_attributes_store_put(
+                self._handle, element, encoded_key, encoded_value
+            )
+        elif self._graph._backend_type == GraphBackend.REF_GRAPH:
+            backend.jgrapht_rs_attributes_store_put(
+                self._handle,
+                id(element),
+                self._graph._hash_equals_wrapper.handle,
+                encoded_key,
+                encoded_value,
+            )
+        else:
+            raise ValueError("Not recognized backend")
 
     def remove(self, element, key):
         encoded_key = bytearray(key, encoding="utf-8")
-        backend.jgrapht_ix_attributes_store_remove(self._handle, element, encoded_key)
+        if self._graph._backend_type == GraphBackend.INT_GRAPH:
+            backend.jgrapht_ix_attributes_store_remove(
+                self._handle, element, encoded_key
+            )
+        elif self._graph._backend_type == GraphBackend.LONG_GRAPH:
+            backend.jgrapht_lx_attributes_store_remove(
+                self._handle, element, encoded_key
+            )
+        elif self._graph._backend_type == GraphBackend.REF_GRAPH:
+            backend.jgrapht_rx_attributes_store_remove(
+                self._handle,
+                id(element),
+                self._graph._hash_equals_wrapper.handle,
+                encoded_key,
+            )
+        else:
+            raise ValueError("Not recognized backend")
 
     def __repr__(self):
         return "_JGraphTAttributeStore(%r)" % self._handle
@@ -74,91 +104,89 @@ class _JGraphTAttributesRegistry(_HandleWrapper):
 
 
 class _VertexAttributes(MutableMapping):
-        """Wrapper around a dictionary to ensure vertex existence."""
+    """Wrapper around a dictionary to ensure vertex existence."""
 
-        def __init__(self, graph, storage):
-            self._graph = graph
-            self._storage = storage
+    def __init__(self, graph, storage):
+        self._graph = graph
+        self._storage = storage
 
-        def __getitem__(self, key):
-            if key not in self._graph.vertices:
-                raise ValueError("Vertex {} not in graph".format(key))
-            return self._storage[key]
+    def __getitem__(self, key):
+        if key not in self._graph.vertices:
+            raise ValueError("Vertex {} not in graph".format(key))
+        return self._storage[key]
 
-        def __setitem__(self, key, value):
-            if key not in self._graph.vertices:
-                raise ValueError("Vertex {} not in graph".format(key))
-            self._storage[key] = value
+    def __setitem__(self, key, value):
+        if key not in self._graph.vertices:
+            raise ValueError("Vertex {} not in graph".format(key))
+        self._storage[key] = value
 
-        def __delitem__(self, key):
-            if key not in self._graph.vertices:
-                raise ValueError("Vertex {} not in graph".format(key))
-            del self._storage[key]
+    def __delitem__(self, key):
+        if key not in self._graph.vertices:
+            raise ValueError("Vertex {} not in graph".format(key))
+        del self._storage[key]
 
-        def _unsafe_delitem(self, key):
-            self._storage.pop(key, None)
+    def _unsafe_delitem(self, key):
+        self._storage.pop(key, None)
 
-        def __len__(self):
-            return len(self._storage)
+    def __len__(self):
+        return len(self._storage)
 
-        def __iter__(self):
-            return iter(self._storage)
+    def __iter__(self):
+        return iter(self._storage)
 
-        def __repr__(self):
-            return "_VertexAttributes(%r)" % repr(self._storage)
+    def __repr__(self):
+        return "_VertexAttributes(%r)" % repr(self._storage)
 
-        def __str__(self):
-            items = []
-            for v in self._graph.vertices:
-                items.append("{}: {}".format(v, self._storage[v]))
-            return "{" + ", ".join(items) + "}"
+    def __str__(self):
+        items = []
+        for v in self._graph.vertices:
+            items.append("{}: {}".format(v, self._storage[v]))
+        return "{" + ", ".join(items) + "}"
 
 
 class _EdgeAttributes(MutableMapping):
-        """Wrapper around a dictionary to ensure edge existence."""
+    """Wrapper around a dictionary to ensure edge existence."""
 
-        def __init__(self, graph, storage):
-            self._graph = graph
-            self._storage = storage
+    def __init__(self, graph, storage):
+        self._graph = graph
+        self._storage = storage
 
-        def __getitem__(self, key):
-            if key not in self._graph.edges:
-                raise ValueError("Edge {} not in graph".format(key))
-            return _PerEdgeWeightAwareDict(
-                self._graph, key, self._storage[key]
-            )
+    def __getitem__(self, key):
+        if key not in self._graph.edges:
+            raise ValueError("Edge {} not in graph".format(key))
+        return _PerEdgeWeightAwareDict(self._graph, key, self._storage[key])
 
-        def __setitem__(self, key, value):
-            if key not in self._graph.edges:
-                raise ValueError("Edge {} not in graph".format(key))
-            self._storage[key] = value
+    def __setitem__(self, key, value):
+        if key not in self._graph.edges:
+            raise ValueError("Edge {} not in graph".format(key))
+        self._storage[key] = value
 
-        def __delitem__(self, key):
-            if key not in self._graph.edges:
-                raise ValueError("Edge {} not in graph".format(key))
-            del self._storage[key]
+    def __delitem__(self, key):
+        if key not in self._graph.edges:
+            raise ValueError("Edge {} not in graph".format(key))
+        del self._storage[key]
 
-        def _unsafe_delitem(self, key):
-            self._storage.pop(key, None)
+    def _unsafe_delitem(self, key):
+        self._storage.pop(key, None)
 
-        def __len__(self):
-            return len(self._storage)
+    def __len__(self):
+        return len(self._storage)
 
-        def __iter__(self):
-            return iter(self._storage)
+    def __iter__(self):
+        return iter(self._storage)
 
-        def __repr__(self):
-            return "_AnyHashableGraph-EdgeAttributes(%r)" % repr(self._storage)
+    def __repr__(self):
+        return "_AnyHashableGraph-EdgeAttributes(%r)" % repr(self._storage)
 
-        def __str__(self):
-            items = []
-            for e in self._graph.edges:
-                items.append("{}: {}".format(e, self._storage[e]))
-            return "{" + ", ".join(items) + "}"
+    def __str__(self):
+        items = []
+        for e in self._graph.edges:
+            items.append("{}: {}".format(e, self._storage[e]))
+        return "{" + ", ".join(items) + "}"
 
 
 class _PerEdgeWeightAwareDict(MutableMapping):
-    
+
     """A dictionary view which knows about the special key weight and delegates
     to the graph. This is only a view."""
 
