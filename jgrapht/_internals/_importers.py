@@ -33,17 +33,33 @@ def _create_callback_wrappers(
     edge_attribute_cb,
     vertex_notify_id_cb,
     edge_notify_id_cb,
-    integer_input_ids=False,
+    integer_input_ids,
+    populate_graph_with_attributes
 ):
     import_id_wrapper = _create_import_id_wrapper(
         graph, callback=import_id_cb, integer_input_ids=integer_input_ids
     )
+
+    if populate_graph_with_attributes: 
+        def use_vertex_attribute_cb(vertex, key, value): 
+            graph.vertex_attrs[vertex][key] = value
+    else:
+        use_vertex_attribute_cb = vertex_attribute_cb
+
     vertex_attribute_wrapper = _create_attribute_callback_wrapper(
-        graph, vertex_attribute_cb
+        graph, use_vertex_attribute_cb
     )
+
+    if populate_graph_with_attributes: 
+        def use_edge_attribute_cb(edge, key, value): 
+            graph.edge_attrs[edge][key] = value
+    else:
+        use_edge_attribute_cb = edge_attribute_cb
+
     edge_attribute_wrapper = _create_attribute_callback_wrapper(
-        graph, edge_attribute_cb
+        graph, use_edge_attribute_cb
     )
+    
     vertex_notify_id_wrapper = _create_notify_id_callback_wrapper(
         graph, vertex_notify_id_cb
     )
@@ -196,6 +212,7 @@ def _parse_graph_json(
     import_id_cb=None,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
+    populate_graph_with_attributes=True,
     input_is_filename=False,
 ):
     (
@@ -212,6 +229,7 @@ def _parse_graph_json(
         vertex_notify_id_cb=None,
         edge_notify_id_cb=None,
         integer_input_ids=False,
+        populate_graph_with_attributes=populate_graph_with_attributes,
     )
 
     backend_method = _create_import_method(

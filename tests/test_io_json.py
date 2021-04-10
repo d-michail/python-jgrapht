@@ -195,6 +195,73 @@ def test_input_json(tmpdir, backend):
         GraphBackend.LONG_GRAPH,
     ],
 )
+def test_input_json_automatic_attributes(tmpdir, backend):
+    tmpfile = tmpdir.join("json.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(expected_escaped)
+
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
+    )
+
+    read_json(g, tmpfilename)
+
+    assert g.vertex_attrs[0]["label"] == "κόμβος 0"
+    assert g.vertex_attrs[1]["ID"] == "1"
+    assert g.vertex_attrs[1]["label"] == "label 1"
+    assert g.vertex_attrs[2]["label"] == "label 2"
+    assert g.edge_attrs[9]["label"] == "edge 1-2"
+
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_input_json_no_automatic_attributes(tmpdir, backend):
+    tmpfile = tmpdir.join("json.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(expected_escaped)
+
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
+    )
+
+    read_json(g, tmpfilename, populate_graph_with_attributes=False)
+
+    assert len(g.vertex_attrs) == 0
+    assert len(g.edge_attrs) == 0
+
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
 def test_input_json_nocallbacks(tmpdir, backend):
     tmpfile = tmpdir.join("json.out")
     tmpfilename = str(tmpfile)
