@@ -31,7 +31,7 @@ def _get_equals_fptr_wrapper():
             return o1 == o2
 
         equals_type = ctypes.CFUNCTYPE(
-            ctypes.c_long, ctypes.py_object, ctypes.py_object
+            ctypes.c_bool, ctypes.py_object, ctypes.py_object
         )
         __equals_fptr_wrapper = _callbacks._CallbackWrapper(_equals, equals_type)
     return __equals_fptr_wrapper
@@ -45,7 +45,7 @@ class _HashEqualsWrapper(_HandleWrapper):
     
     def __init__(self):
         self._hash_lookup_fptr_wrapper = _callbacks._CallbackWrapper(
-            _hash_lookup, ctypes.CFUNCTYPE(ctypes.c_long, ctypes.py_object)
+            _hash_lookup, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.py_object)
         )
         self._equals_lookup_fptr_wrapper = _callbacks._CallbackWrapper(
             _equals_lookup, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.py_object)

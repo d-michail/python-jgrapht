@@ -43,7 +43,10 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
       an identifier to be written to file.
     """
     if export_vertex_id_cb is None:
-        return None
+        if graph._backend_type == _GraphBackend.REF_GRAPH:
+            export_vertex_id_cb = lambda v: str(v) 
+        else: 
+            return None
 
     final_ids = {}
     for v in graph.vertices:
@@ -70,11 +73,27 @@ def _vertex_id_store(graph, check_valid_id=None, export_vertex_id_cb=None):
     return vertex_id_store
 
 
+def _has_any_vertex_attrs(graph, attributes_dict):
+    if attributes_dict is not None:
+        for v in graph.vertices: 
+            if len(attributes_dict[v]) > 0:
+                return True
+
+    for v in graph.vertices: 
+        if len(graph.vertex_attrs[v]) > 0:
+            return True                
+
+    return False
+
+
 def _vertex_attributes_store(graph, attributes_dict):
     """Combine the attributes from a graph and a per-vertex attributes
     dictionary and create an equivalent structure in the capi. This can then be
     used in order to export a graph with attributes.
     """
+    if not _has_any_vertex_attrs(graph, attributes_dict): 
+        return None
+
     handle = _backend.jgrapht_xx_attributes_store_create()
     attribute_store = _JGraphTAttributeStore(handle, graph)
 
@@ -94,11 +113,27 @@ def _vertex_attributes_store(graph, attributes_dict):
     return attribute_store
 
 
+def _has_any_edge_attrs(graph, attributes_dict):
+    if attributes_dict is not None:
+        for e in graph.edges: 
+            if len(attributes_dict[e]) > 0:
+                return True
+
+    for e in graph.edges: 
+        if len(graph.edge_attrs[e]) > 0:
+            return True                
+
+    return False
+
+
 def _edge_attributes_store(graph, attributes_dict):
     """Combine the attributes from a graph and a per-edge attributes
     dictionary and create an equivalent structure in the capi. This can then be
     used in order to export a graph with attributes.
     """
+    if not _has_any_edge_attrs(graph, attributes_dict): 
+        return None
+
     handle = _backend.jgrapht_xx_attributes_store_create()
     attribute_store = _JGraphTAttributeStore(handle, graph)
 
@@ -875,6 +910,7 @@ def generate_dot(
     :raises IOError: In case of an export error
     """
     vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+ 
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
     vertex_id_store = _vertex_id_store(graph, export_vertex_id_cb=export_vertex_id_cb)
 

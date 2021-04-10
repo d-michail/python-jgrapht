@@ -31,7 +31,6 @@ def build_graph(backend):
     return g
 
 
-
 @pytest.mark.parametrize(
     "backend",
     [
@@ -107,11 +106,13 @@ def test_output_to_string(backend):
 
     out = generate_dot(g)
 
+    print(out)
+    #assert False
+
     assert (
         out.splitlines()
         == "digraph G {\n  0;\n  1;\n  2;\n  3;\n  0 -> 1;\n  0 -> 2;\n  0 -> 3;\n  2 -> 3;\n}\n".splitlines()
     )
-
 
 
 def test_property_graph_output_to_string():
@@ -254,8 +255,8 @@ def test_read_dot_graph_from_string(backend):
         allowing_multiple_edges=False,
         weighted=True,
         backend=backend,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()        
+        vertex_supplier=create_vertex_supplier(type="int"), 
+        edge_supplier=create_edge_supplier(type="int")
     )
 
     expected=r"""digraph G {
