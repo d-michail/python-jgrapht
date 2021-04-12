@@ -405,9 +405,12 @@ def write_gml(
     edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
 
     def check_valid_id(id):
-        if not isinstance(id, int):
-            raise TypeError("Identifiers must be integers")
-        if id < 0:
+        if isinstance(id, int):
+            if id < 0:
+                raise ValueError("Identifiers must be non-negative")
+            return
+        id_as_int = int(id)
+        if id_as_int < 0:
             raise ValueError("Identifiers must be non-negative")
 
     vertex_id_store = _vertex_id_store(
@@ -482,18 +485,20 @@ def generate_gml(
     :returns: a string contains the exported graph
     :raises IOError: In case of an export error
     """
-    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
-    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
-
     def check_valid_id(id):
-        if not isinstance(id, int):
-            raise TypeError("Identifiers must be integers")
-        if id < 0:
+        if isinstance(id, int):
+            if id < 0:
+                raise ValueError("Identifiers must be non-negative")
+            return
+        id_as_int = int(id)
+        if id_as_int < 0:
             raise ValueError("Identifiers must be non-negative")
 
     vertex_id_store = _vertex_id_store(
         graph, check_valid_id=check_valid_id, export_vertex_id_cb=export_vertex_id_cb
     )
+    vertex_attribute_store = _vertex_attributes_store(graph, per_vertex_attrs_dict)
+    edge_attribute_store = _edge_attributes_store(graph, per_edge_attrs_dict)
 
     custom = [
         export_edge_weights,

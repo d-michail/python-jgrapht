@@ -703,7 +703,7 @@ def test_input_gml_from_string_preserve_ids(backend):
     def identity(x):
         return x
 
-    parse_gml(g, input_string, identity)
+    parse_gml(g, input_string, import_id_cb=identity)
 
     assert g.vertices == set([5, 7])
 
@@ -786,15 +786,13 @@ def test_output_property_graph_to_string():
     g.edge_attrs["e1"]["type"] = "forward"
     g.edge_attrs["e2"]["type"] = "backward"
 
-    # test bad keys are ignores
+    # test bad keys are ignored
     more_vertex_props = {1: {"color": "green"}}
     more_edge_props = {"e4": {"type": "forward"}}
 
     out = generate_gml(
         g, per_vertex_attrs_dict=more_vertex_props, per_edge_attrs_dict=more_edge_props
     )
-
-    print(out)
 
     assert out.splitlines() == expected5.splitlines()
 
