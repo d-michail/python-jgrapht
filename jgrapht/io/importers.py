@@ -2,10 +2,8 @@ from .._internals._importers import (
     _parse_graph,
 
     _parse_graph_dimacs,
-    _parse_graph_gml,
     _parse_graph_csv,
     _parse_graph_gexf,
-    _parse_graph_graph6sparse6,
     _parse_graph_graphml,
 )
 
@@ -901,12 +899,15 @@ def read_graph6sparse6(
       edges.
     :raises IOError: in case of an import error
     """
-    _parse_graph_graph6sparse6(
+    _parse_graph(
+        "graph6sparse6",
         graph,
         filename,
+        integer_input_ids=False,
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
+        populate_graph_with_attributes=False,
         input_is_filename=True,
     )
 
@@ -956,12 +957,15 @@ def parse_graph6sparse6(
       edges.
     :raises IOError: in case of an import error
     """
-    _parse_graph_graph6sparse6(
+    _parse_graph(
+        "graph6sparse6",
         graph,
         input_string,
+        integer_input_ids=False,
         import_id_cb=import_id_cb,
         vertex_attribute_cb=vertex_attribute_cb,
         edge_attribute_cb=edge_attribute_cb,
+        populate_graph_with_attributes=False,
         input_is_filename=False,
     )
 

@@ -1,7 +1,7 @@
 import pytest
 
-from jgrapht import create_graph
-from jgrapht.utils import create_vertex_supplier, create_edge_supplier
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import create_vertex_supplier, create_edge_supplier, IntegerSupplier
 
 from jgrapht.io.exporters import (
     write_sparse6,
@@ -12,12 +12,15 @@ from jgrapht.io.exporters import (
 from jgrapht.io.importers import read_graph6sparse6, parse_graph6sparse6
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -34,9 +37,17 @@ def build_graph():
     return g
 
 
-def test_output_sparse6(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_sparse6(tmpdir, backend):
 
-    g = build_graph()
+    g = build_graph(backend)
     tmpfile = tmpdir.join("graph.s6")
     tmpfilename = str(tmpfile)
 
@@ -60,9 +71,16 @@ def test_output_sparse6(tmpdir):
     assert len(g1.edges) == 5
 
 
-def test_output_graph6(tmpdir):
-
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_graph6(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("graph.g6")
     tmpfilename = str(tmpfile)
 
@@ -79,6 +97,9 @@ def test_output_graph6(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
     read_graph6sparse6(g1, tmpfilename, vertex_attribute_cb=va_cb)
 
@@ -86,12 +107,23 @@ def test_output_graph6(tmpdir):
     assert len(g1.edges) == 5
 
 
-def test_output_to_string():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_output_to_string(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=True,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertices_from(range(0, 4))
@@ -108,64 +140,94 @@ def test_output_to_string():
     assert out == "Ct"
 
 
-def test_read_sparse6_property_graph_from_string():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_read_sparse6_property_graph_from_string(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     def import_id_cb(id):
-        return 'vv{}'.format(id)
+        return "vv{}".format(id)
 
-    parse_graph6sparse6(g, ':Cca', import_id_cb=import_id_cb)
+    parse_graph6sparse6(g, ":Cca", import_id_cb=import_id_cb)
 
-    assert g.vertices == {'vv0', 'vv1', 'vv2', 'vv3'}
-    assert g.edge_tuple('e0') == ('vv0', 'vv1', 1.0)
+    assert g.vertices == {"vv0", "vv1", "vv2", "vv3"}
+    assert g.edge_tuple("e0") == ("vv0", "vv1", 1.0)
 
 
-def test_read_sparse6_property_graph_from_string1():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_read_sparse6_property_graph_from_string1(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
-    parse_graph6sparse6(g, ':Cca')
+    parse_graph6sparse6(g, ":Cca")
 
-    assert g.vertices == {'v0', 'v1', 'v2', 'v3'}
-    assert g.edge_tuple('e0') == ('v0', 'v1', 1.0)
+    assert g.vertices == {"v0", "v1", "v2", "v3"}
+    assert g.edge_tuple("e0") == ("v0", "v1", 1.0)
 
 
-def test_read_sparse6_graph_from_string():
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_read_sparse6_graph_from_string(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     def import_id_cb(id):
         return int(id)
 
-    parse_graph6sparse6(g, ':Cca', import_id_cb=import_id_cb)
+    parse_graph6sparse6(g, ":Cca", import_id_cb=import_id_cb)
 
     assert g.vertices == {0, 1, 2, 3}
     assert g.edge_tuple(0) == (0, 1, 1.0)
 
 
-def test_read_anyhashableg_sparse6_graph_from_file(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_read_anyhashableg_sparse6_graph_from_file(tmpdir, backend):
     tmpfile = tmpdir.join("gml.out")
     tmpfilename = str(tmpfile)
 
@@ -177,9 +239,9 @@ def test_read_anyhashableg_sparse6_graph_from_file(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
-        vertex_supplier=create_vertex_supplier(type='int'),
-        edge_supplier=create_edge_supplier(type='int'),
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     def import_id_cb(id):

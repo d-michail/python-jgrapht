@@ -473,7 +473,6 @@ def generate_gml(
     :returns: a string contains the exported graph
     :raises IOError: In case of an export error
     """
-
     def check_valid_id(id):
         if isinstance(id, int):
             if id < 0:
