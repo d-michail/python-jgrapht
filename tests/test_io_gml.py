@@ -36,86 +36,71 @@ graph
 	node
 	[
 		id 4
-		label "4"
 	]
 	node
 	[
 		id 5
-		label "5"
 	]
 	node
 	[
 		id 6
-		label "6"
 	]
 	node
 	[
 		id 7
-		label "7"
 	]
 	node
 	[
 		id 8
-		label "8"
 	]
 	node
 	[
 		id 9
-		label "9"
 	]
 	edge
 	[
 		source 0
 		target 1
-		label "0"
 	]
 	edge
 	[
 		source 0
 		target 2
-		label "1"
 	]
 	edge
 	[
 		source 0
 		target 3
-		label "2"
 	]
 	edge
 	[
 		source 0
 		target 4
-		label "3"
 	]
 	edge
 	[
 		source 0
 		target 5
-		label "4"
 	]
 	edge
 	[
 		source 0
 		target 6
-		label "5"
 	]
 	edge
 	[
 		source 0
 		target 7
-		label "6"
 	]
 	edge
 	[
 		source 0
 		target 8
-		label "7"
 	]
 	edge
 	[
 		source 0
 		target 9
-		label "8"
 	]
 	edge
 	[
@@ -127,49 +112,41 @@ graph
 	[
 		source 2
 		target 3
-		label "10"
 	]
 	edge
 	[
 		source 3
 		target 4
-		label "11"
 	]
 	edge
 	[
 		source 4
 		target 5
-		label "12"
 	]
 	edge
 	[
 		source 5
 		target 6
-		label "13"
 	]
 	edge
 	[
 		source 6
 		target 7
-		label "14"
 	]
 	edge
 	[
 		source 7
 		target 8
-		label "15"
 	]
 	edge
 	[
 		source 8
 		target 9
-		label "16"
 	]
 	edge
 	[
 		source 9
 		target 1
-		label "17"
 	]
 ]
 """
@@ -417,6 +394,36 @@ graph
 """
 
 
+expected6 = r"""Creator "JGraphT GML Exporter"
+Version 1
+graph
+[
+	label ""
+	directed 1
+	node
+	[
+		id 0
+		color "red"
+	]
+	node
+	[
+		id 2
+	]
+	edge
+	[
+		source 0
+		target 2
+		type "forward"
+	]
+	edge
+	[
+		source 2
+		target 0
+		type "backward"
+	]
+]
+"""
+
 def build_graph(backend):
     g = create_graph(
         directed=False,
@@ -474,7 +481,13 @@ def test_output_gml(tmpdir, backend):
         3: {"label": "label 3"},
     }
     e_labels = {9: {"label": "edge 1-2"}}
-    write_gml(g, tmpfilename, False, True, True, v_labels, e_labels)
+    write_gml(
+        g,
+        tmpfilename,
+        export_edge_weights=False,
+        per_vertex_attrs_dict=v_labels,
+        per_edge_attrs_dict=e_labels,
+    )
 
     with open(tmpfilename, "r", encoding="utf-8") as f:
         contents = f.read()
@@ -504,7 +517,7 @@ def test_output_gml_without_automatic_labels(tmpdir, backend):
         3: {"label": "label 3"},
     }
     e_labels = {9: {"label": "edge 1-2"}}
-    write_gml(g, tmpfilename, False, False, False, v_labels, e_labels)
+    write_gml(g, tmpfilename, False, v_labels, e_labels)
 
     with open(tmpfilename, "r", encoding="utf-8") as f:
         contents = f.read()
@@ -597,7 +610,6 @@ def test_input_gml_from_string(tmpdir, backend):
     parse_gml(g, expected, vertex_attribute_cb=va_cb, edge_attribute_cb=ea_cb)
 
     assert v_attrs[2]["label"] == "label 2"
-    assert v_attrs[5]["label"] == "5"
     assert e_attrs[9]["label"] == "edge 1-2"
 
 
@@ -818,7 +830,6 @@ def test_read_gml_property_graph_from_string():
     assert len(g.edges) == 18
     assert g.edge_tuple("e6") == ("v1", "v8", 1.0)
     assert g.vertex_attrs["v2"]["label"] == "label 1"
-    assert g.edge_attrs["e15"]["label"] == "15"
 
 
 def test_read_gml_property_graph_from_string_no_id_map():
@@ -839,7 +850,6 @@ def test_read_gml_property_graph_from_string_no_id_map():
     assert len(g.edges) == 18
     assert g.edge_tuple("e6") == ("v0", "v7", 1.0)
     assert g.vertex_attrs["v1"]["label"] == "label 1"
-    assert g.edge_attrs["e15"]["label"] == "15"
 
 
 def test_output_bad_property_graph_to_string():
@@ -862,16 +872,18 @@ def test_output_bad_property_graph_to_string():
     g.edge_attrs["e1"]["type"] = "forward"
     g.edge_attrs["e2"]["type"] = "backward"
 
-    # test bad keys are ignores
+    # test bad keys are ignored
     more_vertex_props = {1: {"color": "green"}}
     more_edge_props = {"e4": {"type": "forward"}}
 
-    with pytest.raises(TypeError):
-        out = generate_gml(
-            g,
-            per_vertex_attrs_dict=more_vertex_props,
-            per_edge_attrs_dict=more_edge_props,
-        )
+#    with pytest.raises(TypeError):
+    out = generate_gml(
+        g,
+        per_vertex_attrs_dict=more_vertex_props,
+        per_edge_attrs_dict=more_edge_props,
+    )
+
+    assert out.splitlines() == expected6.splitlines()
 
 
 def test_output_bad_property_graph_to_string_with_convert():
@@ -944,17 +956,15 @@ def test_write_gml_with_bad_converter(tmpdir, backend):
     e_labels = {9: {"label": "edge 1-2"}}
 
     def bad_convert(id):
-        return str(id)
+        return str("v" + id)
 
     with pytest.raises(TypeError):
         write_gml(
             g,
             tmpfilename,
-            False,
-            True,
-            True,
-            v_labels,
-            e_labels,
+            export_edge_weights=False,
+            per_vertex_attrs_dict=v_labels,
+            per_edge_attrs_dict=e_labels,
             export_vertex_id_cb=bad_convert,
         )
 
@@ -988,8 +998,6 @@ def test_write_gml_with_bad_converter2(tmpdir, backend):
             g,
             tmpfilename,
             False,
-            True,
-            True,
             v_labels,
             e_labels,
             export_vertex_id_cb=bad_convert,
