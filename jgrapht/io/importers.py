@@ -1,10 +1,7 @@
 from .._internals._importers import (
     _parse_graph,
-
     _parse_graph_dimacs,
     _parse_graph_csv,
-    _parse_graph_gexf,
-    _parse_graph_graphml,
 )
 
 
@@ -199,19 +196,19 @@ def read_gml(
         "gml",
         graph,
         filename,
-        integer_input_ids=True,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        populate_graph_with_attributes=populate_graph_with_attributes,
-        input_is_filename=True,
+        True,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        populate_graph_with_attributes,
+        True,
     )
 
 
 def parse_gml(
     graph,
     input_string,
-    populate_graph_with_attributes=True,    
+    populate_graph_with_attributes=True,
     import_id_cb=None,
     vertex_attribute_cb=None,
     edge_attribute_cb=None,
@@ -298,12 +295,12 @@ def parse_gml(
         "gml",
         graph,
         input_string,
-        integer_input_ids=True,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        populate_graph_with_attributes=populate_graph_with_attributes,
-        input_is_filename=False,
+        True,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        populate_graph_with_attributes,
+        False,
     )
 
 
@@ -379,12 +376,12 @@ def read_json(
         "json",
         graph,
         filename,
-        integer_input_ids=False,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        populate_graph_with_attributes=populate_graph_with_attributes,
-        input_is_filename=True,
+        False,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        populate_graph_with_attributes,
+        True,
     )
 
 
@@ -460,12 +457,12 @@ def parse_json(
         "json",
         graph,
         input_string,
-        integer_input_ids=False,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        populate_graph_with_attributes=populate_graph_with_attributes,
-        input_is_filename=False,
+        False,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        populate_graph_with_attributes,
+        False,
     )
 
 
@@ -554,6 +551,7 @@ def parse_csv(
 def read_gexf(
     graph,
     filename,
+    populate_graph_with_attributes=True,
     import_id_cb=None,
     validate_schema=True,
     vertex_attribute_cb=None,
@@ -615,36 +613,45 @@ def read_gexf(
               graph vertex. For any-hashable graphs is may return any hashable object which will serve
               as the graph vertex.
 
-    .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the
-              attribute value. They are only used for default graphs. any-hashable graphs get the
-              attributes/properties automatically loaded.
+              attribute value. 
+
+    The importer by default automatically reads vertex/edge attributes. If the user provides a specific
+    callback function for attributes, this automatic behavior is disabled.
 
     :param graph: the graph to read into
     :param filename: the input file to read from
+    :param populate_graph_with_attributes: Whether to automatically import attributes. Disabled automatically
+      in case the user provided vertex or edge attribute callback functions.
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
       must return an integer, for any-hashable graphs any hashable. If None the graph assigns automatically.
-    :param validate_schema: whether to validate the XML schema
-    :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
-      vertices.
-    :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
-      edges.
+    :param validate_schema: whether to validate the XML schema      
+    :param vertex_attribute_cb: Callback function for vertex attributes.
+    :param edge_attribute_cb: Callback function for edge attributes.      
     :raises IOError: in case of an import error
     """
-    _parse_graph_gexf(
+    if vertex_attribute_cb is not None or edge_attribute_cb is not None:
+        populate_graph_with_attributes = False
+
+    _parse_graph(
+        "gexf",
         graph,
         filename,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        input_is_filename=True,
-        validate_schema=validate_schema,
+        False,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        populate_graph_with_attributes,
+        True,
+        validate_schema,
     )
 
 
 def parse_gexf(
     graph,
     input_string,
+    populate_graph_with_attributes=True,    
     import_id_cb=None,
     validate_schema=True,
     vertex_attribute_cb=None,
@@ -706,30 +713,38 @@ def parse_gexf(
               graph vertex. For any-hashable graphs is may return any hashable object which will serve
               as the graph vertex.
 
-    .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
-              or edge identifier. The second is the attribute key and the third is the
-              attribute value. They are only used for default graphs. any-hashable graphs get the
-              attributes/properties automatically loaded.
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex or edge identifier. The
+              second is the attribute key and the third is the attribute value. They are only used for default
+              graphs. any-hashable graphs get the attributes/properties automatically loaded.
+
+    The importer by default automatically reads vertex/edge attributes. If the user provides a specific
+    callback function for attributes, this automatic behavior is disabled.
 
     :param graph: the graph to read into
     :param input_string: the input string to read from
+    :param populate_graph_with_attributes: Whether to automatically import attributes. Disabled automatically
+      in case the user provided vertex or edge attribute callback functions.
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
       must return an integer, for any-hashable graphs any hashable. If None the graph assigns automatically.
-    :param validate_schema: whether to validate the XML schema
-    :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
-      vertices.
-    :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
-      edges.
+    :param validate_schema: whether to validate the XML schema      
+    :param vertex_attribute_cb: Callback function for vertex attributes.
+    :param edge_attribute_cb: Callback function for edge attributes.
     :raises IOError: in case of an import error
     """
-    _parse_graph_gexf(
+    if vertex_attribute_cb is not None or edge_attribute_cb is not None:
+        populate_graph_with_attributes = False
+
+    _parse_graph(
+        "gexf",
         graph,
         input_string,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        input_is_filename=False,
-        validate_schema=validate_schema,
+        False,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        populate_graph_with_attributes,
+        False,
+        validate_schema,
     )
 
 
@@ -785,12 +800,12 @@ def read_dot(
         "dot",
         graph,
         filename,
-        integer_input_ids=False,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        populate_graph_with_attributes=populate_graph_with_attributes,
-        input_is_filename=True,
+        False,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        populate_graph_with_attributes,
+        True,
     )
 
 
@@ -846,12 +861,12 @@ def parse_dot(
         "dot",
         graph,
         input_string,
-        integer_input_ids=False,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        populate_graph_with_attributes=populate_graph_with_attributes,
-        input_is_filename=False,
+        False,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        populate_graph_with_attributes,
+        False,
     )
 
 
@@ -903,12 +918,12 @@ def read_graph6sparse6(
         "graph6sparse6",
         graph,
         filename,
-        integer_input_ids=False,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        populate_graph_with_attributes=False,
-        input_is_filename=True,
+        False,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        False,
+        True,
     )
 
 
@@ -961,12 +976,12 @@ def parse_graph6sparse6(
         "graph6sparse6",
         graph,
         input_string,
-        integer_input_ids=False,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        populate_graph_with_attributes=False,
-        input_is_filename=False,
+        False,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        False,
+        False,
     )
 
 
@@ -1074,15 +1089,17 @@ def read_graphml(
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error
     """
-    _parse_graph_graphml(
+    _parse_graph(
+        "graphml_simple" if simple else "graphml",
         graph,
         filename,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        input_is_filename=True,
-        validate_schema=validate_schema,
-        simple=simple,
+        False,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        True,
+        True,
+        validate_schema
     )
 
 
@@ -1190,13 +1207,15 @@ def parse_graphml(
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error
     """
-    _parse_graph_graphml(
+    _parse_graph(
+        "graphml_simple" if simple else "graphml",
         graph,
         input_string,
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        input_is_filename=False,
-        validate_schema=validate_schema,
-        simple=simple,
+        False,
+        import_id_cb,
+        vertex_attribute_cb,
+        edge_attribute_cb,
+        True,
+        False,
+        validate_schema,
     )

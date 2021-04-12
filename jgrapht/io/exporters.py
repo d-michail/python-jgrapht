@@ -153,12 +153,45 @@ def _edge_attributes_store(graph, attributes_dict):
     return attribute_store
 
 
-def _edge_id_store(graph):
-    """Create an edge identifier store inside the capi backend. This only
-    works for any-hashable graphs, otherwise it returns None.
+
+def _edge_id_store(graph, check_valid_id=None, export_edge_id_cb=None):
+    """Create an edge identifier store inside the capi backend.
+
+    :param graph: a graph
+    :param check_valid_id: a validator. If None no validation takes place.
+    :param export_edge_id_cb: a function which converts from a graph edge to
+      an identifier to be written to file.
     """
-    edge_id_store = None
+    if export_edge_id_cb is None:
+        if graph._backend_type == _GraphBackend.REF_GRAPH:
+            export_edge_id_cb = lambda v: str(v)
+        else:
+            return None
+
+    final_ids = {}
+    for e in graph.edges:
+        eid = export_edge_id_cb(e)
+        if check_valid_id is not None:
+            check_valid_id(eid)
+        final_ids[e] = str(eid)
+
+    if graph._backend_type == _GraphBackend.INT_GRAPH:
+        edge_id_store = _JGraphTIntegerStringMap()
+    elif graph._backend_type == _GraphBackend.LONG_GRAPH:
+        edge_id_store = _JGraphTLongStringMap()
+    elif graph._backend_type == _GraphBackend.REF_GRAPH:
+        edge_id_store = _JGraphTRefStringMap(
+            handle=_backend.jgrapht_xx_map_create(),
+            hash_equals_resolver_handle=graph._hash_equals_wrapper.handle,
+        )
+    else:
+        raise ValueError("Not recognized backend")
+
+    for e, eid in final_ids.items():
+        edge_id_store[e] = eid
+
     return edge_id_store
+
 
 
 DIMACS_FORMATS = dict(
@@ -676,7 +709,6 @@ def write_gexf(
     per_vertex_attrs_dict=None,
     per_edge_attrs_dict=None,
     export_edge_weights=False,
-    export_edge_labels=False,
     export_edge_types=False,
     export_meta=False,
     export_vertex_id_cb=None,
@@ -727,7 +759,6 @@ def write_gexf(
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
     :param export_edge_weights: whether to export edge weights
-    :param export_edge_labels: whether to export edge labels
     :param export_edge_types: whether to export edge types
     :param export_meta: whether to export meta tag
     :param export_vertex_id_cb: function which converts from vertex to identifier to be written
@@ -750,7 +781,7 @@ def write_gexf(
         vertex_id_store.handle if vertex_id_store is not None else None,
         edge_id_store.handle if edge_id_store is not None else None,
         export_edge_weights,
-        export_edge_labels,
+        False,
         export_edge_types,
         export_meta,
     ]
@@ -764,7 +795,6 @@ def generate_gexf(
     per_vertex_attrs_dict=None,
     per_edge_attrs_dict=None,
     export_edge_weights=False,
-    export_edge_labels=False,
     export_edge_types=False,
     export_meta=False,
     export_vertex_id_cb=None,
@@ -814,7 +844,6 @@ def generate_gexf(
     :param per_vertex_attrs_dict: per vertex attribute dicts
     :param per_edge_attrs_dict: per edge attribute dicts
     :param export_edge_weights: whether to export edge weights
-    :param export_edge_labels: whether to export edge labels
     :param export_edge_types: whether to export edge types
     :param export_meta: whether to export meta tag
     :param export_vertex_id_cb: function which converts from vertex to identifier to be written
@@ -838,7 +867,7 @@ def generate_gexf(
         vertex_id_store.handle if vertex_id_store is not None else None,
         edge_id_store.handle if edge_id_store is not None else None,
         export_edge_weights,
-        export_edge_labels,
+        False,
         export_edge_types,
         export_meta,
     ]

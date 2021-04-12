@@ -51,8 +51,14 @@ def _create_callback_wrappers(
     )
 
     if populate_graph_with_attributes: 
-        def use_edge_attribute_cb(edge, key, value): 
-            graph.edge_attrs[edge][key] = value
+        def use_edge_attribute_cb(edge, key, value):
+            if key == "weight":
+                try: 
+                    graph.edge_attrs[edge][key] = float(value)
+                except ValueError:
+                    pass
+            else:
+                graph.edge_attrs[edge][key] = value
     else:
         use_edge_attribute_cb = edge_attribute_cb
 
@@ -265,62 +271,17 @@ def _parse_graph_csv(
     )
 
 
-def _parse_graph_gexf(
-    graph,
-    input,
-    import_id_cb=None,
-    vertex_attribute_cb=None,
-    edge_attribute_cb=None,
-    input_is_filename=False,
-    validate_schema=True,
-):
-    (
-        import_id_f_ptr,
-        import_id_f,  # pylint: disable=unused-variable
-        vertex_attribute_f_ptr,
-        vertex_attribute_f,  # pylint: disable=unused-variable
-        edge_attribute_f_ptr,
-        edge_attribute_f,  # pylint: disable=unused-variable
-        vertex_notify_f_ptr,
-        vertex_notify_f,  # pylint: disable=unused-variable
-        edge_notify_f_ptr,
-        edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_graph_callbacks(
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        vertex_notify_id_cb=None,
-        edge_notify_id_cb=None,
-    )
-
-    string_as_bytearray = bytearray(input, encoding="utf-8")
-
-    if input_is_filename:
-        backend_function = _backend.jgrapht_ii_import_file_gexf
-    else:
-        backend_function = _backend.jgrapht_ii_import_string_gexf
-
-    backend_function(
-        graph.handle,
-        string_as_bytearray,
-        import_id_f_ptr,
-        validate_schema,
-        vertex_attribute_f_ptr,
-        edge_attribute_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    )
-
 def _parse_graph(
     graph_format,
     graph,
     input,
     integer_input_ids,
-    import_id_cb=None,
-    vertex_attribute_cb=None,
-    edge_attribute_cb=None,
-    populate_graph_with_attributes=True,
-    input_is_filename=False,
+    import_id_cb,
+    vertex_attribute_cb,
+    edge_attribute_cb,
+    populate_graph_with_attributes,
+    input_is_filename,
+    *args
 ):
     (
         import_id_wrapper,
@@ -351,58 +312,7 @@ def _parse_graph(
         edge_attribute_wrapper.fptr,
         vertex_notify_id_wrapper.fptr,
         edge_notify_id_wrapper.fptr,
+        *args
     )
 
-
-def _parse_graph_graphml(
-    graph,
-    input,
-    import_id_cb=None,
-    vertex_attribute_cb=None,
-    edge_attribute_cb=None,
-    input_is_filename=False,
-    validate_schema=True,
-    simple=True,
-):
-    (
-        import_id_f_ptr,
-        import_id_f,  # pylint: disable=unused-variable
-        vertex_attribute_f_ptr,
-        vertex_attribute_f,  # pylint: disable=unused-variable
-        edge_attribute_f_ptr,
-        edge_attribute_f,  # pylint: disable=unused-variable
-        vertex_notify_f_ptr,
-        vertex_notify_f,  # pylint: disable=unused-variable
-        edge_notify_f_ptr,
-        edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_graph_callbacks(
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        vertex_notify_id_cb=None,
-        edge_notify_id_cb=None,
-    )
-
-    string_as_bytearray = bytearray(input, encoding="utf-8")
-
-    if input_is_filename:
-        if simple:
-            backend_function = _backend.jgrapht_ii_import_file_graphml_simple
-        else:
-            backend_function = _backend.jgrapht_ii_import_file_graphml
-    else:
-        if simple:
-            backend_function = _backend.jgrapht_ii_import_string_graphml_simple
-        else:
-            backend_function = _backend.jgrapht_ii_import_string_graphml
-
-    backend_function(
-        graph.handle,
-        string_as_bytearray,
-        import_id_f_ptr,
-        validate_schema,
-        vertex_attribute_f_ptr,
-        edge_attribute_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    )
+    
