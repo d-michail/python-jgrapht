@@ -1,17 +1,21 @@
 import pytest
 
 from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier, create_edge_supplier, create_vertex_supplier
 
 import jgrapht.algorithms.spanning as spanning
 import jgrapht.generators as generators
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=IntegerSupplier(),
+        edge_supplier=IntegerSupplier(),
     )
 
     for i in range(0, 10):
@@ -40,8 +44,16 @@ def build_graph():
     return g
 
 
-def test_kruskal():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_kruskal(backend):
+    g = build_graph(backend)
     mst_w, mst_edges = spanning.kruskal(g)
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
@@ -49,8 +61,16 @@ def test_kruskal():
     assert expected == solution
 
 
-def test_prim():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_prim(backend):
+    g = build_graph(backend)
     mst_w, mst_edges = spanning.prim(g)
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
@@ -58,8 +78,16 @@ def test_prim():
     assert expected == solution
 
 
-def test_boruvka():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_boruvka(backend):
+    g = build_graph(backend)
     mst_w, mst_edges = spanning.boruvka(g)
     assert mst_w == 9.0
     expected = set([0, 1, 2, 3, 4, 5, 6, 7, 8])
@@ -67,8 +95,21 @@ def test_boruvka():
     assert expected == solution
 
 
-def test_small_graph_prim():
-    g = create_graph(directed=False)
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_small_graph_prim(backend):
+    g = create_graph(
+        directed=False,
+        backend=backend,
+        vertex_supplier=IntegerSupplier(),
+        edge_supplier=IntegerSupplier(),
+    )
 
     generators.gnp_random_graph(g, n=500, p=0.1, seed=17)
 
@@ -99,9 +140,18 @@ def test_anyhashableg_prim():
     mst_w, mst_edges = spanning.prim(g)
     assert mst_w == 3.0
     assert set(mst_edges) == {e1, e2}
-    
-def test_result_with_difference(): 
-    g = build_graph()
+
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_result_with_difference(backend):
+    g = build_graph(backend)
     mst_weight, mst_tree = spanning.prim(g)
 
     non_mst_edges = g.edges - set(mst_tree)
@@ -109,10 +159,19 @@ def test_result_with_difference():
     # test that our intermediate set results, property implement
     # method _from_iterable
 
-    assert non_mst_edges == { 9, 10, 11, 12, 13, 14, 15, 16, 17 }
+    assert non_mst_edges == {9, 10, 11, 12, 13, 14, 15, 16, 17}
 
-def test_result_with_difference_symmetric(): 
-    g = build_graph()
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_result_with_difference_symmetric(backend):
+    g = build_graph(backend)
     mst_weight, mst_tree = spanning.prim(g)
 
     non_mst_edges = g.edges - set(mst_tree)
@@ -120,7 +179,7 @@ def test_result_with_difference_symmetric():
     # test that our intermediate set results, property implement
     # method _from_iterable
 
-    assert non_mst_edges == { 9, 10, 11, 12, 13, 14, 15, 16, 17 }
+    assert non_mst_edges == {9, 10, 11, 12, 13, 14, 15, 16, 17}
 
 
 def test_refgraph_prim():
@@ -129,7 +188,7 @@ def test_refgraph_prim():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
-        backend=GraphBackend.REF_GRAPH
+        backend=GraphBackend.REF_GRAPH,
     )
 
     g.add_vertex("0")

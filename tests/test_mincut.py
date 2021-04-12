@@ -97,7 +97,9 @@ def test_anyhashableg_mincut_stoer_wagner():
     assert cut.source_partition == set([9])
 
 
-@pytest.mark.parametrize("backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH])
+@pytest.mark.parametrize(
+    "backend", [GraphBackend.INT_GRAPH, GraphBackend.LONG_GRAPH, GraphBackend.REF_GRAPH]
+)
 def test_oddmincutset_padberg_rao(backend):
     g = build_graph(backend=backend)
 
