@@ -988,6 +988,7 @@ def parse_graph6sparse6(
 def read_graphml(
     graph,
     filename,
+    populate_graph_with_attributes=True,    
     import_id_cb=None,
     validate_schema=True,
     vertex_attribute_cb=None,
@@ -1069,7 +1070,7 @@ def read_graphml(
               graph vertex. For any-hashable graphs is may return any hashable object which will serve
               as the graph vertex.
 
-    .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the
               attribute value. They are only used for default graphs. any-hashable graphs get the
               attributes/properties automatically loaded.
@@ -1077,18 +1078,24 @@ def read_graphml(
     .. note:: The parameter simple affect the capabilities of the importer. It trades functionality
               for parsing speed.
 
+    The importer by default automatically reads vertex/edge attributes. If the user provides a specific
+    callback function for attributes, this automatic behavior is disabled.
+
     :param graph: the graph to read into
     :param filename: the input file to read from
+    :param populate_graph_with_attributes: Whether to automatically import attributes. Disabled automatically
+      in case the user provided vertex or edge attribute callback functions.
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
       must return an integer, for any-hashable graphs any hashable. If None the graph assigns automatically.
-    :param validate_schema: whether to validate the XML schema
-    :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
-      vertices.
-    :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
-      edges.
+    :param validate_schema: whether to validate the XML schema      
+    :param vertex_attribute_cb: Callback function for vertex attributes.
+    :param edge_attribute_cb: Callback function for edge attributes.
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error
     """
+    if vertex_attribute_cb is not None or edge_attribute_cb is not None:
+        populate_graph_with_attributes = False
+
     _parse_graph(
         "graphml_simple" if simple else "graphml",
         graph,
@@ -1097,7 +1104,7 @@ def read_graphml(
         import_id_cb,
         vertex_attribute_cb,
         edge_attribute_cb,
-        True,
+        populate_graph_with_attributes,
         True,
         validate_schema
     )
@@ -1106,6 +1113,7 @@ def read_graphml(
 def parse_graphml(
     graph,
     input_string,
+    populate_graph_with_attributes=True,    
     import_id_cb=None,
     validate_schema=True,
     vertex_attribute_cb=None,
@@ -1187,7 +1195,7 @@ def parse_graphml(
               graph vertex. For any-hashable graphs is may return any hashable object which will serve
               as the graph vertex.
 
-    .. note:: Attribute callback functions accept three parameters. The first is the integer vertex
+    .. note:: Attribute callback functions accept three parameters. The first is the vertex
               or edge identifier. The second is the attribute key and the third is the
               attribute value. They are only used for default graphs. any-hashable graphs get the
               attributes/properties automatically loaded.
@@ -1195,18 +1203,24 @@ def parse_graphml(
     .. note:: The parameter simple affects the capabilities of the importer. It trades functionality
               for parsing speed.
 
+    The importer by default automatically reads vertex/edge attributes. If the user provides a specific
+    callback function for attributes, this automatic behavior is disabled.
+
     :param graph: the graph to read into
     :param input_string: the input string to read from
+    :param populate_graph_with_attributes: Whether to automatically import attributes. Disabled automatically
+      in case the user provided vertex or edge attribute callback functions.
     :param import_id_cb: Callback to transform identifiers from file to vertices. For default graphs
       must return an integer, for any-hashable graphs any hashable. If None the graph assigns automatically.
-    :param validate_schema: whether to validate the XML schema
-    :param vertex_attribute_cb: Callback function for vertex attributes when reading graphs with integer
-      vertices.
-    :param edge_attribute_cb: Callback function for edge attributes when reading graphs with integer
-      edges.
+    :param validate_schema: whether to validate the XML schema      
+    :param vertex_attribute_cb: Callback function for vertex attributes.
+    :param edge_attribute_cb: Callback function for edge attributes.
     :param simple: whether to use a simpler parser with more speed but less functionality
     :raises IOError: in case of an import error
     """
+    if vertex_attribute_cb is not None or edge_attribute_cb is not None:
+        populate_graph_with_attributes = False
+
     _parse_graph(
         "graphml_simple" if simple else "graphml",
         graph,
@@ -1215,7 +1229,7 @@ def parse_graphml(
         import_id_cb,
         vertex_attribute_cb,
         edge_attribute_cb,
-        True,
+        populate_graph_with_attributes,
         False,
         validate_schema,
     )
