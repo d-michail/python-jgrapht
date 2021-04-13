@@ -166,52 +166,6 @@ def _parse_graph_dimacs(
     )
 
 
-def _parse_graph_gml(
-    graph,
-    input,
-    import_id_cb=None,
-    vertex_attribute_cb=None,
-    edge_attribute_cb=None,
-    input_is_filename=False,
-):
-    (
-        import_id_f_ptr,
-        import_id_f,  # pylint: disable=unused-variable
-        vertex_attribute_f_ptr,
-        vertex_attribute_f,  # pylint: disable=unused-variable
-        edge_attribute_f_ptr,
-        edge_attribute_f,  # pylint: disable=unused-variable
-        vertex_notify_f_ptr,
-        vertex_notify_f,  # pylint: disable=unused-variable
-        edge_notify_f_ptr,
-        edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_graph_callbacks(
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=vertex_attribute_cb,
-        edge_attribute_cb=edge_attribute_cb,
-        vertex_notify_id_cb=None,
-        edge_notify_id_cb=None,
-        integer_ids=True,
-    )
-
-    string_as_bytearray = bytearray(input, encoding="utf-8")
-
-    if input_is_filename:
-        backend_function = _backend.jgrapht_ii_import_file_gml
-    else:
-        backend_function = _backend.jgrapht_ii_import_string_gml
-
-    backend_function(
-        graph.handle,
-        string_as_bytearray,
-        import_id_f_ptr,
-        vertex_attribute_f_ptr,
-        edge_attribute_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    )
-
-
 
 CSV_FORMATS = dict(
     {
@@ -220,55 +174,6 @@ CSV_FORMATS = dict(
         "matrix": _backend.CSV_FORMAT_MATRIX,
     }
 )
-
-
-def _parse_graph_csv(
-    graph,
-    input,
-    import_id_cb=None,
-    format="adjacencylist",
-    import_edge_weights=False,
-    matrix_format_node_id=False,
-    matrix_format_zero_when_noedge=True,
-    input_is_filename=False,
-):
-    (
-        import_id_f_ptr,
-        import_id_f,  # pylint: disable=unused-variable
-        _,
-        _,
-        _,
-        _,
-        vertex_notify_f_ptr,
-        vertex_notify_f,  # pylint: disable=unused-variable
-        edge_notify_f_ptr,
-        edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_graph_callbacks(
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=None,
-        edge_attribute_cb=None,
-        vertex_notify_id_cb=None,
-        edge_notify_id_cb=None,
-    )
-
-    string_as_bytearray = bytearray(input, encoding="utf-8")
-
-    if input_is_filename:
-        backend_function = _backend.jgrapht_ii_import_file_csv
-    else:
-        backend_function = _backend.jgrapht_ii_import_string_csv
-
-    backend_function(
-        graph.handle,
-        string_as_bytearray,
-        import_id_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-        CSV_FORMATS.get(format, _backend.CSV_FORMAT_EDGE_LIST),
-        import_edge_weights,
-        matrix_format_node_id,
-        matrix_format_zero_when_noedge,
-    )
 
 
 def _parse_graph(
@@ -315,4 +220,51 @@ def _parse_graph(
         *args
     )
 
+
+def _parse_graph_csv(
+    graph,
+    input,
+    integer_input_ids,
+    import_id_cb,
+    vertex_attribute_cb,
+    edge_attribute_cb,
+    populate_graph_with_attributes,
+    input_is_filename,
+    format="adjacencylist",
+    import_edge_weights=False,
+    matrix_format_node_id=False,
+    matrix_format_zero_when_noedge=True,    
+):
+    (
+        import_id_wrapper,
+        vertex_attribute_wrapper,
+        edge_attribute_wrapper,
+        vertex_notify_id_wrapper,
+        edge_notify_id_wrapper,
+    ) = _create_callback_wrappers(
+        graph,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=vertex_attribute_cb,
+        edge_attribute_cb=edge_attribute_cb,
+        vertex_notify_id_cb=None,
+        edge_notify_id_cb=None,
+        integer_input_ids=integer_input_ids,
+        populate_graph_with_attributes=populate_graph_with_attributes,
+    )
+
+    backend_method = _create_import_method(
+        graph, "file" if input_is_filename else "string", "csv"
+    )
+
+    backend_method(
+        graph.handle,
+        bytearray(input, encoding="utf-8"),
+        import_id_wrapper.fptr,
+        vertex_notify_id_wrapper.fptr,
+        edge_notify_id_wrapper.fptr,
+        CSV_FORMATS.get(format, _backend.CSV_FORMAT_EDGE_LIST),
+        import_edge_weights,
+        matrix_format_node_id,
+        matrix_format_zero_when_noedge,
+    )
     
