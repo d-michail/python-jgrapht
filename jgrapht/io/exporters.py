@@ -13,20 +13,45 @@ from .._internals._attributes import (
 )
 
 
-def _export_to_file(name, graph, filename, *args):
-    if name == "dimacs":
-        alg_method_name = "jgrapht_ix_export_file_" + name
+def _export_to_dimacs_file(graph, filename, *args):
+    if graph._backend_type == _GraphBackend.INT_GRAPH:
+        mt = "ix"
+    elif graph._backend_type == _GraphBackend.LONG_GRAPH:
+        mt = "lx"
+    elif graph._backend_type == _GraphBackend.REF_GRAPH:
+        mt = "rx"
     else:
-        alg_method_name = "jgrapht_xx_export_file_" + name
+        raise ValueError("Backend not recognized")
+    alg_method_name = "jgrapht_{}_export_file_dimacs".format(mt)
     alg_method = getattr(_backend, alg_method_name)
     alg_method(graph.handle, filename, *args)
 
 
-def _export_to_string(name, graph, *args):
-    if name == "dimacs":
-        alg_method_name = "jgrapht_ix_export_string_" + name
+def _export_to_file(name, graph, filename, *args):
+    alg_method_name = "jgrapht_xx_export_file_" + name
+    alg_method = getattr(_backend, alg_method_name)
+    alg_method(graph.handle, filename, *args)
+
+
+def _export_to_dimacs_string(graph, *args):
+    if graph._backend_type == _GraphBackend.INT_GRAPH:
+        mt = "ix"
+    elif graph._backend_type == _GraphBackend.LONG_GRAPH:
+        mt = "lx"
+    elif graph._backend_type == _GraphBackend.REF_GRAPH:
+        mt = "rx"
     else:
-        alg_method_name = "jgrapht_xx_export_string_" + name
+        raise ValueError("Backend not recognized")    
+    alg_method_name = "jgrapht_{}_export_string_dimacs".format(mt)
+    alg_method = getattr(_backend, alg_method_name)
+    handle = alg_method(graph.handle, *args)
+    # We wrap around a python string which copies the result and
+    # releases the actual object inside the backend
+    return str(_JGraphTString(handle))
+
+
+def _export_to_string(name, graph, *args):
+    alg_method_name = "jgrapht_xx_export_string_" + name
     alg_method = getattr(_backend, alg_method_name)
     handle = alg_method(graph.handle, *args)
     # We wrap around a python string which copies the result and
@@ -264,7 +289,7 @@ def write_dimacs(
         export_edge_weights,
         vertex_id_store.handle if vertex_id_store is not None else None,
     ]
-    return _export_to_file("dimacs", graph, filename, *custom)
+    return _export_to_dimacs_file(graph, filename, *custom)
 
 
 def generate_dimacs(
@@ -323,7 +348,7 @@ def generate_dimacs(
         export_edge_weights,
         vertex_id_store.handle if vertex_id_store is not None else None,
     ]
-    return _export_to_string("dimacs", graph, *custom)
+    return _export_to_dimacs_string(graph, *custom)
 
 
 def write_lemon(

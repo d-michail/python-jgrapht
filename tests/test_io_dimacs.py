@@ -1,18 +1,21 @@
 import pytest
 
-from jgrapht import create_graph
-from jgrapht.utils import create_vertex_supplier, create_edge_supplier
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import create_edge_supplier, create_vertex_supplier, IntegerSupplier
 
 from jgrapht.io.exporters import write_dimacs, generate_dimacs
 from jgrapht.io.importers import read_dimacs, parse_dimacs
 
 
-def build_graph():
+def build_graph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     for i in range(0, 10):
@@ -48,6 +51,7 @@ def build_property_graph():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
+        vertex_supplier=create_vertex_supplier(type="int"),
         edge_supplier=create_edge_supplier(type='int')
     )
 
@@ -199,8 +203,17 @@ a 108 109
 a 109 101
 """
 
-def test_dimacs(tmpdir):
-    g = build_graph()
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_dimacs(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
     write_dimacs(g, tmpfilename, format="shortestpath")
@@ -212,8 +225,16 @@ def test_dimacs(tmpdir):
     assert contents == dimacs_sp_expected
 
 
-def test_dimacs_with_custom_ids(tmpdir):
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_dimacs_with_custom_ids(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
 
@@ -229,8 +250,16 @@ def test_dimacs_with_custom_ids(tmpdir):
     assert contents == dimacs_sp_expected100
 
 
-def test_dimacs_with_custom_ids_bad_function(tmpdir):
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_dimacs_with_custom_ids_bad_function(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
 
@@ -247,8 +276,16 @@ def test_dimacs_with_custom_ids_bad_function(tmpdir):
         write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id2)
 
 
-def test_dimacs_coloring(tmpdir):
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_dimacs_coloring(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
     write_dimacs(g, tmpfilename, format="coloring")
@@ -260,8 +297,16 @@ def test_dimacs_coloring(tmpdir):
     assert contents == dimacs_coloring_expected
 
 
-def test_dimacs_maxclique(tmpdir):
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_dimacs_maxclique(tmpdir, backend):
+    g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
     write_dimacs(g, tmpfilename, format="maxclique")
@@ -273,20 +318,39 @@ def test_dimacs_maxclique(tmpdir):
     assert contents == dimacs_maxclique_expected
 
 
-def test_dimacs_output_to_string():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_dimacs_output_to_string(backend):
+    g = build_graph(backend)
 
     out = generate_dimacs(g)
 
     assert out.splitlines() == dimacs_maxclique_expected.splitlines()
 
 
-def test_read_dimacs_from_string(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_read_dimacs_from_string(tmpdir, backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     def identity(x):
@@ -300,7 +364,15 @@ def test_read_dimacs_from_string(tmpdir):
     assert again.splitlines() == dimacs_sp_expected.splitlines()
 
 
-def test_read_dimacs_from_file(tmpdir):
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_read_dimacs_from_file(tmpdir, backend):
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
 
@@ -313,6 +385,9 @@ def test_read_dimacs_from_file(tmpdir):
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),                
     )
 
     def identity(x):
@@ -455,8 +530,16 @@ def test_anyhashableg_dimacs_increase_to_positive_id(tmpdir):
     assert contents == dimacs_sp_expected
 
 
-def test_dimacs_output_to_string():
-    g = build_graph()
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_dimacs_output_to_string(backend):
+    g = build_graph(backend)
 
     def custom_id(id):
         return id+1

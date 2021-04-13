@@ -50,10 +50,10 @@ def read_dimacs(graph, filename, import_id_cb=None):
     :raises IOError: In case of an import error
     """
     _parse_graph_dimacs(
-        graph,
-        filename,
-        import_id_cb=import_id_cb,
-        input_is_filename=True,
+        graph, 
+        filename, 
+        import_id_cb, 
+        True
     )
 
 
@@ -102,7 +102,10 @@ def parse_dimacs(graph, input_string, import_id_cb=None):
     :raises IOError: In case of an import error
     """
     _parse_graph_dimacs(
-        graph, input_string, import_id_cb=import_id_cb, input_is_filename=False
+        graph, 
+        input_string, 
+        import_id_cb, 
+        False
     )
 
 
@@ -549,10 +552,10 @@ def parse_csv(
         None,
         False,
         False,
-            format,
-            import_edge_weights,
-            matrix_format_node_id,
-            matrix_format_zero_when_noedge,
+        format,
+        import_edge_weights,
+        matrix_format_node_id,
+        matrix_format_zero_when_noedge,
     )
 
 

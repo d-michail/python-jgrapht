@@ -124,49 +124,6 @@ def _create_graph_callbacks(
     )
 
 
-def _parse_graph_dimacs(
-    graph,
-    input,
-    import_id_cb=None,
-    input_is_filename=False,
-):
-    (
-        import_id_f_ptr,
-        import_id_f,  # pylint: disable=unused-variable
-        _,
-        _,
-        _,
-        _,
-        vertex_notify_f_ptr,
-        vertex_notify_f,  # pylint: disable=unused-variable
-        edge_notify_f_ptr,
-        edge_notify_f,  # pylint: disable=unused-variable
-    ) = _create_graph_callbacks(
-        import_id_cb=import_id_cb,
-        vertex_attribute_cb=None,
-        edge_attribute_cb=None,
-        vertex_notify_id_cb=None,
-        edge_notify_id_cb=None,
-        integer_ids=True,
-    )
-
-    string_as_bytearray = bytearray(input, encoding="utf-8")
-
-    if input_is_filename:
-        backend_function = _backend.jgrapht_ii_import_file_dimacs
-    else:
-        backend_function = _backend.jgrapht_ii_import_string_dimacs
-
-    backend_function(
-        graph.handle,
-        string_as_bytearray,
-        import_id_f_ptr,
-        vertex_notify_f_ptr,
-        edge_notify_f_ptr,
-    )
-
-
-
 CSV_FORMATS = dict(
     {
         "adjacencylist": _backend.CSV_FORMAT_ADJACENCY_LIST,
@@ -218,6 +175,42 @@ def _parse_graph(
         vertex_notify_id_wrapper.fptr,
         edge_notify_id_wrapper.fptr,
         *args
+    )
+
+
+def _parse_graph_dimacs(
+    graph,
+    input,
+    import_id_cb=None,
+    input_is_filename=False,
+):
+    (
+        import_id_wrapper,
+        vertex_attribute_wrapper,
+        edge_attribute_wrapper,
+        vertex_notify_id_wrapper,
+        edge_notify_id_wrapper,
+    ) = _create_callback_wrappers(
+        graph,
+        import_id_cb=import_id_cb,
+        vertex_attribute_cb=None,
+        edge_attribute_cb=None,
+        vertex_notify_id_cb=None,
+        edge_notify_id_cb=None,
+        integer_input_ids=True,
+        populate_graph_with_attributes=False,
+    )
+
+    backend_method = _create_import_method(
+        graph, "file" if input_is_filename else "string", "dimacs"
+    )
+
+    backend_method(
+        graph.handle,
+        bytearray(input, encoding="utf-8"),
+        import_id_wrapper.fptr,
+        vertex_notify_id_wrapper.fptr,
+        edge_notify_id_wrapper.fptr,
     )
 
 
