@@ -41,7 +41,7 @@ def _export_to_dimacs_string(graph, *args):
     elif graph._backend_type == _GraphBackend.REF_GRAPH:
         mt = "rx"
     else:
-        raise ValueError("Backend not recognized")    
+        raise ValueError("Backend not recognized")
     alg_method_name = "jgrapht_{}_export_string_dimacs".format(mt)
     alg_method = getattr(_backend, alg_method_name)
     handle = alg_method(graph.handle, *args)
@@ -178,7 +178,6 @@ def _edge_attributes_store(graph, attributes_dict):
     return attribute_store
 
 
-
 def _edge_id_store(graph, check_valid_id=None, export_edge_id_cb=None):
     """Create an edge identifier store inside the capi backend.
 
@@ -216,7 +215,6 @@ def _edge_id_store(graph, check_valid_id=None, export_edge_id_cb=None):
         edge_id_store[e] = eid
 
     return edge_id_store
-
 
 
 DIMACS_FORMATS = dict(
@@ -278,10 +276,16 @@ def write_dimacs(
     format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
 
     def check_valid_id(id):
-        if not isinstance(id, int):
-            raise TypeError("Identifiers must be integers")
-        if id <= 0:
-            raise ValueError("Identifiers must be positive")
+        if isinstance(id, int):
+            if id < 0:
+                raise ValueError("Identifiers must be non-negative")
+            return
+        id_as_int = int(id)
+        if id_as_int < 0:
+            raise ValueError("Identifiers must be non-negative")
+
+    if graph._backend_type == _GraphBackend.REF_GRAPH and export_vertex_id_cb is None:
+        export_vertex_id_cb = lambda v: 1 + int(str(v))
 
     vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb)
     custom = [
@@ -337,10 +341,13 @@ def generate_dimacs(
     format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
 
     def check_valid_id(id):
-        if not isinstance(id, int):
-            raise TypeError("Identifiers must integers")
-        if id <= 0:
-            raise ValueError("Identifiers must be positive")
+        if isinstance(id, int):
+            if id < 0:
+                raise ValueError("Identifiers must be non-negative")
+            return
+        id_as_int = int(id)
+        if id_as_int < 0:
+            raise ValueError("Identifiers must be non-negative")
 
     vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb)
     custom = [
@@ -531,6 +538,7 @@ def generate_gml(
     :returns: a string contains the exported graph
     :raises IOError: In case of an export error
     """
+
     def check_valid_id(id):
         if isinstance(id, int):
             if id < 0:

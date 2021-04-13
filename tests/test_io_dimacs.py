@@ -220,9 +220,9 @@ def test_dimacs(tmpdir, backend):
 
     with open(tmpfilename, "r") as f:
         contents = f.read()
-        print(contents)
+        #print(contents)
 
-    assert contents == dimacs_sp_expected
+    assert contents.splitlines() == dimacs_sp_expected.splitlines()
 
 
 @pytest.mark.parametrize(
@@ -262,12 +262,6 @@ def test_dimacs_with_custom_ids_bad_function(tmpdir, backend):
     g = build_graph(backend)
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
-
-    def custom_id(id):
-        return str(id+100)
-
-    with pytest.raises(TypeError):
-        write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id)
 
     def custom_id2(id):
         return -id
@@ -478,9 +472,8 @@ def test_anyhashableg_dimacs(tmpdir):
 
     with open(tmpfilename, "r") as f:
         contents = f.read()
-        print(contents)
 
-    assert contents == dimacs_sp_expected2
+    assert contents.splitlines() == dimacs_sp_expected2.splitlines()
 
 
 def test_anyhashableg_dimacs_increase_to_positive_id(tmpdir):
@@ -547,12 +540,6 @@ def test_dimacs_output_to_string(backend):
     out = generate_dimacs(g, export_vertex_id_cb=custom_id)
 
     assert out.splitlines() == dimacs_maxclique_expected.splitlines()
-
-    def custom_id_bad1(id):
-        return str(id+1)
-
-    with pytest.raises(TypeError):
-        generate_dimacs(g, export_vertex_id_cb=custom_id_bad1)
 
     def custom_id_bad2(id):
         return -id
