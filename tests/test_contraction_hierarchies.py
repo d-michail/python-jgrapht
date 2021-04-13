@@ -1,6 +1,7 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier
 import jgrapht.algorithms.shortestpaths as sp
 import math
 

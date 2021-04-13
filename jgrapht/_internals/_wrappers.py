@@ -252,3 +252,17 @@ class _JGraphTObjectIterator(_HandleWrapper, Iterator):
 
     def __repr__(self):
         return "_JGraphTObjectIterator(%r)" % self._handle
+
+
+class _JGraphTThreadPool(_HandleWrapper):
+    """A JGraphT thread pool executor. 
+    """
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def shutdown(self, timeout_millis=10000):
+        backend.jgrapht_executor_thread_pool_shutdown(self._handle, timeout_millis)
+
+    def __repr__(self):
+        return "_JGraphTThreadPool(%r)" % self._handle

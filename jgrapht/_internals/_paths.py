@@ -278,7 +278,10 @@ class _JGraphTContractionHierarchiesManyToMany(_HandleWrapper, ManyToManyPaths):
             )
         elif self._graph._backend_type == GraphBackend.REF_GRAPH:
             gp = backend.jgrapht_rx_sp_manytomany_get_path_between_vertices(
-                self._handle, id(source_vertex), id(target_vertex)
+                self._handle,
+                id(source_vertex),
+                id(target_vertex),
+                self._graph._hash_equals_wrapper.handle,
             )
         else:
             raise TypeError("Not supported graph type")

@@ -1,6 +1,6 @@
 from .. import backend as _backend
 
-from .._internals._wrappers import GraphBackend
+from .._internals._wrappers import GraphBackend, _JGraphTThreadPool
 from .._internals._results import (
     _build_vertex_set,
     _unwrap_vertex,
@@ -370,23 +370,30 @@ def delta_stepping(
 
     if parallelism is None:
         parallelism = multiprocessing.cpu_count()
+    thread_pool = _JGraphTThreadPool(
+        handle=_backend.jgrapht_executor_thread_pool_create(parallelism)
+    )
+
     if delta is None:
         delta = 0.0
 
-    custom = [delta, parallelism]
+    custom = [delta, thread_pool.handle]
 
     if target_vertex is None:
-        return _sp_singlesource_alg(
+        res = _sp_singlesource_alg(
             "delta_stepping_get_singlesource_from_vertex", graph, source_vertex, *custom
         )
+
     else:
-        return _sp_between_alg(
+        res = _sp_between_alg(
             "delta_stepping_get_path_between_vertices",
             graph,
             source_vertex,
             target_vertex,
             *custom
         )
+    thread_pool.shutdown()
+    return res
 
 
 def martin_multiobjective(
@@ -435,7 +442,7 @@ def martin_multiobjective(
 
         cb_fptr, cb = _create_wrapped_callback(
             inner_edge_weight_cb, ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.py_object)
-        )    
+        )
 
     else:
 
@@ -461,8 +468,8 @@ def martin_multiobjective(
     else:
         return _multisp_between_alg(
             "martin_get_paths_between_vertices",
-            graph, 
-            source_vertex, 
+            graph,
+            source_vertex,
             target_vertex,
             *custom
         )
@@ -482,12 +489,17 @@ def precompute_contraction_hierarchies(graph, parallelism=None, seed=None):
     """
     if parallelism is None:
         parallelism = multiprocessing.cpu_count()
+    thread_pool = _JGraphTThreadPool(
+        handle=_backend.jgrapht_executor_thread_pool_create(parallelism)
+    )
+
     if seed is None:
         seed = int(time.time())
 
     res = _backend.jgrapht_xx_sp_exec_contraction_hierarchy(
-        graph.handle, parallelism, seed
+        graph.handle, thread_pool.handle, seed
     )
+    thread_pool.shutdown()
     return _wrap_contraction_hierarchies(graph, res)
 
 

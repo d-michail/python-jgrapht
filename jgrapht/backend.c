@@ -566,6 +566,18 @@ int jgrapht_rx_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(void *
     return jgrapht_capi_rx_drawing_exec_median_greedy_two_layered_bipartite_layout_2d(thread, g, model, partition, vertex_comparator, vertical);
 }
 
+// executors
+
+int jgrapht_executor_thread_pool_create(int threads, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_executor_thread_pool_create(thread, threads, res);
+}
+
+int jgrapht_executor_thread_pool_shutdown(void *executor, long long int timeout_millis) { 
+    LAZY_THREAD_ATTACH
+    return jgrapht_capi_executor_thread_pool_shutdown(thread, executor, timeout_millis);
+}
+
 // exporter
 
 int jgrapht_ix_export_file_dimacs(void *g, char* filename, dimacs_format_t format, int export_edge_weights, void* vertex_id_store) { 
@@ -3645,34 +3657,34 @@ int jgrapht_rx_sp_exec_eppstein_get_k_paths_between_vertices(void *g, void *sour
     return jgrapht_capi_rx_sp_exec_eppstein_get_k_paths_between_vertices(thread, g, source, target, k, res);
 }
 
-int jgrapht_ix_sp_exec_delta_stepping_get_path_between_vertices(void *g, int source, int target, double delta, int parallelism, void**res) { 
+int jgrapht_ix_sp_exec_delta_stepping_get_path_between_vertices(void *g, int source, int target, double delta, void *executor, void**res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ix_sp_exec_delta_stepping_get_path_between_vertices(thread, g, source, target, delta, parallelism, res);
+    return jgrapht_capi_ix_sp_exec_delta_stepping_get_path_between_vertices(thread, g, source, target, delta, executor, res);
 }
 
-int jgrapht_lx_sp_exec_delta_stepping_get_path_between_vertices(void *g, long long int source, long long int target, double delta, int parallelism, void**res) { 
+int jgrapht_lx_sp_exec_delta_stepping_get_path_between_vertices(void *g, long long int source, long long int target, double delta, void *executor, void**res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_sp_exec_delta_stepping_get_path_between_vertices(thread, g, source, target, delta, parallelism, res);
+    return jgrapht_capi_lx_sp_exec_delta_stepping_get_path_between_vertices(thread, g, source, target, delta, executor, res);
 }
 
-int jgrapht_rx_sp_exec_delta_stepping_get_path_between_vertices(void *g, void *source, void *target, double delta, int parallelism, void** res) { 
+int jgrapht_rx_sp_exec_delta_stepping_get_path_between_vertices(void *g, void *source, void *target, double delta, void *executor, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_delta_stepping_get_path_between_vertices(thread, g, source, target, delta, parallelism, res);
+    return jgrapht_capi_rx_sp_exec_delta_stepping_get_path_between_vertices(thread, g, source, target, delta, executor, res);
 }
 
-int jgrapht_ix_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, int source, double delta, int parallelism, void** res) { 
+int jgrapht_ix_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, int source, double delta, void *executor, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ix_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, delta, parallelism, res);
+    return jgrapht_capi_ix_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, delta, executor, res);
 }
 
-int jgrapht_lx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, long long int source, double delta, int parallelism, void** res) { 
+int jgrapht_lx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, long long int source, double delta, void *executor, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_lx_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, delta, parallelism, res);
+    return jgrapht_capi_lx_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, delta, executor, res);
 }
 
-int jgrapht_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, void *source, double delta, int parallelism, void** res) { 
+int jgrapht_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(void *g, void *source, double delta, void *executor, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, delta, parallelism, res);
+    return jgrapht_capi_rx_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, source, delta, executor, res);
 }
 
 // multi objective shortest paths
@@ -3739,9 +3751,9 @@ int jgrapht_rx_sp_manytomany_get_path_between_vertices(void *mm, void *source, v
     return jgrapht_capi_rx_sp_manytomany_get_path_between_vertices(thread, mm, source, target, hash_equals_resolver, res);
 }
 
-int jgrapht_xx_sp_exec_contraction_hierarchy(void *g, int parallelism, long long int seed, void** res) { 
+int jgrapht_xx_sp_exec_contraction_hierarchy(void *g, void *executor, long long int seed, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xx_sp_exec_contraction_hierarchy(thread, g, parallelism, seed, res);
+    return jgrapht_capi_xx_sp_exec_contraction_hierarchy(thread, g, executor, seed, res);
 }
 
 int jgrapht_xx_sp_exec_contraction_hierarchy_get_manytomany(void *ch, void *sources, void *targets, void** res) { 
@@ -3764,9 +3776,9 @@ int jgrapht_rx_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_bet
     return jgrapht_capi_rx_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(thread, ch, source, target, radius, res);
 }
 
-int jgrapht_xx_sp_exec_transit_node_routing(void *g, int parallelism, void** res) { 
+int jgrapht_xx_sp_exec_transit_node_routing(void *g, void *executor, void** res) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_xx_sp_exec_transit_node_routing(thread, g, parallelism, res);
+    return jgrapht_capi_xx_sp_exec_transit_node_routing(thread, g, executor, res);
 }
 
 int jgrapht_ix_sp_exec_transit_node_routing_get_path_between_vertices(void *tnr, int source, int target, void** path_res) { 
