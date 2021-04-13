@@ -1,8 +1,7 @@
 from .. import backend as _backend
 
 from .._internals._mapping import (
-    _JGraphTIntegerGraphMapping,
-    _JGraphTIntegerGraphMappingIterator,
+    _JGraphTGraphMappingIterator,
 )
 
 
@@ -20,13 +19,16 @@ def vf2(graph1, graph2):
     :param graph2: the second graph
     :returns: an iterator over graph mappings if the graphs are isomorphic, otherwise None
     """
+    if graph1._backend_type != graph2._backend_type: 
+        raise TypeError("Graphs must use the same backend")
+
     exists, map_it_handle = _backend.jgrapht_xx_isomorphism_exec_vf2(
         graph1.handle, graph2.handle
     )
     if not exists:
         return None
 
-    return _JGraphTIntegerGraphMappingIterator(
+    return _JGraphTGraphMappingIterator(
         handle=map_it_handle, graph1=graph1, graph2=graph2
     )
 
@@ -50,12 +52,15 @@ def vf2_subgraph(graph1, graph2):
     :param graph2: the second graph
     :returns: an iterator over graph mappings if the graphs are isomorphic, otherwise None
     """
+    if graph1._backend_type != graph2._backend_type: 
+        raise TypeError("Graphs must use the same backend")
+
     exists, map_it_handle = _backend.jgrapht_xx_isomorphism_exec_vf2_subgraph(
         graph1.handle, graph2.handle
     )
     if not exists:
         return None
 
-    return _JGraphTIntegerGraphMappingIterator(
+    return _JGraphTGraphMappingIterator(
         handle=map_it_handle, graph1=graph1, graph2=graph2
     )

@@ -1,15 +1,27 @@
 import pytest
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import create_edge_supplier, create_vertex_supplier, IntegerSupplier
 import jgrapht.algorithms.isomorphism as iso
 
 
-def test_iso():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_iso(backend):
     g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),                
     )
 
     g1.add_vertices_from([0, 1, 2, 3])
@@ -24,6 +36,9 @@ def test_iso():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     g2.add_vertices_from([5, 6, 7, 8])
@@ -67,12 +82,23 @@ def test_iso():
     assert gm.edges_correspondence() == {0: 2, 1: 1, 2: 0, 3: 3}
 
 
-def test_iso_no():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_iso_no(backend):
     g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     g1.add_vertices_from([0, 1, 2, 3])
@@ -87,6 +113,9 @@ def test_iso_no():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     g2.add_vertices_from([5, 6, 7])
@@ -100,13 +129,23 @@ def test_iso_no():
     assert it is None
 
 
-
-def test_iso_induced_subgraph():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_iso_induced_subgraph(backend):
     g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     g1.add_vertices_from([0, 1, 2, 3])
@@ -121,6 +160,9 @@ def test_iso_induced_subgraph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     g2.add_vertices_from([5, 6, 7])
@@ -150,12 +192,23 @@ def test_iso_induced_subgraph():
     assert gm.vertices_correspondence() == {0: None, 1: 7, 2: 6, 3: 5}
 
 
-def test_iso_not_induced_subgraph():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_iso_not_induced_subgraph(backend):
     g1 = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     g1.add_vertices_from([0, 1, 2, 3])
@@ -172,6 +225,9 @@ def test_iso_not_induced_subgraph():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     g2.add_vertices_from([5, 6, 7])
@@ -191,6 +247,9 @@ def test_anyhashableg_iso():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=GraphBackend.REF_GRAPH,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     g1.add_vertices_from([0, 1, 2, 3])
@@ -205,7 +264,9 @@ def test_anyhashableg_iso():
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=False,
-        any_hashable=True,
+        backend=GraphBackend.REF_GRAPH,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),        
     )
 
     g2.add_vertices_from([5, "6", 7, 8])

@@ -197,12 +197,23 @@ def test_as_edge_reversed(backend):
     assert g4.edge_target(e45) == v4
 
 
-def test_as_masked_subgraph():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_masked_subgraph(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertex(0)

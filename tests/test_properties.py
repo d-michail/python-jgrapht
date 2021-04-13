@@ -704,7 +704,10 @@ def test_is_k33_subdivision(backend):
 )
 def test_is_k5_subdivision(backend):
     g = create_graph(
-        directed=False, allowing_multiple_edges=True, allowing_self_loops=True,         backend=backend,
+        directed=False,
+        allowing_multiple_edges=True,
+        allowing_self_loops=True,
+        backend=backend,
         vertex_supplier=IntegerSupplier(),
         edge_supplier=IntegerSupplier(),
     )
