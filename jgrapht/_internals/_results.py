@@ -490,9 +490,8 @@ def _build_vertex_weights(graph, vertex_weights):
             jgrapht_vertex_weights[key] = val
     elif graph._backend_type == GraphBackend.REF_GRAPH:
         handle = backend.jgrapht_xx_map_linked_create()
-        hash_equals_resolver_handle = _ref_hashequals._get_hash_equals_wrapper().handle
         jgrapht_vertex_weights = _JGraphTRefDoubleMutableMap(
-            handle=handle, hash_equals_resolver_handle=hash_equals_resolver_handle
+            handle=handle, hash_equals_resolver_handle=graph._hash_equals_wrapper.handle
         )
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
