@@ -21,7 +21,7 @@ def greedy(graph, vertex_weights=None):
     r"""A greedy algorithm for the vertex cover problem.
 
     At each iteration the algorithm picks the vertex :math:`v` with 
-    the minimum ration of weight over degree. Afterwards it removes all 
+    the minimum ratio of weight over degree. Afterwards it removes all 
     its incident edges and recurses.
 
     Its running time is :math:`\mathcal{O}(m \log n)`. The implementation

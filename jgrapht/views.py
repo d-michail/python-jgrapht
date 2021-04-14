@@ -14,7 +14,9 @@ from ._internals._views import (
     _EdgeReversedIntegerGraphView,
     _EdgeReversedLongGraphView,
     _EdgeReversedRefGraphView,
-    _MaskedSubgraphView,
+    _MaskedIntegerSubgraphView,
+    _MaskedLongSubgraphView,
+    _MaskedRefSubgraphView,
     _WeightedView,
     _GraphUnion,
     _ListenableView,
@@ -106,7 +108,14 @@ def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):
     :param edge_mask_cb: an edge mask callback
     :returns: a masked subgraph
     """
-    return _MaskedSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
+    if graph._backend_type == GraphBackend.REF_GRAPH:
+        return _MaskedRefSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _MaskedLongSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _MaskedIntegerSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
+    else:
+        raise ValueError("Unkwown backend type")
 
 
 def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through=False):

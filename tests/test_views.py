@@ -309,10 +309,7 @@ def test_anyhashableg_as_masked_subgraph():
     assert masked_graph.edges == {"e1", "e2", "e6"}
     assert not masked_graph.type.modifiable
 
-    # test that while the sets are shared, our view is masked
-    assert masked_graph._vertex_hash_to_id.__contains__("v3") == True
     assert masked_graph.vertices.__contains__("v3") == False
-    assert masked_graph._edge_hash_to_id.__contains__("e5") == True
     assert masked_graph.edges.__contains__("e5") == False
 
     # test that we see changes in the original graph

@@ -34,9 +34,7 @@ def _create_import_id_wrapper(graph, callback, integer_input_ids=False):
         elif graph._backend_type == GraphBackend.LONG_GRAPH:
             callback_ctype = ctypes.CFUNCTYPE(ctypes.c_longlong, ctypes.c_longlong)
         elif graph._backend_type == GraphBackend.REF_GRAPH:
-            callback_ctype = ctypes.CFUNCTYPE(
-                ctypes.py_object, ctypes.c_longlong
-            )
+            callback_ctype = ctypes.CFUNCTYPE(ctypes.py_object, ctypes.c_longlong)
         else:
             raise ValueError("Backend type invalid")
         return _callbacks._CallbackWrapper(callback, callback_ctype)
@@ -74,9 +72,7 @@ def _create_attribute_callback_wrapper(graph, callback):
     else:
         raise ValueError("Backend type invalid")
 
-    callback_ctype = ctypes.CFUNCTYPE(
-        None, id_type, ctypes.c_char_p, ctypes.c_char_p
-    )
+    callback_ctype = ctypes.CFUNCTYPE(None, id_type, ctypes.c_char_p, ctypes.c_char_p)
 
     # We wrap in order to decode string representation.
     # There is no SWIG layer here, as the capi calls us directly
@@ -87,7 +83,7 @@ def _create_attribute_callback_wrapper(graph, callback):
         decoded_value = value.decode(encoding="utf-8")
         callback(id, decoded_key, decoded_value)
 
-    return _callbacks._CallbackWrapper(decoder_callback, callback_ctype)    
+    return _callbacks._CallbackWrapper(decoder_callback, callback_ctype)
 
 
 def _create_notify_id_callback_wrapper(graph, callback):
@@ -104,4 +100,20 @@ def _create_notify_id_callback_wrapper(graph, callback):
         raise ValueError("Backend type invalid")
 
     callback_ctype = ctypes.CFUNCTYPE(None, id_type)
-    return _callbacks._CallbackWrapper(callback, callback_ctype)    
+    return _callbacks._CallbackWrapper(callback, callback_ctype)
+
+
+def _create_vertex_or_edge_mask_wrapper(graph, callback):
+    if callback is None:
+        return _callbacks._CallbackWrapper(callback, callback_type=None)
+
+    if graph._backend_type == GraphBackend.INT_GRAPH:
+        callback_ctype = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_int)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        callback_ctype = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.c_longlong)
+    elif graph._backend_type == GraphBackend.REF_GRAPH:
+        callback_ctype = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.py_object)
+    else:
+        raise ValueError("Backend type invalid")
+
+    return _callbacks._CallbackWrapper(callback, callback_ctype)
