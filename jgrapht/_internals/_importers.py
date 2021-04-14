@@ -183,6 +183,7 @@ def _parse_graph_dimacs(
     input,
     import_id_cb=None,
     input_is_filename=False,
+    subtract_one_from_vertices=True,
 ):
     (
         import_id_wrapper,
@@ -211,6 +212,7 @@ def _parse_graph_dimacs(
         import_id_wrapper.fptr,
         vertex_notify_id_wrapper.fptr,
         edge_notify_id_wrapper.fptr,
+        subtract_one_from_vertices
     )
 
 

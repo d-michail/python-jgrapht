@@ -5,7 +5,7 @@ from .._internals._importers import (
 )
 
 
-def read_dimacs(graph, filename, import_id_cb=None):
+def read_dimacs(graph, filename, import_id_cb=None, subtract_one_from_vertices=True):
     """Read graph in DIMACS format.
 
     For a description of the formats see http://dimacs.rutgers.edu/Challenges . Note that
@@ -13,8 +13,8 @@ def read_dimacs(graph, filename, import_id_cb=None):
     the shortest path challenge format, the coloring format and the maximum-clique challenge
     formats.
 
-    .. note:: In DIMACS formats the vertices are integers numbered from one.
-              The importer automatically translates them to zero-based numbering.
+    .. note:: In DIMACS formats the vertices are integers numbered from one. This behavior can 
+              be adjusted by the paramaters (`subtract_one_from_vertices`). 
 
     Briefly, one of the most common DIMACS formats is the
     `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the
@@ -31,7 +31,7 @@ def read_dimacs(graph, filename, import_id_cb=None):
       }
 
     Although not specified directly in the DIMACS format documentation, this implementation also
-    allows for the a weighted variant::
+    allows for a weighted variant::
 
       e <edge source 1> <edge target 1> <edge_weight>
 
@@ -53,11 +53,12 @@ def read_dimacs(graph, filename, import_id_cb=None):
         graph, 
         filename, 
         import_id_cb, 
-        True
+        True, 
+        subtract_one_from_vertices
     )
 
 
-def parse_dimacs(graph, input_string, import_id_cb=None):
+def parse_dimacs(graph, input_string, import_id_cb=None, subtract_one_from_vertices=True):
     """Read graph in DIMACS format from string.
 
     For a description of the formats see http://dimacs.rutgers.edu/Challenges . Note that
@@ -65,8 +66,8 @@ def parse_dimacs(graph, input_string, import_id_cb=None):
     the shortest path challenge format, the coloring format and the maximum-clique challenge
     formats.
 
-    .. note:: In DIMACS formats the vertices are integers numbered from one.
-                 The importer automatically translates them to zero-based numbering.
+    .. note:: In DIMACS formats the vertices are integers numbered from one. This behavior can 
+              be adjusted by the paramaters (`subtract_one_from_vertices`).
 
     Briefly, one of the most common DIMACS formats is the
     `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the
@@ -83,7 +84,7 @@ def parse_dimacs(graph, input_string, import_id_cb=None):
       }
 
     Although not specified directly in the DIMACS format documentation, this implementation also
-    allows for the a weighted variant::
+    allows for a weighted variant::
 
       e <edge source 1> <edge target 1> <edge_weight>
 
@@ -105,7 +106,8 @@ def parse_dimacs(graph, input_string, import_id_cb=None):
         graph, 
         input_string, 
         import_id_cb, 
-        False
+        False,
+        subtract_one_from_vertices
     )
 
 

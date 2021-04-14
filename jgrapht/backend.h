@@ -419,12 +419,12 @@ int jgrapht_rr_handles_get_graphpath(void *, double*, void**, void**, void**);
 
 // importers
 
-int jgrapht_ii_import_file_dimacs(void *, char*, void *, void *, void*);
-int jgrapht_ll_import_file_dimacs(void *, char*, void *, void *, void*);
-int jgrapht_rr_import_file_dimacs(void *, char*, void *, void *, void*);
-int jgrapht_ii_import_string_dimacs(void *, char*, void *, void *, void*);
-int jgrapht_ll_import_string_dimacs(void *, char*, void *, void *, void*);
-int jgrapht_rr_import_string_dimacs(void *, char*, void *, void *, void*);
+int jgrapht_ii_import_file_dimacs(void *, char*, void *, void *, void*, int);
+int jgrapht_ll_import_file_dimacs(void *, char*, void *, void *, void*, int);
+int jgrapht_rr_import_file_dimacs(void *, char*, void *, void *, void*, int);
+int jgrapht_ii_import_string_dimacs(void *, char*, void *, void *, void*, int);
+int jgrapht_ll_import_string_dimacs(void *, char*, void *, void *, void*, int);
+int jgrapht_rr_import_string_dimacs(void *, char*, void *, void *, void*, int);
 int jgrapht_ii_import_file_gml(void *, char*, void *, void *, void *, void *, void*);
 int jgrapht_ll_import_file_gml(void *, char*, void *, void *, void *, void *, void*);
 int jgrapht_rr_import_file_gml(void *, char*, void *, void *, void *, void *, void*);

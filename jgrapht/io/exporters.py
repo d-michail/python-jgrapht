@@ -240,11 +240,10 @@ def write_dimacs(
     the shortest path challenge format, the coloring format and the maximum-clique challenge
     formats. By default the maximum-clique is used.
 
-    .. note:: In DIMACS formats the vertices are integers numbered from one. In case of default graphs
-              (with integer vertices) this translation happens automatically. With any-hashable graphs the
-              user must either use positive integers as vertices, or must explicitly provide a function
-              which does the conversion to a positive integer (`export_vertex_id_cb`).
-
+    .. note:: In DIMACS formats the vertices are integers numbered from one. In order for the output
+              to be a valid DIMACS file, the user must use positive integers as vertices or must 
+              explicitly provide a function which does the conversion to a positive integer
+              (`export_vertex_id_cb`).
 
     Briefly, one of the most common DIMACS formats is the
     `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the
@@ -276,16 +275,12 @@ def write_dimacs(
     format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
 
     def check_valid_id(id):
-        if isinstance(id, int):
-            if id < 0:
-                raise ValueError("Identifiers must be non-negative")
-            return
         id_as_int = int(id)
         if id_as_int < 0:
             raise ValueError("Identifiers must be non-negative")
 
     if graph._backend_type == _GraphBackend.REF_GRAPH and export_vertex_id_cb is None:
-        export_vertex_id_cb = lambda v: 1 + int(str(v))
+        export_vertex_id_cb = lambda v: int(str(v))
 
     vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb)
     custom = [
@@ -306,10 +301,10 @@ def generate_dimacs(
     the shortest path challenge format, the coloring format and the maximum-clique challenge
     formats. By default the maximum-clique is used.
 
-    .. note:: In DIMACS formats the vertices are integers numbered from one. In case of default graphs
-              (with integer vertices) this translation happens automatically. With any-hashable graphs the
-              user must either use positive integers as vertices, or must explicitly provide a function
-              which does the conversion to a positive integer (`export_vertex_id_cb`).
+    .. note:: In DIMACS formats the vertices are integers numbered from one. In order for the output
+              to be a valid DIMACS file, the user must use positive integers as vertices or must 
+              explicitly provide a function which does the conversion to a positive integer
+              (`export_vertex_id_cb`).
 
     Briefly, one of the most common DIMACS formats is the
     `2nd DIMACS challenge <http://mat.gsia.cmu.edu/COLOR/general/ccformat.ps>`_ and follows the
@@ -341,13 +336,12 @@ def generate_dimacs(
     format = DIMACS_FORMATS.get(format, _backend.DIMACS_FORMAT_MAX_CLIQUE)
 
     def check_valid_id(id):
-        if isinstance(id, int):
-            if id < 0:
-                raise ValueError("Identifiers must be non-negative")
-            return
         id_as_int = int(id)
         if id_as_int < 0:
             raise ValueError("Identifiers must be non-negative")
+
+    if graph._backend_type == _GraphBackend.REF_GRAPH and export_vertex_id_cb is None:
+        export_vertex_id_cb = lambda v: int(str(v))
 
     vertex_id_store = _vertex_id_store(graph, check_valid_id, export_vertex_id_cb)
     custom = [

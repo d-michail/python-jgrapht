@@ -605,12 +605,12 @@ int jgrapht_rr_handles_get_graphpath(void *, double* OUTPUT, void** OUTPUT, void
 
 // importers
 
-int jgrapht_ii_import_file_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
-int jgrapht_ll_import_file_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
-int jgrapht_rr_import_file_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
-int jgrapht_ii_import_string_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
-int jgrapht_ll_import_string_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
-int jgrapht_rr_import_string_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
+int jgrapht_ii_import_file_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR, int);
+int jgrapht_ll_import_file_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR, int);
+int jgrapht_rr_import_file_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR, int);
+int jgrapht_ii_import_string_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR, int);
+int jgrapht_ll_import_string_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR, int);
+int jgrapht_rr_import_string_dimacs(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR, int);
 int jgrapht_ii_import_file_gml(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 int jgrapht_ll_import_file_gml(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);
 int jgrapht_rr_import_file_gml(void *, char* BYTEARRAY, void* LONG_TO_FPTR, void *LONG_TO_FPTR, void *LONG_TO_FPTR, void* LONG_TO_FPTR, void* LONG_TO_FPTR);

@@ -1790,34 +1790,34 @@ int jgrapht_rr_handles_get_graphpath(void *graph_path, double* weight, void** st
 
 // importers
 
-int jgrapht_ii_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ii_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, int subtract_one_from_vertices) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_import_file_dimacs(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ii_import_file_dimacs(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, subtract_one_from_vertices);
 }
 
-int jgrapht_ll_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ll_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, int subtract_one_from_vertices) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_import_file_dimacs(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ll_import_file_dimacs(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, subtract_one_from_vertices);
 }
 
-int jgrapht_rr_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_rr_import_file_dimacs(void *g, char* filename, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, int subtract_one_from_vertices) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rr_import_file_dimacs(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_rr_import_file_dimacs(thread, g, filename, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, subtract_one_from_vertices);
 }
 
-int jgrapht_ii_import_string_dimacs(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ii_import_string_dimacs(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, int subtract_one_from_vertices) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ii_import_string_dimacs(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ii_import_string_dimacs(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, subtract_one_from_vertices);
 }
 
-int jgrapht_ll_import_string_dimacs(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_ll_import_string_dimacs(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, int subtract_one_from_vertices) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_ll_import_string_dimacs(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_ll_import_string_dimacs(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, subtract_one_from_vertices);
 }
 
-int jgrapht_rr_import_string_dimacs(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
+int jgrapht_rr_import_string_dimacs(void *g, char* input, void *import_vertex_id_fptr, void *v_notify_fptr, void *e_notify_fptr, int subtract_one_from_vertices) { 
     LAZY_THREAD_ATTACH
-    return jgrapht_capi_rr_import_string_dimacs(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr);
+    return jgrapht_capi_rr_import_string_dimacs(thread, g, input, import_vertex_id_fptr, v_notify_fptr, e_notify_fptr, subtract_one_from_vertices);
 }
 
 int jgrapht_ii_import_file_gml(void *g, char* filename, void *import_vertex_id_fptr, void *vertex_attribute_fptr, void *edge_attribute_fptr, void *v_notify_fptr, void *e_notify_fptr) { 
