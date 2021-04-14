@@ -15,7 +15,7 @@ def build_graph(backend):
         weighted=True,
         backend=backend,
         vertex_supplier=create_vertex_supplier(type="int"),
-        edge_supplier=create_edge_supplier(type="int"),        
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     for i in range(0, 10):
@@ -52,7 +52,7 @@ def build_property_graph():
         weighted=True,
         any_hashable=True,
         vertex_supplier=create_vertex_supplier(type="int"),
-        edge_supplier=create_edge_supplier(type='int')
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     for i in range(1, 11):
@@ -295,7 +295,7 @@ def test_dimacs(tmpdir, backend):
 
     with open(tmpfilename, "r") as f:
         contents = f.read()
-        #print(contents)
+        # print(contents)
 
     assert contents.splitlines() == dimacs_sp_expected_zero_based.splitlines()
 
@@ -314,7 +314,7 @@ def test_dimacs_with_custom_ids(tmpdir, backend):
     tmpfilename = str(tmpfile)
 
     def custom_id(id):
-        return id+100
+        return id + 100
 
     write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id)
 
@@ -342,7 +342,9 @@ def test_dimacs_with_custom_ids_bad_function(tmpdir, backend):
         return -id
 
     with pytest.raises(ValueError):
-        write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id2)
+        write_dimacs(
+            g, tmpfilename, format="shortestpath", export_vertex_id_cb=custom_id2
+        )
 
 
 @pytest.mark.parametrize(
@@ -419,7 +421,7 @@ def test_read_dimacs_from_string(tmpdir, backend):
         weighted=True,
         backend=backend,
         vertex_supplier=create_vertex_supplier(type="int"),
-        edge_supplier=create_edge_supplier(type="int"),        
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     def identity(x):
@@ -430,6 +432,43 @@ def test_read_dimacs_from_string(tmpdir, backend):
     assert g.vertices == {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 
     again = generate_dimacs(g, format="shortestpath")
+    print(again)
+    assert again.splitlines() == dimacs_sp_expected_zero_based.splitlines()
+
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_read_dimacs_from_string1(tmpdir, backend):
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
+    )
+
+    def identity(x):
+        return x
+
+    parse_dimacs(g, dimacs_sp_expected, identity)
+
+    assert g.vertices == {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+    def export_vertex_id_cb(v):
+        return v + 1
+
+    again = generate_dimacs(
+        g, format="shortestpath", export_vertex_id_cb=export_vertex_id_cb
+    )
+
     assert again.splitlines() == dimacs_sp_expected.splitlines()
 
 
@@ -456,7 +495,7 @@ def test_read_dimacs_from_file(tmpdir, backend):
         weighted=True,
         backend=backend,
         vertex_supplier=create_vertex_supplier(type="int"),
-        edge_supplier=create_edge_supplier(type="int"),                
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     def identity(x):
@@ -467,6 +506,48 @@ def test_read_dimacs_from_file(tmpdir, backend):
     assert g.vertices == {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 
     again = generate_dimacs(g, format="shortestpath")
+    assert again.splitlines() == dimacs_sp_expected_zero_based.splitlines()
+
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_read_dimacs_from_file1(tmpdir, backend):
+    tmpfile = tmpdir.join("dimacs.out")
+    tmpfilename = str(tmpfile)
+
+    # write file json with escaped characters
+    with open(tmpfilename, "w") as f:
+        f.write(dimacs_sp_expected)
+
+    g = create_graph(
+        directed=False,
+        allowing_self_loops=False,
+        allowing_multiple_edges=False,
+        weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type="int"),
+        edge_supplier=create_edge_supplier(type="int"),
+    )
+
+    def identity(x):
+        return x
+
+    read_dimacs(g, tmpfilename, identity)
+
+    assert g.vertices == {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+    def export_vertex_id_cb(v):
+        return v + 1
+
+    again = generate_dimacs(
+        g, format="shortestpath", export_vertex_id_cb=export_vertex_id_cb
+    )
     assert again.splitlines() == dimacs_sp_expected.splitlines()
 
 
@@ -484,14 +565,14 @@ def test_read_dimacs_property_graph_from_file(tmpdir):
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     read_dimacs(g, tmpfilename)
 
-    assert g.vertices == {'v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'}
-    assert g.edge_tuple('e6') == ('v0', 'v7', 1.0)
+    assert g.vertices == {"v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"}
+    assert g.edge_tuple("e6") == ("v0", "v7", 1.0)
     assert g.vertex_attrs == {}
     assert g.edge_attrs == {}
 
@@ -504,14 +585,14 @@ def test_read_dimacs_property_graph_from_string():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     parse_dimacs(g, dimacs_sp_expected)
 
-    assert g.vertices == {'v0', 'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9'}
-    assert g.edge_tuple('e6') == ('v0', 'v7', 1.0)
+    assert g.vertices == {"v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"}
+    assert g.edge_tuple("e6") == ("v0", "v7", 1.0)
     assert g.vertex_attrs == {}
     assert g.edge_attrs == {}
 
@@ -524,17 +605,17 @@ def test_read_dimacs_property_graph_from_string():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        vertex_supplier=create_vertex_supplier(), 
-        edge_supplier=create_edge_supplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier(),
     )
 
     def import_id_cb(id):
-        return 'v{}'.format(id+1)
+        return "v{}".format(id + 1)
 
     parse_dimacs(g, dimacs_sp_expected, import_id_cb=import_id_cb)
 
-    assert g.vertices == {'v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9', 'v10'}
-    assert g.edge_tuple('e6') == ('v1', 'v8', 1.0)
+    assert g.vertices == {"v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"}
+    assert g.edge_tuple("e6") == ("v1", "v8", 1.0)
     assert g.vertex_attrs == {}
     assert g.edge_attrs == {}
 
@@ -558,7 +639,7 @@ def test_anyhashableg_dimacs_increase_to_positive_id(tmpdir):
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        edge_supplier=create_edge_supplier(type='int')
+        edge_supplier=create_edge_supplier(type="int"),
     )
 
     for i in range(0, 10):
@@ -585,11 +666,13 @@ def test_anyhashableg_dimacs_increase_to_positive_id(tmpdir):
     g.add_edge(9, 1)
 
     def increase_vid(id):
-        return id+1
+        return id + 1
 
     tmpfile = tmpdir.join("dimacs.out")
     tmpfilename = str(tmpfile)
-    write_dimacs(g, tmpfilename, format="shortestpath", export_vertex_id_cb=increase_vid)
+    write_dimacs(
+        g, tmpfilename, format="shortestpath", export_vertex_id_cb=increase_vid
+    )
 
     with open(tmpfilename, "r") as f:
         contents = f.read()
@@ -610,7 +693,7 @@ def test_dimacs_output_to_string(backend):
     g = build_graph(backend)
 
     def custom_id(id):
-        return id+1
+        return id + 1
 
     out = generate_dimacs(g, export_vertex_id_cb=custom_id)
 
@@ -621,4 +704,3 @@ def test_dimacs_output_to_string(backend):
 
     with pytest.raises(ValueError):
         generate_dimacs(g, export_vertex_id_cb=custom_id_bad2)
-
