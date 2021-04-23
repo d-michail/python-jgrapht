@@ -1,7 +1,7 @@
 import pytest
 
 from jgrapht import create_graph, GraphBackend
-from jgrapht.utils import IntegerSupplier
+from jgrapht.utils import IntegerSupplier, create_vertex_supplier, create_edge_supplier
 import jgrapht.algorithms.vertexcover as vc
 
 
@@ -112,18 +112,18 @@ def build_property_graph():
         allowing_multiple_edges=False,
         weighted=True,
         any_hashable=True,
-        edge_supplier=IntegerSupplier()
+        vertex_supplier=create_vertex_supplier(),
+        edge_supplier=create_edge_supplier()
     )
 
-    for i in range(0, 10):
-        g.add_vertex(str(i))
+    v = [g.add_vertex() for i in range(0, 10)]
     for i in range(1, 10):
-        g.add_edge(str(0), str(i))
+        g.add_edge(v[0], v[i])
 
     vertex_weights = dict()
-    vertex_weights["0"] = 1000.0
+    vertex_weights[v[0]] = 1000.0
     for i in range(1, 10):
-        vertex_weights[str(i)] = 1.0
+        vertex_weights[v[i]] = 1.0
 
     print(g)
     print(vertex_weights)
@@ -136,7 +136,7 @@ def test_anyhashableg_greedy_with_weights():
     g, vertex_weights = build_property_graph()
     vc_weight, vc_vertices = vc.greedy(g, vertex_weights=vertex_weights)
     assert vc_weight == 9.0
-    assert set(vc_vertices) == set(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
+    assert set(vc_vertices) == set(["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"])
 
 
 @pytest.mark.parametrize(

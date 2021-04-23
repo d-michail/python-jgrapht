@@ -14,8 +14,10 @@ __equals_fptr_wrapper = None
 def _get_hash_fptr_wrapper():
     global __hash_fptr_wrapper
     if __hash_fptr_wrapper is None:
+        def _hash(o):
+            return hash(o)
         hash_type = ctypes.CFUNCTYPE(ctypes.c_long, ctypes.py_object)
-        __hash_fptr_wrapper = _callbacks._CallbackWrapper(hash, hash_type)
+        __hash_fptr_wrapper = _callbacks._CallbackWrapper(_hash, hash_type)
     return __hash_fptr_wrapper
 
 
