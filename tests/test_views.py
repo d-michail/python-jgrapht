@@ -355,12 +355,23 @@ def test_anyhashableg_as_masked_subgraph():
     repr(masked_graph)
 
 
-def test_as_weighted():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_weighted(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertex(0)
@@ -383,12 +394,23 @@ def test_as_weighted():
         wg.set_edge_weight(0, 5.0)
 
 
-def test_as_weighted_with_None_function():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_weighted_with_None_function(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -413,12 +435,23 @@ def test_as_weighted_with_None_function():
         wg.set_edge_weight(0, 5.0)
 
 
-def test_as_weighted_with_caching():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_weighted_with_caching(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -442,12 +475,23 @@ def test_as_weighted_with_caching():
     assert wg.get_edge_weight(0) == 5.0
 
 
-def test_as_weighted_with_caching_and_write_throught_with_unweighted():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_weighted_with_caching_and_write_throught_with_unweighted(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=False,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertex(0)
@@ -466,12 +510,23 @@ def test_as_weighted_with_caching_and_write_throught_with_unweighted():
         wg = as_weighted(g, edge_weight, cache_weights=True, write_weights_through=True)
 
 
-def test_as_weighted_with_caching_and_write_throught():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_weighted_with_caching_and_write_throught(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertex(0)
@@ -495,12 +550,23 @@ def test_as_weighted_with_caching_and_write_throught():
     assert g.get_edge_weight(0) == 5.0
 
 
-def test_as_weighted_with_no_caching_and_write_through():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_weighted_with_no_caching_and_write_through(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     g.add_vertex(0)

@@ -17,8 +17,12 @@ from ._internals._views import (
     _MaskedIntegerSubgraphView,
     _MaskedLongSubgraphView,
     _MaskedRefSubgraphView,
-    _WeightedView,
-    _GraphUnion,
+    _IntegerWeightedView,
+    _LongWeightedView,
+    _RefWeightedView,
+    _IntegerGraphUnion,
+    _LongGraphUnion,    
+    _RefGraphUnion,    
     _ListenableView,
 )
 
@@ -111,9 +115,9 @@ def as_masked_subgraph(graph, vertex_mask_cb, edge_mask_cb=None):
     if graph._backend_type == GraphBackend.REF_GRAPH:
         return _MaskedRefSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
     elif graph._backend_type == GraphBackend.INT_GRAPH:
-        return _MaskedLongSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
-    elif graph._backend_type == GraphBackend.LONG_GRAPH:
         return _MaskedIntegerSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _MaskedLongSubgraphView(graph, vertex_mask_cb, edge_mask_cb)
     else:
         raise ValueError("Unkwown backend type")
 
@@ -145,7 +149,14 @@ def as_weighted(graph, edge_weight_cb, cache_weights=True, write_weights_through
       :py:meth:`~jgrapht.types.Graph.set_edge_weight` will be propagated to the backing graph
     :returns: a weighted view
     """
-    return _WeightedView(graph, edge_weight_cb, cache_weights, write_weights_through)
+    if graph._backend_type == GraphBackend.REF_GRAPH:
+        return _RefWeightedView(graph, edge_weight_cb, cache_weights, write_weights_through)
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        return _IntegerWeightedView(graph, edge_weight_cb, cache_weights, write_weights_through)
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        return _LongWeightedView(graph, edge_weight_cb, cache_weights, write_weights_through)
+    else:
+        raise ValueError("Unkwown backend type")    
 
 
 def as_listenable(graph):
@@ -179,4 +190,15 @@ def as_graph_union(graph1, graph2, edge_weight_combiner_cb=None):
        double parameters and return one.
     :returns: a graph which is the union of the two graphs
     """
-    return _GraphUnion(graph1, graph2, edge_weight_combiner_cb)
+    if graph1._backend_type != graph2._backend_type: 
+        raise ValueError("Graph union only supported for same graph backends")
+
+    backend = graph1._backend_type
+    if backend == GraphBackend.REF_GRAPH:
+        return _RefGraphUnion(graph1, graph2, edge_weight_combiner_cb)
+    elif backend == GraphBackend.INT_GRAPH:
+        return _IntegerGraphUnion(graph1, graph2, edge_weight_combiner_cb)
+    elif backend == GraphBackend.LONG_GRAPH:
+        return _LongGraphUnion(graph1, graph2, edge_weight_combiner_cb)
+    else:
+        raise ValueError("Unkwown backend type")
