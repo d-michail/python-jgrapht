@@ -5,7 +5,10 @@ from ._int_graphs import _JGraphTIntegerGraph
 from ._long_graphs import _JGraphTLongGraph
 from ._ref_graphs import _JGraphTRefGraph
 from ._callbacks import _create_wrapped_callback
-from ._callbacks_graph import _create_vertex_or_edge_mask_wrapper
+from ._callbacks_graph import (
+    _create_vertex_or_edge_mask_wrapper,
+    _create_graph_listener_wrapper,
+)
 from ._attributes import _VertexAttributes, _EdgeAttributes
 
 import ctypes
@@ -25,7 +28,7 @@ class _UnweightedIntegerGraphView(_JGraphTIntegerGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_UnweightedIntegerGraphView(%r)" % self._handle
@@ -44,7 +47,7 @@ class _UnweightedLongGraphView(_JGraphTLongGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_UnweightedLongGraphView(%r)" % self._handle
@@ -68,7 +71,7 @@ class _UnweightedRefGraphView(_JGraphTRefGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_UnweightedRefGraphView(%r)" % self._handle
@@ -87,7 +90,7 @@ class _UndirectedIntegerGraphView(_JGraphTIntegerGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_UndirectedIntegerGraphView(%r)" % self._handle
@@ -106,7 +109,7 @@ class _UndirectedLongGraphView(_JGraphTLongGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_UndirectedLongGraphView(%r)" % self._handle
@@ -130,7 +133,7 @@ class _UndirectedRefGraphView(_JGraphTRefGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_UndirectedRefGraphView(%r)" % self._handle
@@ -149,7 +152,7 @@ class _UnmodifiableIntegerGraphView(_JGraphTIntegerGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_UnmodifiableIntegerGraphView(%r)" % self._handle
@@ -168,7 +171,7 @@ class _UnmodifiableLongGraphView(_JGraphTLongGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_UnmodifiableLongGraphView(%r)" % self._handle
@@ -192,7 +195,7 @@ class _UnmodifiableRefGraphView(_JGraphTRefGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_UnmodifiableRefGraphView(%r)" % self._handle
@@ -211,7 +214,7 @@ class _EdgeReversedIntegerGraphView(_JGraphTIntegerGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_EdgeReversedIntegerGraphView(%r)" % self._handle
@@ -230,7 +233,7 @@ class _EdgeReversedLongGraphView(_JGraphTLongGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_EdgeReversedLongGraphView(%r)" % self._handle
@@ -254,7 +257,7 @@ class _EdgeReversedRefGraphView(_JGraphTRefGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     def __repr__(self):
         return "_EdgeReversedRefGraphView(%r)" % self._handle
@@ -390,7 +393,7 @@ class _IntegerWeightedView(_JGraphTIntegerGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     @property
     def type(self):
@@ -430,7 +433,7 @@ class _LongWeightedView(_JGraphTLongGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     @property
     def type(self):
@@ -475,7 +478,7 @@ class _RefWeightedView(_JGraphTRefGraph):
         # support for graph attributes
         self._graph_attrs = self._graph._graph_attrs
         self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
-        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)        
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
     @property
     def type(self):
@@ -487,7 +490,6 @@ class _RefWeightedView(_JGraphTRefGraph):
 
     def __repr__(self):
         return "_RefWeightedView(%r)" % self._handle
-
 
 
 class _IntegerGraphUnion(_JGraphTIntegerGraph):
@@ -559,7 +561,12 @@ class _RefGraphUnion(_JGraphTRefGraph):
             graph1.handle, graph2.handle, self._edge_weight_combiner_cb_fptr
         )
 
-        super().__init__(handle=handle)
+        super().__init__(
+            handle=handle,
+            vertex_supplier_fptr_wrapper=graph1._vertex_supplier_fptr_wrapper,
+            edge_supplier_fptr_wrapper=graph1._edge_supplier_fptr_wrapper,
+            hash_equals_wrapper=graph1._hash_equals_wrapper,
+        )        
 
         # Keep a reference to avoid gargage collection. This is important since the
         # same references are maintained inside the JVM. If the graph gets garbaged
@@ -568,7 +575,7 @@ class _RefGraphUnion(_JGraphTRefGraph):
         self._graph2 = graph2
 
 
-class _ListenableView(_JGraphTIntegerGraph, ListenableGraph):
+class _IntegerListenableView(_JGraphTIntegerGraph, ListenableGraph):
     def __init__(self, graph):
         res = backend.jgrapht_xx_listenable_as_listenable(graph.handle)
         super().__init__(res)
@@ -577,6 +584,11 @@ class _ListenableView(_JGraphTIntegerGraph, ListenableGraph):
         # same references are maintained inside the JVM. If the graph gets garbaged
         # collected here, the same will happen inside the JVM.
         self._graph = graph
+
+        # support for graph attributes
+        self._graph_attrs = self._graph._graph_attrs
+        self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
 
         # list of user-added listeners
         self._listeners = {}
@@ -587,23 +599,8 @@ class _ListenableView(_JGraphTIntegerGraph, ListenableGraph):
             # convert integer event type to enum
             listener_cb(element, GraphEvent(event_type))
 
-        if self._graph._backend_type == GraphBackend.INT_GRAPH:
-            cb_fptr, cb = _create_wrapped_callback(
-                actual_cb, ctypes.CFUNCTYPE(None, ctypes.c_int, ctypes.c_int)
-            )
-            listener_handle = backend.jgrapht_ii_listenable_create_graph_listener(
-                cb_fptr
-            )
-        elif self._graph._backend_type == GraphBackend.LONG_GRAPH:
-            cb_fptr, cb = _create_wrapped_callback(
-                actual_cb, ctypes.CFUNCTYPE(None, ctypes.c_longlong, ctypes.c_longlong)
-            )
-            listener_handle = backend.jgrapht_ll_listenable_create_graph_listener(
-                cb_fptr
-            )
-        else:
-            raise ValueError("TODO: write rr graph")
-
+        cb_wrapper = _create_graph_listener_wrapper(self._graph, actual_cb)
+        listener_handle = backend.jgrapht_ii_listenable_create_graph_listener(cb_wrapper.fptr)
         backend.jgrapht_xx_listenable_add_graph_listener(self.handle, listener_handle)
 
         # create listener identifier
@@ -612,12 +609,12 @@ class _ListenableView(_JGraphTIntegerGraph, ListenableGraph):
 
         # register and make sure to keep the actual callback around to
         # avoid garbage collection
-        self._listeners[listener_id] = (listener_handle, cb)
+        self._listeners[listener_id] = (listener_handle, cb_wrapper)
 
         return listener_id
 
     def remove_listener(self, listener_id):
-        listener_handle, cb = self._listeners.pop(listener_id)
+        listener_handle, _ = self._listeners.pop(listener_id)
 
         backend.jgrapht_xx_listenable_remove_graph_listener(
             self.handle, listener_handle
@@ -625,4 +622,111 @@ class _ListenableView(_JGraphTIntegerGraph, ListenableGraph):
         backend.jgrapht_handles_destroy(listener_handle)
 
     def __repr__(self):
-        return "_ListenableView(%r)" % self._handle
+        return "_IntegerListenableView(%r)" % self._handle
+
+
+class _LongListenableView(_JGraphTLongGraph, ListenableGraph):
+    def __init__(self, graph):
+        res = backend.jgrapht_xx_listenable_as_listenable(graph.handle)
+        super().__init__(res)
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
+
+        # support for graph attributes
+        self._graph_attrs = self._graph._graph_attrs
+        self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
+
+        # list of user-added listeners
+        self._listeners = {}
+        self._next_id = 0
+
+    def add_listener(self, listener_cb):
+        def actual_cb(element, event_type):
+            # convert integer event type to enum
+            listener_cb(element, GraphEvent(event_type))
+
+        cb_wrapper = _create_graph_listener_wrapper(self._graph, actual_cb)
+        listener_handle = backend.jgrapht_ll_listenable_create_graph_listener(cb_wrapper.fptr)
+        backend.jgrapht_xx_listenable_add_graph_listener(self.handle, listener_handle)
+
+        # create listener identifier
+        listener_id = self._next_id
+        self._next_id += 1
+
+        # register and make sure to keep the actual callback around to
+        # avoid garbage collection
+        self._listeners[listener_id] = (listener_handle, cb_wrapper)
+
+        return listener_id
+
+    def remove_listener(self, listener_id):
+        listener_handle, _ = self._listeners.pop(listener_id)
+
+        backend.jgrapht_xx_listenable_remove_graph_listener(
+            self.handle, listener_handle
+        )
+        backend.jgrapht_handles_destroy(listener_handle)
+
+    def __repr__(self):
+        return "_LongListenableView(%r)" % self._handle
+
+
+
+class _RefListenableView(_JGraphTRefGraph, ListenableGraph):
+    def __init__(self, graph):
+        handle = backend.jgrapht_xx_listenable_as_listenable(graph.handle)
+
+        super().__init__(
+            handle=handle,
+            vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
+            edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
+            hash_equals_wrapper=graph._hash_equals_wrapper,
+        )        
+
+        # Keep a reference to avoid gargage collection. This is important since the
+        # same references are maintained inside the JVM. If the graph gets garbaged
+        # collected here, the same will happen inside the JVM.
+        self._graph = graph
+
+        # support for graph attributes
+        self._graph_attrs = self._graph._graph_attrs
+        self._vertex_attrs = _VertexAttributes(self, self._graph._vertex_to_attrs)
+        self._edge_attrs = _EdgeAttributes(self, self._graph._edge_to_attrs)
+
+        # list of user-added listeners
+        self._listeners = {}
+        self._next_id = 0
+
+    def add_listener(self, listener_cb):
+        def actual_cb(element, event_type):
+            # convert integer event type to enum
+            listener_cb(element, GraphEvent(event_type))
+
+        cb_wrapper = _create_graph_listener_wrapper(self._graph, actual_cb)
+        listener_handle = backend.jgrapht_rr_listenable_create_graph_listener(cb_wrapper.fptr)
+        backend.jgrapht_xx_listenable_add_graph_listener(self.handle, listener_handle)
+
+        # create listener identifier
+        listener_id = self._next_id
+        self._next_id += 1
+
+        # register and make sure to keep the actual callback around to
+        # avoid garbage collection
+        self._listeners[listener_id] = (listener_handle, cb_wrapper)
+
+        return listener_id
+
+    def remove_listener(self, listener_id):
+        listener_handle, _ = self._listeners.pop(listener_id)
+
+        backend.jgrapht_xx_listenable_remove_graph_listener(
+            self.handle, listener_handle
+        )
+        backend.jgrapht_handles_destroy(listener_handle)
+
+    def __repr__(self):
+        return "_RefListenableView(%r)" % self._handle

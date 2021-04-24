@@ -566,7 +566,7 @@ def test_as_weighted_with_no_caching_and_write_through(backend):
         weighted=True,
         backend=backend,
         edge_supplier=IntegerSupplier(),
-        vertex_supplier=IntegerSupplier(),        
+        vertex_supplier=IntegerSupplier(),
     )
 
     g.add_vertex(0)
@@ -603,13 +603,25 @@ element 2, event GraphEvent.VERTEX_REMOVED
 element 0, event GraphEvent.EDGE_WEIGHT_UPDATED"""
 
 
-def test_listenable():
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_listenable(backend):
 
     g = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     lg = as_listenable(g)
@@ -645,19 +657,33 @@ def test_listenable():
     assert listener2_results == listener2_expected.splitlines()
 
 
-def test_union():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_union(backend):
 
     g1 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),               
     )
     g2 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),               
     )
 
     g = as_graph_union(g1, g2)
@@ -695,19 +721,33 @@ def test_union():
     assert g.edge_tuple(3) == (5, 6, 10.0)
 
 
-def test_union_with_combiner():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_union_with_combiner(backend):
 
     g1 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),                       
     )
     g2 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),                       
     )
 
     def max_weight_combiner(x, y):
@@ -748,19 +788,33 @@ def test_union_with_combiner():
     assert g.edge_tuple(3) == (5, 6, 10.0)
 
 
-def test_bad_union():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_bad_union(backend):
 
     g1 = create_graph(
         directed=False,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
     g2 = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        edge_supplier=IntegerSupplier(),
+        vertex_supplier=IntegerSupplier(),        
     )
 
     with pytest.raises(ValueError):
@@ -906,13 +960,19 @@ def test_anyhashableg_two_wrappers():
     assert ug.contains_edge_between("1", "0")
 
 
-def test_as_unweighted_on_property_graphs():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+    ],
+)
+def test_as_unweighted_on_property_graphs(backend):
     g = create_graph(
         directed=True,
         allowing_self_loops=True,
         allowing_multiple_edges=False,
         weighted=True,
-        any_hashable=True,
+        backend=backend,
         vertex_supplier=create_vertex_supplier(),
         edge_supplier=create_edge_supplier(),
     )
@@ -975,6 +1035,87 @@ def test_as_unweighted_on_property_graphs():
     g.edge_attrs["e0"]["weight"] = 200.0
     assert g.edge_attrs["e0"]["weight"] == 200.0
     assert g1.edge_attrs["e0"]["weight"] == 1.0
+
+
+
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_as_unweighted_on_property_graphs(backend):
+    g = create_graph(
+        directed=True,
+        allowing_self_loops=True,
+        allowing_multiple_edges=False,
+        weighted=True,
+        backend=backend,
+        vertex_supplier=create_vertex_supplier(type='int'),
+        edge_supplier=create_edge_supplier(type='int'),
+    )
+
+    g.add_vertex()
+    g.add_vertex()
+    g.add_vertex()
+    g.add_vertex()
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+
+    g.set_edge_weight(0, 100.0)
+    g.set_edge_weight(1, 50.0)
+    g.set_edge_weight(2, 25.0)
+
+    g.vertex_attrs[0]["before"] = 0
+    g.vertex_attrs[1]["before"] = 1
+    g.edge_attrs[0]["before"] = 0
+    g.edge_attrs[1]["before"] = 1
+
+    g1 = as_unweighted(g)
+
+    assert g.type.directed == g1.type.directed
+    assert g.type.allowing_self_loops == g1.type.allowing_self_loops
+    assert g.type.allowing_multiple_edges == g1.type.allowing_multiple_edges
+    assert g.type.weighted != g1.type.weighted
+
+    assert g1.get_edge_weight(0) == 1.0
+    assert g1.get_edge_weight(1) == 1.0
+    assert g1.get_edge_weight(2) == 1.0
+
+    # test that properties still exist
+    assert g.vertex_attrs[0]["before"] == 0
+    assert g.vertex_attrs[1]["before"] == 1
+    assert g.edge_attrs[0]["before"] == 0
+    assert g.edge_attrs[1]["before"] == 1
+
+    assert g1.vertex_attrs[0]["before"] == 0
+    assert g1.vertex_attrs[1]["before"] == 1
+    assert g1.edge_attrs[0]["before"] == 0
+    assert g1.edge_attrs[1]["before"] == 1
+
+    # test adding a property in g
+    g.vertex_attrs[0]["after"] = 0
+    assert g1.vertex_attrs[0]["after"] == 0
+
+    # test adding a property in g1
+    g1.edge_attrs[0]["after"] = 0
+    assert g.edge_attrs[0]["after"] == 0
+
+    # test deleting a property from g
+    del g.vertex_attrs[1]["before"]
+    with pytest.raises(KeyError):
+        g1.vertex_attrs[1]["before"]
+
+    with pytest.raises(ValueError):
+        g1.edge_attrs[0]["weight"] = 200.0
+
+    g.edge_attrs[0]["weight"] = 200.0
+    assert g.edge_attrs[0]["weight"] == 200.0
+    assert g1.edge_attrs[0]["weight"] == 1.0
+
 
 
 def test_anyhashableg_as_weighted():
