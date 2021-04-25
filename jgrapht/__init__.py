@@ -15,21 +15,16 @@ from .__version__ import __copyright__
 from .__version__ import __bibtex__
 
 # Initialize with backend and setup module cleanup
-from . import backend
-import atexit
+from . import backend as _backend
+import atexit as _atexit
 
-backend.jgrapht_init()
-del backend
-
+_backend.jgrapht_init()
 
 def _module_cleanup_function():
-    from . import backend
+    if _backend.jgrapht_is_initialized():
+        _backend.jgrapht_cleanup()
 
-    backend.jgrapht_cleanup()
-
-
-atexit.register(_module_cleanup_function)
-del atexit
+_atexit.register(_module_cleanup_function)
 
 # Set default logging handler to avoid "No handler found" warnings.
 import logging

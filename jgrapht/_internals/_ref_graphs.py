@@ -285,14 +285,16 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
             return set(it)
 
     def __del__(self):
-        for v_ptr in _JGraphTPtrIterator(
-            handle=backend.jgrapht_xx_graph_create_all_vit(self._handle)
-        ):
-            _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(v_ptr))
         for e_ptr in _JGraphTPtrIterator(
             handle=backend.jgrapht_xx_graph_create_all_eit(self._handle)
         ):
             _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(e_ptr))
+
+        for v_ptr in _JGraphTPtrIterator(
+            handle=backend.jgrapht_xx_graph_create_all_vit(self._handle)
+        ):
+            _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(v_ptr))
+            
         super().__del__()
 
 

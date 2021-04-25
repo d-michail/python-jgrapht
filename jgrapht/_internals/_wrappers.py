@@ -18,7 +18,6 @@ class _HandleWrapper:
     """A handle wrapper. Keeps a handle to a backend object and cleans up
        on deletion.
     """
-
     def __init__(self, handle, **kwargs):
         self._handle = handle
 
@@ -27,8 +26,11 @@ class _HandleWrapper:
         return self._handle
 
     def __del__(self):
-        if backend.jgrapht_is_initialized():
+        try: 
             backend.jgrapht_handles_destroy(self._handle)
+        except TypeError as err: 
+            # ignore error if backend is unloaded before we cleanup
+            pass
 
     def __repr__(self):
         return "_HandleWrapper(%r)" % self._handle

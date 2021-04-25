@@ -56,8 +56,10 @@ class _HashEqualsWrapper(_HandleWrapper):
         handle = backend.jgrapht_rr_graph_hash_equals_resolver_create(
             self._hash_lookup_fptr_wrapper.fptr, self._equals_lookup_fptr_wrapper.fptr
         )
+        super().__init__(handle=handle)
 
-        super().__init__(handle)
+    def __del__(self):
+        super().__del__()
 
 
 def _get_hash_equals_wrapper():
