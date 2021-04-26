@@ -439,12 +439,22 @@ def _wrap_subgraph(graph, handle):
     elif graph._backend_type == GraphBackend.LONG_GRAPH:
         return _JGraphTLongGraph(handle=handle)
     elif graph._backend_type == GraphBackend.REF_GRAPH:
-        return _JGraphTRefGraph(
+        result = _JGraphTRefGraph(
             handle=handle,
             vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
             hash_equals_wrapper=graph._hash_equals_wrapper,
         )
+
+        # we need to increase the reference counts of all objects, since the graph 
+        # will release them on deletion
+        for v in result.vertices:
+            _ref_utils._inc_ref(v)
+            
+        for e in result.edges:
+            _ref_utils._inc_ref(e)
+
+        return result
     else:
         raise ValueError("Backend not supported")
 
