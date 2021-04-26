@@ -7,7 +7,7 @@ from ..types import (
     EquivalentFlowTree,
 )
 
-from . import _callbacks, _ref_hashequals
+from . import _callbacks, _ref_hashequals, _ref_utils
 from ._wrappers import _HandleWrapper, GraphBackend
 from ._collections_set import (
     _JGraphTIntegerSet,
@@ -266,12 +266,22 @@ class _JGraphTRefGomoryHuTree(_HandleWrapper, GomoryHuTree):
             hash_equals_wrapper.handle,
         )
 
-        return _JGraphTRefGraph(
+        result = _JGraphTRefGraph(
             tree_handle,
             vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
             hash_equals_wrapper=hash_equals_wrapper,
         )
+
+        # graph is constructed in the backend using the vertex/edge suppliers
+        # we need to increase the reference counts of all objects
+        for v in result.vertices:
+            _ref_utils._inc_ref(v)
+            
+        for e in result.edges:
+            _ref_utils._inc_ref(e)
+
+        return result
 
     def min_cut(self):
         (
@@ -348,12 +358,22 @@ class _JGraphTRefEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
             hash_equals_wrapper.handle,
         )
 
-        return _JGraphTRefGraph(
+        result = _JGraphTRefGraph(
             tree_handle,
             vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
             hash_equals_wrapper=hash_equals_wrapper,
         )
+
+        # graph is constructed in the backend using the vertex/edge suppliers
+        # we need to increase the reference counts of all objects
+        for v in result.vertices:
+            _ref_utils._inc_ref(v)
+
+        for e in result.edges:
+            _ref_utils._inc_ref(e)
+
+        return result
 
     def max_st_flow_value(self, s, t):
         return _backend.jgrapht_rx_equivalentflowtree_max_st_flow(
