@@ -171,57 +171,6 @@ class _JGraphTRefList(_HandleWrapper, Collection):
         return "{" + ", ".join(str(x) for x in self) + "}"
 
 
-class _JGraphTRefMutableList(_JGraphTRefList):
-    """JGraphT Ref List"""
-
-    def __init__(self, handle, hash_equals_resolver_handle, **kwargs):
-        super().__init__(
-            handle=handle,
-            hash_equals_resolver_handle=hash_equals_resolver_handle,
-            **kwargs
-        )
-        # Dictionary which keeps a mapping from objects whole reference count we have 
-        # increased to their actual ids. This solves the issue that a user might override 
-        # equals and use two different objects when inserting and removing an element.
-        self._ref_ids = dict()        
-
-    def add(self, x):
-        if backend.jgrapht_r_list_add(
-            self._handle, id(x), self._hash_equals_resolver_handle
-        ):
-            self._inc_ref_count(x)
-
-    def discard(self, x):
-        if backend.jgrapht_r_list_remove(
-            self._handle, id(x), self._hash_equals_resolver_handle
-        ):
-            self._dec_ref_count(x)
-
-    def clear(self):
-        self._dec_all_ref_counts()
-        backend.jgrapht_x_list_clear(self._handle)
-
-    def _inc_ref_count(self, element):
-        self._ref_ids[element] = id(element)
-        _ref_utils._inc_ref(element)
-
-    def _dec_ref_count(self, element):
-        element_id = self._ref_ids.pop(element)
-        _ref_utils._dec_ref_by_id(element_id)
-
-    def _dec_all_ref_counts(self):
-        for elem_id in self._ref_ids.values():
-            _ref_utils._dec_ref_by_id(elem_id)
-        self._ref_ids.clear()
-
-    def __del__(self):
-        self._dec_all_ref_counts()
-        super().__del__()
-
-    def __repr__(self):
-        return "_JGraphTRefMutableList(%r)" % self._handle
-
-
 class _JGraphTRefListIterator(_JGraphTObjectIterator):
     """An iterator which returns lists with references."""
 

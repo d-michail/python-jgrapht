@@ -496,3 +496,4 @@ def _build_vertex_weights(graph, vertex_weights):
         for key, val in vertex_weights.items():
             jgrapht_vertex_weights[key] = val
     return jgrapht_vertex_weights
+

@@ -579,19 +579,11 @@ class _JGraphTRefIntegerMutableMap(_JGraphTRefIntegerMap, MutableMapping):
             hash_equals_resolver_handle=hash_equals_resolver_handle,
             **kwargs
         )
-        # Dictionary which keeps a mapping from objects whole reference count we have
-        # increased to their actual ids. This solves the issue that a user might override
-        # equals and use two different objects when inserting and removing an element.
-        self._ref_ids = dict()
 
     def add(self, key, value):
-        key_exists = self.__contains__(key)
-        if key_exists:
-            self._dec_ref_count(key)
         backend.jgrapht_ri_map_put(
             self._handle, id(key), self._hash_equals_resolver_handle, value
         )
-        self._inc_ref_count(key)
 
     __marker = object()
 
@@ -600,7 +592,6 @@ class _JGraphTRefIntegerMutableMap(_JGraphTRefIntegerMap, MutableMapping):
             e = backend.jgrapht_ri_map_remove(
                 self._handle, id(key), self._hash_equals_resolver_handle
             )
-            self._dec_ref_count(key)
             return e
         except ValueError:
             if defaultvalue is self.__marker:
@@ -609,13 +600,9 @@ class _JGraphTRefIntegerMutableMap(_JGraphTRefIntegerMap, MutableMapping):
                 return defaultvalue
 
     def __setitem__(self, key, value):
-        key_exists = self.__contains__(key)
-        if key_exists:
-            self._dec_ref_count(key)
         backend.jgrapht_ri_map_put(
             self._handle, id(key), self._hash_equals_resolver_handle, value
         )
-        self._inc_ref_count(key)
 
     def __delitem__(self, key):
         key_exists = self.__contains__(key)
@@ -624,28 +611,9 @@ class _JGraphTRefIntegerMutableMap(_JGraphTRefIntegerMap, MutableMapping):
         backend.jgrapht_ri_map_remove(
             self._handle, id(key), self._hash_equals_resolver_handle
         )
-        self._dec_ref_count(key)
 
     def clear(self):
-        self._dec_all_ref_counts()
         backend.jgrapht_xx_map_clear(self._handle)
-
-    def __del__(self):
-        self._dec_all_ref_counts()
-        super().__del__()
-
-    def _inc_ref_count(self, element):
-        self._ref_ids[element] = id(element)
-        _ref_utils._inc_ref(element)
-
-    def _dec_ref_count(self, element):
-        element_id = self._ref_ids.pop(element)
-        _ref_utils._dec_ref_by_id(element_id)
-
-    def _dec_all_ref_counts(self):
-        for elem_id in self._ref_ids.values():
-            _ref_utils._dec_ref_by_id(elem_id)
-        self._ref_ids.clear()
 
     def __repr__(self):
         return "_JGraphTRefIntegerMutableMap(%r)" % self._handle
@@ -720,13 +688,9 @@ class _JGraphTRefDoubleMutableMap(_JGraphTRefDoubleMap, MutableMapping):
         self._ref_ids = dict()
 
     def add(self, key, value):
-        key_exists = self.__contains__(key)
-        if key_exists:
-            self._dec_ref_count(key)
         backend.jgrapht_rd_map_put(
             self._handle, id(key), self._hash_equals_resolver_handle, value
         )
-        self._inc_ref_count(key)
 
     __marker = object()
 
@@ -735,7 +699,6 @@ class _JGraphTRefDoubleMutableMap(_JGraphTRefDoubleMap, MutableMapping):
             e = backend.jgrapht_rd_map_remove(
                 self._handle, id(key), self._hash_equals_resolver_handle
             )
-            self._dec_ref_count(key)
             return e
         except ValueError:
             if defaultvalue is self.__marker:
@@ -744,13 +707,9 @@ class _JGraphTRefDoubleMutableMap(_JGraphTRefDoubleMap, MutableMapping):
                 return defaultvalue
 
     def __setitem__(self, key, value):
-        key_exists = self.__contains__(key)
-        if key_exists:
-            self._dec_ref_count(key)
         backend.jgrapht_rd_map_put(
             self._handle, id(key), self._hash_equals_resolver_handle, value
         )
-        self._inc_ref_count(key)
 
     def __delitem__(self, key):
         key_exists = self.__contains__(key)
@@ -759,28 +718,9 @@ class _JGraphTRefDoubleMutableMap(_JGraphTRefDoubleMap, MutableMapping):
         backend.jgrapht_rd_map_remove(
             self._handle, id(key), self._hash_equals_resolver_handle
         )
-        self._dec_ref_count(key)
 
     def clear(self):
-        self._dec_all_ref_counts()
         backend.jgrapht_xx_map_clear(self._handle)
-
-    def __del__(self):
-        self._dec_all_ref_counts()
-        super().__del__()
-
-    def _inc_ref_count(self, element):
-        self._ref_ids[element] = id(element)
-        _ref_utils._inc_ref(element)
-
-    def _dec_ref_count(self, element):
-        element_id = self._ref_ids.pop(element)
-        _ref_utils._dec_ref_by_id(element_id)
-
-    def _dec_all_ref_counts(self):
-        for elem_id in self._ref_ids.values():
-            _ref_utils._dec_ref_by_id(elem_id)
-        self._ref_ids.clear()
 
     def __repr__(self):
         return "_JGraphTRefDoubleMutableMap(%r)" % self._handle
@@ -793,18 +733,12 @@ class _JGraphTRefStringMap(_HandleWrapper, MutableMapping):
         super().__init__(handle=handle, **kwargs)
         self._hash_equals_resolver_handle = hash_equals_resolver_handle
 
-        # Dictionary which keeps a mapping from objects whole reference count we have
-        # increased to their actual ids. This solves the issue that a user might override
-        # equals and use two different objects when inserting and removing an element.
-        self._ref_ids = dict()
-
     def __iter__(self):
         res = backend.jgrapht_xx_map_keys_it_create(self._handle)
         return _JGraphTRefIterator(res)
 
     def __len__(self):
-        res = backend.jgrapht_xx_map_size(self._handle)
-        return res
+        return backend.jgrapht_xx_map_size(self._handle)
 
     __marker = object()
 
@@ -821,19 +755,14 @@ class _JGraphTRefStringMap(_HandleWrapper, MutableMapping):
         return str(_JGraphTString(res))
 
     def add(self, key, value):
-        key_exists = self.__contains__(key)
-        if key_exists:
-            self._dec_ref_count(key)
         encoded_value = bytearray(value, encoding="utf-8")
         backend.jgrapht_rs_map_put(
             self._handle, id(key), self._hash_equals_resolver_handle, encoded_value
         )
-        self._inc_ref_count(key)
 
     def pop(self, key, defaultvalue=__marker):
         try:
             res = backend.jgrapht_ls_map_remove(self._handle, key)
-            self._dec_ref_count(key)
             return str(_JGraphTString(res))
         except ValueError:
             if defaultvalue is self.__marker:
@@ -857,14 +786,10 @@ class _JGraphTRefStringMap(_HandleWrapper, MutableMapping):
         return str(_JGraphTString(res))
 
     def __setitem__(self, key, value):
-        key_exists = self.__contains__(key)
-        if key_exists:
-            self._dec_ref_count(key)        
         encoded_value = bytearray(value, encoding="utf-8")
         backend.jgrapht_rs_map_put(
             self._handle, id(key), self._hash_equals_resolver_handle, encoded_value
         )
-        self._inc_ref_count(key)
 
     def __delitem__(self, key):
         key_exists = self.__contains__(key)
@@ -873,28 +798,9 @@ class _JGraphTRefStringMap(_HandleWrapper, MutableMapping):
         backend.jgrapht_rs_map_remove(
             self._handle, id(key), self._hash_equals_resolver_handle
         )
-        self._dec_ref_count(key)
 
     def clear(self):
-        self._dec_all_ref_counts()
         backend.jgrapht_xx_map_clear(self._handle)
-
-    def __del__(self):
-        self._dec_all_ref_counts()
-        super().__del__()
-
-    def _inc_ref_count(self, element):
-        self._ref_ids[element] = id(element)
-        _ref_utils._inc_ref(element)
-
-    def _dec_ref_count(self, element):
-        element_id = self._ref_ids.pop(element)
-        _ref_utils._dec_ref_by_id(element_id)
-
-    def _dec_all_ref_counts(self):
-        for elem_id in self._ref_ids.values():
-            _ref_utils._dec_ref_by_id(elem_id)
-        self._ref_ids.clear()
 
     def __repr__(self):
         return "_JGraphTRefStringMap(%r)" % self._handle
