@@ -118,6 +118,8 @@ def to_pydot(graph, export_edge_weights=True):
 
     :param graph: a graph
     :type graph: jgrapht graph
+    :param export_edge_weights: whether to export edge weights
+    :type export_edge_weights: bool
     :returns: a new graph
     :rtype: pydot graph
     """
@@ -249,57 +251,40 @@ def to_nx(graph):
         else:
             result = nx.Graph()
 
-    if _is_anyhashable_graph(graph):
-        # copy topology and attributes
-        result.graph.update(**graph.graph_attrs)
+    # copy topology and attributes
+    result.graph.update(**graph.graph_attrs)
 
-        for v in graph.vertices: 
-            result.add_node(v)
-            result.nodes[v].update(**graph.vertex_attrs[v])
+    for v in graph.vertices: 
+        result.add_node(v)
+        result.nodes[v].update(**graph.vertex_attrs[v])
 
-        if graph.type.allowing_multiple_edges: 
-            if graph.type.weighted:
-                for e in graph.edges:
-                    u = graph.edge_source(e)
-                    v = graph.edge_target(e)
-                    w = graph.get_edge_weight(e)
-                    k = result.add_edge(u, v, weight=w)
-                    result.edges[u, v, k].update(**graph.edge_attrs[e])
-            else:
-                for e in graph.edges:
-                    u = graph.edge_source(e)
-                    v = graph.edge_target(e)
-                    k = result.add_edge(u, v)
-                    result.edges[u, v, k].update(**graph.edge_attrs[e])
+    if graph.type.allowing_multiple_edges: 
+        if graph.type.weighted:
+            for e in graph.edges:
+                u = graph.edge_source(e)
+                v = graph.edge_target(e)
+                w = graph.get_edge_weight(e)
+                k = result.add_edge(u, v, weight=w)
+                result.edges[u, v, k].update(**graph.edge_attrs[e])
         else:
-            if graph.type.weighted:
-                for e in graph.edges:
-                    u = graph.edge_source(e)
-                    v = graph.edge_target(e)
-                    w = graph.get_edge_weight(e)
-                    result.add_edge(u, v, weight=w)
-                    result.edges[u, v].update(**graph.edge_attrs[e])
-            else:
-                for e in graph.edges:
-                    u = graph.edge_source(e)
-                    v = graph.edge_target(e)
-                    result.add_edge(u, v)
-                    result.edges[u, v].update(**graph.edge_attrs[e])
+            for e in graph.edges:
+                u = graph.edge_source(e)
+                v = graph.edge_target(e)
+                k = result.add_edge(u, v)
+                result.edges[u, v, k].update(**graph.edge_attrs[e])
     else:
-        # copy topology
-        for v in graph.vertices: 
-            result.add_node(v)
-
         if graph.type.weighted:
             for e in graph.edges:
                 u = graph.edge_source(e)
                 v = graph.edge_target(e)
                 w = graph.get_edge_weight(e)
                 result.add_edge(u, v, weight=w)
+                result.edges[u, v].update(**graph.edge_attrs[e])
         else:
             for e in graph.edges:
                 u = graph.edge_source(e)
                 v = graph.edge_target(e)
                 result.add_edge(u, v)
+                result.edges[u, v].update(**graph.edge_attrs[e])
 
     return result

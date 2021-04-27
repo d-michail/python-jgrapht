@@ -2,16 +2,28 @@ import pytest
 
 nx = pytest.importorskip("networkx")
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier, create_edge_supplier, create_vertex_supplier
 from jgrapht.convert import to_nx, from_nx
 
 
-def test_int_graph_to_nx():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_int_graph_to_nx(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=IntegerSupplier(),
+        edge_supplier=IntegerSupplier(),        
     )
 
     for i in range(0, 6):
