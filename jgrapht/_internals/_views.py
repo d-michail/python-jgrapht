@@ -61,6 +61,7 @@ class _UnweightedRefGraphView(_JGraphTRefGraph):
             vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
             hash_equals_wrapper=graph._hash_equals_wrapper,
+            refcounts_owner=False,
         )
 
         # Keep a reference to avoid gargage collection. This is important since the
@@ -123,6 +124,7 @@ class _UndirectedRefGraphView(_JGraphTRefGraph):
             vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
             hash_equals_wrapper=graph._hash_equals_wrapper,
+            refcounts_owner=False,
         )
 
         # Keep a reference to avoid gargage collection. This is important since the
@@ -185,6 +187,7 @@ class _UnmodifiableRefGraphView(_JGraphTRefGraph):
             vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
             hash_equals_wrapper=graph._hash_equals_wrapper,
+            refcounts_owner=False,
         )
 
         # Keep a reference to avoid gargage collection. This is important since the
@@ -247,6 +250,7 @@ class _EdgeReversedRefGraphView(_JGraphTRefGraph):
             vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
             hash_equals_wrapper=graph._hash_equals_wrapper,
+            refcounts_owner=False,            
         )
 
         # Keep a reference to avoid gargage collection. This is important since the
@@ -350,6 +354,7 @@ class _MaskedRefSubgraphView(_JGraphTRefGraph):
             vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
             hash_equals_wrapper=graph._hash_equals_wrapper,
+            refcounts_owner=False,
         )
         self._type = graph.type.as_unmodifiable()
 
@@ -466,6 +471,7 @@ class _RefWeightedView(_JGraphTRefGraph):
             vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
             hash_equals_wrapper=graph._hash_equals_wrapper,
+            refcounts_owner=False,            
         )
 
         self._type = graph.type.as_weighted()
@@ -566,6 +572,7 @@ class _RefGraphUnion(_JGraphTRefGraph):
             vertex_supplier_fptr_wrapper=graph1._vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=graph1._edge_supplier_fptr_wrapper,
             hash_equals_wrapper=graph1._hash_equals_wrapper,
+            refcounts_owner=False,            
         )        
 
         # Keep a reference to avoid gargage collection. This is important since the
@@ -685,6 +692,7 @@ class _RefListenableView(_JGraphTRefGraph, ListenableGraph):
             vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
             hash_equals_wrapper=graph._hash_equals_wrapper,
+            refcounts_owner=False,            
         )        
 
         # Keep a reference to avoid gargage collection. This is important since the

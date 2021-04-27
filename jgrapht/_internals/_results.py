@@ -444,6 +444,7 @@ def _wrap_subgraph(graph, handle):
             vertex_supplier_fptr_wrapper=graph._vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=graph._edge_supplier_fptr_wrapper,
             hash_equals_wrapper=graph._hash_equals_wrapper,
+            refcounts_owner=True,
         )
 
         # we need to increase the reference counts of all objects, since the graph 

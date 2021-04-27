@@ -271,6 +271,7 @@ class _JGraphTRefGomoryHuTree(_HandleWrapper, GomoryHuTree):
             vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
             hash_equals_wrapper=hash_equals_wrapper,
+            refcounts_owner=True,
         )
 
         # graph is constructed in the backend using the vertex/edge suppliers
@@ -363,6 +364,7 @@ class _JGraphTRefEquivalentFlowTree(_HandleWrapper, EquivalentFlowTree):
             vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
             hash_equals_wrapper=hash_equals_wrapper,
+            refcounts_owner=True,
         )
 
         # graph is constructed in the backend using the vertex/edge suppliers

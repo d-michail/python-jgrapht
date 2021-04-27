@@ -51,6 +51,7 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
         vertex_supplier_fptr_wrapper,
         edge_supplier_fptr_wrapper,
         hash_equals_wrapper,
+        refcounts_owner,
         **kwargs
     ):
         super().__init__(handle=handle, **kwargs)
@@ -89,6 +90,10 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
         self._vertex_supplier_fptr_wrapper = vertex_supplier_fptr_wrapper
         self._edge_supplier_fptr_wrapper = edge_supplier_fptr_wrapper
         self._hash_equals_wrapper = hash_equals_wrapper
+
+        # whether this graph is responsible to cleanup refcounts of all
+        # remaining vertices/edges
+        self._refcounts_owner = refcounts_owner
 
     @property
     def type(self):
@@ -285,16 +290,16 @@ class _JGraphTRefGraph(_HandleWrapper, Graph, AttributesGraph):
             return set(it)
 
     def __del__(self):
-        for e_ptr in _JGraphTPtrIterator(
-            handle=backend.jgrapht_xx_graph_create_all_eit(self._handle)
-        ):
-            _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(e_ptr))
+        if self._refcounts_owner:
+            for e_ptr in _JGraphTPtrIterator(
+                handle=backend.jgrapht_xx_graph_create_all_eit(self._handle)
+            ):
+                _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(e_ptr))
 
-        for v_ptr in _JGraphTPtrIterator(
-            handle=backend.jgrapht_xx_graph_create_all_vit(self._handle)
-        ):
-            _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(v_ptr))
-            
+            for v_ptr in _JGraphTPtrIterator(
+                handle=backend.jgrapht_xx_graph_create_all_vit(self._handle)
+            ):
+                _ref_utils._dec_ref(_ref_utils._swig_ptr_to_obj(v_ptr))
         super().__del__()
 
 
@@ -307,6 +312,7 @@ class _JGraphTRefDirectedAcyclicGraph(_JGraphTRefGraph, DirectedAcyclicGraph):
         vertex_supplier_fptr_wrapper,
         edge_supplier_fptr_wrapper,
         hash_equals_wrapper,
+        refcounts_owner,
         **kwargs
     ):
         super().__init__(
@@ -314,6 +320,7 @@ class _JGraphTRefDirectedAcyclicGraph(_JGraphTRefGraph, DirectedAcyclicGraph):
             vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
             edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
             hash_equals_wrapper=hash_equals_wrapper,
+            refcounts_owner=refcounts_owner,
             **kwargs
         )
 
@@ -388,6 +395,7 @@ def _create_ref_graph(
         vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
         edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
         hash_equals_wrapper=hash_equals_wrapper,
+        refcounts_owner=True,
     )
 
 
@@ -433,6 +441,7 @@ def _create_ref_dag(
         vertex_supplier_fptr_wrapper=vertex_supplier_fptr_wrapper,
         edge_supplier_fptr_wrapper=edge_supplier_fptr_wrapper,
         hash_equals_wrapper=hash_equals_wrapper,
+        refcounts_owner=True,
     )
 
 
