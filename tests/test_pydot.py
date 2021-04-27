@@ -2,16 +2,28 @@ import pytest
 
 pydot = pytest.importorskip("pydot")
 
-from jgrapht import create_graph
+from jgrapht import create_graph, GraphBackend
+from jgrapht.utils import IntegerSupplier, create_edge_supplier, create_vertex_supplier
 from jgrapht.convert import to_pydot, from_pydot
 
 
-def test_int_graph_to_pydot():
+@pytest.mark.parametrize(
+    "backend",
+    [
+        GraphBackend.REF_GRAPH,
+        GraphBackend.INT_GRAPH,
+        GraphBackend.LONG_GRAPH,
+    ],
+)
+def test_int_graph_to_pydot(backend):
     g = create_graph(
         directed=False,
         allowing_self_loops=False,
         allowing_multiple_edges=False,
         weighted=True,
+        backend=backend,
+        vertex_supplier=IntegerSupplier(),
+        edge_supplier=IntegerSupplier(),        
     )
 
     for i in range(0, 6):
@@ -54,7 +66,7 @@ def test_any_hashable_graph_to_pydot():
         allowing_self_loops=True,
         allowing_multiple_edges=True,
         weighted=True,
-        any_hashable=True
+        backend=GraphBackend.REF_GRAPH
     )
 
     for i in range(0, 6):
@@ -78,7 +90,7 @@ def test_any_hashable_graph_to_pydot():
     g.edge_attrs[e34]["name"] = "e34"
     g.edge_attrs[e34]["color"] = "red"
 
-    astext = str(to_pydot(g))
+    astext = str(to_pydot(g, export_edge_weights=False))
 
     expected = """strict graph G {
 0;
@@ -131,7 +143,7 @@ def test_any_hashable_no_multiple_edges_graph_to_pydot():
     g.edge_attrs["e23"]["name"] = "e23"
     g.edge_attrs[e34]["name"] = "e34"
 
-    astext = str(to_pydot(g))
+    astext = str(to_pydot(g, export_edge_weights=False))
 
     expected = """graph G {
 0;

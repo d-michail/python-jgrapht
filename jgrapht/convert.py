@@ -1,4 +1,5 @@
 from . import create_graph as _create_graph
+from . import GraphBackend as _GraphBackend
 
 
 def _strip(elem):
@@ -112,7 +113,7 @@ def from_pydot(graph):
     return g
 
 
-def to_pydot(graph):
+def to_pydot(graph, export_edge_weights=True):
     """Convert a graph to a pydot graph.
 
     :param graph: a graph
@@ -128,40 +129,35 @@ def to_pydot(graph):
     graph_type = "digraph" if graph.type.directed else "graph"
     strict = graph.type.allowing_self_loops and graph.type.allowing_multiple_edges
 
-    graph_name = "G"
-    if _is_anyhashable_graph(graph):
-        graph_name = graph.graph_attrs.get("name", graph_name)
+    graph_name = graph.graph_attrs.get("name", "G")
 
     dotg = pydot.Dot(graph_name=graph_name, graph_type=graph_type, strict=strict)
 
-    if _is_anyhashable_graph(graph):
-        try:
-            vertex_attrs = graph.graph_attrs["vertex"]
-            dotg.set_node_defaults(**vertex_attrs)
-        except KeyError:
-            pass
+    try:
+        vertex_attrs = graph.graph_attrs["vertex"]
+        dotg.set_node_defaults(**vertex_attrs)
+    except KeyError:
+        pass
 
-        try:
-            edge_attrs = graph.graph_attrs["edge"]
-            dotg.set_edge_defaults(**edge_attrs)
-        except KeyError:
-            pass
+    try:
+        edge_attrs = graph.graph_attrs["edge"]
+        dotg.set_edge_defaults(**edge_attrs)
+    except KeyError:
+        pass
 
     for v in graph.vertices:
         vattrs = {}
-        if _is_anyhashable_graph(graph):
-            vattrs.update({k: str(v) for k, v in graph.vertex_attrs[v].items()})
-            if 'name' in vattrs: 
-                vattrs.pop('name')
+        vattrs.update({k: str(v) for k, v in graph.vertex_attrs[v].items()})
+        if 'name' in vattrs: 
+            vattrs.pop('name')
         dotv = pydot.Node(str(v), **vattrs)
         dotg.add_node(dotv)
 
     for e in graph.edges:
         u, v, weight = graph.edge_tuple(e)
         eattrs = {}
-        if _is_anyhashable_graph(graph):
-            eattrs.update({k: str(v) for k, v in graph.edge_attrs[e].items()})
-        elif graph.type.weighted:
+        eattrs.update({k: str(v) for k, v in graph.edge_attrs[e].items()})
+        if export_edge_weights:
             eattrs["weight"] = str(weight)
         dote = pydot.Edge(str(u), str(v), **eattrs)
         dotg.add_edge(dote)
