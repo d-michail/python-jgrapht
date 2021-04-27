@@ -28,8 +28,9 @@ class _HandleWrapper:
     def __del__(self):
         try: 
             backend.jgrapht_handles_destroy(self._handle)
-        except TypeError as err: 
+        except (TypeError, AttributeError): 
             # ignore error if backend is unloaded before we cleanup
+            # also ignore error if exception happens before superclass gets initialized
             pass
 
     def __repr__(self):
