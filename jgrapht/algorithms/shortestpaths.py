@@ -545,12 +545,29 @@ def contraction_hierarchies_dijkstra(
     if ch is None:
         ch = precompute_contraction_hierarchies(graph)
 
-    handle = _backend.jgrapht_ix_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
-        ch.handle,
-        _unwrap_vertex(graph, source_vertex),
-        _unwrap_vertex(graph, target_vertex),
-        radius,
-    )
+    if graph._backend_type == GraphBackend.REF_GRAPH:
+        handle = _backend.jgrapht_rx_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
+            ch.handle,
+            _unwrap_vertex(graph, source_vertex),
+            _unwrap_vertex(graph, target_vertex),
+            radius,
+        )
+    elif graph._backend_type == GraphBackend.LONG_GRAPH:
+        handle = _backend.jgrapht_lx_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
+            ch.handle,
+            _unwrap_vertex(graph, source_vertex),
+            _unwrap_vertex(graph, target_vertex),
+            radius,
+        )
+    elif graph._backend_type == GraphBackend.INT_GRAPH:
+        handle = _backend.jgrapht_ix_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(
+            ch.handle,
+            _unwrap_vertex(graph, source_vertex),
+            _unwrap_vertex(graph, target_vertex),
+            radius,
+        )
+    else:
+        raise ValueError("Graph backend not recognized")
 
     if handle is None:
         return None
