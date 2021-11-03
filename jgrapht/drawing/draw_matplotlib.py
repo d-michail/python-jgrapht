@@ -764,7 +764,7 @@ def layout(g, name=None, area=(0, 0, 10, 10), **kwargs):
     result = alg(g, area, **args)
     positions = {}
     for i, vertex in enumerate(g.vertices):
-        x, y = result.get_vertex_location(i)
+        x, y = result.get_vertex_location(vertex)
         positions[vertex] = (x, y)
 
     return positions
