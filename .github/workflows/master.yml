@@ -117,7 +117,7 @@ jobs:
         - { os: macos-10.15,  python-version: "3.6" }              
     steps:
     - name: Download artifacts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4.1.7
       with:
         name: wheel-${{matrix.config.os}}-${{matrix.config.python-version}}-artifact
         path: dist
