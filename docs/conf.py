@@ -48,10 +48,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 pygments_style = 'sphinx'
 todo_include_todos = False
 
-if on_rtd:
-    html_theme = 'default'
-else:
-    html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_rtd_theme'
+html_logo = '_static/logo.png'
 
 html_theme_options = {
     'canonical_url': '',
