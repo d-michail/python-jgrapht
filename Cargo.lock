@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "_jgrapht_rs"
-version = "2.0.0-rc.1"
+version = "2.0.0"
 dependencies = [
  "indexmap",
  "jgrapht",

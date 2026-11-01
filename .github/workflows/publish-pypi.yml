@@ -1,6 +1,6 @@
 name: Publish to PyPI
 
-# Triggered by pushing a tag like "v2.0.0rc1" -- the "v" is stripped and
+# Triggered by pushing a tag like "v2.0.0" -- the "v" is stripped and
 # checked against pyproject.toml's [project] version; the workflow fails
 # immediately on a mismatch, so a forgotten version bump can never publish
 # under the wrong name. This is the real release: it builds fresh wheels

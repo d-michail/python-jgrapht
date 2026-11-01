@@ -41,6 +41,6 @@ Checking the installation
 
   >>> import jgrapht as jg
   >>> jg.__version__
-  '2.0.0rc1'
+  '2.0.0'
   >>> jg.shortest_path(jg.path_graph(3), 0, 2).weight
   2.0

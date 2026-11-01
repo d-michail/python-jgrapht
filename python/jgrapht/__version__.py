@@ -2,7 +2,7 @@ __title__ = "JGraphT"
 __description__ = "Python bindings for the JGraphT graph library"
 __url__ = "https://github.com/d-michail/python-jgrapht-rs"
 
-__version__ = "2.0.0rc1"
+__version__ = "2.0.0"
 # Version of the underlying `jgrapht` Rust crate (https://github.com/d-michail/jgrapht-rs)
 # that this build was compiled against.
 __backend_version__ = "1.0.0"

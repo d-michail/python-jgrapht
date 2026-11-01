@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.0rc1] - 2026-10-31
+## [2.0.0] - 2026-11-01
 Complete rewrite on top of the Rust crate
 [`jgrapht`](https://crates.io/crates/jgrapht) ([source](https://github.com/d-michail/jgrapht-rs)). This is a breaking change from the 1.x
 series, which wrapped the GraalVM-built `jgrapht-capi` shared library.

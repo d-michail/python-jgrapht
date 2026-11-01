@@ -1,6 +1,6 @@
 [package]
 name = "_jgrapht_rs"
-version = "2.0.0-rc.1"
+version = "2.0.0"
 edition = "2024"
 rust-version = "1.88"
 description = "PyO3 native extension backing the jgrapht Python package (see pyproject.toml)"
