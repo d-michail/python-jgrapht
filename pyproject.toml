@@ -10,7 +10,7 @@ readme = "README.md"
 license = "EPL-2.0 OR LGPL-2.1-or-later"
 license-files = ["license-EPL.txt", "license-LGPL.txt"]
 requires-python = ">=3.10"
-urls = { Homepage = "https://github.com/d-michail/python-jgrapht-rs", Documentation = "https://python-jgrapht-rs.readthedocs.io", Repository = "https://github.com/d-michail/python-jgrapht-rs" }
+urls = { Homepage = "https://github.com/d-michail/python-jgrapht", Documentation = "https://python-jgrapht.readthedocs.io", Repository = "https://github.com/d-michail/python-jgrapht" }
 classifiers = [
     "Programming Language :: Rust",
     "Programming Language :: Python :: Implementation :: CPython",

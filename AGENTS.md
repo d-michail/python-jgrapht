@@ -4,7 +4,7 @@ Guidance for AI coding agents working in this repository.
 
 ## Project
 
-`python-jgrapht-rs` is the Python package `jgrapht` (2.0 series): PyO3 bindings for the
+`python-jgrapht` is the Python package `jgrapht` (2.0 series): PyO3 bindings for the
 [`jgrapht`](https://crates.io/crates/jgrapht) Rust crate, built with maturin. It is a complete
 rewrite and **not backward compatible** with the 1.x series (which wrapped `jgrapht-capi`).
 Licensed EPL-2.0 OR LGPL-2.1-or-later.
