@@ -3,7 +3,7 @@ name: Python JGraphT
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build-linux:

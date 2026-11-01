@@ -23,7 +23,7 @@
 
  6. Push the new meta-data to github::
 
-    git push --tags origin master
+    git push --tags origin main
 
     (where ``origin`` is the name of the
     ``github.com:d-michail/python-jgrapht`` repository.)
@@ -41,7 +41,7 @@
     git add jgrapht/__version__.py
     git add requirements/docself.txt
     git commit -m "Bump release version"
-    git push origin master
+    git push origin main
 
  12. Done
 
