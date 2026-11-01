@@ -1,7 +1,7 @@
 [![PyPI](https://img.shields.io/pypi/v/jgrapht)](https://pypi.org/project/jgrapht)
 [![Python](https://img.shields.io/pypi/pyversions/jgrapht)](https://pypi.org/project/jgrapht)
-[![CI](https://github.com/d-michail/python-jgrapht-rs/actions/workflows/CI.yml/badge.svg)](https://github.com/d-michail/python-jgrapht-rs/actions/workflows/CI.yml)
-[![Documentation Status](https://readthedocs.org/projects/python-jgrapht-rs/badge/?version=latest)](https://python-jgrapht-rs.readthedocs.io/en/latest/?badge=latest)
+[![CI](https://github.com/d-michail/python-jgrapht/actions/workflows/CI.yml/badge.svg)](https://github.com/d-michail/python-jgrapht/actions/workflows/CI.yml)
+[![Documentation Status](https://readthedocs.org/projects/python-jgrapht/badge/?version=latest)](https://python-jgrapht.readthedocs.io/en/latest/?badge=latest)
 [![License: EPL-2.0 OR LGPL-2.1+](https://img.shields.io/badge/license-EPL--2.0%20OR%20LGPL--2.1%2B-blue.svg)](license-EPL.txt)
 
 # Python-JGraphT
@@ -32,7 +32,7 @@ wrapped the GraalVM-built `jgrapht-capi` shared library. It is **not backward co
   spanning trees, maximum flow and minimum cuts, minimum-cost flow, matchings, connectivity and
   components, cycles and Eulerian tours, TSP heuristics, coloring, cliques and independent sets,
   isomorphism, centrality and other scores, clustering, planarity and drawing layouts, and more.
-  See the [API reference](https://python-jgrapht-rs.readthedocs.io/en/latest/api/index.html).
+  See the [API reference](https://python-jgrapht.readthedocs.io/en/latest/api/index.html).
 * **Generators:** structured families, random graphs, the 44 named graphs and NETGEN flow
   instances, as either graph class.
 * **Graph I/O:** CSV, DIMACS, DOT, GEXF, GML, graph6, GraphML, JSON and TSPLIB are read; all of
@@ -139,9 +139,9 @@ Use `maturin develop --release` for an optimized build. Rebuild after every chan
 
 ## Documentation
 
-Full documentation is at <https://python-jgrapht-rs.readthedocs.io>: an
-[API reference](https://python-jgrapht-rs.readthedocs.io/en/latest/api/index.html), tutorials, and an
-example gallery. (The documentation of the 1.x series is at <https://python-jgrapht.readthedocs.io>.)
+Full documentation is at <https://python-jgrapht.readthedocs.io>: an
+[API reference](https://python-jgrapht.readthedocs.io/en/latest/api/index.html), tutorials, and an
+example gallery.
 The sources are in [`docs/`](docs) (Sphinx) and [`examples/`](examples); design
 notes are in [`docs/design/`](docs/design). See [CHANGELOG.md](CHANGELOG.md) for what each release
 adds.

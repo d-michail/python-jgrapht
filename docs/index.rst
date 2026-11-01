@@ -51,7 +51,7 @@ Development
 
 Development happens in the following places.
 
- * https://github.com/d-michail/python-jgrapht-rs
+ * https://github.com/d-michail/python-jgrapht
  * https://github.com/d-michail/jgrapht-rs
  * https://github.com/jgrapht/jgrapht
 

@@ -5,7 +5,7 @@ edition = "2024"
 rust-version = "1.88"
 description = "PyO3 native extension backing the jgrapht Python package (see pyproject.toml)"
 license = "EPL-2.0 OR LGPL-2.1-or-later"
-repository = "https://github.com/d-michail/python-jgrapht-rs"
+repository = "https://github.com/d-michail/python-jgrapht"
 publish = false
 
 [lib]
