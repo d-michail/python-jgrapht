@@ -1,0 +1,37 @@
+[build-system]
+requires = ["maturin>=1,<2"]
+build-backend = "maturin"
+
+[project]
+name = "jgrapht"
+version = "2.0.0rc1"
+description = "Python bindings for the JGraphT graph library"
+readme = "README.md"
+license = "EPL-2.0 OR LGPL-2.1-or-later"
+license-files = ["license-EPL.txt", "license-LGPL.txt"]
+requires-python = ">=3.10"
+urls = { Homepage = "https://github.com/d-michail/python-jgrapht-rs", Documentation = "https://python-jgrapht-rs.readthedocs.io", Repository = "https://github.com/d-michail/python-jgrapht-rs" }
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+
+[project.optional-dependencies]
+test = ["pytest", "matplotlib", "networkx", "pydot"]
+plot = ["matplotlib"]
+networkx = ["networkx"]
+pydot = ["pydot"]
+docs = [
+    "sphinx>=7",
+    "sphinx-rtd-theme>=2",
+    "sphinx-gallery>=0.15",
+    "matplotlib",
+    "networkx",
+    "pydot",
+    "pillow",
+]
+
+[tool.maturin]
+python-source = "python"
+module-name = "jgrapht._jgrapht_rs"
+features = ["pyo3/extension-module"]

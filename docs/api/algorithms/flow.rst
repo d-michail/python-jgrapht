@@ -1,46 +1,36 @@
-
 .. _algorithms/flow:
 
-Flows
-*****
+Flow
+****
 
-Algorithms
-----------
+.. currentmodule:: jgrapht
 
-We are given a weighted directed or undirected graph :math:`G(V,E)`. Each edge :math:`e \in E` has 
-an associated non-negative capacity :math:`c_e \ge 0`. The maximum flow problem involves 
-finding a feasible flow :math:`f: E \mapsto \mathbb{R}_{0+}` of maximum value.
-A flow is feasible if:
+Maximum flow (Dinic, Edmonds-Karp, push-relabel, Boykov-Kolmogorov) with edge weights as
+capacities, and minimum-cost flow with integer supplies and capacities.
 
- * the flow :math:`f(e)` of an edge :math:`e` does not exceed its capacity, and 
- * for each vertex except the source and sink, the sum of incoming flows is equal to the sum 
-   of outgoing flows.
+Example
+=======
 
-Computing maximum s-t flows can be performed using the following function.
+.. code-block:: pycon
 
-.. autofunction:: jgrapht.algorithms.flow.max_st_flow
+  >>> import jgrapht as jg
+  >>> g = jg.Graph(directed=True, weighted=True)
+  >>> for v in 'stab':
+  ...     _ = g.add_vertex(v)
+  >>> for u, v, c in [('s', 'a', 3.0), ('s', 'b', 2.0), ('a', 'b', 1.0), ('a', 't', 2.0), ('b', 't', 3.0)]:
+  ...     _ = g.add_edge(u, v, weight=c)
+  >>> flow = jg.maximum_flow(g, 's', 't')
+  >>> flow.value
+  5.0
+  >>> jg.maximum_flow(g, 's', 't', algorithm='push_relabel').value
+  5.0
 
-When the user requires more advanced control over the selected 
-algorithm, the following functions are provided.
+Functions
+=========
 
-.. automodule:: jgrapht.algorithms.flow
-   :members: push_relabel, dinic, edmonds_karp
-
-Computing maximum flow values between all pairs of vertices in an undirected network can 
-be performed using:
-
-.. autofunction:: jgrapht.algorithms.flow.equivalent_flow_tree_gusfield
-
-
-Types
------
-
-Flows are represented using instances of the following classes.
-
-.. autoclass:: jgrapht.types.Flow
+.. autofunction:: maximum_flow
+.. autoclass:: MaximumFlow
    :members:
-
-   This is a dictionary from edges to double values.   
-
-.. autoclass:: jgrapht.types.EquivalentFlowTree
+.. autofunction:: minimum_cost_flow
+.. autoclass:: MinimumCostFlow
    :members:

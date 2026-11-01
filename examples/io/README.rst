@@ -1,8 +1,6 @@
-
 .. _general_examples/io:
 
-Input/Output
-------------
+Reading and writing
+-------------------
 
-This gallery shows some basic uses of importer/exporters.
-
+Round trips through the file formats, attributes and event streams.

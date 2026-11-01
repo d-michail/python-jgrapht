@@ -1,26 +1,30 @@
-
 .. _algorithms/tour:
 
-Tour
-****
+Tours
+*****
 
-Algorithms
-----------
+.. currentmodule:: jgrapht
 
-The travelling salesman problem (TSP) asks the following question: "Given a list of cities and
-the distances between each pair of cities, what is the shortest possible route that visits each
-city exactly once and returns to the origin city?".
+Traveling salesman heuristics (nearest neighbor, greedy, insertion, Christofides, 2-opt),
+exact Held-Karp, and Hamiltonian cycles and paths.
 
-The following algorithms are available:
+Example
+=======
 
-.. automodule:: jgrapht.algorithms.tour
-   :members:
+.. code-block:: pycon
 
-Types
------
+  >>> import jgrapht as jg
+  >>> g = jg.complete_graph(6)
+  >>> tour = jg.traveling_salesman_tour(g)
+  >>> len(tour.vertices)
+  7
+  >>> jg.hamiltonian_cycle(g) is not None
+  True
 
-Tours are represented with instances of :py:class:`.GraphPath`.
+Functions
+=========
 
-.. autoclass:: jgrapht.types.GraphPath
-   :members:
-   :noindex:
+.. autofunction:: traveling_salesman_tour
+.. autofunction:: hamiltonian_cycle
+.. autofunction:: hamiltonian_path
+.. autofunction:: improve_tour

@@ -1,45 +1,58 @@
-.. jgrapht documentation master file, created by
-   sphinx-quickstart on Thu Apr 23 10:34:24 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. JGraphT documentation master file.
 
 The JGraphT library
 ===================
 
 Release v\ |version|.
 
-Python bindings for the `JGraphT graph library <https://jgrapht.org/>`_.
+Python bindings for the `jgrapht <https://crates.io/crates/jgrapht>`__ Rust crate.
 
-The JGraphT library is a highly efficient graph library, written in Java, containing
-state-of-the-art graph data-structures as well as a multitude of sophisticated
-graph algorithms. It has been in development for many years already and is currently used
-in production both in research and industry. 
-
-The |Bindings| is a pure python/native package having no dependency on the JVM. During the
-build process the backend JGraphT library is compiled as a shared library and bundled
-inside the python package.
+JGraphT is a highly efficient graph library containing state-of-the-art graph data structures and
+a multitude of sophisticated graph algorithms. It has been developed for many years in Java and is
+used in production both in research and in industry. The ``jgrapht`` crate is its port to Rust, and the
+|Bindings| is a native Python extension built on it with `PyO3 <https://pyo3.rs>`_. It needs no Java
+virtual machine.
 
 Backend version v\ |BackendVersion|.
 
 Audience
 --------
 
-The audience of the library is any user who needs to use graphs or networks in their every 
-day work, including engineers and researchers either from the industry or academia.
+Anyone who needs graphs or networks in their everyday work: engineers and researchers from industry
+or academia, who want a fast library with a broad set of algorithms and a Pythonic interface.
 
-Why another library?
---------------------
+At a glance
+-----------
 
-Well, this is not really a new library. This is just making a library cross boundaries between 
-two different programming worlds.
+* A mutable :class:`~jgrapht.Graph` whose vertices and edges are **any hashable objects**, and a
+  compact immutable :class:`~jgrapht.SparseGraph` on the integers ``0..n-1``. Every algorithm works
+  with both.
+* About two hundred **algorithms**: shortest paths, spanning trees, flows and cuts, matchings,
+  connectivity, cycles and tours, coloring, cliques, isomorphism, centrality, clustering, planarity,
+  layouts and more.
+* **Generators** for structured, random and famous graphs.
+* **Reading and writing** CSV, DIMACS, DOT, GEXF, GML, graph6, GraphML, JSON, TSPLIB and more, with
+  attributes.
+
+.. code-block:: python
+
+    import jgrapht as jg
+
+    g = jg.Graph(weighted=True)
+    for v in "abcd":
+        g.add_vertex(v)
+    g.add_edge("a", "b", weight=1.0)
+    g.add_edge("b", "c", weight=2.0)
+    g.add_edge("c", "d", weight=1.0)
+    jg.shortest_path(g, "a", "d")   # GraphPath(vertices=['a', 'b', 'c', 'd'], weight=4.0)
 
 Development
 -----------
 
 Development happens in the following places.
 
- * https://github.com/d-michail/python-jgrapht 
- * https://github.com/jgrapht/jgrapht-capi
+ * https://github.com/d-michail/python-jgrapht-rs
+ * https://github.com/d-michail/jgrapht-rs
  * https://github.com/jgrapht/jgrapht
 
 

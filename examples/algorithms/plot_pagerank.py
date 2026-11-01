@@ -1,60 +1,30 @@
-# -*- coding: utf-8 -*-
-
 """
-PageRank
-========
+PageRank and other scores
+=========================
 
-In this example we create a directed graph and compute PageRank. The graph
-is the same as in the `wikipedia <https://en.wikipedia.org/wiki/PageRank>`_.
-
-.. image :: https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/PageRanks-Example.jpg/1024px-PageRanks-Example.jpg 
-
+Rank the vertices of a small web graph.
 """
 
 # %%
-# Start by importing the package
+# Four pages link to each other; page ``0`` is linked to by all the others.
 
-import jgrapht
-import jgrapht.algorithms.scoring as scoring
+import jgrapht as jg
 
-# %%
-# Creating a graph is done using the factory method. By default graphs are directed
-# and weighted.
-
-g = jgrapht.create_graph()
-
-# %%
-# We can add vertices by providing their identifier. The method returns `True` if the 
-# vertex was added, `False` otherwise. Identifiers of vertices and edges are always
-# integers.
-
-for v in range(0, 11):
+g = jg.Graph(directed=True)
+for v in range(4):
     g.add_vertex(v)
-
-# %% 
-# Our graph's vertex set now looks like
-
-print (g.vertices)
+for u, v in [(1, 0), (2, 0), (3, 0), (0, 1), (2, 1)]:
+    g.add_edge(u, v)
 
 # %%
-# We also add the edges
+# PageRank gives a dictionary from vertex to score; the scores sum to one.
 
-g.add_edges_from([(1, 2), (2, 1), (3, 0), (3, 1), (4, 1), (4, 3), (4, 5), (5, 1), (5, 4),
-   (6, 1), (6, 4), (7, 1),  (7, 4), (8, 1),  (8, 4), (9, 4), (10, 4)])
-
-# %%
-# We now have the following edges
-
-print(g.edges)
+pr = jg.pagerank(g)
+for v, score in sorted(pr.items(), key=lambda item: -item[1]):
+    print(v, round(score, 3))
 
 # %%
-# Execute Pagerank using
-pagerank = scoring.pagerank(g)
+# Other scores work the same way.
 
-# %%
-# The returned object is a dictionary from vertices to floating point values.
-# Let us store it in a list
-
-result = [pagerank[v] for v in g.vertices]
-print(result)
-
+print(jg.closeness_centrality(g))
+print(jg.betweenness_centrality(g))

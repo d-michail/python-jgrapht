@@ -1,77 +1,31 @@
-# -*- coding: utf-8 -*-
-
 """
-Coloring
-========
+Graph coloring
+==============
 
-In this example we color a graph using a greedy algorithm which 
-uses saturation degree ordering. The saturation degree of a vertex
-is defined as the number of different colors to which it is adjacent.
-The algorithm always selects the vertex with the largest saturation degree.
+Color the vertices of a graph so that no two adjacent vertices share a color, using few colors.
 """
 
-# %%
-# Start by importing the package.
-
-import jgrapht
-from jgrapht.algorithms.coloring import greedy_dsatur
-
-# %%
-# We create a graph which has 3 communities.
-
-g = jgrapht.create_graph(directed=False)
-
-for i in range(16):
-    g.add_vertex(i)
-
-g.add_edge(0, 1)
-g.add_edge(1, 2)
-g.add_edge(2, 3)
-g.add_edge(3, 4)
-g.add_edge(1, 3)
-g.add_edge(1, 4)
-
-g.add_edge(5, 6)
-g.add_edge(6, 7)
-g.add_edge(7, 8)
-g.add_edge(8, 9)
-g.add_edge(9, 10)
-g.add_edge(5, 8)
-g.add_edge(5, 10)
-
-g.add_edge(11, 12)
-g.add_edge(12, 13)
-g.add_edge(13, 14)
-g.add_edge(11, 15)
-g.add_edge(12, 15)
-
-g.add_edge(1, 5)
-g.add_edge(9, 11)
-
-print(g)
-
-# %%
-# Then, we execute the greedy coloring algorithm.
-
-num_colors, color_map = greedy_dsatur(g)
-
-print(num_colors)
-print(color_map)
-
-# %%
-# We next plot the graph with the colors. 
-
-int_to_actual_color = { 0: 'orangered', 1: 'lightsteelblue', 2: 'lightgreen' }
-vertex_color = [ int_to_actual_color[color_map[v]] for v in g.vertices ]
-vertex_labels = {v:str(v) for v in g.vertices}
-
-import jgrapht.drawing.draw_matplotlib as drawing
 import matplotlib.pyplot as plt
 
-positions = drawing.layout(g, name="fruchterman_reingold", seed=17)
+import jgrapht as jg
+from jgrapht import drawing
 
-drawing.draw_jgrapht_vertices(g, positions=positions, vertex_color=vertex_color)
-drawing.draw_jgrapht_vertex_labels(g, positions=positions, labels=vertex_labels)
-drawing.draw_jgrapht_edges(g, positions=positions)
+g = jg.named_graph("petersen")
 
+# %%
+# The greedy algorithms are fast but may use more colors than needed. The result is the number of
+# colors and a dictionary from vertex to color.
+
+for algorithm in ["greedy", "largest_degree_first", "saturation_degree", "brown_backtrack"]:
+    k, colors = jg.coloring(g, algorithm)
+    print(f"{algorithm:22s} {k} colors")
+
+# %%
+# The backtracking algorithm is exact: it finds the chromatic number. Draw its coloring.
+
+k, colors = jg.coloring(g, "brown_backtrack")
+palette = ["tomato", "mediumseagreen", "royalblue", "gold", "orchid", "darkorange"]
+pos = jg.circular_layout(g)
+drawing.draw(g, pos, vertex_color={v: palette[c] for v, c in colors.items()})
 plt.show()
+print(jg.is_proper_coloring(g, colors))

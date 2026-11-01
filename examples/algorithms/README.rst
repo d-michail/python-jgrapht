@@ -1,8 +1,6 @@
-
 .. _general_examples/algorithms:
 
 Algorithms
 ----------
 
-This gallery shows some basic uses of algorithms.
-
+Shortest paths, components, matchings and scores on small graphs.

@@ -1,22 +1,29 @@
-
 .. _algorithms/planar:
 
-Planar
-******
+Planarity
+*********
 
-Algorithms
-----------
+.. currentmodule:: jgrapht
 
-The following algorithms are available:
+Planarity testing with the Boyer-Myrvold algorithm. A planar graph comes with an embedding, a
+non-planar one with a Kuratowski subdivision as the certificate.
 
-.. automodule:: jgrapht.algorithms.planar
-   :members:
+Example
+=======
 
+.. code-block:: pycon
 
-Types
------
+  >>> import jgrapht as jg
+  >>> jg.is_planar(jg.grid_graph(3, 3))
+  True
+  >>> jg.is_planar(jg.complete_graph(5))
+  False
+  >>> jg.is_planar(jg.complete_bipartite_graph(3, 3))
+  False
 
-Combinatorial embeddings are represented using instances of the following class.
+Functions
+=========
 
-.. autoclass:: jgrapht.types.PlanarEmbedding
-   :members:
+.. autofunction:: is_planar
+.. autofunction:: planar_embedding
+.. autofunction:: kuratowski_subdivision

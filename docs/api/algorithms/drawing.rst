@@ -1,19 +1,30 @@
-
 .. _algorithms/drawing:
 
-Drawing
+Layouts
 *******
 
-Algorithms
-----------
+.. currentmodule:: jgrapht
 
-.. automodule:: jgrapht.algorithms.drawing
-   :members:
+Two-dimensional layouts that assign coordinates to vertices (circular, random,
+Fruchterman-Reingold). To draw a graph with these positions see :doc:`../drawing`, or pass them to
+any other plotting package.
 
-Types
------
+Example
+=======
 
-The result of the 2D drawing algorithms are instances of the following class.
+.. code-block:: pycon
 
-.. autoclass:: jgrapht.types.LayoutModel2D
-   :members:
+  >>> import jgrapht as jg
+  >>> g = jg.ring_graph(4)
+  >>> pos = jg.circular_layout(g)
+  >>> {v: (round(x, 2), round(y, 2)) for v, (x, y) in pos.items()}
+  {3: (-0.0, -1.0), 0: (1.0, 0.0), 1: (0.0, 1.0), 2: (-1.0, 0.0)}
+
+Functions
+=========
+
+.. autofunction:: circular_layout
+.. autofunction:: random_layout
+.. autofunction:: layout_2d
+.. autofunction:: rescale_layout
+.. autofunction:: fruchterman_reingold_layout

@@ -1,0 +1,23 @@
+[package]
+name = "_jgrapht_rs"
+version = "2.0.0-rc.1"
+edition = "2024"
+rust-version = "1.88"
+description = "PyO3 native extension backing the jgrapht Python package (see pyproject.toml)"
+license = "EPL-2.0 OR LGPL-2.1-or-later"
+repository = "https://github.com/d-michail/python-jgrapht-rs"
+publish = false
+
+[lib]
+name = "_jgrapht_rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.29", features = ["extension-module", "num-bigint", "multiple-pymethods"] }
+indexmap = "2"
+rand = "0.9"
+jgrapht = "1.0.0"
+jgrapht-io = "1.0.0"
+
+[profile.release]
+lto = true

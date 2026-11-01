@@ -1,0 +1,81 @@
+name: Python JGraphT
+
+# Build and test machinery only -- no publishing step yet. When the project
+# is ready to release, add a job here (or a separate workflow) that uploads
+# the wheel/sdist artifacts produced below to PyPI, gated on a tag push.
+
+on:
+  # Automatic triggers disabled; run manually from the Actions tab.
+  workflow_dispatch:
+
+jobs:
+  rust-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: cargo check
+        run: cargo check --all-targets
+
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-15]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      # The manylinux build runs inside a container with its own Python
+      # interpreters, unrelated to the host's actions/setup-python install,
+      # so it needs an explicit -i to pick the matching one. Windows/macOS
+      # build natively and pick up whichever Python setup-python just put on
+      # PATH automatically -- no -i flag there (its pythonX.Y naming isn't
+      # portable to Windows anyway).
+      - name: Build wheel (Linux, manylinux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: PyO3/maturin-action@v1
+        with:
+          target: x86_64
+          manylinux: auto
+          args: --release --out dist -i python${{ matrix.python-version }}
+      - name: Build wheel (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
+        uses: PyO3/maturin-action@v1
+        with:
+          args: --release --out dist
+      - name: Install wheel and run tests
+        shell: bash
+        run: |
+          pip install --upgrade pip
+          pip install dist/*.whl
+          pip install pytest matplotlib networkx pydot
+          pytest
+      - name: Upload wheel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: dist/*.whl
+          if-no-files-found: error
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build docs
+        run: |
+          pip install --upgrade pip
+          pip install -e ".[docs]"
+          make -C docs html
+      - name: Upload docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-html
+          path: docs/_build/html

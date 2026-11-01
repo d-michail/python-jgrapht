@@ -1,46 +1,78 @@
 .. _tutorials/sparse_graph:
 
-.. currentmodule:: jgrapht
-
-Sparse graph tutorial
+The SparseGraph class
 =====================
 
-The sparse graph is a special implementation of a graph with integer vertices and edges.
-It has two main restrictions which are: 
+.. currentmodule:: jgrapht
 
-  * the graph is unmodifiable and thus needs to be bulk-loaded, 
-  * the vertices and edges are integers continously numbered in :math:`[0, n)` and 
-    :math:`[0, m)` where :math:`n` and :math:`m` are the total number of vertices
-    and edges respectively.
+:class:`~jgrapht.SparseGraph` is a compact, immutable graph. It has two restrictions:
 
-These two restrictions are translated to two main benefits which are:
+* the graph cannot be modified, so it is **bulk-loaded** from an edge list;
+* vertices are the integers ``0..n-1`` and edges the integers ``0..m-1``, numbered in the order of
+  the edge list.
 
-  * the graph has small memory footprint, and 
-  * the graph is usually much faster, mostly due to its cache-friendly representation on 
-    modern machines.
-
-From the above discussion it should be clear that they are best suited for static workloads
-where the user needs to load a graph and run (once or multiple times) some complex algorithm. 
-Note also that bulk-loading a sparse graph is usually much faster than adding edges one by 
-one in the default graph.
+In return it uses little memory and is usually faster, because its representation is friendly to
+modern caches. It is the right choice when you load a graph once and run algorithms on it.
 
 Creating a sparse graph
 -----------------------
 
-Sparse graphs must be bulk-loaded using edge lists. 
+.. code-block:: pycon
 
-.. nbplot::
+  >>> import jgrapht as jg
+  >>> edges = [(0, 1), (0, 2), (1, 3), (2, 3), (3, 4)]
+  >>> g = jg.SparseGraph(5, edges, directed=True)
+  >>> g
+  SparseGraph(directed=True, weighted=False, vertices=5, edges=5)
 
-  >>> import jgrapht
-  >>> edgelist = [(0, 1), (0, 2), (0, 3), (1, 3), (2, 3), (2, 4), (2, 5), (0, 4), (2, 6)]
-  >>> g = jgrapht.create_sparse_graph(edgelist, 7, directed=True, weighted=False)
+The first argument is the number of vertices. For a weighted graph give the weights, one per edge.
 
-The first parameter is the list of tuples `(u,v)`. In case a weighted graph is requested, then
-the tuples must be `(u,v,weight)`. Note that while sparse graphs are unmodifiable w.r.t. their
-structure, the edge weights can be modified. The second parameter is the number of vertices in the
-graph. Vertices always start from zero and increase continously. If the user does not provide one,
-then it will be deduced by reading the edge list. Finally, the sparse graph representation always
-allows self-loops and multiple-edges.
+.. code-block:: pycon
 
+  >>> w = jg.SparseGraph(5, edges, directed=True, weights=[1.0, 4.0, 2.0, 1.0, 3.0])
+  >>> w.weighted
+  True
+  >>> jg.shortest_path(w, 0, 4)
+  GraphPath(vertices=[0, 1, 3, 4], weight=6.0)
 
+Queries
+-------
+
+Queries return integers, and the edge ``i`` is the ``i``-th pair of the edge list.
+
+.. code-block:: pycon
+
+  >>> g.vertex_count(), g.edge_count()
+  (5, 5)
+  >>> g.edge_source(3), g.edge_target(3)
+  (2, 3)
+  >>> g.out_edges_of(0)
+  [0, 1]
+  >>> g.neighbors_of(3)
+  [4, 1, 2]
+
+The only mutation is changing a weight:
+
+.. code-block:: pycon
+
+  >>> w.set_edge_weight(0, 10.0)
+  >>> jg.shortest_path(w, 0, 4).edges
+  [1, 3, 4]
+
+From and to other graphs
+------------------------
+
+.. code-block:: pycon
+
+  >>> h = jg.Graph(directed=True)
+  >>> for v in range(3):
+  ...     _ = h.add_vertex(v)
+  >>> _ = h.add_edge(0, 1); _ = h.add_edge(1, 2)
+  >>> jg.parse_graph(jg.graph_to_string(h, 'csv', variant='edge_list', vertex_id=str), 'csv',
+  ...                variant='edge_list', directed=True, sparse=True, vertex_factory=None)
+  SparseGraph(directed=True, weighted=False, vertices=3, edges=2)
+
+Readers take ``sparse=True`` to build a sparse graph directly, and every generator accepts
+``sparse=True``. Because a sparse graph is a multigraph by type, algorithms that insist on simple
+graphs (VF2 isomorphism, graph6 export, ...) reject it; see their documentation.
 

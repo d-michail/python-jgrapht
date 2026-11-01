@@ -1,57 +1,36 @@
-# -*- coding: utf-8 -*-
-
 """
-Vertex Cover
+Vertex cover
 ============
 
-In this example we demostrate how to compute a vertex cover in an
-undirected graph.
+A vertex cover is a set of vertices that touches every edge. Find a small one.
 """
 
-# %%
-# Start by importing the package.
-
-import jgrapht
-import jgrapht.algorithms.vertexcover as vc
-import jgrapht.drawing.draw_matplotlib as drawing
 import matplotlib.pyplot as plt
 
-# %%
-# We start by creating a "star" graph.
+import jgrapht as jg
+from jgrapht import drawing
 
-g = jgrapht.create_graph(directed=False, weighted=False)
-
-for i in range(11):
-    g.add_vertex(i)
-
-for i in range(10):
-    g.add_edge(i, 10)
-
-print(g)
+g = jg.named_graph("petersen")
 
 # %%
-# Then, we execute the 2-approximation algorithm of R. Bar-Yehuda and S. Even.
+# Each algorithm returns the weight of the cover and its vertices. The greedy algorithm is quick,
+# and the two-approximation is guaranteed to be at most twice the optimum.
 
-weight, vertex_cover = vc.baryehuda_even(g)
-
-# %%
-# The result is a tuple which contains the weight and the vertex cover.
-# Although it failed to find the optimum which is 1.0, the returned solution is 
-# at most twice the optimum.
-# 
-print('Vertex cover weight: {}'.format(weight))
-print('Vertex cover: {}'.format(vertex_cover))
-
+for algorithm in ["greedy", "two_approximation", "edge_based_two_approximation"]:
+    weight, cover = jg.vertex_cover(g, algorithm)
+    print(f"{algorithm:30s} {len(cover)} vertices, valid: {jg.is_vertex_cover(g, cover)}")
 
 # %%
-# Ploting the graph using separate color for the vertices in the vertex cover.
-positions = drawing.layout(g, name="fruchterman_reingold", seed=17)
+# Draw the greedy cover in red.
 
-drawing.draw_jgrapht_vertices(g, positions=positions, vertex_list=vertex_cover, vertex_color='red')
-
-non_vertex_cover = g.vertices - vertex_cover
-drawing.draw_jgrapht_vertices(g, positions=positions, vertex_list=non_vertex_cover, vertex_color='gray')
-
-drawing.draw_jgrapht_edges(g, positions=positions)
-
+weight, cover = jg.vertex_cover(g)
+pos = jg.circular_layout(g)
+drawing.draw(g, pos, vertex_color={v: "crimson" if v in cover else "lightgray" for v in g.vertices()})
 plt.show()
+
+# %%
+# For a bipartite graph there is an exact algorithm.
+
+b = jg.complete_bipartite_graph(3, 5)
+weight, cover = jg.vertex_cover(b, "bipartite")
+print(sorted(cover))

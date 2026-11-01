@@ -1,18 +1,21 @@
-
 .. _algorithms/index:
 
 Algorithms
 **********
 
-.. currentmodule:: jgrapht.algorithms
+.. currentmodule:: jgrapht
 
-The JGraphT contains a large collection of advanced algorithms.
+|Project| contains a large collection of graph algorithms. They are plain functions of the
+:mod:`jgrapht` module, grouped here by family. Every function accepts a :class:`Graph` or a
+:class:`SparseGraph`, and vertices and edges in results are the objects of the graph passed in.
+Algorithms that come in several variants take the variant as a string, for example
+``shortest_path(g, s, t, algorithm="bellman_ford")``.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   connectivity
    shortestpaths
+   connectivity
    spanning
    cycles
    coloring
@@ -23,10 +26,10 @@ The JGraphT contains a large collection of advanced algorithms.
    cuts
    matching
    flow
-   drawing
    isomorphism
    tour
    cliques
-   independent
-   vertexcover
-   
+   decompositions
+   drawing
+   transformations
+   graphclasses

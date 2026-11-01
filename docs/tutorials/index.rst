@@ -5,15 +5,14 @@ Tutorials
 
 .. currentmodule:: jgrapht
 
-Three different tutorials help you start using the basic graph implementations that 
-the |Bindings| provide.
+The tutorials build graphs step by step. Start with *Getting started*; the others go into more detail.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   default_graph
+   getting_started
+   graph
    sparse_graph
-   succinct_graph
-   any_graph
-   
-
+   algorithms
+   generators
+   io

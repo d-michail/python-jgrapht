@@ -1,9 +1,0 @@
-[run]
-omit =
-  jgrapht/backend.py
-  jgrapht/types.py
-  tests/*
-  .tox/*
-
-[report]
-ignore_errors = True

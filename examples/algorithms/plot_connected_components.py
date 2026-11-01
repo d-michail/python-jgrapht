@@ -1,68 +1,38 @@
-# -*- coding: utf-8 -*-
-
 """
-Connected Components
+Connected components
 ====================
 
-In this example we demostrate how to find connected components in undirected
-graphs.
+Find the components of an undirected graph, and the strongly connected components of a directed one.
 """
 
 # %%
-# Start by importing the package.
+# A graph with three components: a triangle, a path and an isolated vertex.
 
-import jgrapht
-import jgrapht.algorithms.connectivity as cc
-import jgrapht.drawing.draw_matplotlib as drawing
-import matplotlib.pyplot as plt
+import jgrapht as jg
 
-# %%
-# We start by creating a graph with 4 connected components. 
+g = jg.Graph()
+for v in range(8):
+    g.add_vertex(v)
+for u, v in [(0, 1), (1, 2), (2, 0), (3, 4), (4, 5)]:
+    g.add_edge(u, v)
 
-g = jgrapht.create_graph(directed=False, weighted=True)
-
-for i in range(11):
-    g.add_vertex(i)
-
-g.add_edge(0, 1)
-g.add_edge(1, 2)
-g.add_edge(2, 3)
-
-g.add_edge(4, 5)
-g.add_edge(5, 6)
-g.add_edge(6, 7)
-
-g.add_edge(8, 9)
-
-print(g)
+print(jg.connected_components(g))
+print(jg.is_connected(g))
 
 # %%
-# Then, we execute the connected components algorithm.
+# Articulation points and bridges tell where the graph is fragile.
 
-is_connected, connected_components_it = cc.is_connected(g)
-connected_components = list(connected_components_it)
-
-# %%
-# The result is a tuple which contains whether the graph is connected and 
-# an iterator over the connected components.
-# 
-print('is connected: {}'.format(is_connected))
-
-for i, cc in enumerate(connected_components):
-    print('Connected component {}: {}'.format(i, cc))
-
+print(jg.articulation_points(g))
+print(jg.bridges(g))
 
 # %%
-# Ploting the graph with a circular layout and separate color per connected
-# component.
-positions = drawing.layout(g, name="circular", seed=17)
+# For a directed graph the strongly connected components are the maximal sets of mutually
+# reachable vertices. The condensation collapses each component to a vertex.
 
-vertex_labels = {v:str(v) for v in g.vertices}
-colors = ['red', 'blue', 'green', 'yellow']
-for cc, color in zip(connected_components, colors):
-    drawing.draw_jgrapht_vertices(g, positions=positions, vertex_list=cc, vertex_color=color)
+d = jg.Graph(directed=True)
+for v in range(5):
+    d.add_vertex(v)
+for u, v in [(0, 1), (1, 0), (1, 2), (2, 3), (3, 2), (3, 4)]:
+    d.add_edge(u, v)
 
-drawing.draw_jgrapht_vertex_labels(g, positions=positions, labels=vertex_labels)
-drawing.draw_jgrapht_edges(g, positions=positions)
-
-plt.show()
+print(jg.strongly_connected_components(d))

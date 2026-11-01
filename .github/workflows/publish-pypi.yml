@@ -1,0 +1,125 @@
+name: Publish to PyPI
+
+# Triggered by pushing a tag like "v2.0.0rc1" -- the "v" is stripped and
+# checked against pyproject.toml's [project] version; the workflow fails
+# immediately on a mismatch, so a forgotten version bump can never publish
+# under the wrong name. This is the real release: it builds fresh wheels
+# (installing and testing each one before it's trusted), then uploads
+# everything to the real PyPI index using PYPI_API_TOKEN.
+#
+# See publish-testpypi.yml for the manually-triggered dry run of this same
+# pipeline against test.pypi.org -- run that first to validate a release
+# before ever pushing a tag here.
+#
+# The publish job targets the "pypi" GitHub environment. Configuring that
+# environment in the repo's Settings -> Environments (e.g. required
+# reviewers, or restricting it to protected/tag refs) adds a manual approval
+# gate in front of every real publish; until then it behaves like any other
+# job.
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify the tag matches pyproject.toml's version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PROJECT_VERSION=$(grep -m1 '^version = ' pyproject.toml | sed -E 's/version = "(.*)"/\1/')
+          echo "tag version:            $TAG_VERSION"
+          echo "pyproject.toml version: $PROJECT_VERSION"
+          if [ "$TAG_VERSION" != "$PROJECT_VERSION" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match pyproject.toml version $PROJECT_VERSION -- update pyproject.toml and Cargo.toml, commit, and re-tag."
+            exit 1
+          fi
+
+  build-wheels:
+    needs: check-version
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-15]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Build wheel (Linux, manylinux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: PyO3/maturin-action@v1
+        with:
+          target: x86_64
+          manylinux: auto
+          args: --release --out dist -i python${{ matrix.python-version }}
+      - name: Build wheel (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
+        uses: PyO3/maturin-action@v1
+        with:
+          args: --release --out dist
+      - name: Install wheel and run tests
+        shell: bash
+        run: |
+          pip install --upgrade pip
+          pip install dist/*.whl
+          pip install pytest
+          pytest
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: dist/*.whl
+          if-no-files-found: error
+
+  build-sdist:
+    needs: check-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build sdist
+        uses: PyO3/maturin-action@v1
+        with:
+          command: sdist
+          args: --out dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+  publish-pypi:
+    needs: [build-wheels, build-sdist]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/jgrapht/
+    steps:
+      - name: Download wheels
+        uses: actions/download-artifact@v4
+        with:
+          pattern: wheel-*
+          path: dist
+          merge-multiple: true
+      - name: Download sdist
+        uses: actions/download-artifact@v4
+        with:
+          name: sdist
+          path: dist
+      - name: List artifacts to publish
+        run: ls -la dist
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          packages-dir: dist

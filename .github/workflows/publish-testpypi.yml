@@ -1,0 +1,174 @@
+name: Publish to TestPyPI (manual test)
+
+# Manually triggered only -- from the Actions tab ("Run workflow" on this
+# workflow) or `gh workflow run publish-testpypi.yml`. It never runs on a
+# push, pull request, or tag.
+#
+# Every run publishes under a synthesized "<version>.devN" version (N = this
+# run's number), never the bare version in pyproject.toml, so:
+#   - repeated manual test runs never collide with an already-uploaded
+#     TestPyPI version, and
+#   - nothing here can ever claim the real release version number, on
+#     TestPyPI or (since it only ever talks to test.pypi.org) the real index.
+#
+# The distribution name defaults to jgrapht; the package_name input overrides it for a dry run when
+# that name on TestPyPI belongs to another account.
+#
+# This does not publish to the real PyPI. When the project is ready for an
+# actual release, add a tag-triggered workflow using PYPI_API_TOKEN and
+# https://upload.pypi.org/legacy/ instead -- most of the job structure below
+# can be copied directly.
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_name:
+        description: >-
+          Name to publish under on TestPyPI. Leave as jgrapht for the real name; use another name
+          (for example jgrapht-rs) when jgrapht is owned by a different TestPyPI account. Only the
+          distribution name changes: the package is still imported as jgrapht.
+        required: false
+        default: jgrapht
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compute a unique test version
+        id: version
+        run: |
+          BASE_VERSION=$(grep -m1 '^version = ' pyproject.toml | sed -E 's/version = "(.*)"/\1/')
+          echo "version=${BASE_VERSION}.dev${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+
+  build-wheels:
+    needs: prepare
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-15]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Set the test version
+        # Only pyproject.toml -- maturin uses its static [project] version
+        # for the wheel's metadata directly and doesn't require Cargo.toml's
+        # version to match. Cargo.toml's version must stay valid semver
+        # (X.Y.Z, hyphen-separated prerelease), which a PEP 440 ".devN"
+        # suffix is not, so leave it untouched.
+        shell: python
+        env:
+          PACKAGE_NAME: ${{ inputs.package_name }}
+        run: |
+          import os
+          import re
+          import pathlib
+
+          version = "${{ needs.prepare.outputs.version }}"
+          name = os.environ.get("PACKAGE_NAME") or "jgrapht"
+          assert re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", name), f"bad package name {name!r}"
+          path = pathlib.Path("pyproject.toml")
+          text = path.read_text()
+          text, count = re.subn(
+              r'(?m)^version = ".*"$', f'version = "{version}"', text, count=1
+          )
+          assert count == 1, "could not find a version line in pyproject.toml"
+          text, count = re.subn(r'(?m)^name = ".*"$', f'name = "{name}"', text, count=1)
+          assert count == 1, "could not find a name line in pyproject.toml"
+          path.write_text(text)
+      - name: Build wheel (Linux, manylinux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: PyO3/maturin-action@v1
+        with:
+          target: x86_64
+          manylinux: auto
+          args: --release --out dist -i python${{ matrix.python-version }}
+      - name: Build wheel (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
+        uses: PyO3/maturin-action@v1
+        with:
+          args: --release --out dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: dist/*.whl
+          if-no-files-found: error
+
+  build-sdist:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set the test version
+        # Only pyproject.toml -- maturin uses its static [project] version
+        # for the wheel's metadata directly and doesn't require Cargo.toml's
+        # version to match. Cargo.toml's version must stay valid semver
+        # (X.Y.Z, hyphen-separated prerelease), which a PEP 440 ".devN"
+        # suffix is not, so leave it untouched.
+        shell: python
+        env:
+          PACKAGE_NAME: ${{ inputs.package_name }}
+        run: |
+          import os
+          import re
+          import pathlib
+
+          version = "${{ needs.prepare.outputs.version }}"
+          name = os.environ.get("PACKAGE_NAME") or "jgrapht"
+          assert re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", name), f"bad package name {name!r}"
+          path = pathlib.Path("pyproject.toml")
+          text = path.read_text()
+          text, count = re.subn(
+              r'(?m)^version = ".*"$', f'version = "{version}"', text, count=1
+          )
+          assert count == 1, "could not find a version line in pyproject.toml"
+          text, count = re.subn(r'(?m)^name = ".*"$', f'name = "{name}"', text, count=1)
+          assert count == 1, "could not find a name line in pyproject.toml"
+          path.write_text(text)
+      - name: Build sdist
+        uses: PyO3/maturin-action@v1
+        with:
+          command: sdist
+          args: --out dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+  publish-testpypi:
+    needs: [build-wheels, build-sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download wheels
+        uses: actions/download-artifact@v4
+        with:
+          pattern: wheel-*
+          path: dist
+          merge-multiple: true
+      - name: Download sdist
+        uses: actions/download-artifact@v4
+        with:
+          name: sdist
+          path: dist
+      - name: List artifacts to publish
+        run: ls -la dist
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          packages-dir: dist
+          skip-existing: true
