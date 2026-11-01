@@ -1,12 +1,15 @@
 name: Python JGraphT
 
-# Build and test machinery only -- no publishing step yet. When the project
-# is ready to release, add a job here (or a separate workflow) that uploads
-# the wheel/sdist artifacts produced below to PyPI, gated on a tag push.
+# Build and test machinery only; it does not publish. Releases are handled by
+# publish-pypi.yml (tag push) and publish-testpypi.yml (manual dry run).
 
 on:
-  # Automatic triggers disabled; run manually from the Actions tab.
+  pull_request:
+  # Also allow manual runs from the Actions tab.
   workflow_dispatch:
+  # Called by publish-pypi.yml for release tags: the wheels built and tested
+  # here are the ones that get published (artifacts wheel-<os>-py<ver>).
+  workflow_call:
 
 jobs:
   rust-check:

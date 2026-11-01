@@ -3,13 +3,13 @@
 Install
 =======
 
-Once released, prebuilt wheels will be published on
-`PyPI <https://pypi.org/project/jgrapht/>`_. The package replaces the 1.x ``jgrapht`` package, so
-on a recent machine installation is::
+Prebuilt wheels are published on `PyPI <https://pypi.org/project/jgrapht/>`_. The package replaces
+the 1.x ``jgrapht`` package, so installation is::
 
   $ pip install jgrapht
 
-Until then the package is built from source. Python 3.10 or newer is required.
+Python 3.10 or newer is required. On platforms without a prebuilt wheel, the package is built from
+source, as described below.
 
 Building from source
 --------------------
